@@ -11,6 +11,7 @@
         <sample-list-view v-if="module === 'sample'" :data="data" />
 
         <specimen-list-view v-if="module === 'specimen'" :data="data" />
+        <location-list-view v-if="module === 'location'" :data="data"/>
       </v-col>
     </v-row>
   </div>
@@ -20,9 +21,11 @@
 import ReferenceListView from "../reference/ReferenceListView";
 import SampleListView from "../sample/SampleListView";
 import SpecimenListView from "../specimen/SpecimenListView";
+import LocationListView from "@/components/location/LocationListView";
 
 export default {
   components: {
+    LocationListView,
     ReferenceListView,
     SampleListView,
     SpecimenListView
