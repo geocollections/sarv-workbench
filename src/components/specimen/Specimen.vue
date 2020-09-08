@@ -1,7 +1,7 @@
 <template>
   <div class="specimen">
     <!-- SAVE AS NEW -->
-    <div class="text-center text-sm-left" v-if="$route.meta.isEdit">
+    <div class="text-center text-sm-left mt-2" v-if="$route.meta.isEdit">
       <v-btn
         dark
         :color="bodyActiveColor"
@@ -474,7 +474,6 @@
       elevation="4"
     >
       <v-tabs
-        v-model="tabIndex"
         :background-color="bodyColor.split('n-')[0] + 'n-3'"
         show-arrows
         grow
@@ -502,147 +501,141 @@
         </v-tab>
       </v-tabs>
 
-      <v-tabs-items v-model="tabIndex">
-        <v-tab-item v-for="tab in relatedTabs" :key="tab.name">
-          <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-            <specimen-identification-table
-              v-show="activeTab === 'specimen_identification'"
-              :response="relatedData.specimen_identification"
-              :search-parameters="
-                relatedData.searchParameters.specimen_identification
-              "
-              :body-color="bodyColor"
-              :body-active-color="bodyActiveColor"
-              v-on:related:add="addRelatedItem"
-              v-on:related:edit="editRelatedItem"
-              v-on:related:delete="deleteRelatedItem"
-              :is-add-new-available="areSpecimenIdentificationsAvailable"
-            />
+      <v-tabs-items>
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+          <specimen-identification-table
+            v-show="activeTab === 'specimen_identification'"
+            :response="relatedData.specimen_identification"
+            :search-parameters="
+              relatedData.searchParameters.specimen_identification
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+            :is-add-new-available="areSpecimenIdentificationsAvailable"
+          />
 
-            <specimen-identification-geology-table
-              v-show="activeTab === 'specimen_identification_geology'"
-              :response="relatedData.specimen_identification_geology"
-              :search-parameters="
-                relatedData.searchParameters.specimen_identification_geology
-              "
-              :body-color="bodyColor"
-              :body-active-color="bodyActiveColor"
-              v-on:related:add="addRelatedItem"
-              v-on:related:edit="editRelatedItem"
-              v-on:related:delete="deleteRelatedItem"
-              :is-add-new-available="areSpecimenIdentificationsAvailable"
-            />
+          <specimen-identification-geology-table
+            v-show="activeTab === 'specimen_identification_geology'"
+            :response="relatedData.specimen_identification_geology"
+            :search-parameters="
+              relatedData.searchParameters.specimen_identification_geology
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+            :is-add-new-available="areSpecimenIdentificationsAvailable"
+          />
 
-            <specimen-reference-table
-              v-show="activeTab === 'specimen_reference'"
-              :response="relatedData.specimen_reference"
-              :search-parameters="
-                relatedData.searchParameters.specimen_reference
-              "
-              :body-color="bodyColor"
-              :body-active-color="bodyActiveColor"
-              v-on:related:add="addRelatedItem"
-              v-on:related:edit="editRelatedItem"
-              v-on:related:delete="deleteRelatedItem"
-            />
+          <specimen-reference-table
+            v-show="activeTab === 'specimen_reference'"
+            :response="relatedData.specimen_reference"
+            :search-parameters="relatedData.searchParameters.specimen_reference"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
-            <specimen-description-table
-              v-show="activeTab === 'specimen_description'"
-              :response="relatedData.specimen_description"
-              :search-parameters="
-                relatedData.searchParameters.specimen_description
-              "
-              :body-color="bodyColor"
-              :body-active-color="bodyActiveColor"
-              v-on:related:add="addRelatedItem"
-              v-on:related:edit="editRelatedItem"
-              v-on:related:delete="deleteRelatedItem"
-            />
+          <specimen-description-table
+            v-show="activeTab === 'specimen_description'"
+            :response="relatedData.specimen_description"
+            :search-parameters="
+              relatedData.searchParameters.specimen_description
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
-            <div v-show="activeTab === 'attachment'">
-              <file-input
-                show-existing
-                :files-from-object="relatedData.attachment.results"
-                v-on:update:existing-files="addExistingFiles"
-                v-on:file-uploaded="addFiles"
-                accept-multiple
-                :record-options="$route.meta.isEdit"
-                :is-draggable="$route.meta.isEdit"
-                show-attachment-link
+          <div v-show="activeTab === 'attachment'">
+            <file-input
+              show-existing
+              :files-from-object="relatedData.attachment.results"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :record-options="$route.meta.isEdit"
+              :is-draggable="$route.meta.isEdit"
+              show-attachment-link
+            />
+          </div>
+
+          <specimen-location-table
+            v-show="activeTab === 'specimen_location'"
+            :response="relatedData.specimen_location"
+            :search-parameters="relatedData.searchParameters.specimen_location"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
+          <specimen-history-table
+            v-show="activeTab === 'specimen_history'"
+            :response="relatedData.specimen_history"
+            :search-parameters="relatedData.searchParameters.specimen_history"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
+          <specimen-analysis-table
+            v-show="activeTab === 'analysis'"
+            :response="relatedData.analysis"
+            :search-parameters="relatedData.searchParameters.analysis"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
+          <!-- PAGINATION -->
+          <div
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters[activeTab].paginateBy"
+                :color="bodyActiveColor"
+                dense
+                :items="paginateByOptionsTranslated"
+                :item-color="bodyActiveColor"
+                label="Paginate by"
+                hide-details
               />
             </div>
 
-            <specimen-location-table
-              v-show="activeTab === 'specimen_location'"
-              :response="relatedData.specimen_location"
-              :search-parameters="
-                relatedData.searchParameters.specimen_location
-              "
-              :body-color="bodyColor"
-              :body-active-color="bodyActiveColor"
-              v-on:related:add="addRelatedItem"
-              v-on:related:edit="editRelatedItem"
-              v-on:related:delete="deleteRelatedItem"
-            />
-
-            <specimen-history-table
-              v-show="activeTab === 'specimen_history'"
-              :response="relatedData.specimen_history"
-              :search-parameters="relatedData.searchParameters.specimen_history"
-              :body-color="bodyColor"
-              :body-active-color="bodyActiveColor"
-              v-on:related:add="addRelatedItem"
-              v-on:related:edit="editRelatedItem"
-              v-on:related:delete="deleteRelatedItem"
-            />
-
-            <specimen-analysis-table
-              v-show="activeTab === 'analysis'"
-              :response="relatedData.analysis"
-              :search-parameters="relatedData.searchParameters.analysis"
-              :body-color="bodyColor"
-              :body-active-color="bodyActiveColor"
-              v-on:related:add="addRelatedItem"
-              v-on:related:edit="editRelatedItem"
-              v-on:related:delete="deleteRelatedItem"
-            />
-
-            <!-- PAGINATION -->
-            <div
-              v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
-              class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
-            >
-              <div class="mr-3 mb-3">
-                <v-select
-                  v-model="relatedData.searchParameters[activeTab].paginateBy"
-                  :color="bodyActiveColor"
-                  dense
-                  :items="paginateByOptionsTranslated"
-                  :item-color="bodyActiveColor"
-                  label="Paginate by"
-                  hide-details
-                />
-              </div>
-
-              <div>
-                <v-pagination
-                  v-model="relatedData.searchParameters[activeTab].page"
-                  :color="bodyActiveColor"
-                  circle
-                  prev-icon="fas fa-angle-left"
-                  next-icon="fas fa-angle-right"
-                  :length="
-                    Math.ceil(
-                      relatedData[activeTab].count /
-                        relatedData.searchParameters[activeTab].paginateBy
-                    )
-                  "
-                  :total-visible="5"
-                />
-              </div>
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters[activeTab].page"
+                :color="bodyActiveColor"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData[activeTab].count /
+                      relatedData.searchParameters[activeTab].paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
             </div>
-          </v-card>
-        </v-tab-item>
+          </div>
+        </v-card>
       </v-tabs-items>
     </v-card>
 
@@ -859,22 +852,6 @@ export default {
       return fossilId === 1 || fossilId === 7;
     },
 
-    computedRelatedTabs() {
-      return this.relatedTabs.filter(tab => {
-        let fossilId = this.specimen?.fossil?.id;
-
-        if (tab.name === "specimen_identification") {
-          if (fossilId === 1 || fossilId === 7) {
-            return tab;
-          }
-        } else if (tab.name === "specimen_identification_geology") {
-          if (fossilId === 1 || fossilId === 7) {
-            return tab;
-          }
-        } else return tab;
-      });
-    },
-
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
         return {
@@ -1052,39 +1029,9 @@ export default {
 
             this.removeUnnecessaryFields(this.specimen, this.copyFields);
             this.$emit("data-loaded", this.specimen);
-            this.setLoadingState(false);
+          } else this.$emit("object-exists", false);
 
-            // Set default tab
-            // if (this.specimen?.fossil) {
-            //   if (
-            //     this.specimen?.fossil?.id === 1 ||
-            //     this.specimen?.fossil?.id === 7
-            //   ) {
-            //     if (
-            //       this.activeRelatedDataTab &&
-            //       this.activeRelatedDataTab !==
-            //         "specimen_identification_geology"
-            //     )
-            //       this.setTab(this.activeRelatedDataTab);
-            //     else this.setTab("specimen_identification");
-            //   } else {
-            //     if (this.activeRelatedDataTab)
-            //       this.setTab(this.activeRelatedDataTab);
-            //     else this.setTab("specimen_identification_geology");
-            //   }
-            // } else {
-            //   if (
-            //     this.activeRelatedDataTab &&
-            //     this.activeRelatedDataTab !== "specimen_identification" &&
-            //     this.activeRelatedDataTab !== "specimen_identification_geology"
-            //   )
-            //     this.setTab(this.activeRelatedDataTab);
-            //   else this.setTab("specimen_reference");
-            // }
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
+          this.setLoadingState(false);
         });
 
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
@@ -1430,6 +1377,7 @@ export default {
     },
 
     addExistingFiles(files) {
+      console.log(files);
       this.relatedData.attachment.count = files.length;
       this.relatedData.attachment.results = files;
     }
