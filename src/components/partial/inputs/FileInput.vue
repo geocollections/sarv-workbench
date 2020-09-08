@@ -197,7 +197,7 @@
       <v-col
         cols="12"
         class="pa-1"
-        v-if="showExisting && this.existingFiles.length > 0"
+        v-if="showExisting && existingFiles.length > 0"
       >
         <div class="title">
           {{ $t("messages.existingFiles") }}: <b>{{ existingFiles.length }}</b>
