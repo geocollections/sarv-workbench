@@ -141,6 +141,23 @@
       </div>
     </template>
 
+    <template v-slot:item.storage__location="{ item }">
+      <router-link
+        :to="{ path: '/location/' + item.storage__id }"
+        :title="$t('editLocation.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
+        v-if="item.storage__id"
+      >
+        <span
+          v-translate="{
+            et: item.storage__location,
+            en: item.storage__location
+          }"
+        />
+      </router-link>
+    </template>
+
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
