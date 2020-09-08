@@ -514,7 +514,7 @@
             v-on:related:add="addRelatedItem"
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
-            :is-add-new-available="areSpecimenIdentificationsAvailable"
+            :is-add-new-available="isFossil"
           />
 
           <specimen-identification-geology-table
@@ -528,7 +528,7 @@
             v-on:related:add="addRelatedItem"
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
-            :is-add-new-available="areSpecimenIdentificationsAvailable"
+            :is-add-new-available="!isFossil"
           />
 
           <specimen-reference-table
@@ -846,7 +846,7 @@ export default {
       activeRelatedDataTab: state => state.activeRelatedDataTab.specimen
     }),
 
-    areSpecimenIdentificationsAvailable() {
+    isFossil() {
       let fossilId = this.specimen?.fossil?.id;
 
       return fossilId === 1 || fossilId === 7;

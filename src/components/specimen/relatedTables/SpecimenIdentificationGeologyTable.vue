@@ -160,21 +160,17 @@
       </template>
     </v-data-table>
 
-    <v-toolbar
-      :dense="isAddNewAvailable"
-      flat
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-    >
-      <v-dialog
-        v-if="isAddNewAvailable"
-        v-model="dialog"
-        max-width="500px"
-        style="z-index: 50000"
-      >
+    <v-toolbar flat :color="bodyColor.split('n-')[0] + 'n-5'">
+      <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000">
         <template v-slot:activator="{ on }">
-          <v-btn :color="bodyActiveColor" small dark v-on="on">{{
-            $t("buttons.add_new")
-          }}</v-btn>
+          <v-btn
+            :color="bodyActiveColor"
+            small
+            class="white--text"
+            :disabled="!isAddNewAvailable"
+            v-on="on"
+            >{{ $t("buttons.add_new") }}</v-btn
+          >
         </template>
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title>
@@ -298,18 +294,20 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+    </v-toolbar>
 
+    <div class="mx-3" v-if="!isAddNewAvailable">
       <v-alert
-        v-else
-        class="mb-0"
-        border="left"
-        color="red lighten-5"
+        border="right"
+        type="info"
+        colored-border
+        prominent
         dense
         elevation="3"
         icon="fas fa-info"
-        >{{ $t("buttons.add_new_unavailable_specimen") }}</v-alert
+        >{{ $t("buttons.is_fossil") }}</v-alert
       >
-    </v-toolbar>
+    </div>
   </div>
 </template>
 
