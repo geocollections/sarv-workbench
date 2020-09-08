@@ -239,8 +239,11 @@ export default {
 
             await this.uploadImportedFileAsNewAttachment();
             await this.getNewlyAddedRecords();
-          } else if (fileUploadResponse?.data?.error)
-            this.toastError({ text: fileUploadResponse.data.error });
+          } else if (fileUploadResponse?.data?.error) {
+            let errorMessage = fileUploadResponse?.data?.error;
+            this.toastError({ text: errorMessage });
+            this.fileImportResponse = errorMessage;
+          }
         } else {
           this.toastError({ text: "File import failed!" });
           this.fileImportResponse = fileUploadResponse?.data;
