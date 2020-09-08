@@ -7,11 +7,22 @@
     </v-col>
     <v-col class="text-right" align-self="center">
       <v-btn
+        :class="{ 'mt-2': showImportButton }"
         :to="{ path: buttonPath }"
         :color="bodyActiveColor"
         :dark="bodyActiveColorDark"
       >
         {{ $t("add.new") }}
+      </v-btn>
+      <v-btn
+        class="ml-2 mt-2"
+        v-if="showImportButton"
+        :to="{ path: `/${$route.meta.object}/import` }"
+        :color="bodyActiveColor"
+        :dark="bodyActiveColorDark"
+      >
+        {{ $t("buttons.import") }}
+        <v-icon right>fas fa-file-import</v-icon>
       </v-btn>
     </v-col>
   </v-row>
@@ -30,6 +41,11 @@ export default {
     buttonPath: {
       type: String,
       required: true
+    },
+    showImportButton: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {

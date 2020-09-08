@@ -536,7 +536,8 @@ const router = new Router({
         },
         {
           path: "/sample/import",
-          component: () => import("./components/sample/SampleImport.vue"),
+          name: "Sample import",
+          component: () => import("./views/Import.vue"),
           meta: {
             requiresAuth: true,
             object: "sample"
@@ -875,6 +876,15 @@ const router = new Router({
               }
             }
           ]
+        },
+        {
+          path: "/analysis/import",
+          name: "Analysis import",
+          component: () => import("./views/Import.vue"),
+          meta: {
+            requiresAuth: true,
+            object: "analysis"
+          }
         },
         {
           path: "/specimen",

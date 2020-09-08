@@ -365,6 +365,11 @@ export default {
               icon: "far fa-plus-square"
             },
             {
+              title: "analysis_import",
+              path: "/analysis/import",
+              icon: "fas fa-file-import"
+            },
+            {
               title: "editAnalysisParameter",
               path: "/analysis_parameter",
               icon: "fas fa-percent"

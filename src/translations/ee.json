@@ -272,7 +272,8 @@
     "admin": "Admin",
     "analysis_parameter": "Analüüsi parameetrid",
     "analysis_method": "Analüüsi meetodid",
-    "sample_import": "Impordi proovi fail"
+    "sample_import": "Impordi proovi fail",
+    "analysis_import": "Impordi analüüsi fail"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -923,8 +924,6 @@
     "save_as_new_specimen": "Salvesta uue eksemplarina",
     "site": "Vaatluspunkt",
     "series_search": "Seeria ID või nimi",
-    "sample_import1": "Fail nimega",
-    "sample_import2": "laetakse üles",
     "relatedTables": {
       "sample_reference": "Kirjandusviited",
       "analysis": "Analüüsid",
@@ -1833,7 +1832,9 @@
     "confirmationCont": "Jätka muutmist",
     "confirmationSave": "Salvesta kirje",
     "reference_file_upload_failed": "Faili üleslaadimine ebaõnnestus! Vajutage allolevale nupule, et puhastada failid.",
-    "response": "Vastus"
+    "response": "Vastus",
+    "file_import1": "Fail nimega",
+    "file_import2": "laetakse üles"
   },
   "logs": {
     "title": "Kirje ajalugu",
@@ -1868,6 +1869,7 @@
     "send_request": "Saada päring",
     "clearLocalStorage": "Eemalda vaikimisi väärtused",
     "clearLocalStorageAndFields": "Eemalda vaikimisi väärtused ja puhasta väljad",
-    "reset_files": "Puhasta ebaõnnestunud faili(d)"
+    "reset_files": "Puhasta ebaõnnestunud faili(d)",
+    "import": "Impordi fail"
   }
 }

@@ -3,6 +3,7 @@
     <table-view-title
       title="header.samples"
       buttonPath="/sample/add"
+      show-import-button
       class="d-print-none"
     />
 
