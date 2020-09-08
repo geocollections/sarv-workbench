@@ -218,7 +218,7 @@ export default {
 
     idField() {
       if (this.object === "specimen") return "specimen_id";
-      if (this.object === "location") return "attach_link__storage__id";
+      if (this.object === "location") return "storage__id";
       else return "id";
     }
   },
