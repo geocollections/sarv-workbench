@@ -135,7 +135,7 @@
         :to="{ path: '/test-dev' }"
         :color="drawerActiveColor"
       >
-        <v-list-item-title>Test POST interface</v-list-item-title>
+        <v-list-item-title>Test interface</v-list-item-title>
         <v-list-item-icon>
           <v-icon>fas fa-code</v-icon>
         </v-list-item-icon>
@@ -322,6 +322,11 @@ export default {
               title: "sample",
               path: "/sample/add",
               icon: "far fa-plus-square"
+            },
+            {
+              title: "sample_import",
+              path: "/sample/import",
+              icon: "fas fa-file-import"
             },
             {
               title: "sample_series",

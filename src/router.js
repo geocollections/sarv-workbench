@@ -535,6 +535,14 @@ const router = new Router({
           ]
         },
         {
+          path: "/sample/import",
+          component: () => import("./components/sample/SampleImport.vue"),
+          meta: {
+            requiresAuth: true,
+            object: "sample"
+          }
+        },
+        {
           path: "/project",
           component: () => import("./views/Projects.vue"),
           meta: {
@@ -2250,7 +2258,9 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                  import("./components/analysis_parameter/AnalysisParameterTable.vue"),
+                import(
+                  "./components/analysis_parameter/AnalysisParameterTable.vue"
+                ),
               meta: {
                 requiresAuth: true,
                 object: "analysis_parameter",
@@ -2269,7 +2279,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/analysis_parameter/AnalysisParameter.vue"),
+              component: () =>
+                import("./components/analysis_parameter/AnalysisParameter.vue"),
               meta: {
                 isEdit: true,
                 table: "analysis_parameter",
@@ -2290,12 +2301,16 @@ const router = new Router({
             {
               path: "",
               name: "Analysis parameter add",
-              component: () => import("./components/analysis_parameter/AnalysisParameter.vue"),
+              component: () =>
+                import("./components/analysis_parameter/AnalysisParameter.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.analysis_parameter",
                 subForms: [
-                  { path: "/analysis_parameter/add", name: "header.analysis_parameter" }
+                  {
+                    path: "/analysis_parameter/add",
+                    name: "header.analysis_parameter"
+                  }
                 ],
                 requiresAuth: true,
                 object: "analysis_parameter"
@@ -2313,7 +2328,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                  import("./components/analysis_method/AnalysisMethodTable.vue"),
+                import("./components/analysis_method/AnalysisMethodTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "analysis_method",
@@ -2332,7 +2347,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/analysis_method/AnalysisMethod.vue"),
+              component: () =>
+                import("./components/analysis_method/AnalysisMethod.vue"),
               meta: {
                 isEdit: true,
                 table: "analysis_method",
@@ -2353,12 +2369,16 @@ const router = new Router({
             {
               path: "",
               name: "Analysis method add",
-              component: () => import("./components/analysis_method/AnalysisMethod.vue"),
+              component: () =>
+                import("./components/analysis_method/AnalysisMethod.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.analysis_method",
                 subForms: [
-                  { path: "/analysis_method/add", name: "header.analysis_method" }
+                  {
+                    path: "/analysis_method/add",
+                    name: "header.analysis_method"
+                  }
                 ],
                 requiresAuth: true,
                 object: "analysis_method"
