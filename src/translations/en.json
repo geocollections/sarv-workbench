@@ -121,7 +121,7 @@
     "rocks": "Rocks",
     "rock": "Add rock",
     "addAttachment": "Add new file",
-    "editAttachment": "My files",
+    "editAttachment": "Files",
     "addReference": "Add new reference",
     "editReference": "References",
     "editLibrary":"Libraries",
@@ -185,7 +185,7 @@
     "otherFiles": "Add other file",
     "digitisedReference": "Add pdf",
     "reference": "Add reference",
-    "myFiles": "My files",
+    "myFiles": "Files",
     "myReferences": "References",
     "locality": "Add locality",
     "sample": "Add sample",
@@ -1834,7 +1834,9 @@
     "reference_file_upload_failed": "File upload failed! Please click the following button to clear files.",
     "response": "Response",
     "file_import1": "A file named",
-    "file_import2": "will be uploaded"
+    "file_import2": "will be uploaded",
+    "attachment_upload_error": "Attachment upload failed!",
+    "attachment_upload_success": "New attachment uploaded!"
   },
   "logs": {
     "title": "Editing history",
@@ -1870,6 +1872,7 @@
     "clearLocalStorage": "Remove defaults",
     "clearLocalStorageAndFields": "Remove defaults and clear fields",
     "reset_files": "Clear failed file(s)",
-    "import": "Import file"
+    "import": "Import file",
+    "try_again": "Try again"
   }
 }
