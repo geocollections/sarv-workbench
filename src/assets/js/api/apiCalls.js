@@ -3884,6 +3884,56 @@ export function fetchWebPages(data) {
  ***  WEB_PAGES END  ***
  ***********************/
 
+/*************************
+ *** TAXON_PAGES START ***
+ *************************/
+
+export function fetchTaxonPagesDetail(id) {
+  return get(`taxon_page/?id=${id}&format=json`);
+}
+
+export function fetchTaxonPages(data) {
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.language && data.language.trim().length > 0) {
+    searchFields += `&language__${data.language__lookuptype || "icontains"}=${data.language}`;
+  }
+
+  if (data.title && data.title.trim().length > 0) {
+    searchFields += `&title__${data.title__lookuptype || "icontains"}=${data.title}`;
+  }
+  if (data.taxon && data.taxon.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+        data.taxon
+    };fields:taxon__id,taxon__taxon;lookuptype:${data.taxon__lookuptype ||
+    "icontains"}`;
+
+  }
+
+  if (data.on_frontpage) {
+    searchFields += `&on_frontpage=${data.on_frontpage}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+        `taxon_page/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  } else {
+    return get(
+        `taxon_page/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  }
+}
+
+/*************************
+ ***  TAXON_PAGES END  ***
+ *************************/
+
+
+
 /******************************
  *** SITE_GROUNDWATER START ***
  ******************************/

@@ -176,6 +176,8 @@
     "editAnalysisParameter": "Analysis parameters",
     "addAnalysisMethod": "Add analysis method",
     "editAnalysisMethod": "Analysis methods",
+    "addTaxonPage": "Add taxon page",
+    "editTaxonPage": "Taxon pages",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -273,7 +275,8 @@
     "analysis_parameter": "Analysis parameters",
     "analysis_method": "Analysis methods",
     "sample_import": "Import sample file",
-    "analysis_import": "Import analysis file"
+    "analysis_import": "Import analysis file",
+    "taxon_pages": "Taxon pages"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -539,6 +542,10 @@
       "registerUrl": "Register DOI URL",
       "finish": "Finish"
     }
+  },
+  "editTaxonPages": {
+    "editMessage": "Edit taxon page",
+    "heading": "Taxon page"
   },
   "editReference": {
     "heading": "Reference ID",
@@ -1790,6 +1797,14 @@
     "parent_method__analysis_method": "Related analysis method",
     "parent_method": "Related method",
     "method_en": "Analysis method (EN)"
+  },
+  "taxon_page": {
+    "taxon": "Taxon",
+    "title": "Title",
+    "on_frontpage": "On frontpage",
+    "frontpage": "Frontpage",
+    "frontpage_title": "Frontpage title",
+    "content": "Content"
   },
   "admin": {
     "activeUsers": "Active users",

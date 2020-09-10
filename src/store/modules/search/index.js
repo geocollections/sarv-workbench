@@ -412,6 +412,17 @@ const state = {
     sortDesc: [true]
   },
   web_pagesViewType: "table",
+  taxon_pagesSearchParameters: {
+    id: null,
+    title: null,
+    taxon: null,
+    on_frontpage: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  taxon_pagesViewType: "table",
   sarv_issueSearchParameters: {
     title: null,
     description: null,

@@ -35,7 +35,7 @@ import {
   fetchWebNews,
   fetchWebPages,
   fetchAnalysisMethods,
-  fetchAnalysisParameters
+  fetchAnalysisParameters, fetchTaxonPages
 } from "@/assets/js/api/apiCalls";
 
 const actions = {
@@ -266,6 +266,12 @@ const actions = {
 
   FETCH_WEB_PAGES({ commit, state }) {
     return fetchWebPages(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", resp);
+    });
+  },
+
+  FETCH_TAXON_PAGES({ commit, state }) {
+    return fetchTaxonPages(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },

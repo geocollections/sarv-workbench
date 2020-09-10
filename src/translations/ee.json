@@ -176,6 +176,8 @@
     "editAnalysisParameter": "Analüüsi parameetrid",
     "addAnalysisMethod": "Lisa analüüsi meetod",
     "editAnalysisMethod": "Analüüsi meetodid",
+    "addTaxonPage": "Lisa taksoni veebileht",
+    "editTaxonPage": "Taksoni veebilehed",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -273,7 +275,8 @@
     "analysis_parameter": "Analüüsi parameetrid",
     "analysis_method": "Analüüsi meetodid",
     "sample_import": "Impordi proovi fail",
-    "analysis_import": "Impordi analüüsi fail"
+    "analysis_import": "Impordi analüüsi fail",
+    "taxon_pages": "Taksoni veebilehed"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -539,6 +542,10 @@
       "registerUrl": "Registreeri DOI URL",
       "finish": "Lõpeta"
     }
+  },
+  "editTaxonPages": {
+    "editMessage": "Muuda taksoni veebilehte",
+    "heading": "Taksoni veebileht"
   },
   "editReference": {
     "heading": "Kirjandusallikas",
@@ -1789,8 +1796,17 @@
     "analysis_method": "Analüüsi meetod",
     "parent_method__analysis_method": "Seotud analüüsi meetod",
     "parent_method": "Seotud meetod",
-    "method_en": "Analüüsi meetod (EN)"
+    "method_en": "Analüüsi meetod (EN)",
+    "content": "Sisu"
   },
+  "taxon_page": {
+    "taxon": "Takson",
+    "title": "Pealkiri",
+    "on_frontpage": "Pealehel",
+    "frontpage_title": "Pealehe pealkiri",
+    "frontpage": "Pealkiri",
+    "content": "Sisu"
+    },
   "admin": {
     "activeUsers": "Aktiivseid kasutajaid",
     "user": "Kasutajanimi",
