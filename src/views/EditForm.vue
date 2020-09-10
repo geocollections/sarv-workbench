@@ -152,19 +152,21 @@ export default {
       let table = this.$route.meta.table;
       let availableTables = [
         "sample",
+        "sample_series",
         "analysis",
+        "attachment",
         "project",
         "site",
         "drillcore",
         "drillcore_box",
         "dataset",
-        "sample_series",
+        "collection",
         "location",
-        "attachment"
-        // "collection",
+        "selection_series"
         // "specimen",
         // "doi",
         // "selection"
+        // "reference"
       ];
 
       return availableTables.includes(table);

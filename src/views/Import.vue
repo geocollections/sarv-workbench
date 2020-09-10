@@ -4,12 +4,7 @@
 
     <div class="h2 mb-3">{{ $t(`header.${$route.meta.object}_import`) }}</div>
 
-    <v-card
-      elevation="4"
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-      :loading="loadingState"
-      loader-height="15"
-    >
+    <v-card elevation="4" :color="bodyColor.split('n-')[0] + 'n-5'">
       <div class="pa-1">
         <v-row no-gutters>
           <v-col cols="12" class="pa-1">
@@ -32,17 +27,17 @@
           <v-col cols="12" class="pa-1 ml-4" v-if="isFileAdded">
             <span>{{ $t("messages.file_import1") }}</span>
             <span class="font-weight-bold ml-2"
-              >'{{ file_import.file[0].name }}'</span
+              >'{{ fileImport.file[0].name }}'</span
             >
             <span class="ml-1 mr-2"
-              >({{ getSizeAsMB(file_import.file[0].size) }})</span
+              >({{ getSizeAsMB(fileImport.file[0].size) }})</span
             >
             <span>{{ $t("messages.file_import2") }}</span>
           </v-col>
 
-          <v-col cols="12" class="pa-1" v-if="requestResponse"
+          <v-col cols="12" class="pa-1" v-if="fileImportResponse"
             ><b>{{ $t("messages.response") }}</b
-            >: {{ requestResponse }}</v-col
+            >: {{ fileImportResponse }}</v-col
           >
         </v-row>
 
@@ -52,7 +47,7 @@
               @click="importFile"
               :color="bodyActiveColor"
               class="white--text"
-              :disabled="!isFileAdded || isSuccess"
+              :disabled="!isFileAdded || isFileImportSuccess"
               :loading="loadingState"
             >
               {{ $t("buttons.send_request") }}
@@ -82,10 +77,65 @@
       <v-skeleton-loader type="table"></v-skeleton-loader>
     </v-card>
 
+    <!-- ATTACHMENT CARD -->
+    <v-card
+      class="mt-2"
+      v-show="!loadingState && attachmentResponse"
+      elevation="4"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+    >
+      <v-card-title>{{ $t("header.attachment") }}</v-card-title>
 
-    <!-- TODO: Attachment card -->
-    <!-- TODO: Samples card -->
-    <!-- TODO: Analyses card -->
+      <v-card-text>
+        <v-alert v-if="attachment" type="success" text border="right">
+          {{ $t("messages.attachment_upload_success") }}
+          <span class="font-weight-bold"
+            >ID:
+            <router-link :to="`/attachment/${attachment[0].id}`">{{
+              attachment[0].id
+            }}</router-link></span
+          >
+        </v-alert>
+
+        <v-alert v-else type="error" text border="right">
+          <span class="mr-2">
+            {{ $t("messages.attachment_upload_error") }}
+          </span>
+
+          <v-btn
+            v-if="
+              isFileAdded &&
+                isFileImportSuccess &&
+                !attachment &&
+                !isAttachmentSuccess
+            "
+            small
+            @click="retryUploadImportedFileAsNewAttachment"
+            :color="bodyActiveColor"
+            class="white--text"
+            :loading="loadingState"
+          >
+            {{ $t("buttons.try_again") }}
+            <v-icon right small>fas fa-undo-alt</v-icon>
+          </v-btn>
+        </v-alert>
+      </v-card-text>
+    </v-card>
+
+    <!-- TODO: Records card (samples and analyses) -->
+    <!-- RECORDS CARD -->
+    <v-card
+      class="mt-2"
+      v-show="!loadingState && recordsResponse"
+      elevation="4"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+    >
+      <v-card-title>{{ $t(`header.${$route.meta.object}`) }}</v-card-title>
+
+      <div>
+        Todo: Records here
+      </div>
+    </v-card>
   </div>
 </template>
 
@@ -93,7 +143,7 @@
 import SpinnerWrapper from "@/components/partial/SpinnerWrapper";
 import FileInput from "@/components/partial/inputs/FileInput";
 import toastMixin from "@/mixins/toastMixin";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { postRequest } from "@/assets/js/api/apiCalls";
 export default {
   name: "Import",
@@ -103,25 +153,35 @@ export default {
   mixins: [toastMixin],
 
   data: () => ({
-    file_import: {
+    fileImport: {
       url: "https://rwapi.geocollections.info/import/",
       file: []
     },
-    fileData: null,
-    requestResponse: null,
-    isSuccess: false
+    fileImportResponse: null,
+    isFileImportSuccess: false,
+    attachmentResponse: null,
+    isAttachmentSuccess: false,
+    isAttachmentRetrying: false,
+    attachment: null,
+    recordsResponse: null,
+    isRecordsSuccess: false,
+    records: {
+      count: 0,
+      results: []
+    }
   }),
 
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
     ...mapState("search", ["loadingState"]),
+    ...mapGetters("user", ["getCurrentUser"]),
 
     isFileAdded() {
-      return this.file_import.file && this.file_import.file.length === 1;
+      return this.fileImport.file && this.fileImport.file.length === 1;
     },
 
     fileImportUrl() {
-      return this.file_import.url + this.$route.meta.object;
+      return this.fileImport.url + this.$route.meta.object;
     },
 
     showSamplesCard() {
@@ -137,12 +197,21 @@ export default {
     ...mapActions("search", ["setLoadingState", "setLoadingType"]),
 
     addFiles(files) {
-      this.file_import.file = files;
+      this.fileImport.file = files;
     },
 
     clearFiles() {
-      this.file_import.file = [];
-      this.isSuccess = false;
+      this.fileImport.file = [];
+      this.isFileImportSuccess = false;
+      this.fileImportResponse = null;
+      this.attachmentResponse = null;
+      this.attachment = null;
+      this.recordsResponse = null;
+      this.isRecordsSuccess = false;
+      this.records = {
+        count: 0,
+        results: []
+      };
     },
 
     async importFile() {
@@ -151,14 +220,12 @@ export default {
 
       let fileUploadResponse = await this.uploadFile();
 
-      // Todo: Delete timeout
-      await new Promise(r => setTimeout(r, 2000));
-
       if (fileUploadResponse) {
-        // Todo: Change it back
-        this.isSuccess = fileUploadResponse.status.toString().startsWith("4");
+        this.isFileImportSuccess = fileUploadResponse.status
+          .toString()
+          .startsWith("2");
 
-        if (this.isSuccess) {
+        if (this.isFileImportSuccess) {
           if (fileUploadResponse?.data?.message) {
             let message = fileUploadResponse.data.message;
 
@@ -168,21 +235,18 @@ export default {
               });
             else this.toastSuccess({ text: "File successfully imported!" });
 
-            this.requestResponse = message;
+            this.fileImportResponse = message;
+
+            await this.uploadImportedFileAsNewAttachment();
+            await this.getNewlyAddedRecords();
+          } else if (fileUploadResponse?.data?.error) {
+            let errorMessage = fileUploadResponse?.data?.error;
+            this.toastError({ text: errorMessage });
+            this.fileImportResponse = errorMessage;
           }
-
-          //  Todo: Add imported file as attachment
-          let attachmentUploadResponse = await this.uploadImportedFileAsNewAttachment();
-
-          console.log(attachmentUploadResponse);
-
-          //  Todo: Get list of samples or analyses which were added using the imported file
-          let newlyAddedRecordsResponse = await this.getNewlyAddedRecords();
-
-          console.log(newlyAddedRecordsResponse);
         } else {
           this.toastError({ text: "File import failed!" });
-          this.requestResponse = fileUploadResponse?.data;
+          this.fileImportResponse = fileUploadResponse?.data;
         }
 
         this.setLoadingState(false);
@@ -192,8 +256,8 @@ export default {
     async uploadFile() {
       let formData = new FormData();
 
-      if (this.file_import.file && this.file_import.file.length > 0) {
-        this.file_import.file.forEach((file, index) => {
+      if (this.fileImport.file && this.fileImport.file.length > 0) {
+        this.fileImport.file.forEach((file, index) => {
           formData.append("file" + [index], file);
         });
       }
@@ -205,34 +269,75 @@ export default {
           this.fileImportUrl,
           true
         );
-        this.isSuccess = true;
+        this.isFileImportSuccess = true;
         return response;
       } catch (err) {
         console.log(err);
-        this.isSuccess = false;
+        this.isFileImportSuccess = false;
         return false;
       }
     },
 
     async uploadImportedFileAsNewAttachment() {
-      console.log("Upload imported file as attachment");
+      console.log(this.getCurrentUser.id);
+      let data = {
+        description: `See fail loodi kasutades faili importi. Failinimi: ${
+          this.fileImport.file[0].name
+        }, Kuupäev: ${new Date().toISOString().split("T")[0]}`,
+        description_en: `This attachment was created using file import. Filename: ${
+          this.fileImport.file[0].name
+        }, Date: ${new Date().toISOString().split("T")[0]}`,
+        is_private: true,
+        author: this.getCurrentUser.id
+      };
 
-      await new Promise(r => setTimeout(r, 1000));
+      let formData = new FormData();
+      formData.append("data", JSON.stringify(data));
+      formData.append("file0", this.fileImport.file[0]);
 
-      return "New file added";
+      await postRequest("add/attachment/", formData, "", true).then(
+        response => {
+          if (response && response.status === 200) {
+            this.toastSuccess({
+              text: this.$t("messages.attachment_upload_success")
+            });
+            this.attachmentResponse = response.data;
+            this.attachment = response.data.results;
+            this.isAttachmentSuccess = true;
+          } else {
+            this.toastError({
+              text: this.$t("messages.attachment_upload_error")
+            });
+            this.attachmentResponse = response.data;
+            this.attachment = null;
+            this.isAttachmentSuccess = false;
+          }
+        },
+        errResponse => {
+          this.toastError({
+            text: this.$t("messages.attachment_upload_error")
+          });
+          this.attachmentResponse = errResponse;
+          this.attachment = null;
+          this.isAttachmentSuccess = false;
+        }
+      );
+    },
+
+    async retryUploadImportedFileAsNewAttachment() {
+      this.setLoadingState(true);
+      this.setLoadingType("add");
+      await this.uploadImportedFileAsNewAttachment();
+      this.setLoadingState(false);
     },
 
     async getNewlyAddedRecords() {
-      console.log("Fetching new records...");
+      // Todo: Get newly added records
       if (this.showSamplesCard) {
         console.log("Todo: fetch new samples");
       } else if (this.showAnalysesCard) {
         console.log("Todo: fetch new analyses");
       }
-
-      await new Promise(r => setTimeout(r, 1000));
-
-      return "New records received";
     },
 
     getSizeAsMB(size) {
@@ -242,4 +347,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.link:hover {
+  opacity: 0.7;
+}
+</style>

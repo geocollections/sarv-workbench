@@ -121,7 +121,7 @@
     "rocks": "Kivimid ja mineraalid",
     "rock": "Lisa kivim või mineraal",
     "addAttachment": "Lisa uus fail",
-    "editAttachment": "Minu failid",
+    "editAttachment": "Failid",
     "addReference": "Lisa kirjandus",
     "editReference": "Kirjandus",
     "editLibrary":"Kogumikud",
@@ -187,7 +187,7 @@
     "otherFiles": "Lisa fail",
     "digitisedReference": "Lisa kirjanduse pdf",
     "reference": "Lisa kirjandus",
-    "myFiles": "Minu failid",
+    "myFiles": "Failid",
     "myReferences": "Kirjandus",
     "locality": "Lisa lokaliteet",
     "sample": "Lisa proov",
@@ -1850,7 +1850,9 @@
     "reference_file_upload_failed": "Faili üleslaadimine ebaõnnestus! Vajutage allolevale nupule, et puhastada failid.",
     "response": "Vastus",
     "file_import1": "Fail nimega",
-    "file_import2": "laetakse üles"
+    "file_import2": "laetakse üles",
+    "attachment_upload_error": "Faili kirje loomine ebaõnnestus!",
+    "attachment_upload_success": "Uus faili kirje loodud!"
   },
   "logs": {
     "title": "Kirje ajalugu",
@@ -1886,6 +1888,7 @@
     "clearLocalStorage": "Eemalda vaikimisi väärtused",
     "clearLocalStorageAndFields": "Eemalda vaikimisi väärtused ja puhasta väljad",
     "reset_files": "Puhasta ebaõnnestunud faili(d)",
-    "import": "Impordi fail"
+    "import": "Impordi fail",
+    "try_again": "Proovi uuesti"
   }
 }
