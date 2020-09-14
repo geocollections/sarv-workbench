@@ -283,6 +283,7 @@ const state = {
     selectionId: null,
     selection: null,
     loan: null,
+    reference: null,
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],

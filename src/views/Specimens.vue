@@ -94,7 +94,8 @@ export default {
       },
       { id: "selectionId", title: "specimen.selectionId", type: "number" },
       { id: "selection", title: "specimen.selection", type: "text" },
-      { id: "loan", title: "specimen.loan", type: "text" }
+      { id: "loan", title: "specimen.loan", type: "text" },
+      { id: "reference", title: "specimen.reference", type: "text" }
     ]);
   },
 

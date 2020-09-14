@@ -1856,6 +1856,13 @@ export function fetchSpecimens(data, databaseId) {
       "icontains"}`;
   }
 
+  if (data.reference && data.reference.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+      data.reference
+    };fields:specimenreference__reference__reference,specimenreference__reference__id;lookuptype:${data.reference__lookuptype ||
+      "icontains"}`;
+  }
+
   if (typeof databaseId !== "undefined" && databaseId !== null) {
     searchFields += `&database__id=${databaseId}`;
   }
@@ -2121,9 +2128,7 @@ export function fetchRecentSpecimens(currentUserId) {
 }
 
 export function fetchMultiChangeSpecimen(data) {
-  return post(
-    `change_multi/sepecimen/`, data
-  );
+  return post(`change_multi/sepecimen/`, data);
 }
 
 /**********************
@@ -3306,31 +3311,32 @@ export function fetchLocations(data) {
 }
 
 export function fetchLocationImages(data) {
-  let fields = "attachment__uuid_filename,storage__id,storage__location"
+  let fields = "attachment__uuid_filename,storage__id,storage__location";
   let searchFields = "";
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `storage__id__${data.id__lookuptype || "icontains"}=${data.id}`;
+    searchFields += `storage__id__${data.id__lookuptype || "icontains"}=${
+      data.id
+    }`;
   }
 
   if (data.location && data.location.trim().length > 0) {
-    searchFields += `&storage__location__${data.location__lookuptype || "icontains"}=${
-        data.location
-    }`;
+    searchFields += `&storage__location__${data.location__lookuptype ||
+      "icontains"}=${data.location}`;
   }
   if (data.location_location && data.location_location.trim().length > 0) {
     searchFields += `&storage__location_location__${data.location_location__lookuptype ||
-    "icontains"}=${data.location_location}`;
+      "icontains"}=${data.location_location}`;
   }
   if (data.stratigraphy_free && data.stratigraphy_free.trim().length > 0) {
     searchFields += `&storage__stratigraphy_free__${data.stratigraphy_free__lookuptype ||
-    "icontains"}=${data.stratigraphy_free}`;
+      "icontains"}=${data.stratigraphy_free}`;
   }
   if (data.agent && data.agent.trim().length > 0) {
     searchFields += `&multi_search=value:${
-        data.agent
+      data.agent
     };fields:storage__agent__id,storage__agent__agent,storage__agent__forename,storage__agent__surename;lookuptype:${data.agent__lookuptype ||
-    "icontains"}`;
+      "icontains"}`;
   }
   // if (data.user_added && data.user_added.trim().length > 0) {
   //   searchFields += `&user_added__${data.user_added__lookuptype ||
@@ -3341,24 +3347,22 @@ export function fetchLocationImages(data) {
   //     "icontains"}=${data.date_added}`;
   // }
   if (data.contents && data.contents.trim().length > 0) {
-    searchFields += `&storage__contents__${data.contents__lookuptype || "icontains"}=${
-        data.contents
-    }`;
+    searchFields += `&storage__contents__${data.contents__lookuptype ||
+      "icontains"}=${data.contents}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
     return get(
-        `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`
+      `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`
     );
   } else {
     return get(
-        `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`
+      `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`
     );
   }
 }
-
 
 export function fetchLocationAttachment(id, searchParameters) {
   let orderBy = buildOrderBy(
@@ -3907,18 +3911,21 @@ export function fetchTaxonPages(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.language && data.language.trim().length > 0) {
-    searchFields += `&language__${data.language__lookuptype || "icontains"}=${data.language}`;
+    searchFields += `&language__${data.language__lookuptype || "icontains"}=${
+      data.language
+    }`;
   }
 
   if (data.title && data.title.trim().length > 0) {
-    searchFields += `&title__${data.title__lookuptype || "icontains"}=${data.title}`;
+    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
+      data.title
+    }`;
   }
   if (data.taxon && data.taxon.trim().length > 0) {
     searchFields += `&multi_search=value:${
-        data.taxon
+      data.taxon
     };fields:taxon__id,taxon__taxon;lookuptype:${data.taxon__lookuptype ||
-    "icontains"}`;
-
+      "icontains"}`;
   }
 
   if (data.on_frontpage) {
@@ -3929,11 +3936,11 @@ export function fetchTaxonPages(data) {
 
   if (searchFields.length > 0) {
     return get(
-        `taxon_page/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `taxon_page/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   } else {
     return get(
-        `taxon_page/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `taxon_page/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
 }
@@ -3941,8 +3948,6 @@ export function fetchTaxonPages(data) {
 /*************************
  ***  TAXON_PAGES END  ***
  *************************/
-
-
 
 /******************************
  *** SITE_GROUNDWATER START ***
