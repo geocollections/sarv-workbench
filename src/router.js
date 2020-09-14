@@ -2131,6 +2131,69 @@ const router = new Router({
           ]
         },
         {
+          path: "/taxon_page",
+          component: () => import("./views/TaxonPages.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                  import("./components/taxon_pages/TaxonPagesTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "taxon_pages",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/taxon_page/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/taxon_pages/TaxonPage.vue"),
+              meta: {
+                isEdit: true,
+                table: "taxon_page",
+                heading: "editTaxonPages.heading",
+                requiresAuth: true,
+                object: "taxon_page"
+              }
+            }
+          ]
+        },
+        {
+          path: "/taxon_page/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Taxon pages add",
+              component: () => import("./components/taxon_pages/TaxonPage.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.taxon_pages",
+                subForms: [
+                  { path: "/taxon_pages/add", name: "header.taxon_pages" }
+                ],
+                requiresAuth: true,
+                object: "taxon_page"
+              }
+            }
+          ]
+        },
+        {
           path: "/sample_series",
           component: () => import("./views/SampleSeries.vue"),
           meta: {

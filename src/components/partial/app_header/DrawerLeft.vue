@@ -612,6 +612,16 @@ export default {
               title: "web_pages_",
               path: "/web_pages/add",
               icon: "far fa-plus-square"
+            },
+            {
+              title: "editTaxonPage",
+              path: "/taxon_page",
+              icon: "fas fa-pager"
+            },
+            {
+              title: "addTaxonPage",
+              path: "/taxon_page/add",
+              icon: "far fa-plus-square"
             }
           ]
         }
