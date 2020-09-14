@@ -1535,6 +1535,12 @@
   "selectionSeries": {
     "user_added": "Kasutaja",
     "clear": "Tühjenda valik",
+    "clear_yes": "Jah, tühjenda!",
+    "confirm_clearing": "Kas olete kindel, et soovite valiku tühjendada?",
+    "specimen_storage_change": "Eksemplaride valiku hoiukoha määramine",
+    "confirm_storage_change": "Kas olete kindel, et soovite järgnevate eksemplaride hoiukohta muuta?",
+    "change_storage": "Muuda hoiukohta",
+    "change_storage_yes": "Jah, muuda hoiukohta",
     "relatedTables": {
       "specimen": "Eksemplarid",
       "sample": "Proovid",

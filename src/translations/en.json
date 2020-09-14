@@ -1535,6 +1535,12 @@
   "selectionSeries": {
     "user_added": "User added",
     "clear": "Clear selection",
+    "clear_yes": "Yes, clear!",
+    "confirm_clearing": "Are you sure you would like to clear selection?",
+    "specimen_storage_change": "Specimen selection storage change",
+    "confirm_storage_change": "Are you sure you would like to change the storage location for the following specimens?",
+    "change_storage": "Change storage",
+    "change_storage_yes": "Yes, Change storage",
     "relatedTables": {
       "specimen": "Specimens",
       "sample": "Samples",

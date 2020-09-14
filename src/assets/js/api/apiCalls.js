@@ -2120,6 +2120,12 @@ export function fetchRecentSpecimens(currentUserId) {
   );
 }
 
+export function fetchMultiChangeSpecimen(data) {
+  return post(
+    `change_multi/sepecimen/`, data
+  );
+}
+
 /**********************
  ***  SPECIMEN END  ***
  **********************/

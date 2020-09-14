@@ -129,16 +129,173 @@
       </v-tabs-items>
     </v-card>
 
+    <!-- SPECIMEN STORAGE CHANGE -->
+    <v-card
+      v-if="$route.meta.isEdit && isSpecimenInSelection"
+      class="mt-2"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <span>{{ $t("selectionSeries.specimen_storage_change") }}</span>
+        <v-icon right>fas fa-warehouse</v-icon>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.storage = !block.storage"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.storage ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.storage" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="new_specimen_storage"
+                :color="bodyActiveColor"
+                :items="autocomplete.storage"
+                :loading="autocomplete.loaders.storage"
+                item-text="location"
+                :label="$t('common.storage')"
+                is-link
+                route-object="location"
+                is-searchable
+                v-on:search:items="autocompleteStorageSearch"
+                use-state
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1 text-center text-sm-right">
+              <v-dialog
+                v-model="changeStorageDialog"
+                max-width="500"
+                style="z-index: 50000"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-on="on"
+                    v-bind="attrs"
+                    @click="changeStorageDialog = true"
+                    :disabled="!new_specimen_storage"
+                    color="red"
+                    class="white--text"
+                    ><v-icon left small>fas fa-exclamation-triangle</v-icon
+                    >{{ $t("selectionSeries.change_storage") }}
+                    <v-icon right small
+                      >fas fa-exclamation-triangle</v-icon
+                    ></v-btn
+                  >
+                </template>
+                <v-card>
+                  <v-card-title class="headline">{{
+                    $t("selectionSeries.change_storage")
+                  }}</v-card-title>
+                  <v-card-text
+                    >{{ $t("selectionSeries.confirm_storage_change") }}
+                    <div v-if="relatedData.specimen.results.length > 10">
+                      {{
+                        relatedData.specimen.results
+                          .slice(0, 10)
+                          .map(item => item.specimen)
+                          .join(", ")
+                      }}, ...
+                    </div>
+
+                    <div v-else class="font-weight-bold">
+                      {{
+                        relatedData.specimen.results
+                          .map(item => item.specimen)
+                          .join(", ")
+                      }}
+                    </div>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="green darken-1"
+                      small
+                      class="white--text"
+                      @click="changeStorageDialog = false"
+                      >{{ $t("buttons.cancel") }}</v-btn
+                    >
+                    <v-btn
+                      small
+                      color="red darken-1"
+                      @click="changeSpecimenStorage"
+                      class="white--text"
+                    >
+                      <v-icon left small>fas fa-exclamation-triangle</v-icon
+                      >{{ $t("selectionSeries.change_storage_yes") }}
+                      <v-icon right small
+                        >fas fa-exclamation-triangle</v-icon
+                      ></v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- EMPTY SELECTION -->
     <div
       v-if="$route.meta.isEdit && isRelatedDataFilled"
       class="d-flex flex-row flex-nowrap justify-content-end mt-2"
     >
-      <v-btn @click="clearSelection" small color="red" class="white--text"
-        ><v-icon left small>fas fa-exclamation-triangle</v-icon>
-        {{ $t("selectionSeries.clear") }}
-        <v-icon right small>fas fa-exclamation-triangle</v-icon></v-btn
+      <v-dialog
+        v-model="clearSelectionModal"
+        max-width="320"
+        style="z-index: 50000"
       >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-on="on"
+            v-bind="attrs"
+            @click="clearSelectionModal = true"
+            small
+            color="red"
+            class="white--text"
+            ><v-icon left small>fas fa-exclamation-triangle</v-icon>
+            {{ $t("selectionSeries.clear") }}
+            <v-icon right small>fas fa-exclamation-triangle</v-icon></v-btn
+          >
+        </template>
+        <v-card>
+          <v-card-title class="headline">{{
+            $t("selectionSeries.clear")
+          }}</v-card-title>
+          <v-card-text>{{
+            $t("selectionSeries.confirm_clearing")
+          }}</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="green darken-1"
+              small
+              class="white--text"
+              @click="clearSelectionModal = false"
+              >{{ $t("buttons.cancel") }}</v-btn
+            >
+            <v-btn
+              small
+              color="red darken-1"
+              @click="clearSelection"
+              class="white--text"
+            >
+              <v-icon left small>fas fa-exclamation-triangle</v-icon
+              >{{ $t("selectionSeries.clear_yes") }}
+              <v-icon right small>fas fa-exclamation-triangle</v-icon></v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -162,12 +319,17 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import SelectionSeriesDataTable from "./relatedTables/SelectionSeriesDataTable";
 import { mapActions, mapState } from "vuex";
-import { fetchAllSelections } from "@/assets/js/api/apiCalls";
+import {
+  fetchAllSelections,
+  fetchMultiChangeSpecimen
+} from "@/assets/js/api/apiCalls";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
 
 export default {
   name: "SelectionSeries",
 
-  components: { SelectionSeriesDataTable, InputWrapper },
+  components: { AutocompleteWrapper, SelectionSeriesDataTable, InputWrapper },
 
   props: {
     isBodyActiveColorDark: {
@@ -187,7 +349,12 @@ export default {
     }
   },
 
-  mixins: [formManipulation, formSectionsMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    formSectionsMixin,
+    requestsMixin,
+    autocompleteMixin
+  ],
 
   data() {
     return this.setInitialData();
@@ -243,6 +410,10 @@ export default {
         item => this.relatedData[item]?.count > 0
       );
       return !!result;
+    },
+
+    isSpecimenInSelection() {
+      return this.relatedData.specimen.count > 0;
     }
   },
 
@@ -274,13 +445,52 @@ export default {
           errResponse => errResponse
         );
 
-        if (multiRemoveResponse)
+        if (multiRemoveResponse) {
           this.handleResponseMessages(
             multiRemoveResponse,
             multiRemoveResponse.status === 200,
             true
           );
+
+          if (multiRemoveResponse.status === 200)
+            this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        }
       }
+
+      this.clearSelectionModal = false;
+    },
+
+    async changeSpecimenStorage() {
+      let updatedSpecimenObjects = this.relatedData.specimen.results.map(
+        specimen => {
+          return {
+            id: specimen.specimen,
+            storage: this.new_specimen_storage.id
+          };
+        }
+      );
+      console.log(updatedSpecimenObjects);
+
+      let formData = new FormData();
+      formData.append(
+        "data",
+        JSON.stringify({
+          change: updatedSpecimenObjects
+        })
+      );
+
+      let multiChangeResponse = await fetchMultiChangeSpecimen(formData).then(
+        response => response,
+        errResponse => errResponse
+      );
+
+      if (multiChangeResponse)
+        this.handleResponseMessages(
+          multiChangeResponse,
+          multiChangeResponse.status === 200
+        );
+
+      this.changeStorageDialog = false;
     },
 
     setTab(type) {
@@ -309,7 +519,16 @@ export default {
         copyFields: ["id", "name", "remarks"],
         requiredFields: ["name"],
         selection_series: {},
-        block: { info: true },
+        new_specimen_storage: null,
+        autocomplete: {
+          loaders: {
+            storage: false
+          },
+          storage: []
+        },
+        clearSelectionModal: false,
+        changeStorageDialog: false,
+        block: { info: true, storage: true },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
           { text: "main.pagination", value: 25 },
