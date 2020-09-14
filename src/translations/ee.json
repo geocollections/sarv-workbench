@@ -426,6 +426,7 @@
     },
     "selection_series": {
       "info": "Üldinfo",
+      "storage": "Eksemplaride hoiukoha määramine",
       "active": "Aktiivne valik",
       "activeTitle": "Tee valik aktiivseks",
       "inactiveTitle": "Tee valik mitteaktiivseks"
@@ -460,7 +461,8 @@
       "info": "Üldinfo"
     },
     "location": {
-      "info": "Üldinfo"
+      "info": "Üldinfo",
+      "storage": "Hoiukoha muutmine"
     },
     "rock": {
       "info": "Üldinfo"
@@ -1567,6 +1569,10 @@
     "number_items": "Säilikute arv",
     "number_items_registered": "Registreeritud säilikute arv",
     "contents": "Sisu",
+    "change_location_title": "Muuda seotud andmete hoiukohta",
+    "change_location": "Muuda hoiukohta",
+    "confirm_location_change": "Kas olete kindel, et soovite muuta iga seotud andme hoiukohta (v.a failide)?",
+    "change_location_yes": "Jah, Muuda hoiukohta",
     "relatedTables": {
       "attachment_link": "Failid",
       "specimen": "Eksemplarid",

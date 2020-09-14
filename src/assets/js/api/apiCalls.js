@@ -3394,6 +3394,10 @@ export function fetchLocationSamples(id, searchParameters) {
   );
 }
 
+export function fetchMultiChangeLocation(table, data) {
+  return post(`change_multi/${table}/`, data);
+}
+
 /**********************
  ***  LOCATION END  ***
  **********************/

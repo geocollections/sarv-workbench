@@ -426,6 +426,7 @@
     },
     "selection_series": {
       "info": "General info",
+      "storage": "Specimen storage change",
       "active": "Active selection series",
       "activeTitle": "Make selection series active",
       "inactiveTitle": "Make selection series inactive"
@@ -460,7 +461,8 @@
       "info": "General info"
     },
     "location": {
-      "info": "General info"
+      "info": "General info",
+      "storage": "Location change"
     },
     "rock": {
       "info": "General info"
@@ -1567,6 +1569,10 @@
     "number_items": "Number items",
     "number_items_registered": "Number items registered",
     "contents": "Contents",
+    "change_location_title": "Change related data location",
+    "change_location": "Change location",
+    "confirm_location_change": "Are you sure you would like to change location for every related data object (except attachments)?",
+    "change_location_yes": "Yes, Change location",
     "relatedTables": {
       "attachment_link": "Files",
       "specimen": "Specimens",

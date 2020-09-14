@@ -323,6 +323,105 @@
         </v-card>
       </v-tabs-items>
     </v-card>
+
+    <!-- STORAGE CHANGE -->
+    <v-card
+      v-if="$route.meta.isEdit && doesRelatedDataExist"
+      class="mt-2"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <span>{{ $t("location.change_location_title") }}</span>
+        <v-icon right>fas fa-warehouse</v-icon>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.storage = !block.storage"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.storage ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.storage" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="new_storage"
+                :color="bodyActiveColor"
+                :items="autocomplete.storage"
+                :loading="autocomplete.loaders.storage"
+                item-text="location"
+                :label="$t('common.storage')"
+                is-link
+                route-object="location"
+                is-searchable
+                v-on:search:items="autocompleteStorageSearch"
+                use-state
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1 text-center text-sm-right">
+              <v-dialog
+                v-model="changeStorageDialog"
+                max-width="500"
+                style="z-index: 50000"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-on="on"
+                    v-bind="attrs"
+                    @click="changeStorageDialog = true"
+                    :disabled="!new_storage"
+                    color="red"
+                    class="white--text"
+                    ><v-icon left small>fas fa-exclamation-triangle</v-icon
+                    >{{ $t("location.change_location") }}
+                    <v-icon right small
+                      >fas fa-exclamation-triangle</v-icon
+                    ></v-btn
+                  >
+                </template>
+                <v-card>
+                  <v-card-title class="headline">{{
+                    $t("location.change_location")
+                  }}</v-card-title>
+                  <v-card-text>{{
+                    $t("location.confirm_location_change")
+                  }}</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="green darken-1"
+                      small
+                      class="white--text"
+                      @click="changeStorageDialog = false"
+                      >{{ $t("buttons.cancel") }}</v-btn
+                    >
+                    <v-btn
+                      small
+                      color="red darken-1"
+                      @click="changeRelatedDataLocation"
+                      class="white--text"
+                    >
+                      <v-icon left small>fas fa-exclamation-triangle</v-icon
+                      >{{ $t("location.change_location_yes") }}
+                      <v-icon right small
+                        >fas fa-exclamation-triangle</v-icon
+                      ></v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
   </div>
 </template>
 
@@ -336,7 +435,8 @@ import {
   fetchLocation,
   fetchLocationAttachment,
   fetchLocationSamples,
-  fetchLocationSpecimens
+  fetchLocationSpecimens,
+  fetchMultiChangeSpecimen
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import { mapActions, mapState } from "vuex";
@@ -345,6 +445,7 @@ import requestsMixin from "../../mixins/requestsMixin";
 import SpecimenTable from "../specimen/SpecimenTable";
 import SampleTable from "../sample/SampleTable";
 import ExportButtons from "../partial/export/ExportButtons";
+import { fetchMultiChangeLocation } from "@/assets/js/api/apiCalls";
 
 export default {
   name: "Location",
@@ -430,11 +531,75 @@ export default {
           text: this.$t(item.text, { num: item.value })
         };
       });
+    },
+
+    // Returns objects which are valid for location change
+    relatedDataObjects() {
+      return Object.keys(this.relatedData).filter(
+        item => item !== "attachment_link" && item !== "searchParameters"
+      );
+    },
+
+    filledRelatedDataObjects() {
+      return this.relatedDataObjects.filter(
+        item => this.relatedData[item].count > 0
+      );
+    },
+
+    doesRelatedDataExist() {
+      let listOfBooleans = this.relatedDataObjects.map(
+        item => this.relatedData[item].count > 0
+      );
+      return listOfBooleans.includes(true);
     }
   },
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+
+    changeRelatedDataLocation() {
+      console.log(this.filledRelatedDataObjects);
+
+      if (
+        this.filledRelatedDataObjects &&
+        this.filledRelatedDataObjects.length > 0
+      ) {
+        console.log("change");
+
+        this.filledRelatedDataObjects.forEach(async table => {
+          let updatedObjects = this.relatedData[table].results.map(item => {
+            return {
+              storage: this.new_storage.id,
+              id: item.id
+            };
+          });
+
+          let formData = new FormData();
+          formData.append(
+            "data",
+            JSON.stringify({
+              change: updatedObjects
+            })
+          );
+
+          let multiChangeResponse = await fetchMultiChangeLocation(
+            table,
+            formData
+          ).then(
+            response => response,
+            errResponse => errResponse
+          );
+
+          if (multiChangeResponse)
+            this.handleResponseMessages(
+              multiChangeResponse,
+              multiChangeResponse.status === 200
+            );
+        });
+      }
+
+      this.changeStorageDialog = false;
+    },
 
     setTab(type) {
       if (type) {
@@ -478,8 +643,11 @@ export default {
         location: {},
         requiredFields: ["location"],
         block: {
-          info: true
+          info: true,
+          storage: true
         },
+        new_storage: null,
+        changeStorageDialog: false,
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
           { text: "main.pagination", value: 25 },
