@@ -2691,6 +2691,10 @@ export function fetchMultiAddRecordToSelection(data) {
   return post(`add_multi/selection/`, data);
 }
 
+export function fetchAllSelections(id) {
+  return get(`selection/?selection=${id}&fields=id`);
+}
+
 /***********************
  ***  SELECTION END  ***
  ***********************/

@@ -128,6 +128,18 @@
         </v-card>
       </v-tabs-items>
     </v-card>
+
+    <!-- EMPTY SELECTION -->
+    <div
+      v-if="$route.meta.isEdit && isRelatedDataFilled"
+      class="d-flex flex-row flex-nowrap justify-content-end mt-2"
+    >
+      <v-btn @click="clearSelection" small color="red" class="white--text"
+        ><v-icon left small>fas fa-exclamation-triangle</v-icon>
+        {{ $t("selectionSeries.clear") }}
+        <v-icon right small>fas fa-exclamation-triangle</v-icon></v-btn
+      >
+    </div>
   </div>
 </template>
 
@@ -135,6 +147,7 @@
 import formManipulation from "../../mixins/formManipulation";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
+  fetchMultiRemoveRecordFromSelection,
   fetchSelectedAnalyses,
   fetchSelectedAttachments,
   fetchSelectedLocalities,
@@ -149,6 +162,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import SelectionSeriesDataTable from "./relatedTables/SelectionSeriesDataTable";
 import { mapActions, mapState } from "vuex";
+import { fetchAllSelections } from "@/assets/js/api/apiCalls";
 
 export default {
   name: "SelectionSeries",
@@ -222,11 +236,52 @@ export default {
           text: this.$t(item.text, { num: item.value })
         };
       });
+    },
+
+    isRelatedDataFilled() {
+      let result = Object.keys(this.relatedData).find(
+        item => this.relatedData[item]?.count > 0
+      );
+      return !!result;
     }
   },
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+
+    async clearSelection() {
+      let allSelections = await fetchAllSelections(this.$route.params.id);
+
+      if (
+        allSelections &&
+        allSelections.status === 200 &&
+        allSelections?.data?.results
+      ) {
+        let listOfIds = allSelections.data.results.map(item => item.id);
+
+        let formData = new FormData();
+        formData.append(
+          "data",
+          JSON.stringify({
+            delete: listOfIds
+          })
+        );
+
+        let multiRemoveResponse = await fetchMultiRemoveRecordFromSelection(
+          formData
+        ).then(
+          response => response,
+          errResponse => errResponse
+        );
+
+        if (multiRemoveResponse)
+          this.handleResponseMessages(
+            multiRemoveResponse,
+            multiRemoveResponse.status === 200,
+            true
+          );
+      }
+    },
 
     setTab(type) {
       if (type) {

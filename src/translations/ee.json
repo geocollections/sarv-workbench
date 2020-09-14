@@ -1527,6 +1527,7 @@
   },
   "selectionSeries": {
     "user_added": "Kasutaja",
+    "clear": "Tühjenda valik",
     "relatedTables": {
       "specimen": "Eksemplarid",
       "sample": "Proovid",

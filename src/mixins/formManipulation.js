@@ -751,6 +751,43 @@ const formManipulation = {
           this[this.$route.meta.object][fieldToBeUpdated] = date;
         }
       }
+    },
+
+    handleResponseMessages(response, isSuccess, isDelete = false) {
+      if (isSuccess) {
+        if (typeof response.data.message !== "undefined") {
+          if (
+            this.$i18n.locale === "ee" &&
+            typeof response.data.message_et !== "undefined"
+          ) {
+            this.toastSuccess({ text: response.data.message_et });
+          } else {
+            this.toastSuccess({ text: response.data.message });
+          }
+        }
+        if (typeof response.data.error !== "undefined") {
+          if (
+            this.$i18n &&
+            this.$i18n.locale === "ee" &&
+            typeof response.data.error_et !== "undefined"
+          ) {
+            this.toastError({ text: response.data.error_et });
+          } else {
+            this.toastError({ text: response.data.error });
+          }
+        }
+      } else {
+        if (
+          typeof response.data !== "undefined" &&
+          typeof response.data.error !== "undefined"
+        )
+          this.toastError({ text: response.data.error });
+        this.toastError({
+          text: isDelete
+            ? this.$t("messages.deleteError")
+            : this.$t("messages.uploadError")
+        });
+      }
     }
   }
 };
