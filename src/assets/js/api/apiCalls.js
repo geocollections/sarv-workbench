@@ -4299,6 +4299,10 @@ export function fetchChangePrivacyState(table, id, stateData) {
   return post("change/" + table + "/" + id, stateData);
 }
 
+export function fetchDeleteRecord(table, id) {
+  return post_delete(`${table}/${id}`);
+}
+
 /***********************
  ***  UNIVERSAL END  ***
  ***********************/

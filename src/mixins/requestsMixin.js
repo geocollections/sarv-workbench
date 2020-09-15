@@ -1,5 +1,5 @@
 import cloneDeep from "lodash/cloneDeep";
-import { postRequest } from "../assets/js/api/apiCalls";
+import { fetchDeleteRecord, postRequest } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
 
 const requestsMixin = {
@@ -88,9 +88,30 @@ const requestsMixin = {
       }
     },
 
-    deleteRelatedItem(payload) {
+    async deleteRelatedItem(payload) {
       console.log(payload);
-      // Todo
+      if (this.$route.meta.isEdit) {
+        const deleteResponse = await fetchDeleteRecord(
+          payload.table,
+          payload.item.id
+        ).then(
+          response => response,
+          errResponse => errResponse
+        );
+
+        if (deleteResponse) {
+          this.$_requestsMixin_handleResponseMessages(
+            deleteResponse,
+            deleteResponse.status === 200,
+            true
+          );
+
+          if (deleteResponse.status === 200)
+            this.loadRelatedData(payload.table);
+        }
+      } else {
+        // Todo
+      }
     },
 
     $_requestsMixin_httpRequestWrapper(url, formData) {
@@ -132,6 +153,42 @@ const requestsMixin = {
           this.toastSuccess({ text: response.data.message });
         else if (response.data.error)
           this.toastError({ text: response.data.error });
+      }
+    },
+
+    $_requestsMixin_handleResponseMessages(
+      response,
+      isSuccess,
+      isDelete = false
+    ) {
+      if (isSuccess) {
+        if (response?.data?.message) {
+          if (this.$i18n.locale === "ee" && response?.data?.message_et) {
+            this.toastSuccess({ text: response.data.message_et });
+          } else {
+            this.toastSuccess({ text: response.data.message });
+          }
+        }
+        if (response?.data?.error) {
+          if (this.$i18n.locale === "ee" && response?.data?.error_et) {
+            this.toastError({ text: response.data.error_et });
+          } else {
+            this.toastError({ text: response.data.error });
+          }
+        }
+      } else {
+        if (response?.data?.error) {
+          if (this.$i18n.locale === "ee" && response?.data?.error_et) {
+            this.toastError({ text: response.data.error_et });
+          } else {
+            this.toastError({ text: response.data.error });
+          }
+        } else
+          this.toastError({
+            text: isDelete
+              ? this.$t("messages.deleteError")
+              : this.$t("messages.uploadError")
+          });
       }
     }
   }
