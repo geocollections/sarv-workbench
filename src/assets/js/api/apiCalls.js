@@ -3158,6 +3158,26 @@ export function fetchStratigraphySynonyms(id, searchParameters) {
   );
 }
 
+export function fetchStratigraphyCatalogue(data) {
+  let orSearch = `or_search=hierarchy_string__icontains:${data.stringLito};hierarchy_string__icontains:${data.string};parent__hierarchy_string__icontains:${data.string};age_chronostratigraphy__hierarchy_string__icontains:${data.string}`;
+  let fields =
+    "id,stratigraphy,stratigraphy_en,index_main,index_additional,author_free,year,etymon,etymon_en,age_chronostratigraphy,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,parent,parent__stratigraphy,parent__stratigraphy_en,remarks,status__value,status__value_en";
+  return get(
+    `stratigraphy/?scope=3&rank!=null&rank!=0&rank!=1&rank!=2&rank!=3&${orSearch}&fields=${fields}&order_by=stratigraphy,stratigraphy_en`
+  );
+}
+
+export function fetchStratigraphyCatalogueStratotypes(id) {
+  let fields =
+    "stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratotype_type__value,stratotype_type__value_en,reference,reference__reference,remarks";
+  return get(`stratigraphy_stratotype/?stratigraphy=${id}&fields=${fields}`);
+}
+
+export function fetchStratigraphyCatalogueReferences(id) {
+  let fields = "reference,reference__reference";
+  return get(`stratigraphy_reference/?stratigraphy=${id}&fields=${fields}`);
+}
+
 /**************************
  ***  STRATIGRAPHY END  ***
  **************************/

@@ -1514,6 +1514,14 @@ const router = new Router({
           ]
         },
         {
+          path: "/stratigraphy_catalogue",
+          component: () =>
+            import("./components/stratigraphy/StratigraphyCatalogue.vue"),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
           path: "/area",
           component: () => import("./views/Areas.vue"),
           meta: {

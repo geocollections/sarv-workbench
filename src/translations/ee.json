@@ -276,7 +276,8 @@
     "analysis_method": "Analüüsi meetodid",
     "sample_import": "Impordi proovi fail",
     "analysis_import": "Impordi analüüsi fail",
-    "taxon_pages": "Taksoni veebilehed"
+    "taxon_pages": "Taksoni veebilehed",
+    "stratigraphy_catalogue": "Kataloog"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1410,6 +1411,12 @@
     "synonym":"Sünonüüm"
   },
   "stratigraphy": {
+    "unit": "Üksus",
+    "index": "Indeksid",
+    "age": "Vanus",
+    "parent_top": "'Ülemus'",
+    "stratotypes": "Stratotüübid",
+    "references": "Viited",
     "rank":"Tase",
     "scope":"Skoop",
     "parent":"Kuulub",
@@ -1819,7 +1826,15 @@
     "frontpage_title": "Pealehe pealkiri",
     "frontpage": "Pealkiri",
     "content": "Sisu"
-    },
+  },
+  "stratigraphy_catalogue": {
+    "title": "Eesti stratigraafiliste üksuste kataloog",
+    "cambrian": "Kambrium",
+    "ordovician": "Ordoviitsium",
+    "silur": "Silur",
+    "devon": "Devon",
+    "all": "KÕIK"
+  },
   "admin": {
     "activeUsers": "Aktiivseid kasutajaid",
     "user": "Kasutajanimi",

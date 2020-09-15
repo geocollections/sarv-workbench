@@ -276,7 +276,8 @@
     "analysis_method": "Analysis methods",
     "sample_import": "Import sample file",
     "analysis_import": "Import analysis file",
-    "taxon_pages": "Taxon pages"
+    "taxon_pages": "Taxon pages",
+    "stratigraphy_catalogue": "Catalogue"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1410,6 +1411,12 @@
     "synonym":"Synonym"
   },
   "stratigraphy": {
+    "unit": "Unit",
+    "index": "Indexes",
+    "age": "Age",
+    "parent_top": "'Parent'",
+    "stratotypes": "Stratotypes",
+    "references": "References",
     "rank":"Rank",
     "scope":"Scope",
     "parent":"Parent",
@@ -1818,6 +1825,14 @@
     "frontpage": "Frontpage",
     "frontpage_title": "Frontpage title",
     "content": "Content"
+  },
+  "stratigraphy_catalogue": {
+    "title": "Estonian stratigraphic units catalogue",
+    "cambrian": "Cambrian",
+    "ordovician": "Ordovician",
+    "silur": "Silur",
+    "devon": "Devon",
+    "all": "ALL"
   },
   "admin": {
     "activeUsers": "Active users",

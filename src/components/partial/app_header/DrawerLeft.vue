@@ -310,6 +310,11 @@ export default {
               title: "stratigraphy",
               path: "/stratigraphy/add",
               icon: "far fa-plus-square"
+            },
+            {
+              title: "stratigraphy_catalogue",
+              path: "/stratigraphy_catalogue",
+              icon: "fas fa-th-list"
             }
           ]
         },
