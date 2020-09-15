@@ -117,7 +117,7 @@
     "areas": "Alad",
     "area": "Lisa ala",
     "locations": "Asukohad",
-    "location": "Lisa asukoht",
+    "location": "Lisa hoiukoht",
     "rocks": "Kivimid ja mineraalid",
     "rock": "Lisa kivim või mineraal",
     "addAttachment": "Lisa uus fail",
@@ -158,7 +158,7 @@
     "editPreparation": "Preparaadid",
     "addDataset": "Lisa andmeset",
     "editDataset": "Andmesetid",
-    "addLocation": "Lisa asukoht",
+    "addLocation": "Lisa hoiukoht",
     "editLocation": "Asukohad",
     "addRock": "Lisa kivim või mineraal",
     "editRock": "Kivimid ja mineraalid",
@@ -216,7 +216,7 @@
     "specimen_identification_geology": "Eksemplari määrang",
     "specimen_reference": "Eksemplari kirjandus",
     "specimen_description": "Eksemplari kirjeldus",
-    "specimen_location": "Eksemplari asukoht",
+    "specimen_location": "Eksemplari hoiukoht",
     "specimen_history": "Eksemplari ajalugu",
     "specimen_analysis": "Eksemplari analüüs",
     "dataset_author": "Andmeseti autor",
@@ -655,8 +655,8 @@
     "editMessage": "Muuda ala"
   },
   "editLocation": {
-    "heading": "Asukoht",
-    "editMessage": "Muuda asukohta"
+    "heading": "Hoiukoht",
+    "editMessage": "Muuda hoiukohta"
   },
   "editRock": {
     "heading": "Kivim/Mineraal",
@@ -1562,7 +1562,7 @@
     "egf": "Ala EGF"
   },
   "location": {
-    "location": "Asukoht",
+    "location": "Hoiukoht",
     "location_location": "Asub",
     "date_collected_free": "Kogumise aeg",
     "agent": "Persoon: Nimi",
@@ -1757,7 +1757,7 @@
     "agent_collected": "Koguja",
     "date_collected": "Kogumise kuupäev",
     "date_collected_free": "Kogumise kuupäev txt",
-    "location": "Asukoht",
+    "location": "Hoiukoht",
     "locality_free": "Lokaliteet (txt)",
     "relatedTables": {
       "samples": "Proovid",
