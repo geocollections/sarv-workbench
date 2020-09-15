@@ -1865,7 +1865,9 @@
     "file_import1": "Fail nimega",
     "file_import2": "laetakse üles",
     "attachment_upload_error": "Faili kirje loomine ebaõnnestus!",
-    "attachment_upload_success": "Uus faili kirje loodud!"
+    "attachment_upload_success": "Uus faili kirje loodud!",
+    "delete": "Kustuta kirje",
+    "confirm_deleting": "Kas olete kindel, et soovite kirje kustutada?"
   },
   "logs": {
     "title": "Kirje ajalugu",

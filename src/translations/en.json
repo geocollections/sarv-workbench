@@ -1864,7 +1864,9 @@
     "file_import1": "A file named",
     "file_import2": "will be uploaded",
     "attachment_upload_error": "Attachment upload failed!",
-    "attachment_upload_success": "New attachment uploaded!"
+    "attachment_upload_success": "New attachment uploaded!",
+    "delete": "Delete the record",
+    "confirm_deleting": "Are you sure you would like to delete the record?"
   },
   "logs": {
     "title": "Editing history",

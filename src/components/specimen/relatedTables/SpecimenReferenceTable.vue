@@ -19,7 +19,7 @@
       <template v-slot:item.action="{ item }">
         <v-btn
           icon
-          @click="editItem(item)"
+          @click.stop="editItem(item)"
           color="green"
           :title="$t('buttons.edit')"
           small
@@ -29,7 +29,7 @@
         <v-btn
           v-if="$route.meta.isEdit"
           icon
-          @click="deleteItem(item)"
+          @click.stop="deleteItem(item)"
           color="red"
           :title="$t('buttons.delete')"
           small
@@ -147,6 +147,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -155,11 +161,13 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 
 export default {
   name: "SpecimenReferenceTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
     InputWrapper
   },
@@ -215,6 +223,8 @@ export default {
       }
     ],
     dialog: false,
+    deleteDialog: false,
+    emitDeleteData: null,
     item: {
       reference: null,
       pages: "",
@@ -305,11 +315,22 @@ export default {
 
     deleteItem(item) {
       this.deleteDialog = true;
-      this.$emit("related:delete", {
+      this.emitDeleteData = {
         table: "specimen_reference",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
-      });
+      };
+    },
+
+    cancelDeletion() {
+      this.deleteDialog = false;
+      this.emitDeleteData = null;
+    },
+
+    runDeletion() {
+      this.deleteDialog = false;
+      if (this.emitDeleteData)
+        this.$emit("related:delete", this.emitDeleteData);
     },
 
     formatItem(item) {
