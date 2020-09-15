@@ -1292,25 +1292,25 @@
     }
   },
   "drillcore_box": {
-    "drillcore": "Puursüdamik - Nr",
-    "number": "Box no.",
-    "depth_start": "Depth start",
-    "depth_end": "Depth end",
-    "stratigraphy_base": "Strat. base",
-    "stratigraphy_base_free": "Strat. base free",
-    "stratigraphy_top": "Strat. top",
-    "stratigraphy_top_free": "Strat. top free",
-    "stratigraphy_free": "Strat. free",
-    "depth_other": "Depth other",
-    "number_meters": "m. in a box",
+    "drillcore": "Drill core - No",
+    "number": "Kasti nr.",
+    "depth_start": "Algus, m",
+    "depth_end": "Lõpp, m",
+    "stratigraphy_base": "Strat. alumine",
+    "stratigraphy_base_free": "Strat. alumine txt",
+    "stratigraphy_top": "Strat. ülemine",
+    "stratigraphy_top_free": "Strat. ülemine txt",
+    "stratigraphy_free": "Piirid jms",
+    "depth_other": "Muud sügavbused",
+    "number_meters": "m kastis",
     "diameter": "d, mm",
-    "location": "Location",
-    "attachment": "Image",
-    "is_preferred": "Preferred",
-    "is_wet": "Wet",
+    "location": "Asukoht",
+    "attachment": "Pilt",
+    "is_preferred": "Eelistatud",
+    "is_wet": "Märg",
     "relatedTables": {
-      "attachment": "Failid (vaata/muuda)",
-      "add_attachment": "Failid (lisa/kustuta)"
+      "attachment": "Files (view/edit)",
+      "add_attachment": "Files (add/delete)"
     }
   },
   "drillcore_study": {
