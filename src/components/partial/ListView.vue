@@ -11,7 +11,7 @@
         <sample-list-view v-if="module === 'sample'" :data="data" />
 
         <specimen-list-view v-if="module === 'specimen'" :data="data" />
-        <location-list-view v-if="module === 'location'" :data="data"/>
+        <location-list-view v-if="module === 'location'" :data="data" />
       </v-col>
     </v-row>
   </div>

@@ -211,7 +211,10 @@
                 </v-col>
 
                 <v-col cols="12" class="pa-1">
-                  <editor v-model="item.description" :label="$t('common.description')" />
+                  <editor
+                    v-model="item.description"
+                    :label="$t('common.description')"
+                  />
                 </v-col>
               </v-row>
             </v-container>

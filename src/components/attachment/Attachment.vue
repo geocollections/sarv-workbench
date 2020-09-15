@@ -4892,7 +4892,10 @@ export default {
       console.log("FILE METADATA: ");
       console.log(metadata);
 
-      if (metadata && (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile)) {
+      if (
+        metadata &&
+        (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile)
+      ) {
         // DATE
         if (metadata.DateTimeOriginal) {
           this.attachment.date_created = this.formatMetadataDate(

@@ -59,7 +59,9 @@ const autocompleteMixin = {
         : "institution_name_en";
     },
     parameterNameLabel() {
-      return this.$i18n.locale === "ee" ? "parameter_name" : "parameter_name_en";
+      return this.$i18n.locale === "ee"
+        ? "parameter_name"
+        : "parameter_name_en";
     },
     ...mapGetters("user", ["getCurrentUser"])
   },

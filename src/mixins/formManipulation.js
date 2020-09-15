@@ -1,7 +1,10 @@
 import cloneDeep from "lodash/cloneDeep";
 import moment from "moment";
 import { mapActions, mapGetters, mapState } from "vuex";
-import {fetchAttachmentForReference, postRequest} from "../assets/js/api/apiCalls";
+import {
+  fetchAttachmentForReference,
+  postRequest
+} from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
 
 const formManipulation = {

@@ -238,26 +238,22 @@
               </v-row>
 
               <v-row
-                  class="px-3 mt-3 checkboxes"
-                  v-if="$route.meta.object === 'taxon_pages'"
+                class="px-3 mt-3 checkboxes"
+                v-if="$route.meta.object === 'taxon_pages'"
               >
                 <v-col cols="12" class="py-0">
                   <v-row>
                     <v-checkbox
-                        :input-value="searchParameters.on_frontpage"
-                        :label="$t('taxon_page.on_frontpage')"
-                        class="mt-0 pr-6"
-                        :color="bodyActiveColor"
-                        hide-details
-                        @change="
-                        $emit(
-                          'update:searchParameters',
-                          $event,
-                          'on_frontpage'
-                        )
+                      :input-value="searchParameters.on_frontpage"
+                      :label="$t('taxon_page.on_frontpage')"
+                      class="mt-0 pr-6"
+                      :color="bodyActiveColor"
+                      hide-details
+                      @change="
+                        $emit('update:searchParameters', $event, 'on_frontpage')
                       "
                     ></v-checkbox>
-                    </v-row>
+                  </v-row>
                 </v-col>
               </v-row>
 

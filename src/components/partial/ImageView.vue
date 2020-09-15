@@ -23,13 +23,12 @@ export default {
   computed: {
     computedData() {
       if (this.module === "location") {
-
         const data = this.data.map(item => {
-          return {...item, uuid_filename: item.attachment__uuid_filename}
-        })
+          return { ...item, uuid_filename: item.attachment__uuid_filename };
+        });
         return data;
       }
-      return this.data
+      return this.data;
     }
   }
 };

@@ -304,7 +304,7 @@
         dense
         elevation="3"
         icon="fas fa-info"
-      >{{ $t("buttons.is_non_fossil") }}</v-alert
+        >{{ $t("buttons.is_non_fossil") }}</v-alert
       >
     </div>
   </div>

@@ -9,10 +9,17 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span :class="validate('analysis_parameter') ? 'green--text' : 'red--text'">{{
-            $t("common.generalInfo")
-          }}</span>
-          <v-icon right :class="validate('analysis_parameter') ? 'green--text' : 'red--text'"
+          <span
+            :class="
+              validate('analysis_parameter') ? 'green--text' : 'red--text'
+            "
+            >{{ $t("common.generalInfo") }}</span
+          >
+          <v-icon
+            right
+            :class="
+              validate('analysis_parameter') ? 'green--text' : 'red--text'
+            "
             >fas fa-project-diagram</v-icon
           >
         </div>
@@ -38,35 +45,34 @@
             </v-col>
             <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
-                  v-model="analysis_parameter.parent_parameter"
-                  :color="bodyActiveColor"
-                  :items="autocomplete.analysis_parameter"
-                  :loading="autocomplete.loaders.analysis_parameter"
-                  :item-text="parameterNameLabel"
-                  :label="$t('analysis_parameter.parent_parameter')"
-                  is-link
-                  route-object="analysis_parameter"
-                  is-searchable
-                  v-on:search:items="autocompleteAnalysisParameterSearch"
+                v-model="analysis_parameter.parent_parameter"
+                :color="bodyActiveColor"
+                :items="autocomplete.analysis_parameter"
+                :loading="autocomplete.loaders.analysis_parameter"
+                :item-text="parameterNameLabel"
+                :label="$t('analysis_parameter.parent_parameter')"
+                is-link
+                route-object="analysis_parameter"
+                is-searchable
+                v-on:search:items="autocompleteAnalysisParameterSearch"
               />
             </v-col>
           </v-row>
 
           <!-- NAME and NAME (EN) -->
           <v-row no-gutters>
-
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                  v-model="analysis_parameter.parameter_name"
-                  :color="bodyActiveColor"
-                  :label="$t('analysis_parameter.parameter_name')"
+                v-model="analysis_parameter.parameter_name"
+                :color="bodyActiveColor"
+                :label="$t('analysis_parameter.parameter_name')"
               />
             </v-col>
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                  v-model="analysis_parameter.parameter_name_en"
-                  :color="bodyActiveColor"
-                  :label="$t('analysis_parameter.parameter_name_en')"
+                v-model="analysis_parameter.parameter_name_en"
+                :color="bodyActiveColor"
+                :label="$t('analysis_parameter.parameter_name_en')"
               />
             </v-col>
           </v-row>
@@ -74,18 +80,17 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                  v-model="analysis_parameter.parameter_html"
-                  :color="bodyActiveColor"
-                  :label="$t('analysis_parameter.parameter_html')"
+                v-model="analysis_parameter.parameter_html"
+                :color="bodyActiveColor"
+                :label="$t('analysis_parameter.parameter_html')"
               />
             </v-col>
 
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                  v-model="analysis_parameter.synonyms"
-                  :color="bodyActiveColor"
-                  :label="$t('analysis_parameter.synonyms')"
-
+                v-model="analysis_parameter.synonyms"
+                :color="bodyActiveColor"
+                :label="$t('analysis_parameter.synonyms')"
               />
             </v-col>
           </v-row>
@@ -236,7 +241,6 @@ export default {
     },
 
     loadFullInfo() {
-
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
@@ -245,10 +249,17 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.$set(this, "analysis_parameter", this.handleResponse(response)[0]);
+            this.$set(
+              this,
+              "analysis_parameter",
+              this.handleResponse(response)[0]
+            );
             this.fillAutocompleteFields(this.analysis_parameter);
 
-            this.removeUnnecessaryFields(this.analysis_parameter, this.copyFields);
+            this.removeUnnecessaryFields(
+              this.analysis_parameter,
+              this.copyFields
+            );
             this.$emit("data-loaded", this.analysis_parameter);
             this.setLoadingState(false);
           } else {
@@ -260,7 +271,6 @@ export default {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
     },
-    
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
@@ -290,7 +300,9 @@ export default {
           parameter_name: obj.parent_parameter__parameter_name,
           parameter_name_en: obj.parent_parameter__parameter_name_en
         };
-        this.autocomplete.analysis_parameter.push(this.analysis_parameter.parent_parameter)
+        this.autocomplete.analysis_parameter.push(
+          this.analysis_parameter.parent_parameter
+        );
       }
     }
   }

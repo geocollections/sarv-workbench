@@ -35,7 +35,8 @@ import {
   fetchWebNews,
   fetchWebPages,
   fetchAnalysisMethods,
-  fetchAnalysisParameters, fetchTaxonPages
+  fetchAnalysisParameters,
+  fetchTaxonPages
 } from "@/assets/js/api/apiCalls";
 
 const actions = {

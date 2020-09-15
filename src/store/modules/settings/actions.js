@@ -117,7 +117,6 @@ const actions = {
     commit("UPDATE_DRAWER_RIGHT_COLOR", "white");
     commit("UPDATE_DRAWER_RIGHT_DARK", false);
     commit("UPDATE_DRAWER_RIGHT_ACTIVE_COLOR", "deep-orange");
-
   }
 };
 

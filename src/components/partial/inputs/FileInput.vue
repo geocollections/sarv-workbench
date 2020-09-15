@@ -45,7 +45,10 @@
         icon="fas fa-info"
         >{{ $t("messages.reference_file_upload_failed") }}</v-alert
       >
-      <v-btn @click="files = null" :dark="bodyActiveColorDark" :color="bodyActiveColor"
+      <v-btn
+        @click="files = null"
+        :dark="bodyActiveColorDark"
+        :color="bodyActiveColor"
         >{{ $t("buttons.reset_files") }}
         <v-icon right>far fa-trash-alt</v-icon></v-btn
       >

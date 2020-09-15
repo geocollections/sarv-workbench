@@ -1,22 +1,25 @@
 <template>
   <div class="analysis_parameter">
-    <table-view-title title="header.analysis_parameter" buttonPath="/analysis_parameter/add" />
+    <table-view-title
+      title="header.analysis_parameter"
+      buttonPath="/analysis_parameter/add"
+    />
 
     <table-view-search
-        :show-search="block.search"
-        v-on:update:showSearch="block.search = $event"
-        :filters="activeSearchParametersFilters"
-        :search-parameters="searchParameters"
-        :col-size="6"
-        v-on:update:searchParameters="updateSearchParamsByField"
-        v-on:reset:searchParameters="resetSearchParams"
+      :show-search="block.search"
+      v-on:update:showSearch="block.search = $event"
+      :filters="activeSearchParametersFilters"
+      :search-parameters="searchParameters"
+      :col-size="6"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <list-module-core
-        :module="$route.meta.object"
-        :searchParameters="searchParameters"
-        :api-call="fetchAnalysisParameters"
-        v-on:update:searchParameters="updateSearchParamsByField"
+      :module="$route.meta.object"
+      :searchParameters="searchParameters"
+      :api-call="fetchAnalysisParameters"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -48,8 +51,16 @@ export default {
   created() {
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
-      { id: "parameter_name", title: "analysis_parameter.parameter_name", type: "text" },
-      { id: "parameter_name_en", title: "analysis_parameter.parameter_name_en", type: "text" },
+      {
+        id: "parameter_name",
+        title: "analysis_parameter.parameter_name",
+        type: "text"
+      },
+      {
+        id: "parameter_name_en",
+        title: "analysis_parameter.parameter_name_en",
+        type: "text"
+      },
       {
         id: "remarks",
         title: "common.remarks",

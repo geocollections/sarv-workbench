@@ -36,7 +36,9 @@
             class="mb-2"
             value="list"
             :label="
-              module === 'sample' || module === 'specimen' || module === 'location'
+              module === 'sample' ||
+              module === 'specimen' ||
+              module === 'location'
                 ? $t('references.labelView')
                 : $t('references.listView')
             "
@@ -256,14 +258,19 @@ export default {
     },
     currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
-      if ((this.module === "specimen" || this.module === "location") && newVal === "image") {
+      if (
+        (this.module === "specimen" || this.module === "location") &&
+        newVal === "image"
+      ) {
         this.response = { count: 0, results: [] };
         this.$emit("search:images", true);
-      } else if ((this.module === "specimen" || this.module === "location") && oldVal === "image") {
+      } else if (
+        (this.module === "specimen" || this.module === "location") &&
+        oldVal === "image"
+      ) {
         this.response = { count: 0, results: [] };
         this.$emit("search:images", false);
       }
-
     }
   },
 

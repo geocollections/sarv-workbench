@@ -1,52 +1,51 @@
 <template>
   <v-data-table
-      class="taxon-pages-table"
-      :headers="translatedHeaders"
-      hide-default-footer
-      dense
-      :items="response.results"
-      :items-per-page="searchParameters.paginateBy"
-      multi-sort
-      :page="searchParameters.page"
-      :search="filter"
-      expand-icon="fas fa-caret-down"
-      :sort-by="searchParameters.sortBy"
-      :sort-desc="searchParameters.sortDesc"
-      @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
-      @update:sort-desc="
+    class="taxon-pages-table"
+    :headers="translatedHeaders"
+    hide-default-footer
+    dense
+    :items="response.results"
+    :items-per-page="searchParameters.paginateBy"
+    multi-sort
+    :page="searchParameters.page"
+    :search="filter"
+    expand-icon="fas fa-caret-down"
+    :sort-by="searchParameters.sortBy"
+    :sort-desc="searchParameters.sortDesc"
+    @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
+    @update:sort-desc="
       $emit('update:sorting', { value: $event, key: 'sortDesc' })
     "
-      :server-items-length="response.count"
-      :class="bodyColor.split('n-')[0] + 'n-5'"
+    :server-items-length="response.count"
+    :class="bodyColor.split('n-')[0] + 'n-5'"
   >
     <template v-slot:item.id="{ item }">
       <router-link
-          :to="{ path: '/taxon_page/' + item.id }"
-          :title="$t('editTaxonPages.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
+        :to="{ path: '/taxon_page/' + item.id }"
+        :title="$t('editTaxonPages.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
       >
         {{ item.id }}
       </router-link>
     </template>
 
-
-<!--    <template v-slot:item.content="{ item }">-->
-<!--      <div-->
-<!--          v-translate="{-->
-<!--          et: item.content_et,-->
-<!--          en: item.content_en,-->
-<!--          useInnerText: true,-->
-<!--          characterLimit: 1000-->
-<!--        }"-->
-<!--      ></div>-->
-<!--    </template>-->
+    <!--    <template v-slot:item.content="{ item }">-->
+    <!--      <div-->
+    <!--          v-translate="{-->
+    <!--          et: item.content_et,-->
+    <!--          en: item.content_en,-->
+    <!--          useInnerText: true,-->
+    <!--          characterLimit: 1000-->
+    <!--        }"-->
+    <!--      ></div>-->
+    <!--    </template>-->
     <template v-slot:item.taxon="{ item }">
       <router-link
-          :to="{ path: '/taxon/' + item.taxon }"
-          :title="$t('editTaxon.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
+        :to="{ path: '/taxon/' + item.taxon }"
+        :title="$t('editTaxon.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
       >
         {{ item.taxon }}
       </router-link>
@@ -96,8 +95,8 @@ export default {
       { text: "common.id", value: "id" },
       { text: "taxon_page.taxon", value: "taxon" },
       { text: "common.language", value: "language" },
-      { text: "taxon_page.title", value: "title" },
-      ],
+      { text: "taxon_page.title", value: "title" }
+    ],
     names: []
   }),
   computed: {

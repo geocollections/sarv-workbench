@@ -50,7 +50,10 @@ export default {
 .cke_dialog_background_cover {
   z-index: 100001 !important;
 }
-.cke_combopanel, .cke_dialog_container, .cke_notifications_area, .cke_menu_panel {
+.cke_combopanel,
+.cke_dialog_container,
+.cke_notifications_area,
+.cke_menu_panel {
   z-index: 100002 !important;
 }
 </style>

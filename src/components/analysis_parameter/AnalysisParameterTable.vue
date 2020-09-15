@@ -32,14 +32,21 @@
       <span v-html="item.parameter_html"></span>
     </template>
     <template v-slot:item.parameter_name="{ item }">
-      <span v-translate="{et: item.parameter_name, en: item.parameter_name_en}"></span>
+      <span
+        v-translate="{ et: item.parameter_name, en: item.parameter_name_en }"
+      ></span>
     </template>
 
     <template v-slot:item.synonyms="{ item }">
       {{ item.synonyms }}
     </template>
     <template v-slot:item.parent_parameter="{ item }">
-      <span v-translate="{et: item.parent_parameter__parameter_name, en: item.parent_parameter__parameter_name_en}"></span>
+      <span
+        v-translate="{
+          et: item.parent_parameter__parameter_name,
+          en: item.parent_parameter__parameter_name_en
+        }"
+      ></span>
     </template>
   </v-data-table>
 </template>

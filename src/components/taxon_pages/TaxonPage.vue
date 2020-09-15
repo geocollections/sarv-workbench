@@ -58,12 +58,11 @@
             <!-- TITLE -->
             <v-col cols="6" class="pa-1">
               <input-wrapper
-                  v-model="taxon_page.title"
-                  :color="bodyActiveColor"
-                  :label="$t('taxon_page.title')"
+                v-model="taxon_page.title"
+                :color="bodyActiveColor"
+                :label="$t('taxon_page.title')"
               />
             </v-col>
-
           </v-row>
 
           <v-row no-gutters>
@@ -78,9 +77,9 @@
             <!-- FRONTPAGE TITLE -->
             <v-col cols="6" class="pa-1">
               <input-wrapper
-                  v-model="taxon_page.frontpage_title"
-                  :color="bodyActiveColor"
-                  :label="$t('taxon_page.frontpage_title')"
+                v-model="taxon_page.frontpage_title"
+                :color="bodyActiveColor"
+                :label="$t('taxon_page.frontpage_title')"
               />
             </v-col>
           </v-row>
@@ -235,7 +234,6 @@ export default {
       };
     },
     fillAutocompleteFields(obj) {
-
       if (this.isNotEmpty(obj.taxon)) {
         this.taxon_page.taxon = {
           id: obj.taxon,
@@ -250,7 +248,6 @@ export default {
         };
         this.autocomplete.agent.push(this.taxon_page.author);
       }
-
     },
     reloadData() {
       Object.assign(this.$data, this.setInitialData());
@@ -266,7 +263,7 @@ export default {
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
             this.$set(this, "taxon_page", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.taxon_page)
+            this.fillAutocompleteFields(this.taxon_page);
             this.removeUnnecessaryFields(this.taxon_page, this.copyFields);
             this.$emit("data-loaded", this.taxon_page);
             this.setLoadingState(false);
@@ -280,7 +277,7 @@ export default {
       }
     },
 
-      formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       Object.keys(uploadableObject).forEach(key => {

@@ -29,18 +29,25 @@
     </template>
 
     <template v-slot:item.analysis_method="{ item }">
-      <span v-translate="{et: item.analysis_method, en: item.method_en}"></span>
+      <span
+        v-translate="{ et: item.analysis_method, en: item.method_en }"
+      ></span>
     </template>
-<!--    <template v-slot:item.parent_method_analysis_method="{ item }">-->
-<!--      <span-->
-<!--        v-translate="{ et: item.parameter_name, en: item.parameter_name_en }"-->
-<!--      ></span>-->
-<!--    </template>-->
+    <!--    <template v-slot:item.parent_method_analysis_method="{ item }">-->
+    <!--      <span-->
+    <!--        v-translate="{ et: item.parameter_name, en: item.parameter_name_en }"-->
+    <!--      ></span>-->
+    <!--    </template>-->
 
     <template v-slot:item.parent_method__analysis_method="{ item }">
-      <span v-translate="{et: item.parent_method__analysis_method, en: item.parent_method__method_en}"></span>
+      <span
+        v-translate="{
+          et: item.parent_method__analysis_method,
+          en: item.parent_method__method_en
+        }"
+      ></span>
     </template>
-    </v-data-table>
+  </v-data-table>
 </template>
 
 <script>
