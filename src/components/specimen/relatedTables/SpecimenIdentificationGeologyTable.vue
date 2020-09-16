@@ -8,7 +8,6 @@
       :items-per-page="searchParameters.paginateBy"
       multi-sort
       :page="searchParameters.page"
-      :search="filter"
       expand-icon="fas fa-caret-down"
       :sort-by.sync="searchParameters.sortBy"
       :sort-desc.sync="searchParameters.sortDesc"
@@ -27,7 +26,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,7 +38,6 @@
       </template>
 
       <template v-slot:item.rock="{ item }">
-        <div v-if="isUsedAsRelatedData">
           <span
             v-if="$route.meta.isEdit"
             v-translate="{
@@ -54,18 +52,9 @@
               en: item.rock.name_en
             }"
           />
-        </div>
-        <div
-          v-else
-          v-translate="{
-            et: item.rock__name,
-            en: item.rock__name_en
-          }"
-        ></div>
       </template>
 
       <template v-slot:item.agent="{ item }">
-        <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
             :to="{ path: '/agent/' + item.agent }"
@@ -84,20 +73,9 @@
           >
             {{ item.agent.agent }}
           </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/agent/' + item.agent }"
-          :title="$t('editAgent.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.agent__agent }}
-        </router-link>
       </template>
 
       <template v-slot:item.reference="{ item }">
-        <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
             :to="{ path: '/reference/' + item.reference }"
@@ -116,20 +94,9 @@
           >
             {{ item.reference.reference }}
           </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/reference/' + item.reference }"
-          :title="$t('editReference.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.reference__reference }}
-        </router-link>
       </template>
 
       <template v-slot:item.type="{ item }">
-        <div v-if="isUsedAsRelatedData">
           <span
             v-if="$route.meta.isEdit"
             v-translate="{
@@ -144,14 +111,7 @@
               en: item.type.value_en
             }"
           />
-        </div>
-        <div
-          v-else
-          v-translate="{
-            et: item.type__value,
-            en: item.type__value_en
-          }"
-        ></div>
+
       </template>
 
       <template v-slot:item.current="{ item }">
@@ -308,6 +268,12 @@
         >{{ $t("buttons.is_fossil") }}</v-alert
       >
     </div>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -319,18 +285,21 @@ import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import DateWrapper from "../../partial/inputs/DateWrapper";
 import { fetchListIdentificationType } from "../../../assets/js/api/apiCalls";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "SpecimenIdentificationGeologyTable",
 
   components: {
+    RelatedDataDeleteDialog,
     DateWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -359,11 +328,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     },
     isAddNewAvailable: {
       type: Boolean,
@@ -395,7 +359,6 @@ export default {
         align: "center"
       }
     ],
-    dialog: false,
     item: {
       rock: null,
       name: "",
@@ -406,7 +369,6 @@ export default {
       type: null,
       current: false
     },
-    isNewItem: true,
     autocomplete: {
       rock: [],
       agent: [],
@@ -422,15 +384,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return typeof this.item.rock === "object" && this.item.rock !== null;
     }
@@ -443,9 +396,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         rock: null,
         name: "",
@@ -458,31 +409,8 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "specimen_identification_geology",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "specimen_identification_geology",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.rock !== "object" && item.rock !== null) {
         this.item.rock = {
@@ -530,16 +458,6 @@ export default {
       this.item.name_en = item.name_en;
       this.item.date_identified = item.date_identified;
       this.item.current = item.current === true;
-
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "specimen_identification_geology",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
     },
 
     fillListAutocompletes() {
@@ -552,24 +470,6 @@ export default {
           }
         });
         this.autocomplete.loaders.type = false;
-      }
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
-
-    updateUserInputtedDate(fieldToBeUpdated, date) {
-      if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
-          this.item[fieldToBeUpdated] = date;
-        }
       }
     }
   }

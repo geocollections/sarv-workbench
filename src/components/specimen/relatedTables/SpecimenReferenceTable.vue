@@ -8,7 +8,6 @@
       :items-per-page="searchParameters.paginateBy"
       multi-sort
       :page="searchParameters.page"
-      :search="filter"
       expand-icon="fas fa-caret-down"
       :sort-by.sync="searchParameters.sortBy"
       :sort-desc.sync="searchParameters.sortDesc"
@@ -39,34 +38,23 @@
       </template>
 
       <template v-slot:item.reference="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
-        </div>
         <router-link
-          v-else
+          v-if="$route.meta.isEdit"
           :to="{ path: '/reference/' + item.reference }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           {{ item.reference__reference }}
+        </router-link>
+        <router-link
+          v-else-if="item.reference"
+          :to="{ path: '/reference/' + item.reference.id }"
+          :title="$t('editReference.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.reference.reference }}
         </router-link>
       </template>
     </v-data-table>
@@ -160,8 +148,8 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "SpecimenReferenceTable",
@@ -172,15 +160,11 @@ export default {
     InputWrapper
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
       type: Object
-    },
-    filter: {
-      type: String,
-      required: false
     },
     searchParameters: {
       type: Object,
@@ -201,11 +185,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
 
@@ -222,16 +201,12 @@ export default {
         align: "center"
       }
     ],
-    dialog: false,
-    deleteDialog: false,
-    emitDeleteData: null,
     item: {
       reference: null,
       pages: "",
       figures: "",
       remarks: ""
     },
-    isNewItem: true,
     autocomplete: {
       reference: [],
       loaders: {
@@ -241,15 +216,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.reference === "object" && this.item.reference !== null
@@ -258,9 +224,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         reference: null,
         pages: "",
@@ -269,31 +233,8 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "specimen_reference",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "specimen_reference",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
@@ -309,38 +250,6 @@ export default {
       this.item.pages = item.pages;
       this.item.figures = item.figures;
       this.item.remarks = item.remarks;
-
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.deleteDialog = true;
-      this.emitDeleteData = {
-        table: "specimen_reference",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      };
-    },
-
-    cancelDeletion() {
-      this.deleteDialog = false;
-      this.emitDeleteData = null;
-    },
-
-    runDeletion() {
-      this.deleteDialog = false;
-      if (this.emitDeleteData)
-        this.$emit("related:delete", this.emitDeleteData);
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     }
   }
 };

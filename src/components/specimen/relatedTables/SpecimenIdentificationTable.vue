@@ -8,7 +8,6 @@
       :items-per-page="searchParameters.paginateBy"
       multi-sort
       :page="searchParameters.page"
-      :search="filter"
       expand-icon="fas fa-caret-down"
       :sort-by.sync="searchParameters.sortBy"
       :sort-desc.sync="searchParameters.sortDesc"
@@ -27,7 +26,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,28 +38,8 @@
       </template>
 
       <template v-slot:item.taxon="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.taxon }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon__taxon }}
-          </router-link>
-          <router-link
-            v-else-if="item.taxon"
-            :to="{ path: '/taxon/' + item.taxon.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon.taxon }}
-          </router-link>
-        </div>
         <router-link
-          v-else
+          v-if="$route.meta.isEdit"
           :to="{ path: '/taxon/' + item.taxon }"
           :title="$t('editTaxon.editMessage')"
           class="sarv-link"
@@ -68,31 +47,20 @@
         >
           {{ item.taxon__taxon }}
         </router-link>
+        <router-link
+          v-else-if="item.taxon"
+          :to="{ path: '/taxon/' + item.taxon.id }"
+          :title="$t('editTaxon.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.taxon.taxon }}
+        </router-link>
       </template>
 
       <template v-slot:item.agent="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent.agent }}
-          </router-link>
-        </div>
         <router-link
-          v-else
+          v-if="$route.meta.isEdit"
           :to="{ path: '/agent/' + item.agent }"
           :title="$t('editAgent.editMessage')"
           class="sarv-link"
@@ -100,31 +68,20 @@
         >
           {{ item.agent__agent }}
         </router-link>
+        <router-link
+          v-else-if="item.agent"
+          :to="{ path: '/agent/' + item.agent.id }"
+          :title="$t('editAgent.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.agent.agent }}
+        </router-link>
       </template>
 
       <template v-slot:item.reference="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
-        </div>
         <router-link
-          v-else
+          v-if="$route.meta.isEdit"
           :to="{ path: '/reference/' + item.reference }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
@@ -132,32 +89,32 @@
         >
           {{ item.reference__reference }}
         </router-link>
+        <router-link
+          v-else-if="item.reference"
+          :to="{ path: '/reference/' + item.reference.id }"
+          :title="$t('editReference.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.reference.reference }}
+        </router-link>
       </template>
 
       <template v-slot:item.identification_type="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.identification_type__value,
-              en: item.identification_type__value_en
-            }"
-          />
-          <span
-            v-else-if="item.identification_type"
-            v-translate="{
-              et: item.identification_type.value,
-              en: item.identification_type.value_en
-            }"
-          />
-        </div>
-        <div
-          v-else
+        <span
+          v-if="$route.meta.isEdit"
           v-translate="{
             et: item.identification_type__value,
             en: item.identification_type__value_en
           }"
-        ></div>
+        />
+        <span
+          v-else-if="item.identification_type"
+          v-translate="{
+            et: item.identification_type.value,
+            en: item.identification_type.value_en
+          }"
+        />
       </template>
 
       <template v-slot:item.current="{ item }">
@@ -307,6 +264,12 @@
         >{{ $t("buttons.is_non_fossil") }}</v-alert
       >
     </div>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -318,18 +281,21 @@ import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import DateWrapper from "../../partial/inputs/DateWrapper";
 import { fetchListIdentificationType } from "../../../assets/js/api/apiCalls";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "SpecimenIdentificationTable",
 
   components: {
+    RelatedDataDeleteDialog,
     DateWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -358,11 +324,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     },
     isAddNewAvailable: {
       type: Boolean,
@@ -393,7 +354,6 @@ export default {
         align: "center"
       }
     ],
-    dialog: false,
     item: {
       taxon: null,
       name: "",
@@ -403,7 +363,6 @@ export default {
       identification_type: null,
       current: false
     },
-    isNewItem: true,
     autocomplete: {
       taxon: [],
       agent: [],
@@ -419,15 +378,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return typeof this.item.taxon === "object" && this.item.taxon !== null;
     }
@@ -440,9 +390,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         taxon: null,
         name: "",
@@ -454,31 +402,8 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "specimen_identification",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "specimen_identification",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.taxon !== "object" && item.taxon !== null) {
         this.item.taxon = {
@@ -527,16 +452,6 @@ export default {
       this.item.name = item.name;
       this.item.date_identified = item.date_identified;
       this.item.current = item.current === true;
-
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "specimen_identification",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
     },
 
     fillListAutocompletes() {
@@ -549,24 +464,6 @@ export default {
           }
         });
         this.autocomplete.loaders.identification_type = false;
-      }
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
-
-    updateUserInputtedDate(fieldToBeUpdated, date) {
-      if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
-          this.item[fieldToBeUpdated] = date;
-        }
       }
     }
   }
