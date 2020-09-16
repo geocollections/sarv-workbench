@@ -2494,6 +2494,14 @@ const router = new Router({
           meta: {
             requiresAuth: true
           }
+        },
+        {
+          path: "/hierarchy_update",
+          name: "Hierarchy update",
+          component: () => import("./components/partial/hierarchy_update/HierarchyUpdate.vue"),
+          meta: {
+            requiresAuth: true
+          }
         }
       ]
     },

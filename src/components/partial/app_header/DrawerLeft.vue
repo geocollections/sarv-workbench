@@ -140,6 +140,18 @@
           <v-icon>fas fa-code</v-icon>
         </v-list-item-icon>
       </v-list-item>
+
+      <!-- HIERARCHY UPDATE -->
+      <v-list-item
+        v-if="isDevUrl && isUserSuperuser"
+        :to="{ path: '/hierarchy_update' }"
+        :color="drawerActiveColor"
+      >
+        <v-list-item-title>Hierarchy update</v-list-item-title>
+        <v-list-item-icon>
+          <v-icon>fas fa-sitemap</v-icon>
+        </v-list-item-icon>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
