@@ -28,7 +28,7 @@
       </v-card-text>
 
       <StratigraphyCatalogueTable
-        :response="response"
+        :response="response[activeCatalogue.title]"
         :body-color="bodyColor"
         :body-active-color="bodyActiveColor"
       />
@@ -84,8 +84,11 @@ export default {
       { title: "all", id: 10, string: "1", stringLito: "1" }
     ],
     response: {
-      count: 0,
-      results: []
+      cambrian: { count: 0, results: [], stratotypes: [], references: [] },
+      ordovician: { count: 0, results: [], stratotypes: [], references: [] },
+      silur: { count: 0, results: [], stratotypes: [], references: [] },
+      devon: { count: 0, results: [], stratotypes: [], references: [] },
+      all: { count: 0, results: [], stratotypes: [], references: [] }
     }
   }),
 
@@ -104,7 +107,7 @@ export default {
     }
   },
 
-  mounted() {
+  created() {
     this.searchCatalogue();
   },
 
@@ -114,28 +117,43 @@ export default {
     async searchCatalogue(activeItem) {
       if (activeItem) this.activeCatalogue = activeItem;
 
-      this.setLoadingState(true);
-      this.setLoadingType("fetch");
+      if (this.response[this.activeCatalogue.title].count === 0) {
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
 
-      const response = await fetchStratigraphyCatalogue(this.activeCatalogue);
+        const responseFromApi = await fetchStratigraphyCatalogue(
+          this.activeCatalogue
+        );
 
-      if (response?.data) {
-        this.response = response.data;
+        // I don't want to show loader when adding stratotypes and references to table
+        this.setLoadingState(false);
 
-        // Todo: Better way to get stratotypes and reference??? Use solr?, fetch only once?
-        // for (const item of this.response.results) {
-        // let stratotypeResponse = await fetchStratigraphyCatalogueStratotypes(
-        //   item.id
-        // );
-        // console.log(stratotypeResponse);
-        // let referenceResponse = await fetchStratigraphyCatalogueReferences(
-        //   item.id
-        // );
-        // console.log(referenceResponse);
-        // }
+        if (responseFromApi?.data) {
+          this.response[this.activeCatalogue.title].count =
+            responseFromApi.data.count;
+          this.response[this.activeCatalogue.title].results =
+            responseFromApi.data.results;
+
+          let listOfIds = this.response[this.activeCatalogue.title].results.map(
+            item => item.id
+          );
+
+          const stratotypeResponse = await fetchStratigraphyCatalogueStratotypes(
+            listOfIds
+          );
+          if (stratotypeResponse?.data?.results)
+            this.response[this.activeCatalogue.title].stratotypes =
+              stratotypeResponse.data.results;
+
+          const referenceResponse = await fetchStratigraphyCatalogueReferences(
+            listOfIds
+          );
+
+          if (referenceResponse?.data?.results)
+            this.response[this.activeCatalogue.title].references =
+              referenceResponse.data.results;
+        }
       }
-
-      this.setLoadingState(false);
     }
   }
 };

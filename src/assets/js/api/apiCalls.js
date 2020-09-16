@@ -3167,15 +3167,15 @@ export function fetchStratigraphyCatalogue(data) {
   );
 }
 
-export function fetchStratigraphyCatalogueStratotypes(id) {
+export function fetchStratigraphyCatalogueStratotypes(listOfIds) {
   let fields =
     "stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratotype_type__value,stratotype_type__value_en,reference,reference__reference,remarks";
-  return get(`stratigraphy_stratotype/?stratigraphy=${id}&fields=${fields}`);
+  return get(`stratigraphy_stratotype/?stratigraphy__in=${listOfIds}&fields=${fields}`);
 }
 
-export function fetchStratigraphyCatalogueReferences(id) {
-  let fields = "reference,reference__reference";
-  return get(`stratigraphy_reference/?stratigraphy=${id}&fields=${fields}`);
+export function fetchStratigraphyCatalogueReferences(listOfIds) {
+  let fields = "reference,reference__reference,stratigraphy";
+  return get(`stratigraphy_reference/?stratigraphy__in=${listOfIds}&fields=${fields}`);
 }
 
 /**************************

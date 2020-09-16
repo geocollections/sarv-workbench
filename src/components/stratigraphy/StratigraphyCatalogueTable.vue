@@ -91,13 +91,72 @@
       </template>
 
       <!-- Todo -->
-      <template v-slot:item.stratotype="{ item }">
-        <div>Todo</div>
+      <template v-slot:item.stratotypes="{ item }">
+        <ul class="text-small" v-if="getListOfTypes(item.id, 'stratotypes').length > 0">
+          <li
+            v-for="(item, index) in getListOfTypes(item.id, 'stratotypes')"
+            :key="index"
+          >
+            <span
+              class="font-weight-bold"
+              v-translate="{
+                et: item.stratotype_type__value,
+                en: item.stratotype_type__value_en
+              }"
+            />:
+
+            <span v-if="item.stratigraphy">
+              <router-link
+                :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+                :title="$t('editStratigraphy.editMessage')"
+                class="sarv-link"
+                :class="`${bodyActiveColor}--text`"
+              >
+                <span
+                  v-translate="{
+                    et: item.stratigraphy__stratigraphy,
+                    en: item.stratigraphy__stratigraphy_en
+                  }"
+                />
+              </router-link>
+            </span>
+
+            <span v-if="item.reference">
+              <router-link
+                :to="{ path: '/reference/' + item.reference }"
+                :title="$t('editReference.editMessage')"
+                class="sarv-link"
+                :class="`${bodyActiveColor}--text`"
+              >
+                ({{ item.reference__reference }})
+              </router-link>
+            </span>
+
+            <span v-if="item.remarks">
+              {{ $t("common.remarks") }}: {{ item.remarks }}</span
+            >
+          </li>
+        </ul>
       </template>
 
       <!-- Todo -->
-      <template v-slot:item.reference="{ item }">
-        <div>Todo</div>
+      <template v-slot:item.references="{ item }">
+        <ul class="text-small" v-if="getListOfTypes(item.id, 'references').length > 0">
+          <li
+            v-for="(item, index) in getListOfTypes(item.id, 'references')"
+            :key="index"
+          >
+            <router-link
+              v-if="item.reference"
+              :to="{ path: '/reference/' + item.reference }"
+              :title="$t('editReference.editMessage')"
+              class="sarv-link"
+              :class="`${bodyActiveColor}--text`"
+            >
+              {{ item.reference__reference }}
+            </router-link>
+          </li>
+        </ul>
       </template>
 
       <template v-slot:item.status="{ item }">
@@ -136,8 +195,8 @@ export default {
       { text: "stratigraphy.etymon", value: "etymon" },
       { text: "stratigraphy.age", value: "age" },
       { text: "stratigraphy.parent_top", value: "parent" },
-      { text: "stratigraphy.stratotypes", value: "stratotype" },
-      { text: "stratigraphy.references", value: "reference" },
+      { text: "stratigraphy.stratotypes", value: "stratotypes" },
+      { text: "stratigraphy.references", value: "references" },
       { text: "common.remarks", value: "remarks" },
       { text: "stratigraphy.status", value: "status" }
     ]
@@ -151,13 +210,27 @@ export default {
         };
       });
     }
+  },
+
+  methods: {
+    getListOfTypes(id, type) {
+      return this.response[type].filter(item => item.stratigraphy === id);
+    }
   }
 };
 </script>
 
 <style scoped>
-.stratigraphy-catalogue-table.v-data-table td,
-.stratigraphy-catalogue-table.v-data-table th {
-  padding: 0 8px;
+.stratigraphy-catalogue-table >>> td,
+.stratigraphy-catalogue-table >>> th {
+  padding: 0 4px !important;
+}
+
+.text-small {
+  font-size: 0.625rem;
+}
+
+.stratigraphy-catalogue-table >>> .text-start {
+  font-size: 0.75rem;
 }
 </style>
