@@ -155,7 +155,7 @@
             </v-col>
           </v-row>
 
-          <!-- COLLECTIONS_STUDIED and NUMBER_ITEMS -->
+          <!-- COLLECTIONS_STUDIED and ITEMS_STUDIED -->
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
@@ -167,9 +167,9 @@
 
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                v-model="visit.number_items"
+                v-model="visit.items_studied"
                 :color="bodyActiveColor"
-                :label="$t('visit.number_items')"
+                :label="$t('visit.items_studied')"
                 type="number"
               />
             </v-col>
@@ -283,7 +283,7 @@ export default {
           "host",
           "purpose",
           "collections_studied",
-          "number_items",
+          "items_studied",
           "remarks"
         ],
         autocomplete: {
