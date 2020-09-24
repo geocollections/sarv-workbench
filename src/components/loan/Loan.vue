@@ -44,6 +44,7 @@
                 :label="$t('loan.date_start')"
                 v-on:date:clear="loan.date_start = null"
                 v-on:date:update="updateUserInputtedDate('date_start', $event)"
+                use-state
               />
             </v-col>
 
@@ -595,7 +596,7 @@ export default {
           selection_series: []
         },
         loan: {},
-        requiredFields: ["loan_number"],
+        requiredFields: ["loan_number", "date_start"],
         block: {
           info: true,
           selection_series: true
