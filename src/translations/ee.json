@@ -1693,6 +1693,11 @@
     "sample": "Proov",
     "print": "Print",
     "isActive": "Kuva aktiivsed laenud",
+    "selection_series": "Valik",
+    "fill_using_selection": "Täida nimekirjad kasutades valikut",
+    "fill_list": "Lisa nimekirja",
+    "confirm_list_fill": "Kas sa oled kindel, et soovid valikus olevad eksemplarid ja/või proovid lisada laenu nimekirja?",
+    "fill_list_yes": "Jah, lisa nimekirja",
     "relatedTables": {
       "loan_specimen": "Eksemplaride nimekiri",
       "loan_sample": "Proovide nimekiri"

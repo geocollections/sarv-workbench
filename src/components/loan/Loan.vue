@@ -342,6 +342,95 @@
         </v-card>
       </v-tabs-items>
     </v-card>
+
+    <!-- FILL SPECIMENS AND SAMPLES USING SELECTION_SERIES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <span>{{ $t("loan.fill_using_selection") }}</span>
+        <v-icon right>fas fa-clipboard-list</v-icon>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.selection_series = !block.selection_series"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.selection_series ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.selection_series" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="selection_series"
+                :color="bodyActiveColor"
+                :items="autocomplete.selection_series"
+                :loading="autocomplete.loaders.selection_series"
+                :item-text="customSelectionSeriesLabel"
+                :label="$t('loan.selection_series')"
+                is-link
+                route-object="selection_series"
+                is-searchable
+                v-on:search:items="autocompleteSelectionSeriesSearch"
+                use-state
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1 text-center text-sm-right">
+              <v-dialog
+                v-model="selectionSeriesDialog"
+                max-width="500"
+                style="z-index: 50000"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-on="on"
+                    v-bind="attrs"
+                    @click="selectionSeriesDialog = true"
+                    :disabled="!selection_series"
+                    color="red darken-1"
+                    class="white--text"
+                    >{{ $t("loan.fill_list") }}
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title class="headline">{{
+                    $t("loan.fill_list")
+                  }}</v-card-title>
+                  <v-card-text>{{ $t("loan.confirm_list_fill") }}</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="green darken-1"
+                      small
+                      class="white--text"
+                      @click="selectionSeriesDialog = false"
+                      >{{ $t("buttons.cancel") }}</v-btn
+                    >
+                    <v-btn
+                      small
+                      color="red darken-1"
+                      @click="fillUsingSelectionSeries"
+                      class="white--text"
+                    >
+                      {{ $t("loan.fill_list_yes") }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
   </div>
 </template>
 
@@ -356,7 +445,8 @@ import {
   fetchListLoanType,
   fetchLoan,
   fetchLoanSamples,
-  fetchLoanSpecimens
+  fetchLoanSpecimens,
+  fetchSelectedSpecimens
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -366,6 +456,10 @@ import { mapActions, mapState } from "vuex";
 import LoanSampleTable from "./relatedTables/LoanSampleTable";
 import LoanSpecimenTable from "./relatedTables/LoanSpecimenTable";
 import requestsMixin from "../../mixins/requestsMixin";
+import {
+  fetchIdsUsingSelection,
+  fetchMultiAddLoanLists
+} from "@/assets/js/api/apiCalls";
 
 export default {
   name: "Loan",
@@ -491,17 +585,22 @@ export default {
           loaders: {
             agent: false,
             list_loan_type: false,
-            list_loan_delivery_method: false
+            list_loan_delivery_method: false,
+            selection_series: false
           },
           agent: [],
           list_loan_type: [],
-          list_loan_delivery_method: []
+          list_loan_delivery_method: [],
+          selection_series: []
         },
         loan: {},
         requiredFields: ["loan_number"],
         block: {
-          info: true
+          info: true,
+          selection_series: true
         },
+        selection_series: null,
+        selectionSeriesDialog: false,
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
           { text: "main.pagination", value: 25 },
@@ -664,6 +763,67 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
+    },
+
+    // Fill Specimens and Samples using selection_series
+    async fillUsingSelectionSeries() {
+      if (this.selection_series?.id) {
+        this.setLoadingState(true);
+        this.setLoadingType("add");
+        await this.fillLists("specimen");
+        await this.fillLists("sample");
+      }
+
+      this.selectionSeriesDialog = false;
+      this.setLoadingState(false);
+    },
+
+    async fillLists(table) {
+      let response = await fetchIdsUsingSelection(
+        this.selection_series.id,
+        table
+      );
+
+      if (response?.data?.results) {
+        let listOfObjects = response.data.results.map(item => {
+          return {
+            [table]: item[table],
+            loan: this.$route.params.id
+          };
+        });
+
+        let formData = new FormData();
+        formData.append(
+          "data",
+          JSON.stringify({
+            add: listOfObjects
+          })
+        );
+
+        let multiAddResponse = await fetchMultiAddLoanLists(
+          `loan_${table}`,
+          formData
+        ).then(
+          response => response,
+          errResponse => errResponse
+        );
+
+        if (multiAddResponse) {
+          this.handleResponseMessages(
+            multiAddResponse,
+            multiAddResponse.status === 200,
+            true
+          );
+
+          if (multiAddResponse.status === 200)
+            this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        }
+      }
+    },
+
+    customSelectionSeriesLabel(option) {
+      if (option.name) return `${option.id} - ${option.name}`;
+      else return `${option.id}`;
     }
   }
 };

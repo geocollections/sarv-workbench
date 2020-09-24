@@ -363,6 +363,9 @@ const autocompleteMixin = {
     autocompleteUserSearch(value) {
       this.$_autocompleteMixin_search(value, "user", "user", 2);
     },
+    autocompleteSelectionSeriesSearch(value) {
+      this.$_autocompleteMixin_search(value, "selection_series", "selection_series", 2);
+    },
 
     /**
      * Initiates autocomplete search and sets results to autocomplete object.
@@ -516,6 +519,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `user/?username__icontains=${value}&fields=id,username`;
     case "rock_classification":
       return `rock_classification/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+    case "selection_series":
+      return `selection_series/?multi_search=value:${value};fields:id,name,tablename,remarks;lookuptype:icontains&fields=id,name,tablename,remarks`;
     case "attach_link__collection":
     case "attach_link__dataset":
     case "attach_link__project":

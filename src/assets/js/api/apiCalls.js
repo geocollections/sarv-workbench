@@ -2614,6 +2614,12 @@ export function fetchAddItemToSelection(data) {
   return post(`add/selection/`, data);
 }
 
+export function fetchIdsUsingSelection(id, table) {
+  return get(
+    `selection/?selection=${id}&${table}!=null&fields=${table}&format=json`
+  );
+}
+
 export function fetchSelectedSpecimens(selectionSeriesId, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -3170,12 +3176,16 @@ export function fetchStratigraphyCatalogue(data) {
 export function fetchStratigraphyCatalogueStratotypes(listOfIds) {
   let fields =
     "stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratotype_type__value,stratotype_type__value_en,reference,reference__reference,remarks";
-  return get(`stratigraphy_stratotype/?stratigraphy__in=${listOfIds}&fields=${fields}`);
+  return get(
+    `stratigraphy_stratotype/?stratigraphy__in=${listOfIds}&fields=${fields}`
+  );
 }
 
 export function fetchStratigraphyCatalogueReferences(listOfIds) {
   let fields = "reference,reference__reference,stratigraphy";
-  return get(`stratigraphy_reference/?stratigraphy__in=${listOfIds}&fields=${fields}`);
+  return get(
+    `stratigraphy_reference/?stratigraphy__in=${listOfIds}&fields=${fields}`
+  );
 }
 
 /**************************
@@ -3776,6 +3786,10 @@ export function fetchLoanSamples(id, searchParameters) {
   return get(
     `loan_sample/?loan=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
+}
+
+export function fetchMultiAddLoanLists(table, data) {
+  return post(`add_multi/${table}/`, data);
 }
 
 /******************

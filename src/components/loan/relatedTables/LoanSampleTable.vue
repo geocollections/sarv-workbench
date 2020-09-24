@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,34 +39,23 @@
       </template>
 
       <template v-slot:item.sample="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/sample/' + item.sample }"
-            :title="$t('editSample.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.sample__number }}
-          </router-link>
-          <router-link
-            v-else-if="item.sample"
-            :to="{ path: '/sample/' + item.sample.id }"
-            :title="$t('editSample.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.sample.number }}
-          </router-link>
-        </div>
         <router-link
-          v-else
+          v-if="$route.meta.isEdit"
           :to="{ path: '/sample/' + item.sample }"
           :title="$t('editSample.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           {{ item.sample__number }}
+        </router-link>
+        <router-link
+          v-else-if="item.sample"
+          :to="{ path: '/sample/' + item.sample.id }"
+          :title="$t('editSample.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.sample.number }}
         </router-link>
       </template>
     </v-data-table>
@@ -129,24 +118,32 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "LoanSampleTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
     InputWrapper
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -175,11 +172,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
 
@@ -194,12 +186,10 @@ export default {
         align: "center"
       }
     ],
-    dialog: false,
     item: {
       sample: null,
       remarks: ""
     },
-    isNewItem: true,
     autocomplete: {
       sample: [],
       loaders: {
@@ -209,15 +199,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.sample !== "undefined" && this.item.sample !== null
@@ -226,40 +207,17 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
-        sample: null,
+        reference: null,
+        pages: "",
+        figures: "",
         remarks: ""
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "loan_sample",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "loan_sample",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.sample !== "object" && item.sample !== null) {
         this.item.sample = {
@@ -272,26 +230,6 @@ export default {
         this.autocomplete.sample.push(this.item.sample);
       }
       this.item.remarks = item.remarks;
-
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "loan_sample",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     }
   }
 };
