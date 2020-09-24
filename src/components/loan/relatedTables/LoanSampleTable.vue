@@ -267,7 +267,7 @@ export default {
           number: item.sample__number
         };
         this.autocomplete.sample.push(this.item.sample);
-      } else if (item.sample !== null) {
+      } else {
         this.item.sample = item.sample;
         this.autocomplete.sample.push(this.item.sample);
       }

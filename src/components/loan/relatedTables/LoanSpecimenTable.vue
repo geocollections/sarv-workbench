@@ -81,7 +81,7 @@
                     :color="bodyActiveColor"
                     :items="autocomplete.specimen"
                     :loading="autocomplete.loaders.specimen"
-                    item-text="specimen_id"
+                    :item-text="customSpecimenLabel"
                     :label="$t('loan.specimen')"
                     use-state
                     is-link
@@ -249,10 +249,11 @@ export default {
       if (typeof item.specimen !== "object" && item.specimen !== null) {
         this.item.specimen = {
           id: item.specimen,
-          specimen_id: item.specimen__specimen_id
+          specimen_id: item.specimen__specimen_id,
+          coll__number: item.specimen__coll__number
         };
         this.autocomplete.specimen.push(this.item.specimen);
-      } else if (item.specimen !== null) {
+      } else {
         this.item.specimen = item.specimen;
         this.autocomplete.specimen.push(this.item.specimen);
       }
@@ -277,6 +278,16 @@ export default {
         }
       });
       return item;
+    },
+
+    customSpecimenLabel(option) {
+      if (option.coll__number) {
+        return `${option.coll__number.split(" ")[0]} ${
+          option.specimen_id
+        } (ID: ${option.id})`;
+      } else {
+        return `${option.specimen_id} (ID: ${option.id})`;
+      }
     }
   }
 };
