@@ -3757,8 +3757,8 @@ export function fetchLoanSpecimens(id, searchParameters) {
     searchParameters = {
       page: 1,
       paginateBy: 1000,
-      sortBy: ["specimen"],
-      sortDesc: [true]
+      sortBy: ["specimen__specimen_id"],
+      sortDesc: [false]
     };
   }
   let orderBy = buildOrderBy(
