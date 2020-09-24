@@ -39,34 +39,23 @@
       </template>
 
       <template v-slot:item.specimen="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/specimen/' + item.specimen }"
-            :title="$t('editSpecimen.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.specimen__specimen_id }}
-          </router-link>
-          <router-link
-            v-else-if="item.specimen"
-            :to="{ path: '/specimen/' + item.specimen.id }"
-            :title="$t('editSpecimen.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.specimen.specimen_id }}
-          </router-link>
-        </div>
         <router-link
-          v-else
+          v-if="$route.meta.isEdit"
           :to="{ path: '/specimen/' + item.specimen }"
           :title="$t('editSpecimen.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           {{ item.specimen__specimen_id }}
+        </router-link>
+        <router-link
+          v-else-if="item.specimen"
+          :to="{ path: '/specimen/' + item.specimen.id }"
+          :title="$t('editSpecimen.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.specimen.specimen_id }}
         </router-link>
       </template>
     </v-data-table>
@@ -175,17 +164,13 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
 
   data: () => ({
     headers: [
       { text: "loan.specimen", value: "specimen" },
+      { text: "specimen.coll", value: "specimen__coll__number" },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
