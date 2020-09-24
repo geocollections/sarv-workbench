@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
@@ -51,7 +51,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("user", ["getDatabaseId"])
+    ...mapGetters("user", ["getDatabaseId"])
   },
 
   created() {

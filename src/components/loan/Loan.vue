@@ -452,7 +452,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import LoanSampleTable from "./relatedTables/LoanSampleTable";
 import LoanSpecimenTable from "./relatedTables/LoanSpecimenTable";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -529,6 +529,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["loanSearchParameters"]),
 
     paginateByOptionsTranslated() {
@@ -788,9 +789,12 @@ export default {
         let listOfObjects = response.data.results.map(item => {
           return {
             [table]: item[table],
-            loan: this.$route.params.id
+            loan: this.$route.params.id,
+            database: this.getDatabaseId
           };
         });
+
+        console.log(listOfObjects)
 
         let formData = new FormData();
         formData.append(
