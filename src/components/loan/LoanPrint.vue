@@ -141,13 +141,21 @@
                   en: loan.delivery_method__value_en
                 }"
               ></span>
-              <span
-                v-translate="{
-                  et: ' Omniva poolt',
-                  en: ' by Omniva'
-                }"
-              ></span
-              >.
+              <span v-if="loan.deliverer">
+                <span
+                  v-translate="{
+                    et: ' isiku ',
+                    en: ' by '
+                  }"
+                ></span>
+                {{ loan.deliverer__agent
+                }}<span
+                  v-translate="{
+                    et: ' poolt.',
+                    en: '.'
+                  }"
+                ></span>
+              </span>
             </div>
           </v-col>
 
@@ -323,6 +331,7 @@
 
         <v-row
           no-gutters
+          :class="{ 'mt-1': loanSpecimens.length > 0 }"
           v-if="loanSamples.length > 0"
           style="border: 1px solid black"
         >
