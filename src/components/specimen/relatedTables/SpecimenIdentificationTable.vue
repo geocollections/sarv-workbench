@@ -361,7 +361,7 @@ export default {
       reference: null,
       date_identified: null,
       identification_type: null,
-      current: false
+      current: true
     },
     autocomplete: {
       taxon: [],
@@ -398,7 +398,7 @@ export default {
         reference: null,
         date_identified: null,
         identification_type: null,
-        current: false
+        current: true
       };
     },
 

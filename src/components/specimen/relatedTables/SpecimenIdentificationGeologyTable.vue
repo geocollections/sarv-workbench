@@ -367,7 +367,7 @@ export default {
       reference: null,
       date_identified: null,
       type: null,
-      current: false
+      current: true
     },
     autocomplete: {
       rock: [],
@@ -405,7 +405,7 @@ export default {
         reference: null,
         date_identified: null,
         type: null,
-        current: false
+        current: true
       };
     },
 
