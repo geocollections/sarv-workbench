@@ -75,6 +75,7 @@
     "between": "<> vahemikus",
     "doesnotcontain": "!* ei sisalda",
     "doesnotequal": "!= ei võrdu",
+    "hierarchy": "-·= hierarhiline",
     "lookUpType": "Filter"
   },
   "login": {

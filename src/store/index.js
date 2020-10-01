@@ -12,9 +12,9 @@ Vue.use(Vuex);
 
 function buildLocalStorageKey() {
   const hostname = window?.location?.hostname;
-  const devVersion = "_v1.0.6";
-  const liveVersion = "_v1.0.6";
-  const localVersion = "_v1.0.7";
+  const devVersion = "_v1.0.7";
+  const liveVersion = "_v1.0.7";
+  const localVersion = "_v1.0.8";
 
   if (hostname) {
     if (hostname.startsWith("edit2.") || hostname.startsWith("edit3.")) {

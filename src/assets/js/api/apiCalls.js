@@ -1863,6 +1863,13 @@ export function fetchSpecimens(data, databaseId) {
       "icontains"}`;
   }
 
+  if (data.classification && data.classification.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+      data.classification
+    };fields:classification__class_field,classification__class_en,classification__class_lat,classification__class_en_synonym,classification__class_synonym;lookuptype:${data.classification__lookuptype ||
+      "icontains"}`;
+  }
+
   if (typeof databaseId !== "undefined" && databaseId !== null) {
     searchFields += `&database__id=${databaseId}`;
   }

@@ -284,6 +284,7 @@ const state = {
     selection: null,
     loan: null,
     reference: null,
+    classification: null,
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
@@ -467,7 +468,8 @@ const state = {
     { text: "main.lte", value: "lte", symbol: "<" },
     { text: "main.between", value: "range", symbol: "<>" },
     { text: "main.doesnotequal", value: "iexact!", symbol: "!=" },
-    { text: "main.doesnotcontain", value: "icontains!", symbol: "!*" }
+    { text: "main.doesnotcontain", value: "icontains!", symbol: "!*" },
+    { text: "main.hierarchy", value: "hierarchy", symbol: "-·=" }
   ],
   activeSelectionSeriesList: null,
   activeLibraryList: null

@@ -75,6 +75,7 @@
     "between": "<> between",
     "doesnotcontain": "!* does not contain",
     "doesnotequal": "!= does not equal",
+    "hierarchy": "-·= hierarchy",
     "lookUpType": "Filter"
   },
   "login": {

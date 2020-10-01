@@ -237,6 +237,7 @@
                 </v-col>
               </v-row>
 
+              <!-- TAXON_PAGE CHECKBOXES -->
               <v-row
                 class="px-3 mt-3 checkboxes"
                 v-if="$route.meta.object === 'taxon_pages'"
