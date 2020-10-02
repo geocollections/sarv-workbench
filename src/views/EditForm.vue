@@ -3,7 +3,7 @@
     <div class="d-flex flex-wrap mt-2 mb-1 page-title justify-space-between">
       <div class="h2 float-left mb-1 mr-2">
         <span>
-          {{ $t($route.meta.heading) }}: <b>{{ $route.params.id }}</b>
+          {{ $t($route.meta.heading) }} ID: <b>{{ $route.params.id }}</b>
         </span>
 
         <span v-if="data && data.egf">
