@@ -37,8 +37,6 @@
           <v-row no-gutters>
             <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
-                v-on="on"
-                v-bind="attrs"
                 v-model="doi.identifier"
                 :color="bodyActiveColor"
                 :label="$t('doi.identifier')"
@@ -74,38 +72,38 @@
           <!-- CREATORS, YEAR and PUBLISHER -->
           <v-row no-gutters>
             <v-col cols="12" md="4" class="pa-1">
-              <div class="d-flex">
-                <div class="flex-fill">
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on, attrs }">
-                      <input-wrapper
-                        v-on="on"
-                        v-bind="attrs"
-                        v-model="doi.creators"
-                        :color="bodyActiveColor"
-                        :label="$t('doi.creators')"
-                        use-state
-                        readonly
-                      />
-                    </template>
-                    <span>{{ $t("doi.authorTooltip") }}</span>
-                  </v-tooltip>
-                </div>
-
-                <div
-                  class="align-self-end pl-2"
-                  v-if="!this.$route.meta.isEdit && isNotEmpty(doi.creators)"
-                >
-                  <v-btn
-                    icon
+              <!--              <div class="d-flex">-->
+              <!--                <div class="flex-fill">-->
+              <v-tooltip top z-index="60000">
+                <template v-slot:activator="{ on, attrs }">
+                  <input-wrapper
+                    v-on="on"
+                    v-bind="attrs"
+                    v-model="doi.creators"
                     :color="bodyActiveColor"
-                    @click="addCreatorsToRelatedData"
-                    :title="$t('doi.addCreators')"
-                  >
-                    <v-icon small>fas fa-user-plus</v-icon>
-                  </v-btn>
-                </div>
-              </div>
+                    :label="$t('doi.creators')"
+                    use-state
+                    readonly
+                  />
+                </template>
+                <span>{{ $t("doi.authorTooltip") }}</span>
+              </v-tooltip>
+              <!--                </div>-->
+
+              <!--                <div-->
+              <!--                  class="align-self-end pl-2"-->
+              <!--                  v-if="!$route.meta.isEdit && isNotEmpty(doi.creators)"-->
+              <!--                >-->
+              <!--                  <v-btn-->
+              <!--                    icon-->
+              <!--                    :color="bodyActiveColor"-->
+              <!--                    @click="addCreatorsToRelatedData"-->
+              <!--                    :title="$t('doi.addCreators')"-->
+              <!--                  >-->
+              <!--                    <v-icon small>fas fa-user-plus</v-icon>-->
+              <!--                  </v-btn>-->
+              <!--                </div>-->
+              <!--              </div>-->
             </v-col>
 
             <v-col cols="12" md="4" class="pa-1">
@@ -219,7 +217,7 @@
             </v-col>
 
             <v-col cols="12" md="3" class="pa-1">
-              <v-tooltip top>
+              <v-tooltip top z-index="60000">
                 <template v-slot:activator="{ on, attrs }">
                   <input-wrapper
                     v-on="on"
@@ -967,6 +965,13 @@ export default {
         this.loadRelatedData(this.activeTab);
       },
       deep: true
+    },
+    "relatedData.doi_agent.results": {
+      handler(newVal) {
+        console.log(newVal);
+        if (newVal && newVal.length > 0) this.updateDoiCreatorsField(newVal);
+      },
+      deep: true
     }
   },
 
@@ -1527,11 +1532,19 @@ export default {
         let creators = "";
 
         doiAgent.forEach(agent => {
+          console.log(agent);
           // Only Creators are added (agent_type 1 === Creator)
-          if (agent.agent_type === 1) {
-            if (typeof agent.agent !== "undefined" && agent.agent !== null) {
-              creators +=
-                agent.agent__surename + ", " + agent.agent__forename + "; ";
+          if (this.$route.meta.isEdit) {
+            if (agent?.agent_type === 1) {
+              if (agent?.agent__surename && agent?.agent__forename) {
+                creators += `${agent.agent__surename}, ${agent.agent__forename}; `;
+              } else if (agent?.name) creators += `${agent.name}; `;
+            }
+          } else {
+            if (agent?.agent_type?.id === 1) {
+              if (agent?.agent?.surename && agent?.agent?.forename) {
+                creators += `${agent?.agent?.surename}, ${agent?.agent?.forename}; `;
+              } else if (agent?.name) creators += `${agent.name}; `;
             }
           }
         });
