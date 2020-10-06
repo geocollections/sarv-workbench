@@ -37,6 +37,8 @@
           <v-row no-gutters>
             <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
+                v-on="on"
+                v-bind="attrs"
                 v-model="doi.identifier"
                 :color="bodyActiveColor"
                 :label="$t('doi.identifier')"
@@ -47,7 +49,6 @@
               />
             </v-col>
 
-            <!-- TODO: Find a way to change vue-multiselect size like b-form-input size -->
             <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
                 v-model="doi.resource_type"
@@ -75,13 +76,20 @@
             <v-col cols="12" md="4" class="pa-1">
               <div class="d-flex">
                 <div class="flex-fill">
-                  <input-wrapper
-                    v-model="doi.creators"
-                    :color="bodyActiveColor"
-                    :label="$t('doi.creators')"
-                    use-state
-                    readonly
-                  />
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <input-wrapper
+                        v-on="on"
+                        v-bind="attrs"
+                        v-model="doi.creators"
+                        :color="bodyActiveColor"
+                        :label="$t('doi.creators')"
+                        use-state
+                        readonly
+                      />
+                    </template>
+                    <span>{{ $t("doi.authorTooltip") }}</span>
+                  </v-tooltip>
                 </div>
 
                 <div
@@ -211,11 +219,18 @@
             </v-col>
 
             <v-col cols="12" md="3" class="pa-1">
-              <input-wrapper
-                v-model="doi.formats"
-                :color="bodyActiveColor"
-                :label="$t('doi.formats')"
-              />
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <input-wrapper
+                    v-on="on"
+                    v-bind="attrs"
+                    v-model="doi.formats"
+                    :color="bodyActiveColor"
+                    :label="$t('doi.formats')"
+                  />
+                </template>
+                <span>{{ $t("doi.formatsTooltip") }}</span>
+              </v-tooltip>
             </v-col>
 
             <v-col cols="12" md="3" class="pa-1">

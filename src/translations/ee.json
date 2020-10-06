@@ -1207,6 +1207,9 @@
     "sort": "Jrk",
     "currentUrl": "Praegune link",
     "newUrl": "Uus link",
+    "doiTooltip": "DOI lahter täidetakse automaatselt",
+    "authorTooltip": "Autori lahter täidetakse 'Seotud inimesed ja institutsioonid' kirjetega",
+    "formatsTooltip": "Siia lahtrisse sisesta lisatavate failide laiend, nt pdf, xlsx või csv; mitme faili puhul eralda need kooloniga",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "attachment_link": "Failid",
