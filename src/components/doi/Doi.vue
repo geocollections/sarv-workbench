@@ -878,7 +878,7 @@ import {
   fetchRegisterDoiUrlToDataCite,
   fetchDoiUsingEGF,
   fetchAgentUsingName
-} from "../../assets/js/api/apiCalls";
+} from "@/assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -968,7 +968,6 @@ export default {
     },
     "relatedData.doi_agent.results": {
       handler(newVal) {
-        console.log(newVal);
         if (newVal && newVal.length > 0) this.updateDoiCreatorsField(newVal);
       },
       deep: true
@@ -1532,7 +1531,6 @@ export default {
         let creators = "";
 
         doiAgent.forEach(agent => {
-          console.log(agent);
           // Only Creators are added (agent_type 1 === Creator)
           if (this.$route.meta.isEdit) {
             if (agent?.agent_type === 1) {
