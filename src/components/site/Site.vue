@@ -808,6 +808,7 @@ import FileInput from "../partial/inputs/FileInput";
 import requestsMixin from "../../mixins/requestsMixin";
 import SiteLocalityDescriptionTable from "./relatedTables/SiteLocalityDescriptionTable";
 import SiteLocalityReferenceTable from "./relatedTables/SiteLocalityReferenceTable";
+import toastMixin from "@/mixins/toastMixin";
 
 export default {
   name: "Site",
@@ -844,7 +845,8 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     sidebarMixin,
-    requestsMixin
+    requestsMixin,
+    toastMixin
   ],
   data() {
     return this.setInitialData();

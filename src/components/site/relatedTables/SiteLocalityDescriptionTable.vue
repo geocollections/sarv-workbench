@@ -329,6 +329,7 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import { cloneDeep } from "lodash";
 import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
+import {mapGetters} from "vuex";
 
 export default {
   name: "SiteLocalityDescriptionTable",
@@ -443,11 +444,13 @@ export default {
           text: this.$t(header.text)
         };
       });
-    }
+    },
+
+    ...mapGetters("user", ["getCurrentUser"])
   },
 
   watch: {
-    currentUser: {
+    getCurrentUser: {
       handler(newVal) {
         if (newVal) {
           this.item.agent = {
@@ -546,7 +549,7 @@ export default {
           reference: item.reference__reference
         };
         this.autocomplete.reference.push(this.item.reference);
-      } else {
+      } else if (item.reference !== null) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
       }
