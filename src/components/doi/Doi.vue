@@ -80,6 +80,7 @@
                     :color="bodyActiveColor"
                     :label="$t('doi.creators')"
                     use-state
+                    readonly
                   />
                 </div>
 
@@ -1176,6 +1177,8 @@ export default {
               text: `Couldn't fetch <b>Fond</b> with an ID: <b>${this.$route.params.id}</b>`
             });
         });
+      } else {
+        this.doi.version = "1.0";
       }
 
       if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
