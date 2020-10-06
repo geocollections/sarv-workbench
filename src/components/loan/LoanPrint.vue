@@ -144,7 +144,7 @@
               <span v-if="loan.deliverer">
                 <span
                   v-translate="{
-                    et: ' isiku ',
+                    et: ' ',
                     en: ' by '
                   }"
                 ></span>
