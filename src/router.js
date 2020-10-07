@@ -684,6 +684,15 @@ const router = new Router({
             }
           ]
         },
+        // {
+        //   path: "/site/import",
+        //   name: "Site import",
+        //   component: () => import("./views/Import.vue"),
+        //   meta: {
+        //     requiresAuth: true,
+        //     object: "site"
+        //   }
+        // },
         {
           path: "/library",
           component: () => import("./views/Libraries.vue"),
@@ -1581,6 +1590,15 @@ const router = new Router({
             }
           ]
         },
+        // {
+        //   path: "/area/import",
+        //   name: "Area import",
+        //   component: () => import("./views/Import.vue"),
+        //   meta: {
+        //     requiresAuth: true,
+        //     object: "area"
+        //   }
+        // },
         {
           path: "/drillcore_box",
           component: () => import("./views/DrillcoreBoxes.vue"),
