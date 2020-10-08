@@ -197,10 +197,10 @@
                   }}</v-card-title>
                   <v-card-text
                     >{{ $t("selectionSeries.confirm_storage_change") }}
-                    <div v-if="relatedData.specimen.results.length > 10">
+                    <div v-if="relatedData.specimen.results.length > 5">
                       {{
                         relatedData.specimen.results
-                          .slice(0, 10)
+                          .slice(0, 5)
                           .map(item => item.specimen)
                           .join(", ")
                       }}, ...
@@ -461,34 +461,53 @@ export default {
     },
 
     async changeSpecimenStorage() {
-      let updatedSpecimenObjects = this.relatedData.specimen.results.map(
-        specimen => {
-          return {
-            id: specimen.specimen,
-            storage: this.new_specimen_storage.id
-          };
+      let specimenSelectionResponse = await fetchSelectedSpecimens(
+        this.$route.params.id,
+        {
+          page: 1,
+          paginateBy: 1000,
+          sortBy: ["specimen"],
+          sortDesc: [true]
         }
       );
-      console.log(updatedSpecimenObjects);
 
-      let formData = new FormData();
-      formData.append(
-        "data",
-        JSON.stringify({
-          change: updatedSpecimenObjects
-        })
-      );
-
-      let multiChangeResponse = await fetchMultiChangeSpecimen(formData).then(
-        response => response,
-        errResponse => errResponse
-      );
-
-      if (multiChangeResponse)
-        this.handleResponseMessages(
-          multiChangeResponse,
-          multiChangeResponse.status === 200
+      if (
+        specimenSelectionResponse &&
+        specimenSelectionResponse?.data?.results
+      ) {
+        let updatedSpecimenObjects = specimenSelectionResponse.data.results.map(
+          specimen => {
+            return {
+              id: specimen.specimen,
+              storage: this.new_specimen_storage.id
+            };
+          }
         );
+        console.log(updatedSpecimenObjects);
+
+        let formData = new FormData();
+        formData.append(
+          "data",
+          JSON.stringify({
+            change: updatedSpecimenObjects
+          })
+        );
+
+        let multiChangeResponse = await fetchMultiChangeSpecimen(formData).then(
+          response => response,
+          errResponse => errResponse
+        );
+
+        if (multiChangeResponse) {
+          this.handleResponseMessages(
+            multiChangeResponse,
+            multiChangeResponse.status === 200
+          );
+
+          if (multiChangeResponse.status === 200)
+            this.loadRelatedData("specimen");
+        }
+      }
 
       this.changeStorageDialog = false;
     },
