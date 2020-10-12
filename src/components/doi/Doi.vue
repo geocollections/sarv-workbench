@@ -1010,10 +1010,10 @@ export default {
     },
 
     doiContainsFile() {
-      return true;
+      // return true;
       // Does not apply to egf #516
-      // if (this.doi.egf) return true;
-      // else return this.relatedData.attachment_link.count > 0;
+      if (this.doi.egf) return true;
+      else return this.relatedData.attachment_link.count > 0;
     }
   },
 
