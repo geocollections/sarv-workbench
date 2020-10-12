@@ -30,8 +30,8 @@ jobs:
           name: Npm disabling progress bar and adding depth 0
           command: npm set progress=false && npm config set depth 0
       - run:
-          name: Installing only production packages
-          command: npm install --only=production
+          name: Installing packages
+          command: npm install
       - save_cache:
           key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
           paths:
