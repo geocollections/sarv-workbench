@@ -1010,9 +1010,10 @@ export default {
     },
 
     doiContainsFile() {
+      return true;
       // Does not apply to egf #516
-      if (this.doi.egf) return true;
-      else return this.relatedData.attachment_link.count > 0;
+      // if (this.doi.egf) return true;
+      // else return this.relatedData.attachment_link.count > 0;
     }
   },
 
@@ -1179,14 +1180,14 @@ export default {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
-        });
 
-        this.checkMetadata();
-        this.checkDoiUrl();
+          this.checkMetadata();
+          this.checkDoiUrl();
 
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => {
-          this.loadRelatedData(tab.name);
+          // Load Related Data which is in tabs
+          this.relatedTabs.forEach(tab => {
+            this.loadRelatedData(tab.name);
+          });
         });
       } else if (this.$route.meta.isEGF && !this.$route.meta.isEdit) {
         fetchDoiUsingEGF(this.$route.params.id).then(response => {
@@ -1247,7 +1248,7 @@ export default {
           },
           doi_agent: {
             page: 1,
-            paginateBy: 10,
+            paginateBy: 25,
             sortBy: ["sort", "id"],
             sortDesc: [false, false]
           },
@@ -1529,19 +1530,27 @@ export default {
     updateDoiCreatorsField(doiAgent) {
       if (doiAgent.length > 0) {
         let creators = "";
+        let creatorsLong = "";
+        let moreThanOneAuthor = doiAgent.length > 1;
 
         doiAgent.forEach(agent => {
           // Only Creators are added (agent_type 1 === Creator)
           if (this.$route.meta.isEdit) {
             if (agent?.agent_type === 1) {
               if (agent?.agent__surename && agent?.agent__forename) {
+                creatorsLong += `${
+                  agent.agent__surename
+                }, ${agent.agent__forename.charAt(0)}., `;
                 creators += `${agent.agent__surename}, ${agent.agent__forename}; `;
               } else if (agent?.name) creators += `${agent.name}; `;
             }
           } else {
             if (agent?.agent_type?.id === 1) {
               if (agent?.agent?.surename && agent?.agent?.forename) {
-                creators += `${agent?.agent?.surename}, ${agent?.agent?.forename}; `;
+                creatorsLong += `${
+                  agent.agent.surename
+                }, ${agent.agent.forename.charAt(0)}., `;
+                creators += `${agent.agent.surename}, ${agent.agent.forename}; `;
               } else if (agent?.name) creators += `${agent.name}; `;
             }
           }
@@ -1549,7 +1558,13 @@ export default {
 
         if (creators.length > 0) {
           creators = creators.trim().slice(0, -1);
-          this.doi.creators = creators;
+          creatorsLong = creatorsLong.trim().slice(0, -1);
+
+          if (moreThanOneAuthor) this.doi.creators = creatorsLong;
+          else {
+            if (this.doi.creators !== creatorsLong)
+              this.doi.creators = creators;
+          }
         }
       }
     },
