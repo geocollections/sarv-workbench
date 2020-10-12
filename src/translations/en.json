@@ -1208,7 +1208,7 @@
     "currentUrl": "Current link",
     "newUrl": "New link",
     "doiTooltip": "DOI field will be filled automatically",
-    "authorTooltip": "Authro field will be filled with records from 'Related persons and institutions' tab",
+    "authorTooltip": "Author field will be filled with records from 'Related persons and institutions' tab",
     "formatsTooltip": "Enter the file extension here, such as pdf, xlsx or csv; for multiple files, separate them with a colon",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
