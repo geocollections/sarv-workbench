@@ -281,7 +281,7 @@ export default {
     initMap() {
       this.map = L.map("map", {
         layers: [this.tileProviders[0].leafletObject],
-        scrollWheelZoom: true
+        scrollWheelZoom: false
       }).setView(this.center, this.zoom);
 
       let baseLayers = {};

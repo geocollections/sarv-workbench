@@ -223,7 +223,7 @@ export default {
     initMap(recentData) {
       this.map = L.map("map", {
         layers: [this.baseMaps[0].leafletObject],
-        scrollWheelZoom: true
+        scrollWheelZoom: false
       }).setView(L.latLng(58.5, 25.5), 6);
 
       let baseMaps = {};

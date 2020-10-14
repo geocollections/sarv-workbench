@@ -162,7 +162,7 @@ export default {
     initMap() {
       this.map = L.map("polygon-map", {
         layers: [this.tileProviders[0].leafletObject],
-        scrollWheelZoom: true,
+        scrollWheelZoom: false,
         minZoom: this.minZoom,
         maxZoom: this.maxZoom
       }).fitBounds([
