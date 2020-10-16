@@ -2189,6 +2189,13 @@ export function fetchCollections(data, databaseId) {
       "icontains"}`;
   }
 
+  if (data.classification && data.classification.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+      data.classification
+    };fields:classification__id,classification__class_field,classification__class_en,classification__class_lat,classification__class_synonym,classification__class_en_synonym;lookuptype:${data.classification__lookuptype ||
+      "icontains"}`;
+  }
+
   if (typeof databaseId !== "undefined" && databaseId !== null) {
     searchFields += `&database_id=${databaseId}`;
   }

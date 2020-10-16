@@ -61,7 +61,8 @@ export default {
       { id: "name", title: "common.name", type: "text" },
       { id: "agent", title: "collection.agent", type: "text" },
       { id: "locality", title: "collection.locality", type: "text" },
-      { id: "reference", title: "common.reference", type: "text" }
+      { id: "reference", title: "common.reference", type: "text" },
+      { id: "classification", title: "collection.classification", type: "text" }
     ]);
   },
 

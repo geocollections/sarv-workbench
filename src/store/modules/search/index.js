@@ -298,6 +298,7 @@ const state = {
     agent: null,
     locality: null,
     reference: null,
+    classification: null,
     page: 1,
     paginateBy: 50,
     sortBy: ["collection_id"],
