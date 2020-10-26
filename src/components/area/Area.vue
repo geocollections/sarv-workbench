@@ -122,13 +122,21 @@
             </v-col>
           </v-row>
 
-          <!-- DESCRIPTION -->
+          <!-- DESCRIPTION and DESCRIPTION_EN -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <editor
                 v-if="typeof area.description !== 'undefined'"
                 v-model="area.description"
                 :label="$t('common.description')"
+              />
+            </v-col>
+
+            <v-col cols="12" class="pa-1">
+              <editor
+                v-if="typeof area.description_en !== 'undefined'"
+                v-model="area.description_en"
+                :label="$t('common.description_en')"
               />
             </v-col>
           </v-row>
@@ -361,12 +369,8 @@ import {
   fetchArea,
   fetchAreaLocalityReferences,
   fetchLinkedAreaSites,
-  fetchLinkedSamples,
   fetchListAreaTypes,
-  fetchListMaakond,
-  fetchSiteAttachment,
-  fetchSiteLocalityDescriptions,
-  fetchSiteLocalityReferences
+  fetchListMaakond
 } from "../../assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import Editor from "../partial/inputs/Editor";
@@ -542,6 +546,7 @@ export default {
           "deposit_area_ha",
           "maakond",
           "description",
+          "description_en",
           "remarks"
           // "polygon"
         ],
