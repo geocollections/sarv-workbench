@@ -407,28 +407,6 @@ export async function fetchReferences(data) {
       api.solrUrl
     );
   }
-  if (data.keywords !== null && data.keywords.trim().length > 0) {
-    // #247 changing keywords search so that reference_keyword table is used
-    //searchFields += '&multi_search=value:' + data.keywords + ';fields:tags,libraryreference__keywords;lookuptype:icontains&distinct=true'
-
-    let listOfReferenceIDs = await fetchReferenceIDsUsingReferenceKeyword(
-      data
-    ).then(response => {
-      if (
-        response &&
-        response.data &&
-        response.data.results &&
-        response.data.results.length > 0
-      ) {
-        return response.data.results.map(reference_keyword => {
-          return reference_keyword.reference;
-        });
-      } else return [314159265];
-    });
-    return get(
-      `reference/?id__in=${listOfReferenceIDs}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
-    );
-  }
 
   let searchFields = "";
 
@@ -488,6 +466,10 @@ export async function fetchReferences(data) {
   if (data.userAdded && data.userAdded.trim().length > 0) {
     searchFields += `&user_added__${data.userAdded__lookuptype ||
       "icontains"}=${data.userAdded}`;
+  }
+  if (data.keywords !== null && data.keywords.trim().length > 0) {
+    searchFields += `&referencekeywords__keyword__keyword__${data.keywords__lookuptype ||
+      "icontains"}=${data.keywords}`;
   }
   if (data.isEstonianReference) {
     searchFields += `&is_estonian_reference=${data.isEstonianReference}`;
