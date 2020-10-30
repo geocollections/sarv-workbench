@@ -364,7 +364,12 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "user", "user", 2);
     },
     autocompleteSelectionSeriesSearch(value) {
-      this.$_autocompleteMixin_search(value, "selection_series", "selection_series", 2);
+      this.$_autocompleteMixin_search(
+        value,
+        "selection_series",
+        "selection_series",
+        2
+      );
     },
 
     /**

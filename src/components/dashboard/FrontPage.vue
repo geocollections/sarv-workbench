@@ -83,11 +83,9 @@
             </v-btn>
           </v-card-title>
 
-          <transition enter-active-class="animated zoomIn faster">
-            <div v-show="block.map">
-              <sites-map :show-map="block.map" />
-            </div>
-          </transition>
+          <div v-show="block.map">
+            <sites-map :show-map="block.map" />
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -116,35 +114,33 @@
             </v-btn>
           </v-card-title>
 
-          <transition enter-active-class="animated zoomIn faster">
-            <div v-show="block.files">
-              <v-row no-gutters class="mx-3">
-                <v-col cols="12" class="pa-1">
-                  <v-radio-group
-                    v-model="recentFilesPaginateBy"
-                    row
-                    dense
-                    hide-details
-                    label="Number of recent files: "
-                    class="mt-0 radio-buttons"
-                  >
-                    <v-radio label="6" :value="6" :color="bodyActiveColor" />
-                    <v-radio label="12" :value="12" :color="bodyActiveColor" />
-                    <v-radio label="24" :value="24" :color="bodyActiveColor" />
-                    <v-radio label="36" :value="36" :color="bodyActiveColor" />
-                  </v-radio-group>
-                </v-col>
-              </v-row>
+          <div v-show="block.files">
+            <v-row no-gutters class="mx-3">
+              <v-col cols="12" class="pa-1">
+                <v-radio-group
+                  v-model="recentFilesPaginateBy"
+                  row
+                  dense
+                  hide-details
+                  label="Number of recent files: "
+                  class="mt-0 radio-buttons"
+                >
+                  <v-radio label="6" :value="6" :color="bodyActiveColor" />
+                  <v-radio label="12" :value="12" :color="bodyActiveColor" />
+                  <v-radio label="24" :value="24" :color="bodyActiveColor" />
+                  <v-radio label="36" :value="36" :color="bodyActiveColor" />
+                </v-radio-group>
+              </v-col>
+            </v-row>
 
-              <image-view-wrapper
-                class="pb-3"
-                :data="recentFiles"
-                :body-active-color="bodyActiveColor"
-                :body-color="bodyColor"
-                clear-item-background
-              />
-            </div>
-          </transition>
+            <image-view-wrapper
+              class="pb-3"
+              :data="recentFiles"
+              :body-active-color="bodyActiveColor"
+              :body-color="bodyColor"
+              clear-item-background
+            />
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -182,32 +178,30 @@
             </v-btn>
           </v-card-title>
 
-          <transition enter-active-class="animated zoomIn faster">
-            <v-card-text v-show="block.help">
-              <p>
-                Siinne kasutajaliides on aktiivses arenduses ja muutumises. Kui
-                mõni funktsioon ei tööta, siis on soovitav kasutada eelmist
-                stabiilsemat versiooni:
-                <a href="https://edit.geocollections.info" target="HelpLink"
-                  >https://edit.geocollections.info</a
-                >.
-              </p>
-              <p>
-                Vigadest anna teada githubis:
-                <a
-                  href="https://github.com/geocollections/sarv-edit"
-                  target="HelpLink"
-                  ><i class="fab fa-github"></i>
-                  https://github.com/geocollections/sarv-edit</a
-                >
-                või kirjuta:
-                <a href="mailto:olle.hints@taltech.ee"
-                  ><i class="far fa-envelope"></i> olle.hints@taltech.ee</a
-                >, või helista:
-                <a href="tel:5130157"><i class="fas fa-phone"></i> 5130157</a>.
-              </p>
-            </v-card-text>
-          </transition>
+          <v-card-text v-show="block.help">
+            <p>
+              Siinne kasutajaliides on aktiivses arenduses ja muutumises. Kui
+              mõni funktsioon ei tööta, siis on soovitav kasutada eelmist
+              stabiilsemat versiooni:
+              <a href="https://edit.geocollections.info" target="HelpLink"
+                >https://edit.geocollections.info</a
+              >.
+            </p>
+            <p>
+              Vigadest anna teada githubis:
+              <a
+                href="https://github.com/geocollections/sarv-edit"
+                target="HelpLink"
+                ><i class="fab fa-github"></i>
+                https://github.com/geocollections/sarv-edit</a
+              >
+              või kirjuta:
+              <a href="mailto:olle.hints@taltech.ee"
+                ><i class="far fa-envelope"></i> olle.hints@taltech.ee</a
+              >, või helista:
+              <a href="tel:5130157"><i class="fas fa-phone"></i> 5130157</a>.
+            </p>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>

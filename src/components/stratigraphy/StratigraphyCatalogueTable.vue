@@ -92,7 +92,10 @@
 
       <!-- Todo -->
       <template v-slot:item.stratotypes="{ item }">
-        <ul class="text-small" v-if="getListOfTypes(item.id, 'stratotypes').length > 0">
+        <ul
+          class="text-small"
+          v-if="getListOfTypes(item.id, 'stratotypes').length > 0"
+        >
           <li
             v-for="(item, index) in getListOfTypes(item.id, 'stratotypes')"
             :key="index"
@@ -141,7 +144,10 @@
 
       <!-- Todo -->
       <template v-slot:item.references="{ item }">
-        <ul class="text-small" v-if="getListOfTypes(item.id, 'references').length > 0">
+        <ul
+          class="text-small"
+          v-if="getListOfTypes(item.id, 'references').length > 0"
+        >
           <li
             v-for="(item, index) in getListOfTypes(item.id, 'references')"
             :key="index"

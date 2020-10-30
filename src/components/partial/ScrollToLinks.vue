@@ -11,7 +11,7 @@
         v-for="(value, name) in formSections"
         class="scroll-to-button text-none"
         :key="name"
-        v-scroll-to="'#block-' + name"
+        @click="$vuetify.goTo(`#block-${name}`, scrollToOptions)"
         x-small
       >
         <v-icon x-small left>{{
@@ -28,13 +28,26 @@ import { mapState } from "vuex";
 
 export default {
   name: "ScrollToLinks",
+  data: () => ({
+    duration: 100,
+    easing: "easeInOutCubic",
+    offset: 5
+  }),
   computed: {
     // ...mapState("settings", ["formSections"])
     ...mapState("settings", {
       formSections: function(state) {
         return state.formSections[this.$route.meta.object];
       }
-    })
+    }),
+
+    scrollToOptions() {
+      return {
+        duration: this.duration,
+        offset: this.offset,
+        easing: this.easing
+      };
+    }
   },
   methods: {
     getIcon(name) {

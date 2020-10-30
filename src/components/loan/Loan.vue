@@ -453,7 +453,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import {mapActions, mapGetters, mapState} from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import LoanSampleTable from "./relatedTables/LoanSampleTable";
 import LoanSpecimenTable from "./relatedTables/LoanSpecimenTable";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -795,7 +795,7 @@ export default {
           };
         });
 
-        console.log(listOfObjects)
+        console.log(listOfObjects);
 
         let formData = new FormData();
         formData.append(

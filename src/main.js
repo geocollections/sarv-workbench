@@ -5,10 +5,8 @@ import VueIziToast from "vue-izitoast"; // Pop-up messages
 import VueI18n from "vue-i18n"; // Translations
 import VueCookies from "vue-cookies";
 import store from "./store";
-import VueScrollTo from "vue-scrollto";
-import animated from "animate.css";
 import vuetify from "./plugins/vuetify";
-import moment from "moment";
+// import moment from "moment";
 require("moment/locale/et");
 
 // Bootstrap css
@@ -23,21 +21,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueCookies);
-Vue.use(VueScrollTo, {
-  container: "body",
-  duration: 100,
-  easing: "ease",
-  offset: -55,
-  force: true,
-  cancelable: true,
-  onStart: false,
-  onDone: false,
-  onCancel: false,
-  x: false,
-  y: true
-});
-Vue.use(animated);
-Vue.use(require("vue-moment"), { moment });
+Vue.use(require("vue-moment"));
 
 Vue.config.productionTip = false;
 

@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   package-version:
     type: string
-    default: "v3.2"
+    default: "v3.2.0"
 
 jobs:
   checkout_code:

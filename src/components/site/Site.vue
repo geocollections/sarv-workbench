@@ -243,24 +243,22 @@
           </v-card>
 
           <!-- MAP -->
-          <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="myShowMap" class="mt-1">
-              <v-col cols="12" class="pa-1">
-                <map-component
-                  :show-map="myShowMap && block.location"
-                  :gps-coords="true"
-                  mode="single"
-                  module="site"
-                  v-bind:locations="[]"
-                  v-bind:location="{
-                    lat: site.latitude ? site.latitude.toString() : null,
-                    lng: site.longitude ? site.longitude.toString() : null
-                  }"
-                  v-on:update-coordinates="updateLocation"
-                />
-              </v-col>
-            </v-row>
-          </transition>
+          <v-row no-gutters v-show="myShowMap" class="mt-1">
+            <v-col cols="12" class="pa-1">
+              <map-component
+                :show-map="myShowMap && block.location"
+                :gps-coords="true"
+                mode="single"
+                module="site"
+                v-bind:locations="[]"
+                v-bind:location="{
+                  lat: site.latitude ? site.latitude.toString() : null,
+                  lng: site.longitude ? site.longitude.toString() : null
+                }"
+                v-on:update-coordinates="updateLocation"
+              />
+            </v-col>
+          </v-row>
 
           <!-- ELEVATION, ELEVATION_ACCURACY and COORD_DET_METHOD -->
           <v-row no-gutters>

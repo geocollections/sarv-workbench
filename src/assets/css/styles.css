@@ -174,23 +174,6 @@ th.sortable > span:after {
   width: 5.7em!important;
 }
 
-.related-input-data td{
-  padding: 0.2em!important;
-}
-
-.related-input-data .mx-datepicker{
-  font-size: 0.9rem !important;
-  font-weight: lighter;
-}
-
-.related-input-data .mx-calendar-icon {
-  height: auto!important;
-}
-
-.related-input-data .mx-calendar .mx-calendar-panel-date {
-  z-index: 1000000!important;
-}
-
 .allow-remove {
   background-color: rgba(220, 53, 69, 0.2) !important;
 }
@@ -362,17 +345,6 @@ ul.multiselect__content {
 /********************************
  ***  EDIT IMAGE PREVIEW END  ***
  ********************************/
-
-
-/* DATEPICKER STYLES */
-.mx-datepicker {
-  width: 100% !important;
-}
-
-/* Giving it 1 higher that map's zoom icons have */
-.mx-datepicker-popup {
-  z-index: 1001 !important;
-}
 
 
 /* CUSTOM STYLES */

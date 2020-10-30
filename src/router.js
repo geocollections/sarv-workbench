@@ -2516,7 +2516,8 @@ const router = new Router({
         {
           path: "/hierarchy_update",
           name: "Hierarchy update",
-          component: () => import("./components/partial/hierarchy_update/HierarchyUpdate.vue"),
+          component: () =>
+            import("./components/partial/hierarchy_update/HierarchyUpdate.vue"),
           meta: {
             requiresAuth: true
           }

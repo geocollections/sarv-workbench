@@ -27,7 +27,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchSiteGroundwaters } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
-import {mapGetters, mapState} from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   name: "SiteGroundwaters",
 

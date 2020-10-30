@@ -185,26 +185,20 @@
           </v-card>
 
           <!-- MAP -->
-          <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="myShowMap" class="mt-1">
-              <v-col cols="12" class="pa-1">
-                <map-component
-                  :show-map="myShowMap && block.map"
-                  mode="single"
-                  v-bind:locations="[]"
-                  v-bind:location="{
-                    lat: locality.latitude
-                      ? locality.latitude.toString()
-                      : null,
-                    lng: locality.longitude
-                      ? locality.longitude.toString()
-                      : null
-                  }"
-                  v-on:update-coordinates="updateLocation"
-                />
-              </v-col>
-            </v-row>
-          </transition>
+          <v-row no-gutters v-show="myShowMap" class="mt-1">
+            <v-col cols="12" class="pa-1">
+              <map-component
+                :show-map="myShowMap && block.map"
+                mode="single"
+                v-bind:locations="[]"
+                v-bind:location="{
+                  lat: locality.latitude ? locality.latitude.toString() : null,
+                  lng: locality.longitude ? locality.longitude.toString() : null
+                }"
+                v-on:update-coordinates="updateLocation"
+              />
+            </v-col>
+          </v-row>
         </div>
       </transition>
     </v-card>

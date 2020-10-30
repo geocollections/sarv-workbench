@@ -397,27 +397,25 @@
               </v-card>
 
               <!-- MAP -->
-              <transition enter-active-class="animated fadeIn faster">
-                <v-row no-gutters v-show="myShowMap" class="mt-1">
-                  <v-col cols="12" class="pa-1">
-                    <map-component
-                      :show-map="myShowMap && block.map"
-                      mode="single"
-                      module="attachment"
-                      v-bind:locations="[]"
-                      v-bind:location="{
-                        lat: attachment.image_latitude
-                          ? attachment.image_latitude.toString()
-                          : null,
-                        lng: attachment.image_longitude
-                          ? attachment.image_longitude.toString()
-                          : null
-                      }"
-                      v-on:update-coordinates="updateLocation"
-                    ></map-component>
-                  </v-col>
-                </v-row>
-              </transition>
+              <v-row no-gutters v-show="myShowMap" class="mt-1">
+                <v-col cols="12" class="pa-1">
+                  <map-component
+                    :show-map="myShowMap && block.map"
+                    mode="single"
+                    module="attachment"
+                    v-bind:locations="[]"
+                    v-bind:location="{
+                      lat: attachment.image_latitude
+                        ? attachment.image_latitude.toString()
+                        : null,
+                      lng: attachment.image_longitude
+                        ? attachment.image_longitude.toString()
+                        : null
+                    }"
+                    v-on:update-coordinates="updateLocation"
+                  ></map-component>
+                </v-col>
+              </v-row>
             </div>
           </transition>
         </v-card>
@@ -2239,27 +2237,25 @@
               </v-card>
 
               <!-- MAP -->
-              <transition enter-active-class="animated fadeIn faster">
-                <v-row no-gutters v-show="myShowMap" class="mt-1">
-                  <v-col cols="12" class="pa-1">
-                    <map-component
-                      :show-map="myShowMap && block.map"
-                      mode="single"
-                      module="attachment"
-                      v-bind:locations="[]"
-                      v-bind:location="{
-                        lat: attachment.image_latitude
-                          ? attachment.image_latitude.toString()
-                          : null,
-                        lng: attachment.image_longitude
-                          ? attachment.image_longitude.toString()
-                          : null
-                      }"
-                      v-on:update-coordinates="updateLocation"
-                    ></map-component>
-                  </v-col>
-                </v-row>
-              </transition>
+              <v-row no-gutters v-show="myShowMap" class="mt-1">
+                <v-col cols="12" class="pa-1">
+                  <map-component
+                    :show-map="myShowMap && block.map"
+                    mode="single"
+                    module="attachment"
+                    v-bind:locations="[]"
+                    v-bind:location="{
+                      lat: attachment.image_latitude
+                        ? attachment.image_latitude.toString()
+                        : null,
+                      lng: attachment.image_longitude
+                        ? attachment.image_longitude.toString()
+                        : null
+                    }"
+                    v-on:update-coordinates="updateLocation"
+                  ></map-component>
+                </v-col>
+              </v-row>
             </div>
           </transition>
         </v-card>

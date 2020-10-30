@@ -35,14 +35,12 @@
           class="float-left fill-height d-flex "
           style="width: 36% !important;"
         >
-          <transition enter-active-class="animated fadeIn faster">
-            <div v-show="showQRCode" class="qr-code align-self-center">
-              <vue-q-r-code-component
-                :text="'https://edit.geocollections.info/location/' + entity.id"
-                error-level="L"
-              />
-            </div>
-          </transition>
+          <div class="qr-code align-self-center">
+            <vue-q-r-code-component
+              :text="'https://edit.geocollections.info/location/' + entity.id"
+              error-level="L"
+            />
+          </div>
         </div>
       </div>
     </router-link>
@@ -63,12 +61,8 @@ export default {
     VueQRCodeComponent
   },
   data: () => ({
-    names: [],
-    showQRCode: false
+    names: []
   }),
-  created() {
-    setTimeout(() => (this.showQRCode = true), 1);
-  },
   watch: {
     data: {
       immediate: true

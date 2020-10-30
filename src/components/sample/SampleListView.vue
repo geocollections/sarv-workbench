@@ -124,14 +124,10 @@
           class="small-image"
           style="background-color: #fff; border-top: solid 0.25pt #000; border-left: solid 0.25pt #000; position:absolute; bottom: 0mm; right:0mm; padding: 0.5mm;"
         >
-          <transition enter-active-class="animated fadeIn faster">
-            <div v-show="showQRCode">
-              <vue-q-r-code-component
-                :text="'http://geocollections.info/sample/' + entity.id"
-                error-level="L"
-              ></vue-q-r-code-component>
-            </div>
-          </transition>
+          <vue-q-r-code-component
+            :text="'http://geocollections.info/sample/' + entity.id"
+            error-level="L"
+          ></vue-q-r-code-component>
         </div>
       </div>
     </router-link>
@@ -151,12 +147,6 @@ export default {
     VueQRCodeComponent
   },
   name: "SampleListView",
-  data: () => ({
-    showQRCode: false
-  }),
-  created() {
-    setTimeout(() => (this.showQRCode = true), 1);
-  },
   methods: {
     getFontSizeUsingLength(item) {
       if (item) {

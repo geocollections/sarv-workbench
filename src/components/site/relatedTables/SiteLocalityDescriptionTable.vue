@@ -329,7 +329,7 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import { cloneDeep } from "lodash";
 import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "SiteLocalityDescriptionTable",

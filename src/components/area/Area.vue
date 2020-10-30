@@ -242,20 +242,18 @@
             </v-card>
 
             <!-- MAP -->
-            <transition enter-active-class="animated fadeIn faster">
-              <v-row no-gutters v-show="myShowMap" class="mt-2">
-                <v-col cols="12" class="px-1">
-                  <map-component
-                    :show-map="myShowMap && block.sites"
-                    :gps-coords="true"
-                    mode="multiple"
-                    module="area"
-                    v-bind:location="{ lat: null, lng: null }"
-                    :locations="relatedData.sites.results"
-                  />
-                </v-col>
-              </v-row>
-            </transition>
+            <v-row no-gutters v-show="myShowMap" class="mt-2">
+              <v-col cols="12" class="px-1">
+                <map-component
+                  :show-map="myShowMap && block.sites"
+                  :gps-coords="true"
+                  mode="multiple"
+                  module="area"
+                  v-bind:location="{ lat: null, lng: null }"
+                  :locations="relatedData.sites.results"
+                />
+              </v-col>
+            </v-row>
 
             <!-- ADD NEW and EXPORT -->
             <v-card

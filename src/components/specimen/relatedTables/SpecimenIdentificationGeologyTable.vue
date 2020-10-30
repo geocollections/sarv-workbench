@@ -38,80 +38,79 @@
       </template>
 
       <template v-slot:item.rock="{ item }">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.rock__name,
-              en: item.rock__name_en
-            }"
-          />
-          <span
-            v-else-if="item.rock"
-            v-translate="{
-              et: item.rock.name,
-              en: item.rock.name_en
-            }"
-          />
+        <span
+          v-if="$route.meta.isEdit"
+          v-translate="{
+            et: item.rock__name,
+            en: item.rock__name_en
+          }"
+        />
+        <span
+          v-else-if="item.rock"
+          v-translate="{
+            et: item.rock.name,
+            en: item.rock.name_en
+          }"
+        />
       </template>
 
       <template v-slot:item.agent="{ item }">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent.agent }}
-          </router-link>
+        <router-link
+          v-if="$route.meta.isEdit"
+          :to="{ path: '/agent/' + item.agent }"
+          :title="$t('editAgent.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.agent__agent }}
+        </router-link>
+        <router-link
+          v-else-if="item.agent"
+          :to="{ path: '/agent/' + item.agent.id }"
+          :title="$t('editAgent.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.agent.agent }}
+        </router-link>
       </template>
 
       <template v-slot:item.reference="{ item }">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
+        <router-link
+          v-if="$route.meta.isEdit"
+          :to="{ path: '/reference/' + item.reference }"
+          :title="$t('editReference.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.reference__reference }}
+        </router-link>
+        <router-link
+          v-else-if="item.reference"
+          :to="{ path: '/reference/' + item.reference.id }"
+          :title="$t('editReference.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.reference.reference }}
+        </router-link>
       </template>
 
       <template v-slot:item.type="{ item }">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.type__value,
-              en: item.type__value_en
-            }"
-          />
-          <span
-            v-else-if="item.type"
-            v-translate="{
-              et: item.type.value,
-              en: item.type.value_en
-            }"
-          />
-
+        <span
+          v-if="$route.meta.isEdit"
+          v-translate="{
+            et: item.type__value,
+            en: item.type__value_en
+          }"
+        />
+        <span
+          v-else-if="item.type"
+          v-translate="{
+            et: item.type.value,
+            en: item.type.value_en
+          }"
+        />
       </template>
 
       <template v-slot:item.current="{ item }">

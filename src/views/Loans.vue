@@ -26,7 +26,7 @@ import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchLoans } from "../assets/js/api/apiCalls";
-import {mapGetters, mapState} from "vuex";
+import { mapGetters, mapState } from "vuex";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 export default {
   name: "Loans",

@@ -25,7 +25,7 @@ import ListModuleCore from "./ListModuleCore";
 import { fetchDatasets } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import {mapGetters, mapState} from "vuex";
+import { mapGetters, mapState } from "vuex";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 export default {
   name: "Datasets",
