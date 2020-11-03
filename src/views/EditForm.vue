@@ -162,7 +162,8 @@ export default {
         "dataset",
         "collection",
         "location",
-        "selection_series"
+        "selection_series",
+        "library"
         // "specimen",
         // "doi",
         // "selection"
