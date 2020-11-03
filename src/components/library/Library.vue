@@ -98,7 +98,39 @@
               />
             </v-col>
           </v-row>
+        </div>
+      </transition>
+    </v-card>
 
+    <!-- DESCRIPTION -->
+    <v-card
+      class="mt-2"
+      id="block-description"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("common.remarks") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.description" class="pa-1">
           <!-- ABSTRACT -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
@@ -466,7 +498,7 @@ export default {
         },
         requiredFields: [],
         library: {},
-        block: { info: true, members: true },
+        block: { info: true, description: true, members: true },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
           { text: "main.pagination", value: 25 },
