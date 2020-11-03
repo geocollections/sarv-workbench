@@ -22,11 +22,10 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { fetchLibrariesFromLibraryAgent } from "../assets/js/api/apiCalls";
-import { mapActions, mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import { fetchLibraries } from "@/assets/js/api/apiCalls";
 
 export default {
   components: {
@@ -45,10 +44,6 @@ export default {
     };
   },
 
-  computed: {
-    ...mapGetters("user", ["getCurrentUser"])
-  },
-
   created() {
     this.setActiveSearchParametersFilters([
       { id: "author_txt", title: "library.author_txt", type: "text" },
@@ -61,12 +56,7 @@ export default {
   methods: {
     fetchLibraries() {
       return new Promise(resolve => {
-        resolve(
-          fetchLibrariesFromLibraryAgent(
-            this.searchParameters,
-            this.getCurrentUser
-          )
-        );
+        resolve(fetchLibraries(this.searchParameters));
       });
     }
   }

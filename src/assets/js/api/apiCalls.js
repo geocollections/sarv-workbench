@@ -988,7 +988,7 @@ export function fetchLibrary(id) {
 }
 
 export function fetchLibraries(data) {
-  const fields = "id,author_txt,year,title,title_en,is_private";
+  const fields = "id,author_txt,year,title,title_en,is_private,author,author__agent,author__surename,author__forename";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1011,7 +1011,7 @@ export function fetchLibraries(data) {
   }
 
   if (data.reference !== null && data.reference.trim().length > 0) {
-    searchFields += `&library__libraryreference_library__reference__reference__${data.reference__lookuptype ||
+    searchFields += `&libraryreference_library__reference__reference__${data.reference__lookuptype ||
       "icontains"}=${data.reference}&distinct=true`;
   }
 

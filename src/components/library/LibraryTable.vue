@@ -18,35 +18,35 @@
     :server-items-length="response.count"
     :class="bodyColor.split('n-')[0] + 'n-5'"
   >
-    <template v-slot:item.library="{ item }">
+    <template v-slot:item.id="{ item }">
       <router-link
-        :to="{ path: '/library/' + item.library }"
+        :to="{ path: '/library/' + item.id }"
         :title="$t('editLibrary.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        {{ item.library }}
+        {{ item.id }}
       </router-link>
     </template>
 
-    <template v-slot:item.library__title="{ item }">
+    <template v-slot:item.title="{ item }">
       <router-link
-        :to="{ path: '/library/' + item.library }"
+        :to="{ path: '/library/' + item.id }"
         :title="$t('editLibrary.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        {{ item.library__title }}
+        {{ item.title }}
       </router-link>
     </template>
 
-    <template v-slot:item.library__is_private="{ item }">
+    <template v-slot:item.is_private="{ item }">
       <v-checkbox
         hide-details
         class="mt-0"
-        v-model="item.library__is_private"
+        v-model="item.is_private"
         @change="
-          $emit('toggle-privacy-state', item.library__is_private, item.library)
+          $emit('toggle-privacy-state', item.is_private, item.id)
         "
         :color="bodyActiveColor"
       ></v-checkbox>
@@ -55,7 +55,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'library', id: item.library })"
+        :href="getGeoDetailUrl({ object: 'library', id: item.id })"
         :title="$t('editLibrary.viewMessage')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"
@@ -102,10 +102,10 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "common.id", value: "library" },
-      { text: "library.title", value: "library__title" },
-      { text: "library.author_txt", value: "agent__agent" },
-      { text: "common.is_private", value: "library__is_private" },
+      { text: "common.id", value: "id" },
+      { text: "library.title", value: "title" },
+      { text: "library.author_txt", value: "author_txt" },
+      { text: "common.is_private", value: "is_private" },
       { text: "", value: "link", sortable: false }
     ],
     names: []

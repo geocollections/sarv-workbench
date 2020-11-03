@@ -15,7 +15,6 @@ import {
   fetchDrillcores,
   fetchJournals,
   fetchKeywords,
-  fetchLibrariesFromLibraryAgent,
   fetchLoans,
   fetchLocalities,
   fetchLocations,
@@ -36,7 +35,8 @@ import {
   fetchWebPages,
   fetchAnalysisMethods,
   fetchAnalysisParameters,
-  fetchTaxonPages
+  fetchTaxonPages,
+  fetchLibraries
 } from "@/assets/js/api/apiCalls";
 
 const actions = {
@@ -97,11 +97,10 @@ const actions = {
     );
   },
 
-  FETCH_LIBRARIES({ commit, state, rootGetters }) {
-    return fetchLibrariesFromLibraryAgent(
-      state.activeSearchParams.search,
-      rootGetters["user/getCurrentUser"]
-    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
+  FETCH_LIBRARIES({ commit, state }) {
+    return fetchLibraries(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", resp)
+    );
   },
 
   FETCH_LOCALITIES({ commit, state }) {
