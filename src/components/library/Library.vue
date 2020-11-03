@@ -424,6 +424,7 @@ export default {
       },
       deep: true
     }
+
   },
 
   computed: {
