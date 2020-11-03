@@ -138,7 +138,7 @@ const activeListMixin = {
             "data",
             JSON.stringify({
               reference: selection?.item?.id,
-              library: this.activeLibrary.library
+              library: this.activeLibrary.id
             })
           );
 
@@ -146,13 +146,13 @@ const activeListMixin = {
             response => {
               this.handleResponseMessages(response, true);
               this.getActiveLibraryList({
-                libraryId: this.activeLibrary.library
+                libraryId: this.activeLibrary.id
               });
             },
             errResponse => {
               this.handleResponseMessages(errResponse, false);
               this.getActiveLibraryList({
-                libraryId: this.activeLibrary.library
+                libraryId: this.activeLibrary.id
               });
             }
           );
@@ -165,13 +165,13 @@ const activeListMixin = {
               response => {
                 this.handleResponseMessages(response, true, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.library
+                  libraryId: this.activeLibrary.id
                 });
               },
               errResponse => {
                 this.handleResponseMessages(errResponse, false, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.library
+                  libraryId: this.activeLibrary.id
                 });
               }
             );
@@ -197,7 +197,7 @@ const activeListMixin = {
               [relation]: item.id,
               [keyForListOfObjects]:
                 relation === "reference"
-                  ? this.activeLibrary.library
+                  ? this.activeLibrary.id
                   : this.activeSelectionSeries.id
             };
           });
@@ -230,13 +230,13 @@ const activeListMixin = {
               response => {
                 this.handleResponseMessages(response, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.library
+                  libraryId: this.activeLibrary.id
                 });
               },
               errResponse => {
                 this.handleResponseMessages(errResponse, false);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.library
+                  libraryId: this.activeLibrary.id
                 });
               }
             );
@@ -283,13 +283,13 @@ const activeListMixin = {
               response => {
                 this.handleResponseMessages(response, true, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.library
+                  libraryId: this.activeLibrary.id
                 });
               },
               errResponse => {
                 this.handleResponseMessages(errResponse, false, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.library
+                  libraryId: this.activeLibrary.id
                 });
               }
             );

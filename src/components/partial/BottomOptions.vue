@@ -249,10 +249,7 @@ export default {
     },
 
     initNavigationButtons(list) {
-      this.listOfIDs = list.map(item => {
-        if (this.$route.meta.object === "library") return item.library;
-        else return item.id;
-      });
+      this.listOfIDs = list.map(item => item.id);
       this.previousId = this.calculatePreviousId(
         this.listOfIDs,
         this.$route.params.id

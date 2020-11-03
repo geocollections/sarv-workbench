@@ -385,7 +385,7 @@ export default {
         request: "FETCH_LIBRARIES",
         title: "header.libraries",
         object: "library",
-        field: "library__title_en"
+        field: "title_en"
       });
     }
 

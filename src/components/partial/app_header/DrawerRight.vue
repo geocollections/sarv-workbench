@@ -266,12 +266,9 @@
         <!-- LIST ITEMS -->
         <v-list-item
           v-for="entity in sidebarList.results"
-          :key="$route.meta.table !== 'library' ? entity.id : entity.library"
+          :key="entity.id"
           :to="{
-            path:
-              $route.meta.table !== 'library'
-                ? `/${$route.meta.table}/${entity.id}`
-                : `/${$route.meta.table}/${entity.library}`
+            path: `/${$route.meta.table}/${entity.id}`
           }"
           :color="drawerActiveColor"
           :title="entity[activeSearchParams.field]"
@@ -280,9 +277,7 @@
         >
           <v-list-item-content>
             <v-list-item-title style="white-space: unset">
-              <span class="font-weight-bold">{{
-                $route.meta.table !== "library" ? entity.id : entity.library
-              }}</span>
+              <span class="font-weight-bold">{{ entity.id }}</span>
               <span> - {{ entity[activeSearchParams.field] }}</span>
             </v-list-item-title>
           </v-list-item-content>
@@ -398,10 +393,10 @@
         <!-- LIST ITEMS -->
         <v-list-item
           v-for="entity in sidebarList.results"
-          :key="entity.library"
+          :key="entity.id"
           :color="drawerActiveColor"
           :title="
-            activeLibrary && activeLibrary.library === entity.library
+            activeLibrary && activeLibrary.id === entity.id
               ? $t('sidebar.library.inactiveTitle')
               : $t('sidebar.library.activeTitle')
           "
@@ -409,12 +404,12 @@
           @click="toggleActive(entity, 'setActiveLibrary')"
           :class="{
             'v-list-item--active':
-              activeLibrary && activeLibrary.library === entity.library
+              activeLibrary && activeLibrary.id === entity.id
           }"
         >
           <v-list-item-content>
             <v-list-item-title style="white-space: unset">
-              <span class="font-weight-bold">{{ entity.library }}</span>
+              <span class="font-weight-bold">{{ entity.id }}</span>
               <span> - {{ entity[activeSearchParams.field] }}</span>
             </v-list-item-title>
           </v-list-item-content>
@@ -776,9 +771,9 @@ export default {
       if (makeActive) {
         this.$store.dispatch(`search/${activeObject}`, entity);
         if (activeObject === "setActiveLibrary") {
-          this.getActiveLibraryList({ libraryId: entity.library });
+          this.getActiveLibraryList({ libraryId: entity.id });
           this.toastInfo({
-            text: `Library ${entity.library} is active!`,
+            text: `Library ${entity.id} is active!`,
             timeout: 1000
           });
         } else if (activeObject === "setActiveSelectionSeries") {
@@ -796,7 +791,7 @@ export default {
         if (activeObject === "setActiveLibrary") {
           this.resetActiveLibraryList();
           this.toastInfo({
-            text: `Library ${entity.library} is inactive!`,
+            text: `Library ${entity.id} is inactive!`,
             timeout: 1000
           });
         } else if (activeObject === "setActiveSelectionSeries") {

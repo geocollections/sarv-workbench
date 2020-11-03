@@ -1501,24 +1501,6 @@ export default {
       });
     },
 
-    customLabelForAttachment(option) {
-      if (this.$i18n.locale === "ee")
-        return `${option.id} - (${option.description}) (${option.author__agent})`;
-      return `${option.id} - (${option.description_en}) (${option.author__agent})`;
-    },
-
-    customLabelForLocality(option) {
-      if (this.$i18n.locale === "ee")
-        return `${option.id} - (${option.locality})`;
-      return `${option.id} - (${option.locality_en})`;
-    },
-
-    customLabelForLibrary(option) {
-      if (this.$i18n.locale === "ee")
-        return `${option.library} - (${option.library__title})`;
-      return `${option.library} - (${option.library__title_en})`;
-    },
-
     checkDoi() {
       this.setLoadingState(true);
       this.setLoadingType("fetch");
