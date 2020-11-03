@@ -31,17 +31,11 @@
           <!-- AUTHOR AND YEAR -->
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
-              <autocomplete-wrapper
-                v-model="library.author"
+              <input-wrapper
+                v-model="library.author_txt"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
-                item-text="agent"
-                :label="$t('library.author')"
-                is-link
-                route-object="agent"
-                is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                :label="$t('library.author_txt')"
+                use-state
               />
             </v-col>
 
@@ -51,17 +45,6 @@
                 :color="bodyActiveColor"
                 :label="$t('common.year')"
                 type="number"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- AUTHORS -->
-          <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
-              <input-wrapper
-                v-model="library.author_txt"
-                :color="bodyActiveColor"
-                :label="$t('library.author_txt')"
               />
             </v-col>
           </v-row>
@@ -424,7 +407,6 @@ export default {
       },
       deep: true
     }
-
   },
 
   computed: {
@@ -477,7 +459,6 @@ export default {
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "id",
-          "author",
           "author_txt",
           "year",
           "title",
@@ -489,15 +470,13 @@ export default {
         ],
         autocomplete: {
           loaders: {
-            agent: false,
             reference: false,
             library_agent: false
           },
-          agent: [],
           reference: [],
           library_agent: []
         },
-        requiredFields: [],
+        requiredFields: ["author_txt"],
         library: {},
         block: { info: true, description: true, members: true },
         paginateByOptions: [
@@ -527,8 +506,6 @@ export default {
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
             this.$set(this, "library", this.handleResponse(response)[0]);
-            // this.library = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.library);
 
             this.removeUnnecessaryFields(this.library, this.copyFields);
             this.$emit("data-loaded", this.library);
@@ -634,13 +611,6 @@ export default {
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.author)) {
-        this.library.author = { agent: obj.author__agent, id: obj.author };
-        this.autocomplete.agent.push(this.library.author);
-      }
     },
 
     loadRelatedData(object) {
