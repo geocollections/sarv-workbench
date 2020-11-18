@@ -8,7 +8,7 @@
       :title="$t('editLocation.editMessage')"
     >
       <div class="p-2 pl-3 h-100">
-        <div class="float-left " style="width: 64% !important;">
+        <div class="float-left pr-1" style="width: 64% !important;">
           <div
             class="mb-2"
             style="font-size: 90%"
