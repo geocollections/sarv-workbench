@@ -2847,6 +2847,45 @@ export function fetchDrillcoreBoxes(data) {
   }
 }
 
+export function fetchDrillcoreBoxImages(data) {
+  let fields = "attachment__uuid_filename,drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en";
+  let searchFields = "";
+
+  if (data.storage && data.storage.trim().length > 0) {
+    searchFields += `storage__location__${data.storage__lookuptype ||
+    "icontains"}=${data.storage}`;
+  }
+
+  if (data.drillcore && data.drillcore.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+        data.drillcore
+    };fields:drillcore__drillcore,drillcore__drillcore_en;lookuptype:${data.drillcore__lookuptype ||
+    "icontains"}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  // if (data.user_added && data.user_added.trim().length > 0) {
+  //   searchFields += `&user_added__${data.user_added__lookuptype ||
+  //     "icontains"}=${data.user_added}`;
+  // }
+  // if (data.date_added && data.date_added.trim().length > 0) {
+  //   searchFields += `&date_added__${data.date_added__lookuptype ||
+  //     "icontains"}=${data.date_added}`;
+  // }
+
+
+  if (searchFields.length > 0) {
+    return get(
+        `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`
+    );
+  } else {
+    return get(
+        `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`
+    );
+  }
+}
+
 export function fetchDrillcoreBoxAttachments(drillcoreBoxId, searchParameters) {
   let fields =
     "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number,is_preferred";

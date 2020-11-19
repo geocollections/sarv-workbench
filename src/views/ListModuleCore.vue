@@ -259,13 +259,13 @@ export default {
     currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
       if (
-        (this.module === "specimen" || this.module === "location") &&
+        (this.module === "specimen" || this.module === "location" || this.module === "drillcore_box") &&
         newVal === "image"
       ) {
         this.response = { count: 0, results: [] };
         this.$emit("search:images", true);
       } else if (
-        (this.module === "specimen" || this.module === "location") &&
+        (this.module === "specimen" || this.module === "location" || this.module === "drillcore_box") &&
         oldVal === "image"
       ) {
         this.response = { count: 0, results: [] };

@@ -22,12 +22,13 @@ export default {
   props: ["module", "data", "bodyActiveColor", "bodyColor"],
   computed: {
     computedData() {
-      if (this.module === "location") {
+      if (this.module === "location" || this.module === "drillcore_box") {
         const data = this.data.map(item => {
           return { ...item, uuid_filename: item.attachment__uuid_filename };
         });
         return data;
       }
+
       return this.data;
     }
   }

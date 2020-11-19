@@ -18,7 +18,9 @@
       :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchDrillcoreBoxes"
+      :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:search:images="searchDrillcoreBoxImages"
     />
   </div>
 </template>
@@ -27,8 +29,12 @@
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import ListModuleCore from "./ListModuleCore";
-import { fetchDrillcoreBoxes } from "../assets/js/api/apiCalls";
+import {
+  fetchDrillcoreBoxes,
+  fetchDrillcoreBoxImages
+} from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import {mapState} from "vuex";
 export default {
   name: "DrillcoreBoxes",
 
@@ -49,11 +55,28 @@ export default {
     ]);
   },
 
+  computed: {
+    ...mapState("search", ["drillcore_boxViewType"])
+  },
   methods: {
     fetchDrillcoreBoxes() {
       return new Promise(resolve => {
-        resolve(fetchDrillcoreBoxes(this.searchParameters));
+        resolve(
+          this.drillcore_boxViewType === "image"
+            ? fetchDrillcoreBoxImages(this.searchParameters)
+            : fetchDrillcoreBoxes(this.searchParameters)
+        );
       });
+    },
+    searchDrillcoreBoxImages(searchImages) {
+      // Just to trigger change
+      if (searchImages) {
+        this.updateSearchParamsByField(["date_added"], "sortBy");
+        this.updateSearchParamsByField([true], "sortDesc");
+      } else {
+        this.updateSearchParamsByField(["id"], "sortBy");
+        this.updateSearchParamsByField([true], "sortDesc");
+      }
     }
   }
 };

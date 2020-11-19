@@ -102,6 +102,16 @@
               {{ image.attach_link__storage__location }}
             </span>
           </span>
+
+          <span v-else-if="object === 'drillcore_box'">
+            <span
+              v-translate="{
+                et: image.drillcore_box__drillcore__drillcore,
+                en: image.drillcore_box__drillcore__drillcore_en
+              }"
+            >
+            </span>
+          </span>
         </v-tooltip>
 
         <div
@@ -215,6 +225,7 @@ export default {
     idField() {
       if (this.object === "specimen") return "specimen_id";
       if (this.object === "location") return "storage__id";
+      if (this.object === "drillcore_box") return "drillcore_box";
       else return "id";
     }
   },
