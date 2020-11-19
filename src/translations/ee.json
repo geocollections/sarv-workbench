@@ -1292,6 +1292,7 @@
     "details": "Muu info",
     "relatedTables": {
       "drillcore_box": "Südamikukastid",
+      "drillcore_box_images": "Pildid",
       "drillcore_study": "Tööd südamikuga",
       "attachment_link": "Failid"
     }

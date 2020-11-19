@@ -278,7 +278,27 @@
               show-attachment-link
             />
           </div>
-
+          <div v-show="activeTab === 'drillcore_box_images'">
+            <v-btn
+              v-if="relatedData.drillcore_box_images.count > 0"
+              :color="bodyActiveColor"
+              dark
+              @click="openDrillcorePrintView($route.params.id)"
+              >Print</v-btn
+            >
+            <drillcore-box-list-view
+              :data="relatedData.drillcore_box_images.results"
+            >
+              <template v-slot:itemTitle="{ item }">
+                <h5
+                  v-translate="{
+                    et: `Kast nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`,
+                    en: `Box nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`
+                  }"
+                ></h5>
+              </template>
+            </drillcore-box-list-view>
+          </div>
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -357,11 +377,14 @@ import DrillcoreBoxTable from "./relatedTables/DrillcoreBoxTable";
 import DrillcoreStudyTable from "./relatedTables/DrillcoreStudyTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import { mapActions, mapState } from "vuex";
+import { fetchRelatedDrillcoreBoxImages } from "@/assets/js/api/apiCalls";
+import DrillcoreBoxListView from "@/components/drillcore_box/DrillcoreBoxListView";
 
 export default {
   name: "Drillcore",
 
   components: {
+    DrillcoreBoxListView,
     DrillcoreStudyTable,
     DrillcoreBoxTable,
     FileInput,
@@ -464,6 +487,7 @@ export default {
       return {
         relatedTabs: [
           { name: "drillcore_box", iconClass: "fas fa-box" },
+          { name: "drillcore_box_images", iconClass: "fas fa-camera-retro" },
           { name: "drillcore_study", iconClass: "fas fa-school" },
           { name: "attachment_link", iconClass: "far fa-folder-open" }
         ],
@@ -579,6 +603,7 @@ export default {
     setDefaultRelatedData() {
       return {
         drillcore_box: { count: 0, results: [] },
+        drillcore_box_images: { count: 0, results: [] },
         drillcore_study: { count: 0, results: [] },
         attachment_link: { count: 0, results: [] },
         searchParameters: {
@@ -587,6 +612,12 @@ export default {
             paginateBy: 10,
             sortBy: ["id"],
             sortDesc: [true]
+          },
+          drillcore_box_images: {
+            page: 1,
+            paginateBy: 10,
+            sortBy: ["drillcore_box__depth_start"],
+            sortDesc: [false]
           },
           drillcore_study: {
             page: 1,
@@ -701,6 +732,11 @@ export default {
           this.$route.params.id,
           this.relatedData.searchParameters.drillcore_box
         );
+      } else if (object === "drillcore_box_images") {
+        query = fetchRelatedDrillcoreBoxImages(
+          this.$route.params.id,
+          this.relatedData.searchParameters.drillcore_box_images
+        );
       } else if (object === "drillcore_study") {
         query = fetchDrillcoreStudies(
           this.$route.params.id,
@@ -719,10 +755,20 @@ export default {
       });
     },
 
+    openDrillcorePrintView(id) {
+      let routeData = this.$router.resolve({
+        path: "/drillcore_print/" + id
+      });
+      window.open(
+        routeData.href,
+        "DrillcorePrintWindow",
+        "width=800,height=750"
+      );
+    },
+
     addFiles(files, singleFileMetadata) {
       this.addFileAsRelatedDataNew(files, "drillcore", singleFileMetadata);
     },
-
     addExistingFiles(files) {
       this.relatedData.attachment_link.count = files.length;
       this.relatedData.attachment_link.results = files;

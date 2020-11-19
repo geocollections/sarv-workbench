@@ -12,6 +12,16 @@
 
         <specimen-list-view v-if="module === 'specimen'" :data="data" />
         <location-list-view v-if="module === 'location'" :data="data" />
+        <drillcore-box-list-view v-if="module === 'drillcore_box'" :data="data">
+          <template v-slot:itemTitle="{ item }">
+            <h5
+              v-translate="{
+                et: item.drillcore_box__drillcore__drillcore,
+                en: item.drillcore_box__drillcore__drillcore_en
+              }"
+            ></h5>
+          </template>
+        </drillcore-box-list-view>
       </v-col>
     </v-row>
   </div>
@@ -22,9 +32,11 @@ import ReferenceListView from "../reference/ReferenceListView";
 import SampleListView from "../sample/SampleListView";
 import SpecimenListView from "../specimen/SpecimenListView";
 import LocationListView from "@/components/location/LocationListView";
+import DrillcoreBoxListView from "@/components/drillcore_box/DrillcoreBoxListView";
 
 export default {
   components: {
+    DrillcoreBoxListView,
     LocationListView,
     ReferenceListView,
     SampleListView,

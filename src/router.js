@@ -2531,6 +2531,14 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: "/drillcore_print/:id(\\d+)",
+      name: "Drillcore print",
+      component: (data) => import("./components/drillcore/DrillcorePrint.vue"),
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 });

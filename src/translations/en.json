@@ -1292,6 +1292,7 @@
     "details": "Other info",
     "relatedTables": {
       "drillcore_box": "Drill core box",
+      "drillcore_box_images": "Pictures",
       "drillcore_study": "Drill core study",
       "attachment_link": "Attachment"
     }

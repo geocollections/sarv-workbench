@@ -2784,6 +2784,16 @@ export function fetchRelatedDrillcoreBoxes(drillcoreId, searchParameters) {
   );
 }
 
+export function fetchRelatedDrillcoreBoxImages(drillcoreId, searchParameters) {
+  let orderBy = buildOrderBy(
+      searchParameters.sortBy,
+      searchParameters.sortDesc
+  );
+  return get(
+      `attachment_link/?drillcore_box__drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json&fields=attachment__uuid_filename,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__number`
+  );
+}
+
 export function fetchDrillcoreStudies(drillcoreId, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,

@@ -19,6 +19,7 @@
       :searchParameters="searchParameters"
       :api-call="fetchDrillcoreBoxes"
       :use-image-view="true"
+      :use-list-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
       v-on:search:images="searchDrillcoreBoxImages"
     />
@@ -62,7 +63,7 @@ export default {
     fetchDrillcoreBoxes() {
       return new Promise(resolve => {
         resolve(
-          this.drillcore_boxViewType === "image"
+          this.drillcore_boxViewType === "image" || this.drillcore_boxViewType === "list"
             ? fetchDrillcoreBoxImages(this.searchParameters)
             : fetchDrillcoreBoxes(this.searchParameters)
         );
