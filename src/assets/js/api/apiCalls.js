@@ -2852,14 +2852,14 @@ export function fetchDrillcoreBoxImages(data) {
   let searchFields = "";
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `storage__location__${data.storage__lookuptype ||
+    searchFields += `drillcore_box__storage__location__${data.storage__lookuptype ||
     "icontains"}=${data.storage}`;
   }
 
   if (data.drillcore && data.drillcore.trim().length > 0) {
     searchFields += `&multi_search=value:${
         data.drillcore
-    };fields:drillcore__drillcore,drillcore__drillcore_en;lookuptype:${data.drillcore__lookuptype ||
+    };fields:drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en;lookuptype:${data.drillcore__lookuptype ||
     "icontains"}`;
   }
 
