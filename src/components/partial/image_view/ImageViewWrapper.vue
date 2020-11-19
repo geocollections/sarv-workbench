@@ -238,7 +238,7 @@ export default {
         } else {
           url = this.getFileUrl(file.uuid_filename);
         }
-        window.open(url, "FileWindow", "width=800,height=750");
+        window.open(url, "_blank", "width=800,height=750");
       }
     },
 
