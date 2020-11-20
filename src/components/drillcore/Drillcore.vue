@@ -759,11 +759,7 @@ export default {
       let routeData = this.$router.resolve({
         path: "/drillcore_print/" + id
       });
-      window.open(
-        routeData.href,
-        "DrillcorePrintWindow",
-        "width=1000,height=750"
-      );
+      window.open(routeData.href, "_blank", "width=1000,height=750");
     },
 
     addFiles(files, singleFileMetadata) {
