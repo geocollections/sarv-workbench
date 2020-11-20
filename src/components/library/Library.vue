@@ -59,6 +59,15 @@
               />
             </v-col>
           </v-row>
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="library.title_short"
+                :color="bodyActiveColor"
+                :label="$t('library.title_short')"
+              />
+            </v-col>
+          </v-row>
 
           <!-- TITLE_EN -->
           <v-row no-gutters>
@@ -67,6 +76,15 @@
                 v-model="library.title_en"
                 :color="bodyActiveColor"
                 :label="$t('library.title_en')"
+              />
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="library.title_short_en"
+                :color="bodyActiveColor"
+                :label="$t('library.title_short_en')"
               />
             </v-col>
           </v-row>
@@ -462,7 +480,9 @@ export default {
           "author_txt",
           "year",
           "title",
+          "title_short",
           "title_en",
+          "title_short_en",
           "keywords",
           "abstract",
           "abstract_en",

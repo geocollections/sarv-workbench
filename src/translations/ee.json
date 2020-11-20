@@ -1520,6 +1520,8 @@
     "author_txt": "Compiler(s)",
     "title": "Pealkiri",
     "title_en": "Pealkiri (ENG)",
+    "title_short": "Lühike pealkiri",
+    "title_short_en": "Lühike pealkiri (ENG)",
     "keywords": "Keywords",
     "abstract": "Abstrakt",
     "abstract_en": "Abstrakt (ENG)",

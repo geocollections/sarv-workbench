@@ -1520,6 +1520,9 @@
     "author_txt": "Koostaja(d)",
     "title": "Title",
     "title_en": "Title (ENG)",
+    "title_short": "Title short",
+    "title_short_en": "Title short (ENG)",
+
     "keywords": "Keywords",
     "abstract": "Abstract",
     "abstract_en": "Abstract (ENG)",
