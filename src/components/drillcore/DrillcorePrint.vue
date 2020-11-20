@@ -8,12 +8,19 @@
       }"
     >
       <template v-slot:itemTitle="{ item }">
-        <h2
-          v-translate="{
-            et: `Kast nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`,
-            en: `Box nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`
-          }"
-        ></h2>
+        <router-link
+          :to="{ path: '/drillcore_box/' + item.drillcore_box }"
+          :title="$t('editDrillcoreBox.editMessage')"
+          class="sarv-link pt-3 ma-0"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <h5
+            v-translate="{
+              et: `Kast nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`,
+              en: `Box nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`
+            }"
+          ></h5>
+        </router-link>
       </template>
     </drillcore-box-list-view>
   </div>

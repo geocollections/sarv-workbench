@@ -13,13 +13,21 @@
         <specimen-list-view v-if="module === 'specimen'" :data="data" />
         <location-list-view v-if="module === 'location'" :data="data" />
         <drillcore-box-list-view v-if="module === 'drillcore_box'" :data="data">
+
           <template v-slot:itemTitle="{ item }">
-            <h5
-              v-translate="{
-                et: item.drillcore_box__drillcore__drillcore,
-                en: item.drillcore_box__drillcore__drillcore_en
-              }"
-            ></h5>
+            <router-link
+              :to="{ path: '/drillcore_box/' + item.drillcore_box }"
+              :title="$t('editDrillcoreBox.editMessage')"
+              class="sarv-link pt-3 ma-0"
+              :class="`${bodyActiveColor}--text`"
+            >
+              <h5
+                v-translate="{
+                  et: `${item.drillcore_box__drillcore__drillcore}, Kast nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`,
+                  en: `${item.drillcore_box__drillcore__drillcore_en}, Box nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`
+                }"
+              />
+            </router-link>
           </template>
         </drillcore-box-list-view>
       </v-col>

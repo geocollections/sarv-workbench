@@ -30,15 +30,7 @@
           <!--              </v-row>-->
           <!--            </template>-->
           <!--          </v-img>-->
-          <router-link
-            :to="{ path: '/drillcore_box/' + box.drillcore_box }"
-            :title="$t('editDrillcoreBox.editMessage')"
-            class="sarv-link pt-3 ma-0"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <!-- Todo: Add drillcore_box number and depths -->
-            <slot name="itemTitle" v-bind:item="box"></slot>
-          </router-link>
+          <slot name="itemTitle" v-bind:item="box"></slot>
         </div>
       </v-col>
     </v-row>
