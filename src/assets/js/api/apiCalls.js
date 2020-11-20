@@ -2858,7 +2858,7 @@ export function fetchDrillcoreBoxes(data) {
 }
 
 export function fetchDrillcoreBoxImages(data) {
-  let fields = "attachment__uuid_filename,drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en";
+  let fields = "attachment__uuid_filename,drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__depth_start,drillcore_box__depth_end";
   let searchFields = "";
 
   if (data.storage && data.storage.trim().length > 0) {

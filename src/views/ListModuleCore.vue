@@ -259,17 +259,20 @@ export default {
     currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
       if (
-        (this.module === "specimen" || this.module === "location" || this.module === "drillcore_box") &&
+        (this.module === "specimen" || this.module === "location") &&
         newVal === "image"
       ) {
         this.response = { count: 0, results: [] };
         this.$emit("search:images", true);
       } else if (
-        (this.module === "specimen" || this.module === "location" || this.module === "drillcore_box") &&
+        (this.module === "specimen" || this.module === "location") &&
         oldVal === "image"
       ) {
         this.response = { count: 0, results: [] };
         this.$emit("search:images", false);
+      } else if (this.module === "drillcore_box") {
+        if (oldVal === "table") this.$emit("search:images", false);
+        else this.$emit("search:images", true);
       }
     }
   },

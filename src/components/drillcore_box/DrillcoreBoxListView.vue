@@ -1,6 +1,5 @@
 <template>
   <div class="list-row" v-if="data.length > 0">
-
     <v-row v-if="title">
       <v-col>
         <h1 class="text-center py-4" v-translate="title" />
@@ -13,7 +12,9 @@
           <img
             @click="openFileInNewWindow(box)"
             style="max-width: 800px; max-height: 500px"
+            class="elevation-4"
             :src="getFileUrl(box.attachment__uuid_filename, 'medium')"
+            :title="getFileUrl(box.attachment__uuid_filename, 'medium')"
           />
 
           <!--          <v-img-->
@@ -35,6 +36,7 @@
             class="sarv-link pt-3 ma-0"
             :class="`${bodyActiveColor}--text`"
           >
+            <!-- Todo: Add drillcore_box number and depths -->
             <slot name="itemTitle" v-bind:item="box"></slot>
           </router-link>
         </div>
@@ -79,16 +81,18 @@ export default {
       }
     },
     getFileUrl(uuid, size = null) {
-      if (size) {
-        return `https://files.geocollections.info/${size}/${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
-      } else {
-        return `https://files.geocollections.info/${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
+      if (uuid) {
+        if (size) {
+          return `https://files.geocollections.info/${size}/${uuid.substring(
+            0,
+            2
+          )}/${uuid.substring(2, 4)}/${uuid}`;
+        } else {
+          return `https://files.geocollections.info/${uuid.substring(
+            0,
+            2
+          )}/${uuid.substring(2, 4)}/${uuid}`;
+        }
       }
     },
     isImageFile(image) {
@@ -105,10 +109,15 @@ export default {
 </script>
 
 <style scoped>
+img {
+  opacity: 1;
+  transition: opacity 200ms ease-in;
+}
 
 img:hover {
   cursor: pointer;
   opacity: 0.8;
+  transition: opacity 200ms ease-in;
 }
 
 @media print {
