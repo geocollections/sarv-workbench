@@ -49,7 +49,8 @@
     "number": "Number",
     "loadingEdit": "Please wait! Changing data...",
     "loadingAdd": "Please wait! Adding data...",
-    "loading": "Please wait! Fetching data..."
+    "loading": "Please wait! Fetching data...",
+    "print": "Print"
   },
   "main": {
     "pagination": "Show {num} results per page",

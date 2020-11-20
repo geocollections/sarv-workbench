@@ -1,31 +1,38 @@
 <template>
   <v-container class="list-row" v-if="data.length > 0">
+
     <v-row v-if="title">
       <v-col>
-        <h2 class="text-center" v-translate="title" />
+        <h1 class="text-center py-4" v-translate="title" />
       </v-col>
     </v-row>
     <v-row v-for="(box, index) in data" :key="index">
-      <v-col cols="12">
-        <v-divider v-if="index > 0"  class="d-print-none"/>
+      <v-col cols="12" class="box">
+        <v-divider v-if="index > 0" class="d-print-none" />
         <div class="py-2 d-flex align-center flex-column">
-          <v-img
-            max-width="700"
-            max-height="500"
-            contain
-            :lazy-src="getFileUrl(box.attachment__uuid_filename, 'small')"
+          <img
+            @click="openFileInNewWindow(box)"
+            style="max-width: 800px; max-height: 500px"
             :src="getFileUrl(box.attachment__uuid_filename, 'medium')"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-row>
-            </template>
-          </v-img>
+          />
+
+          <!--          <v-img-->
+          <!--            max-width="700"-->
+          <!--            max-height="500"-->
+          <!--            contain-->
+          <!--            :lazy-src="getFileUrl(box.attachment__uuid_filename, 'small')"-->
+          <!--            :src="getFileUrl(box.attachment__uuid_filename, 'medium')"-->
+          <!--          >-->
+          <!--            <template v-slot:placeholder>-->
+          <!--              <v-row class="fill-height ma-0" align="center" justify="center">-->
+          <!--                <v-progress-circular indeterminate color="grey lighten-5" />-->
+          <!--              </v-row>-->
+          <!--            </template>-->
+          <!--          </v-img>-->
           <router-link
             :to="{ path: '/drillcore_box/' + box.drillcore_box }"
             :title="$t('editDrillcoreBox.editMessage')"
-            class="sarv-link pt-2 ma-0"
+            class="sarv-link pt-3 ma-0"
             :class="`${bodyActiveColor}--text`"
           >
             <slot name="itemTitle" v-bind:item="box"></slot>
@@ -59,6 +66,18 @@ export default {
     }
   },
   methods: {
+    openFileInNewWindow(file) {
+      if (typeof file !== "undefined" && file !== null) {
+        let url = "";
+        if (this.isImageFile(file)) {
+          url = this.getFileUrl(file.attachment__uuid_filename, "large");
+        } else {
+          url = this.getFileUrl(file.attachment__uuid_filename);
+        }
+
+        window.open(url, "FileWindow", "width=800,height=750");
+      }
+    },
     getFileUrl(uuid, size = null) {
       if (size) {
         return `https://files.geocollections.info/${size}/${uuid.substring(
@@ -71,9 +90,29 @@ export default {
           2
         )}/${uuid.substring(2, 4)}/${uuid}`;
       }
+    },
+    isImageFile(image) {
+      if (image.attachment_format__value) {
+        return !!image.attachment_format__value.includes("image");
+      } else {
+        let fileType = image.attachment__uuid_filename.split(".")[1];
+        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
+        return !!(fileType.includes("jpg") || fileType.includes("png"));
+      }
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@media print {
+  .box {
+    break-inside: avoid;
+    height: 15cm;
+  }
+
+  .sarv-link {
+    text-decoration: none;
+  }
+}
+</style>

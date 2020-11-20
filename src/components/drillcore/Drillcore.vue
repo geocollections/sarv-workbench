@@ -284,7 +284,7 @@
               :color="bodyActiveColor"
               dark
               @click="openDrillcorePrintView($route.params.id)"
-              >Print</v-btn
+              >{{ $t("common.print") }}</v-btn
             >
             <drillcore-box-list-view
               :data="relatedData.drillcore_box_images.results"
@@ -762,7 +762,7 @@ export default {
       window.open(
         routeData.href,
         "DrillcorePrintWindow",
-        "width=800,height=750"
+        "width=1000,height=750"
       );
     },
 

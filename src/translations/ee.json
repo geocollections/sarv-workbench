@@ -49,7 +49,8 @@
     "number": "Number",
     "loadingEdit": "Palun oodake! Muudan andmeid...",
     "loadingAdd": "Palun oodake! Lisan andmeid...",
-    "loading": "Palun oodake! Pärin andmeid..."
+    "loading": "Palun oodake! Pärin andmeid...",
+    "print": "Prindi"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",

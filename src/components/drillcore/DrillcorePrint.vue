@@ -4,16 +4,16 @@
       :data="result"
       :title="{
         et: result[0].drillcore_box__drillcore__drillcore,
-        en: result[0].drillcore_box_drillcore__drillcore_en
+        en: result[0].drillcore_box__drillcore__drillcore_en
       }"
     >
       <template v-slot:itemTitle="{ item }">
-        <h5
+        <h2
           v-translate="{
             et: `Kast nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`,
             en: `Box nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`
           }"
-        ></h5>
+        ></h2>
       </template>
     </drillcore-box-list-view>
   </div>
