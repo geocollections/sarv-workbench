@@ -1,5 +1,5 @@
 <template>
-  <v-container class="list-row" v-if="data.length > 0">
+  <div class="list-row" v-if="data.length > 0">
 
     <v-row v-if="title">
       <v-col>
@@ -40,7 +40,7 @@
         </div>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
   <div v-else>
     <div
       class="text-center"
@@ -105,6 +105,12 @@ export default {
 </script>
 
 <style scoped>
+
+img:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
 @media print {
   .box {
     break-inside: avoid;
