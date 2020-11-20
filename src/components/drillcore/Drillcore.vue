@@ -280,12 +280,16 @@
           </div>
           <div v-show="activeTab === 'drillcore_box_images'">
             <v-btn
+              class="my-3 mx-2"
               v-if="relatedData.drillcore_box_images.count > 0"
               :color="bodyActiveColor"
               dark
               @click="openDrillcorePrintView($route.params.id)"
-              >{{ $t("common.print") }}</v-btn
             >
+              <v-icon small class="pr-1">fas fa-print</v-icon>
+              {{ $t("common.print") }}
+            </v-btn>
+            <v-divider class="mt-0" />
             <drillcore-box-list-view
               :data="relatedData.drillcore_box_images.results"
             >
