@@ -36,7 +36,7 @@
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        {{ item.title }}
+        {{ item.title_short ? item.title_short : item.title }}
       </router-link>
     </template>
 

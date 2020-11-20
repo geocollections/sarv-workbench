@@ -988,7 +988,7 @@ export function fetchLibrary(id) {
 }
 
 export function fetchLibraries(data) {
-  const fields = "id,author_txt,year,title,title_en,is_private,author,author__agent,author__surename,author__forename";
+  const fields = "id,author_txt,year,title,title_en,is_private,author,author__agent,author__surename,author__forename,title_short,title_short_en";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
