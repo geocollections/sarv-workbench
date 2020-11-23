@@ -108,17 +108,19 @@
       </div>
 
       <div class="label2_row3" style="margin-right: 13mm;">
-        <div style="float: left;">
+        <span style="float: left;">
           <b>Coll. </b>
           <span style="font-size: 1.1em;">{{
             entity.agent_collected__agent
           }}</span>
-        </div>
 
-        <div style="float: right;">
-          <span v-if="entity.date_collected">{{ entity.date_collected }}</span>
-          <span v-else>{{ entity.date_collected_free }}</span>
-        </div>
+          <span style="float: right;">
+            <span v-if="entity.date_collected">{{
+              entity.date_collected
+            }}</span>
+            <span v-else>{{ entity.date_collected_free }}</span>
+          </span>
+        </span>
 
         <div
           class="small-image"
@@ -184,7 +186,7 @@ export default {
 .label2 {
   position: relative;
   float: left;
-  height: 40mm;
+  height: 45mm;
   width: 58mm;
   border: solid 1pt #000;
   padding: 1mm;
