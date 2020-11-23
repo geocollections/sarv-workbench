@@ -27,10 +27,11 @@
       <!-- IMAGE -->
       <img
         v-else-if="isImageFile"
-        :src="getFileLink({ filename: data.uuid_filename })"
+        :src="getFileLink({ filename: data.uuid_filename, size: 'medium' })"
+        :title="getFileLink({ filename: data.uuid_filename, size: 'medium' })"
         @click="
           openUrlInNewWindow({
-            url: getFileLink({ filename: data.uuid_filename })
+            url: getFileLink({ filename: data.uuid_filename, size: 'medium' })
           })
         "
         alt="Image preview..."
@@ -51,17 +52,32 @@
       ></i>
     </div>
 
-    <div class="align-self-end" v-if="isAudioFile || isVideoFile">
-      <div
-        class="btn btn-outline-primary btn-sm link"
-        @click="
-          openUrlInNewWindow({
-            url: getFileLink({ filename: data.uuid_filename })
-          })
-        "
-        :title="getFileLink({ filename: data.uuid_filename })"
-      >
-        <i class="fas fa-external-link-alt"></i>
+    <div
+      class="align-self-center"
+      v-if="isAudioFile || isVideoFile || isImageFile"
+    >
+      <div class="d-flex flex-row flex-wrap">
+        <v-btn
+          v-for="btn in buttons"
+          :key="btn"
+          small
+          class="ma-1"
+          @click="
+            openUrlInNewWindow({
+              url: getFileLink({
+                filename: data.uuid_filename,
+                size: btn === 'original' ? '' : btn
+              })
+            })
+          "
+          :title="
+            getFileLink({
+              filename: data.uuid_filename,
+              size: btn === 'original' ? '' : btn
+            })
+          "
+          >{{ $t(`common.${btn}`) }}</v-btn
+        >
       </div>
     </div>
   </div>
@@ -100,6 +116,13 @@ export default {
         // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
         return !!(fileType.includes("jpg") || fileType.includes("png"));
       }
+    },
+
+    buttons() {
+      let buttons = ["small", "medium", "large", "original"];
+      return buttons.filter(btn =>
+        btn === "original" ? true : this.isImageFile
+      );
     }
   },
   methods: {
@@ -186,5 +209,16 @@ video {
 
 .link:hover {
   cursor: pointer;
+}
+
+img {
+  opacity: 1;
+  transition: opacity 200ms ease-out;
+}
+
+img:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 200ms ease-in;
 }
 </style>

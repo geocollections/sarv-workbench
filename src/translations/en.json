@@ -50,7 +50,11 @@
     "loadingEdit": "Please wait! Changing data...",
     "loadingAdd": "Please wait! Adding data...",
     "loading": "Please wait! Fetching data...",
-    "print": "Print"
+    "print": "Print",
+    "small": "Small",
+    "medium": "Medium",
+    "large": "large",
+    "original": "Original"
   },
   "main": {
     "pagination": "Show {num} results per page",
