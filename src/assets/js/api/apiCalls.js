@@ -1988,6 +1988,10 @@ export function fetchListSpecimenType() {
   return get(`list_specimen_type/?format=json`);
 }
 
+export function fetchListSpecimenSubtype() {
+  return get(`list_specimen_subtype/?format=json`);
+}
+
 export function fetchListHistoryType() {
   return get(`list_history_type/?format=json`);
 }

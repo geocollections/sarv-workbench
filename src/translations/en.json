@@ -28,6 +28,7 @@
     "location": "Location",
     "storage": "Storage",
     "type": "Type",
+    "subtype": "Subtype",
     "forename": "Forename",
     "surename": "Surname",
     "stratigraphy": "Stratigraphy",

@@ -776,13 +776,13 @@ export default {
           },
           specimen: {
             page: 1,
-            paginateBy: 25,
+            paginateBy: 100,
             sortBy: ["id"],
             sortDesc: [true]
           },
           sample: {
             page: 1,
-            paginateBy: 25,
+            paginateBy: 100,
             sortBy: ["id"],
             sortDesc: [true]
           }

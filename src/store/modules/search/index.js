@@ -72,7 +72,7 @@ const state = {
     id: null,
     page: 1,
     paginateBy: 50,
-    sortBy: ["library"],
+    sortBy: ["id"],
     sortDesc: [true]
   },
   libraryViewType: "table",
