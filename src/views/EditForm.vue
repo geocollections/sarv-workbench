@@ -1,7 +1,7 @@
 <template>
   <div class="edit-form">
     <div class="d-flex flex-wrap mt-2 mb-1 page-title justify-space-between">
-      <div class="h2 float-left mb-1 mr-2">
+      <div class="h2 float-left mb-1 mr-2 d-print-none">
         <span>
           {{ $t($route.meta.heading) }} ID: <b>{{ $route.params.id }}</b>
         </span>
@@ -23,7 +23,7 @@
 
       <div class="flex-grow-1"></div>
 
-      <div class="mr-2">
+      <div class="mr-2 d-print-none">
         <v-btn
           :to="{ path: `/${$route.meta.object}/add` }"
           :color="bodyActiveColor"
@@ -33,7 +33,7 @@
         </v-btn>
       </div>
 
-      <div class="text-right">
+      <div class="text-right d-print-none">
         <v-btn
           :to="{ path: '/' + $route.meta.object }"
           :color="bodyActiveColor"
@@ -70,6 +70,7 @@
           objectExists &&
           enablePermissions
       "
+      class="d-print-none"
       :table="$route.meta.table"
       :object-data="data"
       :key="permissionsComponentKey"
@@ -80,6 +81,7 @@
     <!-- LOGS -->
     <log
       v-if="typeof data === 'object' && data !== null && objectExists"
+      class="d-print-none"
       :table="$route.meta.table"
       :object-data="data"
       :key="logComponentKey"
@@ -88,6 +90,7 @@
     />
 
     <bottom-options
+      class="d-print-none"
       :body-color="bodyColor"
       :is-navbar-dark="navbarDark"
       :navbar-color="navbarColor"

@@ -2,7 +2,7 @@
   <div class="location">
     <!-- GENERAL INFO -->
     <v-card
-      class="mt-2"
+      class="mt-2 d-print-none"
       id="block-info"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -148,6 +148,7 @@
           v-for="tab in relatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
+          class="d-print-none"
         >
           <span>{{ $t("location.relatedTables." + tab.name) }}</span>
           <span class="ml-1">
@@ -186,7 +187,7 @@
               tile
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
-              <v-card flat tile class="mx-1">
+              <v-card flat tile class="mx-1 d-print-none">
                 <v-btn
                   :to="{
                     name: 'Specimen add',
@@ -202,7 +203,7 @@
               <v-card
                 flat
                 tile
-                class="mx-1"
+                class="mx-1 d-print-none"
                 v-if="relatedData.specimen.count > 0"
               >
                 <export-buttons
@@ -214,7 +215,7 @@
               </v-card>
 
               <v-radio-group
-                class="mt-0 mx-2"
+                class="mt-0 mx-2 d-print-none"
                 v-if="relatedData.specimen.count > 0"
                 v-model="currentViewType"
                 row
@@ -273,7 +274,7 @@
               tile
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
-              <v-card flat tile class="mx-1">
+              <v-card flat tile class="mx-1 d-print-none">
                 <v-btn
                   :to="{
                     name: 'Sample add',
@@ -289,7 +290,7 @@
               <v-card
                 flat
                 tile
-                class="mx-1"
+                class="mx-1 d-print-none"
                 v-if="relatedData.sample.count > 0"
               >
                 <export-buttons
@@ -301,7 +302,7 @@
               </v-card>
 
               <v-radio-group
-                class="mt-0 mx-2"
+                class="mt-0 mx-2 d-print-none"
                 v-if="relatedData.sample.count > 0"
                 v-model="currentViewType"
                 row
@@ -328,7 +329,9 @@
                   ref="table"
                   :response="relatedData.sample"
                   :search-parameters="relatedData.searchParameters.sample"
-                  v-if="currentViewType === 'table' && relatedData.sample.count > 0"
+                  v-if="
+                    currentViewType === 'table' && relatedData.sample.count > 0
+                  "
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
                   v-on:update:sorting="
@@ -353,7 +356,7 @@
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between pa-1 mt-2"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -391,7 +394,7 @@
     <!-- STORAGE CHANGE -->
     <v-card
       v-if="$route.meta.isEdit && doesRelatedDataExist"
-      class="mt-2"
+      class="mt-2 d-print-none"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
@@ -450,7 +453,7 @@
                     ></v-btn
                   >
                 </template>
-                <v-card >
+                <v-card>
                   <v-card-title class="headline">{{
                     $t("location.change_location")
                   }}</v-card-title>
