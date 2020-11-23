@@ -28,6 +28,7 @@
     "location": "Asukoht",
     "storage": "Hoiukoht",
     "type": "Tüüp",
+    "subtype": "Alamtüüp",
     "forename": "Eesnimi",
     "surename": "Perenimi",
     "stratigraphy": "Stratigraafia",

@@ -382,9 +382,20 @@
             </v-col>
           </v-row>
 
-          <!-- PRESENCE, STORAGE and NUMBER_PIECES -->
+          <!-- SUBTYPE_ID, PRESENCE, STORAGE and NUMBER_PIECES -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
+                v-model="specimen.subtype_id"
+                :color="bodyActiveColor"
+                :items="autocomplete.specimen_subtype"
+                :loading="autocomplete.loaders.specimen_subtype"
+                :item-text="commonLabel"
+                :label="$t('common.subtype')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
               <autocomplete-wrapper
                 v-model="specimen.presence"
                 :color="bodyActiveColor"
@@ -395,7 +406,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
               <autocomplete-wrapper
                 v-model="specimen.storage"
                 :color="bodyActiveColor"
@@ -408,7 +419,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
               <input-wrapper
                 v-model="specimen.number_pieces"
                 :color="bodyActiveColor"
@@ -750,6 +761,7 @@ import SpecimenLocationTable from "./relatedTables/SpecimenLocationTable";
 import SpecimenHistoryTable from "./relatedTables/SpecimenHistoryTable";
 import SpecimenAnalysisTable from "./relatedTables/SpecimenAnalysisTable";
 import saveAsNewMixin from "@/mixins/saveAsNewMixin";
+import { fetchListSpecimenSubtype } from "@/assets/js/api/apiCalls";
 
 export default {
   name: "Specimen",
@@ -899,6 +911,7 @@ export default {
           "number_field",
           "fossil",
           "type",
+          "subtype_id",
           "part",
           "locality",
           "locality_free",
@@ -938,6 +951,7 @@ export default {
             specimen_presence: false,
             specimen_status: false,
             specimen_type: false,
+            specimen_subtype: false,
             locality: false,
             sample: false,
             stratigraphy: false,
@@ -966,6 +980,7 @@ export default {
           specimen_presence: [],
           specimen_status: [],
           specimen_type: [],
+          specimen_subtype: [],
           locality: [],
           sample: [],
           stratigraphy: [],
@@ -1089,6 +1104,10 @@ export default {
       fetchListSpecimenType().then(
         response =>
           (this.autocomplete.specimen_type = this.handleResponse(response))
+      );
+      fetchListSpecimenSubtype().then(
+        response =>
+          (this.autocomplete.specimen_subtype = this.handleResponse(response))
       );
       fetchAccession().then(
         response =>
@@ -1236,6 +1255,11 @@ export default {
         id: obj.type,
         value: obj.type__value,
         value_en: obj.type__value_en
+      };
+      this.specimen.subtype_id = {
+        id: obj.subtype_id,
+        value: obj.subtype_id__value,
+        value_en: obj.subtype_id__value_en
       };
       if (this.isNotEmpty(obj.locality)) {
         this.specimen.locality = {
