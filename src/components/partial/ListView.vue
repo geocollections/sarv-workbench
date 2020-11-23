@@ -23,8 +23,8 @@
             >
               <h5
                 v-translate="{
-                  et: `${item.drillcore_box__drillcore__drillcore}, Kast nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`,
-                  en: `${item.drillcore_box__drillcore__drillcore_en}, Box nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`
+                  et: `${item.drillcore_box__drillcore__drillcore}, Kast nr. ${item.drillcore_box__number} ${!item.drillcore_box__depth_start && !item.drillcore_box__depth_end ? '' :`(${item.drillcore_box__depth_start ? item.drillcore_box__depth_start : ''} - ${item.drillcore_box__depth_end ? item.drillcore_box__depth_end : ''} m)`}`,
+                  en: `${item.drillcore_box__drillcore__drillcore_en}, Box nr. ${item.drillcore_box__number} ${!item.drillcore_box__depth_start && !item.drillcore_box__depth_end ? '' :`(${item.drillcore_box__depth_start ? item.drillcore_box__depth_start : ''} - ${item.drillcore_box__depth_end ? item.drillcore_box__depth_end : ''} m)`}`
                 }"
               />
             </router-link>
