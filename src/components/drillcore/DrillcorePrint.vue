@@ -16,8 +16,8 @@
         >
           <h5
             v-translate="{
-              et: `Kast nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`,
-              en: `Box nr. ${item.drillcore_box__number} (${item.drillcore_box__depth_start} - ${item.drillcore_box__depth_end} m)`
+              et: `Kast nr. ${item.drillcore_box__number} ${boxRange(item)}`,
+              en: `Box nr. ${item.drillcore_box__number} ${boxRange(item)}`
             }"
           ></h5>
         </router-link>
@@ -51,6 +51,16 @@ export default {
       this.count = response.data.count;
       this.result = this.handleResponse(response);
     });
+  },
+  methods: {
+    boxRange(item) {
+
+      if (!item.drillcore_box__depth_start && !item.drillcore_box__depth_end) {
+        return ''
+      }
+
+      return `(${item.drillcore_box__depth_start ?? ''} - ${item.drillcore_box__depth_end ?? ''} m)`
+    }
   }
 };
 </script>
