@@ -212,6 +212,27 @@
                   :body-active-color="bodyActiveColor"
                 />
               </v-card>
+
+              <v-radio-group
+                class="mt-0 mx-2"
+                v-if="relatedData.specimen.count > 0"
+                v-model="currentViewType"
+                row
+                hide-details
+              >
+                <v-radio
+                  value="table"
+                  class="mb-2"
+                  :label="$t('references.tableView')"
+                  :color="bodyActiveColor"
+                />
+                <v-radio
+                  class="mb-2"
+                  value="list"
+                  :label="$t('references.labelView')"
+                  :color="bodyActiveColor"
+                />
+              </v-radio-group>
             </v-card>
 
             <v-row no-gutters>
@@ -220,13 +241,25 @@
                   ref="table"
                   :response="relatedData.specimen"
                   :search-parameters="relatedData.searchParameters.specimen"
-                  v-if="relatedData.specimen.count > 0"
+                  v-if="
+                    currentViewType === 'table' &&
+                      relatedData.specimen.count > 0
+                  "
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
                   v-on:update:sorting="
                     relatedData.searchParameters[activeTab][$event.key] =
                       $event.value
                   "
+                />
+                <list-view
+                  v-if="
+                    currentViewType === 'list' && relatedData.specimen.count > 0
+                  "
+                  :data="relatedData.specimen.results"
+                  module="specimen"
+                  :body-color="bodyColor"
+                  :body-active-color="bodyActiveColor"
                 />
               </v-col>
             </v-row>
@@ -266,6 +299,27 @@
                   :body-active-color="bodyActiveColor"
                 />
               </v-card>
+
+              <v-radio-group
+                class="mt-0 mx-2"
+                v-if="relatedData.sample.count > 0"
+                v-model="currentViewType"
+                row
+                hide-details
+              >
+                <v-radio
+                  value="table"
+                  class="mb-2"
+                  :label="$t('references.tableView')"
+                  :color="bodyActiveColor"
+                />
+                <v-radio
+                  class="mb-2"
+                  value="list"
+                  :label="$t('references.labelView')"
+                  :color="bodyActiveColor"
+                />
+              </v-radio-group>
             </v-card>
 
             <v-row no-gutters>
@@ -274,13 +328,23 @@
                   ref="table"
                   :response="relatedData.sample"
                   :search-parameters="relatedData.searchParameters.sample"
-                  v-if="relatedData.sample.count > 0"
+                  v-if="currentViewType === 'table' && relatedData.sample.count > 0"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
                   v-on:update:sorting="
                     relatedData.searchParameters[activeTab][$event.key] =
                       $event.value
                   "
+                />
+
+                <list-view
+                  v-if="
+                    currentViewType === 'list' && relatedData.sample.count > 0
+                  "
+                  :data="relatedData.sample.results"
+                  module="sample"
+                  :body-color="bodyColor"
+                  :body-active-color="bodyActiveColor"
                 />
               </v-col>
             </v-row>
@@ -289,7 +353,7 @@
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -386,7 +450,7 @@
                     ></v-btn
                   >
                 </template>
-                <v-card>
+                <v-card >
                   <v-card-title class="headline">{{
                     $t("location.change_location")
                   }}</v-card-title>
@@ -446,11 +510,13 @@ import SpecimenTable from "../specimen/SpecimenTable";
 import SampleTable from "../sample/SampleTable";
 import ExportButtons from "../partial/export/ExportButtons";
 import { fetchMultiChangeLocation } from "@/assets/js/api/apiCalls";
+import ListView from "@/components/partial/ListView";
 
 export default {
   name: "Location",
 
   components: {
+    ListView,
     ExportButtons,
     SampleTable,
     SpecimenTable,
@@ -620,6 +686,7 @@ export default {
         ],
         relatedData: this.setDefaultRelatedData(),
         activeTab: "attachment_link",
+        currentViewType: "table",
         copyFields: [
           "id",
           "location",
