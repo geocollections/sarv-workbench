@@ -242,7 +242,7 @@
                   ref="table"
                   :response="relatedData.specimen"
                   :search-parameters="relatedData.searchParameters.specimen"
-                  v-if="
+                  v-show="
                     currentViewType === 'table' &&
                       relatedData.specimen.count > 0
                   "
@@ -254,7 +254,7 @@
                   "
                 />
                 <list-view
-                  v-if="
+                  v-show="
                     currentViewType === 'list' && relatedData.specimen.count > 0
                   "
                   :data="relatedData.specimen.results"
@@ -329,7 +329,7 @@
                   ref="table"
                   :response="relatedData.sample"
                   :search-parameters="relatedData.searchParameters.sample"
-                  v-if="
+                  v-show="
                     currentViewType === 'table' && relatedData.sample.count > 0
                   "
                   :body-active-color="bodyActiveColor"
@@ -341,7 +341,7 @@
                 />
 
                 <list-view
-                  v-if="
+                  v-show="
                     currentViewType === 'list' && relatedData.sample.count > 0
                   "
                   :data="relatedData.sample.results"
