@@ -1195,6 +1195,10 @@ export function fetchDoiResourceType() {
   return get(`doi_resource_type/?format=json`);
 }
 
+export function fetchDoiPublisher() {
+  return get(`doi_publisher/?format=json`);
+}
+
 // export function fetchListTitleTranslatedLanguages() {
 //   return get(`title_translated_language/?format=json`)
 // }
