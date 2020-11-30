@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -54,8 +54,8 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.taxon_synonym"
                     :color="bodyActiveColor"
                     :label="$t('taxon.synonym')"
@@ -64,7 +64,7 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" class="pa-1">
                   <input-wrapper
                     v-model="item.author"
                     :color="bodyActiveColor"
@@ -73,7 +73,7 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" class="pa-1">
                   <input-wrapper
                     v-model="item.year"
                     :color="bodyActiveColor"
@@ -83,8 +83,8 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.pages"
                     :color="bodyActiveColor"
                     :label="$t('taxon.pages')"
@@ -92,8 +92,8 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.figures"
                     :color="bodyActiveColor"
                     :label="$t('taxon.figures')"
@@ -101,8 +101,8 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
                     :label="$t('common.remarks')"
@@ -129,19 +129,31 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "TaxonSynonymTable",
 
   components: {
+    RelatedDataDeleteDialog,
+    TextareaWrapper,
     InputWrapper
   },
+
+  mixins: [relatedDataMixin],
 
   props: {
     response: {
@@ -170,11 +182,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
 
@@ -206,15 +213,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return (
         this.item.taxon_synonym !== null && this.item.taxon_synonym.length > 0
@@ -223,9 +221,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         taxon_synonym: "",
         author: "",
@@ -236,31 +232,8 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "taxon_synonym",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "taxon_synonym",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       this.item.taxon_synonym = item.taxon_synonym;
       this.item.author = item.author;
@@ -270,24 +243,6 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "taxon_synonym",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     }
   }
 };
