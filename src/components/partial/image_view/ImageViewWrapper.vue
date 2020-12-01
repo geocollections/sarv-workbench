@@ -243,13 +243,14 @@ export default {
     },
 
     getFileUrl(uuid, size = null) {
+      console.log(process.env.VUE_APP_IMAGES_URL)
       if (size) {
-        return `https://files.geocollections.info/${size}/${uuid.substring(
+        return `${process.env.VUE_APP_IMAGES_URL}${size}/${uuid.substring(
           0,
           2
         )}/${uuid.substring(2, 4)}/${uuid}`;
       } else {
-        return `https://files.geocollections.info/${uuid.substring(
+        return `${process.env.VUE_APP_IMAGES_URL}${uuid.substring(
           0,
           2
         )}/${uuid.substring(2, 4)}/${uuid}`;
