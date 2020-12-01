@@ -162,7 +162,8 @@ export default {
 
     getFileLink(params) {
       if (params.size) {
-        return (process.env.VUE_APP_IMAGES_URL +
+        return (
+          this.$constants.IMAGE_URL +
           params.size +
           "/" +
           params.filename.substring(0, 2) +
@@ -172,7 +173,8 @@ export default {
           params.filename
         );
       } else {
-        return (process.env.VUE_APP_IMAGES_URL +
+        return (
+          this.$constants.IMAGE_URL +
           params.filename.substring(0, 2) +
           "/" +
           params.filename.substring(2, 4) +

@@ -35,7 +35,7 @@ import {
   fetchDrillcoreBoxImages
 } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "DrillcoreBoxes",
 
@@ -63,7 +63,8 @@ export default {
     fetchDrillcoreBoxes() {
       return new Promise(resolve => {
         resolve(
-          this.drillcore_boxViewType === "image" || this.drillcore_boxViewType === "list"
+          this.drillcore_boxViewType === "image" ||
+            this.drillcore_boxViewType === "list"
             ? fetchDrillcoreBoxImages(this.searchParameters)
             : fetchDrillcoreBoxes(this.searchParameters)
         );

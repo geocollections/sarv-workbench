@@ -2535,7 +2535,7 @@ const router = new Router({
     {
       path: "/drillcore_print/:id(\\d+)",
       name: "Drillcore print",
-      component: (data) => import("./components/drillcore/DrillcorePrint.vue"),
+      component: data => import("./components/drillcore/DrillcorePrint.vue"),
       meta: {
         requiresAuth: true
       }

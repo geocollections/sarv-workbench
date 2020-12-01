@@ -45,9 +45,7 @@
         hide-details
         class="mt-0"
         v-model="item.is_private"
-        @change="
-          $emit('toggle-privacy-state', item.is_private, item.id)
-        "
+        @change="$emit('toggle-privacy-state', item.is_private, item.id)"
         :color="bodyActiveColor"
       ></v-checkbox>
     </template>

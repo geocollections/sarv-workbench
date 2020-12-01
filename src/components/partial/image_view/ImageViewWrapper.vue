@@ -243,14 +243,13 @@ export default {
     },
 
     getFileUrl(uuid, size = null) {
-      console.log(process.env.VUE_APP_IMAGES_URL)
       if (size) {
-        return `${process.env.VUE_APP_IMAGES_URL}${size}/${uuid.substring(
+        return `${this.$constants.IMAGE_URL}${size}/${uuid.substring(
           0,
           2
         )}/${uuid.substring(2, 4)}/${uuid}`;
       } else {
-        return `${process.env.VUE_APP_IMAGES_URL}${uuid.substring(
+        return `${this.$constants.IMAGE_URL}${uuid.substring(
           0,
           2
         )}/${uuid.substring(2, 4)}/${uuid}`;

@@ -54,12 +54,12 @@ export default {
   },
   methods: {
     boxRange(item) {
-
       if (!item.drillcore_box__depth_start && !item.drillcore_box__depth_end) {
-        return ''
+        return "";
       }
 
-      return `(${item.drillcore_box__depth_start ?? ''} - ${item.drillcore_box__depth_end ?? ''} m)`
+      return `(${item.drillcore_box__depth_start ??
+        ""} - ${item.drillcore_box__depth_end ?? ""} m)`;
     }
   }
 };

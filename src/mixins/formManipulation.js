@@ -589,7 +589,7 @@ const formManipulation = {
 
     openPdf(params) {
       window.open(
-          process.env.VUE_APP_IMAGES_URL +
+        this.$constants.IMAGE_URL +
           params.pdf.substring(0, 2) +
           "/" +
           params.pdf.substring(2, 4) +

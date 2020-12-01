@@ -6,6 +6,7 @@ import VueI18n from "vue-i18n"; // Translations
 import VueCookies from "vue-cookies";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
+import constants from "@/plugins/constants";
 // import moment from "moment";
 require("moment/locale/et");
 
@@ -22,6 +23,7 @@ Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueCookies);
 Vue.use(require("vue-moment"));
+Vue.use(constants);
 
 Vue.config.productionTip = false;
 

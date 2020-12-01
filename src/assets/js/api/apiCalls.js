@@ -988,7 +988,8 @@ export function fetchLibrary(id) {
 }
 
 export function fetchLibraries(data) {
-  const fields = "id,author_txt,year,title,title_en,is_private,author,author__agent,author__surename,author__forename,title_short,title_short_en";
+  const fields =
+    "id,author_txt,year,title,title_en,is_private,author,author__agent,author__surename,author__forename,title_short,title_short_en";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2794,11 +2795,11 @@ export function fetchRelatedDrillcoreBoxes(drillcoreId, searchParameters) {
 
 export function fetchRelatedDrillcoreBoxImages(drillcoreId, searchParameters) {
   let orderBy = buildOrderBy(
-      searchParameters.sortBy,
-      searchParameters.sortDesc
+    searchParameters.sortBy,
+    searchParameters.sortDesc
   );
   return get(
-      `attachment_link/?drillcore_box__drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json&fields=attachment__uuid_filename,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__number`
+    `attachment_link/?drillcore_box__drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json&fields=attachment__uuid_filename,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__number`
   );
 }
 
@@ -2866,19 +2867,20 @@ export function fetchDrillcoreBoxes(data) {
 }
 
 export function fetchDrillcoreBoxImages(data) {
-  let fields = "attachment__uuid_filename,drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__depth_start,drillcore_box__depth_end";
+  let fields =
+    "attachment__uuid_filename,drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__depth_start,drillcore_box__depth_end";
   let searchFields = "";
 
   if (data.storage && data.storage.trim().length > 0) {
     searchFields += `drillcore_box__storage__location__${data.storage__lookuptype ||
-    "icontains"}=${data.storage}`;
+      "icontains"}=${data.storage}`;
   }
 
   if (data.drillcore && data.drillcore.trim().length > 0) {
     searchFields += `&multi_search=value:${
-        data.drillcore
+      data.drillcore
     };fields:drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en;lookuptype:${data.drillcore__lookuptype ||
-    "icontains"}`;
+      "icontains"}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2892,14 +2894,13 @@ export function fetchDrillcoreBoxImages(data) {
   //     "icontains"}=${data.date_added}`;
   // }
 
-
   if (searchFields.length > 0) {
     return get(
-        `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`
+      `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`
     );
   } else {
     return get(
-        `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`
+      `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`
     );
   }
 }
