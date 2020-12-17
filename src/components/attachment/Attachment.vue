@@ -516,11 +516,7 @@
                     icon
                     color="green"
                     :title="$t('add.new')"
-                    @click="
-                      windowOpenNewTab('/keyword/add', {
-                        attachment: JSON.stringify(attachment)
-                      })
-                    "
+                    @click="windowOpenNewTab('/keyword/add')"
                     target="newKeywordWindow"
                   >
                     <v-icon>fas fa-plus</v-icon>
@@ -1850,13 +1846,10 @@
                 <div class="mr-2 my-1 align-self-end">
                   <v-btn
                     icon
-                    color="green"
                     :title="$t('add.new')"
-                    :to="{
-                      name: 'Keyword add',
-                      query: { attachment: JSON.stringify(attachment) }
-                    }"
+                    @click="windowOpenNewTab('/keyword/add')"
                     target="newKeywordWindow"
+                    color="green"
                   >
                     <v-icon>fas fa-plus</v-icon>
                   </v-btn>
@@ -2316,13 +2309,10 @@
                 <div class="mr-2 my-1 align-self-end">
                   <v-btn
                     icon
-                    color="green"
                     :title="$t('add.new')"
-                    :to="{
-                      name: 'Keyword add',
-                      query: { attachment: JSON.stringify(attachment) }
-                    }"
+                    @click="windowOpenNewTab('/keyword/add')"
                     target="newKeywordWindow"
+                    color="green"
                   >
                     <v-icon>fas fa-plus</v-icon>
                   </v-btn>

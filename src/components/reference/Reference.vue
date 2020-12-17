@@ -375,9 +375,7 @@
                 icon
                 :title="$t('add.new')"
                 @click="
-                  windowOpenNewTab('/keyword/add', {
-                    attachment: JSON.stringify(reference)
-                  })
+                  windowOpenNewTab('/keyword/add')
                 "
                 target="newKeywordWindow"
                 color="green"
