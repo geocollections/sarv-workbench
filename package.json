@@ -21,7 +21,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
     "@geoman-io/leaflet-geoman-free": "^2.6.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.2",
     "ckeditor4-vue": "^0.1.0",
     "diff-match-patch": "^1.0.5",
