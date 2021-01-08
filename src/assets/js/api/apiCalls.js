@@ -1638,9 +1638,6 @@ export function fetchAnalyses(data, agent, databaseId) {
   //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
   // }
 
-  if (typeof databaseId !== "undefined" && databaseId !== null) {
-    searchFields += `&database__id=${databaseId}`;
-  }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
@@ -1857,10 +1854,6 @@ export function fetchSpecimens(data, databaseId) {
       "icontains"}`;
   }
 
-  if (typeof databaseId !== "undefined" && databaseId !== null) {
-    searchFields += `&database__id=${databaseId}`;
-  }
-
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -1952,10 +1945,6 @@ export function fetchSpecimenImages(data, databaseId) {
 
   if (data.loan && data.loan.trim().length > 0) {
     searchFields += `&multi_search=value:${data.loan};fields:specimen__loanspecimen__loan__id,specimen__loanspecimen__loan__loan_number;lookuptype:iexact`;
-  }
-
-  if (typeof databaseId !== "undefined" && databaseId !== null) {
-    searchFields += `&database_id=${databaseId}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2185,10 +2174,6 @@ export function fetchCollections(data, databaseId) {
       data.classification
     };fields:classification__id,classification__class_field,classification__class_en,classification__class_lat,classification__class_synonym,classification__class_en_synonym;lookuptype:${data.classification__lookuptype ||
       "icontains"}`;
-  }
-
-  if (typeof databaseId !== "undefined" && databaseId !== null) {
-    searchFields += `&database_id=${databaseId}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -3038,8 +3023,6 @@ export function fetchDatasets(data, databaseId) {
       data.remarks
     }`;
   }
-
-  if (databaseId) searchFields += `&database__id=${databaseId}`;
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
