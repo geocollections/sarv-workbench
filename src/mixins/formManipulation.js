@@ -11,9 +11,6 @@ const formManipulation = {
   mixins: [toastMixin],
   data() {
     return {
-      fileUrl: "https://files.geocollections.info",
-      apiUrl: "https://rwapi.geocollections.info/",
-      editMode: false,
       isFileAddedAsObject: null
     };
   },
@@ -592,7 +589,7 @@ const formManipulation = {
 
     openPdf(params) {
       window.open(
-        "https://files.geocollections.info/" +
+        this.$constants.IMAGE_URL +
           params.pdf.substring(0, 2) +
           "/" +
           params.pdf.substring(2, 4) +

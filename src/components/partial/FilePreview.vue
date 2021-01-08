@@ -163,7 +163,7 @@ export default {
     getFileLink(params) {
       if (params.size) {
         return (
-          "https://files.geocollections.info/" +
+          this.$constants.IMAGE_URL +
           params.size +
           "/" +
           params.filename.substring(0, 2) +
@@ -174,7 +174,7 @@ export default {
         );
       } else {
         return (
-          "https://files.geocollections.info/" +
+          this.$constants.IMAGE_URL +
           params.filename.substring(0, 2) +
           "/" +
           params.filename.substring(2, 4) +

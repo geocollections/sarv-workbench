@@ -39,24 +39,24 @@
       </template>
 
       <template v-slot:item.reference="{ item }">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
+        <router-link
+          v-if="$route.meta.isEdit"
+          :to="{ path: '/reference/' + item.reference }"
+          :title="$t('editReference.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.reference__reference }}
+        </router-link>
+        <router-link
+          v-else-if="item.reference"
+          :to="{ path: '/reference/' + item.reference.id }"
+          :title="$t('editReference.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.reference.reference }}
+        </router-link>
       </template>
     </v-data-table>
 
@@ -75,7 +75,7 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" class="pa-1">
                   <autocomplete-wrapper
                     v-model="item.reference"
                     :color="bodyActiveColor"
@@ -91,24 +91,24 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.pages"
                     :color="bodyActiveColor"
                     :label="$t('reference.pages')"
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.figures"
                     :color="bodyActiveColor"
                     :label="$t('reference.figures')"
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
                     :label="$t('common.remarks')"
@@ -146,17 +146,17 @@
 <script>
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import InputWrapper from "../../partial/inputs/InputWrapper";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 
 export default {
   name: "LocalityReferenceTable",
 
   components: {
+    TextareaWrapper,
     RelatedDataDeleteDialog,
-    AutocompleteWrapper,
-    InputWrapper
+    AutocompleteWrapper
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],

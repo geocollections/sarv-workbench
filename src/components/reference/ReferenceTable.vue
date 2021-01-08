@@ -192,7 +192,7 @@ export default {
     },
 
     getFileUrl(uuid) {
-      return `https://files.geocollections.info/${uuid.substring(
+      return `${this.$constants.IMAGE_URL}${uuid.substring(
         0,
         2
       )}/${uuid.substring(2, 4)}/${uuid}`;

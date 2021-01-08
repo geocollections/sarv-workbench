@@ -116,12 +116,22 @@
             </v-col>
 
             <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
+              <autocomplete-wrapper
                 v-model="doi.publisher"
                 :color="bodyActiveColor"
+                :items="autocomplete.doi_publisher"
+                :loading="autocomplete.loaders.doi_publisher"
+                item-value="test"
+                item-text="value"
                 :label="$t('doi.publisher')"
                 use-state
               />
+              <!--              <input-wrapper-->
+              <!--                v-model="doi.publisher"-->
+              <!--                :color="bodyActiveColor"-->
+              <!--                :label="$t('doi.publisher')"-->
+              <!--                use-state-->
+              <!--              />-->
             </v-col>
           </v-row>
 
@@ -877,7 +887,8 @@ import {
   fetchRegisterMetadataToDataCite,
   fetchRegisterDoiUrlToDataCite,
   fetchDoiUsingEGF,
-  fetchAgentUsingName
+  fetchAgentUsingName,
+  fetchDoiPublisher
 } from "@/assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
@@ -1076,6 +1087,7 @@ export default {
         autocomplete: {
           loaders: {
             resource_type: false,
+            doi_publisher: false,
             agent: false,
             language: false,
             copyright_agent: false,
@@ -1091,6 +1103,7 @@ export default {
             attachment_public: false
           },
           resource_type: [],
+          doi_publisher: [],
           agent: [],
           language: [],
           copyright_agent: [],
@@ -1210,6 +1223,21 @@ export default {
         response =>
           (this.autocomplete.resource_type = this.handleResponse(response))
       );
+      fetchDoiPublisher().then(response => {
+        this.autocomplete.doi_publisher = [
+          ...this.autocomplete.doi_publisher,
+          ...this.handleResponse(response)
+        ];
+        if (
+          !this.$route.meta.isEdit &&
+          !this.doi.publisher &&
+          this.autocomplete.doi_publisher.length > 0
+        ) {
+          if (this.$route.meta.isEGF)
+            this.doi.publisher = this.autocomplete.doi_publisher[4].value;
+          else this.doi.publisher = this.autocomplete.doi_publisher[0].value;
+        }
+      });
       fetchListLanguages().then(
         response => (this.autocomplete.language = this.handleResponse(response))
       );
@@ -1431,6 +1459,19 @@ export default {
         name: obj.dataset__name,
         name_en: obj.dataset__name_en
       };
+
+      if (this.doi.publisher) {
+        if (
+          !this.autocomplete.doi_publisher.some(
+            item => item.value === this.doi.publisher
+          )
+        ) {
+          this.autocomplete.doi_publisher = [
+            ...this.autocomplete.doi_publisher,
+            { value: this.doi.publisher }
+          ];
+        }
+      }
     },
 
     loadRelatedData(object, doi = null) {
@@ -1551,7 +1592,10 @@ export default {
                   agent.agent.surename
                 }, ${agent.agent.forename.charAt(0)}., `;
                 creators += `${agent.agent.surename}, ${agent.agent.forename}; `;
-              } else if (agent?.name) creators += `${agent.name}; `;
+              } else if (agent?.name) {
+                creators += `${agent.name}; `;
+                creatorsLong += `${agent.name}; `;
+              }
             }
           }
         });

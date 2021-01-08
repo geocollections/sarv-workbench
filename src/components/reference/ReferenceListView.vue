@@ -106,7 +106,7 @@ export default {
     },
 
     getFileUrl(uuid) {
-      return `https://files.geocollections.info/${uuid.substring(
+      return `${this.$constants.IMAGE_URL}${uuid.substring(
         0,
         2
       )}/${uuid.substring(2, 4)}/${uuid}`;
@@ -127,7 +127,7 @@ export default {
 
     openPdf(params) {
       window.open(
-        "https://files.geocollections.info/" +
+        this.$constants.IMAGE_URL +
           params.pdf.substring(0, 2) +
           "/" +
           params.pdf.substring(2, 4) +

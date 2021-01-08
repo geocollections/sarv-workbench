@@ -4,9 +4,6 @@ import toastMixin from "./toastMixin";
 
 const requestsMixin = {
   mixins: [toastMixin],
-  data: () => ({
-    apiUrl: "https://rwapi.geocollections.info/"
-  }),
 
   methods: {
     addRelatedItem(payload, connectionField = null) {

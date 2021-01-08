@@ -139,19 +139,19 @@
     <site-icons style="z-index: 3"></site-icons>
     <!--  Load in background images  -->
     <img
-      src="https://files.geocollections.info/img/sarv-edit/background_1.jpg"
+      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_1.jpg`"
       v-show="false"
     />
     <img
-      src="https://files.geocollections.info/img/sarv-edit/background_2.jpg"
+      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_2.jpg`"
       v-show="false"
     />
     <img
-      src="https://files.geocollections.info/img/sarv-edit/background_3.jpg"
+      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_3.jpg`"
       v-show="false"
     />
     <img
-      src="https://files.geocollections.info/img/sarv-edit/background_4.jpg"
+      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_4.jpg`"
       v-show="false"
     />
   </v-main>
@@ -193,10 +193,10 @@ export default {
     idError: false,
     imageId: 0,
     images: [
-      "https://files.geocollections.info/img/sarv-edit/background_1.jpg",
-      "https://files.geocollections.info/img/sarv-edit/background_2.jpg",
-      "https://files.geocollections.info/img/sarv-edit/background_3.jpg",
-      "https://files.geocollections.info/img/sarv-edit/background_4.jpg"
+      "/img/sarv-edit/background_1.jpg",
+      "/img/sarv-edit/background_2.jpg",
+      "/img/sarv-edit/background_3.jpg",
+      "/img/sarv-edit/background_4.jpg"
     ],
     imageInterval: 60000
   }),
@@ -213,7 +213,8 @@ export default {
   computed: {
     ...mapState("settings", ["bodyColor"]),
     image() {
-      return this.images[this.imageId];
+      console.log(this.$constants.IMAGE_URL);
+      return this.$constants.IMAGE_URL + this.images[this.imageId];
     }
   },
 

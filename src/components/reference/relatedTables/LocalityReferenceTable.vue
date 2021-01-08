@@ -26,7 +26,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -38,38 +38,8 @@
       </template>
 
       <template v-slot:item.locality="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/locality/' + item.locality }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality__locality,
-                en: item.locality__locality_en
-              }"
-            ></span>
-          </router-link>
-          <router-link
-            v-else-if="item.locality"
-            :to="{ path: '/locality/' + item.locality.id }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality.locality,
-                en: item.locality.locality_en
-              }"
-            ></span>
-          </router-link>
-        </div>
         <router-link
-          v-else
+          v-if="$route.meta.isEdit"
           :to="{ path: '/locality/' + item.locality }"
           :title="$t('editLocality.editMessage')"
           class="sarv-link"
@@ -79,6 +49,20 @@
             v-translate="{
               et: item.locality__locality,
               en: item.locality__locality_en
+            }"
+          ></span>
+        </router-link>
+        <router-link
+          v-else-if="item.locality"
+          :to="{ path: '/locality/' + item.locality.id }"
+          :title="$t('editLocality.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-translate="{
+              et: item.locality.locality,
+              en: item.locality.locality_en
             }"
           ></span>
         </router-link>
@@ -102,7 +86,7 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" class="pa-1">
                   <autocomplete-wrapper
                     v-model="item.locality"
                     :color="bodyActiveColor"
@@ -118,24 +102,24 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.pages"
                     :color="bodyActiveColor"
                     :label="$t('reference.pages')"
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.figures"
                     :color="bodyActiveColor"
                     :label="$t('reference.figures')"
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
                     :label="$t('common.remarks')"
@@ -161,21 +145,28 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
 <script>
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { cloneDeep } from "lodash";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 
 export default {
   name: "LocalityReferenceTable",
 
-  components: { AutocompleteWrapper, InputWrapper },
+  components: { RelatedDataDeleteDialog, TextareaWrapper, AutocompleteWrapper },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -204,11 +195,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
 
@@ -242,15 +228,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.locality === "object" && this.item.locality !== null
@@ -259,9 +236,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         locality: null,
         pages: "",
@@ -270,31 +245,8 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "locality_reference",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "locality_reference",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.locality !== "object" && item.locality !== null) {
         this.item.locality = {
@@ -313,24 +265,6 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "locality_reference",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     }
   }
 };

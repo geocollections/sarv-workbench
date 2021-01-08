@@ -11,8 +11,8 @@
       outlined
       :placeholder="$t('add.autocomplete')"
       :item-color="$attrs.color"
-      item-value="id"
-      return-object
+      :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
+      :return-object="!$attrs['item-value']"
       :cache-items="noCache ? false : isSearchable"
       v-bind="$attrs"
       v-on="$listeners"
