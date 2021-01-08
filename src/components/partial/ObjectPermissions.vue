@@ -58,7 +58,9 @@
                     :multiple="true"
                     v-on:chip:close="
                       object_permissions.change_group.splice(
-                        object_permissions.change_group.indexOf($event),
+                        object_permissions.change_group.findIndex(
+                          item => item.id === $event.id
+                        ),
                         1
                       )
                     "
@@ -77,7 +79,9 @@
                     :multiple="true"
                     v-on:chip:close="
                       object_permissions.change_user.splice(
-                        object_permissions.change_user.indexOf($event),
+                        object_permissions.change_user.findIndex(
+                          item => item.id === $event.id
+                        ),
                         1
                       )
                     "
@@ -119,7 +123,9 @@
                     :multiple="true"
                     v-on:chip:close="
                       object_permissions.view_group.splice(
-                        object_permissions.view_group.indexOf($event),
+                        object_permissions.view_group.findIndex(
+                          item => item.id === $event.id
+                        ),
                         1
                       )
                     "
@@ -138,7 +144,9 @@
                     :multiple="true"
                     v-on:chip:close="
                       object_permissions.view_user.splice(
-                        object_permissions.view_user.indexOf($event),
+                        object_permissions.view_user.findIndex(
+                          item => item.id === $event.id
+                        ),
                         1
                       )
                     "
