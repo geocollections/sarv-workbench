@@ -1416,7 +1416,8 @@
       "library": "Seotud kogumikud",
       "taxon": "Taksonid",
       "stratigraphy": "Stratigraafia"
-    }
+    },
+    "translation_of": "Tõlge teosest"
   },
   "synonym": {
     "synonym":"Sünonüüm"

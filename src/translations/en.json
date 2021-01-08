@@ -1416,7 +1416,8 @@
       "library": "Related libraries",
       "taxon": "Taxon",
       "stratigraphy": "Stratigraphy"
-    }
+    },
+    "translation_of": "Translation of"
   },
   "synonym": {
     "synonym":"Synonym"
