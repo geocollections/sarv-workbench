@@ -154,10 +154,11 @@ export default {
     enablePermissions() {
       let table = this.$route.meta.table;
       let availableTables = [
-        "sample",
-        "sample_series",
         "analysis",
         "attachment",
+        "sample",
+        "specimen",
+        "sample_series",
         "project",
         "site",
         "drillcore",
@@ -167,10 +168,8 @@ export default {
         "location",
         "selection_series",
         "library"
-        // "specimen",
         // "doi",
         // "selection"
-        // "reference"
       ];
 
       return availableTables.includes(table);
