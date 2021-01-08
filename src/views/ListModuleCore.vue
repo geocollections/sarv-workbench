@@ -127,7 +127,7 @@
     </v-card>
 
     <pagination
-      class="pt-2"
+      class="pt-2 pt-md-0 pb-0 pb-md-5"
       :body-active-color="bodyActiveColor"
       :count="response.count"
       :paginate-by="searchParameters.paginateBy"
