@@ -34,7 +34,7 @@ axios.interceptors.response.use(function(response) {
         response.data.error_permissions,
         "Missing permissions",
         {
-          position: "bottomRight",
+          position: "topCenter",
           timeout: 5000,
           closeOnEscape: true,
           pauseOnHover: false,
@@ -48,7 +48,7 @@ axios.interceptors.response.use(function(response) {
       Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
       Vue.$cookies.remove("csrftoken", null, "geocollections.info");
       Vue.prototype.toast.error("Please log back in", "Session expired", {
-        position: "bottomRight",
+        position: "topCenter",
         timeout: 5000,
         closeOnEscape: true,
         pauseOnHover: false,
@@ -60,7 +60,7 @@ axios.interceptors.response.use(function(response) {
     // Showing link error message
     if (response.data.link_error) {
       Vue.prototype.toast.error(response.data.link_error, "Error", {
-        position: "bottomRight",
+        position: "topCenter",
         timeout: 99999999999,
         pauseOnHover: false,
         displayMode: "replace"
