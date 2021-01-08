@@ -56,6 +56,7 @@
     </v-row>
 
     <pagination
+      class="pb-2"
       :body-active-color="bodyActiveColor"
       :count="response.count"
       :paginate-by="searchParameters.paginateBy"
@@ -126,6 +127,7 @@
     </v-card>
 
     <pagination
+      class="pt-2"
       :body-active-color="bodyActiveColor"
       :count="response.count"
       :paginate-by="searchParameters.paginateBy"
