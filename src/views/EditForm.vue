@@ -150,7 +150,6 @@ export default {
 
     ...mapState("detail", ["initialEditViewDataHasChangedState"]),
 
-    // Todo: In the future perms should be available on every view
     enablePermissions() {
       let table = this.$route.meta.table;
       let availableTables = [
