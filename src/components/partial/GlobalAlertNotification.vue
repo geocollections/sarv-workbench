@@ -16,7 +16,7 @@ export default {
   data: () => ({
     showAlert: true,
     alertText:
-      "Toimuvad serveri hooldustööd, rakenduse kasutamine on häiritud 10.01.2021 ajavahemikus 20:00 - 23:00."
+      "Toimuvad serveri hooldustööd, rakenduse kasutamine on häiritud 10.01.2021 ajavahemikus 21:00 - 23:00."
   }),
   methods: {
     //  Todo: Get info from web_pages or web_news table
