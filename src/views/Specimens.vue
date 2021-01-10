@@ -60,8 +60,6 @@ export default {
       "selection_seriesSearchParameters",
       "specimenViewType"
     ]),
-
-    ...mapGetters("user", ["getDatabaseId"])
   },
 
   created() {
@@ -107,8 +105,8 @@ export default {
       return new Promise(resolve => {
         resolve(
           this.specimenViewType === "image"
-            ? fetchSpecimenImages(this.searchParameters, this.getDatabaseId)
-            : fetchSpecimens(this.searchParameters, this.getDatabaseId)
+            ? fetchSpecimenImages(this.searchParameters)
+            : fetchSpecimens(this.searchParameters)
         );
       });
     },

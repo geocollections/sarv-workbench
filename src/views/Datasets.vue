@@ -44,10 +44,6 @@ export default {
     };
   },
 
-  computed: {
-    ...mapGetters("user", ["getDatabaseId"])
-  },
-
   created() {
     this.setActiveSearchParametersFilters([
       { id: "name", title: "common.name", type: "text" },
@@ -60,7 +56,7 @@ export default {
   methods: {
     fetchDatasets() {
       return new Promise(resolve => {
-        resolve(fetchDatasets(this.searchParameters, this.getDatabaseId));
+        resolve(fetchDatasets(this.searchParameters));
       });
     }
   }

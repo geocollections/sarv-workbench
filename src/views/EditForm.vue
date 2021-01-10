@@ -166,9 +166,9 @@ export default {
         "collection",
         "location",
         "selection_series",
-        "library"
-        // "doi",
-        // "selection"
+        "library",
+        "doi",
+        "selection"
       ];
 
       return availableTables.includes(table);
