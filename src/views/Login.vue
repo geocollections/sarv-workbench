@@ -11,6 +11,7 @@
     <v-container fill-height>
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
+          <v-alert v-if="showAlert" type="info" elevation="8" style="z-index: 3" >{{ alertText }}</v-alert>
           <v-card
             :color="bodyColor.split('n-')[0] + 'n-5'"
             elevation="8"
@@ -171,6 +172,8 @@ export default {
   },
   mixins: [authenticationMixin],
   data: () => ({
+    showAlert: false,
+    alertText: "ALERT TEXT",
     tab: null,
     loggingIn: false,
     valid: true,

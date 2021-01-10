@@ -65,10 +65,10 @@
 
             <v-col cols="12" md="3" class="pa-1">
               <input-wrapper
-                v-model="location.number_items_registered"
+                :value="getItemsRegistered"
                 :color="bodyActiveColor"
                 :label="$t('location.number_items_registered')"
-                type="number"
+                readonly
               />
             </v-col>
           </v-row>
@@ -620,6 +620,10 @@ export default {
         item => this.relatedData[item].count > 0
       );
       return listOfBooleans.includes(true);
+    },
+
+    getItemsRegistered() {
+      return this.relatedData.specimen.count + this.relatedData.sample.count
     }
   },
 
