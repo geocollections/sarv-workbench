@@ -3,11 +3,11 @@
     <drawer-left
       :current-user="getCurrentUser"
       :user-shortcuts="shortcuts"
-      :drawerState="drawer"
+      :drawerState="drawerState"
       :drawer-color="drawerLeftColor"
       :is-drawer-dark="drawerLeftDark"
       :drawer-active-color="drawerLeftActiveColor"
-      v-on:update:drawerState="drawer = $event"
+      v-on:update:drawerState="updateDrawerState($event)"
     />
 
     <v-app-bar
@@ -19,7 +19,7 @@
       :dark="navbarDark"
       dense
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon @click.stop="updateDrawerState(!drawerState)" />
 
       <v-toolbar-items>
         <v-btn
@@ -138,15 +138,17 @@
         </v-btn>
       </v-toolbar-items>
 
-      <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
+      <v-app-bar-nav-icon
+        @click.stop="updateDrawerRightState(!drawerRightState)"
+      />
     </v-app-bar>
 
     <drawer-right
-      :drawerState="drawerRight"
+      :drawerState="drawerRightState"
       :drawer-color="drawerRightColor"
       :is-drawer-dark="drawerRightDark"
       :drawer-active-color="drawerRightActiveColor"
-      v-on:update:drawerState="drawerRight = $event"
+      v-on:update:drawerState="updateDrawerRightState($event)"
     />
   </v-card>
 </template>
@@ -190,18 +192,12 @@ export default {
       "drawerRightColor",
       "drawerRightDark",
       "drawerRightActiveColor",
+      "drawerState",
+      "drawerRightState",
       "shortcuts",
       "lang"
     ]),
     ...mapGetters("user", ["getCurrentUser", "isUserSuperuser"])
-  },
-  watch: {
-    drawer(newVal) {
-      this.updateDrawerState(newVal);
-    },
-    drawerRight(newVal) {
-      this.updateDrawerRightState(newVal);
-    }
   },
   created() {
     this.fetchActiveSarvIssues();
