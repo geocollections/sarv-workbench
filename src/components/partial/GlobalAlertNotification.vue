@@ -14,7 +14,7 @@
 
     <div
       v-else
-      class="d-flex justify-end"
+      class="d-flex justify-end mb-1"
       :class="{ 'mb-2': $route.meta.isLogin }"
     >
       <div
