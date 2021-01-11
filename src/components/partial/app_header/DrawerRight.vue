@@ -699,11 +699,18 @@ export default {
       },
       immediate: true
     },
-
-    "activeSearchParams.search.page"(newVal) {
-      if (newVal && this?.activeSearchParams?.request) {
-        this.$store.dispatch(`search/${this.activeSearchParams.request}`);
-      }
+    "activeSearchParams.search": {
+      handler(newVal) {
+        if (
+          this.$route.params.id &&
+          newVal &&
+          this?.activeSearchParams?.request
+        ) {
+          this.$store.dispatch(`search/${this.activeSearchParams.request}`);
+        }
+      },
+      deep: true,
+      immediate: true
     },
 
     searchParameters: {
