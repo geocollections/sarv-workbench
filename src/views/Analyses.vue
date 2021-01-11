@@ -53,9 +53,7 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["selection_seriesSearchParameters"]),
-
-    ...mapGetters("user", ["getCurrentUser", "getDatabaseId"])
+    ...mapState("search", ["selection_seriesSearchParameters"])
   },
 
   created() {
@@ -90,9 +88,7 @@ export default {
       return new Promise(resolve => {
         resolve(
           fetchAnalyses(
-            this.searchParameters,
-            this.getCurrentUser,
-            this.getDatabaseId
+            this.searchParameters
           )
         );
       });

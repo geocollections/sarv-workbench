@@ -94,15 +94,11 @@ export default {
     ]);
   },
 
-  computed: {
-    ...mapGetters("user", ["getDatabaseId"])
-  },
-
   methods: {
     fetchSiteGroundwaters() {
       return new Promise(resolve => {
         resolve(
-          fetchSiteGroundwaters(this.searchParameters, this.getDatabaseId)
+          fetchSiteGroundwaters(this.searchParameters)
         );
       });
     }

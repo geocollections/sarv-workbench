@@ -150,7 +150,6 @@ export default {
 
     ...mapState("detail", ["initialEditViewDataHasChangedState"]),
 
-    // Todo: In the future perms should be available on every view
     enablePermissions() {
       let table = this.$route.meta.table;
       let availableTables = [
@@ -167,9 +166,9 @@ export default {
         "collection",
         "location",
         "selection_series",
-        "library"
-        // "doi",
-        // "selection"
+        "library",
+        "doi",
+        "selection"
       ];
 
       return availableTables.includes(table);

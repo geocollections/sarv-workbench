@@ -65,14 +65,10 @@ export default {
     ]);
   },
 
-  computed: {
-    ...mapGetters("user", ["getDatabaseId"])
-  },
-
   methods: {
     fetchLoans() {
       return new Promise(resolve => {
-        resolve(fetchLoans(this.searchParameters, this.getDatabaseId));
+        resolve(fetchLoans(this.searchParameters));
       });
     }
   }

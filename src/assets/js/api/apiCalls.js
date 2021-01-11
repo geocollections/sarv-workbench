@@ -1136,7 +1136,7 @@ export function fetchMultiAddReferencesToLibrary(data) {
  *** DOI START ***
  *****************/
 
-export function fetchDois(data, databaseId) {
+export function fetchDois(data) {
   const fields =
     "id,identifier,creators,publication_year,title,resource_type__value,is_private,datacite_created";
   let searchFields = "";
@@ -1165,10 +1165,6 @@ export function fetchDois(data, databaseId) {
     searchFields += `&title__${data.title__lookuptype || "icontains"}=${
       data.title
     }`;
-  }
-
-  if (typeof databaseId !== "undefined" && databaseId !== null) {
-    searchFields += `&database__id=${databaseId}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -1356,7 +1352,7 @@ export function fetchProjectType() {
   return get(`project_type/?order_by=name&format=json`);
 }
 
-export function fetchProjects(data, agent) {
+export function fetchProjects(data) {
   const fields =
     "id,name,name_en,project_type,project_type__name,project_type__name_en,parent_project,date_start,date_end," +
     "date_free,description,remarks,owner,owner__agent,is_private";
@@ -1376,11 +1372,11 @@ export function fetchProjects(data, agent) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
     return get(
-      `project/?projectagent__agent=${agent}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `project/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `project/?projectagent__agent=${agent}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `project/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1587,7 +1583,7 @@ export function fetchInstruments() {
   return get(`lab_instrument/?format=json`);
 }
 
-export function fetchAnalyses(data, agent, databaseId) {
+export function fetchAnalyses(data) {
   const fields =
     "id,sample,sample__number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__depth,analysis_method__analysis_method," +
     "date,lab_txt,agent__agent,is_private";
@@ -1756,7 +1752,7 @@ export function fetchSpecimen(id) {
   return get(`specimen/?id=${id}&format=json`);
 }
 
-export function fetchSpecimens(data, databaseId) {
+export function fetchSpecimens(data) {
   const fields =
     "id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__id,storage__location,database__name,database__name_en,database__acronym,lithostratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy_id,date_collected,date_collected_free,depth,depth_interval,is_private,storage__location";
   let searchFields = "";
@@ -1867,7 +1863,7 @@ export function fetchSpecimens(data, databaseId) {
   }
 }
 
-export function fetchSpecimenImages(data, databaseId) {
+export function fetchSpecimenImages(data) {
   const fields =
     "id,specimen_id,size_mb,original_filename,uuid_filename,user_added,date_added,specimen__specimen_id,specimen__database__acronym";
   let searchFields = "";
@@ -2126,7 +2122,7 @@ export function fetchMultiChangeSpecimen(data) {
  *** COLLECTION START ***
  ************************/
 
-export function fetchCollections(data, databaseId) {
+export function fetchCollections(data) {
   const fields =
     "id,collection_id,number,name,name_en,name_long,name_long_en,database__acronym";
   let searchFields = "";
@@ -2993,7 +2989,7 @@ export function fetchDataset(id) {
   return get(`dataset/?id=${id}&format=json`);
 }
 
-export function fetchDatasets(data, databaseId) {
+export function fetchDatasets(data) {
   const fields =
     "id,name,name_en,date,date_txt,owner,owner_txt,owner__agent,database,database__acronym,is_private";
   let searchFields = "";
@@ -3716,7 +3712,7 @@ export function fetchLoan(id) {
   return get(`loan/?id=${id}&format=json`);
 }
 
-export function fetchLoans(data, databaseId) {
+export function fetchLoans(data) {
   let fields =
     "id,loan_number,borrower,borrower__agent,project,date_start,date_end,returned,database";
   let searchFields = "";
@@ -3762,10 +3758,6 @@ export function fetchLoans(data, databaseId) {
 
   if (data.isActive) {
     searchFields += `&returned=${!data.isActive}`;
-  }
-
-  if (typeof databaseId !== "undefined" && databaseId !== null) {
-    searchFields += `&database__id=${databaseId}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);

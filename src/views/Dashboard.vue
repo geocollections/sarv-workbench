@@ -6,6 +6,8 @@
 
     <v-main>
       <v-container fluid>
+        <GlobalAlertNotification />
+
         <breadcrumbs
           class="d-print-none"
           v-if="recentUrlsState"
@@ -23,9 +25,11 @@
 import AppHeader from "../components/partial/app_header/AppHeader";
 import { mapActions, mapState } from "vuex";
 import Breadcrumbs from "../components/partial/Breadcrumbs";
+import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
 
 export default {
   components: {
+    GlobalAlertNotification,
     Breadcrumbs,
     AppHeader
   },

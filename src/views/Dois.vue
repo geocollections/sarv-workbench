@@ -45,10 +45,6 @@ export default {
     };
   },
 
-  computed: {
-    ...mapGetters("user", ["getDatabaseId"])
-  },
-
   created() {
     this.setActiveSearchParametersFilters([
       { id: "identifier", title: "doi.identifier", type: "text" },
@@ -61,7 +57,7 @@ export default {
   methods: {
     fetchDois() {
       return new Promise(resolve => {
-        resolve(fetchDois(this.searchParameters, this.getDatabaseId));
+        resolve(fetchDois(this.searchParameters));
       });
     }
   }

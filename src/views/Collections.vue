@@ -50,9 +50,6 @@ export default {
       block: { search: true }
     };
   },
-  computed: {
-    ...mapGetters("user", ["getDatabaseId"])
-  },
 
   created() {
     this.setActiveSearchParametersFilters([
@@ -69,7 +66,7 @@ export default {
   methods: {
     fetchCollections() {
       return new Promise(resolve => {
-        resolve(fetchCollections(this.searchParameters, this.getDatabaseId));
+        resolve(fetchCollections(this.searchParameters));
       });
     }
   }
