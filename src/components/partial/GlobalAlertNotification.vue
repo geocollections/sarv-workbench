@@ -1,5 +1,5 @@
 <template>
-  <div v-if="page && page.public">
+  <div v-if="page && page.public" style="z-index: 3">
     <v-alert
       v-if="globalNotificationState"
       type="info"
@@ -12,15 +12,22 @@
       <div v-html="pageTranslated" />
     </v-alert>
 
-    <div v-else class="d-flex justify-end">
+    <div
+      v-else
+      class="d-flex justify-end"
+      :class="{ 'mb-2': $route.meta.isLogin }"
+    >
       <div
+        style="z-index: 3"
         class="align-self-center mr-3 text-link"
+        :class="{ 'login-view-text': $route.meta.isLogin }"
         @click="toggleGlobalNotification"
       >
         {{ $t("messages.globalNotificationIsAvailable") }}
       </div>
 
       <v-btn
+        style="z-index: 3;"
         color="white"
         class="info"
         icon
@@ -80,5 +87,10 @@ export default {
   transition: color 100ms ease-in;
   color: #2196f3;
   cursor: pointer;
+}
+
+.login-view-text {
+  font-weight: 600;
+  color: #fff;
 }
 </style>
