@@ -1901,7 +1901,8 @@
     "attachment_upload_error": "Attachment upload failed!",
     "attachment_upload_success": "New attachment uploaded!",
     "delete": "Delete the record",
-    "confirm_deleting": "Are you sure you would like to delete the record?"
+    "confirm_deleting": "Are you sure you would like to delete the record?",
+    "globalNotificationIsAvailable": "View global notification!"
   },
   "logs": {
     "title": "Editing history",

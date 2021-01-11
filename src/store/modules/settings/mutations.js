@@ -90,6 +90,10 @@ const mutations = {
 
   UPDATE_FORM_SECTIONS(state, payload) {
     state.formSections[payload.key] = payload.value;
+  },
+
+  TOGGLE_GLOBAL_NOTIFICATION(state) {
+    state.globalNotificationState = !state.globalNotificationState;
   }
 };
 

@@ -1901,7 +1901,8 @@
     "attachment_upload_error": "Faili kirje loomine ebaõnnestus!",
     "attachment_upload_success": "Uus faili kirje loodud!",
     "delete": "Kustuta kirje",
-    "confirm_deleting": "Kas olete kindel, et soovite kirje kustutada?"
+    "confirm_deleting": "Kas olete kindel, et soovite kirje kustutada?",
+    "globalNotificationIsAvailable": "Vaata üldist teadet!"
   },
   "logs": {
     "title": "Kirje ajalugu",
