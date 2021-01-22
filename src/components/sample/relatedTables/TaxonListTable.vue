@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,7 +39,6 @@
       </template>
 
       <template v-slot:item.taxon="{ item }">
-        <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
             :to="{ path: '/taxon/' + item.taxon }"
@@ -58,20 +57,9 @@
           >
             {{ item.taxon.taxon }}
           </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/taxon/' + item.taxon }"
-          :title="$t('editTaxon.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.taxon__taxon }}
-        </router-link>
       </template>
 
       <template v-slot:item.agent_identified="{ item }">
-        <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
             :to="{ path: '/agent/' + item.agent_identified }"
@@ -90,16 +78,6 @@
           >
             {{ item.agent_identified.agent }}
           </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/agent/' + item.agent_identified }"
-          :title="$t('editAgent.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.agent_identified__agent }}
-        </router-link>
       </template>
 
       <template v-slot:item.extra="{ item }">
@@ -228,21 +206,6 @@
                   />
                 </v-col>
 
-                <!--                <v-col cols="12" md="6" class="pa-1">-->
-                <!--                  <autocomplete-wrapper-->
-                <!--                    v-model="item.preparation"-->
-                <!--                    :color="bodyActiveColor"-->
-                <!--                    :items="autocomplete.preparation"-->
-                <!--                    :loading="autocomplete.loaders.preparation"-->
-                <!--                    item-text="preparation_number"-->
-                <!--                    :label="$t('taxon.preparation')"-->
-                <!--                    is-link-->
-                <!--                    route-object="preparation"-->
-                <!--                    is-searchable-->
-                <!--                    v-on:search:items="autocompletePreparationSearch"-->
-                <!--                  />-->
-                <!--                </v-col>-->
-
                 <v-col cols="12" md="6" class="pa-1">
                   <checkbox-wrapper
                     v-model="item.is_private"
@@ -279,6 +242,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+        :dialog="deleteDialog"
+        @cancel="cancelDeletion"
+        @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -289,18 +258,21 @@ import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import DateWrapper from "../../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
-  name: "SampleTaxonListTable",
+  name: "TaxonListTable",
 
   components: {
+    RelatedDataDeleteDialog,
     CheckboxWrapper,
     DateWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -329,11 +301,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
 
@@ -345,7 +312,6 @@ export default {
       { text: "taxon.det_agent", value: "agent_identified" },
       { text: "taxon.det_date", value: "date_identified" },
       { text: "taxon.extra", value: "extra" },
-      // { text: "taxon.preparation", value: "preparation" },
       { text: "common.is_private", value: "is_private" },
       { text: "common.remarks", value: "remarks" },
       {
@@ -363,7 +329,6 @@ export default {
       agent_identified: null,
       date_identified: "",
       extra: "",
-      // preparation: null,
       is_private: false,
       remarks: ""
     },
@@ -371,25 +336,14 @@ export default {
     autocomplete: {
       taxon: [],
       agent: [],
-      // preparation: [],
       loaders: {
         taxon: false,
         agent: false
-        // preparation: false
       }
     }
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       // return (
       //   (typeof this.item.taxon === "object" && this.item.taxon !== null) ||
@@ -400,9 +354,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         taxon: null,
         name: "",
@@ -416,31 +368,8 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "taxon_list",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "taxon_list",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.taxon !== "object" && item.taxon !== null) {
         this.item.taxon = {
@@ -467,17 +396,6 @@ export default {
         this.autocomplete.agent.push(this.item.agent_identified);
       }
 
-      // if (typeof item.preparation !== "object" && item.preparation !== null) {
-      //   this.item.preparation = {
-      //     id: item.preparation,
-      //     preparation_number: item.preparation_number
-      //   };
-      //   this.autocomplete.preparation.push(this.item.preparation);
-      // } else if (item.preparation !== null) {
-      //   this.item.preparation = item.preparation;
-      //   this.autocomplete.preparation.push(this.item.preparation);
-      // }
-
       this.item.name = item.name;
       this.item.frequency = item.frequency;
       this.item.date_identified = item.date_identified;
@@ -486,32 +404,6 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "taxon_list",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
-
-    updateUserInputtedDate(fieldToBeUpdated, date) {
-      if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
-          this.item[fieldToBeUpdated] = date;
-        }
-      }
     }
   }
 };

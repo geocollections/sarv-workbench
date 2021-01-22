@@ -896,7 +896,7 @@
 
         <v-tabs-items>
           <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-            <sample-analysis-table
+            <analysis-table
               v-show="activeTab === 'analysis'"
               :response="relatedData.analysis"
               :search-parameters="relatedData.searchParameters.analysis"
@@ -907,7 +907,7 @@
               v-on:related:delete="deleteRelatedItem"
             />
 
-            <sample-preparation-table
+            <preparation-table
               v-show="activeTab === 'preparation'"
               :response="relatedData.preparation"
               :search-parameters="relatedData.searchParameters.preparation"
@@ -918,7 +918,7 @@
               v-on:related:delete="deleteRelatedItem"
             />
 
-            <sample-taxon-list-table
+            <taxon-list-table
               v-show="activeTab === 'taxon_list'"
               :response="relatedData.taxon_list"
               :search-parameters="relatedData.searchParameters.taxon_list"
@@ -1017,10 +1017,10 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import FileInput from "../partial/inputs/FileInput";
-import SampleAnalysisTable from "./relatedTables/SampleAnalysisTable";
+import AnalysisTable from "./relatedTables/AnalysisTable";
 import requestsMixin from "../../mixins/requestsMixin";
-import SamplePreparationTable from "./relatedTables/SamplePreparationTable";
-import SampleTaxonListTable from "./relatedTables/SamplesTaxonListTable";
+import PreparationTable from "./relatedTables/PreparationTable";
+import TaxonListTable from "./relatedTables/TaxonListTable";
 import SampleReferenceTable from "./relatedTables/SampleReferenceTable";
 import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 
@@ -1029,9 +1029,9 @@ export default {
 
   components: {
     SampleReferenceTable,
-    SampleTaxonListTable,
-    SamplePreparationTable,
-    SampleAnalysisTable,
+    TaxonListTable,
+    PreparationTable,
+    AnalysisTable,
     FileInput,
     TextareaWrapper,
     DateWrapper,
