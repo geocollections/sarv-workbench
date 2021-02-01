@@ -374,9 +374,7 @@
               <v-btn
                 icon
                 :title="$t('add.new')"
-                @click="
-                  windowOpenNewTab('/keyword/add')
-                "
+                @click="windowOpenNewTab('/keyword/add')"
                 target="newKeywordWindow"
                 color="green"
               >
@@ -1372,7 +1370,7 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       Object.keys(uploadableObject).forEach(key => {
@@ -1435,6 +1433,13 @@ export default {
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
 
+      if (saveAsNew) {
+        uploadableObject.reference += " (copy)";
+        uploadableObject.abstract = null;
+        uploadableObject.author_keywords = null;
+        uploadableObject.related_data = null;
+      }
+
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
@@ -1482,7 +1487,9 @@ export default {
           id: obj.translated_reference,
           reference: obj.translated_reference__reference
         };
-        this.autocomplete.translated_reference.push(this.reference.translated_reference);
+        this.autocomplete.translated_reference.push(
+          this.reference.translated_reference
+        );
       }
     },
 
