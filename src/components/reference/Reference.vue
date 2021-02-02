@@ -1434,7 +1434,6 @@ export default {
         delete uploadableObject.related_data;
 
       if (saveAsNew) {
-        uploadableObject.reference += " (copy)";
         uploadableObject.abstract = null;
         uploadableObject.author_keywords = null;
         uploadableObject.related_data = null;
