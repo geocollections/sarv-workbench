@@ -7,6 +7,7 @@
     mobile-breakpoint="992"
     :dark="isDrawerDark"
     :color="drawerColor"
+    style="z-index: 1100"
   >
     <template v-slot:prepend>
       <v-list-item>

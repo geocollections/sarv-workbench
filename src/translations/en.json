@@ -573,31 +573,31 @@
     "viewMessage": "View analysis in geocollections portal"
   },
   "editProject": {
-    "heading": "Project ID",
+    "heading": "Project",
     "editMessage": "Edit project"
   },
   "editSite": {
-    "heading": "Site ID",
+    "heading": "Site",
     "editMessage": "Edit site",
     "viewMessage": "View site"
   },
   "editLocality": {
-    "heading": "Locality ID",
+    "heading": "Locality",
     "editMessage": "Edit locality",
     "viewMessage": "View locality in geocollections portal"
   },
   "editSample": {
-    "heading": "Sample ID",
+    "heading": "Sample",
     "editMessage": "Edit sample",
     "viewMessage": "View sample in geocollections portal"
   },
   "editLibrary": {
-    "heading": "Library ID",
+    "heading": "Library",
     "editMessage": "Edit library",
     "viewMessage": "View library in geocollections portal"
   },
   "editDoi": {
-    "heading": "Doi ID",
+    "heading": "Doi",
     "viewMessage": "View DOI",
     "editMessage": "Edit DOI"
   },
@@ -1416,7 +1416,8 @@
       "library": "Related libraries",
       "taxon": "Taxon",
       "stratigraphy": "Stratigraphy"
-    }
+    },
+    "translation_of": "Translation of"
   },
   "synonym": {
     "synonym":"Synonym"
@@ -1900,7 +1901,9 @@
     "attachment_upload_error": "Attachment upload failed!",
     "attachment_upload_success": "New attachment uploaded!",
     "delete": "Delete the record",
-    "confirm_deleting": "Are you sure you would like to delete the record?"
+    "confirm_deleting": "Are you sure you would like to delete the record?",
+    "globalNotificationIsAvailable": "View global notification!",
+    "devNotification": "You are visiting the <b>development version</b> of the application. More stable version can be found here: "
   },
   "logs": {
     "title": "Editing history",

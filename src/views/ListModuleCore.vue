@@ -55,37 +55,16 @@
       </div>
     </v-row>
 
-    <!-- PAGINATION -->
-    <div
-      v-if="response.count > 0"
-      class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none"
-    >
-      <div class="mr-3 mb-3">
-        <v-select
-          :value="searchParameters.paginateBy"
-          :color="bodyActiveColor"
-          dense
-          :items="paginateByOptionsTranslated"
-          :item-color="bodyActiveColor"
-          label="Paginate by"
-          hide-details
-          @change="$emit('update:searchParameters', $event, 'paginateBy')"
-        />
-      </div>
-
-      <div>
-        <v-pagination
-          :value="searchParameters.page"
-          :color="bodyActiveColor"
-          circle
-          prev-icon="fas fa-angle-left"
-          next-icon="fas fa-angle-right"
-          :length="Math.ceil(response.count / searchParameters.paginateBy)"
-          :total-visible="5"
-          @input="$emit('update:searchParameters', $event, 'page')"
-        />
-      </div>
-    </div>
+    <pagination
+      class="pb-2"
+      :body-active-color="bodyActiveColor"
+      :count="response.count"
+      :paginate-by="searchParameters.paginateBy"
+      :options="paginateByOptionsTranslated"
+      :page="searchParameters.page"
+      v-on:update:page="$emit('update:searchParameters', $event, 'page')"
+      v-on:update:paginateBy="$emit('update:searchParameters', $event, 'paginateBy')"
+    />
 
     <!-- DATA TABLE -->
     <v-card
@@ -146,6 +125,17 @@
         "
       />
     </v-card>
+
+    <pagination
+      class="pt-2 pt-md-0 pb-0 pb-md-5"
+      :body-active-color="bodyActiveColor"
+      :count="response.count"
+      :paginate-by="searchParameters.paginateBy"
+      :options="paginateByOptionsTranslated"
+      :page="searchParameters.page"
+      v-on:update:page="$emit('update:searchParameters', $event, 'page')"
+      v-on:update:paginateBy="$emit('update:searchParameters', $event, 'paginateBy')"
+    />
   </div>
 </template>
 
@@ -159,9 +149,11 @@ import { mapActions, mapState } from "vuex";
 import ScrollToTop from "../components/partial/ScrollToTop";
 import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
+import Pagination from "@/components/partial/Pagination";
 
 export default {
   components: {
+    Pagination,
     ScrollToTop,
     ExportButtons,
     ListView,

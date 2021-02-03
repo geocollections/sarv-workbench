@@ -72,10 +72,9 @@ const actions = {
     commit("SET_LOADING_PERCENT", percent);
   },
 
-  FETCH_PROJECTS({ commit, state, rootGetters }) {
+  FETCH_PROJECTS({ commit, state }) {
     return fetchProjects(
-      state.activeSearchParams.search,
-      rootGetters["user/getCurrentUser"].id
+      state.activeSearchParams.search
     ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
@@ -121,32 +120,27 @@ const actions = {
     );
   },
 
-  FETCH_SAMPLES({ commit, state, rootGetters }) {
+  FETCH_SAMPLES({ commit, state }) {
     return fetchSamples(
-      state.activeSearchParams.search,
-      rootGetters["user/getDatabaseId"]
+      state.activeSearchParams.search
     ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
-  FETCH_ANALYSES({ commit, state, rootGetters }) {
+  FETCH_ANALYSES({ commit, state }) {
     return fetchAnalyses(
-      state.activeSearchParams.search,
-      rootGetters["user/getCurrentUser"],
-      rootGetters["user/getDatabaseId"]
+      state.activeSearchParams.search
     ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
-  FETCH_DOIS({ commit, state, rootGetters }) {
+  FETCH_DOIS({ commit, state }) {
     return fetchDois(
-      state.activeSearchParams.search,
-      rootGetters["user/getDatabaseId"]
+      state.activeSearchParams.search
     ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
-  FETCH_SPECIMENS({ commit, state, rootGetters }) {
+  FETCH_SPECIMENS({ commit, state }) {
     return fetchSpecimens(
-      state.activeSearchParams.search,
-      rootGetters["user/getDatabaseId"]
+      state.activeSearchParams.search
     ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
@@ -198,10 +192,9 @@ const actions = {
     });
   },
 
-  FETCH_DATASETS({ commit, state, rootGetters }) {
+  FETCH_DATASETS({ commit, state }) {
     return fetchDatasets(
-      state.activeSearchParams.search,
-      rootGetters["user/getDatabaseId"]
+      state.activeSearchParams.search
     ).then(resp => {
       commit("SET_SIDEBAR_LIST", resp);
     });
@@ -255,10 +248,9 @@ const actions = {
     });
   },
 
-  FETCH_LOANS({ commit, state, rootGetters }) {
+  FETCH_LOANS({ commit, state }) {
     return fetchLoans(
-      state.activeSearchParams.search,
-      rootGetters["user/getDatabaseId"]
+      state.activeSearchParams.search
     ).then(resp => {
       commit("SET_SIDEBAR_LIST", resp);
     });

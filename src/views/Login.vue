@@ -11,6 +11,10 @@
     <v-container fill-height>
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
+          <GlobalAlertNotification />
+
+          <DevNotification />
+
           <v-card
             :color="bodyColor.split('n-')[0] + 'n-5'"
             elevation="8"
@@ -140,18 +144,22 @@
     <!--  Load in background images  -->
     <img
       :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_1.jpg`"
+      alt="background_image_1"
       v-show="false"
     />
     <img
       :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_2.jpg`"
+      alt="background_image_2"
       v-show="false"
     />
     <img
       :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_3.jpg`"
+      alt="background_image_3"
       v-show="false"
     />
     <img
       :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_4.jpg`"
+      alt="background_image_4"
       v-show="false"
     />
   </v-main>
@@ -162,10 +170,14 @@ import authenticationMixin from "../mixins/authenticationMixin";
 import LangButtons from "../components/partial/LangButtons";
 import { mapState } from "vuex";
 import SiteIcons from "@/components/partial/SiteIcons";
+import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
+import DevNotification from "@/components/partial/DevNotification";
 
 export default {
   name: "Login",
   components: {
+    DevNotification,
+    GlobalAlertNotification,
     SiteIcons,
     LangButtons
   },

@@ -213,7 +213,8 @@ export default {
           this.initNavigationButtons(newVal.results);
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     },
     "$route.params.id": {
       handler: function(newVal) {

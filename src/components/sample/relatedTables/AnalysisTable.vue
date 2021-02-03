@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -50,60 +50,40 @@
       </template>
 
       <template v-slot:item.method="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.analysis_method__analysis_method,
-              en: item.analysis_method__method_en
-            }"
-          />
-          <span
-            v-else-if="item.analysis_method"
-            v-translate="{
-              et: item.analysis_method.analysis_method,
-              en: item.analysis_method.method_en
-            }"
-          />
-        </div>
-        <div
-          v-else
+        <span
+          v-if="$route.meta.isEdit"
           v-translate="{
             et: item.analysis_method__analysis_method,
             en: item.analysis_method__method_en
           }"
-        ></div>
+        />
+        <span
+          v-else-if="item.analysis_method"
+          v-translate="{
+            et: item.analysis_method.analysis_method,
+            en: item.analysis_method.method_en
+          }"
+        />
       </template>
 
       <template v-slot:item.agent="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent.agent }}
-          </router-link>
-        </div>
         <router-link
-          v-else
+          v-if="$route.meta.isEdit"
           :to="{ path: '/agent/' + item.agent }"
           :title="$t('editAgent.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           {{ item.agent__agent }}
+        </router-link>
+        <router-link
+          v-else-if="item.agent"
+          :to="{ path: '/agent/' + item.agent.id }"
+          :title="$t('editAgent.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.agent.agent }}
         </router-link>
       </template>
     </v-data-table>
@@ -226,6 +206,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+        :dialog="deleteDialog"
+        @cancel="cancelDeletion"
+        @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -236,17 +222,20 @@ import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import { fetchAnalysisMethod } from "../../../assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import DateWrapper from "../../partial/inputs/DateWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
-  name: "SampleAnalysisTable",
+  name: "AnalysisTable",
 
   components: {
+    RelatedDataDeleteDialog,
     DateWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -275,11 +264,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
 
@@ -324,21 +308,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers
-        .map(header => {
-          return {
-            ...header,
-            text: this.$t(header.text)
-          };
-        })
-        .filter(header => {
-          if (header.value === "id") {
-            return this.$route.meta.isEdit;
-          } else return true;
-        });
-    },
-
     isItemValid() {
       return (
         typeof this.item.analysis_method !== "undefined" &&
@@ -347,16 +316,8 @@ export default {
     }
   },
 
-  watch: {
-    dialog() {
-      this.fillListAutocompletes();
-    }
-  },
-
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         analysis_method: null,
         method_details: "",
@@ -369,31 +330,8 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "analysis",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "analysis",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.agent !== "object" && item.agent !== null) {
         this.item.agent = {
@@ -427,14 +365,6 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "analysis",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
-    },
-
     fillListAutocompletes() {
       if (this.autocomplete.analysis_method.length <= 1) {
         this.autocomplete.loaders.analysis_method = true;
@@ -445,24 +375,6 @@ export default {
           }
         });
         this.autocomplete.loaders.analysis_method = false;
-      }
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
-
-    updateUserInputtedDate(fieldToBeUpdated, date) {
-      if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
-          this.item[fieldToBeUpdated] = date;
-        }
       }
     }
   }

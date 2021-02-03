@@ -374,11 +374,7 @@
               <v-btn
                 icon
                 :title="$t('add.new')"
-                @click="
-                  windowOpenNewTab('/keyword/add', {
-                    attachment: JSON.stringify(reference)
-                  })
-                "
+                @click="windowOpenNewTab('/keyword/add')"
                 target="newKeywordWindow"
                 color="green"
               >
@@ -418,11 +414,25 @@
         <div v-show="block.other" class="pa-1">
           <!-- AUTHOR_ORIGINAL -->
           <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
+            <v-col cols="6" class="pa-1">
               <input-wrapper
                 v-model="reference.author_original"
                 :color="bodyActiveColor"
                 :label="$t('reference.author_original')"
+              />
+            </v-col>
+            <v-col cols="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="reference.translated_reference"
+                :color="bodyActiveColor"
+                :items="autocomplete.translated_reference"
+                :loading="autocomplete.loaders.translated_reference"
+                item-text="reference"
+                :label="$t('reference.translation_of')"
+                is-link
+                route-object="reference"
+                is-searchable
+                v-on:search:items="autocompleteTranslatedReferenceSearch"
               />
             </v-col>
           </v-row>
@@ -1138,7 +1148,8 @@ export default {
           "author_original",
           "book_translated",
           "book_translated_language",
-          "parent_reference"
+          "parent_reference",
+          "translated_reference"
         ],
         autocomplete: {
           loaders: {
@@ -1152,7 +1163,8 @@ export default {
             library: false,
             locality_reference_type: false,
             licence: false,
-            reference: false
+            reference: false,
+            translated_reference: false
           },
           types: [],
           languages: [],
@@ -1163,7 +1175,8 @@ export default {
           library: [],
           locality_reference_type: [],
           licence: [],
-          reference: []
+          reference: [],
+          translated_reference: []
         },
         requiredFields: ["reference", "year", "author", "title"],
         reference: {
@@ -1357,7 +1370,7 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       Object.keys(uploadableObject).forEach(key => {
@@ -1420,6 +1433,12 @@ export default {
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
 
+      if (saveAsNew) {
+        uploadableObject.abstract = null;
+        uploadableObject.author_keywords = null;
+        uploadableObject.related_data = null;
+      }
+
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
@@ -1462,6 +1481,15 @@ export default {
         licence: obj.licence__licence,
         licence_en: obj.licence__licence_en
       };
+      if (this.isNotEmpty(obj.translated_reference)) {
+        this.reference.translated_reference = {
+          id: obj.translated_reference,
+          reference: obj.translated_reference__reference
+        };
+        this.autocomplete.translated_reference.push(
+          this.reference.translated_reference
+        );
+      }
     },
 
     loadRelatedData(object) {

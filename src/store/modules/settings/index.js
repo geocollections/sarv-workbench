@@ -21,7 +21,8 @@ const state = {
   recentUrlsState: true,
   shortcuts: [],
   lang: "ee",
-  formSections: {}
+  formSections: {},
+  globalNotificationState: true
 };
 
 export default {

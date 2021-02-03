@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,28 +39,8 @@
       </template>
 
       <template v-slot:item.taxon="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.taxon }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon__taxon }}
-          </router-link>
-          <router-link
-            v-else-if="item.taxon"
-            :to="{ path: '/taxon/' + item.taxon.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon.taxon }}
-          </router-link>
-        </div>
         <router-link
-          v-else
+          v-if="$route.meta.isEdit"
           :to="{ path: '/taxon/' + item.taxon }"
           :title="$t('editTaxon.editMessage')"
           class="sarv-link"
@@ -68,14 +48,20 @@
         >
           {{ item.taxon__taxon }}
         </router-link>
+        <router-link
+          v-else-if="item.taxon"
+          :to="{ path: '/taxon/' + item.taxon.id }"
+          :title="$t('editTaxon.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.taxon.taxon }}
+        </router-link>
       </template>
 
       <template v-slot:item.storage="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div v-if="$route.meta.isEdit">{{ item.storage__location }}</div>
-          <div v-else-if="item.storage">{{ item.storage.location }}</div>
-        </div>
-        <div v-else>{{ item.storage__location }}</div>
+        <div v-if="$route.meta.isEdit">{{ item.storage__location }}</div>
+        <div v-else-if="item.storage">{{ item.storage.location }}</div>
       </template>
     </v-data-table>
 
@@ -158,6 +144,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -166,16 +158,19 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
-  name: "SamplePreparationTable",
+  name: "PreparationTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
     InputWrapper
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -204,11 +199,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
 
@@ -244,15 +234,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return (
         this.item.preparation_number !== null &&
@@ -262,9 +243,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         preparation_number: "",
         taxon: null,
@@ -273,31 +252,8 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "preparation",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "preparation",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.taxon !== "object" && item.taxon !== null) {
         this.item.taxon = {
@@ -325,24 +281,6 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "preparation",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     }
   }
 };
