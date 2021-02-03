@@ -1902,7 +1902,8 @@
     "attachment_upload_success": "Uus faili kirje loodud!",
     "delete": "Kustuta kirje",
     "confirm_deleting": "Kas olete kindel, et soovite kirje kustutada?",
-    "globalNotificationIsAvailable": "Vaata üldist teadet!"
+    "globalNotificationIsAvailable": "Vaata üldist teadet!",
+    "devNotification": "Külastate rakenduse <b>arendusversiooni</b>, kus võib esineda tõrkeid. Stabiilsema versiooni leiate siit: "
   },
   "logs": {
     "title": "Kirje ajalugu",

@@ -13,6 +13,8 @@
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
           <GlobalAlertNotification />
 
+          <DevNotification />
+
           <v-card
             :color="bodyColor.split('n-')[0] + 'n-5'"
             elevation="8"
@@ -169,10 +171,12 @@ import LangButtons from "../components/partial/LangButtons";
 import { mapState } from "vuex";
 import SiteIcons from "@/components/partial/SiteIcons";
 import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
+import DevNotification from "@/components/partial/DevNotification";
 
 export default {
   name: "Login",
   components: {
+    DevNotification,
     GlobalAlertNotification,
     SiteIcons,
     LangButtons

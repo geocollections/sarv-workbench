@@ -1902,7 +1902,8 @@
     "attachment_upload_success": "New attachment uploaded!",
     "delete": "Delete the record",
     "confirm_deleting": "Are you sure you would like to delete the record?",
-    "globalNotificationIsAvailable": "View global notification!"
+    "globalNotificationIsAvailable": "View global notification!",
+    "devNotification": "You are visiting the <b>development version</b> of the application. More stable version can be found here: "
   },
   "logs": {
     "title": "Editing history",
