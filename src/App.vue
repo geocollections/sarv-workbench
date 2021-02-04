@@ -33,4 +33,14 @@ body {
 .v-overlay--active {
   /*z-index: 49999 !important;*/
 }
+
+/**
+ * Temporary fix for breaking change in Vuetify v-grid
+ * (see : https://github.com/vuetifyjs/vuetify/issues/11408)
+ * TODO - remove this after migration
+ */
+/*.row:not([class*="my-"]):not([class*="ma-"]):not([class*="mt-"]):not([class*="mb-"]) {*/
+/*  margin-top: 0 !important;*/
+/*  margin-bottom: 0 !important;*/
+/*}*/
 </style>
