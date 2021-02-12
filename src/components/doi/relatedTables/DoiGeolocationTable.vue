@@ -343,6 +343,9 @@ export default {
       return (
         (typeof this.item.locality !== "undefined" &&
           this.item.locality !== null) ||
+        (typeof this.item.place !== "undefined" &&
+          this.item.place !== null &&
+          this.item.place.trim().length > 0) ||
         (this.item.polygon && this.item.polygon.length > 0)
       );
     }
