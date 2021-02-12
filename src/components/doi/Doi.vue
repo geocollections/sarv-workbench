@@ -1583,7 +1583,10 @@ export default {
                   agent.agent__surename
                 }, ${agent.agent__forename.charAt(0)}., `;
                 creators += `${agent.agent__surename}, ${agent.agent__forename}; `;
-              } else if (agent?.name) creators += `${agent.name}; `;
+              } else if (agent?.name) {
+                creatorsLong += `${agent.name}; `;
+                creators += `${agent.name}; `;
+              }
             }
           } else {
             if (agent?.agent_type?.id === 1) {
