@@ -19,7 +19,7 @@
       <template v-slot:item.action="{ item }">
         <v-btn
           icon
-          @click="editItem(item)"
+          @click="openAttachment(item.id)"
           color="green"
           :title="$t('buttons.edit')"
           small
@@ -45,7 +45,7 @@
             :src="getFileUrl(item.uuid_filename, 'small')"
             :lazy-src="getFileUrl(item.uuid_filename, 'small')"
             class="grey lighten-2 attachment-table-image-preview my-1"
-            :max-width="widths[value]"
+            :max-width="400"
           >
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
@@ -68,8 +68,8 @@
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
 
-      <template v-slot:item.boolean1="{ item }">
-        <v-icon v-if="item.boolean1" color="green" small>fas fa-check</v-icon>
+      <template v-slot:item.is_private="{ item }">
+        <v-icon v-if="item.is_private" color="green" small>fas fa-check</v-icon>
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
     </v-data-table>
@@ -95,10 +95,10 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <checkbox-wrapper
-                    v-model="item.boolean1"
+                    v-model="item.is_private"
                     :color="bodyActiveColor"
-                    :label="$t('drillcore_box.is_wet')"
-                    @change="item.boolean1 = !item.boolean1"
+                    :label="$t('common.is_private')"
+                    @change="item.is_private = !item.is_private"
                   />
                 </v-col>
               </v-row>
@@ -170,7 +170,7 @@ export default {
     headers: [
       { text: "drillcore_box.attachment", value: "id" },
       { text: "drillcore_box.is_preferred", value: "is_preferred" },
-      { text: "drillcore_box.is_wet", value: "boolean1" },
+      { text: "common.is_private", value: "is_private" },
       {
         text: "common.actions",
         value: "action",
@@ -181,7 +181,7 @@ export default {
     dialog: false,
     item: {
       is_preferred: false,
-      boolean1: false
+      is_private: false
     },
     widths: {}
   }),
@@ -215,7 +215,7 @@ export default {
       this.dialog = false;
       this.item = {
         is_preferred: false,
-        boolean1: false
+        is_private: false
       };
     },
 
@@ -235,7 +235,7 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
       this.item.is_preferred = item.is_preferred;
-      this.item.boolean1 = item.boolean1;
+      this.item.is_private = item.is_private;
 
       this.dialog = true;
     },
@@ -281,6 +281,13 @@ export default {
         if (img.width) this.$set(this.widths, id, img.width);
         else this.$set(this.widths, id, 400);
       } else this.$set(this.widths, id, 400);
+    },
+
+    openAttachment(id) {
+      let routeData = this.$router.resolve({
+        path: "/attachment/" + id
+      });
+      window.open(routeData.href, "_blank", "width=800,height=750");
     }
   }
 };

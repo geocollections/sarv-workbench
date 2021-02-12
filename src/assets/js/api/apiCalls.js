@@ -2888,7 +2888,7 @@ export function fetchDrillcoreBoxImages(data) {
 
 export function fetchDrillcoreBoxAttachments(drillcoreBoxId, searchParameters) {
   let fields =
-    "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number,is_preferred";
+    "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number,is_preferred,is_private";
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
     searchParameters.sortDesc

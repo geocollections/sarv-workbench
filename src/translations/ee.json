@@ -1321,7 +1321,7 @@
     "is_preferred": "Eelistatud",
     "is_wet": "Märg",
     "relatedTables": {
-      "attachment": "Files (view/edit)",
+      "attachment": "Files",
       "add_attachment": "Files (add/delete)"
     }
   },

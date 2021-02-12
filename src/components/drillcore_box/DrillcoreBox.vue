@@ -224,7 +224,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in computedRelatedTabs"
+          v-for="tab in relatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -244,25 +244,27 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <drillcore-box-attachment-table
-            v-show="activeTab === 'attachment'"
-            :response="relatedData.attachment"
-            :search-parameters="relatedData.searchParameters.attachment"
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-            v-on:related:edit="editRelatedItem"
-          />
-
-          <div v-show="activeTab === 'add_attachment'">
+          <div v-show="activeTab === 'attachment'">
             <file-input
               show-existing
-              :files-from-object="relatedData.add_attachment.results"
+              :show-existing-previews="!$route.meta.isEdit"
+              :files-from-object="relatedData.attachment.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
               :record-options="$route.meta.isEdit"
               :is-draggable="$route.meta.isEdit"
               show-attachment-link
+            />
+
+            <drillcore-box-attachment-table
+              class="mt-2"
+              v-if="$route.meta.isEdit"
+              :response="relatedData.attachment"
+              :search-parameters="relatedData.searchParameters.attachment"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:edit="editRelatedItem"
             />
           </div>
 
@@ -315,7 +317,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import {
   fetchDrillcoreBox,
   fetchDrillcoreBoxAttachments
-} from "../../assets/js/api/apiCalls";
+} from "@/assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import FileInput from "../partial/inputs/FileInput";
@@ -400,13 +402,6 @@ export default {
           text: this.$t(item.text, { num: item.value })
         };
       });
-    },
-
-    computedRelatedTabs() {
-      return this.relatedTabs.filter(tab => {
-        if (this.$route.meta.isEdit) return tab;
-        else if (tab.name !== "attachment") return tab;
-      });
     }
   },
 
@@ -425,10 +420,7 @@ export default {
 
     setInitialData() {
       return {
-        relatedTabs: [
-          { name: "attachment", iconClass: "fas fa-image" },
-          { name: "add_attachment", iconClass: "fas fa-file" }
-        ],
+        relatedTabs: [{ name: "attachment", iconClass: "fas fa-image" }],
         activeTab: "attachment",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
@@ -508,7 +500,6 @@ export default {
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-        this.setTab("add_attachment");
       }
     },
 
@@ -533,31 +524,29 @@ export default {
       if (!this.$route.meta.isEdit) {
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
-            if (tab.name !== "attachment") {
-              if (tab.name === "add_attachment") {
-                uploadableObject.related_data.attachment = this.relatedData.add_attachment.results.map(
-                  item => {
-                    return { id: item.id };
-                  }
-                );
-              } else {
-                uploadableObject.related_data[tab.name] = this.relatedData[
-                  tab.name
-                ].results;
+            if (tab.name === "attachment") {
+              uploadableObject.related_data.attachment = this.relatedData.attachment.results.map(
+                item => {
+                  return { id: item.id };
+                }
+              );
+            } else {
+              uploadableObject.related_data[tab.name] = this.relatedData[
+                tab.name
+              ].results;
 
-                uploadableObject.related_data[tab.name].forEach(item => {
-                  Object.keys(item).forEach(key => {
-                    if (typeof item[key] === "object" && item[key] !== null) {
-                      item[key] = item[key].id ? item[key].id : null;
-                    }
-                  });
+              uploadableObject.related_data[tab.name].forEach(item => {
+                Object.keys(item).forEach(key => {
+                  if (typeof item[key] === "object" && item[key] !== null) {
+                    item[key] = item[key].id ? item[key].id : null;
+                  }
                 });
-              }
+              });
             }
         });
       } else {
-        if (this.relatedData.add_attachment.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.add_attachment.results.map(
+        if (this.relatedData.attachment.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachment.results.map(
             item => {
               return { id: item.id };
             }
@@ -614,15 +603,8 @@ export default {
     setDefaultRelatedData() {
       return {
         attachment: { count: 0, results: [] },
-        add_attachment: { count: 0, results: [] },
         searchParameters: {
           attachment: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["is_preferred"],
-            sortDesc: [true]
-          },
-          add_attachment: {
             page: 1,
             paginateBy: 10,
             sortBy: ["is_preferred"],
@@ -640,11 +622,6 @@ export default {
           this.$route.params.id,
           this.relatedData.searchParameters.attachment
         );
-      } else if (object === "add_attachment") {
-        query = fetchDrillcoreBoxAttachments(
-          this.$route.params.id,
-          this.relatedData.searchParameters.add_attachment
-        );
       }
 
       query.then(response => {
@@ -654,12 +631,19 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "drillcore_box", singleFileMetadata);
+      this.addFileAsRelatedDataNew(
+        files,
+        "drillcore_box",
+        singleFileMetadata,
+        this.relatedData.attachment.count
+      );
+
+      this.loadRelatedData("attachment");
     },
 
     addExistingFiles(files) {
-      this.relatedData.add_attachment.count = files.length;
-      this.relatedData.add_attachment.results = files;
+      this.relatedData.attachment.count = files.length;
+      this.relatedData.attachment.results = files;
     },
 
     setDefaultSearchParameters() {

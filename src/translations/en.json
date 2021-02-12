@@ -1321,7 +1321,7 @@
     "is_preferred": "Preferred",
     "is_wet": "Wet",
     "relatedTables": {
-      "attachment": "Failid (vaata/muuda)",
+      "attachment": "Failid",
       "add_attachment": "Failid (lisa/kustuta)"
     }
   },

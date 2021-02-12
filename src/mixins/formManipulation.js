@@ -384,8 +384,14 @@ const formManipulation = {
       }
     },
 
-    addFileAsRelatedDataNew(files, relatedObject, singleFileMetadata) {
+    addFileAsRelatedDataNew(
+      files,
+      relatedObject,
+      singleFileMetadata,
+      totalAttachmentCount
+    ) {
       console.log(files);
+      console.log(totalAttachmentCount);
       console.log(singleFileMetadata);
       let attach_link = `attach_link__${
         relatedObject === "location" ? "storage" : relatedObject
@@ -413,6 +419,10 @@ const formManipulation = {
             author: this.getCurrentUser.id,
             date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
             is_private: true,
+            is_preferred:
+              relatedObject === "drillcore_box" && totalAttachmentCount === 0
+                ? true
+                : false,
             is_locked: relatedObject === "doi",
             related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
           };
