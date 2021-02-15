@@ -36,7 +36,8 @@ import {
   fetchAnalysisMethods,
   fetchAnalysisParameters,
   fetchTaxonPages,
-  fetchLibraries
+  fetchLibraries,
+  fetchAllFields
 } from "@/assets/js/api/apiCalls";
 
 const actions = {
@@ -73,9 +74,9 @@ const actions = {
   },
 
   FETCH_PROJECTS({ commit, state }) {
-    return fetchProjects(
-      state.activeSearchParams.search
-    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
+    return fetchProjects(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", resp)
+    );
   },
 
   FETCH_SITES({ commit, state }) {
@@ -121,27 +122,27 @@ const actions = {
   },
 
   FETCH_SAMPLES({ commit, state }) {
-    return fetchSamples(
-      state.activeSearchParams.search
-    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
+    return fetchSamples(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", resp)
+    );
   },
 
   FETCH_ANALYSES({ commit, state }) {
-    return fetchAnalyses(
-      state.activeSearchParams.search
-    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
+    return fetchAnalyses(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", resp)
+    );
   },
 
   FETCH_DOIS({ commit, state }) {
-    return fetchDois(
-      state.activeSearchParams.search
-    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
+    return fetchDois(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", resp)
+    );
   },
 
   FETCH_SPECIMENS({ commit, state }) {
-    return fetchSpecimens(
-      state.activeSearchParams.search
-    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
+    return fetchSpecimens(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", resp)
+    );
   },
 
   FETCH_KEYWORDS({ commit, state }) {
@@ -193,9 +194,7 @@ const actions = {
   },
 
   FETCH_DATASETS({ commit, state }) {
-    return fetchDatasets(
-      state.activeSearchParams.search
-    ).then(resp => {
+    return fetchDatasets(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
@@ -249,9 +248,7 @@ const actions = {
   },
 
   FETCH_LOANS({ commit, state }) {
-    return fetchLoans(
-      state.activeSearchParams.search
-    ).then(resp => {
+    return fetchLoans(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
@@ -372,6 +369,27 @@ const actions = {
 
   resetActiveLibraryList({ commit }) {
     commit("RESET_ACTIVE_LIBRARY_LIST");
+  },
+
+  initTableHeaders({ commit }, payload) {
+    commit("INIT_TABLE_HEADERS", payload)
+  },
+
+  async getAllFieldNames({ commit }, table) {
+    try {
+      let response = await fetchAllFields(table);
+
+      if (response && response?.data?.results?.fields) {
+        let fields = response.data.results.fields;
+        commit("SET_ALL_TABLE_HEADERS", { fields: fields, table: table });
+      }
+    } catch (err) {
+      console.error(`Fetching fields failed: ${err}`);
+    }
+  },
+
+  updateTableHeaders({ commit }, payload) {
+    commit("UPDATE_TABLE_HEADERS", payload);
   }
 };
 

@@ -27,7 +27,7 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { fetchAttachments } from "../assets/js/api/apiCalls";
+import { fetchAttachments } from "@/assets/js/api/apiCalls";
 import { mapActions, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
@@ -53,7 +53,9 @@ export default {
     ...mapState("search", ["selection_seriesSearchParameters"])
   },
 
-  created() {
+  async created() {
+    await this.getAllFieldNames(this.$route.meta.object);
+
     // Used by sidebar
     this.setActiveSearchParameters({
       search: this.selection_seriesSearchParameters,
@@ -74,10 +76,31 @@ export default {
       { id: "keyword", title: "keyword.keyword", type: "text" },
       { id: "author", title: "attachment.author", type: "text" }
     ]);
+
+    this.initTableHeaders({
+      headers: [
+        "uuid_filename",
+        "id",
+        "attachment_format__value",
+        "image_number",
+        "author",
+        "date_created",
+        "specimen",
+        "reference",
+        "specimen_image_attachment",
+        "is_private",
+        "link"
+      ],
+      table: this.$route.meta.object
+    });
   },
 
   methods: {
-    ...mapActions("search", ["setActiveSearchParameters"]),
+    ...mapActions("search", [
+      "setActiveSearchParameters",
+      "initTableHeaders",
+      "getAllFieldNames"
+    ]),
 
     fetchAttachments() {
       return new Promise(resolve => {

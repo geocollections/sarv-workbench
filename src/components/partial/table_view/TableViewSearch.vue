@@ -309,6 +309,31 @@
               </v-col>
             </v-row>
 
+            <!-- DYNAMIC FIELDS -->
+            <v-row class="mt-4 mb-2">
+              <v-col cols="12" class="py-0">
+                <v-select
+                  :items="computedTableHeaders"
+                  :value="computedShownTableHeaders"
+                  chips
+                  small-chips
+                  deletable-chips
+                  multiple
+                  :color="bodyActiveColor"
+                  :label="$t('common.fields')"
+                  @change="
+                    updateTableHeaders({
+                      event: $event,
+                      table: $route.meta.object
+                    })
+                  "
+                  class="chips-select"
+                  hide-details
+                  dense
+                />
+              </v-col>
+            </v-row>
+
             <!-- RESET SEARCH PREFERENCES -->
             <v-row class="mt-3">
               <v-col cols="12">
@@ -330,7 +355,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   name: "TableViewSearch",
@@ -355,7 +380,8 @@ export default {
   },
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
-    ...mapState("search", ["lookUpTypes"]),
+    ...mapState("search", ["lookUpTypes", "tableHeaders"]),
+    ...mapGetters("search", ["getAllShownTableHeaders"]),
 
     translatedLookUpTypes() {
       return this.lookUpTypes.map(item => {
@@ -364,6 +390,27 @@ export default {
           text: this.$t(item.text)
         };
       });
+    },
+
+    computedTableHeaders() {
+      return this.tableHeaders[this.$route.meta.object].map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text)
+        };
+      });
+      // return this.tableHeaders[this.$route.meta.object];
+    },
+
+    computedShownTableHeaders() {
+      return this.getAllShownTableHeaders(this.$route.meta.object).map(item => {
+        console.log(item);
+        return {
+          ...item,
+          text: this.$t(item.text)
+        };
+      });
+      // return this.getAllShownTableHeaders(this.$route.meta.object);
     }
   },
   data: () => ({
@@ -372,6 +419,8 @@ export default {
     calendarMenus: ["date_start", "date_end"]
   }),
   methods: {
+    ...mapActions("search", ["getAllFieldNames", "updateTableHeaders"]),
+
     updateDate(event, fieldId, index) {
       this.$emit("update:searchParameters", event, fieldId);
       this.calendarMenus[fieldId] = false;
@@ -392,6 +441,18 @@ export default {
 
 .table-view-search >>> .v-text-field__slot input {
   color: unset;
+  font-weight: bold;
+}
+
+.chips-select >>> .v-select__selections {
+  padding: 8px 0;
+}
+
+.chips-select >>> .v-chip {
+  margin: 3px !important;
+}
+
+.chips-select >>> .v-label {
   font-weight: bold;
 }
 </style>

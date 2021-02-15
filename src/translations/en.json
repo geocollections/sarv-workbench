@@ -55,7 +55,8 @@
     "small": "Small",
     "medium": "Medium",
     "large": "large",
-    "original": "Original"
+    "original": "Original",
+    "fields": "Table headers"
   },
   "main": {
     "pagination": "Show {num} results per page",

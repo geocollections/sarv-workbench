@@ -17,6 +17,9 @@ const state = {
   activeRelatedDataTab: {},
   activeSearchParams: null,
   activeSearchParametersFilters: [],
+  tableHeaders: {
+    attachment: []
+  },
   attachmentSearchParameters: {
     id: null,
     image_number: null,

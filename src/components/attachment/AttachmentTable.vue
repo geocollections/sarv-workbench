@@ -67,7 +67,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.author__agent="{ item }">
+    <template v-slot:item.author="{ item }">
       <span v-if="item.author__agent">{{ item.author__agent }}</span>
       <span v-else>{{ item.author_free }}</span>
     </template>
@@ -88,7 +88,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.reference__reference="{ item }">
+    <template v-slot:item.reference="{ item }">
       <router-link
         :to="{ path: '/reference/' + item.reference_id }"
         :title="$t('editReference.editMessage')"
@@ -141,6 +141,7 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import { mapGetters } from "vuex";
 
 export default {
   name: "AttachmentTable",
@@ -174,32 +175,18 @@ export default {
     }
   },
   mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "attachment.file", value: "uuid_filename", align: "center" },
-      { text: "common.id", value: "id" },
-      { text: "attachment.format", value: "attachment_format__value" },
-      { text: "attachment.imageNumber_short", value: "image_number" },
-      { text: "attachment.author", value: "author__agent" },
-      { text: "common.date", value: "date_created" },
-      { text: "attachment.specimen_short", value: "specimen" },
-      { text: "common.reference", value: "reference__reference" },
-      {
-        text: "attachment.specimenImageAttachment",
-        value: "specimen_image_attachment"
-      },
-      { text: "attachment.is_private_text_short", value: "is_private" },
-      { text: "", value: "link", sortable: false }
-    ]
-  }),
   computed: {
+    ...mapGetters("search", ["getAllShownTableHeaders"]),
+
     translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
+      return this.getAllShownTableHeaders(this.$route.meta.object).map(
+        header => {
+          return {
+            ...header,
+            text: this.$t(header.text)
+          };
+        }
+      );
     }
   },
   methods: {

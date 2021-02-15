@@ -1634,7 +1634,6 @@ export function fetchAnalyses(data) {
   //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
   // }
 
-
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
     return get(
@@ -4364,6 +4363,10 @@ export function fetchChangeRecordState(table, id, stateData) {
 
 export function fetchDeleteRecord(table, id) {
   return post_delete(`${table}/${id}`);
+}
+
+export function fetchAllFields(table) {
+  return get(`fields/${table}`);
 }
 
 /***********************

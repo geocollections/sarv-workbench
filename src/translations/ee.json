@@ -55,7 +55,8 @@
     "small": "Väike",
     "medium": "Keskmine",
     "large": "Suur",
-    "original": "Originaal"
+    "original": "Originaal",
+    "fields": "Tabeli päised"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",

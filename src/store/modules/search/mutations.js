@@ -123,6 +123,55 @@ const mutations = {
 
   SET_ACTIVE_LIBRARY_LIST(state, payload) {
     state.activeLibraryList = payload || null;
+  },
+
+  INIT_TABLE_HEADERS(state, payload) {
+    console.log("INIT");
+    if (
+      state?.tableHeaders?.[payload.table] &&
+      state.tableHeaders[payload.table].filter(item => item.show).length === 0
+    ) {
+      let mappedTableHeaders = state.tableHeaders[payload.table].map(item => {
+        return {
+          ...item,
+          show: payload.headers.includes(item.value)
+        };
+      });
+      mappedTableHeaders.sort(
+        (a, b) =>
+          payload.headers.indexOf(a.value) - payload.headers.indexOf(b.value)
+      );
+      state.tableHeaders[payload.table] = mappedTableHeaders;
+    }
+  },
+
+  UPDATE_TABLE_HEADERS(state, payload) {
+    state.tableHeaders[payload.table].forEach((item, index) => {
+      state.tableHeaders[payload.table][index].show = !!payload.event.includes(
+        item.value
+      );
+    });
+  },
+
+  SET_ALL_TABLE_HEADERS(state, payload) {
+    console.log("ALL");
+    let allHeaders = payload.fields.map(item => {
+      return {
+        value: item,
+        text: `${payload.table}.${item}`,
+        align: "start",
+        show: false
+      };
+    });
+    if (payload.table === "attachment")
+      allHeaders.push({
+        value: "link",
+        text: `${payload.table}.link`,
+        sortable: false,
+        show: false,
+        align: "start"
+      });
+    state.tableHeaders[payload.table] = allHeaders;
   }
 };
 
