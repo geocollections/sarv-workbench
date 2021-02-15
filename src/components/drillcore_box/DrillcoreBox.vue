@@ -265,6 +265,8 @@
               :body-color="bodyColor"
               :body-active-color="bodyActiveColor"
               v-on:related:edit="editRelatedItem"
+              v-on:toggle-preferred-state="handleChangeObjectsState"
+              v-on:toggle-privacy-state="handleChangeObjectsState"
             />
           </div>
 
@@ -655,6 +657,11 @@ export default {
         sortBy: ["drillcore"],
         sortDesc: [true]
       };
+    },
+
+    handleChangeObjectsState(data) {
+      this.changeObjectsState(data);
+      this.loadRelatedData("attachment");
     }
   }
 };

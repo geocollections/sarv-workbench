@@ -34,43 +34,83 @@
         <!--          :title="$t('edit.editMessage')"-->
         <!--          :to="{ path: '/attachment/' + item.id }"-->
         <!--        >-->
-        <a
-          :href="getFileUrl(item.uuid_filename)"
-          target="DrillcoreBoxWindow"
-          title="View original image"
-        >
-          <v-img
-            :id="item.id"
-            v-if="!!item.attachment_format__value.includes('image')"
-            :src="getFileUrl(item.uuid_filename, 'small')"
-            :lazy-src="getFileUrl(item.uuid_filename, 'small')"
-            class="grey lighten-2 attachment-table-image-preview my-1"
-            :max-width="400"
+        <div style="max-width: 200px; max-height: 200px">
+          <a
+            :href="getFileUrl(item.uuid_filename)"
+            target="DrillcoreBoxWindow"
+            title="View original file"
+            class="image-link"
+            style="max-width: 200px; max-height: 200px"
           >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-row>
-            </template>
-          </v-img>
+            <v-img
+              :id="item.id"
+              v-if="
+                item.attachment_format__value &&
+                  !!item.attachment_format__value.includes('image')
+              "
+              :src="getFileUrl(item.uuid_filename, 'small')"
+              :lazy-src="getFileUrl(item.uuid_filename, 'small')"
+              class="grey lighten-2 attachment-table-image-preview my-1 rounded"
+              :max-width="200"
+              :max-height="200"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular indeterminate color="grey lighten-5" />
+                </v-row>
+              </template>
+            </v-img>
 
-          <v-icon v-else class="my-1" style="font-size: 3rem"
-            >far fa-file</v-icon
-          >
-        </a>
+            <div
+              v-else
+              class="my-3"
+              style="max-width: 400px; max-height: 400px;"
+            >
+              <v-icon style="font-size: 3rem;">far fa-file</v-icon>
+            </div>
+          </a>
+        </div>
         <!--        </router-link>-->
       </template>
 
       <template v-slot:item.is_preferred="{ item }">
-        <v-icon v-if="item.is_preferred" color="green" small
-          >fas fa-check</v-icon
-        >
-        <v-icon v-else color="red" small>fas fa-times</v-icon>
+        <div class="d-flex justify-center">
+          <v-checkbox
+            hide-details
+            class="mt-0"
+            :input-value="item.is_preferred"
+            @change="
+              $emit('toggle-preferred-state', {
+                is_preferred: !item.is_preferred,
+                id: item.id
+              })
+            "
+            :color="bodyActiveColor"
+          />
+        </div>
+        <!--        <v-icon v-if="item.is_preferred" color="green" small-->
+        <!--          >fas fa-check</v-icon-->
+        <!--        >-->
+        <!--        <v-icon v-else color="red" small>fas fa-times</v-icon>-->
       </template>
 
       <template v-slot:item.is_private="{ item }">
-        <v-icon v-if="item.is_private" color="green" small>fas fa-check</v-icon>
-        <v-icon v-else color="red" small>fas fa-times</v-icon>
+        <div class="d-flex justify-center">
+          <v-checkbox
+            hide-details
+            class="mt-0"
+            :input-value="item.is_private"
+            @change="
+              $emit('toggle-privacy-state', {
+                is_private: !item.is_private,
+                id: item.id
+              })
+            "
+            :color="bodyActiveColor"
+          />
+        </div>
+        <!--        <v-icon v-if="item.is_private" color="green" small>fas fa-check</v-icon>-->
+        <!--        <v-icon v-else color="red" small>fas fa-times</v-icon>-->
       </template>
     </v-data-table>
 
@@ -168,9 +208,13 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "drillcore_box.attachment", value: "id" },
-      { text: "drillcore_box.is_preferred", value: "is_preferred" },
-      { text: "common.is_private", value: "is_private" },
+      { text: "drillcore_box.attachment", value: "id", align: "center" },
+      {
+        text: "drillcore_box.is_preferred",
+        value: "is_preferred",
+        align: "center"
+      },
+      { text: "common.is_private", value: "is_private", align: "center" },
       {
         text: "common.actions",
         value: "action",
@@ -201,6 +245,7 @@ export default {
     "response.results": {
       handler(newVal) {
         if (newVal.length > 0) {
+          console.log(newVal);
           newVal.forEach(item =>
             this.getImageWidth(item.uuid_filename, item.id)
           );
@@ -293,4 +338,11 @@ export default {
 };
 </script>
 
-<style scoped />
+<style scoped>
+.image-link {
+  transition: opacity 200ms ease-in;
+}
+.image-link:hover {
+  opacity: 0.8;
+}
+</style>

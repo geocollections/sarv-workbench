@@ -3,6 +3,7 @@ import moment from "moment";
 import { mapActions, mapGetters, mapState } from "vuex";
 import {
   fetchAttachmentForReference,
+  fetchChangeRecordState,
   postRequest
 } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
@@ -798,6 +799,36 @@ const formManipulation = {
             : this.$t("messages.uploadError")
         });
       }
+    },
+
+    changeObjectsState(data) {
+      let formData = new FormData();
+      let id = data.id;
+      delete data.id;
+      formData.append("data", JSON.stringify({ ...data }));
+
+      fetchChangeRecordState(this.module, id, formData).then(
+        response => {
+          if (response && response.data) {
+            if (this.$i18n.locale === "ee") {
+              if (response.data.message_et)
+                this.toastSuccess({ text: response.data.message_et });
+              else if (response.data.error_et)
+                this.toastError({ text: response.data.error_et });
+            } else {
+              if (response.data.message)
+                this.toastSuccess({ text: response.data.message });
+              else if (response.data.error)
+                this.toastError({ text: response.data.error });
+            }
+          }
+        },
+        errResponse => {
+          if (errResponse && errResponse.data && errResponse.data.error)
+            this.toastError({ text: errResponse.data.error });
+          this.toastError({ text: this.$t("messages.uploadError") });
+        }
+      );
     }
   }
 };

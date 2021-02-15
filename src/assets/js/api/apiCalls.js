@@ -4358,7 +4358,7 @@ export function fetchAnalysisMethodDetail(id) {
  *** UNIVERSAL START ***
  ***********************/
 
-export function fetchChangePrivacyState(table, id, stateData) {
+export function fetchChangeRecordState(table, id, stateData) {
   return post("change/" + table + "/" + id, stateData);
 }
 
