@@ -78,10 +78,10 @@
           <v-checkbox
             hide-details
             class="mt-0"
-            :input-value="item.is_preferred"
+            v-model="item.is_preferred"
             @change="
               $emit('toggle-preferred-state', {
-                is_preferred: !item.is_preferred,
+                is_preferred: item.is_preferred,
                 id: item.id
               })
             "
@@ -99,10 +99,10 @@
           <v-checkbox
             hide-details
             class="mt-0"
-            :input-value="item.is_private"
+            v-model="item.is_private"
             @change="
               $emit('toggle-privacy-state', {
-                is_private: !item.is_private,
+                is_private: item.is_private,
                 id: item.id
               })
             "
@@ -244,8 +244,10 @@ export default {
   watch: {
     "response.results": {
       handler(newVal) {
-        if (newVal.length > 0) {
-          console.log(newVal);
+        if (
+          newVal.length > 0 &&
+          Object.keys(this.widths).length !== newVal.length
+        ) {
           newVal.forEach(item =>
             this.getImageWidth(item.uuid_filename, item.id)
           );
