@@ -661,7 +661,7 @@ export default {
 
     handleChangeObjectsState(data) {
       this.changeObjectsState({ table: "attachment", ...data });
-      this.loadRelatedData("attachment");
+      // this.loadRelatedData("attachment");
     }
   }
 };
