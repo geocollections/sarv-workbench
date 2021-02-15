@@ -32,6 +32,7 @@ import { mapActions, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -41,7 +42,7 @@ export default {
   },
   name: "Attachments",
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -54,7 +55,7 @@ export default {
   },
 
   async created() {
-    await this.getAllFieldNames(this.$route.meta.object);
+    await this.$_tableHeaderMixin_getAllFieldNames(this.$route.meta.object);
 
     // Used by sidebar
     this.setActiveSearchParameters({
@@ -77,7 +78,7 @@ export default {
       { id: "author", title: "attachment.author", type: "text" }
     ]);
 
-    this.initTableHeaders({
+    this.$_tableHeaderMixin_initTableHeaders({
       headers: [
         "uuid_filename",
         "id",
@@ -96,11 +97,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", [
-      "setActiveSearchParameters",
-      "initTableHeaders",
-      "getAllFieldNames"
-    ]),
+    ...mapActions("search", ["setActiveSearchParameters"]),
 
     fetchAttachments() {
       return new Promise(resolve => {

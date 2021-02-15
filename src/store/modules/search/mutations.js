@@ -126,7 +126,6 @@ const mutations = {
   },
 
   INIT_TABLE_HEADERS(state, payload) {
-    console.log("INIT");
     if (
       state?.tableHeaders?.[payload.table] &&
       state.tableHeaders[payload.table].filter(item => item.show).length === 0
@@ -145,6 +144,7 @@ const mutations = {
     }
   },
 
+  // Todo: Optimize
   UPDATE_TABLE_HEADERS(state, payload) {
     state.tableHeaders[payload.table].forEach((item, index) => {
       state.tableHeaders[payload.table][index].show = !!payload.event.includes(
@@ -154,24 +154,32 @@ const mutations = {
   },
 
   SET_ALL_TABLE_HEADERS(state, payload) {
-    console.log("ALL");
-    let allHeaders = payload.fields.map(item => {
-      return {
-        value: item,
-        text: `${payload.table}.${item}`,
-        align: "start",
-        show: false
-      };
-    });
-    if (payload.table === "attachment")
-      allHeaders.push({
-        value: "link",
-        text: `${payload.table}.link`,
-        sortable: false,
-        show: false,
-        align: "start"
+    let shownHeaders = state?.tableHeaders?.[payload.table]?.filter(
+      item => item.show
+    );
+    console.log(shownHeaders);
+    if (
+      state?.tableHeaders?.[payload.table]?.length === 0 ||
+      shownHeaders.length === 0
+    ) {
+      let allHeaders = payload.fields.map(item => {
+        return {
+          value: item,
+          text: `${payload.table}.${item}`,
+          align: "start",
+          show: false
+        };
       });
-    state.tableHeaders[payload.table] = allHeaders;
+      if (payload.table === "attachment")
+        allHeaders.push({
+          value: "link",
+          text: `${payload.table}.link`,
+          sortable: false,
+          show: false,
+          align: "start"
+        });
+      state.tableHeaders[payload.table] = allHeaders;
+    }
   }
 };
 

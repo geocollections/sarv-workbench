@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="attachment-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -141,7 +141,7 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
-import { mapGetters } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "AttachmentTable",
@@ -174,21 +174,8 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
-  computed: {
-    ...mapGetters("search", ["getAllShownTableHeaders"]),
+  mixins: [activeListMixin, tableHeaderMixin],
 
-    translatedHeaders() {
-      return this.getAllShownTableHeaders(this.$route.meta.object).map(
-        header => {
-          return {
-            ...header,
-            text: this.$t(header.text)
-          };
-        }
-      );
-    }
-  },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
