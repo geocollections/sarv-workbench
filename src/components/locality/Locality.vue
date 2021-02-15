@@ -1080,7 +1080,7 @@ export default {
           this.relatedData.searchParameters.attachment_link
         );
       } else if (type === "locality_stratigraphy") {
-        query = fetchLocalityStratigraphy(
+        query = fetchLocalityDescriptions(
           this.$route.params.id,
           this.relatedData.searchParameters.locality_stratigraphy
         );
