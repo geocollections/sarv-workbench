@@ -660,7 +660,7 @@ export default {
     },
 
     handleChangeObjectsState(data) {
-      this.changeObjectsState(data);
+      this.changeObjectsState({ table: "attachment", ...data });
       this.loadRelatedData("attachment");
     }
   }

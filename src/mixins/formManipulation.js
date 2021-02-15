@@ -803,11 +803,13 @@ const formManipulation = {
 
     changeObjectsState(data) {
       let formData = new FormData();
-      let id = data.id;
+      const id = data.id;
+      const table = data.table;
       delete data.id;
+      delete data.table;
       formData.append("data", JSON.stringify({ ...data }));
 
-      fetchChangeRecordState(this.module, id, formData).then(
+      fetchChangeRecordState(table, id, formData).then(
         response => {
           if (response && response.data) {
             if (this.$i18n.locale === "ee") {
