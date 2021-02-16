@@ -1449,6 +1449,10 @@
     "book_translated_language": "Book translated language",
     "remarksPrivate": "Remarks (private)",
     "parentReference": "Belongs to reference",
+    "id": "ID",
+    "year": "Year",
+    "link": "Link",
+    "attachment": "Filename",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

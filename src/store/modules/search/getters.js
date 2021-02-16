@@ -3,7 +3,7 @@ const getters = {
     return state.activeSarvIssues?.count;
   },
 
-  getAllShownTableHeaders: (state) => (table) => {
+  getAllShownTableHeaders: state => table => {
     return state.tableHeaders[table].filter(item => item.show);
   }
 };

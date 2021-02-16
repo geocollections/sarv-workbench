@@ -18,7 +18,8 @@ const state = {
   activeSearchParams: null,
   activeSearchParametersFilters: [],
   tableHeaders: {
-    attachment: []
+    attachment: [],
+    reference: []
   },
   attachmentSearchParameters: {
     id: null,

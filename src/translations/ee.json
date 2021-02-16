@@ -1449,6 +1449,10 @@
     "book_translated_language": "Kogumiku tõlke keel",
     "remarksPrivate": "Lisainfo (privaatne)",
     "parentReference": "Kuulub kogumikku",
+    "id": "ID",
+    "year": "Aasta",
+    "link": "Link",
+    "attachment": "Failinimi",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",

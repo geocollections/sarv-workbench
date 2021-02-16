@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="reference-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -85,7 +85,7 @@
       >
     </template>
 
-    <template v-slot:item.attachment__filename="{ item }">
+    <template v-slot:item.attachment="{ item }">
       <v-btn
         v-if="item.attachment__filename"
         :href="getFileUrl(item.attachment__filename)"
@@ -116,6 +116,7 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "ReferenceTable",
@@ -148,30 +149,8 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "reference.author", value: "author" },
-      { text: "common.year", value: "year" },
-      { text: "reference.title", value: "title" },
-      { text: "reference.journal", value: "journal" },
-      { text: "reference.volume", value: "volume" },
-      { text: "reference.pages_short", value: "pages" },
-      {
-        text: "reference.is_estonian_reference_short",
-        value: "is_estonian_reference"
-      },
-      {
-        text: "reference.is_estonian_author_short",
-        value: "is_estonian_author"
-      },
-      { text: "", value: "link", sortable: false },
-      { text: "reference.doi", value: "doi" },
-      { text: "reference.pdf", value: "attachment__filename" },
-      { text: "reference.url", value: "url" }
-    ]
-  }),
+  mixins: [activeListMixin, tableHeaderMixin],
+
   computed: {
     translatedHeaders() {
       return this.headers.map(header => {

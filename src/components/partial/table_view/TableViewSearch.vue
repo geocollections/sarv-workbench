@@ -322,6 +322,7 @@
                   :color="bodyActiveColor"
                   :label="$t('common.fields')"
                   clearable
+                  clear-icon="fas fa-times"
                   @change="
                     $_tableHeaderMixin_updateTableHeaders({
                       event: $event,
