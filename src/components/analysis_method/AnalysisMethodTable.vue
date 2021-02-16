@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="analysis-method-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -52,9 +52,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "AnalysisMethodTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -84,7 +86,6 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
   data: () => ({
     headers: [
       { text: "common.id", value: "id" },

@@ -57,7 +57,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames(this.$route.meta.object);
+    await this.$_tableHeaderMixin_getAllFieldNames();
 
     // Used by sidebar
     this.setActiveSearchParameters({
@@ -89,25 +89,6 @@ export default {
       // {id: "solrSearch", title: "reference.solrSearch", type: "text"},
       { id: "userAdded", title: "reference.userAdded", type: "text" }
     ]);
-
-    this.$_tableHeaderMixin_initTableHeaders({
-      headers: [
-        "id",
-        "author",
-        "year",
-        "title",
-        "author",
-        "journal",
-        "volume",
-        "pages",
-        "is_estonian_reference",
-        "link",
-        "doi",
-        "attachment",
-        "url"
-      ],
-      table: this.$route.meta.object
-    });
   },
 
   methods: {

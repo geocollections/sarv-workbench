@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="collection-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     :items="response.results"
     dense
@@ -63,8 +63,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "CollectionTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object

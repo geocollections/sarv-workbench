@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="selectionSeries-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -32,8 +32,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "SelectionSeriesTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object

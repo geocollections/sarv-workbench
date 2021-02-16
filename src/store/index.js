@@ -7,6 +7,7 @@ import search from "./modules/search";
 import settings from "./modules/settings";
 import user from "./modules/user";
 import admin from "./modules/admin";
+import tableHeaders from "./modules/tableHeaders";
 
 Vue.use(Vuex);
 
@@ -42,7 +43,8 @@ export default new Vuex.Store({
     search,
     settings,
     user,
-    admin
+    admin,
+    tableHeaders
   },
   plugins: [vuexLocal.plugin],
   strict: process.env.NODE_ENV !== "production"

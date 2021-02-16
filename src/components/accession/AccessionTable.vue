@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="accession-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -55,8 +55,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "AccessionTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -86,29 +89,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "accession.number", value: "number" },
-      { text: "accession.date_signed", value: "date_signed" },
-      { text: "accession.agent_andis", value: "agent_andis" },
-      { text: "accession.agent_vottis", value: "agent_vottis" },
-      { text: "accession.number_items", value: "number_items" },
-      { text: "accession.description", value: "description" },
-      { text: "common.id", value: "id" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  }
 };
 </script>
 

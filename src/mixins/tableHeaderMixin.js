@@ -1,12 +1,15 @@
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 const tableHeaderMixin = {
   computed: {
-    ...mapState("search", ["tableHeaders"]),
-    ...mapGetters("search", ["getAllShownTableHeaders"]),
+    ...mapState("tableHeaders", {
+      tableHeaders: function(state) {
+        return state[this.$route.meta.object];
+      }
+    }),
 
     $_tableHeaderMixin_allHeaders() {
-      return this.tableHeaders[this.$route.meta.object].map(item => {
+      return this.tableHeaders.map(item => {
         return {
           ...item,
           text: this.$t(item.text)
@@ -15,34 +18,19 @@ const tableHeaderMixin = {
     },
 
     $_tableHeaderMixin_shownHeaders() {
-      return this.getAllShownTableHeaders(this.$route.meta.object).map(
-        header => {
-          return {
-            ...header,
-            text: this.$t(header.text)
-          };
-        }
-      );
+      return this.$_tableHeaderMixin_allHeaders.filter(item => item.show);
     }
   },
 
   methods: {
-    ...mapActions("search", [
-      "updateTableHeaders",
-      "getAllFieldNames",
-      "initTableHeaders"
-    ]),
+    ...mapActions("tableHeaders", ["updateTableHeaders", "getAllFieldNames"]),
 
     $_tableHeaderMixin_updateTableHeaders(payload) {
       this.updateTableHeaders(payload);
     },
 
-    async $_tableHeaderMixin_getAllFieldNames(table) {
+    async $_tableHeaderMixin_getAllFieldNames(table = this.$route.meta.object) {
       await this.getAllFieldNames(table);
-    },
-
-    $_tableHeaderMixin_initTableHeaders(payload) {
-      this.initTableHeaders(payload);
     }
   }
 };

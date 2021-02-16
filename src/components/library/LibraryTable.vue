@@ -70,6 +70,7 @@ import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "LibraryTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -99,7 +100,6 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [tableHeaderMixin],
 
   data: () => ({
     expanded: [],

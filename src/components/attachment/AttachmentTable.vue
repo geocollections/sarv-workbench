@@ -158,6 +158,7 @@ import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "AttachmentTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -187,7 +188,6 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin, tableHeaderMixin],
 
   methods: {
     getGeoDetailUrl(params) {

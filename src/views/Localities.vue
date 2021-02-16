@@ -29,6 +29,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { mapActions, mapGetters, mapState } from "vuex";
 import isEmpty from "lodash";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -39,7 +40,7 @@ export default {
 
   name: "Localities",
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -51,7 +52,8 @@ export default {
     ...mapState("search", ["selection_seriesSearchParameters"])
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
     // Used by sidebar
     this.setActiveSearchParameters({
       search: this.selection_seriesSearchParameters,

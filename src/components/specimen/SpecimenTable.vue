@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="specimen-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -180,9 +180,11 @@ import {
 } from "../../assets/js/api/apiCalls";
 import { mapState } from "vuex";
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "SpecimenTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -212,7 +214,6 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
   data: () => ({
     headers: [
       { text: "common.id", value: "id" },

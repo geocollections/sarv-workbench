@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="preparation-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -91,8 +91,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "PreparationTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object

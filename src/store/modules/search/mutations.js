@@ -123,69 +123,6 @@ const mutations = {
 
   SET_ACTIVE_LIBRARY_LIST(state, payload) {
     state.activeLibraryList = payload || null;
-  },
-
-  INIT_TABLE_HEADERS(state, payload) {
-    if (
-      state?.tableHeaders?.[payload.table] &&
-      state.tableHeaders[payload.table].filter(item => item.show).length === 0
-    ) {
-      let mappedTableHeaders = state.tableHeaders[payload.table].map(item => {
-        return {
-          ...item,
-          show: payload.headers.includes(item.value)
-        };
-      });
-      mappedTableHeaders
-        .sort(
-          (a, b) =>
-            payload.headers.indexOf(a.value) - payload.headers.indexOf(b.value)
-        )
-        .sort((a, b) => b.show - a.show);
-      state.tableHeaders[payload.table] = mappedTableHeaders;
-
-      console.log("INIT");
-      console.log(state.tableHeaders[payload.table]);
-    }
-  },
-
-  UPDATE_TABLE_HEADERS(state, payload) {
-    let clonedHeaders = [...state.tableHeaders[payload.table]];
-    clonedHeaders.forEach((item, index) => {
-      clonedHeaders[index].show = !!payload.event.includes(item.value);
-    });
-
-    // Todo: Sort
-
-    state.tableHeaders[payload.table] = clonedHeaders;
-  },
-
-  SET_ALL_TABLE_HEADERS(state, payload) {
-    let shownHeaders = state?.tableHeaders?.[payload.table]?.filter(
-      item => item.show
-    );
-    if (
-      state?.tableHeaders?.[payload.table]?.length === 0 ||
-      shownHeaders.length === 0
-    ) {
-      let allHeaders = payload.fields.map(item => {
-        return {
-          value: item,
-          text: `${payload.table}.${item}`,
-          align: "start",
-          show: false
-        };
-      });
-      if (payload.table === "attachment")
-        allHeaders.push({
-          value: "link",
-          text: `${payload.table}.link`,
-          sortable: false,
-          show: false,
-          align: "start"
-        });
-      state.tableHeaders[payload.table] = allHeaders;
-    }
   }
 };
 

@@ -369,27 +369,6 @@ const actions = {
 
   resetActiveLibraryList({ commit }) {
     commit("RESET_ACTIVE_LIBRARY_LIST");
-  },
-
-  initTableHeaders({ commit }, payload) {
-    commit("INIT_TABLE_HEADERS", payload)
-  },
-
-  async getAllFieldNames({ commit }, table) {
-    try {
-      let response = await fetchAllFields(table);
-
-      if (response && response?.data?.results?.fields) {
-        let fields = response.data.results.fields;
-        commit("SET_ALL_TABLE_HEADERS", { fields: fields, table: table });
-      }
-    } catch (err) {
-      console.error(`Fetching fields failed: ${err}`);
-    }
-  },
-
-  updateTableHeaders({ commit }, payload) {
-    commit("UPDATE_TABLE_HEADERS", payload);
   }
 };
 

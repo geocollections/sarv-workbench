@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="web-pages-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -53,8 +53,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "WebPagesTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object

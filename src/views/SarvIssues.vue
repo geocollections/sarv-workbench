@@ -28,12 +28,13 @@ import ListModuleCore from "./ListModuleCore";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions, mapGetters } from "vuex";
 import { fetchSarvIssues } from "../assets/js/api/apiCalls";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "SarvIssues",
 
   components: { ListModuleCore, TableViewSearch, TableViewTitle },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -45,7 +46,8 @@ export default {
     ...mapGetters("user", ["getUserId"])
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
     this.fetchActiveSarvIssues();
 
     this.setActiveSearchParametersFilters([

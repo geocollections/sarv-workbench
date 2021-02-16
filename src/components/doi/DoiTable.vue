@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="doi-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -51,9 +51,11 @@
 
 <script>
 import moment from "moment";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "DoiTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object

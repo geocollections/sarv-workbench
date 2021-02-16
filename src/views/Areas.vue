@@ -26,13 +26,14 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import ListModuleCore from "./ListModuleCore";
 import { fetchAreas } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "Areas",
 
   components: { ListModuleCore, TableViewSearch, TableViewTitle },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -40,7 +41,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
     this.setActiveSearchParametersFilters([
       { id: "name", title: "common.name", type: "text" },
       { id: "type", title: "common.type", type: "text" },

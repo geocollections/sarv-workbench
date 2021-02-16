@@ -46,7 +46,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames(this.$route.meta.object);
+    await this.$_tableHeaderMixin_getAllFieldNames();
 
     this.setActiveSearchParametersFilters([
       { id: "author_txt", title: "library.author_txt", type: "text" },
@@ -54,17 +54,6 @@ export default {
       { id: "title", title: "library.title", type: "text" },
       { id: "reference", title: "common.reference", type: "text" }
     ]);
-
-    this.$_tableHeaderMixin_initTableHeaders({
-      headers: [
-        "id",
-        "title",
-        "author_txt",
-        "is_private",
-        "link"
-      ],
-      table: this.$route.meta.object
-    });
   },
 
   methods: {

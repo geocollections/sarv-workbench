@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="drillcoreBox-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -95,8 +95,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "DrillcoreBoxTable",
+  mixins: [tableHeaderMixin],
 
   props: {
     response: {

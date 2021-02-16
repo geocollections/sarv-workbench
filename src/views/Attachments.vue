@@ -55,7 +55,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames(this.$route.meta.object);
+    await this.$_tableHeaderMixin_getAllFieldNames();
 
     // Used by sidebar
     this.setActiveSearchParameters({
@@ -77,23 +77,6 @@ export default {
       { id: "keyword", title: "keyword.keyword", type: "text" },
       { id: "author", title: "attachment.author", type: "text" }
     ]);
-
-    this.$_tableHeaderMixin_initTableHeaders({
-      headers: [
-        "uuid_filename",
-        "id",
-        "attachment_format",
-        "image_number",
-        "author",
-        "date_created",
-        "specimen",
-        "reference",
-        "specimen_image_attachment",
-        "is_private",
-        "link"
-      ],
-      table: this.$route.meta.object
-    });
   },
 
   methods: {

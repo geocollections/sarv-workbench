@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="analysis-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -81,9 +81,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "AnalysisTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -111,37 +113,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
-    }
-  },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "analysis.sample__id", value: "sample" },
-      { text: "analysis.sample__number", value: "sample__number" },
-      {
-        text: "analysis.sample__locality",
-        value: "sample__locality__locality"
-      },
-      { text: "analysis.sample__depth", value: "sample__depth" },
-      {
-        text: "analysis.analysis_method",
-        value: "analysis_method__analysis_method"
-      },
-      { text: "analysis.date_", value: "date" },
-      { text: "analysis.labor_txt", value: "lab_txt" },
-      { text: "analysis.agent", value: "agent__agent" },
-      { text: "", value: "link", sortable: false }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
     }
   },
   methods: {

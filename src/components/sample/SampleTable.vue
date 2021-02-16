@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="sample-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -141,9 +141,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "SampleTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -173,7 +175,6 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
   data: () => ({
     headers: [
       { text: "sample.numberSlashId", value: "number" },

@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="dataset-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -75,8 +75,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "DatasetTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
