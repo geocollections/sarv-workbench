@@ -151,16 +151,6 @@ export default {
   },
   mixins: [activeListMixin, tableHeaderMixin],
 
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getGeoloogiaUrl(id) {
       return `https://geoloogia.info/reference/${id}`;

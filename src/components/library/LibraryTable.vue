@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     class="library-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     :items="response.results"
     :items-per-page="searchParameters.paginateBy"
@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "LibraryTable",
   props: {
@@ -97,27 +99,12 @@ export default {
       default: "deep-orange"
     }
   },
+  mixins: [tableHeaderMixin],
+
   data: () => ({
     expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "library.title", value: "title" },
-      { text: "library.author_txt", value: "author_txt" },
-      { text: "common.is_private", value: "is_private" },
-      { text: "", value: "link", sortable: false }
-    ],
     names: []
   }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
