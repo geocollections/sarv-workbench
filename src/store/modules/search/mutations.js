@@ -136,28 +136,34 @@ const mutations = {
           show: payload.headers.includes(item.value)
         };
       });
-      mappedTableHeaders.sort(
-        (a, b) =>
-          payload.headers.indexOf(a.value) - payload.headers.indexOf(b.value)
-      );
+      mappedTableHeaders
+        .sort(
+          (a, b) =>
+            payload.headers.indexOf(a.value) - payload.headers.indexOf(b.value)
+        )
+        .sort((a, b) => b.show - a.show);
       state.tableHeaders[payload.table] = mappedTableHeaders;
+
+      console.log("INIT");
+      console.log(state.tableHeaders[payload.table]);
     }
   },
 
-  // Todo: Optimize
   UPDATE_TABLE_HEADERS(state, payload) {
-    state.tableHeaders[payload.table].forEach((item, index) => {
-      state.tableHeaders[payload.table][index].show = !!payload.event.includes(
-        item.value
-      );
+    let clonedHeaders = [...state.tableHeaders[payload.table]];
+    clonedHeaders.forEach((item, index) => {
+      clonedHeaders[index].show = !!payload.event.includes(item.value);
     });
+
+    // Todo: Sort
+
+    state.tableHeaders[payload.table] = clonedHeaders;
   },
 
   SET_ALL_TABLE_HEADERS(state, payload) {
     let shownHeaders = state?.tableHeaders?.[payload.table]?.filter(
       item => item.show
     );
-    console.log(shownHeaders);
     if (
       state?.tableHeaders?.[payload.table]?.length === 0 ||
       shownHeaders.length === 0

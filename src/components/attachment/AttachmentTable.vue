@@ -26,34 +26,41 @@
     :class="bodyColor.split('n-')[0] + 'n-5'"
   >
     <template v-slot:item.uuid_filename="{ item }">
-      <router-link
-        v-if="item.uuid_filename"
-        :title="$t('edit.editMessage')"
-        :to="{ path: '/attachment/' + item.id }"
-      >
-        <v-img
-          v-if="isAttachmentImage(item.attachment_format__value)"
-          :src="getFileUrl(item.uuid_filename, 'small')"
-          :lazy-src="getFileUrl(item.uuid_filename, 'small')"
-          class="grey lighten-2 attachment-table-image-preview my-1"
+      <div style="max-width: 200px; max-height: 200px" class="text-center">
+        <router-link
+          v-if="item.uuid_filename"
+          :title="$t('edit.editMessage')"
+          :to="{ path: '/attachment/' + item.id }"
+          class="image-link"
+          style="max-width: 200px; max-height: 200px"
         >
-          <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-progress-circular indeterminate color="grey lighten-5" />
-            </v-row>
-          </template>
-        </v-img>
+          <v-img
+            v-if="isAttachmentImage(item.attachment_format__value)"
+            :src="getFileUrl(item.uuid_filename, 'small')"
+            :lazy-src="getFileUrl(item.uuid_filename, 'small')"
+            class="grey lighten-2 attachment-table-image-preview my-1"
+            max-width="200"
+            max-height="200"
+          >
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="grey lighten-5" />
+              </v-row>
+            </template>
+          </v-img>
 
-        <v-icon v-else class="my-1" style="font-size: 3rem">far fa-file</v-icon>
-      </router-link>
-
-      <router-link
-        v-else
-        :title="$t('edit.editMessage')"
-        :to="{ path: '/attachment/' + item.id }"
-      >
-        <v-icon class="my-1" style="font-size: 3rem">far fa-file</v-icon>
-      </router-link>
+          <v-icon v-else class="my-1" style="font-size: 3rem"
+            >far fa-file</v-icon
+          >
+        </router-link>
+        <router-link
+          v-else
+          :title="$t('edit.editMessage')"
+          :to="{ path: '/attachment/' + item.id }"
+        >
+          <v-icon class="my-1" style="font-size: 3rem">far fa-file</v-icon>
+        </router-link>
+      </div>
     </template>
 
     <template v-slot:item.id="{ item }">
@@ -70,6 +77,12 @@
     <template v-slot:item.author="{ item }">
       <span v-if="item.author__agent">{{ item.author__agent }}</span>
       <span v-else>{{ item.author_free }}</span>
+    </template>
+
+    <template v-slot:item.attachment_format="{ item }">
+      <span v-if="item.attachment_format__value">{{
+        item.attachment_format__value
+      }}</span>
     </template>
 
     <template v-slot:item.date_created="{ item }">
@@ -212,5 +225,12 @@ export default {
   max-height: 200px;
   max-width: 200px;
   border-radius: 0.25rem;
+}
+
+.image-link {
+  transition: opacity 200ms ease-in;
+}
+.image-link:hover {
+  opacity: 0.8;
 }
 </style>

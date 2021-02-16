@@ -321,6 +321,7 @@
                   multiple
                   :color="bodyActiveColor"
                   :label="$t('common.fields')"
+                  clearable
                   @change="
                     $_tableHeaderMixin_updateTableHeaders({
                       event: $event,

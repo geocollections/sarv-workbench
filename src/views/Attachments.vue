@@ -82,7 +82,7 @@ export default {
       headers: [
         "uuid_filename",
         "id",
-        "attachment_format__value",
+        "attachment_format",
         "image_number",
         "author",
         "date_created",
