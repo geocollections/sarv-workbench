@@ -26,7 +26,8 @@ import { fetchKeywords } from "../assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { fetchImagesets } from "@/assets/js/api/apiCalls";
 
 export default {
   name: "Imagesets",
@@ -47,21 +48,19 @@ export default {
 
   created() {
     this.setActiveSearchParametersFilters([
-      { id: "id", title: "common.id", type: "number" },
-      { id: "term", title: "imageset.keyword", type: "text" },
-      { id: "language", title: "imageset.language", type: "text" },
-      {
-        id: "keyword_category",
-        title: "imageset.keyword_category",
-        type: "text"
-      }
+      { id: "number", title: "imageset.imagesetNumber", type: "text" },
+      { id: "description", title: "imageset.description", type: "text" }
     ]);
+  },
+
+  computed: {
+    ...mapGetters("user", ["getCurrentUser"])
   },
 
   methods: {
     fetchImagesets() {
       return new Promise(resolve => {
-        resolve(fetchImagesets(this.searchParameters));
+        resolve(fetchImagesets(this.searchParameters, this.getCurrentUser.id));
       });
     }
   }

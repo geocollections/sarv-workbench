@@ -30,28 +30,26 @@
       </router-link>
     </template>
 
-    <template v-slot:item.language__value="{ item }">
-      <span
-        v-translate="{
-          et: item.language__value,
-          en: item.language__value_en
-        }"
-      ></span>
+    <template v-slot:item.author="{ item }">
+      <router-link
+        :to="{ path: '/agent/' + item.author }"
+        :title="$t('editAgent.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
+      >
+        {{ item.author__agent }}
+      </router-link>
     </template>
 
-    <template v-slot:item.is_primary="{ item }">
-      <v-icon v-if="item.is_primary" small color="green">fas fa-check</v-icon>
-      <v-icon v-else small color="red">fas fa-minus</v-icon>
-    </template>
-
-    <template v-slot:item.is_preferred="{ item }">
-      <v-icon v-if="item.is_preferred" small color="green">fas fa-check</v-icon>
-      <v-icon v-else small color="red">fas fa-minus</v-icon>
+    <template v-slot:item.date_added="{ item }">
+      <span>{{ item.date_added | moment("YYYY-DD-MM HH:mm") }}</span>
     </template>
   </v-data-table>
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
   name: "ImagesetTable",
   props: {
@@ -87,19 +85,10 @@ export default {
     expanded: [],
     headers: [
       { text: "common.id", value: "id" },
-      { text: "imageset.keyword", value: "keyword" },
-      { text: "imageset.language", value: "language__value" },
-      { text: "imageset.keyword_category", value: "keyword_category__name" },
-      {
-        text: "imageset.is_primary_table",
-        value: "is_primary",
-        align: "center"
-      },
-      {
-        text: "imageset.is_preferred_table",
-        value: "is_preferred",
-        align: "center"
-      }
+      { text: "imageset.imagesetNumber", value: "imageset_number" },
+      { text: "imageset.author", value: "author" },
+      { text: "imageset.description", value: "description" },
+      { text: "imageset.date_added", value: "date_added" }
     ],
     names: []
   }),
