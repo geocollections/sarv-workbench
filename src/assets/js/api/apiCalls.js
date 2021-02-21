@@ -1634,7 +1634,6 @@ export function fetchAnalyses(data) {
   //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
   // }
 
-
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
     return get(
@@ -4353,6 +4352,45 @@ export function fetchAnalysisMethodDetail(id) {
 /******************************
  ***  ANALYSIS_METHODS END  ***
  *****************************/
+
+/**********************
+ *** IMAGESET START ***
+ **********************/
+
+export function fetchImageset(id) {
+  return get(`imageset/?id=${id}&format=json`);
+}
+
+export function fetchImagesets(data, author) {
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.number && data.number.trim().length > 0) {
+    searchFields += `&imageset_number__${data.number__lookuptype ||
+      "icontains"}=${data.number}`;
+  }
+
+  if (data.description && data.description.trim().length > 0) {
+    searchFields += `&description__${data.description__lookuptype ||
+      "icontains"}=${data.description}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `imageset/?${searchFields}&author=${author}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  } else {
+    return get(
+      `imageset/?page=${data.page}&author=${author}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  }
+}
+
+/**********************
+ ***  IMAGESET END  ***
+ **********************/
 
 /***********************
  *** UNIVERSAL START ***
