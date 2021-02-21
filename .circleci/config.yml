@@ -6,7 +6,7 @@ orbs:
 parameters:
   package-version:
     type: string
-    default: "1.0.2"
+    default: "1.0.3"
 
 executors:
   docker-publisher:
@@ -27,7 +27,7 @@ jobs:
       - setup_remote_docker
       - when:
           condition:
-            equal: [ "master", << pipeline.git.branch >> ]
+            equal: [ "production", << pipeline.git.branch >> ]
           steps:
             - run:
                 name: Build Docker image
@@ -63,7 +63,7 @@ jobs:
           command: docker load -i /tmp/workspace/image.tar
       - when:
           condition:
-            equal: [ "master", << pipeline.git.branch >> ]
+            equal: [ "production", << pipeline.git.branch >> ]
           steps:
             - run:
                 name: Publish Docker image to Docker Hub
@@ -212,7 +212,7 @@ workflows:
             - publish_docker_image
           filters:
             branches:
-              only: master
+              only: production
       - run_docker_image_dev:
           requires:
             - publish_docker_image
@@ -230,7 +230,7 @@ workflows:
             - bundle_dependencies
           filters:
             branches:
-              only: [ development, master ]
+              only: [ development, production ]
       - deploy_to_dev:
           requires:
             - build_dependencies
@@ -248,4 +248,4 @@ workflows:
             - build_dependencies
           filters:
             branches:
-              only: master
+              only: production
