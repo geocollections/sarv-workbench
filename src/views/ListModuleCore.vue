@@ -142,7 +142,6 @@
 <script>
 import ExportButtons from "../components/partial/export/ExportButtons";
 import ListView from "../components/partial/ListView";
-import { fetchChangePrivacyState } from "../assets/js/api/apiCalls";
 import debounce from "lodash/debounce";
 import ImageView from "../components/partial/ImageView";
 import { mapActions, mapState } from "vuex";
@@ -150,6 +149,7 @@ import ScrollToTop from "../components/partial/ScrollToTop";
 import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
 import Pagination from "@/components/partial/Pagination";
+import {fetchChangeRecordState} from "@/assets/js/api/apiCalls";
 
 export default {
   components: {
@@ -295,7 +295,7 @@ export default {
       let formData = new FormData();
       formData.append("data", JSON.stringify({ is_private: state }));
 
-      fetchChangePrivacyState(this.module, id, formData).then(
+      fetchChangeRecordState(this.module, id, formData).then(
         response => {
           if (response && response.data) {
             if (this.$i18n.locale === "ee") {

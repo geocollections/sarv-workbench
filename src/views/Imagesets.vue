@@ -1,0 +1,70 @@
+<template>
+  <div class="imagesets">
+    <table-view-title title="header.imagesets" buttonPath="/imageset/add" />
+
+    <table-view-search
+      :show-search="block.search"
+      v-on:update:showSearch="block.search = $event"
+      :filters="activeSearchParametersFilters"
+      :search-parameters="searchParameters"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
+    />
+
+    <list-module-core
+      :module="$route.meta.object"
+      :searchParameters="searchParameters"
+      :api-call="fetchImagesets"
+      v-on:update:searchParameters="updateSearchParamsByField"
+    />
+  </div>
+</template>
+
+<script>
+import ListModuleCore from "./ListModuleCore";
+import { fetchKeywords } from "../assets/js/api/apiCalls";
+import TableViewTitle from "../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import searchParametersMixin from "../mixins/searchParametersMixin";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { fetchImagesets } from "@/assets/js/api/apiCalls";
+
+export default {
+  name: "Imagesets",
+
+  components: {
+    ListModuleCore,
+    TableViewSearch,
+    TableViewTitle
+  },
+
+  mixins: [searchParametersMixin],
+
+  data() {
+    return {
+      block: { search: true }
+    };
+  },
+
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "number", title: "imageset.imagesetNumber", type: "text" },
+      { id: "description", title: "imageset.description", type: "text" }
+    ]);
+  },
+
+  computed: {
+    ...mapGetters("user", ["getCurrentUser"])
+  },
+
+  methods: {
+    fetchImagesets() {
+      return new Promise(resolve => {
+        resolve(fetchImagesets(this.searchParameters, this.getCurrentUser.id));
+      });
+    }
+  }
+};
+</script>
+
+<style scoped />

@@ -196,7 +196,7 @@
     </v-row>
 
     <!-- EXISTING FILES -->
-    <v-row no-gutters v-if="isExistingFilesValid">
+    <v-row no-gutters v-if="isExistingFilesValid && showExistingPreviews">
       <v-col
         cols="12"
         class="pa-1"
@@ -332,6 +332,10 @@ export default {
       default: true
     },
     showExisting: Boolean,
+    showExistingPreviews: {
+      type: Boolean,
+      default: true
+    },
     showNewFilesImmediately: Boolean,
     showResetFilesButton: Boolean,
     acceptMultiple: Boolean,

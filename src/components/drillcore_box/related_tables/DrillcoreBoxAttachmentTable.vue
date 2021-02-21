@@ -19,7 +19,7 @@
       <template v-slot:item.action="{ item }">
         <v-btn
           icon
-          @click="editItem(item)"
+          @click="openAttachment(item.id)"
           color="green"
           :title="$t('buttons.edit')"
           small
@@ -34,43 +34,83 @@
         <!--          :title="$t('edit.editMessage')"-->
         <!--          :to="{ path: '/attachment/' + item.id }"-->
         <!--        >-->
-        <a
-          :href="getFileUrl(item.uuid_filename)"
-          target="DrillcoreBoxWindow"
-          title="View original image"
-        >
-          <v-img
-            :id="item.id"
-            v-if="!!item.attachment_format__value.includes('image')"
-            :src="getFileUrl(item.uuid_filename, 'small')"
-            :lazy-src="getFileUrl(item.uuid_filename, 'small')"
-            class="grey lighten-2 attachment-table-image-preview my-1"
-            :max-width="widths[value]"
+        <div style="max-width: 200px; max-height: 200px">
+          <a
+            :href="getFileUrl(item.uuid_filename)"
+            target="DrillcoreBoxWindow"
+            title="View original file"
+            class="image-link"
+            style="max-width: 200px; max-height: 200px"
           >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-row>
-            </template>
-          </v-img>
+            <v-img
+              :id="item.id"
+              v-if="
+                item.attachment_format__value &&
+                  !!item.attachment_format__value.includes('image')
+              "
+              :src="getFileUrl(item.uuid_filename, 'small')"
+              :lazy-src="getFileUrl(item.uuid_filename, 'small')"
+              class="grey lighten-2 attachment-table-image-preview my-1 rounded"
+              :max-width="200"
+              :max-height="200"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular indeterminate color="grey lighten-5" />
+                </v-row>
+              </template>
+            </v-img>
 
-          <v-icon v-else class="my-1" style="font-size: 3rem"
-            >far fa-file</v-icon
-          >
-        </a>
+            <div
+              v-else
+              class="my-3"
+              style="max-width: 400px; max-height: 400px;"
+            >
+              <v-icon style="font-size: 3rem;">far fa-file</v-icon>
+            </div>
+          </a>
+        </div>
         <!--        </router-link>-->
       </template>
 
       <template v-slot:item.is_preferred="{ item }">
-        <v-icon v-if="item.is_preferred" color="green" small
-          >fas fa-check</v-icon
-        >
-        <v-icon v-else color="red" small>fas fa-times</v-icon>
+        <div class="d-flex justify-center">
+          <v-checkbox
+            hide-details
+            class="mt-0"
+            v-model="item.is_preferred"
+            @change="
+              $emit('toggle-preferred-state', {
+                is_preferred: item.is_preferred,
+                id: item.id
+              })
+            "
+            :color="bodyActiveColor"
+          />
+        </div>
+        <!--        <v-icon v-if="item.is_preferred" color="green" small-->
+        <!--          >fas fa-check</v-icon-->
+        <!--        >-->
+        <!--        <v-icon v-else color="red" small>fas fa-times</v-icon>-->
       </template>
 
-      <template v-slot:item.boolean1="{ item }">
-        <v-icon v-if="item.boolean1" color="green" small>fas fa-check</v-icon>
-        <v-icon v-else color="red" small>fas fa-times</v-icon>
+      <template v-slot:item.is_private="{ item }">
+        <div class="d-flex justify-center">
+          <v-checkbox
+            hide-details
+            class="mt-0"
+            v-model="item.is_private"
+            @change="
+              $emit('toggle-privacy-state', {
+                is_private: item.is_private,
+                id: item.id
+              })
+            "
+            :color="bodyActiveColor"
+          />
+        </div>
+        <!--        <v-icon v-if="item.is_private" color="green" small>fas fa-check</v-icon>-->
+        <!--        <v-icon v-else color="red" small>fas fa-times</v-icon>-->
       </template>
     </v-data-table>
 
@@ -95,10 +135,10 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <checkbox-wrapper
-                    v-model="item.boolean1"
+                    v-model="item.is_private"
                     :color="bodyActiveColor"
-                    :label="$t('drillcore_box.is_wet')"
-                    @change="item.boolean1 = !item.boolean1"
+                    :label="$t('common.is_private')"
+                    @change="item.is_private = !item.is_private"
                   />
                 </v-col>
               </v-row>
@@ -168,9 +208,13 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "drillcore_box.attachment", value: "id" },
-      { text: "drillcore_box.is_preferred", value: "is_preferred" },
-      { text: "drillcore_box.is_wet", value: "boolean1" },
+      { text: "drillcore_box.attachment", value: "id", align: "center" },
+      {
+        text: "drillcore_box.is_preferred",
+        value: "is_preferred",
+        align: "center"
+      },
+      { text: "common.is_private", value: "is_private", align: "center" },
       {
         text: "common.actions",
         value: "action",
@@ -181,7 +225,7 @@ export default {
     dialog: false,
     item: {
       is_preferred: false,
-      boolean1: false
+      is_private: false
     },
     widths: {}
   }),
@@ -200,7 +244,10 @@ export default {
   watch: {
     "response.results": {
       handler(newVal) {
-        if (newVal.length > 0) {
+        if (
+          newVal.length > 0 &&
+          Object.keys(this.widths).length !== newVal.length
+        ) {
           newVal.forEach(item =>
             this.getImageWidth(item.uuid_filename, item.id)
           );
@@ -215,7 +262,7 @@ export default {
       this.dialog = false;
       this.item = {
         is_preferred: false,
-        boolean1: false
+        is_private: false
       };
     },
 
@@ -235,7 +282,7 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
       this.item.is_preferred = item.is_preferred;
-      this.item.boolean1 = item.boolean1;
+      this.item.is_private = item.is_private;
 
       this.dialog = true;
     },
@@ -281,9 +328,23 @@ export default {
         if (img.width) this.$set(this.widths, id, img.width);
         else this.$set(this.widths, id, 400);
       } else this.$set(this.widths, id, 400);
+    },
+
+    openAttachment(id) {
+      let routeData = this.$router.resolve({
+        path: "/attachment/" + id
+      });
+      window.open(routeData.href, "_blank", "width=800,height=750");
     }
   }
 };
 </script>
 
-<style scoped />
+<style scoped>
+.image-link {
+  transition: opacity 200ms ease-in;
+}
+.image-link:hover {
+  opacity: 0.8;
+}
+</style>

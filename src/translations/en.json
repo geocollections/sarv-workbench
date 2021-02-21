@@ -284,7 +284,8 @@
     "sample_import": "Import sample file",
     "analysis_import": "Import analysis file",
     "taxon_pages": "Taxon pages",
-    "stratigraphy_catalogue": "Catalogue"
+    "stratigraphy_catalogue": "Catalogue",
+    "selection_series": "Selections"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -353,6 +354,9 @@
       "files": "Files",
       "samples": "Linked samples",
       "groundwater": "Groundwater extension"
+    },
+    "imageset": {
+      "info": "General info"
     },
     "reference": {
       "requiredFields": "Required fields",
@@ -571,6 +575,10 @@
     "heading": "Analysis",
     "editMessage": "Edit analysis",
     "viewMessage": "View analysis in geocollections portal"
+  },
+  "editImageset": {
+    "heading": "Imageset",
+    "editMessage": "Edit imageset"
   },
   "editProject": {
     "heading": "Project",
@@ -800,7 +808,10 @@
     "map": "Map"
   },
   "imageset": {
-    "imagesetNumber": "Imageset number"
+    "imagesetNumber": "Imageset number",
+    "author": "Author",
+    "description": "Description",
+    "date_added": "Date added"
   },
   "collection": {
     "number": "Number",
@@ -1321,7 +1332,7 @@
     "is_preferred": "Preferred",
     "is_wet": "Wet",
     "relatedTables": {
-      "attachment": "Failid (vaata/muuda)",
+      "attachment": "Failid",
       "add_attachment": "Failid (lisa/kustuta)"
     }
   },

@@ -1634,7 +1634,6 @@ export function fetchAnalyses(data) {
   //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
   // }
 
-
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
     return get(
@@ -2888,7 +2887,7 @@ export function fetchDrillcoreBoxImages(data) {
 
 export function fetchDrillcoreBoxAttachments(drillcoreBoxId, searchParameters) {
   let fields =
-    "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number,is_preferred";
+    "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number,is_preferred,is_private";
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
     searchParameters.sortDesc
@@ -4354,11 +4353,50 @@ export function fetchAnalysisMethodDetail(id) {
  ***  ANALYSIS_METHODS END  ***
  *****************************/
 
+/**********************
+ *** IMAGESET START ***
+ **********************/
+
+export function fetchImageset(id) {
+  return get(`imageset/?id=${id}&format=json`);
+}
+
+export function fetchImagesets(data, author) {
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.number && data.number.trim().length > 0) {
+    searchFields += `&imageset_number__${data.number__lookuptype ||
+      "icontains"}=${data.number}`;
+  }
+
+  if (data.description && data.description.trim().length > 0) {
+    searchFields += `&description__${data.description__lookuptype ||
+      "icontains"}=${data.description}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `imageset/?${searchFields}&author=${author}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  } else {
+    return get(
+      `imageset/?page=${data.page}&author=${author}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  }
+}
+
+/**********************
+ ***  IMAGESET END  ***
+ **********************/
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/
 
-export function fetchChangePrivacyState(table, id, stateData) {
+export function fetchChangeRecordState(table, id, stateData) {
   return post("change/" + table + "/" + id, stateData);
 }
 

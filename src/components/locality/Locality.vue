@@ -199,6 +199,36 @@
               />
             </v-col>
           </v-row>
+
+          <!-- COORDX, COORDY and EPSG -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="locality.coordx"
+                :color="bodyActiveColor"
+                :label="$t('site.coordx')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="locality.coordy"
+                :color="bodyActiveColor"
+                :label="$t('site.coordy')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="locality.epsg"
+                :color="bodyActiveColor"
+                :label="$t('site.epsg')"
+                type="number"
+              />
+            </v-col>
+          </v-row>
         </div>
       </transition>
     </v-card>
@@ -747,6 +777,7 @@ export default {
           "depth",
           "coordx",
           "coordy",
+          "epsg",
           "coord_system",
           "stratigraphy_top_free",
           "stratigraphy_base_free",
@@ -1080,7 +1111,7 @@ export default {
           this.relatedData.searchParameters.attachment_link
         );
       } else if (type === "locality_stratigraphy") {
-        query = fetchLocalityStratigraphy(
+        query = fetchLocalityDescriptions(
           this.$route.params.id,
           this.relatedData.searchParameters.locality_stratigraphy
         );

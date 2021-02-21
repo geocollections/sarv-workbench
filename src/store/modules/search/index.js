@@ -458,6 +458,15 @@ const state = {
     sortDesc: [true]
   },
   analysis_methodViewType: "table",
+  imagesetSearchParameters: {
+    number: null,
+    description: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  imagesetViewType: "table",
   activeSarvIssues: null,
   lookUpTypes: [
     //exact, iexact, in, range, contains, icontains, startswith, istartswith, endswith, iendswith, gt, lt, gte, lte, isnull, hierarchy

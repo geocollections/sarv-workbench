@@ -3,6 +3,7 @@ import moment from "moment";
 import { mapActions, mapGetters, mapState } from "vuex";
 import {
   fetchAttachmentForReference,
+  fetchChangeRecordState,
   postRequest
 } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
@@ -87,7 +88,8 @@ const formManipulation = {
       let optionalFields = this.optionalFields;
 
       // Exceptions
-      if (object === "imageset") isValid &= !this.imagesetNumberExists;
+      if (object === "imageset" && !this.$route.meta.isEdit)
+        isValid &= !this.imagesetNumberExists;
       if (object === "attachment") {
         if (!this.isNotEmpty(child)) {
           if (this.$route.meta.child) child = this.$route.meta.child;
@@ -384,8 +386,14 @@ const formManipulation = {
       }
     },
 
-    addFileAsRelatedDataNew(files, relatedObject, singleFileMetadata) {
+    addFileAsRelatedDataNew(
+      files,
+      relatedObject,
+      singleFileMetadata,
+      totalAttachmentCount
+    ) {
       console.log(files);
+      console.log(totalAttachmentCount);
       console.log(singleFileMetadata);
       let attach_link = `attach_link__${
         relatedObject === "location" ? "storage" : relatedObject
@@ -413,6 +421,10 @@ const formManipulation = {
             author: this.getCurrentUser.id,
             date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
             is_private: true,
+            is_preferred:
+              relatedObject === "drillcore_box" && totalAttachmentCount === 0
+                ? true
+                : false,
             is_locked: relatedObject === "doi",
             related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
           };
@@ -788,6 +800,38 @@ const formManipulation = {
             : this.$t("messages.uploadError")
         });
       }
+    },
+
+    changeObjectsState(data) {
+      let formData = new FormData();
+      const id = data.id;
+      const table = data.table;
+      delete data.id;
+      delete data.table;
+      formData.append("data", JSON.stringify({ ...data }));
+
+      fetchChangeRecordState(table, id, formData).then(
+        response => {
+          if (response && response.data) {
+            if (this.$i18n.locale === "ee") {
+              if (response.data.message_et)
+                this.toastSuccess({ text: response.data.message_et });
+              else if (response.data.error_et)
+                this.toastError({ text: response.data.error_et });
+            } else {
+              if (response.data.message)
+                this.toastSuccess({ text: response.data.message });
+              else if (response.data.error)
+                this.toastError({ text: response.data.error });
+            }
+          }
+        },
+        errResponse => {
+          if (errResponse && errResponse.data && errResponse.data.error)
+            this.toastError({ text: errResponse.data.error });
+          this.toastError({ text: this.$t("messages.uploadError") });
+        }
+      );
     }
   }
 };
