@@ -204,6 +204,9 @@ workflows:
     jobs:
       # NEW (cloud)
       - build_docker_image
+          filters:
+            branches:
+              only: [development, production]
       - publish_docker_image:
           requires:
             - build_docker_image
@@ -222,6 +225,9 @@ workflows:
 
       # OLD
       - checkout_code
+          filters:
+            branches:
+              only: [development, production]
       - bundle_dependencies:
           requires:
             - checkout_code
