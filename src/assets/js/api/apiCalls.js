@@ -3918,6 +3918,16 @@ export function fetchWebNews(data) {
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
+  }
+
+  if (data.title && data.title.trim().length > 0) {
+    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
+      data.title
+    }`;
+  }
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -3946,6 +3956,16 @@ export function fetchWebPagesDetail(id) {
 export function fetchWebPages(data) {
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
+  }
+
+  if (data.title && data.title.trim().length > 0) {
+    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
+      data.title
+    }`;
+  }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -4404,8 +4424,9 @@ export function fetchDeleteRecord(table, id) {
   return post_delete(`${table}/${id}`);
 }
 
-export function fetchAllFields(table) {
-  return get(`fields/${table}`);
+export function fetchAllFields(table, data = null) {
+  if (data.show_all) return get(`fields/${table}?show_all=true`);
+  else return get(`fields/${table}`);
 }
 
 /***********************

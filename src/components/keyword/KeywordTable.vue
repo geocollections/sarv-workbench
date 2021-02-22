@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="keyword-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
@@ -9,7 +8,6 @@
     multi-sort
     :page="searchParameters.page"
     :search="filter"
-    expand-icon="fas fa-caret-down"
     :sort-by="searchParameters.sortBy"
     :sort-desc="searchParameters.sortDesc"
     @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
@@ -85,43 +83,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "keyword.keyword", value: "keyword" },
-      { text: "keyword.language", value: "language__value" },
-      { text: "keyword.keyword_category", value: "keyword_category__name" },
-      {
-        text: "keyword.is_primary_table",
-        value: "is_primary",
-        align: "center"
-      },
-      {
-        text: "keyword.is_preferred_table",
-        value: "is_preferred",
-        align: "center"
-      }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style>
-.keyword-table.v-data-table td,
-.keyword-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

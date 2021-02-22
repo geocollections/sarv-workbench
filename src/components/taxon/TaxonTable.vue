@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="taxon-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
@@ -116,27 +115,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "taxon.taxon", value: "taxon" },
-      { text: "taxon.author_year", value: "author_year" },
-      { text: "taxon.taxon_epithet", value: "taxon_epithet" },
-      { text: "taxon.parent__taxon", value: "parent__taxon" },
-      { text: "taxon.fossil_group__taxon", value: "fossil_group__taxon" },
-      { text: "", value: "link", sortable: false }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getFossilsUrl(id) {
       return `https://fossiilid.info/${id}`;
@@ -144,10 +122,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.taxon-table.v-data-table td,
-.taxon-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

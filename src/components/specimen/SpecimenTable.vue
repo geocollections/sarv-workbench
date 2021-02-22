@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="specimen-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
@@ -97,47 +96,21 @@
 
     <template v-slot:item.stratigraphy__stratigraphy="{ item }">
       <div>
-        <!--        <a-->
-        <!--          v-if="item.stratigraphy_id"-->
-        <!--          :href="-->
-        <!--            getGeoDetailUrl({-->
-        <!--              object: 'stratigraphy',-->
-        <!--              id: item.stratigraphy_id-->
-        <!--            })-->
-        <!--          "-->
-        <!--          :title="$t('editStratigraphy.viewMessage')"-->
-        <!--          class="sarv-link"-->
-        <!--          target="GeocollectionsWindow"-->
-        <!--        >-->
         <span
           v-translate="{
             et: item.stratigraphy__stratigraphy,
             en: item.stratigraphy__stratigraphy_en
           }"
         />
-        <!--        </a>-->
         <span v-if="item.stratigraphy_id && item.lithostratigraphy_id">
           |
         </span>
-        <!--        <a-->
-        <!--          v-if="item.lithostratigraphy_id"-->
-        <!--          :href="-->
-        <!--            getGeoDetailUrl({-->
-        <!--              object: 'stratigraphy',-->
-        <!--              id: item.lithostratigraphy_id-->
-        <!--            })-->
-        <!--          "-->
-        <!--          :title="$t('editStratigraphy.viewMessage')"-->
-        <!--          class="sarv-link"-->
-        <!--          target="GeocollectionsWindow"-->
-        <!--        >-->
         <span
           v-translate="{
             et: item.lithostratigraphy__stratigraphy,
             en: item.lithostratigraphy__stratigraphy_en
           }"
         />
-        <!--        </a>-->
       </div>
     </template>
 
@@ -215,29 +188,8 @@ export default {
     }
   },
   data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "specimen.number", value: "specimen_id" },
-      { text: "common.name", value: "name", sortable: false },
-      { text: "specimen.locality", value: "locality__locality" },
-      { text: "common.depth", value: "depth" },
-      { text: "common.stratigraphy", value: "stratigraphy__stratigraphy" },
-      { text: "specimen.agent_collected", value: "agent_collected__agent" },
-      { text: "specimen.storage", value: "storage__location" },
-      { text: "", value: "link", sortable: false }
-    ],
     names: []
   }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   watch: {
     "response.results": {
       handler(newVal) {
@@ -346,10 +298,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.specimen-table.v-data-table td,
-.specimen-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

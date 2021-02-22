@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="deaccession-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
@@ -77,35 +76,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "deaccession.number", value: "number" },
-      { text: "deaccession.date_signed", value: "date_signed" },
-      { text: "deaccession.agent_kandis", value: "agent_kandis" },
-      { text: "deaccession.number_items", value: "number_items" },
-      { text: "deaccession.description", value: "description" },
-      { text: "common.id", value: "id" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style scoped>
-.deaccession-table.v-data-table td,
-.deaccession-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

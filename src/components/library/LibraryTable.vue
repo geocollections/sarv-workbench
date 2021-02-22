@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="library-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     :items="response.results"
@@ -100,11 +99,6 @@ export default {
       default: "deep-orange"
     }
   },
-
-  data: () => ({
-    expanded: [],
-    names: []
-  }),
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -112,10 +106,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.library-table.v-data-table td,
-.library-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

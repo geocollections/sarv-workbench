@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="drillcoreBox-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
@@ -131,35 +130,6 @@ export default {
     }
   },
 
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "drillcore.drillcore", value: "drillcore" },
-      { text: "drillcore_box.number", value: "number" },
-      { text: "drillcore_box.number_meters", value: "number_meters" },
-      { text: "drillcore_box.depth_start", value: "depth_start" },
-      { text: "drillcore_box.depth_end", value: "depth_end" },
-      { text: "drillcore_box.depth_other", value: "depth_other" },
-      { text: "drillcore_box.stratigraphy_base", value: "stratigraphy_base" },
-      { text: "drillcore_box.stratigraphy_top", value: "stratigraphy_top" },
-      { text: "drillcore_box.stratigraphy_free", value: "stratigraphy_free" },
-      { text: "common.remarks", value: "remarks" },
-      { text: "", value: "link", sortable: false }
-    ],
-    names: []
-  }),
-
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
-
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -167,10 +137,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.drillcoreBox-table.v-data-table td,
-.drillcoreBox-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

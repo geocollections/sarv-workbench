@@ -431,6 +431,8 @@ const state = {
   },
   deaccessionViewType: "table",
   web_newsSearchParameters: {
+    id: null,
+    title: null,
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
@@ -438,13 +440,15 @@ const state = {
   },
   web_newsViewType: "table",
   web_pagesSearchParameters: {
+    id: null,
+    title: null,
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
     sortDesc: [true]
   },
   web_pagesViewType: "table",
-  taxon_pagesSearchParameters: {
+  taxon_pageSearchParameters: {
     id: null,
     title: null,
     taxon: null,
@@ -454,7 +458,7 @@ const state = {
     sortBy: ["id"],
     sortDesc: [true]
   },
-  taxon_pagesViewType: "table",
+  taxon_pageViewType: "table",
   sarv_issueSearchParameters: {
     title: null,
     description: null,

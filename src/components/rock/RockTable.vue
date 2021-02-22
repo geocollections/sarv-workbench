@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="rock-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
@@ -118,32 +117,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "rock.name", value: "name" },
-      { text: "rock.name_en", value: "name_en" },
-      { text: "rock.formula_html", value: "formula_html" },
-      { text: "rock.rock_type", value: "rock_type" },
-      { text: "rock.rock_rank", value: "rock_rank" },
-      { text: "rock.in_estonia", value: "in_estonia" },
-      { text: "rock.in_portal", value: "in_portal" },
-      { text: "rock.kivid_info", value: "link", sortable: false },
-      { text: "rock.mindat", value: "mindat_id" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getRockUrl(id) {
       if (id) return `https://kivid.info/${id}`;
@@ -157,10 +130,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.rock-table.v-data-table td,
-.rock-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

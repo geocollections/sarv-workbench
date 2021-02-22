@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="reference-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
@@ -37,7 +36,7 @@
       >
     </template>
 
-    <template v-slot:item.journal="{ item }">
+    <template v-slot:item.journal__journal_name="{ item }">
       <router-link
         :to="{ path: '/journal/' + item.journal }"
         :title="$t('editJournal.editMessage')"
@@ -177,10 +176,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.reference-table.v-data-table td,
-.reference-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

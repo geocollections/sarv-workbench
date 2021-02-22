@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="agent-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
@@ -91,13 +90,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
+  }
 };
 </script>
-
-<style>
-.agent-table.v-data-table td,
-.agent-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

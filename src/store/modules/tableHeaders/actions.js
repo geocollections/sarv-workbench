@@ -3,7 +3,7 @@ import { fetchAllFields } from "@/assets/js/api/apiCalls";
 const actions = {
   async getAllFieldNames({ commit }, table) {
     try {
-      let response = await fetchAllFields(table);
+      let response = await fetchAllFields(table, { show_all: true });
 
       if (response?.data?.results?.fields) {
         let fields = response.data.results.fields;

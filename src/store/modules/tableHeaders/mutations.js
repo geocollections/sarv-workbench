@@ -20,32 +20,42 @@ const mutations = {
       };
     });
 
-    if (payload.table === "attachment" || payload.table === "analysis")
+    if (
+      payload.table === "attachment" ||
+      payload.table === "analysis" ||
+      payload.table === "collection" ||
+      payload.table === "dataset" ||
+      payload.table === "doi" ||
+      payload.table === "drillcore" ||
+      payload.table === "drillcore_box" ||
+      payload.table === "library" ||
+      payload.table === "locality" ||
+      payload.table === "preparation" ||
+      payload.table === "reference" ||
+      payload.table === "rock" ||
+      payload.table === "specimen" ||
+      payload.table === "stratigraphy" ||
+      payload.table === "taxon"
+    )
       allHeaders.push({
         value: "link",
         text: `${payload.table}.link`,
         sortable: false,
         show: true
       });
-    if (payload.table === "analysis") {
+    if (payload.table === "loan") {
       allHeaders.push({
-        value: "sample__number",
-        text: `${payload.table}.sample__number`,
+        value: "print",
+        text: `${payload.table}.print`,
+        sortable: false,
         show: true
       });
+    }
+    if (payload.table === "sarv_issue") {
       allHeaders.push({
-        value: "sample__locality__locality",
-        text: `${payload.table}.sample__locality__locality`,
-        show: true
-      });
-      allHeaders.push({
-        value: "sample__depth",
-        text: `${payload.table}.sample__depth`,
-        show: true
-      });
-      allHeaders.push({
-        value: "analysis_method__analysis_method",
-        text: `${payload.table}.analysis_method__analysis_method`,
+        value: "replied",
+        text: `${payload.table}.replied`,
+        sortable: false,
         show: true
       });
     }

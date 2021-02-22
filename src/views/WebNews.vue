@@ -9,7 +9,6 @@
       :search-parameters="searchParameters"
       v-on:update:searchParameters="updateSearchParamsByField"
       v-on:reset:searchParameters="resetSearchParams"
-      :col-size="4"
     />
 
     <list-module-core
@@ -47,7 +46,14 @@ export default {
 
   async created() {
     await this.$_tableHeaderMixin_getAllFieldNames();
-    this.setActiveSearchParametersFilters([]);
+    this.setActiveSearchParametersFilters([
+      { id: "id", title: "common.id", type: "number" },
+      {
+        id: "title",
+        title: "web_news.title",
+        type: "text"
+      }
+    ]);
   },
 
   methods: {

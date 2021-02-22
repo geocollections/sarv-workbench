@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="attachment-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
@@ -74,15 +73,9 @@
       </router-link>
     </template>
 
-    <template v-slot:item.author="{ item }">
+    <template v-slot:item.author__agent="{ item }">
       <span v-if="item.author__agent">{{ item.author__agent }}</span>
       <span v-else>{{ item.author_free }}</span>
-    </template>
-
-    <template v-slot:item.attachment_format="{ item }">
-      <span v-if="item.attachment_format__value">{{
-        item.attachment_format__value
-      }}</span>
     </template>
 
     <template v-slot:item.date_created="{ item }">
@@ -101,7 +94,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.reference="{ item }">
+    <template v-slot:item.reference__reference="{ item }">
       <router-link
         :to="{ path: '/reference/' + item.reference_id }"
         :title="$t('editReference.editMessage')"
@@ -216,11 +209,6 @@ export default {
 </script>
 
 <style>
-.attachment-table.v-data-table td,
-.attachment-table.v-data-table th {
-  padding: 0 8px;
-}
-
 .attachment-table-image-preview {
   max-height: 200px;
   max-width: 200px;

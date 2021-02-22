@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="collection-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     :items="response.results"
@@ -97,27 +96,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "collection.number", value: "collection_id" },
-      { text: "common.name", value: "name" },
-      { text: "collection.name_long", value: "name_long" },
-      { text: "collection.database", value: "database__acronym" },
-      { text: "", value: "link", sortable: false }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -125,10 +103,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.collection-table.v-data-table td,
-.collection-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

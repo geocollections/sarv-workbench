@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="analysis-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
@@ -122,10 +121,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.analysis-table.v-data-table td,
-.analysis-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

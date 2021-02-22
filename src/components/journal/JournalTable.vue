@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="journal-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
@@ -77,23 +76,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style>
-.journal-table.v-data-table td,
-.journal-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

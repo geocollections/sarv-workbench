@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="project-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
@@ -126,10 +125,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.project-table.v-data-table td,
-.project-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

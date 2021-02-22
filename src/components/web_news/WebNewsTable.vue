@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="web-news-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
@@ -79,33 +78,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "web_news.title", value: "title" },
-      { text: "web_news.text", value: "text" },
-      { text: "common.is_private", value: "is_private", align: "center" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style scoped>
-.web-news-table.v-data-table td,
-.web-news-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

@@ -2208,7 +2208,7 @@ const router = new Router({
                 import("./components/taxon_pages/TaxonPagesTable.vue"),
               meta: {
                 requiresAuth: true,
-                object: "taxon_pages",
+                object: "taxon_page",
                 isTableView: true
               }
             }
@@ -2250,7 +2250,7 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.taxon_pages",
                 subForms: [
-                  { path: "/taxon_pages/add", name: "header.taxon_pages" }
+                  { path: "/taxon_page/add", name: "header.taxon_pages" }
                 ],
                 requiresAuth: true,
                 object: "taxon_page"

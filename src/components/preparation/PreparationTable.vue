@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="preparation-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
@@ -125,26 +124,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "preparation.preparation_number", value: "preparation_number" },
-      { text: "preparation.sample__locality", value: "locality" },
-      { text: "preparation.sample__stratigraphy", value: "stratigraphy" },
-      { text: "preparation.agent", value: "agent" },
-      { text: "", value: "link", sortable: false }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -152,10 +131,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.preparation-table.v-data-table td,
-.preparation-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

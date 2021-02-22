@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="analysis-parameter-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
@@ -86,37 +85,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "analysis_parameter.parameter", value: "parameter" },
-
-      { text: "analysis_parameter.parameter_html", value: "parameter_html" },
-      { text: "analysis_parameter.parameter_name", value: "parameter_name" },
-      {
-        text: "analysis_parameter.synonyms",
-        value: "synonyms"
-      },
-      { text: "analysis_parameter.parent_parameter", value: "parent_parameter" }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style>
-.analysis-parameter-table.v-data-table td,
-.analysis-parameter-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

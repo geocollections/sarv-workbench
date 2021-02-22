@@ -1,6 +1,5 @@
 <template>
   <v-data-table
-    class="accession-table"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
@@ -30,7 +29,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.agent_andis="{ item }">
+    <template v-slot:item.agent_andis__agent="{ item }">
       <router-link
         :to="{ path: '/agent/' + item.agent_andis }"
         :title="$t('editAgent.editMessage')"
@@ -41,7 +40,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.agent_vottis="{ item }">
+    <template v-slot:item.agent_vottis__agent="{ item }">
       <router-link
         :to="{ path: '/agent/' + item.agent_vottis }"
         :title="$t('editAgent.editMessage')"
@@ -88,13 +87,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
+  }
 };
 </script>
-
-<style scoped>
-.accession-table.v-data-table td,
-.accession-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>
