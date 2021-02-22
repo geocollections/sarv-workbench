@@ -23,14 +23,22 @@ const tableHeaderMixin = {
   },
 
   methods: {
-    ...mapActions("tableHeaders", ["updateTableHeaders", "getAllFieldNames"]),
+    ...mapActions("tableHeaders", [
+      "updateTableHeaders",
+      "getAllFieldNames",
+      "setDefaultTableHeaders"
+    ]),
+
+    async $_tableHeaderMixin_getAllFieldNames(table = this.$route.meta.object) {
+      await this.getAllFieldNames(table);
+    },
 
     $_tableHeaderMixin_updateTableHeaders(payload) {
       this.updateTableHeaders(payload);
     },
 
-    async $_tableHeaderMixin_getAllFieldNames(table = this.$route.meta.object) {
-      await this.getAllFieldNames(table);
+    $_tableHeaderMixin_setDefaultTableHeaders(table = this.$route.meta.object) {
+      this.setDefaultTableHeaders(table);
     }
   }
 };

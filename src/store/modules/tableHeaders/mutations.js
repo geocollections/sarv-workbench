@@ -68,6 +68,15 @@ const mutations = {
       .sort((a, b) => b.show - a.show);
 
     state[payload.table] = allHeaders;
+  },
+
+  SET_DEFAULT_TABLE_HEADERS(state, payload) {
+    state[payload.table] = state[payload.table].map(item => {
+      return {
+        ...item,
+        show: state.defaults[payload.table].includes(item.value)
+      };
+    });
   }
 };
 

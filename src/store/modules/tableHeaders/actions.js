@@ -16,6 +16,10 @@ const actions = {
 
   updateTableHeaders({ commit }, payload) {
     commit("UPDATE_TABLE_HEADERS", payload);
+  },
+
+  setDefaultTableHeaders({ commit }, table) {
+    commit("SET_DEFAULT_TABLE_HEADERS", { table: table });
   }
 };
 

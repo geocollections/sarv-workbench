@@ -339,13 +339,9 @@
             <!-- RESET SEARCH PREFERENCES -->
             <v-row class="mt-3">
               <v-col cols="12">
-                <v-btn
-                  @click="$emit('reset:searchParameters')"
-                  :color="bodyActiveColor"
-                  dark
-                >
+                <v-btn @click="resetSearch" :color="bodyActiveColor" dark>
                   <v-icon left>fas fa-filter</v-icon>
-                  {{ $t("buttons.deletePreferences") }}
+                  {{ $t("buttons.resetSearch") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -404,6 +400,11 @@ export default {
     updateDate(event, fieldId, index) {
       this.$emit("update:searchParameters", event, fieldId);
       this.calendarMenus[fieldId] = false;
+    },
+
+    resetSearch() {
+      this.$emit("reset:searchParameters");
+      this.$_tableHeaderMixin_setDefaultTableHeaders();
     }
   }
 };
