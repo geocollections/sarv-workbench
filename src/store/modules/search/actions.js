@@ -37,7 +37,8 @@ import {
   fetchAnalysisParameters,
   fetchTaxonPages,
   fetchLibraries,
-  fetchAllFields
+  fetchAllFields,
+  fetchImagesets
 } from "@/assets/js/api/apiCalls";
 
 const actions = {
@@ -101,6 +102,13 @@ const actions = {
     return fetchLibraries(state.activeSearchParams.search).then(resp =>
       commit("SET_SIDEBAR_LIST", resp)
     );
+  },
+
+  FETCH_IMAGESETS({ commit, state, rootGetters }) {
+    return fetchImagesets(
+      state.activeSearchParams.search,
+      rootGetters["user/getCurrentUser"].id
+    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
   FETCH_LOCALITIES({ commit, state }) {

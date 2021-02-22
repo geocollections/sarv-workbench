@@ -285,7 +285,8 @@
     "sample_import": "Impordi proovi fail",
     "analysis_import": "Impordi analüüsi fail",
     "taxon_pages": "Taksoni veebilehed",
-    "stratigraphy_catalogue": "Kataloog"
+    "stratigraphy_catalogue": "Kataloog",
+    "selection_series": "Valikud"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -354,6 +355,9 @@
       "files": "Failid",
       "samples": "Seotud proovid",
       "groundwater": "Põhjavee laiendusmoodul"
+    },
+    "imageset": {
+      "info": "Üldinfo"
     },
     "reference": {
       "requiredFields": "Kohustuslikud väljad",
@@ -572,6 +576,10 @@
     "heading": "Analüüs",
     "editMessage": "Muuda analüüsi",
     "viewMessage": "Vaata analüüsi geokogude portaalis"
+  },
+  "editImageset": {
+    "heading": "Pildiseeria",
+    "editMessage": "Muuda pildiseeriat"
   },
   "editProject": {
     "heading": "Projekt",
@@ -842,7 +850,10 @@
     "map": "Kaart"
   },
   "imageset": {
-    "imagesetNumber": "Pildiseeria number"
+    "imagesetNumber": "Pildiseeria number",
+    "author": "Autor",
+    "description": "Kirjeldus",
+    "date_added": "Sisestatud"
   },
   "collection": {
     "number": "Number",

@@ -334,6 +334,45 @@ const router = new Router({
           ]
         },
         {
+          path: "/imageset",
+          component: () => import("./views/Imagesets.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/imageset/ImagesetTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "imageset",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/imageset/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/imageset/Imageset.vue"),
+              meta: {
+                isEdit: true,
+                table: "imageset",
+                heading: "editImageset.heading",
+                requiresAuth: true,
+                object: "imageset"
+              }
+            }
+          ]
+        },
+        {
           path: "/imageset/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
