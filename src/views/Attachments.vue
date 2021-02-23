@@ -18,7 +18,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAttachments"
+      :api-call="apiCall"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -82,10 +82,11 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
-    fetchAttachments() {
-      return new Promise(resolve => {
-        resolve(fetchAttachments(this.searchParameters));
-      });
+    apiCall() {
+      return fetchAttachments(
+        this.searchParameters,
+        this.$_tableHeaderMixin_shownHeadersAsStringList
+      );
     }
   }
 };

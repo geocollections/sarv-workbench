@@ -19,6 +19,12 @@ const tableHeaderMixin = {
 
     $_tableHeaderMixin_shownHeaders() {
       return this.$_tableHeaderMixin_allHeaders.filter(item => item.show);
+    },
+
+    $_tableHeaderMixin_shownHeadersAsStringList() {
+      return this.$_tableHeaderMixin_shownHeaders
+        .filter(item => typeof item.sortable === "undefined" || item.sortable)
+        .map(item => item.value);
     }
   },
 

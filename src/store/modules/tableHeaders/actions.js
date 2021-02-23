@@ -5,8 +5,8 @@ const actions = {
     try {
       let response = await fetchAllFields(table, { show_all: true });
 
-      if (response?.data?.results?.fields) {
-        let fields = response.data.results.fields;
+      if (response?.data?.tableHeaders) {
+        let fields = response.data.tableHeaders;
         commit("SET_ALL_TABLE_HEADERS", { fields: fields, table: table });
       }
     } catch (err) {

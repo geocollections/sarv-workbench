@@ -167,8 +167,8 @@ export function postRequest(
  *************************/
 
 export function fetchAttachments(data) {
-  const fields =
-    "id,uuid_filename,original_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment,is_private,attachment_format__value";
+  let fields = "original_filename,filename,specimen_image_attachment,type,type__value,type__value_en,attachment_format,attachment_format__value,author,author__agent,author_free,date_created,date_created_free,device,device__name,device_txt,date_digitised,date_digitised_free,agent_digitised,agent_digitised__agent,device_digitised,device_digitised__name,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,description,description_en,size_mb,remarks,tags,stars,is_private,is_preferred,is_locked,boolean1,specimen,specimen__specimen_id,locality,locality__locality,locality__locality_en,drillcore,drillcore__drillcore,drillcore__drillcore_en,drillcore_box,drillcore_box__number,reference,reference__reference,drillcore_image_id,image_id,imageset,imageset__imageset_number,specimen_image_id,image_number,image_type,image_type__value,image_type__value_en,image_width,image_height,image_category,image_category__value,image_category__value_en,image_object,image_place,image_people,image_latitude,image_longitude,image_altitude,image_scalebar,image_description,image_description_en,storage,user_added,date_added,user_changed,date_changed,database,database__acronym,uuid_filename,id,upload,uuid"
+
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1585,8 +1585,7 @@ export function fetchInstruments() {
 
 export function fetchAnalyses(data) {
   const fields =
-    "id,sample,sample__number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__depth,analysis_method__analysis_method," +
-    "date,lab_txt,agent__agent,is_private";
+    "material,sample,sample__number,sample__locality__locality,sample__depth,specimen,specimen__specimen_id,dataset,dataset__name,dataset__name_en,reference,reference__reference,analysis_method,analysis_method__analysis_method,analysis_method__method_en,method_details,method_details_en,mass,date,date_end,date_free,lab,lab__lab,lab__lab_en,lab_txt,lab_sample_number,lab_analysis_number,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,agent,agent__agent,agent_txt,owner,owner__agent,is_private,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2490,7 +2489,7 @@ export function fetchAgent(id) {
 
 export function fetchAgents(data) {
   const fields =
-    "id,agent,forename,surename,institution_name,institution_name_en,institution__agent,institution__institution_name,institution__institution_name_en,remarks,type,type__value,type__value_en";
+    "agent,type,type__value,type__value_en,forename,middlename,surename,title,profession,profession_en,institution,institution__agent,institution_name,institution_name_en,address,address1,address2,country,country__value,country__value_en,country_txt,phone,email,http,old_name,new_name,date_born,date_deceased,orcid,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3234,7 +3233,7 @@ export function fetchArea(id) {
 
 export function fetchAreas(data) {
   const fields =
-    "id,name,name_en,area_type,area_type__name,area_type__name_en,maardla,eelis,egf,area_ha,deposit_area_ha,maakond,maakond__maakond,maakond__maakond_en,description,remarks";
+    "name,name_en,area_type,area_type__name,area_type__name_en,maardla,eelis,egf,area_ha,deposit_area_ha,maakond,maakond__maakond,maakond__maakond_en,description,description_en,remarks,text1,polygon,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3834,7 +3833,7 @@ export function fetchAccessionDetail(id) {
 
 export function fetchAccessions(data) {
   let fields =
-    "id,number,date_signed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,number_items,description";
+    "number,date_signed,date_confirmed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4268,6 +4267,8 @@ export function fetchSampleSeriesAttachments(id, searchParameters) {
  **********************************/
 
 export function fetchAnalysisParameters(data) {
+  const fields =
+    "parameter,parameter_name,parameter_name_en,parameter_html,synonyms,parent_parameter,parent_parameter__parameter,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4295,11 +4296,11 @@ export function fetchAnalysisParameters(data) {
 
   if (searchFields.length > 0) {
     return get(
-      `analysis_parameter/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `analysis_parameter/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `analysis_parameter/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `analysis_parameter/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -4317,6 +4318,8 @@ export function fetchAnalysisParameter(id) {
  *******************************/
 
 export function fetchAnalysisMethods(data) {
+  const fields =
+    "analysis_method,method_en,parent_method,parent_method__analysis_method,parent_method__method_en,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4356,11 +4359,11 @@ export function fetchAnalysisMethods(data) {
 
   if (searchFields.length > 0) {
     return get(
-      `analysis_method/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `analysis_method/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `analysis_method/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `analysis_method/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -4425,8 +4428,9 @@ export function fetchDeleteRecord(table, id) {
 }
 
 export function fetchAllFields(table, data = null) {
-  if (data.show_all) return get(`fields/${table}?show_all=true`);
-  else return get(`fields/${table}`);
+  // if (data.show_all) return get(`fields/${table}?show_all=true`);
+  // else return get(`fields/${table}`);
+  return get(`dynamic_fields/${table}`);
 }
 
 /***********************
