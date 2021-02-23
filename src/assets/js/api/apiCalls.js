@@ -1138,7 +1138,7 @@ export function fetchMultiAddReferencesToLibrary(data) {
 
 export function fetchDois(data) {
   const fields =
-    "id,identifier,creators,publication_year,title,resource_type__value,is_private,datacite_created";
+    "identifier,creators,title,title_alternative,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,publisher,publication_year,subjects,reference,reference__reference,dataset,dataset__name,dataset__name_en,language,language__value,language__value_en,resource_type,resource_type__value,resource,version,sizes,formats,abstract,methods,date_txt,is_private,owner,owner__agent,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,egf,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,datacite_created,datacite_updated,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2122,7 +2122,7 @@ export function fetchMultiChangeSpecimen(data) {
 
 export function fetchCollections(data) {
   const fields =
-    "id,collection_id,number,name,name_en,name_long,name_long_en,database__acronym";
+    "number,collection_id,name,name_long,name_en,name_long_en,type,type__value,type__value_en,classification,classification__class_field,agent,agent__agent,locality,locality__locality,locality__locality_en,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,number_objects,number_types,reference,reference__reference,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2709,8 +2709,7 @@ export function fetchDrillcore(id) {
 }
 
 export function fetchDrillcores(data) {
-  const fields =
-    "id,drillcore,drillcore_en,locality__locality,locality__locality_en,depth,locality__depth,boxes,box_numbers,location,year,agent__agent,remarks,storage__location,depository__value";
+  const fields = "drillcore,drillcore_en,locality,locality__locality,locality__locality_en,year,agent,agent__agent,depository,depository__value,depository__value_en,location,storage,storage__location,boxes,box_numbers,number_meters,direction_lr,depth,igsn,remarks,database,database__acronym,uid,gid,is_private,user_added,date_added,user_changed,date_changed,id"
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2815,8 +2814,7 @@ export function fetchDrillcoreBox(id) {
 }
 
 export function fetchDrillcoreBoxes(data) {
-  const fields =
-    "id,drillcore,drillcore__drillcore,drillcore__drillcore_en,number,number_meters,depth_start,depth_end,depth_other,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_free,remarks";
+  const fields = "drillcore,drillcore__drillcore,drillcore__drillcore_en,number,number_meters,diameter,depth_start,depth_end,depth_other,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,stratigraphy_free,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id"
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2989,7 +2987,7 @@ export function fetchDataset(id) {
 
 export function fetchDatasets(data) {
   const fields =
-    "id,name,name_en,date,date_txt,owner,owner_txt,owner__agent,database,database__acronym,is_private";
+    "name,name_en,description,description_en,dataset_html,date,date_txt,is_private,owner,owner__agent,owner_txt,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3874,7 +3872,7 @@ export function fetchDeaccessionDetail(id) {
 
 export function fetchDeaccessions(data) {
   let fields =
-    "id,number,date_signed,agent_kandis,agent_kandis__agent,number_items,description";
+    "number,date_signed,date_confirmed,agent_kandis__agent,agent_kandis,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
