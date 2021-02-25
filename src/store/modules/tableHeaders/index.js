@@ -304,7 +304,7 @@ const state = {
       "fossil_group__taxon",
       "link"
     ],
-    taxon_pages: ["id", "taxon", "language", "title"],
+    taxon_page: ["id", "taxon", "language", "title"],
     visit: [
       "id",
       "visitor",
