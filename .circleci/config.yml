@@ -203,7 +203,7 @@ workflows:
   build:
     jobs:
       # NEW (cloud)
-      - build_docker_image
+      - build_docker_image:
           filters:
             branches:
               only: [development, production]
@@ -224,7 +224,7 @@ workflows:
               only: development
 
       # OLD
-      - checkout_code
+      - checkout_code:
           filters:
             branches:
               only: [development, production]
