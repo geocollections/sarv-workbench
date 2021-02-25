@@ -2044,18 +2044,18 @@
     }
   },
   "agent": {
-    "country__value": "country__value",
-    "country__value_en": "country__value_en",
-    "forename": "forename",
-    "id": "id",
-    "institution__agent": "institution__agent",
-    "institution__institution_name": "institution__institution_name",
-    "institution__institution_name_en": "institution__institution_name_en",
-    "remarks": "remarks",
-    "surename": "surename",
-    "type": "type",
-    "type__value": "type__value",
-    "type__value_en": "type__value_en",
+    "country__value": "Country",
+    "country__value_en": "Country EN",
+    "forename": "Forename",
+    "id": "ID",
+    "institution__agent": "Institution ID",
+    "institution__institution_name": "Institution",
+    "institution__institution_name_en": "Institution EN",
+    "remarks": "Remarks",
+    "surename": "Surname",
+    "type": "Type ID",
+    "type__value": "Type",
+    "type__value_en": "Type EN",
     "institution": "Institution",
     "institution__institution": "Institution",
     "agent": "Agent",
@@ -2077,7 +2077,14 @@
     "date_deceased": "Date deceased",
     "old_name": "Old name",
     "new_name": "New name",
-    "details": "Other info"
+    "middlename": "Middle name",
+    "details": "Other info",
+    "date_added": "Date added",
+    "user_added": "User added",
+    "date_changed": "Date changed",
+    "user_changed": "User changed",
+    "database": "Database ID",
+    "database__acronym": "Database acronym"
   },
   "drillcore": {
     "agent__agent": "agent__agent",
@@ -2748,7 +2755,13 @@
     "date_confirmed": "Date confirmed",
     "agent_kinnitas": "Agent signed ID",
     "agent_kandis": "Agent confirmed ID",
-    "number_items": "Number items"
+    "number_items": "Number items",
+    "date_added": "Date added",
+    "user_added": "User added",
+    "date_changed": "Date changed",
+    "user_changed": "User changed",
+    "database": "Database ID",
+    "database__acronym": "Database acronym"
   },
   "accession": {
     "agent_andis__agent": "Agent granted",
@@ -2763,7 +2776,13 @@
     "agent_andis": "Agent granted ID",
     "agent_vottis": "Agent received ID",
     "agent_kinnitas": "Agent signed ID",
-    "number_items": "Number items"
+    "number_items": "Number items",
+    "date_added": "Date added",
+    "user_added": "User added",
+    "date_changed": "Date changed",
+    "user_changed": "User changed",
+    "database": "Database ID",
+    "database__acronym": "Database acronym"
   },
   "visit": {
     "database": "database",
