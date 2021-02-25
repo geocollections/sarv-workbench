@@ -210,9 +210,7 @@ export default {
   methods: {
     resetItem() {
       this.item = {
-        reference: null,
-        pages: "",
-        figures: "",
+        specimen: null,
         remarks: ""
       };
     },
