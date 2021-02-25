@@ -73,11 +73,11 @@
 
     <template v-slot:item.locality__locality="{ item }">
       <router-link
-        :to="{ path: '/locality/' + item.locality_id }"
+        :to="{ path: '/locality/' + item.locality }"
         :title="$t('editLocality.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-        v-if="item.locality_id"
+        v-if="item.locality"
       >
         <span
           v-translate="{
@@ -108,11 +108,11 @@
 
     <template v-slot:item.storage__location="{ item }">
       <router-link
-        :to="{ path: '/location/' + item.storage__id }"
+        :to="{ path: '/location/' + item.storage }"
         :title="$t('editLocation.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-        v-if="item.storage__id"
+        v-if="item.storage"
       >
         <span
           v-translate="{

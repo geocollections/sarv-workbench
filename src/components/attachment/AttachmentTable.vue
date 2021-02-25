@@ -96,7 +96,7 @@
 
     <template v-slot:item.reference__reference="{ item }">
       <router-link
-        :to="{ path: '/reference/' + item.reference_id }"
+        :to="{ path: '/reference/' + item.reference }"
         :title="$t('editReference.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"

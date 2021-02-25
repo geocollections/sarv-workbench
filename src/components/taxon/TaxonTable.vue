@@ -56,7 +56,7 @@
 
     <template v-slot:item.parent__taxon="{ item }">
       <router-link
-        :to="{ path: '/taxon/' + item.parent_id }"
+        :to="{ path: '/taxon/' + item.parent }"
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
