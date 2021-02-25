@@ -83,10 +83,7 @@ export default {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
     apiCall() {
-      return fetchAttachments(
-        this.searchParameters,
-        this.$_tableHeaderMixin_shownHeadersAsStringList
-      );
+      return fetchAttachments(this.searchParameters);
     }
   }
 };

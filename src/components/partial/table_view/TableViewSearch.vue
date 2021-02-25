@@ -309,6 +309,13 @@
               </v-col>
             </v-row>
 
+            <!-- DYNAMIC SEARCH -->
+            <v-row class="mt-4 mb-2">
+              <v-col cols="12" class="py-0">
+                <DynamicSearch />
+              </v-col>
+            </v-row>
+
             <!-- DYNAMIC FIELDS -->
             <v-row class="mt-4 mb-2">
               <v-col cols="12" class="py-0">
@@ -355,9 +362,11 @@
 <script>
 import { mapState } from "vuex";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import DynamicSearch from "@/components/partial/table_view/DynamicSearch";
 
 export default {
   name: "TableViewSearch",
+  components: {DynamicSearch},
   mixins: [tableHeaderMixin],
   props: {
     showSearch: {
