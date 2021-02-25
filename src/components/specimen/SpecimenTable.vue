@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="specimen-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -73,11 +72,11 @@
 
     <template v-slot:item.locality__locality="{ item }">
       <router-link
-        :to="{ path: '/locality/' + item.locality_id }"
+        :to="{ path: '/locality/' + item.locality }"
         :title="$t('editLocality.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-        v-if="item.locality_id"
+        v-if="item.locality"
       >
         <span
           v-translate="{
@@ -97,57 +96,31 @@
 
     <template v-slot:item.stratigraphy__stratigraphy="{ item }">
       <div>
-        <!--        <a-->
-        <!--          v-if="item.stratigraphy_id"-->
-        <!--          :href="-->
-        <!--            getGeoDetailUrl({-->
-        <!--              object: 'stratigraphy',-->
-        <!--              id: item.stratigraphy_id-->
-        <!--            })-->
-        <!--          "-->
-        <!--          :title="$t('editStratigraphy.viewMessage')"-->
-        <!--          class="sarv-link"-->
-        <!--          target="GeocollectionsWindow"-->
-        <!--        >-->
         <span
           v-translate="{
             et: item.stratigraphy__stratigraphy,
             en: item.stratigraphy__stratigraphy_en
           }"
         />
-        <!--        </a>-->
-        <span v-if="item.stratigraphy_id && item.lithostratigraphy_id">
+        <span v-if="item.stratigraphy && item.lithostratigraphy">
           |
         </span>
-        <!--        <a-->
-        <!--          v-if="item.lithostratigraphy_id"-->
-        <!--          :href="-->
-        <!--            getGeoDetailUrl({-->
-        <!--              object: 'stratigraphy',-->
-        <!--              id: item.lithostratigraphy_id-->
-        <!--            })-->
-        <!--          "-->
-        <!--          :title="$t('editStratigraphy.viewMessage')"-->
-        <!--          class="sarv-link"-->
-        <!--          target="GeocollectionsWindow"-->
-        <!--        >-->
         <span
           v-translate="{
             et: item.lithostratigraphy__stratigraphy,
             en: item.lithostratigraphy__stratigraphy_en
           }"
         />
-        <!--        </a>-->
       </div>
     </template>
 
     <template v-slot:item.storage__location="{ item }">
       <router-link
-        :to="{ path: '/location/' + item.storage__id }"
+        :to="{ path: '/location/' + item.storage }"
         :title="$t('editLocation.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-        v-if="item.storage__id"
+        v-if="item.storage"
       >
         <span
           v-translate="{
@@ -180,9 +153,11 @@ import {
 } from "../../assets/js/api/apiCalls";
 import { mapState } from "vuex";
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "SpecimenTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -212,31 +187,9 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
   data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "specimen.number", value: "specimen_id" },
-      { text: "common.name", value: "name", sortable: false },
-      { text: "specimen.locality", value: "locality__locality" },
-      { text: "common.depth", value: "depth" },
-      { text: "common.stratigraphy", value: "stratigraphy__stratigraphy" },
-      { text: "specimen.agent_collected", value: "agent_collected__agent" },
-      { text: "specimen.storage", value: "storage__location" },
-      { text: "", value: "link", sortable: false }
-    ],
     names: []
   }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   watch: {
     "response.results": {
       handler(newVal) {
@@ -279,7 +232,7 @@ export default {
                 name_en: entity.taxon__taxon
                   ? entity.taxon__taxon
                   : entity.name,
-                taxonId: entity.taxon_id
+                taxonId: entity.taxon
               };
             });
           }
@@ -317,7 +270,7 @@ export default {
                 id: entity.specimen_id,
                 name: name,
                 name_en: name_en,
-                rockId: entity.rock_id
+                rockId: entity.rock
               };
             });
           }
@@ -345,10 +298,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.specimen-table.v-data-table td,
-.specimen-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

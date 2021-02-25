@@ -309,16 +309,39 @@
               </v-col>
             </v-row>
 
+            <!-- DYNAMIC FIELDS -->
+            <v-row class="mt-4 mb-2">
+              <v-col cols="12" class="py-0">
+                <v-select
+                  :items="$_tableHeaderMixin_allHeaders"
+                  :value="$_tableHeaderMixin_shownHeaders"
+                  chips
+                  small-chips
+                  deletable-chips
+                  multiple
+                  :color="bodyActiveColor"
+                  :label="$t('common.fields')"
+                  clearable
+                  clear-icon="fas fa-times"
+                  @change="
+                    $_tableHeaderMixin_updateTableHeaders({
+                      event: $event,
+                      table: $route.meta.object
+                    })
+                  "
+                  class="chips-select"
+                  hide-details
+                  dense
+                />
+              </v-col>
+            </v-row>
+
             <!-- RESET SEARCH PREFERENCES -->
             <v-row class="mt-3">
               <v-col cols="12">
-                <v-btn
-                  @click="$emit('reset:searchParameters')"
-                  :color="bodyActiveColor"
-                  dark
-                >
+                <v-btn @click="resetSearch" :color="bodyActiveColor" dark>
                   <v-icon left>fas fa-filter</v-icon>
-                  {{ $t("buttons.deletePreferences") }}
+                  {{ $t("buttons.resetSearch") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -331,9 +354,11 @@
 
 <script>
 import { mapState } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "TableViewSearch",
+  mixins: [tableHeaderMixin],
   props: {
     showSearch: {
       type: Boolean,
@@ -375,6 +400,11 @@ export default {
     updateDate(event, fieldId, index) {
       this.$emit("update:searchParameters", event, fieldId);
       this.calendarMenus[fieldId] = false;
+    },
+
+    resetSearch() {
+      this.$emit("reset:searchParameters");
+      this.$_tableHeaderMixin_setDefaultTableHeaders();
     }
   }
 };
@@ -392,6 +422,18 @@ export default {
 
 .table-view-search >>> .v-text-field__slot input {
   color: unset;
+  font-weight: bold;
+}
+
+.chips-select >>> .v-select__selections {
+  padding: 8px 0;
+}
+
+.chips-select >>> .v-chip {
+  margin: 3px !important;
+}
+
+.chips-select >>> .v-label {
   font-weight: bold;
 }
 </style>

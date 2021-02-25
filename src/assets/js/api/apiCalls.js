@@ -167,8 +167,9 @@ export function postRequest(
  *************************/
 
 export function fetchAttachments(data) {
-  const fields =
-    "id,uuid_filename,original_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment,is_private,attachment_format__value";
+  let fields =
+    "original_filename,filename,specimen_image_attachment,type,type__value,type__value_en,attachment_format,attachment_format__value,author,author__agent,author_free,date_created,date_created_free,device,device__name,device_txt,date_digitised,date_digitised_free,agent_digitised,agent_digitised__agent,device_digitised,device_digitised__name,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,description,description_en,size_mb,remarks,tags,stars,is_private,is_preferred,is_locked,boolean1,specimen,specimen__specimen_id,locality,locality__locality,locality__locality_en,drillcore,drillcore__drillcore,drillcore__drillcore_en,drillcore_box,drillcore_box__number,reference,reference__reference,drillcore_image_id,image_id,imageset,imageset__imageset_number,specimen_image_id,image_number,image_type,image_type__value,image_type__value_en,image_width,image_height,image_category,image_category__value,image_category__value_en,image_object,image_place,image_people,image_latitude,image_longitude,image_altitude,image_scalebar,image_description,image_description_en,storage,user_added,date_added,user_changed,date_changed,database,database__acronym,uuid_filename,id,upload,uuid";
+
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -398,6 +399,7 @@ export function fetchReference(id) {
 }
 
 export async function fetchReferences(data) {
+  const fields = "reference,author,author_original,year,type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid"
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
   // This (solr search) overrides regular search fields
   if (data.solrSearch && data.solrSearch.trim().length > 0) {
@@ -483,13 +485,13 @@ export async function fetchReferences(data) {
     // Not using 'fields' because of alternative table
     // return get(`reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
     return get(
-      `reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     // Not using 'fields' because of alternative table
     // return get(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
     return get(
-      `reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -655,7 +657,7 @@ export function fetchLatestLogs(data) {
 
 export function fetchLocalities(data) {
   const fields =
-    "id,country__value_en,country__value,locality_en,locality,user_added,number";
+    "locality,locality_en,number,code,type,type__value,type__value_en,parent,parent__locality,parent__locality_en,latitude,longitude,elevation,coord_det_precision,coord_det_precision__value,coord_det_precision__value_en,coord_det_method,coord_det_method__value,coord_det_method__value_en,coord_det_agent,coord_det_agent__agent,coord_system,epsg,coordx,coordy,extent,extent__value,extent__value_en,country,country__value,country__value_en,maakond,maakond__maakond,maakond__maakond_en,vald,vald__vald,vald__vald_en,asustusyksus,asustusyksus__asustusyksus,asustusyksus__asustusyksus_en,remarks_location,depth,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,eelis,maaamet_pa_id,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -823,7 +825,7 @@ export function fetchAnalysisMethod() {
 
 export function fetchSamples(data) {
   const fields =
-    "id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,date_collected_free,locality,depth,depth_interval,storage__id,storage__location,is_private,site,site__name,site__name_en";
+    "number,number_additional,number_field,igsn,series,series__name,parent_sample,parent_sample__number,parent_specimen,parent_specimen__specimen_id,sample_purpose,sample_purpose__value,sample_purpose__value_en,sample_type,locality,locality__locality,locality__locality_en,site,site__name,site__name_en,locality_free,soil_site,soil_site__site,soil_site__site_en,latitude1,longitude1,x1,y1,epsg,coordinate_accuracy,depth,depth_interval,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,stratigraphy_bed,soil_horizon,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,classification_rock,classification_rock__name,classification_rock__name_en,rock,rock_en,fossils,palaeontology,analysis,mass,location,location_additional,storage,storage__location,storage_additional,storage_additional__location,remarks,user_added,date_added,user_changed,date_changed,owner,owner__agent,is_private,database__acronym,id,number";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -989,7 +991,7 @@ export function fetchLibrary(id) {
 
 export function fetchLibraries(data) {
   const fields =
-    "id,author_txt,year,title,title_en,is_private,author,author__agent,author__surename,author__forename,title_short,title_short_en";
+    "title,title_en,title_short,title_short_en,abstract,abstract_en,author,author__agent,author_txt,year,publisher,doi,keywords,remarks,is_private,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1138,7 +1140,7 @@ export function fetchMultiAddReferencesToLibrary(data) {
 
 export function fetchDois(data) {
   const fields =
-    "id,identifier,creators,publication_year,title,resource_type__value,is_private,datacite_created";
+    "identifier,creators,title,title_alternative,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,publisher,publication_year,subjects,reference,reference__reference,dataset,dataset__name,dataset__name_en,language,language__value,language__value_en,resource_type,resource_type__value,resource,version,sizes,formats,abstract,methods,date_txt,is_private,owner,owner__agent,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,egf,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,datacite_created,datacite_updated,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1354,8 +1356,7 @@ export function fetchProjectType() {
 
 export function fetchProjects(data) {
   const fields =
-    "id,name,name_en,project_type,project_type__name,project_type__name_en,parent_project,date_start,date_end," +
-    "date_free,description,remarks,owner,owner__agent,is_private";
+    "name,name_en,number,project_type,project_type__name,project_type__name_en,parent_project,parent_project__name,parent_project__name_en,date_start,date_end,date_free,description,remarks,owner,owner__agent,is_private,user_added,date_added,user_changed,date_changed,id,timestamp";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1397,10 +1398,7 @@ export function fetchActiveProjects(projectIds) {
 
 export function fetchSites(data) {
   let fields =
-    "id,project,project__name,project__name_en,locality,locality__locality,name,name_en,number," +
-    "latitude,longitude,location_accuracy,elevation,elevation_accuracy," +
-    "coord_det_method__value,coord_det_method__value_en, date_start,date_end,date_free,remarks_location," +
-    "description,remarks";
+    "project,project__name,project__name_en,locality,locality__locality,locality__locality,area,area__name,area__name_en,site_type,site_type__value,site_type__value,name,name_en,number,latitude,longitude,location_accuracy,elevation,elevation_accuracy,coord_det_precision,coord_det_precision__value,coord_det_precision__value_en,coord_det_method,coord_det_method__value,coord_det_method__value_en,coord_det_agent,coord_det_agent__agent,epsg,coordx,coordy,extent,depth,date_start,date_end,date_free,remarks_location,description,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1585,8 +1583,7 @@ export function fetchInstruments() {
 
 export function fetchAnalyses(data) {
   const fields =
-    "id,sample,sample__number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__depth,analysis_method__analysis_method," +
-    "date,lab_txt,agent__agent,is_private";
+    "material,sample,sample__number,sample__locality__locality,sample__depth,specimen,specimen__specimen_id,dataset,dataset__name,dataset__name_en,reference,reference__reference,analysis_method,analysis_method__analysis_method,analysis_method__method_en,method_details,method_details_en,mass,date,date_end,date_free,lab,lab__lab,lab__lab_en,lab_txt,lab_sample_number,lab_analysis_number,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,agent,agent__agent,agent_txt,owner,owner__agent,is_private,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1680,7 +1677,7 @@ export function fetchJournal(id) {
 
 export function fetchJournals(data) {
   let fields =
-    "id,journal_name,journal_short, journal_original,publisher,remarks";
+    "journal_name,journal_short,journal_long,journal_abbr,journal_original,issn,publisher,publisher_place,http,former_journal,former_journal__journal_name,following_journal,following_journal__journal_name,oldname,newname,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1753,7 +1750,7 @@ export function fetchSpecimen(id) {
 
 export function fetchSpecimens(data) {
   const fields =
-    "id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__id,storage__location,database__name,database__name_en,database__acronym,lithostratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy_id,date_collected,date_collected_free,depth,depth_interval,is_private,storage__location";
+    "specimen_id,collection,coll,coll__number,specimen_nr,number_field,type,type__value,type__value_en,subtype_id,subtype_id__value,subtype_id__value_en,fossil,fossil__value,fossil__value_en,kind,kind,kind,classification,classification__class_field,part,number_pieces,locality,locality__locality,locality__locality_en,locality_free,locality_free_en,locality_is_private,depth,depth_interval,sample_number,sample,sample__number,parent,parent__specimen_id,remarks_collecting,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,remarks,remarks_internal,tags,presence,presence__value,presence__value_en,storage,storage__location,location,status,status__value,status__value_en,original_status,original_status__value,original_status__value_en,is_private,accession,accession__number,deaccession,deaccession__number,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2123,7 +2120,7 @@ export function fetchMultiChangeSpecimen(data) {
 
 export function fetchCollections(data) {
   const fields =
-    "id,collection_id,number,name,name_en,name_long,name_long_en,database__acronym";
+    "number,collection_id,name,name_long,name_en,name_long_en,type,type__value,type__value_en,classification,classification__class_field,agent,agent__agent,locality,locality__locality,locality__locality_en,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,number_objects,number_types,reference,reference__reference,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2202,7 +2199,7 @@ export function fetchListCollectionType() {
 
 export function fetchTaxa(data) {
   const fields =
-    "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference,is_private";
+    "taxon,author_year,taxon_epithet,taxon_full_name,taxon_original_name,reference,reference__reference,parent,parent__taxon,fossil_group,fossil_group__taxon,synonym_of,synonym_of_reference_id,hierarchy_string,rank,rank__rank,rank_original,rank_original__rank,type_taxon,type_taxon__taxon,type_taxon_txt,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,in_estonia,in_baltoscandia,is_fossil,is_private,is_valid,is_fossil_group,sort,taxon_id_pbdb,taxon_id_plutof,taxon_id_tol,taxon_id_eol,taxon_id_nrm,remarks,owner,is_authorized,user_authorized,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2394,7 +2391,7 @@ export function fetchKeyword(id) {
 
 export function fetchKeywords(data, listOfIDs) {
   let fields =
-    "id,keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,remarks,is_primary,is_preferred";
+    "keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,is_primary,is_preferred,is_private,description,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2490,7 +2487,7 @@ export function fetchAgent(id) {
 
 export function fetchAgents(data) {
   const fields =
-    "id,agent,forename,surename,institution_name,institution_name_en,institution__agent,institution__institution_name,institution__institution_name_en,remarks,type,type__value,type__value_en";
+    "agent,type,type__value,type__value_en,forename,middlename,surename,title,profession,profession_en,institution,institution__agent,institution_name,institution_name_en,address,address1,address2,country,country__value,country__value_en,country_txt,phone,email,http,old_name,new_name,date_born,date_deceased,orcid,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2548,7 +2545,7 @@ export function fetchListAgentType() {
  ******************************/
 
 export function fetchSelectionSeries(data) {
-  let fields = "id,name,remarks,user_added";
+  let fields = "name,tablename,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2711,7 +2708,7 @@ export function fetchDrillcore(id) {
 
 export function fetchDrillcores(data) {
   const fields =
-    "id,drillcore,drillcore_en,locality__locality,locality__locality_en,depth,locality__depth,boxes,box_numbers,location,year,agent__agent,remarks,storage__location,depository__value";
+    "drillcore,drillcore_en,locality,locality__locality,locality__locality_en,year,agent,agent__agent,depository,depository__value,depository__value_en,location,storage,storage__location,boxes,box_numbers,number_meters,direction_lr,depth,igsn,remarks,database,database__acronym,uid,gid,is_private,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2817,7 +2814,7 @@ export function fetchDrillcoreBox(id) {
 
 export function fetchDrillcoreBoxes(data) {
   const fields =
-    "id,drillcore,drillcore__drillcore,drillcore__drillcore_en,number,number_meters,depth_start,depth_end,depth_other,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_free,remarks";
+    "drillcore,drillcore__drillcore,drillcore__drillcore_en,number,number_meters,diameter,depth_start,depth_end,depth_other,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,stratigraphy_free,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2911,7 +2908,7 @@ export function fetchPreparation(id) {
 
 export function fetchPreparations(data) {
   const fields =
-    "id,preparation_number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__stratigraphy__stratigraphy,sample__stratigraphy__stratigraphy_en,agent,agent__agent";
+    "preparation_number,sample,sample__number,analysis,sample_number,taxon,taxon__taxon,agent,agent__agent,agent_txt,date_prepared,date_prepared_txt,identification_agent,identification_agent__agent,identification_date,identification_remarks,location,storage,storage__location,owner,owner__agent,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2990,7 +2987,7 @@ export function fetchDataset(id) {
 
 export function fetchDatasets(data) {
   const fields =
-    "id,name,name_en,date,date_txt,owner,owner_txt,owner__agent,database,database__acronym,is_private";
+    "name,name_en,description,description_en,dataset_html,date,date_txt,is_private,owner,owner__agent,owner_txt,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3076,7 +3073,7 @@ export function fetchStratigraphy(id) {
 
 export function fetchStratigraphies(data) {
   const fields =
-    "id,stratigraphy,stratigraphy_en,type,type__value,type__value_en,rank,rank__value,rank__value_en,scope,scope__value,scope__value_en,parent,parent__stratigraphy,parent__stratigraphy_en,is_private";
+    "stratigraphy,stratigraphy_en,stratigraphy_original,author_free,year,etymon,etymon_en,original_locality,original_rank,index_main,index_main_html,index_additional,index_additional_html,index_old,color_code_cgmw,color_code_additional,hierarchy_string,parent,parent__stratigraphy,parent__stratigraphy_en,type,type__value,type__value_en,rank,rank__value,rank__value_en,scope,scope__value,scope__value_en,status,status__value,status__value_en,region,region_en,lithology,lithology_en,max_thickness,description,description_en,definition,definition_en,age_base,age_top,age_precision,age_reference,age_reference__reference,age_chronostratigraphy,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,sort_within_parent,approved_ics,approved_esk,maaamet_kood,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3234,7 +3231,7 @@ export function fetchArea(id) {
 
 export function fetchAreas(data) {
   const fields =
-    "id,name,name_en,area_type,area_type__name,area_type__name_en,maardla,eelis,egf,area_ha,deposit_area_ha,maakond,maakond__maakond,maakond__maakond_en,description,remarks";
+    "name,name_en,area_type,area_type__name,area_type__name_en,maardla,eelis,egf,area_ha,deposit_area_ha,maakond,maakond__maakond,maakond__maakond_en,description,description_en,remarks,text1,polygon,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3318,7 +3315,7 @@ export function fetchLocation(id) {
 
 export function fetchLocations(data) {
   let fields =
-    "id,location,parent_location__location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,remarks,database,database__name,database__name_en,user_added,date_added";
+    "location,parent_location,parent_location__location,location_location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,number_items_registered,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3473,7 +3470,7 @@ export function fetchRock(id) {
 
 export function fetchRocks(data) {
   let fields =
-    "id,name,name_en,formula,formula_html,rock_type__name,rock_type__name_en,rock_rank__name,rock_rank__name,in_estonia,in_portal,mindat_id";
+    "name,name_en,name_ru,rock_type,rock_type__name,rock_type__name_en,rock_rank,rock_rank__name,rock_rank__name_en,parent,parent__name,parent__name_en,synonym_of,synonym_of__name,synonym_of__name_en,sort,description,description_en,description_ru,description_in_estonia,description_in_estonia_en,description_in_estonia_ru,description_usage,description_usage_en,description_usage_ru,description_author,in_estonia,is_resource,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,mindat_id,link_wikipedia,link_wikipedia_en,link_wikipedia_ru,ima_status,formula,formula_html,remarks,is_private,in_portal,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3655,7 +3652,7 @@ export function fetchVisit(id) {
 
 export function fetchVisits(data) {
   let fields =
-    "id,visitor,visitor__agent,visitor_country,visitor_country__value,visitor_country__value_en,date_arrived,date_left,host,host__agent";
+    "visitor,visitor__agent,visitor_free,visitor_institution,visitor_institution__agent,visitor_country,visitor_country__value,visitor_country__value_en,host,host__agent,date_arrived,date_left,purpose,collections_studied,items_studied,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3713,7 +3710,7 @@ export function fetchLoan(id) {
 
 export function fetchLoans(data) {
   let fields =
-    "id,loan_number,borrower,borrower__agent,project,date_start,date_end,returned,database";
+    "loan_number,date_start,date_end,type,type__value,type__value_en,project,borrower,borrower__agent,borrower_institution,borrower_institution__agent,loaner,loaner__agent,date_signed,delivery_method,delivery_method__value,delivery_method__value_en,deliverer,deliverer__agent,delivery_remarks,returned,date_returned,special,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3834,7 +3831,7 @@ export function fetchAccessionDetail(id) {
 
 export function fetchAccessions(data) {
   let fields =
-    "id,number,date_signed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,number_items,description";
+    "number,date_signed,date_confirmed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3875,7 +3872,7 @@ export function fetchDeaccessionDetail(id) {
 
 export function fetchDeaccessions(data) {
   let fields =
-    "id,number,date_signed,agent_kandis,agent_kandis__agent,number_items,description";
+    "number,date_signed,date_confirmed,agent_kandis__agent,agent_kandis,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3915,18 +3912,29 @@ export function fetchWebNewsDetail(id) {
 }
 
 export function fetchWebNews(data) {
+  const fields = "title_et,title_en,text_en,text_et,is_private,user_added,date_added,user_changed,date_changed,date_expires,timestamp,id"
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
+  }
+
+  if (data.title && data.title.trim().length > 0) {
+    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
+      data.title
+    }`;
+  }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
     return get(
-      `web_news/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `web_news/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `web_news/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `web_news/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -3944,18 +3952,29 @@ export function fetchWebPagesDetail(id) {
 }
 
 export function fetchWebPages(data) {
+  const fields = "title_et,menu_title_et,content_et,link_et,title_en,menu_title_en,content_en,link_en,public,menu,menu_bold,menu_color,menu_fold,sort,parent,site,is_private,user,date_inserted,date_expires,timestamp,id"
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
+  }
+
+  if (data.title && data.title.trim().length > 0) {
+    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
+      data.title
+    }`;
+  }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
     return get(
-      `web_pages/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `web_pages/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `web_pages/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `web_pages/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -3973,6 +3992,7 @@ export function fetchTaxonPagesDetail(id) {
 }
 
 export function fetchTaxonPages(data) {
+  const fields = "taxon,taxon__taxon,language,on_frontpage,frontpage,frontpage_order,frontpage_title,title,content,author,author__agent,author_txt,date_txt,is_private,link_wikipedia,user_added,date_added,user_changed,date_changed,id"
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4002,11 +4022,11 @@ export function fetchTaxonPages(data) {
 
   if (searchFields.length > 0) {
     return get(
-      `taxon_page/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `taxon_page/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `taxon_page/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `taxon_page/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -4028,6 +4048,7 @@ export function fetchSiteGroundwaterUsingSite(siteId) {
 }
 
 export function fetchSiteGroundwaters(data) {
+  const fields = "site,aquifer_system,aquifer,well_depth,type_txt,filter_type,filter_top_z,filter_bottom_z,filter_midpoint_z,filter_top,filter_bottom,filter_midpoint,kataster_id,keskkonnaregister_id,url_veka,remarks,user_added,date_added,user_changed,date_changed,id"
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4090,11 +4111,11 @@ export function fetchSiteGroundwaters(data) {
 
   if (searchFields.length > 0) {
     return get(
-      `site_groundwater/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `site_groundwater/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `site_groundwater/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `site_groundwater/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -4185,6 +4206,7 @@ export function fetchSampleSeriesDetail(id) {
 }
 
 export function fetchSampleSeries(data) {
+  const fields = "name,sampling_purpose,sample_count,sample_numbers,number_prefix,number_start,locality,locality__locality,locality__locality_en,locality_free,zero_level,depth_top,depth_base,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,agent_collected,agent_collected__agent,date_collected,date_collected_free,location,remarks,owner,owner__agent,public,is_private,user_added,date_added,user_changed,date_changed,database,database__acronym,id"
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4210,11 +4232,11 @@ export function fetchSampleSeries(data) {
 
   if (searchFields.length > 0) {
     return get(
-      `sample_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `sample_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `sample_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `sample_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -4248,6 +4270,8 @@ export function fetchSampleSeriesAttachments(id, searchParameters) {
  **********************************/
 
 export function fetchAnalysisParameters(data) {
+  const fields =
+    "parameter,parameter_name,parameter_name_en,parameter_html,synonyms,parent_parameter,parent_parameter__parameter,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4275,11 +4299,11 @@ export function fetchAnalysisParameters(data) {
 
   if (searchFields.length > 0) {
     return get(
-      `analysis_parameter/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `analysis_parameter/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `analysis_parameter/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `analysis_parameter/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -4297,6 +4321,8 @@ export function fetchAnalysisParameter(id) {
  *******************************/
 
 export function fetchAnalysisMethods(data) {
+  const fields =
+    "analysis_method,method_en,parent_method,parent_method__analysis_method,parent_method__method_en,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4336,11 +4362,11 @@ export function fetchAnalysisMethods(data) {
 
   if (searchFields.length > 0) {
     return get(
-      `analysis_method/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `analysis_method/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `analysis_method/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `analysis_method/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -4362,6 +4388,8 @@ export function fetchImageset(id) {
 }
 
 export function fetchImagesets(data, author) {
+  const fields =
+    "imageset_number,imageset_series,author,author__agent,author_free,date_start,date_end,date_free,device,device__name,object,place,keywords,description,date_digitised,date_digitised_free,device_digitised,device_digitised__name,agent_digitised,agent_digitised__agent,is_private,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4379,11 +4407,11 @@ export function fetchImagesets(data, author) {
 
   if (searchFields.length > 0) {
     return get(
-      `imageset/?${searchFields}&author=${author}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `imageset/?${searchFields}&author=${author}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return get(
-      `imageset/?page=${data.page}&author=${author}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `imageset/?page=${data.page}&author=${author}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -4402,6 +4430,12 @@ export function fetchChangeRecordState(table, id, stateData) {
 
 export function fetchDeleteRecord(table, id) {
   return post_delete(`${table}/${id}`);
+}
+
+export function fetchAllFields(table, data = null) {
+  // if (data.show_all) return get(`fields/${table}?show_all=true`);
+  // else return get(`fields/${table}`);
+  return get(`dynamic_fields/${table}`);
 }
 
 /***********************

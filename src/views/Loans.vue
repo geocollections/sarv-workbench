@@ -28,6 +28,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchLoans } from "../assets/js/api/apiCalls";
 import { mapGetters, mapState } from "vuex";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "Loans",
 
@@ -37,7 +38,7 @@ export default {
     TableViewSearch
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -45,7 +46,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
     this.setActiveSearchParametersFilters([
       { id: "loan_number", title: "loan.loan_number", type: "text" },
       { id: "project", title: "loan.project", type: "text" },

@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="analysis-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -74,9 +73,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "LocalityTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -106,28 +107,6 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "locality.locality", value: "locality" },
-      { text: "locality.number", value: "number" },
-      { text: "locality.country", value: "country__value" },
-      { text: "locality.agent", value: "user_added" },
-      { text: "", value: "link", sortable: false }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -135,10 +114,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.locality-table.v-data-table td,
-.locality-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

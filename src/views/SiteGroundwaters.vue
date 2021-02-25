@@ -28,6 +28,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchSiteGroundwaters } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapGetters, mapState } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "SiteGroundwaters",
 
@@ -37,7 +38,7 @@ export default {
     TableViewSearch
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -45,7 +46,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
     this.setActiveSearchParametersFilters([
       { title: "site_groundwater.site", id: "site", type: "text" },
       { title: "site_groundwater.type_txt", id: "type_txt", type: "text" },

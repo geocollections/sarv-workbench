@@ -9,7 +9,6 @@
       :search-parameters="searchParameters"
       v-on:update:searchParameters="updateSearchParamsByField"
       v-on:reset:searchParameters="resetSearchParams"
-      :col-size="4"
     />
 
     <list-module-core
@@ -27,6 +26,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchWebNews } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "WebNews",
 
@@ -36,7 +36,7 @@ export default {
     TableViewSearch
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -44,8 +44,16 @@ export default {
     };
   },
 
-  created() {
-    this.setActiveSearchParametersFilters([]);
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
+    this.setActiveSearchParametersFilters([
+      { id: "id", title: "common.id", type: "number" },
+      {
+        id: "title",
+        title: "web_news.title",
+        type: "text"
+      }
+    ]);
   },
 
   methods: {

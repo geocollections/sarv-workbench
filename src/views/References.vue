@@ -31,6 +31,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import toastMixin from "../mixins/toastMixin";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -41,7 +42,7 @@ export default {
 
   name: "References",
 
-  mixins: [toastMixin, searchParametersMixin],
+  mixins: [toastMixin, searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -55,7 +56,9 @@ export default {
     ...mapGetters("user", ["getCurrentUser"])
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
+
     // Used by sidebar
     this.setActiveSearchParameters({
       search: this.librarySearchParameters,

@@ -32,6 +32,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchSampleSeries } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -42,7 +43,7 @@ export default {
 
   name: "SamplesSeries",
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -50,7 +51,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
     this.setActiveSearchParametersFilters([
       { id: "name", title: "common.name", type: "text" },
       { id: "locality", title: "common.locality", type: "text" },

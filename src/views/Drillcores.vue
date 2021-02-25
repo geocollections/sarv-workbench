@@ -28,6 +28,7 @@ import { fetchDrillcores } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -36,13 +37,14 @@ export default {
     TableViewSearch
   },
   name: "Drillcores",
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
   data() {
     return {
       block: { search: true }
     };
   },
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
     this.setActiveSearchParametersFilters([
       {
         id: "drillcore",

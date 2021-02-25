@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="drillcore-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -65,8 +64,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "DrillcoreTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -96,30 +98,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "drillcore.drillcore", value: "drillcore" },
-      { text: "common.depth", value: "depth" },
-      { text: "drillcore.boxes", value: "boxes" },
-      { text: "drillcore.box_numbers", value: "box_numbers" },
-      { text: "drillcore.location", value: "location" },
-      { text: "common.year", value: "year" },
-      { text: "drillcore.agent", value: "agent__agent" },
-      { text: "common.remarks", value: "remarks" },
-      { text: "", value: "link", sortable: false }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -127,10 +105,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.drillcore-table.v-data-table td,
-.drillcore-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

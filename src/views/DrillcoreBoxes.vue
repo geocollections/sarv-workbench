@@ -36,12 +36,13 @@ import {
 } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapState } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "DrillcoreBoxes",
 
   components: { ListModuleCore, TableViewTitle, TableViewSearch },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -49,7 +50,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
     this.setActiveSearchParametersFilters([
       { id: "storage", title: "drillcore.storage", type: "text" },
       { id: "drillcore", title: "drillcore.drillcore", type: "text" }

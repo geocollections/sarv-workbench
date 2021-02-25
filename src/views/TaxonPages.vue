@@ -31,6 +31,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchTaxonPages } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "TaxonPages",
 
@@ -40,7 +41,7 @@ export default {
     TableViewSearch
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -48,7 +49,9 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
+
     this.setActiveSearchParametersFilters([
       { id: "taxon", title: "taxon_page.taxon", type: "text" },
       { id: "language", title: "common.language", type: "text" },

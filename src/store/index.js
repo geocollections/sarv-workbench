@@ -7,6 +7,7 @@ import search from "./modules/search";
 import settings from "./modules/settings";
 import user from "./modules/user";
 import admin from "./modules/admin";
+import tableHeaders from "./modules/tableHeaders";
 
 Vue.use(Vuex);
 
@@ -14,7 +15,7 @@ function buildLocalStorageKey() {
   const hostname = window?.location?.hostname;
   const devVersion = "_v1.0.8";
   const liveVersion = "_v1.0.9";
-  const localVersion = "_v1.0.10";
+  const localVersion = "_v1.0.17";
 
   if (hostname) {
     if (hostname.startsWith("edit2.") || hostname.startsWith("edit3.")) {
@@ -42,7 +43,8 @@ export default new Vuex.Store({
     search,
     settings,
     user,
-    admin
+    admin,
+    tableHeaders
   },
   plugins: [vuexLocal.plugin],
   strict: process.env.NODE_ENV !== "production"

@@ -18,7 +18,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAttachments"
+      :api-call="apiCall"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -27,11 +27,12 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { fetchAttachments } from "../assets/js/api/apiCalls";
+import { fetchAttachments } from "@/assets/js/api/apiCalls";
 import { mapActions, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -41,7 +42,7 @@ export default {
   },
   name: "Attachments",
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -53,7 +54,9 @@ export default {
     ...mapState("search", ["selection_seriesSearchParameters"])
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
+
     // Used by sidebar
     this.setActiveSearchParameters({
       search: this.selection_seriesSearchParameters,
@@ -79,10 +82,11 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
-    fetchAttachments() {
-      return new Promise(resolve => {
-        resolve(fetchAttachments(this.searchParameters));
-      });
+    apiCall() {
+      return fetchAttachments(
+        this.searchParameters,
+        this.$_tableHeaderMixin_shownHeadersAsStringList
+      );
     }
   }
 };

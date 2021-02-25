@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="agent-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -37,7 +36,7 @@
       ></div>
     </template>
 
-    <template v-slot:item.institution__institution_name="{ item }">
+    <template v-slot:item.institution="{ item }">
       <div
         v-translate="{
           et: item.institution__institution_name,
@@ -58,8 +57,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "AgentTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -88,38 +90,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "common.name", value: "agent" },
-      { text: "common.forename", value: "forename" },
-      { text: "common.surename", value: "surename" },
-      { text: "agent.institution", value: "institution_name" },
-      {
-        text: "agent.institution__institution",
-        value: "institution__institution_name"
-      },
-      { text: "common.remarks", value: "remarks" },
-      { text: "common.type", value: "type" }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style>
-.agent-table.v-data-table td,
-.agent-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

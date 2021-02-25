@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="taxon-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -57,7 +56,7 @@
 
     <template v-slot:item.parent__taxon="{ item }">
       <router-link
-        :to="{ path: '/taxon/' + item.parent_id }"
+        :to="{ path: '/taxon/' + item.parent }"
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
@@ -82,9 +81,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "TaxonTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -114,28 +115,6 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "taxon.taxon", value: "taxon" },
-      { text: "taxon.author_year", value: "author_year" },
-      { text: "taxon.taxon_epithet", value: "taxon_epithet" },
-      { text: "taxon.parent__taxon", value: "parent__taxon" },
-      { text: "taxon.fossil_group__taxon", value: "fossil_group__taxon" },
-      { text: "", value: "link", sortable: false }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getFossilsUrl(id) {
       return `https://fossiilid.info/${id}`;
@@ -143,10 +122,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.taxon-table.v-data-table td,
-.taxon-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

@@ -28,6 +28,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { fetchImagesets } from "@/assets/js/api/apiCalls";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "Imagesets",
@@ -38,7 +39,7 @@ export default {
     TableViewTitle
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -46,7 +47,9 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
+
     this.setActiveSearchParametersFilters([
       { id: "number", title: "imageset.imagesetNumber", type: "text" },
       { id: "description", title: "imageset.description", type: "text" }

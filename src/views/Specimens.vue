@@ -37,6 +37,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchSpecimenImages, fetchSpecimens } from "../assets/js/api/apiCalls";
 import isEmpty from "lodash";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -47,7 +48,7 @@ export default {
 
   name: "Specimens",
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -62,7 +63,8 @@ export default {
     ]),
   },
 
-  created() {
+async created() {
+  await this.$_tableHeaderMixin_getAllFieldNames();
     // Used by sidebar
     this.setActiveSearchParameters({
       search: this.selection_seriesSearchParameters,

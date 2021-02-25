@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="web-pages-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -53,8 +52,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "WebPagesTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -83,34 +85,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "web_pages.site", value: "site" },
-      { text: "web_pages.title", value: "title" },
-      { text: "web_pages.text", value: "content" },
-      { text: "common.is_private", value: "public", align: "center" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style scoped>
-.web-pages-table.v-data-table td,
-.web-pages-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

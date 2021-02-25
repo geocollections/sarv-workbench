@@ -28,6 +28,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions, mapState } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "Journals",
@@ -38,7 +39,7 @@ export default {
     TableViewSearch
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -46,7 +47,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getAllFieldNames();
     this.setActiveSearchParametersFilters([
       { id: "journal", title: "journal.journalFilter", type: "text" },
       { id: "publisher", title: "journal.publisherFilter", type: "text" },

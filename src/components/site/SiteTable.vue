@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="site-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -60,9 +59,11 @@
 
 <script>
 import moment from "moment";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "SiteTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -130,10 +131,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.site-table.v-data-table td,
-.site-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

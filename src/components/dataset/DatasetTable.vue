@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="dataset-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -75,8 +74,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "DatasetTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -106,28 +108,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "common.name", value: "name" },
-      { text: "common.date", value: "date" },
-      { text: "common.owner", value: "owner" },
-      { text: "dataset.database", value: "database__acronym" },
-      { text: "", value: "link", sortable: false }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -135,10 +115,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.dataset-table.v-data-table td,
-.dataset-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

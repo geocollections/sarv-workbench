@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="project-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -62,9 +61,11 @@
 
 <script>
 import moment from "moment";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "ProjectTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -124,10 +125,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.project-table.v-data-table td,
-.project-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="sample-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -74,11 +73,11 @@
 
     <template v-slot:item.locality__locality="{ item }">
       <router-link
-        :to="{ path: '/locality/' + item.locality_id }"
+        :to="{ path: '/locality/' + item.locality }"
         :title="$t('editLocality.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-        v-if="item.locality_id"
+        v-if="item.locality"
       >
         <span
           v-translate="{
@@ -109,11 +108,11 @@
 
     <template v-slot:item.storage__location="{ item }">
       <router-link
-        :to="{ path: '/location/' + item.storage__id }"
+        :to="{ path: '/location/' + item.storage }"
         :title="$t('editLocation.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-        v-if="item.storage__id"
+        v-if="item.storage"
       >
         <span
           v-translate="{
@@ -141,9 +140,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "SampleTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -173,29 +174,6 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "sample.numberSlashId", value: "number" },
-      { text: "common.id", value: "id" },
-      { text: "sample.locality", value: "locality" },
-      { text: "common.depth", value: "depth" },
-      { text: "common.stratigraphy", value: "stratigraphy" },
-      { text: "sample.agent_collected", value: "agent_collected__agent" },
-      { text: "sample.storage", value: "storage__location" },
-      { text: "", value: "link", sortable: false }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -203,5 +181,3 @@ export default {
   }
 };
 </script>
-
-<style scoped></style>
