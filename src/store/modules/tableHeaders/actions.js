@@ -24,6 +24,14 @@ const actions = {
 
   setDefaultTableHeaders({ commit }, table) {
     commit("SET_DEFAULT_TABLE_HEADERS", { table: table });
+  },
+
+  updateDynamicSearchField({ commit }, payload) {
+    commit("UPDATE_DYNAMIC_SEARCH_FIELD", payload);
+  },
+
+  resetDynamicSearchField({ commit }, table) {
+    commit("RESET_DYNAMIC_SEARCH_FIELDS", { table: table });
   }
 };
 

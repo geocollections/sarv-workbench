@@ -83,8 +83,10 @@ const mutations = {
     let currentSearchFields = state.searchFields[payload.table];
     const dynamicFields = payload.fields.map(item => {
       return {
-        [item]: null,
-        [`${item}__lookuptype`]: "icontains"
+        id: item,
+        title: `${payload.table}.${item}`,
+        value: null,
+        lookUpType: "icontains"
       };
     });
 
@@ -98,6 +100,28 @@ const mutations = {
       currentSearchFields = dynamicFields;
       state.searchFields[payload.table] = currentSearchFields;
     }
+  },
+
+  UPDATE_DYNAMIC_SEARCH_FIELD(state, payload) {
+    console.log(payload);
+    state.searchFields[payload.table] = state.searchFields[payload.table].map(
+      item => {
+        if (item.id === payload.id) item[payload.key] = payload.value;
+        return item;
+      }
+    );
+  },
+
+  RESET_DYNAMIC_SEARCH_FIELDS(state, payload) {
+    state.searchFields[payload.table] = state.searchFields[payload.table].map(
+      item => {
+        return {
+          ...item,
+          value: null,
+          lookUpType: "icontains"
+        };
+      }
+    );
   }
 };
 

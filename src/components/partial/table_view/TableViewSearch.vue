@@ -317,6 +317,7 @@
               :look-up-types="translatedLookUpTypes"
               :dynamic-search-fields="$_tableHeaderMixin_searchFields"
               :col-size="colSize"
+              @update:dynamicSearchFields="updateDynamicSearchFieldsDebounced"
             />
 
             <!-- DYNAMIC FIELDS -->
@@ -366,6 +367,7 @@
 import { mapState } from "vuex";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 import DynamicSearch from "@/components/partial/table_view/DynamicSearch";
+import { debounce } from "lodash";
 
 export default {
   name: "TableViewSearch",
@@ -417,7 +419,12 @@ export default {
     resetSearch() {
       this.$emit("reset:searchParameters");
       this.$_tableHeaderMixin_setDefaultTableHeaders();
-    }
+      this.$_tableHeaderMixin_resetDynamicSearchFields();
+    },
+
+    updateDynamicSearchFieldsDebounced: debounce(function(payload) {
+      this.$_tableHeaderMixin_updateDynamicSearchField(payload);
+    }, 400)
   }
 };
 </script>

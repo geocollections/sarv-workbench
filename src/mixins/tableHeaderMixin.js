@@ -29,7 +29,9 @@ const tableHeaderMixin = {
     ...mapActions("tableHeaders", [
       "updateTableHeaders",
       "getDynamicFields",
-      "setDefaultTableHeaders"
+      "setDefaultTableHeaders",
+      "updateDynamicSearchField",
+      "resetDynamicSearchField"
     ]),
 
     async $_tableHeaderMixin_getDynamicFields(table = this.$route.meta.object) {
@@ -42,6 +44,16 @@ const tableHeaderMixin = {
 
     $_tableHeaderMixin_setDefaultTableHeaders(table = this.$route.meta.object) {
       this.setDefaultTableHeaders(table);
+    },
+
+    $_tableHeaderMixin_updateDynamicSearchField(payload) {
+      this.updateDynamicSearchField(payload);
+    },
+
+    $_tableHeaderMixin_resetDynamicSearchFields(
+      table = this.$route.meta.object
+    ) {
+      this.resetDynamicSearchField(table);
     }
   }
 };

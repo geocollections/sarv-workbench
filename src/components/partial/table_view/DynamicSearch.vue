@@ -17,7 +17,7 @@
             :color="bodyActiveColor"
           >
             <v-icon>{{
-              showSearch ? "fas fa-angle-up" : "fas fa-angle-down"
+              showDynamicSearch ? "fas fa-angle-up" : "fas fa-angle-down"
             }}</v-icon>
           </v-btn>
         </v-card-title>
@@ -28,16 +28,13 @@
               <v-col
                 cols="12"
                 :md="colSize"
-                v-for="(field, index) in dynamicSearchFields"
+                v-for="(item, index) in dynamicSearchFields"
                 :key="index"
               >
                 <v-row class="pa-2">
                   <v-col cols="3" xl="2" class="py-0 px-1">
                     <v-select
-                      :value="
-                        dynamicSearchFields[`${field.id}__lookuptype`] ||
-                          'icontains'
-                      "
+                      :value="item.lookUpType || 'icontains'"
                       :color="bodyActiveColor"
                       :item-color="bodyActiveColor"
                       disable-lookup
@@ -45,11 +42,12 @@
                       :items="lookUpTypes"
                       :label="$t('main.lookUpType')"
                       @input="
-                        $emit(
-                          'update:dynamicSearchFields',
-                          $event,
-                          `${field.id}__lookuptype`
-                        )
+                        $emit('update:dynamicSearchFields', {
+                          id: item.id,
+                          key: 'lookUpType',
+                          value: $event,
+                          table: $route.meta.object
+                        })
                       "
                     >
                       <template v-slot:selection="{ item }">
@@ -62,13 +60,18 @@
 
                   <v-col cols="9" xl="10" class="py-0 px-1">
                     <v-text-field
-                      :value="dynamicSearchFields[field.id]"
-                      :label="$t(field.title)"
+                      :value="item.value"
+                      :label="$t(item.title)"
                       :color="bodyActiveColor"
                       hide-details
                       :class="bodyActiveColor + '--text'"
                       @input="
-                        $emit('update:searchParameters', $event, field.id)
+                        $emit('update:dynamicSearchFields', {
+                          id: item.id,
+                          key: 'value',
+                          value: $event,
+                          table: $route.meta.object
+                        })
                       "
                     ></v-text-field>
                   </v-col>
