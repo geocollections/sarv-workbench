@@ -47,7 +47,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "identifier", title: "doi.identifier", type: "text" },
       { id: "creators", title: "doi.creators", type: "text" },

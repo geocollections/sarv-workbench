@@ -5,6 +5,9 @@ const tableHeaderMixin = {
     ...mapState("tableHeaders", {
       tableHeaders: function(state) {
         return state[this.$route.meta.object];
+      },
+      $_tableHeaderMixin_searchFields: function(state) {
+        return state.searchFields[this.$route.meta.object];
       }
     }),
 
@@ -25,12 +28,12 @@ const tableHeaderMixin = {
   methods: {
     ...mapActions("tableHeaders", [
       "updateTableHeaders",
-      "getAllFieldNames",
+      "getDynamicFields",
       "setDefaultTableHeaders"
     ]),
 
-    async $_tableHeaderMixin_getAllFieldNames(table = this.$route.meta.object) {
-      await this.getAllFieldNames(table);
+    async $_tableHeaderMixin_getDynamicFields(table = this.$route.meta.object) {
+      await this.getDynamicFields(table);
     },
 
     $_tableHeaderMixin_updateTableHeaders(payload) {

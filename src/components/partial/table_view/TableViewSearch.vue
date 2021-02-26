@@ -310,11 +310,14 @@
             </v-row>
 
             <!-- DYNAMIC SEARCH -->
-            <v-row class="mt-4 mb-2">
-              <v-col cols="12" class="py-0">
-                <DynamicSearch />
-              </v-col>
-            </v-row>
+            <DynamicSearch
+              class="mt-4 mb-2"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              :look-up-types="translatedLookUpTypes"
+              :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+              :col-size="colSize"
+            />
 
             <!-- DYNAMIC FIELDS -->
             <v-row class="mt-4 mb-2">
@@ -366,7 +369,7 @@ import DynamicSearch from "@/components/partial/table_view/DynamicSearch";
 
 export default {
   name: "TableViewSearch",
-  components: {DynamicSearch},
+  components: { DynamicSearch },
   mixins: [tableHeaderMixin],
   props: {
     showSearch: {

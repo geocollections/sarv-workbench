@@ -543,6 +543,7 @@
     "editMessage": "Edit file",
     "overlayLoading": "Please wait! Loading data...",
     "search": "Search",
+    "dynamicSearch": "Extra search fields",
     "buttons": {
       "save": "Save",
       "saveAndLeave": "Save and leave",

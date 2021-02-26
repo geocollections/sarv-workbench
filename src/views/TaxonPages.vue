@@ -50,7 +50,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
 
     this.setActiveSearchParametersFilters([
       { id: "taxon", title: "taxon_page.taxon", type: "text" },

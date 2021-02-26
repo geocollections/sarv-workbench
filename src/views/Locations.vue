@@ -53,7 +53,7 @@ export default {
     ...mapState("search", ["locationViewType"])
   },
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
       { id: "location", title: "location.location", type: "text" },

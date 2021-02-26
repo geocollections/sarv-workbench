@@ -1,10 +1,117 @@
 <template>
-  <div>Todo: Dynamic Search</div>
+  <v-row>
+    <v-col cols="12">
+      <v-card :color="bodyColor.split('n-')[0] + 'n-4'" elevation="2">
+        <v-card-title class="pb-0 pt-2">
+          <div
+            class="card-title--clickable"
+            @click="showDynamicSearch = !showDynamicSearch"
+          >
+            <span>{{ $t("edit.dynamicSearch") }}</span>
+            <v-icon right :color="bodyActiveColor">fas fa-search</v-icon>
+          </div>
+          <v-spacer></v-spacer>
+          <v-btn
+            icon
+            @click="showDynamicSearch = !showDynamicSearch"
+            :color="bodyActiveColor"
+          >
+            <v-icon>{{
+              showSearch ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <v-card-text class="pt-0 pb-2">
+          <div v-show="showDynamicSearch">
+            <v-row>
+              <v-col
+                cols="12"
+                :md="colSize"
+                v-for="(field, index) in dynamicSearchFields"
+                :key="index"
+              >
+                <v-row class="pa-2">
+                  <v-col cols="3" xl="2" class="py-0 px-1">
+                    <v-select
+                      :value="
+                        dynamicSearchFields[`${field.id}__lookuptype`] ||
+                          'icontains'
+                      "
+                      :color="bodyActiveColor"
+                      :item-color="bodyActiveColor"
+                      disable-lookup
+                      hide-details
+                      :items="lookUpTypes"
+                      :label="$t('main.lookUpType')"
+                      @input="
+                        $emit(
+                          'update:dynamicSearchFields',
+                          $event,
+                          `${field.id}__lookuptype`
+                        )
+                      "
+                    >
+                      <template v-slot:selection="{ item }">
+                        <div class="font-weight-bold">
+                          {{ item.symbol }}
+                        </div>
+                      </template>
+                    </v-select>
+                  </v-col>
+
+                  <v-col cols="9" xl="10" class="py-0 px-1">
+                    <v-text-field
+                      :value="dynamicSearchFields[field.id]"
+                      :label="$t(field.title)"
+                      :color="bodyActiveColor"
+                      hide-details
+                      :class="bodyActiveColor + '--text'"
+                      @input="
+                        $emit('update:searchParameters', $event, field.id)
+                      "
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 export default {
-  name: "DynamicSearch"
+  name: "DynamicSearch",
+  props: {
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    },
+    lookUpTypes: {
+      type: Array,
+      required: true
+    },
+    dynamicSearchFields: {
+      type: Array,
+      required: true
+    },
+    colSize: {
+      type: Number,
+      default: 6
+    }
+  },
+  data: () => ({
+    showDynamicSearch: false
+  })
 };
 </script>
 

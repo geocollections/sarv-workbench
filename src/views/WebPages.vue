@@ -45,7 +45,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
       {

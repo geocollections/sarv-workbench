@@ -543,6 +543,7 @@
     "editMessage": "Muuda faili infot",
     "overlayLoading": "Palun oodake! Laen infot...",
     "search": "Otsing",
+    "dynamicSearch": "Lisa otsinguväljad",
     "buttons": {
       "save": "Salvesta",
       "saveAndLeave": "Salvesta ja lahku",

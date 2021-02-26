@@ -47,7 +47,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { title: "site_groundwater.site", id: "site", type: "text" },
       { title: "site_groundwater.type_txt", id: "type_txt", type: "text" },
