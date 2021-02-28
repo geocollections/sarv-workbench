@@ -175,6 +175,9 @@ export default {
     searchParameters: {
       type: Object
     },
+    dynamicSearchFields: {
+      type: Array
+    },
     exportButtons: {
       type: Boolean,
       default: true
@@ -251,6 +254,12 @@ export default {
         this.search();
       },
       immediate: true,
+      deep: true
+    },
+    dynamicSearchFields: {
+      handler() {
+        this.search();
+      },
       deep: true
     },
     currentViewType(newVal, oldVal) {

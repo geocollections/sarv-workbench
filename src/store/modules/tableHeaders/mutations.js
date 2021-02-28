@@ -90,9 +90,6 @@ const mutations = {
       };
     });
 
-    console.log(currentSearchFields.length);
-    console.log(dynamicFields.length);
-
     if (
       currentSearchFields.length === 0 ||
       currentSearchFields.length !== dynamicFields.length
@@ -103,7 +100,6 @@ const mutations = {
   },
 
   UPDATE_DYNAMIC_SEARCH_FIELD(state, payload) {
-    console.log(payload);
     state.searchFields[payload.table] = state.searchFields[payload.table].map(
       item => {
         if (item.id === payload.id) item[payload.key] = payload.value;

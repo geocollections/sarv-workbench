@@ -8,7 +8,7 @@
             @click="showDynamicSearch = !showDynamicSearch"
           >
             <span>{{ $t("edit.dynamicSearch") }}</span>
-            <v-icon right :color="bodyActiveColor">fas fa-search</v-icon>
+            <v-icon right :color="bodyActiveColor">fas fa-search-plus</v-icon>
           </div>
           <v-spacer></v-spacer>
           <v-btn
@@ -114,7 +114,15 @@ export default {
   },
   data: () => ({
     showDynamicSearch: false
-  })
+  }),
+  mounted() {
+    this.showDynamicSearch = this.isOpenAtStart();
+  },
+  methods: {
+    isOpenAtStart() {
+      return this.dynamicSearchFields.filter(item => item.value).length > 0;
+    }
+  }
 };
 </script>
 

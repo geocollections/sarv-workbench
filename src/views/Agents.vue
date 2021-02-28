@@ -15,7 +15,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAgents"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -47,8 +48,8 @@ export default {
     };
   },
 
-async created() {
-  await this.$_tableHeaderMixin_getDynamicFields();
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
       { id: "agent", title: "common.name", type: "text" },
@@ -58,10 +59,8 @@ async created() {
   },
 
   methods: {
-    fetchAgents() {
-      return new Promise(resolve => {
-        resolve(fetchAgents(this.searchParameters));
-      });
+    apiCall() {
+      return fetchAgents(this.searchParameters, this.$_tableHeaderMixin_searchFields);
     }
   }
 };

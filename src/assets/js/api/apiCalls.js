@@ -399,7 +399,8 @@ export function fetchReference(id) {
 }
 
 export async function fetchReferences(data) {
-  const fields = "reference,author,author_original,year,type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid"
+  const fields =
+    "reference,author,author_original,year,type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
   // This (solr search) overrides regular search fields
   if (data.solrSearch && data.solrSearch.trim().length > 0) {
@@ -2485,7 +2486,7 @@ export function fetchAgent(id) {
   return get(`agent/?id=${id}&fields=${fields}&format=json`);
 }
 
-export function fetchAgents(data) {
+export function fetchAgents(data, dynamicSearch) {
   const fields =
     "agent,type,type__value,type__value_en,forename,middlename,surename,title,profession,profession_en,institution,institution__agent,institution_name,institution_name_en,address,address1,address2,country,country__value,country__value_en,country_txt,phone,email,http,old_name,new_name,date_born,date_deceased,orcid,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -2511,6 +2512,13 @@ export function fetchAgents(data) {
     searchFields += `&surename__${data.surename__lookuptype || "icontains"}=${
       data.surename
     }`;
+  }
+
+  if (dynamicSearch?.length > 0) {
+    dynamicSearch.forEach(item => {
+      if (item.value)
+        searchFields += `${item.id}__${item.lookUpType}=${item.value}`;
+    });
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2545,7 +2553,8 @@ export function fetchListAgentType() {
  ******************************/
 
 export function fetchSelectionSeries(data) {
-  let fields = "name,tablename,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
+  let fields =
+    "name,tablename,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3912,7 +3921,8 @@ export function fetchWebNewsDetail(id) {
 }
 
 export function fetchWebNews(data) {
-  const fields = "title_et,title_en,text_en,text_et,is_private,user_added,date_added,user_changed,date_changed,date_expires,timestamp,id"
+  const fields =
+    "title_et,title_en,text_en,text_et,is_private,user_added,date_added,user_changed,date_changed,date_expires,timestamp,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3952,7 +3962,8 @@ export function fetchWebPagesDetail(id) {
 }
 
 export function fetchWebPages(data) {
-  const fields = "title_et,menu_title_et,content_et,link_et,title_en,menu_title_en,content_en,link_en,public,menu,menu_bold,menu_color,menu_fold,sort,parent,site,is_private,user,date_inserted,date_expires,timestamp,id"
+  const fields =
+    "title_et,menu_title_et,content_et,link_et,title_en,menu_title_en,content_en,link_en,public,menu,menu_bold,menu_color,menu_fold,sort,parent,site,is_private,user,date_inserted,date_expires,timestamp,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3992,7 +4003,8 @@ export function fetchTaxonPagesDetail(id) {
 }
 
 export function fetchTaxonPages(data) {
-  const fields = "taxon,taxon__taxon,language,on_frontpage,frontpage,frontpage_order,frontpage_title,title,content,author,author__agent,author_txt,date_txt,is_private,link_wikipedia,user_added,date_added,user_changed,date_changed,id"
+  const fields =
+    "taxon,taxon__taxon,language,on_frontpage,frontpage,frontpage_order,frontpage_title,title,content,author,author__agent,author_txt,date_txt,is_private,link_wikipedia,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4048,7 +4060,8 @@ export function fetchSiteGroundwaterUsingSite(siteId) {
 }
 
 export function fetchSiteGroundwaters(data) {
-  const fields = "site,aquifer_system,aquifer,well_depth,type_txt,filter_type,filter_top_z,filter_bottom_z,filter_midpoint_z,filter_top,filter_bottom,filter_midpoint,kataster_id,keskkonnaregister_id,url_veka,remarks,user_added,date_added,user_changed,date_changed,id"
+  const fields =
+    "site,aquifer_system,aquifer,well_depth,type_txt,filter_type,filter_top_z,filter_bottom_z,filter_midpoint_z,filter_top,filter_bottom,filter_midpoint,kataster_id,keskkonnaregister_id,url_veka,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4206,7 +4219,8 @@ export function fetchSampleSeriesDetail(id) {
 }
 
 export function fetchSampleSeries(data) {
-  const fields = "name,sampling_purpose,sample_count,sample_numbers,number_prefix,number_start,locality,locality__locality,locality__locality_en,locality_free,zero_level,depth_top,depth_base,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,agent_collected,agent_collected__agent,date_collected,date_collected_free,location,remarks,owner,owner__agent,public,is_private,user_added,date_added,user_changed,date_changed,database,database__acronym,id"
+  const fields =
+    "name,sampling_purpose,sample_count,sample_numbers,number_prefix,number_start,locality,locality__locality,locality__locality_en,locality_free,zero_level,depth_top,depth_base,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,agent_collected,agent_collected__agent,date_collected,date_collected_free,location,remarks,owner,owner__agent,public,is_private,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
