@@ -75,6 +75,7 @@ export default {
             this.$_tableHeaderMixin_searchFields
           );
     },
+    //test
     searchDrillcoreBoxImages(searchImages) {
       // Just to trigger change
       if (searchImages) {
