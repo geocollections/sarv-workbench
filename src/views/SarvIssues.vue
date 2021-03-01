@@ -15,7 +15,8 @@
     <list-module-core
       module="sarv_issue"
       :searchParameters="searchParameters"
-      :api-call="fetchSarvIssues"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>

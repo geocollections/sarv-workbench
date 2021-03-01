@@ -18,7 +18,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAnalysisParameters"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -28,7 +29,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import { fetchAnalysisParameters } from "../assets/js/api/apiCalls";
+import { fetchAnalysisParameters } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
@@ -72,10 +73,11 @@ export default {
   },
 
   methods: {
-    fetchAnalysisParameters() {
-      return new Promise(resolve => {
-        resolve(fetchAnalysisParameters(this.searchParameters));
-      });
+    apiCall() {
+      return fetchAnalysisParameters(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

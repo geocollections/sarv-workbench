@@ -14,7 +14,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchDatasets"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -56,10 +57,11 @@ export default {
   },
 
   methods: {
-    fetchDatasets() {
-      return new Promise(resolve => {
-        resolve(fetchDatasets(this.searchParameters));
-      });
+    apiCall() {
+      return fetchDatasets(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

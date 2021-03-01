@@ -20,7 +20,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAnalyses_"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -28,11 +29,10 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { fetchAnalyses } from "../assets/js/api/apiCalls";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { fetchAnalyses } from "@/assets/js/api/apiCalls";
+import {mapActions, mapState} from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import isEmpty from "lodash";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
@@ -86,14 +86,11 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
-    fetchAnalyses_() {
-      return new Promise(resolve => {
-        resolve(
-          fetchAnalyses(
-            this.searchParameters
-          )
-        );
-      });
+    apiCall() {
+      return fetchAnalyses(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

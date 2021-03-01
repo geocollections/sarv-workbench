@@ -15,7 +15,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchLocations"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       :use-list-view="true"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"

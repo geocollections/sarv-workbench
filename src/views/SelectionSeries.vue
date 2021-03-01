@@ -19,7 +19,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchSelectionSeries"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       :multi-ordering="true"
       v-on:update:searchParameters="updateSearchParamsByField"
     />

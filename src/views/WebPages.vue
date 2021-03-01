@@ -14,6 +14,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
       :api-call="fetchWebPages"
       v-on:update:searchParameters="updateSearchParamsByField"
     />

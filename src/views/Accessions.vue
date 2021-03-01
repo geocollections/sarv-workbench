@@ -14,7 +14,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAccessions"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -55,10 +56,11 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateSearchParameters"]),
-    fetchAccessions() {
-      return new Promise(resolve => {
-        resolve(fetchAccessions(this.searchParameters));
-      });
+    apiCall() {
+      return fetchAccessions(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

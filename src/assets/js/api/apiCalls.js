@@ -166,7 +166,7 @@ export function postRequest(
  *** ATTACHMENTS START ***
  *************************/
 
-export function fetchAttachments(data) {
+export function fetchAttachments(data, dynamicSearch) {
   let fields =
     "original_filename,filename,specimen_image_attachment,type,type__value,type__value_en,attachment_format,attachment_format__value,author,author__agent,author_free,date_created,date_created_free,device,device__name,device_txt,date_digitised,date_digitised_free,agent_digitised,agent_digitised__agent,device_digitised,device_digitised__name,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,description,description_en,size_mb,remarks,tags,stars,is_private,is_preferred,is_locked,boolean1,specimen,specimen__specimen_id,locality,locality__locality,locality__locality_en,drillcore,drillcore__drillcore,drillcore__drillcore_en,drillcore_box,drillcore_box__number,reference,reference__reference,drillcore_image_id,image_id,imageset,imageset__imageset_number,specimen_image_id,image_number,image_type,image_type__value,image_type__value_en,image_width,image_height,image_category,image_category__value,image_category__value_en,image_object,image_place,image_people,image_latitude,image_longitude,image_altitude,image_scalebar,image_description,image_description_en,storage,user_added,date_added,user_changed,date_changed,database,database__acronym,uuid_filename,id,upload,uuid";
 
@@ -243,6 +243,9 @@ export function fetchAttachments(data) {
       ";fields:attachmentkeyword__keyword__keyword,description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:" +
       `${data.keyword__lookuptype || "icontains"}&distinct=true`;
   }
+  // , dynamicSearch
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -1139,7 +1142,7 @@ export function fetchMultiAddReferencesToLibrary(data) {
  *** DOI START ***
  *****************/
 
-export function fetchDois(data) {
+export function fetchDois(data, dynamicSearch) {
   const fields =
     "identifier,creators,title,title_alternative,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,publisher,publication_year,subjects,reference,reference__reference,dataset,dataset__name,dataset__name_en,language,language__value,language__value_en,resource_type,resource_type__value,resource,version,sizes,formats,abstract,methods,date_txt,is_private,owner,owner__agent,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,egf,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,datacite_created,datacite_updated,id";
   let searchFields = "";
@@ -1169,6 +1172,8 @@ export function fetchDois(data) {
       data.title
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -1582,7 +1587,7 @@ export function fetchInstruments() {
   return get(`lab_instrument/?format=json`);
 }
 
-export function fetchAnalyses(data) {
+export function fetchAnalyses(data, dynamicSearch) {
   const fields =
     "material,sample,sample__number,sample__locality__locality,sample__depth,specimen,specimen__specimen_id,dataset,dataset__name,dataset__name_en,reference,reference__reference,analysis_method,analysis_method__analysis_method,analysis_method__method_en,method_details,method_details_en,mass,date,date_end,date_free,lab,lab__lab,lab__lab_en,lab_txt,lab_sample_number,lab_analysis_number,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,agent,agent__agent,agent_txt,owner,owner__agent,is_private,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -1631,6 +1636,7 @@ export function fetchAnalyses(data) {
   // if (typeof agent !== "undefined" && agent !== null) {
   //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
   // }
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
@@ -2119,7 +2125,7 @@ export function fetchMultiChangeSpecimen(data) {
  *** COLLECTION START ***
  ************************/
 
-export function fetchCollections(data) {
+export function fetchCollections(data, dynamicSearch) {
   const fields =
     "number,collection_id,name,name_long,name_en,name_long_en,type,type__value,type__value_en,classification,classification__class_field,agent,agent__agent,locality,locality__locality,locality__locality_en,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,number_objects,number_types,reference,reference__reference,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym";
   let searchFields = "";
@@ -2168,6 +2174,8 @@ export function fetchCollections(data) {
     };fields:classification__id,classification__class_field,classification__class_en,classification__class_lat,classification__class_synonym,classification__class_en_synonym;lookuptype:${data.classification__lookuptype ||
       "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2514,12 +2522,7 @@ export function fetchAgents(data, dynamicSearch) {
     }`;
   }
 
-  if (dynamicSearch?.length > 0) {
-    dynamicSearch.forEach(item => {
-      if (item.value)
-        searchFields += `${item.id}__${item.lookUpType}=${item.value}`;
-    });
-  }
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2821,7 +2824,7 @@ export function fetchDrillcoreBox(id) {
   return get(`drillcore_box/?id=${id}&format=json`);
 }
 
-export function fetchDrillcoreBoxes(data) {
+export function fetchDrillcoreBoxes(data, dynamicSearch) {
   const fields =
     "drillcore,drillcore__drillcore,drillcore__drillcore_en,number,number_meters,diameter,depth_start,depth_end,depth_other,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,stratigraphy_free,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -2839,6 +2842,8 @@ export function fetchDrillcoreBoxes(data) {
       "icontains"}`;
   }
 
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -2852,9 +2857,9 @@ export function fetchDrillcoreBoxes(data) {
   }
 }
 
-export function fetchDrillcoreBoxImages(data) {
+export function fetchDrillcoreBoxImages(data, dynamicSearch) {
   let fields =
-    "attachment__uuid_filename,drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__depth_start,drillcore_box__depth_end";
+    "attachment__uuid_filename,drillcore_box__drillcore,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__number_meters,drillcore_box__diameter,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base_free,drillcore_box__stratigraphy_top_free,drillcore_box__stratigraphy_free,drillcore_box__location,drillcore_box__storage,drillcore_box__storage__location,drillcore_box__remarks,drillcore_box__user_added,drillcore_box__date_added,drillcore_box__user_changed,drillcore_box__date_changed,drillcore_box__database,drillcore_box__database__acronym,drillcore_box__id";
   let searchFields = "";
 
   if (data.storage && data.storage.trim().length > 0) {
@@ -2868,6 +2873,8 @@ export function fetchDrillcoreBoxImages(data) {
     };fields:drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en;lookuptype:${data.drillcore__lookuptype ||
       "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch, "drillcore_box__");
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2994,7 +3001,7 @@ export function fetchDataset(id) {
   return get(`dataset/?id=${id}&format=json`);
 }
 
-export function fetchDatasets(data) {
+export function fetchDatasets(data, dynamicSearch) {
   const fields =
     "name,name_en,description,description_en,dataset_html,date,date_txt,is_private,owner,owner__agent,owner_txt,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -3024,6 +3031,8 @@ export function fetchDatasets(data) {
       data.remarks
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3238,7 +3247,7 @@ export function fetchArea(id) {
   return get(`area/?id=${id}&format=json`);
 }
 
-export function fetchAreas(data) {
+export function fetchAreas(data, dynamicSearch) {
   const fields =
     "name,name_en,area_type,area_type__name,area_type__name_en,maardla,eelis,egf,area_ha,deposit_area_ha,maakond,maakond__maakond,maakond__maakond_en,description,description_en,remarks,text1,polygon,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3269,6 +3278,8 @@ export function fetchAreas(data) {
     };fields:maakond__maakond,maakond__maakond_en;lookuptype:${data.maakond__lookuptype ||
       "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3838,7 +3849,7 @@ export function fetchAccessionDetail(id) {
   return get(`accession/?id=${id}&format=json`);
 }
 
-export function fetchAccessions(data) {
+export function fetchAccessions(data, dynamicSearch) {
   let fields =
     "number,date_signed,date_confirmed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -3853,6 +3864,8 @@ export function fetchAccessions(data) {
     searchFields += `&description__${data.description__lookuptype ||
       "icontains"}=${data.description}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3879,7 +3892,7 @@ export function fetchDeaccessionDetail(id) {
   return get(`deaccession/?id=${id}&format=json`);
 }
 
-export function fetchDeaccessions(data) {
+export function fetchDeaccessions(data, dynamicSearch) {
   let fields =
     "number,date_signed,date_confirmed,agent_kandis__agent,agent_kandis,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -3894,6 +3907,8 @@ export function fetchDeaccessions(data) {
     searchFields += `&description__${data.description__lookuptype ||
       "icontains"}=${data.description}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -4283,7 +4298,7 @@ export function fetchSampleSeriesAttachments(id, searchParameters) {
  ***  ANALYSIS_PARAMETERS START  ***
  **********************************/
 
-export function fetchAnalysisParameters(data) {
+export function fetchAnalysisParameters(data, dynamicSearch) {
   const fields =
     "parameter,parameter_name,parameter_name_en,parameter_html,synonyms,parent_parameter,parent_parameter__parameter,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4308,6 +4323,8 @@ export function fetchAnalysisParameters(data) {
       data.remarks
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -4334,7 +4351,7 @@ export function fetchAnalysisParameter(id) {
  ***  ANALYSIS_METHODS START  ***
  *******************************/
 
-export function fetchAnalysisMethods(data) {
+export function fetchAnalysisMethods(data, dynamicSearch) {
   const fields =
     "analysis_method,method_en,parent_method,parent_method__analysis_method,parent_method__method_en,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4371,6 +4388,8 @@ export function fetchAnalysisMethods(data) {
       data.remarks
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -4505,6 +4524,17 @@ function buildOrderBy(sortBy, sortDesc) {
 
     return orderBy;
   } else return "-id";
+}
+
+function buildDynamicSearch(data, prefix = "") {
+  let result = "";
+  if (data?.length > 0) {
+    data.forEach(item => {
+      if (item.value)
+        result += `&${prefix}${item.id}__${item.lookUpType}=${item.value}`;
+    });
+  }
+  return result;
 }
 
 /*********************

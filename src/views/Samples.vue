@@ -21,7 +21,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchSamples"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       :use-list-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
     />

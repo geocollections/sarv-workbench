@@ -27,7 +27,6 @@ import ListModuleCore from "./ListModuleCore";
 import { fetchAgents } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { mapActions } from "vuex";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
@@ -60,7 +59,10 @@ export default {
 
   methods: {
     apiCall() {
-      return fetchAgents(this.searchParameters, this.$_tableHeaderMixin_searchFields);
+      return fetchAgents(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };
