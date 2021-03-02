@@ -12,7 +12,7 @@ const mutations = {
     if (currentHeaders && currentHeaders.length === 0)
       currentHeaders = state.defaults[payload.table];
 
-    let allHeaders = payload.fields.map(item => {
+    let allHeaders = payload.headers.map(item => {
       return {
         value: item,
         text: `${payload.table}.${item}`,
@@ -77,6 +77,47 @@ const mutations = {
         show: state.defaults[payload.table].includes(item.value)
       };
     });
+  },
+
+  SET_DYNAMIC_SEARCH_FIELDS(state, payload) {
+    let currentSearchFields = state.searchFields[payload.table];
+    const dynamicFields = payload.fields.map(item => {
+      return {
+        id: item,
+        title: `${payload.table}.${item}`,
+        value: null,
+        lookUpType: "icontains"
+      };
+    });
+
+    if (
+      currentSearchFields.length === 0 ||
+      currentSearchFields.length !== dynamicFields.length
+    ) {
+      currentSearchFields = dynamicFields;
+      state.searchFields[payload.table] = currentSearchFields;
+    }
+  },
+
+  UPDATE_DYNAMIC_SEARCH_FIELD(state, payload) {
+    state.searchFields[payload.table] = state.searchFields[payload.table].map(
+      item => {
+        if (item.id === payload.id) item[payload.key] = payload.value;
+        return item;
+      }
+    );
+  },
+
+  RESET_DYNAMIC_SEARCH_FIELDS(state, payload) {
+    state.searchFields[payload.table] = state.searchFields[payload.table].map(
+      item => {
+        return {
+          ...item,
+          value: null,
+          lookUpType: "icontains"
+        };
+      }
+    );
   }
 };
 

@@ -14,7 +14,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchWebNews"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -24,7 +25,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchWebNews } from "../assets/js/api/apiCalls";
+import { fetchWebNews } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
@@ -45,7 +46,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
       {
@@ -57,10 +58,11 @@ export default {
   },
 
   methods: {
-    fetchWebNews() {
-      return new Promise(resolve => {
-        resolve(fetchWebNews(this.searchParameters));
-      });
+    apiCall() {
+      return fetchWebNews(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

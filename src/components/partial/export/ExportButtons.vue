@@ -114,9 +114,7 @@ export default {
         if (this.clipboardClass) {
           el = document.getElementsByClassName(this.clipboardClass);
         } else {
-          el = document.getElementsByClassName(
-            `${this.$route.meta.object}-table`
-          );
+          el = document.getElementsByClassName("v-data-table");
         }
 
         let body = document.body,

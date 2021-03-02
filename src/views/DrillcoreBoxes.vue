@@ -17,7 +17,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchDrillcoreBoxes"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       :use-image-view="true"
       :use-list-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
@@ -51,7 +52,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "storage", title: "drillcore.storage", type: "text" },
       { id: "drillcore", title: "drillcore.drillcore", type: "text" }
@@ -62,16 +63,19 @@ export default {
     ...mapState("search", ["drillcore_boxViewType"])
   },
   methods: {
-    fetchDrillcoreBoxes() {
-      return new Promise(resolve => {
-        resolve(
-          this.drillcore_boxViewType === "image" ||
-            this.drillcore_boxViewType === "list"
-            ? fetchDrillcoreBoxImages(this.searchParameters)
-            : fetchDrillcoreBoxes(this.searchParameters)
-        );
-      });
+    apiCall() {
+      return this.drillcore_boxViewType === "image" ||
+        this.drillcore_boxViewType === "list"
+        ? fetchDrillcoreBoxImages(
+            this.searchParameters,
+            this.$_tableHeaderMixin_searchFields
+          )
+        : fetchDrillcoreBoxes(
+            this.searchParameters,
+            this.$_tableHeaderMixin_searchFields
+          );
     },
+    //test
     searchDrillcoreBoxImages(searchImages) {
       // Just to trigger change
       if (searchImages) {

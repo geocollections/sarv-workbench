@@ -309,6 +309,17 @@
               </v-col>
             </v-row>
 
+            <!-- DYNAMIC SEARCH -->
+            <DynamicSearch
+              class="mt-4 mb-2"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              :look-up-types="translatedLookUpTypes"
+              :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+              :col-size="3"
+              @update:dynamicSearchFields="updateDynamicSearchFieldsDebounced"
+            />
+
             <!-- DYNAMIC FIELDS -->
             <v-row class="mt-4 mb-2">
               <v-col cols="12" class="py-0">
@@ -355,9 +366,12 @@
 <script>
 import { mapState } from "vuex";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import DynamicSearch from "@/components/partial/table_view/DynamicSearch";
+import { debounce } from "lodash";
 
 export default {
   name: "TableViewSearch",
+  components: { DynamicSearch },
   mixins: [tableHeaderMixin],
   props: {
     showSearch: {
@@ -405,7 +419,12 @@ export default {
     resetSearch() {
       this.$emit("reset:searchParameters");
       this.$_tableHeaderMixin_setDefaultTableHeaders();
-    }
+      this.$_tableHeaderMixin_resetDynamicSearchFields();
+    },
+
+    updateDynamicSearchFieldsDebounced: debounce(function(payload) {
+      this.$_tableHeaderMixin_updateDynamicSearchField(payload);
+    }, 400)
   }
 };
 </script>

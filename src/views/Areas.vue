@@ -14,7 +14,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAreas"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -42,7 +43,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "name", title: "common.name", type: "text" },
       { id: "type", title: "common.type", type: "text" },
@@ -52,10 +53,11 @@ export default {
   },
 
   methods: {
-    fetchAreas() {
-      return new Promise(resolve => {
-        resolve(fetchAreas(this.searchParameters));
-      });
+    apiCall() {
+      return fetchAreas(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

@@ -14,7 +14,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchKeywords"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -22,11 +23,10 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { fetchKeywords } from "../assets/js/api/apiCalls";
+import { fetchKeywords } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
-import { mapActions, mapState } from "vuex";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
@@ -47,7 +47,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
       { id: "term", title: "keyword.keyword", type: "text" },
@@ -61,10 +61,12 @@ export default {
   },
 
   methods: {
-    fetchKeywords() {
-      return new Promise(resolve => {
-        resolve(fetchKeywords(this.searchParameters));
-      });
+    apiCall() {
+      return fetchKeywords(
+        this.searchParameters,
+        [],
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

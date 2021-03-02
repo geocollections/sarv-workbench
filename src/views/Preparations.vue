@@ -19,7 +19,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchPreparations"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -29,7 +30,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchPreparations } from "../assets/js/api/apiCalls";
+import { fetchPreparations } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
@@ -51,7 +52,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       {
         id: "preparation_number",
@@ -62,10 +63,11 @@ export default {
   },
 
   methods: {
-    fetchPreparations() {
-      return new Promise(resolve => {
-        resolve(fetchPreparations(this.searchParameters));
-      });
+    apiCall() {
+      return fetchPreparations(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

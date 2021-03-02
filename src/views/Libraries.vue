@@ -14,7 +14,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchLibraries"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -46,7 +47,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
 
     this.setActiveSearchParametersFilters([
       { id: "author_txt", title: "library.author_txt", type: "text" },
@@ -57,10 +58,11 @@ export default {
   },
 
   methods: {
-    fetchLibraries() {
-      return new Promise(resolve => {
-        resolve(fetchLibraries(this.searchParameters));
-      });
+    apiCall() {
+      return fetchLibraries(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

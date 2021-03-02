@@ -18,6 +18,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
       :api-call="apiCall"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
@@ -55,7 +56,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
 
     // Used by sidebar
     this.setActiveSearchParameters({
@@ -85,7 +86,7 @@ export default {
     apiCall() {
       return fetchAttachments(
         this.searchParameters,
-        this.$_tableHeaderMixin_shownHeadersAsStringList
+        this.$_tableHeaderMixin_searchFields
       );
     }
   }

@@ -166,7 +166,7 @@ export function postRequest(
  *** ATTACHMENTS START ***
  *************************/
 
-export function fetchAttachments(data) {
+export function fetchAttachments(data, dynamicSearch) {
   let fields =
     "original_filename,filename,specimen_image_attachment,type,type__value,type__value_en,attachment_format,attachment_format__value,author,author__agent,author_free,date_created,date_created_free,device,device__name,device_txt,date_digitised,date_digitised_free,agent_digitised,agent_digitised__agent,device_digitised,device_digitised__name,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,description,description_en,size_mb,remarks,tags,stars,is_private,is_preferred,is_locked,boolean1,specimen,specimen__specimen_id,locality,locality__locality,locality__locality_en,drillcore,drillcore__drillcore,drillcore__drillcore_en,drillcore_box,drillcore_box__number,reference,reference__reference,drillcore_image_id,image_id,imageset,imageset__imageset_number,specimen_image_id,image_number,image_type,image_type__value,image_type__value_en,image_width,image_height,image_category,image_category__value,image_category__value_en,image_object,image_place,image_people,image_latitude,image_longitude,image_altitude,image_scalebar,image_description,image_description_en,storage,user_added,date_added,user_changed,date_changed,database,database__acronym,uuid_filename,id,upload,uuid";
 
@@ -243,6 +243,9 @@ export function fetchAttachments(data) {
       ";fields:attachmentkeyword__keyword__keyword,description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:" +
       `${data.keyword__lookuptype || "icontains"}&distinct=true`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -398,8 +401,9 @@ export function fetchReference(id) {
   return get(`reference/?id=${id}&format=json`);
 }
 
-export async function fetchReferences(data) {
-  const fields = "reference,author,author_original,year,type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid"
+export async function fetchReferences(data, dynamicSearch) {
+  const fields =
+    "reference,author,author_original,year,type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
   // This (solr search) overrides regular search fields
   if (data.solrSearch && data.solrSearch.trim().length > 0) {
@@ -479,6 +483,7 @@ export async function fetchReferences(data) {
   if (data.isEstonianAuthor) {
     searchFields += `&is_estonian_author=${data.isEstonianAuthor}`;
   }
+  searchFields += buildDynamicSearch(dynamicSearch);
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -655,7 +660,7 @@ export function fetchLatestLogs(data) {
  *** LOCALITY START ***
  **********************/
 
-export function fetchLocalities(data) {
+export function fetchLocalities(data, dynamicSearch) {
   const fields =
     "locality,locality_en,number,code,type,type__value,type__value_en,parent,parent__locality,parent__locality_en,latitude,longitude,elevation,coord_det_precision,coord_det_precision__value,coord_det_precision__value_en,coord_det_method,coord_det_method__value,coord_det_method__value_en,coord_det_agent,coord_det_agent__agent,coord_system,epsg,coordx,coordy,extent,extent__value,extent__value_en,country,country__value,country__value_en,maakond,maakond__maakond,maakond__maakond_en,vald,vald__vald,vald__vald_en,asustusyksus,asustusyksus__asustusyksus,asustusyksus__asustusyksus_en,remarks_location,depth,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,eelis,maaamet_pa_id,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -700,6 +705,8 @@ export function fetchLocalities(data) {
     searchFields += `&selection__selection__name__${data.selection__lookuptype ||
       "icontains"}=${data.selection}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -823,7 +830,7 @@ export function fetchAnalysisMethod() {
   return get(`analysis_method/?order_by=analysis_method&format=json`);
 }
 
-export function fetchSamples(data) {
+export function fetchSamples(data, dynamicSearch) {
   const fields =
     "number,number_additional,number_field,igsn,series,series__name,parent_sample,parent_sample__number,parent_specimen,parent_specimen__specimen_id,sample_purpose,sample_purpose__value,sample_purpose__value_en,sample_type,locality,locality__locality,locality__locality_en,site,site__name,site__name_en,locality_free,soil_site,soil_site__site,soil_site__site_en,latitude1,longitude1,x1,y1,epsg,coordinate_accuracy,depth,depth_interval,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,stratigraphy_bed,soil_horizon,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,classification_rock,classification_rock__name,classification_rock__name_en,rock,rock_en,fossils,palaeontology,analysis,mass,location,location_additional,storage,storage__location,storage_additional,storage_additional__location,remarks,user_added,date_added,user_changed,date_changed,owner,owner__agent,is_private,database__acronym,id,number";
   let searchFields = "";
@@ -901,6 +908,8 @@ export function fetchSamples(data) {
     };fields:series__id,series__name;lookuptype:${data.series__lookuptype ||
       "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -989,7 +998,7 @@ export function fetchLibrary(id) {
   return get(`library/?id=${id}&format=json`);
 }
 
-export function fetchLibraries(data) {
+export function fetchLibraries(data, dynamicSearch) {
   const fields =
     "title,title_en,title_short,title_short_en,abstract,abstract_en,author,author__agent,author_txt,year,publisher,doi,keywords,remarks,is_private,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -1017,6 +1026,8 @@ export function fetchLibraries(data) {
     searchFields += `&libraryreference_library__reference__reference__${data.reference__lookuptype ||
       "icontains"}=${data.reference}&distinct=true`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -1138,7 +1149,7 @@ export function fetchMultiAddReferencesToLibrary(data) {
  *** DOI START ***
  *****************/
 
-export function fetchDois(data) {
+export function fetchDois(data, dynamicSearch) {
   const fields =
     "identifier,creators,title,title_alternative,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,publisher,publication_year,subjects,reference,reference__reference,dataset,dataset__name,dataset__name_en,language,language__value,language__value_en,resource_type,resource_type__value,resource,version,sizes,formats,abstract,methods,date_txt,is_private,owner,owner__agent,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,egf,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,datacite_created,datacite_updated,id";
   let searchFields = "";
@@ -1168,6 +1179,8 @@ export function fetchDois(data) {
       data.title
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -1354,7 +1367,7 @@ export function fetchProjectType() {
   return get(`project_type/?order_by=name&format=json`);
 }
 
-export function fetchProjects(data) {
+export function fetchProjects(data, dynamicSearch) {
   const fields =
     "name,name_en,number,project_type,project_type__name,project_type__name_en,parent_project,parent_project__name,parent_project__name_en,date_start,date_end,date_free,description,remarks,owner,owner__agent,is_private,user_added,date_added,user_changed,date_changed,id,timestamp";
   let searchFields = "";
@@ -1369,6 +1382,8 @@ export function fetchProjects(data) {
       data.name
     };fields:name,name_en;lookuptype:${data.name__lookuptype || "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
@@ -1396,7 +1411,7 @@ export function fetchActiveProjects(projectIds) {
  *** SITE START ***
  ******************/
 
-export function fetchSites(data) {
+export function fetchSites(data, dynamicSearch) {
   let fields =
     "project,project__name,project__name_en,locality,locality__locality,locality__locality,area,area__name,area__name_en,site_type,site_type__value,site_type__value,name,name_en,number,latitude,longitude,location_accuracy,elevation,elevation_accuracy,coord_det_precision,coord_det_precision__value,coord_det_precision__value_en,coord_det_method,coord_det_method__value,coord_det_method__value_en,coord_det_agent,coord_det_agent__agent,epsg,coordx,coordy,extent,depth,date_start,date_end,date_free,remarks_location,description,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -1454,6 +1469,8 @@ export function fetchSites(data) {
   if (data.coords_not_null === true) {
     searchFields += `&latitude__isnull=False&longitude__isnull=False`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -1581,9 +1598,9 @@ export function fetchInstruments() {
   return get(`lab_instrument/?format=json`);
 }
 
-export function fetchAnalyses(data) {
+export function fetchAnalyses(data, dynamicSearch) {
   const fields =
-    "material,sample,sample__number,sample__locality__locality,sample__depth,specimen,specimen__specimen_id,dataset,dataset__name,dataset__name_en,reference,reference__reference,analysis_method,analysis_method__analysis_method,analysis_method__method_en,method_details,method_details_en,mass,date,date_end,date_free,lab,lab__lab,lab__lab_en,lab_txt,lab_sample_number,lab_analysis_number,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,agent,agent__agent,agent_txt,owner,owner__agent,is_private,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
+    "material,sample,sample__number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__depth,specimen,specimen__specimen_id,dataset,dataset__name,dataset__name_en,reference,reference__reference,analysis_method,analysis_method__analysis_method,analysis_method__method_en,method_details,method_details_en,mass,date,date_end,date_free,lab,lab__lab,lab__lab_en,lab_txt,lab_sample_number,lab_analysis_number,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,agent,agent__agent,agent_txt,owner,owner__agent,is_private,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1630,6 +1647,7 @@ export function fetchAnalyses(data) {
   // if (typeof agent !== "undefined" && agent !== null) {
   //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
   // }
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
@@ -1675,7 +1693,7 @@ export function fetchJournal(id) {
   return get(`journal/?id=${id}&format=json`);
 }
 
-export function fetchJournals(data) {
+export function fetchJournals(data, dynamicSearch) {
   let fields =
     "journal_name,journal_short,journal_long,journal_abbr,journal_original,issn,publisher,publisher_place,http,former_journal,former_journal__journal_name,following_journal,following_journal__journal_name,oldname,newname,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -1700,6 +1718,8 @@ export function fetchJournals(data) {
       data.remarks
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -1748,7 +1768,7 @@ export function fetchSpecimen(id) {
   return get(`specimen/?id=${id}&format=json`);
 }
 
-export function fetchSpecimens(data) {
+export function fetchSpecimens(data, dynamicSearch) {
   const fields =
     "specimen_id,collection,coll,coll__number,specimen_nr,number_field,type,type__value,type__value_en,subtype_id,subtype_id__value,subtype_id__value_en,fossil,fossil__value,fossil__value_en,kind,kind,kind,classification,classification__class_field,part,number_pieces,locality,locality__locality,locality__locality_en,locality_free,locality_free_en,locality_is_private,depth,depth_interval,sample_number,sample,sample__number,parent,parent__specimen_id,remarks_collecting,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,remarks,remarks_internal,tags,presence,presence__value,presence__value_en,storage,storage__location,location,status,status__value,status__value_en,original_status,original_status__value,original_status__value_en,is_private,accession,accession__number,deaccession,deaccession__number,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -1846,6 +1866,8 @@ export function fetchSpecimens(data) {
       "icontains"}`;
   }
 
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -1859,9 +1881,9 @@ export function fetchSpecimens(data) {
   }
 }
 
-export function fetchSpecimenImages(data) {
+export function fetchSpecimenImages(data, dynamicSearch) {
   const fields =
-    "id,specimen_id,size_mb,original_filename,uuid_filename,user_added,date_added,specimen__specimen_id,specimen__database__acronym";
+    "id,specimen_id,size_mb,original_filename,uuid_filename,user_added,date_added,specimen__specimen_id,specimen__collection,specimen__coll,specimen__coll__number,specimen__specimen_nr,specimen__number_field,specimen__type,specimen__type__value,specimen__type__value_en,specimen__subtype_id,specimen__subtype_id__value,specimen__subtype_id__value_en,specimen__fossil,specimen__fossil__value,specimen__fossil__value_en,specimen__kind,specimen__kind,specimen__kind,specimen__classification,specimen__classification__class_field,specimen__part,specimen__number_pieces,specimen__locality,specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free,specimen__locality_free_en,specimen__locality_is_private,specimen__depth,specimen__depth_interval,specimen__sample_number,specimen__sample,specimen__sample__number,specimen__parent,specimen__parent__specimen_id,specimen__remarks_collecting,specimen__stratigraphy,specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__agent_collected,specimen__agent_collected__agent,specimen__agent_collected_free,specimen__date_collected,specimen__date_collected_free,specimen__remarks,specimen__remarks_internal,specimen__tags,specimen__presence,specimen__presence__value,specimen__presence__value_en,specimen__storage,specimen__storage__location,specimen__location,specimen__status,specimen__status__value,specimen__status__value_en,specimen__original_status,specimen__original_status__value,specimen__original_status__value_en,specimen__is_private,specimen__accession,specimen__accession__number,specimen__deaccession,specimen__deaccession__number,specimen__user_added,specimen__date_added,specimen__user_changed,specimen__date_changed,specimen__database,specimen__database__acronym,specimen__id";
   let searchFields = "";
   let orderBy = "";
 
@@ -1938,6 +1960,8 @@ export function fetchSpecimenImages(data) {
   if (data.loan && data.loan.trim().length > 0) {
     searchFields += `&multi_search=value:${data.loan};fields:specimen__loanspecimen__loan__id,specimen__loanspecimen__loan__loan_number;lookuptype:iexact`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch, "specimen__");
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2118,7 +2142,7 @@ export function fetchMultiChangeSpecimen(data) {
  *** COLLECTION START ***
  ************************/
 
-export function fetchCollections(data) {
+export function fetchCollections(data, dynamicSearch) {
   const fields =
     "number,collection_id,name,name_long,name_en,name_long_en,type,type__value,type__value_en,classification,classification__class_field,agent,agent__agent,locality,locality__locality,locality__locality_en,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,number_objects,number_types,reference,reference__reference,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym";
   let searchFields = "";
@@ -2168,6 +2192,8 @@ export function fetchCollections(data) {
       "icontains"}`;
   }
 
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -2197,7 +2223,7 @@ export function fetchListCollectionType() {
  *** TAXON START ***
  *******************/
 
-export function fetchTaxa(data) {
+export function fetchTaxa(data, dynamicSearch) {
   const fields =
     "taxon,author_year,taxon_epithet,taxon_full_name,taxon_original_name,reference,reference__reference,parent,parent__taxon,fossil_group,fossil_group__taxon,synonym_of,synonym_of_reference_id,hierarchy_string,rank,rank__rank,rank_original,rank_original__rank,type_taxon,type_taxon__taxon,type_taxon_txt,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,in_estonia,in_baltoscandia,is_fossil,is_private,is_valid,is_fossil_group,sort,taxon_id_pbdb,taxon_id_plutof,taxon_id_tol,taxon_id_eol,taxon_id_nrm,remarks,owner,is_authorized,user_authorized,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -2242,6 +2268,8 @@ export function fetchTaxa(data) {
     searchFields += `&selection__selection__name__${data.selection__lookuptype ||
       "icontains"}=${data.selection}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2389,7 +2417,7 @@ export function fetchKeyword(id) {
   return get(`keyword/?id=${id}&format=json`);
 }
 
-export function fetchKeywords(data, listOfIDs) {
+export function fetchKeywords(data, listOfIDs, dynamicSearch) {
   let fields =
     "keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,is_primary,is_preferred,is_private,description,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -2424,6 +2452,8 @@ export function fetchKeywords(data, listOfIDs) {
   if (data.is_primary) {
     searchFields += `&is_primary=${data.is_primary}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2485,7 +2515,7 @@ export function fetchAgent(id) {
   return get(`agent/?id=${id}&fields=${fields}&format=json`);
 }
 
-export function fetchAgents(data) {
+export function fetchAgents(data, dynamicSearch) {
   const fields =
     "agent,type,type__value,type__value_en,forename,middlename,surename,title,profession,profession_en,institution,institution__agent,institution_name,institution_name_en,address,address1,address2,country,country__value,country__value_en,country_txt,phone,email,http,old_name,new_name,date_born,date_deceased,orcid,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -2512,6 +2542,8 @@ export function fetchAgents(data) {
       data.surename
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2544,8 +2576,9 @@ export function fetchListAgentType() {
  *** SELECTION SERIES START ***
  ******************************/
 
-export function fetchSelectionSeries(data) {
-  let fields = "name,tablename,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
+export function fetchSelectionSeries(data, dynamicSearch) {
+  let fields =
+    "name,tablename,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2566,6 +2599,8 @@ export function fetchSelectionSeries(data) {
     searchFields += `&user_added__${data.user_added__lookuptype ||
       "icontains"}=${data.user_added}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2706,7 +2741,7 @@ export function fetchDrillcore(id) {
   return get(`drillcore/?id=${id}&format=json`);
 }
 
-export function fetchDrillcores(data) {
+export function fetchDrillcores(data, dynamicSearch) {
   const fields =
     "drillcore,drillcore_en,locality,locality__locality,locality__locality_en,year,agent,agent__agent,depository,depository__value,depository__value_en,location,storage,storage__location,boxes,box_numbers,number_meters,direction_lr,depth,igsn,remarks,database,database__acronym,uid,gid,is_private,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -2742,6 +2777,8 @@ export function fetchDrillcores(data) {
     };fields:storage__location,depository__value;lookuptype:${data.storage__lookuptype ||
       "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2812,7 +2849,7 @@ export function fetchDrillcoreBox(id) {
   return get(`drillcore_box/?id=${id}&format=json`);
 }
 
-export function fetchDrillcoreBoxes(data) {
+export function fetchDrillcoreBoxes(data, dynamicSearch) {
   const fields =
     "drillcore,drillcore__drillcore,drillcore__drillcore_en,number,number_meters,diameter,depth_start,depth_end,depth_other,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,stratigraphy_free,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -2830,6 +2867,8 @@ export function fetchDrillcoreBoxes(data) {
       "icontains"}`;
   }
 
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -2843,9 +2882,9 @@ export function fetchDrillcoreBoxes(data) {
   }
 }
 
-export function fetchDrillcoreBoxImages(data) {
+export function fetchDrillcoreBoxImages(data, dynamicSearch) {
   let fields =
-    "attachment__uuid_filename,drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__depth_start,drillcore_box__depth_end";
+    "attachment__uuid_filename,drillcore_box__drillcore,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__number_meters,drillcore_box__diameter,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base_free,drillcore_box__stratigraphy_top_free,drillcore_box__stratigraphy_free,drillcore_box__location,drillcore_box__storage,drillcore_box__storage__location,drillcore_box__remarks,drillcore_box__user_added,drillcore_box__date_added,drillcore_box__user_changed,drillcore_box__date_changed,drillcore_box__database,drillcore_box__database__acronym,drillcore_box__id";
   let searchFields = "";
 
   if (data.storage && data.storage.trim().length > 0) {
@@ -2859,6 +2898,8 @@ export function fetchDrillcoreBoxImages(data) {
     };fields:drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en;lookuptype:${data.drillcore__lookuptype ||
       "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch, "drillcore_box__");
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2906,7 +2947,7 @@ export function fetchPreparation(id) {
   return get(`preparation/?id=${id}&format=json`);
 }
 
-export function fetchPreparations(data) {
+export function fetchPreparations(data, dynamicSearch) {
   const fields =
     "preparation_number,sample,sample__number,analysis,sample_number,taxon,taxon__taxon,agent,agent__agent,agent_txt,date_prepared,date_prepared_txt,identification_agent,identification_agent__agent,identification_date,identification_remarks,location,storage,storage__location,owner,owner__agent,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -2916,6 +2957,8 @@ export function fetchPreparations(data) {
     searchFields += `preparation_number__${data.preparation_number__lookuptype ||
       "icontains"}=${data.preparation_number}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -2985,7 +3028,7 @@ export function fetchDataset(id) {
   return get(`dataset/?id=${id}&format=json`);
 }
 
-export function fetchDatasets(data) {
+export function fetchDatasets(data, dynamicSearch) {
   const fields =
     "name,name_en,description,description_en,dataset_html,date,date_txt,is_private,owner,owner__agent,owner_txt,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -3015,6 +3058,8 @@ export function fetchDatasets(data) {
       data.remarks
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3071,7 +3116,7 @@ export function fetchStratigraphy(id) {
   return get(`stratigraphy/?id=${id}&format=json`);
 }
 
-export function fetchStratigraphies(data) {
+export function fetchStratigraphies(data, dynamicSearch) {
   const fields =
     "stratigraphy,stratigraphy_en,stratigraphy_original,author_free,year,etymon,etymon_en,original_locality,original_rank,index_main,index_main_html,index_additional,index_additional_html,index_old,color_code_cgmw,color_code_additional,hierarchy_string,parent,parent__stratigraphy,parent__stratigraphy_en,type,type__value,type__value_en,rank,rank__value,rank__value_en,scope,scope__value,scope__value_en,status,status__value,status__value_en,region,region_en,lithology,lithology_en,max_thickness,description,description_en,definition,definition_en,age_base,age_top,age_precision,age_reference,age_reference__reference,age_chronostratigraphy,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,sort_within_parent,approved_ics,approved_esk,maaamet_kood,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3129,6 +3174,8 @@ export function fetchStratigraphies(data) {
     };fields:author_free,user_added;lookuptype:${data.author__lookuptype ||
       "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3229,7 +3276,7 @@ export function fetchArea(id) {
   return get(`area/?id=${id}&format=json`);
 }
 
-export function fetchAreas(data) {
+export function fetchAreas(data, dynamicSearch) {
   const fields =
     "name,name_en,area_type,area_type__name,area_type__name_en,maardla,eelis,egf,area_ha,deposit_area_ha,maakond,maakond__maakond,maakond__maakond_en,description,description_en,remarks,text1,polygon,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3260,6 +3307,8 @@ export function fetchAreas(data) {
     };fields:maakond__maakond,maakond__maakond_en;lookuptype:${data.maakond__lookuptype ||
       "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3313,7 +3362,7 @@ export function fetchLocation(id) {
   return get(`location/?id=${id}&format=json`);
 }
 
-export function fetchLocations(data) {
+export function fetchLocations(data, dynamicSearch) {
   let fields =
     "location,parent_location,parent_location__location,location_location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,number_items_registered,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3356,6 +3405,8 @@ export function fetchLocations(data) {
     }`;
   }
 
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -3369,8 +3420,9 @@ export function fetchLocations(data) {
   }
 }
 
-export function fetchLocationImages(data) {
-  let fields = "attachment__uuid_filename,storage__id,storage__location";
+export function fetchLocationImages(data, dynamicSearch) {
+  let fields =
+    "attachment__uuid_filename,storage__location,storage__parent_location,storage__parent_location__location,storage__location_location,storage__contents,storage__agent,storage__agent__agent,storage__date_collected_free,storage__stratigraphy_free,storage__number_items,storage__number_items_registered,storage__remarks,storage__database,storage__database__acronym,storage__user_added,storage__date_added,storage__user_changed,storage__date_changed,storage__id";
   let searchFields = "";
 
   if (data.id && data.id.trim().length > 0) {
@@ -3409,6 +3461,8 @@ export function fetchLocationImages(data) {
     searchFields += `&storage__contents__${data.contents__lookuptype ||
       "icontains"}=${data.contents}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch, "storage__");
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3468,7 +3522,7 @@ export function fetchRock(id) {
   return get(`rock/?id=${id}&format=json`);
 }
 
-export function fetchRocks(data) {
+export function fetchRocks(data, dynamicSearch) {
   let fields =
     "name,name_en,name_ru,rock_type,rock_type__name,rock_type__name_en,rock_rank,rock_rank__name,rock_rank__name_en,parent,parent__name,parent__name_en,synonym_of,synonym_of__name,synonym_of__name_en,sort,description,description_en,description_ru,description_in_estonia,description_in_estonia_en,description_in_estonia_ru,description_usage,description_usage_en,description_usage_ru,description_author,in_estonia,is_resource,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,mindat_id,link_wikipedia,link_wikipedia_en,link_wikipedia_ru,ima_status,formula,formula_html,remarks,is_private,in_portal,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3514,6 +3568,8 @@ export function fetchRocks(data) {
   if (data.in_estonia) {
     searchFields += `&in_estonia=${data.in_estonia}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3650,7 +3706,7 @@ export function fetchVisit(id) {
   return get(`visit/?id=${id}&format=json`);
 }
 
-export function fetchVisits(data) {
+export function fetchVisits(data, dynamicSearch) {
   let fields =
     "visitor,visitor__agent,visitor_free,visitor_institution,visitor_institution__agent,visitor_country,visitor_country__value,visitor_country__value_en,host,host__agent,date_arrived,date_left,purpose,collections_studied,items_studied,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3683,6 +3739,8 @@ export function fetchVisits(data) {
     searchFields += `&date_left__gte=${date}`;
   }
 
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -3708,7 +3766,7 @@ export function fetchLoan(id) {
   return get(`loan/?id=${id}&format=json`);
 }
 
-export function fetchLoans(data) {
+export function fetchLoans(data, dynamicSearch) {
   let fields =
     "loan_number,date_start,date_end,type,type__value,type__value_en,project,borrower,borrower__agent,borrower_institution,borrower_institution__agent,loaner,loaner__agent,date_signed,delivery_method,delivery_method__value,delivery_method__value_en,deliverer,deliverer__agent,delivery_remarks,returned,date_returned,special,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -3755,6 +3813,8 @@ export function fetchLoans(data) {
   if (data.isActive) {
     searchFields += `&returned=${!data.isActive}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3829,7 +3889,7 @@ export function fetchAccessionDetail(id) {
   return get(`accession/?id=${id}&format=json`);
 }
 
-export function fetchAccessions(data) {
+export function fetchAccessions(data, dynamicSearch) {
   let fields =
     "number,date_signed,date_confirmed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -3844,6 +3904,8 @@ export function fetchAccessions(data) {
     searchFields += `&description__${data.description__lookuptype ||
       "icontains"}=${data.description}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3870,7 +3932,7 @@ export function fetchDeaccessionDetail(id) {
   return get(`deaccession/?id=${id}&format=json`);
 }
 
-export function fetchDeaccessions(data) {
+export function fetchDeaccessions(data, dynamicSearch) {
   let fields =
     "number,date_signed,date_confirmed,agent_kandis__agent,agent_kandis,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -3885,6 +3947,8 @@ export function fetchDeaccessions(data) {
     searchFields += `&description__${data.description__lookuptype ||
       "icontains"}=${data.description}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3911,8 +3975,9 @@ export function fetchWebNewsDetail(id) {
   return get(`web_news/?id=${id}&format=json`);
 }
 
-export function fetchWebNews(data) {
-  const fields = "title_et,title_en,text_en,text_et,is_private,user_added,date_added,user_changed,date_changed,date_expires,timestamp,id"
+export function fetchWebNews(data, dynamicSearch) {
+  const fields =
+    "title_et,title_en,text_en,text_et,is_private,user_added,date_added,user_changed,date_changed,date_expires,timestamp,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3925,6 +3990,8 @@ export function fetchWebNews(data) {
       data.title
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3951,8 +4018,9 @@ export function fetchWebPagesDetail(id) {
   return get(`web_pages/?id=${id}&format=json`);
 }
 
-export function fetchWebPages(data) {
-  const fields = "title_et,menu_title_et,content_et,link_et,title_en,menu_title_en,content_en,link_en,public,menu,menu_bold,menu_color,menu_fold,sort,parent,site,is_private,user,date_inserted,date_expires,timestamp,id"
+export function fetchWebPages(data, dynamicSearch) {
+  const fields =
+    "title_et,menu_title_et,content_et,link_et,title_en,menu_title_en,content_en,link_en,public,menu,menu_bold,menu_color,menu_fold,sort,parent,site,is_private,user,date_inserted,date_expires,timestamp,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3965,6 +4033,8 @@ export function fetchWebPages(data) {
       data.title
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -3991,8 +4061,9 @@ export function fetchTaxonPagesDetail(id) {
   return get(`taxon_page/?id=${id}&format=json`);
 }
 
-export function fetchTaxonPages(data) {
-  const fields = "taxon,taxon__taxon,language,on_frontpage,frontpage,frontpage_order,frontpage_title,title,content,author,author__agent,author_txt,date_txt,is_private,link_wikipedia,user_added,date_added,user_changed,date_changed,id"
+export function fetchTaxonPages(data, dynamicSearch) {
+  const fields =
+    "taxon,taxon__taxon,language,on_frontpage,frontpage,frontpage_order,frontpage_title,title,content,author,author__agent,author_txt,date_txt,is_private,link_wikipedia,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4017,6 +4088,8 @@ export function fetchTaxonPages(data) {
   if (data.on_frontpage) {
     searchFields += `&on_frontpage=${data.on_frontpage}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -4047,8 +4120,9 @@ export function fetchSiteGroundwaterUsingSite(siteId) {
   return get(`site_groundwater/?site=${siteId}&format=json`);
 }
 
-export function fetchSiteGroundwaters(data) {
-  const fields = "site,aquifer_system,aquifer,well_depth,type_txt,filter_type,filter_top_z,filter_bottom_z,filter_midpoint_z,filter_top,filter_bottom,filter_midpoint,kataster_id,keskkonnaregister_id,url_veka,remarks,user_added,date_added,user_changed,date_changed,id"
+export function fetchSiteGroundwaters(data, dynamicSearch) {
+  const fields =
+    "site,aquifer_system,aquifer,well_depth,type_txt,filter_type,filter_top_z,filter_bottom_z,filter_midpoint_z,filter_top,filter_bottom,filter_midpoint,kataster_id,keskkonnaregister_id,url_veka,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4107,6 +4181,8 @@ export function fetchSiteGroundwaters(data) {
     }`;
   }
 
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -4140,7 +4216,7 @@ export function fetchActiveSarvIssues(currentUserId) {
   );
 }
 
-export function fetchSarvIssues(data, currentUserId) {
+export function fetchSarvIssues(data, currentUserId, dynamicSearch) {
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4159,6 +4235,8 @@ export function fetchSarvIssues(data, currentUserId) {
     searchFields += `&from_user__username__${data.from_user__lookuptype ||
       "icontains"}=${data.from_user}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -4205,8 +4283,9 @@ export function fetchSampleSeriesDetail(id) {
   return get(`sample_series/?id=${id}&format=json`);
 }
 
-export function fetchSampleSeries(data) {
-  const fields = "name,sampling_purpose,sample_count,sample_numbers,number_prefix,number_start,locality,locality__locality,locality__locality_en,locality_free,zero_level,depth_top,depth_base,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,agent_collected,agent_collected__agent,date_collected,date_collected_free,location,remarks,owner,owner__agent,public,is_private,user_added,date_added,user_changed,date_changed,database,database__acronym,id"
+export function fetchSampleSeries(data, dynamicSearch) {
+  const fields =
+    "name,sampling_purpose,sample_count,sample_numbers,number_prefix,number_start,locality,locality__locality,locality__locality_en,locality_free,zero_level,depth_top,depth_base,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,agent_collected,agent_collected__agent,date_collected,date_collected_free,location,remarks,owner,owner__agent,public,is_private,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -4227,6 +4306,8 @@ export function fetchSampleSeries(data) {
     };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:${data.agent_collected__lookuptype ||
       "icontains"}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -4269,7 +4350,7 @@ export function fetchSampleSeriesAttachments(id, searchParameters) {
  ***  ANALYSIS_PARAMETERS START  ***
  **********************************/
 
-export function fetchAnalysisParameters(data) {
+export function fetchAnalysisParameters(data, dynamicSearch) {
   const fields =
     "parameter,parameter_name,parameter_name_en,parameter_html,synonyms,parent_parameter,parent_parameter__parameter,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4294,6 +4375,8 @@ export function fetchAnalysisParameters(data) {
       data.remarks
     }`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -4320,7 +4403,7 @@ export function fetchAnalysisParameter(id) {
  ***  ANALYSIS_METHODS START  ***
  *******************************/
 
-export function fetchAnalysisMethods(data) {
+export function fetchAnalysisMethods(data, dynamicSearch) {
   const fields =
     "analysis_method,method_en,parent_method,parent_method__analysis_method,parent_method__method_en,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4358,6 +4441,8 @@ export function fetchAnalysisMethods(data) {
     }`;
   }
 
+  searchFields += buildDynamicSearch(dynamicSearch);
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -4387,7 +4472,7 @@ export function fetchImageset(id) {
   return get(`imageset/?id=${id}&format=json`);
 }
 
-export function fetchImagesets(data, author) {
+export function fetchImagesets(data, author, dynamicSearch) {
   const fields =
     "imageset_number,imageset_series,author,author__agent,author_free,date_start,date_end,date_free,device,device__name,object,place,keywords,description,date_digitised,date_digitised_free,device_digitised,device_digitised__name,agent_digitised,agent_digitised__agent,is_private,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4402,6 +4487,8 @@ export function fetchImagesets(data, author) {
     searchFields += `&description__${data.description__lookuptype ||
       "icontains"}=${data.description}`;
   }
+
+  searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
@@ -4491,6 +4578,17 @@ function buildOrderBy(sortBy, sortDesc) {
 
     return orderBy;
   } else return "-id";
+}
+
+function buildDynamicSearch(data, prefix = "") {
+  let result = "";
+  if (data?.length > 0) {
+    data.forEach(item => {
+      if (item.value)
+        result += `&${prefix}${item.id}__${item.lookUpType}=${item.value}`;
+    });
+  }
+  return result;
 }
 
 /*********************

@@ -15,7 +15,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchProjects"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -24,7 +25,6 @@
 <script>
 import ListModuleCore from "./ListModuleCore";
 import { fetchProjects } from "@/assets/js/api/apiCalls";
-import { mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
@@ -48,22 +48,19 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "name", title: "common.name", type: "text" },
       { id: "id", title: "common.id", type: "number" }
     ]);
   },
 
-  computed: {
-    ...mapGetters("user", ["getCurrentUser"])
-  },
-
   methods: {
-    fetchProjects() {
-      return new Promise(resolve => {
-        resolve(fetchProjects(this.searchParameters, this.getCurrentUser.id));
-      });
+    apiCall() {
+      return fetchProjects(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

@@ -20,7 +20,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchSampleSeries"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -52,7 +53,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "name", title: "common.name", type: "text" },
       { id: "locality", title: "common.locality", type: "text" },
@@ -65,10 +66,11 @@ export default {
   },
 
   methods: {
-    fetchSampleSeries() {
-      return new Promise(resolve => {
-        resolve(fetchSampleSeries(this.searchParameters));
-      });
+    apiCall() {
+      return fetchSampleSeries(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

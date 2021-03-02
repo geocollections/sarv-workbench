@@ -20,18 +20,18 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchCollections"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchCollections } from "../assets/js/api/apiCalls";
+import { fetchCollections } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
@@ -53,7 +53,7 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getAllFieldNames();
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
       { id: "number", title: "collection.number", type: "number" },
@@ -66,10 +66,11 @@ export default {
   },
 
   methods: {
-    fetchCollections() {
-      return new Promise(resolve => {
-        resolve(fetchCollections(this.searchParameters));
-      });
+    apiCall() {
+      return fetchCollections(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };
