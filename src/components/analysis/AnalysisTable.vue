@@ -46,7 +46,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.sample__locality__locality="{ item }">
+    <template v-slot:item.sample__locality="{ item }">
       <router-link
         :to="{ path: '/locality/' + item.sample__locality }"
         :title="$t('editLocality.editMessage')"

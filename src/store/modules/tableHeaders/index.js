@@ -103,7 +103,7 @@ const state = {
       "id",
       "sample",
       "sample__number",
-      "sample__locality__locality",
+      "sample__locality",
       "sample__depth",
       "analysis_method__analysis_method",
       "date",
