@@ -29,7 +29,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchTaxonPages } from "../assets/js/api/apiCalls";
+import { fetchTaxonPages } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions } from "vuex";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
@@ -62,10 +62,11 @@ export default {
 
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
-    fetchTaxonPages() {
-      return new Promise(resolve => {
-        resolve(fetchTaxonPages(this.searchParameters));
-      });
+    apiCall() {
+      return fetchTaxonPages(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

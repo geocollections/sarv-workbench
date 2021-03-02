@@ -81,10 +81,11 @@ export default {
   },
 
   methods: {
-    fetchSites() {
-      return new Promise(resolve => {
-        resolve(fetchSites(this.searchParameters));
-      });
+    apiCall() {
+      return fetchSites(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

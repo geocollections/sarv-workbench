@@ -66,10 +66,11 @@ export default {
   },
 
   methods: {
-    fetchSampleSeries() {
-      return new Promise(resolve => {
-        resolve(fetchSampleSeries(this.searchParameters));
-      });
+    apiCall() {
+      return fetchSampleSeries(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

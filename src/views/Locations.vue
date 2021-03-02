@@ -70,14 +70,16 @@ export default {
   },
 
   methods: {
-    fetchLocations() {
-      return new Promise(resolve => {
-        resolve(
-          this.locationViewType === "image"
-            ? fetchLocationImages(this.searchParameters)
-            : fetchLocations(this.searchParameters)
-        );
-      });
+    apiCall() {
+      return this.locationViewType === "image"
+        ? fetchLocationImages(
+            this.searchParameters,
+            this.$_tableHeaderMixin_searchFields
+          )
+        : fetchLocations(
+            this.searchParameters,
+            this.$_tableHeaderMixin_searchFields
+          );
     },
     searchLocationImages(searchImages) {
       // Just to trigger change

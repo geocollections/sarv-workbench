@@ -15,7 +15,7 @@
       :module="$route.meta.object"
       :searchParameters="searchParameters"
       :dynamic-search-fields="$_tableHeaderMixin_searchFields"
-      :api-call="fetchWebPages"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -25,7 +25,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchWebPages } from "../assets/js/api/apiCalls";
+import { fetchWebPages } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
@@ -58,10 +58,11 @@ export default {
   },
 
   methods: {
-    fetchWebPages() {
-      return new Promise(resolve => {
-        resolve(fetchWebPages(this.searchParameters));
-      });
+    apiCall() {
+      return fetchWebPages(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

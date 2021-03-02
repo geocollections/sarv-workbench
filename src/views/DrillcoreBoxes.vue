@@ -85,7 +85,7 @@ export default {
         this.updateSearchParamsByField(["id"], "sortBy");
         this.updateSearchParamsByField([true], "sortDesc");
       }
-    },
+    }
   }
 };
 </script>

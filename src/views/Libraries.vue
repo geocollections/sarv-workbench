@@ -58,10 +58,11 @@ export default {
   },
 
   methods: {
-    fetchLibraries() {
-      return new Promise(resolve => {
-        resolve(fetchLibraries(this.searchParameters));
-      });
+    apiCall() {
+      return fetchLibraries(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

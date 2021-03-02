@@ -28,7 +28,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import ListModuleCore from "./ListModuleCore";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions, mapGetters } from "vuex";
-import { fetchSarvIssues } from "../assets/js/api/apiCalls";
+import { fetchSarvIssues } from "@/assets/js/api/apiCalls";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "SarvIssues",
@@ -62,10 +62,12 @@ export default {
     ...mapActions("search", ["setActiveSearchParameters"]),
     ...mapActions("search", ["fetchActiveSarvIssues"]),
 
-    fetchSarvIssues() {
-      return new Promise(resolve => {
-        resolve(fetchSarvIssues(this.searchParameters, this.getUserId));
-      });
+    apiCall() {
+      return fetchSarvIssues(
+        this.searchParameters,
+        this.getUserId,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

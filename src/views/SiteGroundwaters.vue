@@ -26,9 +26,8 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchSiteGroundwaters } from "../assets/js/api/apiCalls";
+import { fetchSiteGroundwaters } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
-import { mapGetters, mapState } from "vuex";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "SiteGroundwaters",
@@ -98,12 +97,11 @@ export default {
   },
 
   methods: {
-    fetchSiteGroundwaters() {
-      return new Promise(resolve => {
-        resolve(
-          fetchSiteGroundwaters(this.searchParameters)
-        );
-      });
+    apiCall() {
+      return fetchSiteGroundwaters(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

@@ -26,7 +26,6 @@
 <script>
 import ListModuleCore from "./ListModuleCore";
 import { fetchReferences } from "@/assets/js/api/apiCalls";
-import { fetchAddReferenceToLibrary } from "../assets/js/api/apiCalls";
 import { mapActions, mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
@@ -95,10 +94,11 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
-    fetchReferences() {
-      return new Promise(resolve => {
-        resolve(fetchReferences(this.searchParameters));
-      });
+    apiCall() {
+      return fetchReferences(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

@@ -316,7 +316,7 @@
               :body-active-color="bodyActiveColor"
               :look-up-types="translatedLookUpTypes"
               :dynamic-search-fields="$_tableHeaderMixin_searchFields"
-              :col-size="colSize"
+              :col-size="3"
               @update:dynamicSearchFields="updateDynamicSearchFieldsDebounced"
             />
 

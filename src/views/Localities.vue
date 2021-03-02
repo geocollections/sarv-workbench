@@ -27,8 +27,7 @@ import ListModuleCore from "./ListModuleCore";
 import { fetchLocalities } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { mapActions, mapGetters, mapState } from "vuex";
-import isEmpty from "lodash";
+import { mapActions, mapState } from "vuex";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
@@ -78,10 +77,11 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
-    fetchLocalities() {
-      return new Promise(resolve => {
-        resolve(fetchLocalities(this.searchParameters));
-      });
+    apiCall() {
+      return fetchLocalities(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

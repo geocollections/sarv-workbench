@@ -31,7 +31,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchSelectionSeries } from "../assets/js/api/apiCalls";
+import { fetchSelectionSeries } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
@@ -63,10 +63,11 @@ export default {
   },
 
   methods: {
-    fetchSelectionSeries() {
-      return new Promise(resolve => {
-        resolve(fetchSelectionSeries(this.searchParameters));
-      });
+    apiCall() {
+      return fetchSelectionSeries(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

@@ -23,11 +23,10 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { fetchKeywords } from "../assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { fetchImagesets } from "@/assets/js/api/apiCalls";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
@@ -62,10 +61,12 @@ export default {
   },
 
   methods: {
-    fetchImagesets() {
-      return new Promise(resolve => {
-        resolve(fetchImagesets(this.searchParameters, this.getCurrentUser.id));
-      });
+    apiCall() {
+      return fetchImagesets(
+        this.searchParameters,
+        this.getCurrentUser.id,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

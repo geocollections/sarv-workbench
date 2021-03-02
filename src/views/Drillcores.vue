@@ -59,10 +59,11 @@ export default {
     ]);
   },
   methods: {
-    fetchDrillcores() {
-      return new Promise(resolve => {
-        resolve(fetchDrillcores(this.searchParameters));
-      });
+    apiCall() {
+      return fetchDrillcores(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

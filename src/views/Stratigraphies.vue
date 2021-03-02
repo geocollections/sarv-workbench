@@ -29,7 +29,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchStratigraphies } from "../assets/js/api/apiCalls";
+import { fetchStratigraphies } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
@@ -68,10 +68,11 @@ export default {
   },
 
   methods: {
-    fetchStratigraphies() {
-      return new Promise(resolve => {
-        resolve(fetchStratigraphies(this.searchParameters));
-      });
+    apiCall() {
+      return fetchStratigraphies(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };
