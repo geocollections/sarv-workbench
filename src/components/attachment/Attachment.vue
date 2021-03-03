@@ -146,7 +146,7 @@
                     :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
                     item-text="agent"
-                    :label="$t('attachment.author')"
+                    :label="$t('attachment.author__agent')"
                     use-custom-state
                     :error="
                       !(
@@ -288,7 +288,7 @@
                     :items="autocomplete.locality"
                     :loading="autocomplete.loaders.locality"
                     :item-text="localityLabel"
-                    :label="$t('attachment.locality')"
+                    :label="$t('attachment.locality__locality')"
                     is-link
                     route-object="locality"
                     is-searchable
@@ -1679,7 +1679,7 @@
                     :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
                     item-text="agent"
-                    :label="$t('attachment.author')"
+                    :label="$t('attachment.author__agent')"
                     use-custom-state
                     :error="
                       !(
@@ -1759,7 +1759,7 @@
                     :items="autocomplete.specimen"
                     :loading="autocomplete.loaders.specimen"
                     :item-text="customLabelForSpecimen"
-                    :label="$t('attachment.specimen')"
+                    :label="$t('attachment.specimen__specimen_id')"
                     use-state
                     is-link
                     route-object="specimen"
@@ -1994,7 +1994,7 @@
                     :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
                     item-text="agent"
-                    :label="$t('attachment.author')"
+                    :label="$t('attachment.author__agent')"
                     use-custom-state
                     :error="
                       !(
@@ -3580,7 +3580,7 @@
                     :items="autocomplete.reference"
                     :loading="autocomplete.loaders.reference"
                     :item-text="customLabelForReference"
-                    :label="$t('attachment.reference')"
+                    :label="$t('attachment.reference__reference')"
                     use-state
                     is-link
                     route-object="reference"
@@ -3791,7 +3791,7 @@
           <checkbox-wrapper
             v-model="attachment.is_locked"
             :color="bodyActiveColor"
-            :label="$t('attachment.is_locked_text')"
+            :label="$t('attachment.is_locked')"
             @change="attachment.is_locked = !attachment.is_locked"
           />
         </div>
