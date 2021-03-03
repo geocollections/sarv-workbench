@@ -124,7 +124,7 @@
                 :items="autocomplete.languages"
                 :loading="autocomplete.loaders.languages"
                 :item-text="commonLabel"
-                :label="$t('reference.language')"
+                :label="$t('reference.language__value')"
               />
             </v-col>
 
@@ -146,7 +146,7 @@
                 :items="autocomplete.journals"
                 :loading="autocomplete.loaders.journals"
                 item-text="journal_name"
-                :label="$t('reference.journal')"
+                :label="$t('reference.journal__journal_name')"
                 is-link
                 route-object="journal"
                 is-searchable
