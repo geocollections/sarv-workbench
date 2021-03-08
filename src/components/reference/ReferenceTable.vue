@@ -84,7 +84,7 @@
       >
     </template>
 
-    <template v-slot:item.attachment="{ item }">
+    <template v-slot:item.attachment__filename="{ item }">
       <v-btn
         v-if="item.attachment__filename"
         :href="getFileUrl(item.attachment__filename)"

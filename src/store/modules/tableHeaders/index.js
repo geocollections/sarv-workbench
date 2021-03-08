@@ -77,7 +77,7 @@ const state = {
     taxon_page: [],
     visit: [],
     web_news: [],
-    web_pages: [],
+    web_pages: []
   },
   defaults: {
     accession: [
@@ -269,7 +269,7 @@ const state = {
       "is_estonian_reference",
       "link",
       "doi",
-      "attachment",
+      "attachment__filename",
       "url"
     ],
     rock: [
