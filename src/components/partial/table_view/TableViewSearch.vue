@@ -424,7 +424,8 @@ export default {
 
     updateDynamicSearchFieldsDebounced: debounce(function(payload) {
       this.$_tableHeaderMixin_updateDynamicSearchField(payload);
-    }, 400)
+    // }, 400) TODO: For Testing Purposes
+    }, 0)
   }
 };
 </script>
