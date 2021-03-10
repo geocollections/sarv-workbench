@@ -1731,6 +1731,7 @@ export default {
 
     addFiles(files, singleFileMetadata) {
       this.addFileAsRelatedDataNew(files, "reference", singleFileMetadata);
+      this.loadAutocompleteFields(false, true);
     },
 
     addExistingFiles(files) {
