@@ -1729,13 +1729,8 @@ export default {
       this.addFileAsObject(fileData, "reference");
     },
 
-    async addFiles(files, singleFileMetadata) {
-      await this.addFileAsRelatedDataNew(
-        files,
-        "reference",
-        singleFileMetadata
-      );
-      this.loadAutocompleteFields(false, true);
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "reference", singleFileMetadata);
     },
 
     addExistingFiles(files) {

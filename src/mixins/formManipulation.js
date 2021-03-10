@@ -447,10 +447,12 @@ const formManipulation = {
           savedObjectId => {
             console.log(savedObjectId);
             if (savedObjectId) {
-              if (this.isNotEmpty(this.relatedData.attachment))
+              if (relatedObject === "reference")
+                this.loadAutocompleteFields(false, true);
+              else {
                 this.loadRelatedData("attachment");
-              else if (this.isNotEmpty(this.relatedData.attachment_link))
                 this.loadRelatedData("attachment_link");
+              }
             }
           }
         );
