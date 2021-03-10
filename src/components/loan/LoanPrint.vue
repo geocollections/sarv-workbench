@@ -18,10 +18,18 @@
         </v-row>
 
         <v-row no-gutters class="text-center mt-4">
-          <v-col cols="12">{{ $t("loan_print.title") }}</v-col>
-          <v-col cols="12" style="font-size: 0.7rem;">{{
-            $t("loan_print.title_address")
-          }}</v-col>
+          <v-col cols="12">
+            <div
+              style="font-size: 1.2rem"
+              v-translate="{
+                et: loan.loaner__institution__institution_name,
+                en: loan.loaner__institution__institution_name_en
+              }"
+            />
+          </v-col>
+          <v-col cols="12" style="font-size: 0.8rem;">
+            {{ loanReturnAddress }}
+          </v-col>
           <v-col cols="12">
             <v-divider class="mt-1" style="border-color: black;"></v-divider>
           </v-col>
@@ -128,13 +136,20 @@
               >
 
               {{ $t("loan_print.specimen_info2") }}
+              <span
+                v-translate="{
+                  et: loan.loaner__institution__institution_name,
+                  en: loan.loaner__institution__institution_name_en
+                }"
+              ></span>
+              {{ $t("loan_print.specimen_info3") }}
 
               <span class="font-weight-bold">{{ loan.date_end }}</span
               >.
             </div>
 
             <div class="mt-2">
-              {{ $t("loan_print.specimen_info3") }}
+              {{ $t("loan_print.specimen_info4") }}
               <span
                 v-translate="{
                   et: loan.delivery_method__value,
@@ -392,7 +407,7 @@
             <div class="text-center" style="color: transparent;">.</div>
             <div style="border-bottom: 1px solid black;"></div>
             <div class="text-center">
-              {{ $t("loan_print.chief_curator") }}
+              {{ loanerSignature }}
             </div>
           </v-col>
           <v-col cols="4">
@@ -409,7 +424,14 @@
         >
           <v-col cols="12" class="pa-1" v-if="loanSpecimens.length > 0">
             <div class="font-weight-bold mt-4 mb-3">
-              {{ $t("loan_print.specimen_extra") }}
+              {{ $t("loan_print.specimen_extra0") }}
+              <span
+                v-translate="{
+                  et: loan.loaner__institution__institution_name,
+                  en: loan.loaner__institution__institution_name_en
+                }"
+              />
+              {{ $t("loan_print.specimen_extra0a") }}
             </div>
 
             <div class="my-3">
@@ -418,6 +440,12 @@
               {{ $t("loan_print.specimen_extra2") }}
               <span>{{ loan.date_end }}</span>
               {{ $t("loan_print.specimen_extra3") }}
+              <span
+                v-translate="{
+                  et: loan.loaner__institution__institution_name,
+                  en: loan.loaner__institution__institution_name_en
+                }"
+              />
             </div>
 
             <div class="my-3">
@@ -426,6 +454,13 @@
 
             <div class="my-3">
               {{ $t("loan_print.specimen_extra5") }}
+              <span
+                v-translate="{
+                  et: loan.loaner__institution__institution_name,
+                  en: loan.loaner__institution__institution_name_en
+                }"
+              />
+              {{ $t("loan_print.specimen_extra5a") }}
             </div>
 
             <div class="mt-3 mb-4">
@@ -440,8 +475,16 @@
             </div>
 
             <div class="my-3">
-              {{ $t("loan_print.sample_extra1")
-              }}<a
+              {{ $t("loan_print.sample_extra1") }}
+              <span
+                v-translate="{
+                  et: loan.loaner__institution__institution_name,
+                  en: loan.loaner__institution__institution_name_en
+                }"
+              ></span
+              >.
+              {{ $t("loan_print.sample_extra1a") }}
+              <a
                 href="https://geocollections.info"
                 class="sarv-link"
                 target="GeocollectionsWindow"
@@ -451,6 +494,21 @@
 
             <div class="my-3">
               {{ $t("loan_print.sample_extra2") }}
+              <span
+                v-translate="{
+                  et: loan.loaner__institution__institution_name + '.',
+                  en: loan.loaner__institution__institution_name_en
+                }"
+              ></span>
+              {{ $t("loan_print.sample_extra2a") }}
+              <span
+                v-translate="{
+                  et: loan.loaner__institution__institution_name,
+                  en: loan.loaner__institution__institution_name_en
+                }"
+              ></span
+              >.
+              {{ $t("loan_print.sample_extra2b") }}
             </div>
 
             <div class="mt-3 mb-4">
@@ -469,8 +527,8 @@
               </div>
             </div>
             <div v-else-if="loanSamples.length > 0">
-              <div class="text-center" v-if="loan.database === 1">
-                {{ $t("loan_print.chief_curator") }}
+              <div class="text-center" v-if="loanerSignature">
+                {{ loanerSignature }}
               </div>
               <div class="text-center" v-else>
                 {{ $t("loan_print.signature") }}
@@ -507,6 +565,35 @@ export default {
     loanSamples: [],
     names: []
   }),
+  computed: {
+    loanReturnAddress() {
+      let address = "";
+      if (this.loan.loaner__institution__address)
+        address += this.loan.loaner__institution__address;
+      if (this.loan.loaner__institution__address1)
+        address += `, ${this.loan.loaner__institution__address1}`;
+      if (this.loan.loaner__institution__address2)
+        address += `, ${this.loan.loaner__institution__address2}`;
+      if (this.loan.loaner__institution__phone)
+        address += `; tel: ${this.loan.loaner__institution__phone}`;
+      if (this.loan.loaner__institution__http)
+        address += `; ${this.loan.loaner__institution__http}`;
+      if (this.loan.loaner__institution__email)
+        address += `; e-mail: ${this.loan.loaner__institution__email}`;
+
+      return address;
+    },
+
+    loanerSignature() {
+      let signature = "";
+      if (this.loan.loaner__forename && this.loan.loaner__surename)
+        signature += `${this.loan.loaner__forename} ${this.loan.loaner__surename}`;
+      else signature += `${this.loan.loaner__agent}`;
+      if (this.loan.loaner__profession)
+        signature += `, ${this.loan.loaner__profession}`;
+      return signature;
+    }
+  },
   watch: {
     "$route.params.id": {
       handler(newVal) {
