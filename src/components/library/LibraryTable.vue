@@ -52,7 +52,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'library', id: item.id })"
+        :href="getGeokirjandusUrl({ object: 'library', id: item.id })"
         :title="$t('editLibrary.viewMessage')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"
@@ -100,8 +100,8 @@ export default {
     }
   },
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
+    getGeokirjandusUrl(params) {
+      return `https://geoloogia.info/${params.object}/${params.id}`;
     }
   }
 };

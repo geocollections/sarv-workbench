@@ -1143,6 +1143,7 @@
     "value_new": "Uus väärtus"
   },
   "sample": {
+    "link": "Link",
     "agent_collected__agent": "Koguja",
     "agent_collected__id": "Koguja ID",
     "analysis": "Analüüs",

@@ -1144,6 +1144,7 @@
     "value_new": "New value"
   },
   "sample": {
+    "link": "Link",
     "agent_collected__agent": "Agent collected",
     "agent_collected__id": "Agent collected ID",
     "analysis": "Analysis",

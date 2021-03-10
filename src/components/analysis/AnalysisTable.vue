@@ -66,7 +66,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'analysis', id: item.id })"
+        :href="getEmaUrl({ object: 'analysis', id: item.id })"
         :title="$t('editAnalysis.viewMessage')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"
@@ -115,8 +115,8 @@ export default {
     }
   },
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
+    getEmaUrl(params) {
+      return `https://ema.geoloogia.info/${params.object}/${params.id}`;
     }
   }
 };

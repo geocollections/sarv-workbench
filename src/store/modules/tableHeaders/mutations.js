@@ -33,6 +33,7 @@ const mutations = {
       payload.table === "preparation" ||
       payload.table === "reference" ||
       payload.table === "rock" ||
+      payload.table === "sample" ||
       payload.table === "specimen" ||
       payload.table === "stratigraphy" ||
       payload.table === "taxon"
