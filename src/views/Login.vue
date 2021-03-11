@@ -10,7 +10,7 @@
     <div class="gradient"></div>
     <v-container fill-height>
       <v-row align="center" justify="center">
-        <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
+        <v-col sm="10" md="8" lg="6" xl="4" style="margin: 48px 0;">
           <GlobalAlertNotification />
 
           <DevNotification />
@@ -142,26 +142,26 @@
     </v-container>
     <site-icons style="z-index: 3"></site-icons>
     <!--  Load in background images  -->
-    <img
-      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_1.jpg`"
-      alt="background_image_1"
-      v-show="false"
-    />
+    <!--    <img-->
+    <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_1.jpg`"-->
+    <!--      alt="background_image_1"-->
+    <!--      v-show="false"-->
+    <!--    />-->
     <img
       :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_2.jpg`"
       alt="background_image_2"
       v-show="false"
     />
-    <img
-      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_3.jpg`"
-      alt="background_image_3"
-      v-show="false"
-    />
-    <img
-      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_4.jpg`"
-      alt="background_image_4"
-      v-show="false"
-    />
+    <!--    <img-->
+    <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_3.jpg`"-->
+    <!--      alt="background_image_3"-->
+    <!--      v-show="false"-->
+    <!--    />-->
+    <!--    <img-->
+    <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_4.jpg`"-->
+    <!--      alt="background_image_4"-->
+    <!--      v-show="false"-->
+    <!--    />-->
   </v-main>
 </template>
 
@@ -205,10 +205,10 @@ export default {
     idError: false,
     imageId: 0,
     images: [
-      "/img/sarv-edit/background_1.jpg",
-      "/img/sarv-edit/background_2.jpg",
-      "/img/sarv-edit/background_3.jpg",
-      "/img/sarv-edit/background_4.jpg"
+      // "/img/sarv-edit/background_1.jpg",
+      "/img/sarv-edit/background_2.jpg"
+      // "/img/sarv-edit/background_3.jpg",
+      // "/img/sarv-edit/background_4.jpg"
     ],
     imageInterval: 60000
   }),
@@ -244,7 +244,7 @@ export default {
         this.login();
     },
     changeImage() {
-      if (this.images.length > 0) {
+      if (this.images.length > 1) {
         setInterval(() => {
           if (this.imageId >= this.images.length - 1) this.imageId = 0;
           else this.imageId++;
