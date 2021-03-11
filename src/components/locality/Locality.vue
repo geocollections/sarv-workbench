@@ -152,7 +152,7 @@
 
           <!-- MAP SWITCH -->
           <v-card
-            class="d-flex flex-row justify-content-start mb-1 mx-3"
+            class="d-flex flex-row justify-start mb-1 mx-3"
             flat
             :color="bodyColor.split('n-')[0] + 'n-5'"
             tile

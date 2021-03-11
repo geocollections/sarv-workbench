@@ -207,7 +207,7 @@
           <div v-if="activeTab === 'sites'">
             <!-- MAP SWITCH -->
             <v-card
-              class="d-flex flex-row justify-content-start mt-1 mx-3"
+              class="d-flex flex-row justify-start mt-1 mx-3"
               flat
               tile
               :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -257,7 +257,7 @@
 
             <!-- ADD NEW and EXPORT -->
             <v-card
-              class="d-flex flex-row justify-content-start mt-2 mb-3"
+              class="d-flex flex-row justify-start mt-2 mb-3"
               flat
               tile
               :color="bodyColor.split('n-')[0] + 'n-5'"

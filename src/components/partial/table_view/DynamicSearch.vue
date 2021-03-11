@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row no-gutters>
     <v-col cols="12">
       <v-card :color="bodyColor.split('n-')[0] + 'n-4'" elevation="2">
         <v-card-title class="pb-0 pt-2">
@@ -24,15 +24,16 @@
 
         <v-card-text class="pt-0 pb-2">
           <div v-show="showDynamicSearch">
-            <v-row>
+            <v-row no-gutters>
               <v-col
+                class="pa-2"
                 cols="12"
                 :md="colSize"
                 v-for="(item, index) in dynamicSearchFields"
                 :key="index"
               >
-                <v-row class="pa-2">
-                  <v-col cols="3" xl="2" class="py-0 px-1">
+                <v-row no-gutters>
+                  <v-col cols="3" xl="2" class="px-1">
                     <v-select
                       :value="item.lookUpType || 'icontains'"
                       :color="bodyActiveColor"
@@ -58,7 +59,7 @@
                     </v-select>
                   </v-col>
 
-                  <v-col cols="9" xl="10" class="py-0 px-1">
+                  <v-col cols="9" xl="10" class="px-1">
                     <v-text-field
                       :value="item.value"
                       :label="$t(item.title)"

@@ -11,7 +11,7 @@ import constants from "@/plugins/constants";
 require("moment/locale/et");
 
 // Bootstrap css
-import "bootstrap/dist/css/bootstrap.css";
+// import "bootstrap/dist/css/bootstrap.css";
 
 import "izitoast/dist/css/iziToast.min.css"; // Pop-up messages style
 import "leaflet/dist/leaflet.css"; // Leaflet css

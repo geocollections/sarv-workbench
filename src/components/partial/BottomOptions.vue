@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-options-new" :class="bodyColor.split('n-')[0] + 'n-5'">
     <div
-      class="d-flex justify-content-around align-items-center"
+      class="d-flex align-center justify-space-around"
       :class="{
         'drawer-left-margin': drawerState,
         'drawer-left-margin-0': !drawerState,

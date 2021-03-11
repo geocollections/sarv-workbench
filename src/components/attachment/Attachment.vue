@@ -352,7 +352,7 @@
 
               <!-- MAP SWITCH -->
               <v-card
-                class="d-flex flex-row justify-content-start mb-1 mx-3"
+                class="d-flex flex-row justify-start mb-1 mx-3"
                 flat
                 tile
                 :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -488,7 +488,7 @@
               </v-row>
 
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap pa-1">
+              <div class="d-flex justify-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
                   <autocomplete-wrapper
                     v-model="relatedData.keyword"
@@ -1820,7 +1820,7 @@
               </v-row>
 
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap pa-1">
+              <div class="d-flex justify-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
                   <autocomplete-wrapper
                     v-model="relatedData.keyword"
@@ -2185,7 +2185,7 @@
 
               <!-- MAP SWITCH -->
               <v-card
-                class="d-flex flex-row justify-content-start mb-1 mx-3"
+                class="d-flex flex-row justify-start mb-1 mx-3"
                 flat
                 tile
                 :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -2283,7 +2283,7 @@
           <transition>
             <div v-show="block.description" class="pa-1">
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap pa-1">
+              <div class="d-flex justify-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
                   <autocomplete-wrapper
                     v-model="relatedData.keyword"
@@ -3807,7 +3807,7 @@
     </template>
 
     <template v-slot:add-doi>
-      <div class="d-flex justify-content-end mt-3">
+      <div class="d-flex justify-end mt-3">
         <new-doi-button
           v-if="
             attachment &&

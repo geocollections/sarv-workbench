@@ -346,7 +346,7 @@
           </v-row>
 
           <!-- REFERENCE KEYWORDS -->
-          <div class="d-flex justify-content-start flex-wrap pa-1">
+          <div class="d-flex justify-start flex-wrap pa-1">
             <div class="mr-3 flex-grow-1">
               <autocomplete-wrapper
                 v-model="relatedData.keyword"
@@ -872,7 +872,7 @@
     </v-card>
 
     <!-- NEW DOI BUTTON -->
-    <div class="d-flex justify-content-end mt-2" v-if="$route.meta.isEdit">
+    <div class="d-flex justify-end mt-2" v-if="$route.meta.isEdit">
       <new-doi-button
         v-if="
           reference &&

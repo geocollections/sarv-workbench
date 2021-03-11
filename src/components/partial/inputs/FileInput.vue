@@ -8,7 +8,7 @@
           v-on:dragover.stop.prevent="isDragging = true"
           v-on:dragleave.stop.prevent="isDragging = false"
           v-on:drop.stop.prevent="dropFile"
-          class="d-flex justify-content-center align-items-center file-upload mb-0"
+          class="d-flex justify-center align-center file-upload mb-0"
         >
           <span :class="{ 'd-none': isDragging }">
             {{ $t("add.file") }}

@@ -2,7 +2,7 @@
   <div class="admin">
     <div class="row mt-4">
       <div class="col">
-        <p class="h3 mb-2">{{ $t("header.admin") }}</p>
+        <p class="table-title mb-2">{{ $t("header.admin") }}</p>
       </div>
     </div>
 
@@ -100,4 +100,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+</style>

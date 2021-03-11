@@ -1,9 +1,9 @@
 <template>
   <div
-    class="file-preview d-flex flex-column justify-content-center align-items-center h-100"
+    class="file-preview d-flex flex-column align-center justify-center fill-height"
     v-if="data"
   >
-    <div class="align-self-center my-2">
+    <div class="align-center align-end my-2">
       <!-- AUDIO -->
       <audio v-if="isAudioFile" controls>
         <source
@@ -220,5 +220,14 @@ img:hover {
   cursor: pointer;
   opacity: 0.8;
   transition: opacity 200ms ease-in;
+}
+
+.img-thumbnail {
+  padding: 0.25rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  max-width: 100%;
+  height: auto;
 }
 </style>

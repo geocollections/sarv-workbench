@@ -2,7 +2,7 @@
   <div class="settings">
     <div class="row mt-4">
       <div class="col">
-        <p class="h3 mb-2">{{ $t("header.settings") }}</p>
+        <p class="table-title mb-2">{{ $t("header.settings") }}</p>
       </div>
     </div>
 
@@ -116,6 +116,7 @@
 
     <!-- SECURITY -->
     <v-card
+      v-if="false"
       class="mt-2"
       id="block-security"
       :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -230,5 +231,10 @@ export default {
 .card-title--clickable:hover {
   cursor: pointer;
   opacity: 0.8;
+}
+
+.table-title {
+  font-size: 2rem;
+  font-weight: 600;
 }
 </style>

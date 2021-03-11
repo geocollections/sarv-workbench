@@ -2,10 +2,10 @@
   <div class="front-page">
     <!-- NAME -->
     <v-row>
-      <v-col class="pb-0">
+      <v-col>
         <v-card flat color="transparent">
           <v-card-title class="pl-0">
-            <span class="h3 text-capitalize break-word">
+            <span class="table-title text-capitalize break-word">
               {{
                 `${$t("frontPage.welcome")}, ${getCurrentUser.forename} ${
                   getCurrentUser.surename
@@ -40,10 +40,7 @@
     </v-row>
 
     <!-- MESSAGES -->
-    <v-row
-      class="pb-6"
-      v-if="activeSarvIssues !== null && activeSarvIssues.count > 0"
-    >
+    <v-row v-if="activeSarvIssues !== null && activeSarvIssues.count > 0">
       <v-col>
         <messages
           :sarv-issues="activeSarvIssues"
@@ -55,6 +52,7 @@
 
     <!-- MAP -->
     <v-row
+      class="mt-0"
       v-if="
         isUserAllowedTo('add', 'site') &&
           isUserAllowedTo('add', 'sample') &&
@@ -62,7 +60,7 @@
           isUserAllowedTo('add', 'attachment')
       "
     >
-      <v-col class="pb-0">
+      <v-col>
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
           <v-card-title class="pt-2 pb-1">
             <div class="card-title--clickable" @click="block.map = !block.map">
@@ -91,8 +89,8 @@
     </v-row>
 
     <!-- IMAGES/FILES -->
-    <v-row class="py-6" v-if="isUserAllowedTo('add', 'attachment')">
-      <v-col class="pb-0">
+    <v-row v-if="isUserAllowedTo('add', 'attachment')">
+      <v-col>
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
           <v-card-title class="pt-2 pb-1">
             <div
@@ -116,7 +114,7 @@
 
           <div v-show="block.files">
             <v-row no-gutters class="mx-3">
-              <v-col cols="12" class="pa-1">
+              <v-col cols="12">
                 <v-radio-group
                   v-model="recentFilesPaginateBy"
                   row
@@ -283,5 +281,10 @@ export default {
 
 .radio-buttons >>> label {
   margin-bottom: 0;
+}
+
+.table-title {
+  font-size: 1.75rem;
+  font-weight: 600;
 }
 </style>

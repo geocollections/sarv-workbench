@@ -7,7 +7,7 @@
     />
 
     <!-- EXPORT and OPTIONS -->
-    <v-row align="center" justify="start" class="px-4 d-print-none">
+    <v-row align="center" justify="start" class="px-4 mt-4 mb-1 d-print-none">
       <!-- EXPORT -->
       <div class="mr-4 mb-2" v-if="exportButtons">
         <export-buttons
