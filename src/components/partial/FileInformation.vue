@@ -11,7 +11,7 @@
           <a
             v-if="reference && !data.is_private"
             class="no-underline external-link"
-            :href="'http://geoloogia.info/reference/' + this.data.id"
+            :href="'http://kirjandus.geoloogia.info/reference/' + this.data.id"
             target="ReferenceWindow"
           >
             <b>{{ $t("edit.referenceLink") }}</b> &nbsp;<i

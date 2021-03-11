@@ -152,7 +152,7 @@ export default {
 
   methods: {
     getGeoloogiaUrl(id) {
-      return `https://geoloogia.info/reference/${id}`;
+      return `https://kirjandus.geoloogia.info/reference/${id}`;
     },
 
     getDoiUrl(doi) {

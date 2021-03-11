@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     getGeokirjandusUrl(params) {
-      return `https://geoloogia.info/${params.object}/${params.id}`;
+      return `https://kirjandus.geoloogia.info/${params.object}/${params.id}`;
     }
   }
 };

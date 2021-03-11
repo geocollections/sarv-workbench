@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     getEmaUrl(params) {
-      return `https://ema.geoloogia.info/${params.object}/${params.id}`;
+      return `https://geoloogia.info/${params.object}/${params.id}`;
     }
   }
 };
