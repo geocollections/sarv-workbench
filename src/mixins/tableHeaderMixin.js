@@ -2,12 +2,22 @@ import { mapActions, mapState } from "vuex";
 
 const tableHeaderMixin = {
   computed: {
+    $_tableHeaderMixin_tableName() {
+      let table = this.$route.meta.object;
+
+      if (this.$options.name.endsWith("Table")) {
+        table = this.$options.name
+          .substring(0, this.$options.name.indexOf("Table"))
+          .toLowerCase();
+      }
+      return table;
+    },
     ...mapState("tableHeaders", {
       tableHeaders: function(state) {
-        return state[this.$route.meta.object];
+        return state[this.$_tableHeaderMixin_tableName];
       },
       $_tableHeaderMixin_searchFields: function(state) {
-        return state.searchFields[this.$route.meta.object];
+        return state.searchFields[this.$_tableHeaderMixin_tableName];
       }
     }),
 
