@@ -1,7 +1,7 @@
 <template>
   <div class="edit-form">
     <div class="d-flex flex-wrap mt-2 mb-1 page-title justify-space-between">
-      <div class="h2 float-left mb-1 mr-2 d-print-none">
+      <div class="table-title float-left mb-1 mr-2 d-print-none">
         <span>
           {{ $t($route.meta.heading) }} ID: <b>{{ $route.params.id }}</b>
         </span>
@@ -250,4 +250,9 @@ export default {
   }
 };
 </script>
-<style scoped></style>
+<style scoped>
+.table-title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+</style>

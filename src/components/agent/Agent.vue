@@ -48,6 +48,7 @@
                 :loading="autocomplete.loaders.agent_type"
                 :item-text="commonLabel"
                 :label="$t('common.type')"
+                use-state
               />
             </v-col>
 
@@ -453,7 +454,7 @@ export default {
           institution: [],
           list_country: []
         },
-        requiredFields: ["agent"],
+        requiredFields: ["agent", "type"],
         agent: {},
         block: {
           info: true,
