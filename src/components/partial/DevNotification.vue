@@ -10,6 +10,7 @@
     dense
     :outlined="!$route.meta.isLogin"
     :dismissible="!$route.meta.isLogin"
+    v-if="!isProductionUrl || ($route.meta.isLogin && isProductionUrl)"
   >
     <div v-if="$route.meta.isLogin && isProductionUrl">
       <span v-html="$t('messages.prodNotification')" />
