@@ -25,7 +25,7 @@
 
 <script>
 import AppHeader from "../components/partial/app_header/AppHeader";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import Breadcrumbs from "../components/partial/Breadcrumbs";
 import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
 import DevNotification from "@/components/partial/DevNotification";
@@ -45,7 +45,8 @@ export default {
       "bodyActiveColor",
       "recentUrls",
       "recentUrlsState"
-    ])
+    ]),
+    ...mapGetters("tableHeaders", ["getListOfAllTables"])
   },
   beforeRouteUpdate(to, from, next) {
     this.updateRecentUrls({
@@ -57,11 +58,14 @@ export default {
   created() {
     this.fetchActiveSarvIssues();
     this.fetchLastLoggedInDate();
+    // Filling all dynamic fields
+    this.getListOfAllTables().forEach(table => this.getDynamicFields(table));
   },
   methods: {
     ...mapActions("settings", ["updateRecentUrls"]),
     ...mapActions("search", ["fetchActiveSarvIssues"]),
-    ...mapActions("user", ["fetchLastLoggedInDate"])
+    ...mapActions("user", ["fetchLastLoggedInDate"]),
+    ...mapActions("tableHeaders", ["getDynamicFields"])
   }
 };
 </script>
