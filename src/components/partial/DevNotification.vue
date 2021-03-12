@@ -22,7 +22,7 @@
       >
     </div>
 
-    <div v-else>
+    <div v-else-if="!isProductionUrl">
       <span v-html="$t('messages.devNotification')" />
       <a
         href="https://edit.geocollections.info"
