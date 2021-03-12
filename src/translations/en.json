@@ -2987,7 +2987,8 @@
     "delete": "Delete the record",
     "confirm_deleting": "Are you sure you would like to delete the record?",
     "globalNotificationIsAvailable": "View global notification!",
-    "devNotification": "You are visiting the <b>development version</b> of the application. More stable version can be found here: "
+    "devNotification": "You are visiting the <b>development version</b> of the application. More stable version can be found here: ",
+    "prodNotification": "Did you know there is also a <b>development version</b>, which has all the latest features and functionality. Development version can be found here: "
   },
   "logs": {
     "title": "Editing history",

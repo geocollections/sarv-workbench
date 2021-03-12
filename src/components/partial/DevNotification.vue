@@ -10,16 +10,28 @@
     dense
     :outlined="!$route.meta.isLogin"
     :dismissible="!$route.meta.isLogin"
-    v-if="!isProductionUrl"
   >
-    <span v-html="$t('messages.devNotification')" />
-    <a
-      href="https://edit.geocollections.info"
-      :class="{ [`${bodyActiveColor}--text`]: !$route.meta.isLogin }"
-      class="font-weight-bold"
-      title="https://edit.geocollections.info"
-      >edit.geocollections.info</a
-    >
+    <div v-if="$route.meta.isLogin && isProductionUrl">
+      <span v-html="$t('messages.prodNotification')" />
+      <a
+        href="https://edit2.geocollections.info"
+        :class="{ [`${bodyActiveColor}--text`]: !$route.meta.isLogin }"
+        class="font-weight-bold"
+        title="https://edit2.geocollections.info"
+        >edit2.geocollections.info</a
+      >
+    </div>
+
+    <div v-else>
+      <span v-html="$t('messages.devNotification')" />
+      <a
+        href="https://edit.geocollections.info"
+        :class="{ [`${bodyActiveColor}--text`]: !$route.meta.isLogin }"
+        class="font-weight-bold"
+        title="https://edit.geocollections.info"
+        >edit.geocollections.info</a
+      >
+    </div>
   </v-alert>
 </template>
 
