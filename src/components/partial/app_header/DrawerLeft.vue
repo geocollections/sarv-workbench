@@ -218,6 +218,7 @@ export default {
               path: "/attachment/add/digitised_reference",
               icon: "far fa-file-pdf"
             },
+            { title: "imagesets", path: "/imageset", icon: "fas fa-images" },
             { title: "imageset", path: "/imageset/add", icon: "far fa-images" }
           ]
         },

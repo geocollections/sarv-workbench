@@ -1,6 +1,6 @@
 <template>
-  <div class="shortcuts row no-gutters">
-    <div class="col-12">
+  <v-row no-gutters class="shortcuts">
+    <v-col cols="12" class="px-1">
       <v-btn
         small
         @click="addShortcut"
@@ -22,11 +22,11 @@
         <v-icon left small>fa fa-save</v-icon>
         {{ $t("settings.saveShortcuts") }}
       </v-btn>
-    </div>
+    </v-col>
 
-    <div class="col-12 px-1" v-if="myShortcuts.length > 0">
-      <div class="row">
-        <div class="col">
+    <v-col cols="12" class="px-1" v-if="myShortcuts.length > 0">
+      <v-row>
+        <v-col cols="12">
           <p>
             {{ $t("settings.pathInfo1") }} <b class="text-info">{{ origin }}</b
             >, {{ $t("settings.pathInfo2") }} {{ origin
@@ -39,11 +39,11 @@
             <b class="text-info">{{ $t("settings.isAlwaysVisible") }}</b>
             {{ $t("settings.isAlwaysVisibleInfo") }}.
           </p>
-        </div>
-      </div>
+        </v-col>
+      </v-row>
 
-      <div class="table-responsive">
-        <table class="table">
+      <v-card elevation="2" class="mb-2 pb-2 mx-1">
+        <table class="table" style="width: 100%">
           <thead class="">
             <tr>
               <th>{{ $t("settings.handle") }}</th>
@@ -105,9 +105,9 @@
             </tr>
           </draggable>
         </table>
-      </div>
-    </div>
-  </div>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

@@ -639,8 +639,6 @@ export default {
         singleFileMetadata,
         this.relatedData.attachment.count
       );
-
-      this.loadRelatedData("attachment");
     },
 
     addExistingFiles(files) {

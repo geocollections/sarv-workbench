@@ -21,7 +21,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchSamples"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       :use-list-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -34,8 +35,8 @@ import { fetchSamples } from "@/assets/js/api/apiCalls";
 import { mapActions, mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import isEmpty from "lodash";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -46,7 +47,7 @@ export default {
 
   name: "Samples",
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -60,7 +61,8 @@ export default {
     ...mapGetters("user", ["getCurrentUser"])
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     // Used by sidebar
     this.setActiveSearchParameters({
       search: this.selection_seriesSearchParameters,
@@ -89,10 +91,11 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
-    fetchSamples() {
-      return new Promise(resolve => {
-        resolve(fetchSamples(this.searchParameters));
-      });
+    apiCall() {
+      return fetchSamples(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

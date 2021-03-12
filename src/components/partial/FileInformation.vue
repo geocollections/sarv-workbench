@@ -1,133 +1,149 @@
 <template>
-  <div class="file-information" v-if="data">
-    <!-- LINK -->
-    <div class="row">
-      <div class="col-sm-12 mb-2">
-        <!-- REFERENCE -->
-        <a
-          v-if="reference && !data.is_private"
-          class="no-underline external-link"
-          :href="'http://geoloogia.info/reference/' + this.data.id"
-          target="ReferenceWindow"
-        >
-          <b>{{ $t("edit.referenceLink") }}</b> &nbsp;<i
-            class="fas fa-file"
-          ></i>
-        </a>
+  <v-row class="file-information" v-if="data">
+    <v-col cols="12">
+      <!-- LINK -->
+      <v-row
+        class="mt-0"
+        v-if="(reference && !data.is_private) || !data.is_private"
+      >
+        <v-col cols="12" sm="12">
+          <!-- REFERENCE -->
+          <a
+            v-if="reference && !data.is_private"
+            class="no-underline external-link"
+            :href="'http://kirjandus.geoloogia.info/reference/' + this.data.id"
+            target="ReferenceWindow"
+          >
+            <b>{{ $t("edit.referenceLink") }}</b> &nbsp;<i
+              class="fas fa-file"
+            ></i>
+          </a>
 
-        <!-- FILE -->
-        <a
-          v-else-if="!data.is_private"
-          class="no-underline external-link"
-          :href="'http://geocollections.info/file/' + this.data.id"
-          target="GeocollectionsWindow"
-        >
-          <b>{{ $t("edit.link") }}</b>
-        </a>
-      </div>
-    </div>
+          <!-- FILE -->
+          <a
+            v-else-if="!data.is_private"
+            class="no-underline external-link"
+            :href="'http://geocollections.info/file/' + this.data.id"
+            target="GeocollectionsWindow"
+          >
+            <b>{{ $t("edit.link") }}</b>
+          </a>
+        </v-col>
+      </v-row>
 
-    <!-- IMAGE NUMBER -->
-    <div class="row" v-if="data.image_number && data.image_number !== null">
-      <div class="col mb-2">
-        {{ $t("edit.imageNumber") }}: <b>{{ data.image_number }}</b>
-      </div>
-    </div>
+      <!-- IMAGE NUMBER -->
+      <v-row
+        class="mt-0"
+        v-if="data.image_number && data.image_number !== null"
+      >
+        <v-col cols="12">
+          {{ $t("edit.imageNumber") }}: <b>{{ data.image_number }}</b>
+        </v-col>
+      </v-row>
 
-    <!-- FILENAME -->
-    <div class="row" v-if="data.filename && data.filename !== null">
-      <div class="col mb-2">
-        {{ $t("edit.filename") }}: <b>{{ data.filename }}</b>
-      </div>
-    </div>
+      <!-- FILENAME -->
+      <v-row class="mt-0" v-if="data.filename && data.filename !== null">
+        <v-col cols="12">
+          {{ $t("edit.filename") }}: <b>{{ data.filename }}</b>
+        </v-col>
+      </v-row>
 
-    <!-- FILE SIZE -->
-    <div
-      class="row"
-      v-if="typeof data.size_mb !== 'undefined' && data.size_mb !== null"
-    >
-      <div class="col mb-2">
-        {{ $t("edit.size_mb") }}:
-        <span v-if="data.size_mb < 0.1">
-          <b>{{ $t("edit.size_mb_under") }} 0.1</b>
-        </span>
-        <b v-else>{{ data.size_mb }}</b>
-        MB
-      </div>
-    </div>
+      <!-- FILE SIZE -->
+      <v-row
+        class="mt-0"
+        v-if="typeof data.size_mb !== 'undefined' && data.size_mb !== null"
+      >
+        <v-col cols="12">
+          {{ $t("edit.size_mb") }}:
+          <span v-if="data.size_mb < 0.1">
+            <b>{{ $t("edit.size_mb_under") }} 0.1</b>
+          </span>
+          <b v-else>{{ data.size_mb }}</b>
+          MB
+        </v-col>
+      </v-row>
 
-    <!-- ORIGINAL FILENAME -->
-    <div
-      class="row"
-      v-if="data.original_filename && data.original_filename !== null"
-    >
-      <div class="col mb-2">
-        {{ $t("edit.original_filename") }}: <b>{{ data.original_filename }}</b>
-      </div>
-    </div>
+      <!-- ORIGINAL FILENAME -->
+      <v-row
+        class="mt-0"
+        v-if="data.original_filename && data.original_filename !== null"
+      >
+        <v-col cols="12">
+          {{ $t("edit.original_filename") }}:
+          <b>{{ data.original_filename }}</b>
+        </v-col>
+      </v-row>
 
-    <!-- ATTACHMENT FORMAT VALUE -->
-    <div
-      class="row"
-      v-if="
-        data.attachment_format__value && data.attachment_format__value !== null
-      "
-    >
-      <div class="col mb-2">
-        {{ $t("edit.attachment_format_value") }}:
-        <b>{{ data.attachment_format__value }}</b>
-      </div>
-    </div>
+      <!-- ATTACHMENT FORMAT VALUE -->
+      <v-row
+        class="mt-0"
+        v-if="
+          data.attachment_format__value &&
+            data.attachment_format__value !== null
+        "
+      >
+        <v-col cols="12">
+          {{ $t("edit.attachment_format_value") }}:
+          <b>{{ data.attachment_format__value }}</b>
+        </v-col>
+      </v-row>
 
-    <!-- IMAGE WIDTH -->
-    <div class="row" v-if="data.image_width && data.image_width !== null">
-      <div class="col mb-2">
-        {{ $t("edit.image_width") }}: <b>{{ data.image_width }}</b>
-      </div>
-    </div>
+      <!-- IMAGE WIDTH -->
+      <v-row class="mt-0" v-if="data.image_width && data.image_width !== null">
+        <v-col cols="12">
+          {{ $t("edit.image_width") }}: <b>{{ data.image_width }}</b>
+        </v-col>
+      </v-row>
 
-    <!-- IMAGE HEIGHT -->
-    <div class="row" v-if="data.image_height && data.image_height !== null">
-      <div class="col mb-2">
-        {{ $t("edit.image_height") }}: <b>{{ data.image_height }}</b>
-      </div>
-    </div>
+      <!-- IMAGE HEIGHT -->
+      <v-row
+        class="mt-0"
+        v-if="data.image_height && data.image_height !== null"
+      >
+        <v-col cols="12">
+          {{ $t("edit.image_height") }}: <b>{{ data.image_height }}</b>
+        </v-col>
+      </v-row>
 
-    <!-- DATE ADDED -->
-    <div class="row" v-if="data.date_added && data.date_added !== null">
-      <div class="col mb-2">
-        {{ $t("edit.date_added") }}:
-        <b>{{ new Date(data.date_added).toLocaleDateString() }}</b>
-      </div>
-    </div>
+      <!-- DATE ADDED -->
+      <v-row class="mt-0" v-if="data.date_added && data.date_added !== null">
+        <v-col cols="12">
+          {{ $t("edit.date_added") }}:
+          <b>{{ new Date(data.date_added).toLocaleDateString() }}</b>
+        </v-col>
+      </v-row>
 
-    <!-- USER ADDED -->
-    <div class="row" v-if="data.user_added && data.user_added !== null">
-      <div class="col mb-2">
-        {{ $t("edit.user_added") }}: <b>{{ data.user_added }}</b>
-      </div>
-    </div>
+      <!-- USER ADDED -->
+      <v-row class="mt-0" v-if="data.user_added && data.user_added !== null">
+        <v-col cols="12">
+          {{ $t("edit.user_added") }}: <b>{{ data.user_added }}</b>
+        </v-col>
+      </v-row>
 
-    <!-- DATE CHANGED -->
-    <div class="row" v-if="data.date_changed && data.date_changed !== null">
-      <div class="col mb-2">
-        {{ $t("edit.date_changed") }}:
-        <b>{{ new Date(data.date_changed).toLocaleDateString() }}</b>
-      </div>
-    </div>
+      <!-- DATE CHANGED -->
+      <v-row
+        class="mt-0"
+        v-if="data.date_changed && data.date_changed !== null"
+      >
+        <v-col cols="12">
+          {{ $t("edit.date_changed") }}:
+          <b>{{ new Date(data.date_changed).toLocaleDateString() }}</b>
+        </v-col>
+      </v-row>
 
-    <!-- USER CHANGED -->
-    <div
-      class="row"
-      v-if="
-        data.user_changed && data.user_changed !== null && data.user_changed
-      "
-    >
-      <div class="col mb-2">
-        {{ $t("edit.user_changed") }}: <b>{{ data.user_changed }}</b>
-      </div>
-    </div>
-  </div>
+      <!-- USER CHANGED -->
+      <v-row
+        class="mt-0"
+        v-if="
+          data.user_changed && data.user_changed !== null && data.user_changed
+        "
+      >
+        <v-col cols="12">
+          {{ $t("edit.user_changed") }}: <b>{{ data.user_changed }}</b>
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

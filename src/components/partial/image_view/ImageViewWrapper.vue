@@ -1,10 +1,11 @@
 <template>
   <div class="image-view-wrapper mx-3" v-if="data && data.length > 0">
-    <v-row class="mx-0">
+    <v-row>
       <v-col
         v-for="(image, index) in data"
         :key="index"
-        class="d-flex child-flex my-3"
+        class="my-3"
+        style="position:relative;"
         cols="6"
         sm="4"
         md="3"
@@ -14,7 +15,7 @@
           <template v-slot:activator="{ on }">
             <v-card
               flat
-              class="d-flex image-hover"
+              class="d-flex image-hover fill-height my-3"
               v-on="on"
               :class="
                 clearItemBackground
@@ -63,60 +64,61 @@
             </v-card>
           </template>
 
-          <span v-if="object === 'attachment'">
-            <b>ID:</b> {{ image.id }}<br />
-            <span v-if="image.date_created || image.date_created_free">
-              <b>Date:</b> {{ image.date_created }} |
-              {{ image.date_created_free }}
-              <br />
+          <div style="max-width: 300px">
+            <span v-if="object === 'attachment'">
+              <b>ID:</b> {{ image.id }}<br />
+              <span v-if="image.date_created || image.date_created_free">
+                <b>Date:</b> {{ image.date_created }} |
+                {{ image.date_created_free }}
+                <br />
+              </span>
+              <span v-if="image.author__agent">
+                <b>Author:</b>
+                {{ image.author__agent }}
+                <br />
+              </span>
+              <span v-if="image.image_number">
+                <b>Photo:</b>
+                {{ image.image_number }}
+                <br />
+              </span>
+              <span v-if="image.original_filename">
+                <b>Filename:</b>
+                {{ image.original_filename }}
+                <br />
+              </span>
             </span>
-            <span v-if="image.author__agent">
-              <b>Author:</b>
-              {{ image.author__agent }}
-              <br />
+            <span v-else-if="object === 'specimen'">
+              <span
+                v-if="
+                  image.specimen__database__acronym &&
+                    image.specimen__specimen_id
+                "
+              >
+                {{ image.specimen__database__acronym }}
+                {{ image.specimen__specimen_id }}
+              </span>
             </span>
-            <span v-if="image.image_number">
-              <b>Photo:</b>
-              {{ image.image_number }}
-              <br />
+            <span v-else-if="object === 'location'">
+              <span v-if="image.attach_link__storage__location">
+                {{ image.attach_link__storage__location }}
+              </span>
             </span>
-            <span v-if="image.original_filename">
-              <b>Filename:</b>
-              {{ image.original_filename }}
-              <br />
+            <span v-else-if="object === 'drillcore_box'">
+              <span
+                v-translate="{
+                  et: image.drillcore_box__drillcore__drillcore,
+                  en: image.drillcore_box__drillcore__drillcore_en
+                }"
+              >
+              </span>
             </span>
-          </span>
-
-          <span v-else-if="object === 'specimen'">
-            <span
-              v-if="
-                image.specimen__database__acronym && image.specimen__specimen_id
-              "
-            >
-              {{ image.specimen__database__acronym }}
-              {{ image.specimen__specimen_id }}
-            </span>
-          </span>
-          <span v-else-if="object === 'location'">
-            <span v-if="image.attach_link__storage__location">
-              {{ image.attach_link__storage__location }}
-            </span>
-          </span>
-
-          <span v-else-if="object === 'drillcore_box'">
-            <span
-              v-translate="{
-                et: image.drillcore_box__drillcore__drillcore,
-                en: image.drillcore_box__drillcore__drillcore_en
-              }"
-            >
-            </span>
-          </span>
+          </div>
         </v-tooltip>
 
         <div
           class="d-flex flex-row justify-space-around"
-          style="position: absolute; padding-right: 30px; bottom: 5px; width: 100%"
+          style="position: absolute; padding-right: 30px; bottom: 0; width: 100%"
         >
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">

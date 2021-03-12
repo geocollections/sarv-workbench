@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="imageset-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -49,9 +48,11 @@
 
 <script>
 import moment from "moment";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "ImagesetTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -80,34 +81,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "imageset.imagesetNumber", value: "imageset_number" },
-      { text: "imageset.author", value: "author" },
-      { text: "imageset.description", value: "description" },
-      { text: "imageset.date_added", value: "date_added" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style>
-.imageset-table.v-data-table td,
-.imageset-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

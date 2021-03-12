@@ -18,7 +18,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAnalysisMethods"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -30,6 +31,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import { fetchAnalysisMethods } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "AnalysisMethods",
@@ -40,7 +42,7 @@ export default {
     TableViewTitle
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -48,7 +50,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
       {
@@ -70,10 +73,11 @@ export default {
   },
 
   methods: {
-    fetchAnalysisMethods() {
-      return new Promise(resolve => {
-        resolve(fetchAnalysisMethods(this.searchParameters));
-      });
+    apiCall() {
+      return fetchAnalysisMethods(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

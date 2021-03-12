@@ -15,7 +15,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchRocks"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -25,8 +26,9 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import { fetchRocks } from "../assets/js/api/apiCalls";
+import { fetchRocks } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "Rocks",
@@ -37,7 +39,7 @@ export default {
     TableViewTitle
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -45,7 +47,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "name", title: "rock.name", type: "text" },
       { id: "name_en", title: "rock.name_en", type: "text" },
@@ -58,10 +61,11 @@ export default {
   },
 
   methods: {
-    fetchRocks() {
-      return new Promise(resolve => {
-        resolve(fetchRocks(this.searchParameters));
-      });
+    apiCall() {
+      return fetchRocks(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

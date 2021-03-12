@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="collection-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     :items="response.results"
     dense
@@ -21,7 +20,7 @@
   >
     <template v-slot:item.collection_id="{ item }">
       <router-link
-        :to="{ path: '/collection/' + item.id }"
+        :to="{ path: '/collection/' + item.collection_id }"
         :title="$t('editCollection.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
@@ -63,8 +62,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "CollectionTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -94,27 +96,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "collection.number", value: "collection_id" },
-      { text: "common.name", value: "name" },
-      { text: "collection.name_long", value: "name_long" },
-      { text: "collection.database", value: "database__acronym" },
-      { text: "", value: "link", sortable: false }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -122,10 +103,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.collection-table.v-data-table td,
-.collection-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

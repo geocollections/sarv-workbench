@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="library-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     :items="response.results"
     :items-per-page="searchParameters.paginateBy"
@@ -53,7 +52,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'library', id: item.id })"
+        :href="getGeokirjandusUrl({ object: 'library', id: item.id })"
         :title="$t('editLibrary.viewMessage')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"
@@ -66,8 +65,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "LibraryTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -97,38 +99,10 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "library.title", value: "title" },
-      { text: "library.author_txt", value: "author_txt" },
-      { text: "common.is_private", value: "is_private" },
-      { text: "", value: "link", sortable: false }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
+    getGeokirjandusUrl(params) {
+      return `https://kirjandus.geoloogia.info/${params.object}/${params.id}`;
     }
   }
 };
 </script>
-
-<style>
-.library-table.v-data-table td,
-.library-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

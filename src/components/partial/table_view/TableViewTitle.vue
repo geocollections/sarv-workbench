@@ -57,6 +57,6 @@ export default {
 <style scoped>
 .table-title {
   font-size: 2rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 </style>

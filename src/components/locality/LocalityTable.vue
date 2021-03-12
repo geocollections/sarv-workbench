@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="analysis-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -60,7 +59,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'locality', id: item.id })"
+        :href="getEmaUrl({ object: 'locality', id: item.id })"
         :title="$t('editLocality.viewMessage')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"
@@ -74,9 +73,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "LocalityTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -106,39 +107,10 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "locality.locality", value: "locality" },
-      { text: "locality.number", value: "number" },
-      { text: "locality.country", value: "country__value" },
-      { text: "locality.agent", value: "user_added" },
-      { text: "", value: "link", sortable: false }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
+    getEmaUrl(params) {
+      return `https://geoloogia.info/${params.object}/${params.id}`;
     }
   }
 };
 </script>
-
-<style>
-.locality-table.v-data-table td,
-.locality-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

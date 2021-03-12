@@ -16,7 +16,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchDrillcores"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -28,6 +29,7 @@ import { fetchDrillcores } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -36,13 +38,14 @@ export default {
     TableViewSearch
   },
   name: "Drillcores",
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
   data() {
     return {
       block: { search: true }
     };
   },
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       {
         id: "drillcore",
@@ -56,10 +59,11 @@ export default {
     ]);
   },
   methods: {
-    fetchDrillcores() {
-      return new Promise(resolve => {
-        resolve(fetchDrillcores(this.searchParameters));
-      });
+    apiCall() {
+      return fetchDrillcores(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

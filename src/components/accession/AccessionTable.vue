@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="accession-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -30,7 +29,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.agent_andis="{ item }">
+    <template v-slot:item.agent_andis__agent="{ item }">
       <router-link
         :to="{ path: '/agent/' + item.agent_andis }"
         :title="$t('editAgent.editMessage')"
@@ -41,7 +40,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.agent_vottis="{ item }">
+    <template v-slot:item.agent_vottis__agent="{ item }">
       <router-link
         :to="{ path: '/agent/' + item.agent_vottis }"
         :title="$t('editAgent.editMessage')"
@@ -55,8 +54,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "AccessionTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -85,36 +87,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "accession.number", value: "number" },
-      { text: "accession.date_signed", value: "date_signed" },
-      { text: "accession.agent_andis", value: "agent_andis" },
-      { text: "accession.agent_vottis", value: "agent_vottis" },
-      { text: "accession.number_items", value: "number_items" },
-      { text: "accession.description", value: "description" },
-      { text: "common.id", value: "id" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style scoped>
-.accession-table.v-data-table td,
-.accession-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

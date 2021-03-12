@@ -146,7 +146,7 @@
                     :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
                     item-text="agent"
-                    :label="$t('attachment.author')"
+                    :label="$t('attachment.author__agent')"
                     use-custom-state
                     :error="
                       !(
@@ -288,7 +288,7 @@
                     :items="autocomplete.locality"
                     :loading="autocomplete.loaders.locality"
                     :item-text="localityLabel"
-                    :label="$t('attachment.locality')"
+                    :label="$t('attachment.locality__locality')"
                     is-link
                     route-object="locality"
                     is-searchable
@@ -352,7 +352,7 @@
 
               <!-- MAP SWITCH -->
               <v-card
-                class="d-flex flex-row justify-content-start mb-1 mx-3"
+                class="d-flex flex-row justify-start mb-1 mx-3"
                 flat
                 tile
                 :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -488,7 +488,7 @@
               </v-row>
 
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap pa-1">
+              <div class="d-flex justify-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
                   <autocomplete-wrapper
                     v-model="relatedData.keyword"
@@ -1679,7 +1679,7 @@
                     :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
                     item-text="agent"
-                    :label="$t('attachment.author')"
+                    :label="$t('attachment.author__agent')"
                     use-custom-state
                     :error="
                       !(
@@ -1759,7 +1759,7 @@
                     :items="autocomplete.specimen"
                     :loading="autocomplete.loaders.specimen"
                     :item-text="customLabelForSpecimen"
-                    :label="$t('attachment.specimen')"
+                    :label="$t('attachment.specimen__specimen_id')"
                     use-state
                     is-link
                     route-object="specimen"
@@ -1820,7 +1820,7 @@
               </v-row>
 
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap pa-1">
+              <div class="d-flex justify-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
                   <autocomplete-wrapper
                     v-model="relatedData.keyword"
@@ -1994,7 +1994,7 @@
                     :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
                     item-text="agent"
-                    :label="$t('attachment.author')"
+                    :label="$t('attachment.author__agent')"
                     use-custom-state
                     :error="
                       !(
@@ -2185,7 +2185,7 @@
 
               <!-- MAP SWITCH -->
               <v-card
-                class="d-flex flex-row justify-content-start mb-1 mx-3"
+                class="d-flex flex-row justify-start mb-1 mx-3"
                 flat
                 tile
                 :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -2283,7 +2283,7 @@
           <transition>
             <div v-show="block.description" class="pa-1">
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap pa-1">
+              <div class="d-flex justify-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
                   <autocomplete-wrapper
                     v-model="relatedData.keyword"
@@ -3580,7 +3580,7 @@
                     :items="autocomplete.reference"
                     :loading="autocomplete.loaders.reference"
                     :item-text="customLabelForReference"
-                    :label="$t('attachment.reference')"
+                    :label="$t('attachment.reference__reference')"
                     use-state
                     is-link
                     route-object="reference"
@@ -3791,7 +3791,7 @@
           <checkbox-wrapper
             v-model="attachment.is_locked"
             :color="bodyActiveColor"
-            :label="$t('attachment.is_locked_text')"
+            :label="$t('attachment.is_locked')"
             @change="attachment.is_locked = !attachment.is_locked"
           />
         </div>
@@ -3807,7 +3807,7 @@
     </template>
 
     <template v-slot:add-doi>
-      <div class="d-flex justify-content-end mt-3">
+      <div class="d-flex justify-end mt-3">
         <new-doi-button
           v-if="
             attachment &&

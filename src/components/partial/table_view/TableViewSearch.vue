@@ -1,6 +1,6 @@
 <template>
-  <v-row class="table-view-search d-print-none" v-if="filters.length > 0">
-    <v-col class="py-4">
+  <v-row class="table-view-search d-print-none mt-0" v-if="filters.length > 0">
+    <v-col>
       <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title class="pb-0">
           <div
@@ -24,17 +24,17 @@
 
         <v-card-text class="pt-0">
           <div v-show="showSearch">
-            <v-row>
+            <v-row no-gutters class="mb-2">
               <v-col
+                class="pa-2"
                 cols="12"
                 :md="colSize"
                 v-for="(field, index) in filters"
                 :key="index"
-                class="py-0"
               >
                 <!-- DATEPICKER -->
-                <v-row v-if="field.isDate" class="pa-2">
-                  <v-col cols="12" class="py-0 px-1">
+                <v-row no-gutters v-if="field.isDate">
+                  <v-col cols="12">
                     <v-menu
                       v-model="calendarMenus[field.id]"
                       :close-on-content-click="false"
@@ -72,8 +72,8 @@
                 </v-row>
 
                 <!-- REGULAR SEARCH FIELD -->
-                <v-row v-else class="pa-2">
-                  <v-col cols="3" xl="2" class="py-0 px-1">
+                <v-row no-gutters v-else>
+                  <v-col cols="3" xl="2" class="px-1">
                     <v-select
                       :value="
                         searchParameters[`${field.id}__lookuptype`] ||
@@ -110,7 +110,7 @@
                     </v-select>
                   </v-col>
 
-                  <v-col cols="9" xl="10" class="py-0 px-1">
+                  <v-col cols="9" xl="10" class="px-1">
                     <v-text-field
                       :value="searchParameters[field.id]"
                       :label="$t(field.title)"
@@ -128,11 +128,12 @@
 
             <!-- ATTACHMENT CHECKBOXES -->
             <v-row
-              class="px-3 mt-3 checkboxes"
+              no-gutters
+              class="checkboxes"
               v-if="$route.meta.object === 'attachment'"
             >
-              <v-col cols="12" class="py-0">
-                <v-row>
+              <v-col cols="12">
+                <v-row no-gutters>
                   <v-checkbox
                     :input-value="searchParameters.specimen_image_attachment"
                     :label="$t('attachment.photoArchive')"
@@ -199,11 +200,12 @@
 
             <!-- REFERENCE CHECKBOXES -->
             <v-row
-              class="px-3 mt-3 checkboxes"
+              no-gutters
+              class="checkboxes"
               v-if="$route.meta.object === 'reference'"
             >
-              <v-col cols="12" class="py-0">
-                <v-row>
+              <v-col cols="12">
+                <v-row no-gutters>
                   <v-checkbox
                     :input-value="searchParameters.isEstonianReference"
                     :label="$t('reference.is_estonian_reference')"
@@ -238,11 +240,12 @@
 
             <!-- TAXON_PAGE CHECKBOXES -->
             <v-row
-              class="px-3 mt-3 checkboxes"
+              no-gutters
+              class="checkboxes"
               v-if="$route.meta.object === 'taxon_pages'"
             >
-              <v-col cols="12" class="py-0">
-                <v-row>
+              <v-col cols="12">
+                <v-row no-gutters>
                   <v-checkbox
                     :input-value="searchParameters.on_frontpage"
                     :label="$t('taxon_page.on_frontpage')"
@@ -259,11 +262,12 @@
 
             <!-- ROCK CHECKBOXES -->
             <v-row
-              class="px-3 mt-3 checkboxes"
+              no-gutters
+              class="checkboxes"
               v-if="$route.meta.object === 'rock'"
             >
-              <v-col cols="12" class="py-0">
-                <v-row>
+              <v-col cols="12">
+                <v-row no-gutters>
                   <v-checkbox
                     :input-value="searchParameters.in_portal"
                     :label="$t('rock.in_portal')"
@@ -290,11 +294,12 @@
 
             <!-- LOAN CHECKBOXES -->
             <v-row
-              class="px-3 mt-3 checkboxes"
+              no-gutters
+              class="checkboxes"
               v-if="$route.meta.object === 'loan'"
             >
-              <v-col cols="12" class="py-0">
-                <v-row>
+              <v-col cols="12">
+                <v-row no-gutters>
                   <v-checkbox
                     :input-value="searchParameters.isActive"
                     :label="$t('loan.isActive')"
@@ -309,16 +314,50 @@
               </v-col>
             </v-row>
 
-            <!-- RESET SEARCH PREFERENCES -->
-            <v-row class="mt-3">
+            <!-- DYNAMIC SEARCH -->
+            <DynamicSearch
+              class="mt-4 mb-2"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              :look-up-types="translatedLookUpTypes"
+              :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+              :col-size="3"
+              @update:dynamicSearchFields="updateDynamicSearchFieldsDebounced"
+            />
+
+            <!-- DYNAMIC FIELDS -->
+            <v-row no-gutters class="mt-6 mb-4">
               <v-col cols="12">
-                <v-btn
-                  @click="$emit('reset:searchParameters')"
+                <v-select
+                  :items="$_tableHeaderMixin_allHeaders"
+                  :value="$_tableHeaderMixin_shownHeaders"
+                  chips
+                  small-chips
+                  deletable-chips
+                  multiple
                   :color="bodyActiveColor"
-                  dark
-                >
+                  :label="$t('common.fields')"
+                  clearable
+                  clear-icon="fas fa-times"
+                  @change="
+                    $_tableHeaderMixin_updateTableHeaders({
+                      event: $event,
+                      table: $route.meta.object
+                    })
+                  "
+                  class="chips-select"
+                  hide-details
+                  dense
+                />
+              </v-col>
+            </v-row>
+
+            <!-- RESET SEARCH PREFERENCES -->
+            <v-row no-gutters>
+              <v-col cols="12">
+                <v-btn @click="resetSearch" :color="bodyActiveColor" dark>
                   <v-icon left>fas fa-filter</v-icon>
-                  {{ $t("buttons.deletePreferences") }}
+                  {{ $t("buttons.resetSearch") }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -331,9 +370,14 @@
 
 <script>
 import { mapState } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import DynamicSearch from "@/components/partial/table_view/DynamicSearch";
+import { debounce } from "lodash";
 
 export default {
   name: "TableViewSearch",
+  components: { DynamicSearch },
+  mixins: [tableHeaderMixin],
   props: {
     showSearch: {
       type: Boolean,
@@ -375,7 +419,18 @@ export default {
     updateDate(event, fieldId, index) {
       this.$emit("update:searchParameters", event, fieldId);
       this.calendarMenus[fieldId] = false;
-    }
+    },
+
+    resetSearch() {
+      this.$emit("reset:searchParameters");
+      this.$_tableHeaderMixin_setDefaultTableHeaders();
+      this.$_tableHeaderMixin_resetDynamicSearchFields();
+    },
+
+    updateDynamicSearchFieldsDebounced: debounce(function(payload) {
+      this.$_tableHeaderMixin_updateDynamicSearchField(payload);
+      // }, 400) TODO: For Testing Purposes
+    }, 0)
   }
 };
 </script>
@@ -392,6 +447,18 @@ export default {
 
 .table-view-search >>> .v-text-field__slot input {
   color: unset;
+  font-weight: bold;
+}
+
+.chips-select >>> .v-select__selections {
+  padding: 8px 0;
+}
+
+.chips-select >>> .v-chip {
+  margin: 3px !important;
+}
+
+.chips-select >>> .v-label {
   font-weight: bold;
 }
 </style>

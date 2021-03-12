@@ -1,8 +1,8 @@
 <template>
   <div class="add-form">
-    <div class="d-flex flex-wrap justify-content-between mt-2 mb-1">
+    <div class="d-flex flex-wrap justify-between mt-2 mb-1">
       <div class="pr-4">
-        <p class="h2 mb-1">{{ $t($route.meta.addNew) }}</p>
+        <p class="table-title mb-1">{{ $t($route.meta.addNew) }}</p>
       </div>
 
       <v-tabs
@@ -66,4 +66,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+</style>

@@ -247,7 +247,7 @@
     <!-- EMPTY SELECTION -->
     <div
       v-if="$route.meta.isEdit && isRelatedDataFilled"
-      class="d-flex flex-row flex-nowrap justify-content-end mt-2"
+      class="d-flex flex-row flex-nowrap justify-end mt-2"
     >
       <v-dialog
         v-model="clearSelectionModal"

@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="loan-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -72,8 +71,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "LoanTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -103,31 +105,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "loan.print", value: "print", align: "center", sortable: false },
-      { text: "common.id", value: "id" },
-      { text: "loan.loan_number", value: "loan_number" },
-      { text: "loan.borrower", value: "borrower" },
-      { text: "loan.project", value: "project" },
-      { text: "loan.date_start", value: "date_start" },
-      { text: "loan.date_end", value: "date_end" },
-      { text: "loan.returned", value: "returned", align: "center" },
-      { text: "loan.database", value: "database", align: "center" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     openLoanPrintView(id) {
       let routeData = this.$router.resolve({
@@ -138,10 +115,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.loan-table.v-data-table td,
-.loan-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

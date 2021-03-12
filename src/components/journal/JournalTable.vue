@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="journal-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -44,8 +43,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "JournalTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -74,35 +76,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "journal.journalName", value: "journal_name" },
-      { text: "journal.journalShort", value: "journal_short" },
-      { text: "journal.journalOriginal", value: "journal_original" },
-      { text: "journal.publisher", value: "publisher" },
-      { text: "common.remarks", value: "remarks" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style>
-.journal-table.v-data-table td,
-.journal-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

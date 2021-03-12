@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="sample-series-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -61,8 +60,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "SampleSeriesTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -91,32 +93,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "common.name", value: "name" },
-      { text: "common.locality", value: "locality" },
-      { text: "specimen.agent_collected", value: "agent_collected" }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style>
-.sample-series-table.v-data-table td,
-.sample-series-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

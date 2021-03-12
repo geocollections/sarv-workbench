@@ -20,7 +20,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchSpecimens"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       :use-list-view="true"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
@@ -31,12 +32,12 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchSpecimenImages, fetchSpecimens } from "../assets/js/api/apiCalls";
-import isEmpty from "lodash";
+import { fetchSpecimenImages, fetchSpecimens } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -47,7 +48,7 @@ export default {
 
   name: "Specimens",
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -59,10 +60,11 @@ export default {
     ...mapState("search", [
       "selection_seriesSearchParameters",
       "specimenViewType"
-    ]),
+    ])
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     // Used by sidebar
     this.setActiveSearchParameters({
       search: this.selection_seriesSearchParameters,
@@ -101,14 +103,16 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
-    fetchSpecimens() {
-      return new Promise(resolve => {
-        resolve(
-          this.specimenViewType === "image"
-            ? fetchSpecimenImages(this.searchParameters)
-            : fetchSpecimens(this.searchParameters)
-        );
-      });
+    apiCall() {
+      return this.specimenViewType === "image"
+        ? fetchSpecimenImages(
+            this.searchParameters,
+            this.$_tableHeaderMixin_searchFields
+          )
+        : fetchSpecimens(
+            this.searchParameters,
+            this.$_tableHeaderMixin_searchFields
+          );
     },
     searchSpecimenImages(searchImages) {
       // Just to trigger change

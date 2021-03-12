@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="sarv-issue-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -47,8 +46,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "SarvIssueTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -77,38 +79,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "sarv_issue.replied", value: "replied", sortable: false },
-      { text: "common.id", value: "id" },
-      { text: "sarv_issue.date_added", value: "date_added" },
-      { text: "sarv_issue.from_user", value: "from_user__username" },
-      { text: "sarv_issue.to_user", value: "to_user__username" },
-      { text: "sarv_issue.title", value: "title" },
-      { text: "sarv_issue.description", value: "description" },
-      { text: "sarv_issue.url", value: "url" },
-      { text: "sarv_issue.response", value: "response" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style scoped>
-.sarv-issue-table.v-data-table td,
-.sarv-issue-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

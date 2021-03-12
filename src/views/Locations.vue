@@ -15,7 +15,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchLocations"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       :use-list-view="true"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
@@ -31,6 +32,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import { fetchLocations, fetchLocationImages } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapGetters, mapState } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "Locations",
@@ -41,7 +43,7 @@ export default {
     TableViewTitle
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -51,7 +53,8 @@ export default {
   computed: {
     ...mapState("search", ["locationViewType"])
   },
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
       { id: "location", title: "location.location", type: "text" },
@@ -67,14 +70,16 @@ export default {
   },
 
   methods: {
-    fetchLocations() {
-      return new Promise(resolve => {
-        resolve(
-          this.locationViewType === "image"
-            ? fetchLocationImages(this.searchParameters)
-            : fetchLocations(this.searchParameters)
-        );
-      });
+    apiCall() {
+      return this.locationViewType === "image"
+        ? fetchLocationImages(
+            this.searchParameters,
+            this.$_tableHeaderMixin_searchFields
+          )
+        : fetchLocations(
+            this.searchParameters,
+            this.$_tableHeaderMixin_searchFields
+          );
     },
     searchLocationImages(searchImages) {
       // Just to trigger change

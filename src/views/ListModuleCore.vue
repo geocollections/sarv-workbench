@@ -7,7 +7,7 @@
     />
 
     <!-- EXPORT and OPTIONS -->
-    <v-row align="center" justify="start" class="px-4 d-print-none">
+    <v-row align="center" justify="start" class="px-4 mt-4 mb-1 d-print-none">
       <!-- EXPORT -->
       <div class="mr-4 mb-2" v-if="exportButtons">
         <export-buttons
@@ -63,7 +63,9 @@
       :options="paginateByOptionsTranslated"
       :page="searchParameters.page"
       v-on:update:page="$emit('update:searchParameters', $event, 'page')"
-      v-on:update:paginateBy="$emit('update:searchParameters', $event, 'paginateBy')"
+      v-on:update:paginateBy="
+        $emit('update:searchParameters', $event, 'paginateBy')
+      "
     />
 
     <!-- DATA TABLE -->
@@ -134,7 +136,9 @@
       :options="paginateByOptionsTranslated"
       :page="searchParameters.page"
       v-on:update:page="$emit('update:searchParameters', $event, 'page')"
-      v-on:update:paginateBy="$emit('update:searchParameters', $event, 'paginateBy')"
+      v-on:update:paginateBy="
+        $emit('update:searchParameters', $event, 'paginateBy')
+      "
     />
   </div>
 </template>
@@ -149,7 +153,7 @@ import ScrollToTop from "../components/partial/ScrollToTop";
 import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
 import Pagination from "@/components/partial/Pagination";
-import {fetchChangeRecordState} from "@/assets/js/api/apiCalls";
+import { fetchChangeRecordState } from "@/assets/js/api/apiCalls";
 
 export default {
   components: {
@@ -161,7 +165,8 @@ export default {
   },
   props: {
     apiCall: {
-      type: Function
+      type: Function,
+      required: true
     },
     module: {
       type: String,
@@ -169,6 +174,9 @@ export default {
     },
     searchParameters: {
       type: Object
+    },
+    dynamicSearchFields: {
+      type: Array
     },
     exportButtons: {
       type: Boolean,
@@ -248,6 +256,12 @@ export default {
       immediate: true,
       deep: true
     },
+    dynamicSearchFields: {
+      handler() {
+        this.search();
+      },
+      deep: true
+    },
     currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
       if (
@@ -272,28 +286,44 @@ export default {
   methods: {
     ...mapActions("search", ["updateViewType"]),
 
-    search: debounce(function() {
+    search: debounce(async function() {
       this.isLoading = true;
 
-      this.apiCall().then(
-        response => {
-          if (response.status === 200) {
-            if (response.data.count === 0) this.noResults = true;
-            if (response.data.count > 0) this.noResults = false;
-            this.response.count = response.data.count;
-            this.response.results = response.data.results;
-          }
-          this.isLoading = false;
-        },
-        () => {
-          this.isLoading = false;
-        }
-      );
+      const response = await this.apiCall();
+
+      this.isLoading = false;
+
+      if (response?.status === 200) {
+        if (response?.data?.count === 0) this.noResults = true;
+        if (response?.data?.count > 0) this.noResults = false;
+        this.response.count = response.data.count ?? 0;
+        this.response.results = response.data.results ?? [];
+      }
     }, 500),
 
     changeObjectsPrivacyState(state, id) {
       let formData = new FormData();
       formData.append("data", JSON.stringify({ is_private: state }));
+
+      // const response = await fetchChangeRecordState(this.module, id, formData);
+      //
+      // if (response?.data) {
+      //   if (response?.data?.message)
+      //     this.toastSuccess({
+      //       text: `${response?.data?.message}${
+      //         this.$i18n.locale === "ee" ? "_et" : ""
+      //       }`
+      //     });
+      //   else if (response?.data?.error)
+      //     this.toastSuccess({
+      //       text: `${response?.data?.error}${
+      //         this.$i18n.locale === "ee" ? "_et" : ""
+      //       }`
+      //     });
+      // } else
+      //   this.toastError({
+      //     text: response?.data?.error ?? this.$t("messages.uploadError")
+      //   });
 
       fetchChangeRecordState(this.module, id, formData).then(
         response => {

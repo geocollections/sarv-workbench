@@ -18,7 +18,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchTaxonPages"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -28,9 +29,10 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchTaxonPages } from "../assets/js/api/apiCalls";
+import { fetchTaxonPages } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "TaxonPages",
 
@@ -40,7 +42,7 @@ export default {
     TableViewSearch
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -48,7 +50,9 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
+
     this.setActiveSearchParametersFilters([
       { id: "taxon", title: "taxon_page.taxon", type: "text" },
       { id: "language", title: "common.language", type: "text" },
@@ -58,10 +62,11 @@ export default {
 
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
-    fetchTaxonPages() {
-      return new Promise(resolve => {
-        resolve(fetchTaxonPages(this.searchParameters));
-      });
+    apiCall() {
+      return fetchTaxonPages(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

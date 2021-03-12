@@ -15,7 +15,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchSiteGroundwaters"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -25,9 +26,9 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchSiteGroundwaters } from "../assets/js/api/apiCalls";
+import { fetchSiteGroundwaters } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
-import { mapGetters, mapState } from "vuex";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "SiteGroundwaters",
 
@@ -37,7 +38,7 @@ export default {
     TableViewSearch
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -45,7 +46,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { title: "site_groundwater.site", id: "site", type: "text" },
       { title: "site_groundwater.type_txt", id: "type_txt", type: "text" },
@@ -95,12 +97,11 @@ export default {
   },
 
   methods: {
-    fetchSiteGroundwaters() {
-      return new Promise(resolve => {
-        resolve(
-          fetchSiteGroundwaters(this.searchParameters)
-        );
-      });
+    apiCall() {
+      return fetchSiteGroundwaters(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

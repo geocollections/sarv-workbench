@@ -14,7 +14,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAccessions"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -27,6 +28,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchAccessions } from "../assets/js/api/apiCalls";
 import { mapActions } from "vuex";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "Accessions",
 
@@ -36,7 +38,7 @@ export default {
     TableViewSearch
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -44,7 +46,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "number", title: "common.number", type: "text" },
       { id: "description", title: "common.description", type: "text" }
@@ -53,10 +56,11 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateSearchParameters"]),
-    fetchAccessions() {
-      return new Promise(resolve => {
-        resolve(fetchAccessions(this.searchParameters));
-      });
+    apiCall() {
+      return fetchAccessions(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

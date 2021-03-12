@@ -15,7 +15,8 @@
     <list-module-core
       module="sarv_issue"
       :searchParameters="searchParameters"
-      :api-call="fetchSarvIssues"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -27,13 +28,14 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import ListModuleCore from "./ListModuleCore";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions, mapGetters } from "vuex";
-import { fetchSarvIssues } from "../assets/js/api/apiCalls";
+import { fetchSarvIssues } from "@/assets/js/api/apiCalls";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 export default {
   name: "SarvIssues",
 
   components: { ListModuleCore, TableViewSearch, TableViewTitle },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -45,7 +47,8 @@ export default {
     ...mapGetters("user", ["getUserId"])
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.fetchActiveSarvIssues();
 
     this.setActiveSearchParametersFilters([
@@ -59,10 +62,12 @@ export default {
     ...mapActions("search", ["setActiveSearchParameters"]),
     ...mapActions("search", ["fetchActiveSarvIssues"]),
 
-    fetchSarvIssues() {
-      return new Promise(resolve => {
-        resolve(fetchSarvIssues(this.searchParameters, this.getUserId));
-      });
+    apiCall() {
+      return fetchSarvIssues(
+        this.searchParameters,
+        this.getUserId,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

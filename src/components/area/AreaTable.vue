@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="area-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -56,9 +55,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "AreaTable",
-
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -87,38 +88,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.name", value: "name" },
-      { text: "common.type", value: "area_type" },
-      { text: "area.maardla", value: "maardla" },
-      { text: "area.eelis", value: "eelis" },
-      { text: "area.area_ha", value: "area_ha" },
-      { text: "area.deposit_area_ha", value: "deposit_area_ha" },
-      { text: "area.maakond", value: "maakond" }
-    ],
-    names: []
-  }),
-
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style>
-.area-table.v-data-table td,
-.area-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

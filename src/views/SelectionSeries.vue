@@ -19,7 +19,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchSelectionSeries"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       :multi-ordering="true"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -30,8 +31,9 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import { fetchSelectionSeries } from "../assets/js/api/apiCalls";
+import { fetchSelectionSeries } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "SelectionSeries",
@@ -42,7 +44,7 @@ export default {
     TableViewSearch
   },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -50,7 +52,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
       { id: "name", title: "common.name", type: "text" },
@@ -60,10 +63,11 @@ export default {
   },
 
   methods: {
-    fetchSelectionSeries() {
-      return new Promise(resolve => {
-        resolve(fetchSelectionSeries(this.searchParameters));
-      });
+    apiCall() {
+      return fetchSelectionSeries(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

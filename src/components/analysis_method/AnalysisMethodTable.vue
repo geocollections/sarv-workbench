@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="analysis-method-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -33,11 +32,6 @@
         v-translate="{ et: item.analysis_method, en: item.method_en }"
       ></span>
     </template>
-    <!--    <template v-slot:item.parent_method_analysis_method="{ item }">-->
-    <!--      <span-->
-    <!--        v-translate="{ et: item.parameter_name, en: item.parameter_name_en }"-->
-    <!--      ></span>-->
-    <!--    </template>-->
 
     <template v-slot:item.parent_method__analysis_method="{ item }">
       <span
@@ -52,9 +46,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "AnalysisMethodTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -83,35 +79,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "analysis_method.analysis_method", value: "analysis_method" },
-
-      {
-        text: "analysis_method.parent_method__analysis_method",
-        value: "parent_method__analysis_method"
-      }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style>
-.analysis-parameter-table.v-data-table td,
-.analysis-parameter-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

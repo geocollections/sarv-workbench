@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="taxon-pages-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -30,16 +29,6 @@
       </router-link>
     </template>
 
-    <!--    <template v-slot:item.content="{ item }">-->
-    <!--      <div-->
-    <!--          v-translate="{-->
-    <!--          et: item.content_et,-->
-    <!--          en: item.content_en,-->
-    <!--          useInnerText: true,-->
-    <!--          characterLimit: 1000-->
-    <!--        }"-->
-    <!--      ></div>-->
-    <!--    </template>-->
     <template v-slot:item.taxon="{ item }">
       <router-link
         :to="{ path: '/taxon/' + item.taxon }"
@@ -58,8 +47,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "TaxonPagesTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -88,33 +80,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "taxon_page.taxon", value: "taxon" },
-      { text: "common.language", value: "language" },
-      { text: "taxon_page.title", value: "title" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style scoped>
-.taxon-pages-table.v-data-table td,
-.taxon-pages-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="reference-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -37,7 +36,7 @@
       >
     </template>
 
-    <template v-slot:item.journal="{ item }">
+    <template v-slot:item.journal__journal_name="{ item }">
       <router-link
         :to="{ path: '/journal/' + item.journal }"
         :title="$t('editJournal.editMessage')"
@@ -116,9 +115,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "ReferenceTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -148,43 +149,10 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "reference.author", value: "author" },
-      { text: "common.year", value: "year" },
-      { text: "reference.title", value: "title" },
-      { text: "reference.journal", value: "journal" },
-      { text: "reference.volume", value: "volume" },
-      { text: "reference.pages_short", value: "pages" },
-      {
-        text: "reference.is_estonian_reference_short",
-        value: "is_estonian_reference"
-      },
-      {
-        text: "reference.is_estonian_author_short",
-        value: "is_estonian_author"
-      },
-      { text: "", value: "link", sortable: false },
-      { text: "reference.doi", value: "doi" },
-      { text: "reference.pdf", value: "attachment__filename" },
-      { text: "reference.url", value: "url" }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
+
   methods: {
     getGeoloogiaUrl(id) {
-      return `https://geoloogia.info/reference/${id}`;
+      return `https://kirjandus.geoloogia.info/reference/${id}`;
     },
 
     getDoiUrl(doi) {
@@ -208,10 +176,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.reference-table.v-data-table td,
-.reference-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

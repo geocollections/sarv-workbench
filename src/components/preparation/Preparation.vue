@@ -325,7 +325,7 @@
         <div v-show="block.taxa" class="pa-1">
           <!-- ADD NEW and EXPORT -->
           <v-card
-            class="d-flex flex-row justify-content-start mb-3"
+            class="d-flex flex-row justify-start mb-3"
             flat
             tile
             :color="bodyColor.split('n-')[0] + 'n-5'"

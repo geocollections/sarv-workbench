@@ -259,7 +259,7 @@
       </v-col>
     </v-row>
     <v-divider class="ma-1"></v-divider>
-    <v-row>
+    <v-row no-gutters>
       <v-col>
         <v-btn
           class="ma-1"

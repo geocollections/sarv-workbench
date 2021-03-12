@@ -14,7 +14,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchAreas"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -26,13 +27,14 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import ListModuleCore from "./ListModuleCore";
 import { fetchAreas } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "Areas",
 
   components: { ListModuleCore, TableViewSearch, TableViewTitle },
 
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -40,7 +42,8 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "name", title: "common.name", type: "text" },
       { id: "type", title: "common.type", type: "text" },
@@ -50,10 +53,11 @@ export default {
   },
 
   methods: {
-    fetchAreas() {
-      return new Promise(resolve => {
-        resolve(fetchAreas(this.searchParameters));
-      });
+    apiCall() {
+      return fetchAreas(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

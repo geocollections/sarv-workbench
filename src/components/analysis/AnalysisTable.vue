@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="analysis-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     dense
     hide-default-footer
     :items="response.results"
@@ -47,7 +46,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.sample__locality__locality="{ item }">
+    <template v-slot:item.sample__locality="{ item }">
       <router-link
         :to="{ path: '/locality/' + item.sample__locality }"
         :title="$t('editLocality.editMessage')"
@@ -67,7 +66,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'analysis', id: item.id })"
+        :href="getEmaUrl({ object: 'analysis', id: item.id })"
         :title="$t('editAnalysis.viewMessage')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"
@@ -81,9 +80,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "AnalysisTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -113,48 +114,10 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "analysis.sample__id", value: "sample" },
-      { text: "analysis.sample__number", value: "sample__number" },
-      {
-        text: "analysis.sample__locality",
-        value: "sample__locality__locality"
-      },
-      { text: "analysis.sample__depth", value: "sample__depth" },
-      {
-        text: "analysis.analysis_method",
-        value: "analysis_method__analysis_method"
-      },
-      { text: "analysis.date_", value: "date" },
-      { text: "analysis.labor_txt", value: "lab_txt" },
-      { text: "analysis.agent", value: "agent__agent" },
-      { text: "", value: "link", sortable: false }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
+    getEmaUrl(params) {
+      return `https://geoloogia.info/${params.object}/${params.id}`;
     }
   }
 };
 </script>
-
-<style>
-.analysis-table.v-data-table td,
-.analysis-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

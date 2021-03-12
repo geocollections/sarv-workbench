@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="site-groundwater-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -59,8 +58,11 @@
 </template>
 
 <script>
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+
 export default {
   name: "SiteGroundwaterTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -89,41 +91,6 @@ export default {
       required: false,
       default: "deep-orange"
     }
-  },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "site_groundwater.type_txt", value: "type_txt" },
-      { text: "site_groundwater.aquifer_system", value: "aquifer_system" },
-      { text: "site_groundwater.aquifer", value: "aquifer" },
-      { text: "site_groundwater.well_depth", value: "well_depth" },
-      { text: "site_groundwater.filter_type", value: "filter_type" },
-      { text: "site_groundwater.filter_top", value: "filter_top" },
-      { text: "site_groundwater.filter_bottom", value: "filter_bottom" },
-      { text: "site_groundwater.filter_top_z", value: "filter_top_z" },
-      { text: "site_groundwater.filter_bottom_z", value: "filter_bottom_z" },
-      { text: "site_groundwater.url_veka_short", value: "url_veka" },
-      { text: "common.remarks", value: "remarks" }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
   }
 };
 </script>
-
-<style scoped>
-.site-groundwater-table.v-data-table td,
-.site-groundwater-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>

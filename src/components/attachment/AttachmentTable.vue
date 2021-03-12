@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="attachment-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -26,34 +25,41 @@
     :class="bodyColor.split('n-')[0] + 'n-5'"
   >
     <template v-slot:item.uuid_filename="{ item }">
-      <router-link
-        v-if="item.uuid_filename"
-        :title="$t('edit.editMessage')"
-        :to="{ path: '/attachment/' + item.id }"
-      >
-        <v-img
-          v-if="isAttachmentImage(item.attachment_format__value)"
-          :src="getFileUrl(item.uuid_filename, 'small')"
-          :lazy-src="getFileUrl(item.uuid_filename, 'small')"
-          class="grey lighten-2 attachment-table-image-preview my-1"
+      <div style="max-width: 200px; max-height: 200px" class="text-center">
+        <router-link
+          v-if="item.uuid_filename"
+          :title="$t('edit.editMessage')"
+          :to="{ path: '/attachment/' + item.id }"
+          class="image-link"
+          style="max-width: 200px; max-height: 200px"
         >
-          <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-progress-circular indeterminate color="grey lighten-5" />
-            </v-row>
-          </template>
-        </v-img>
+          <v-img
+            v-if="isAttachmentImage(item.attachment_format__value)"
+            :src="getFileUrl(item.uuid_filename, 'small')"
+            :lazy-src="getFileUrl(item.uuid_filename, 'small')"
+            class="grey lighten-2 attachment-table-image-preview my-1"
+            max-width="200"
+            max-height="200"
+          >
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="grey lighten-5" />
+              </v-row>
+            </template>
+          </v-img>
 
-        <v-icon v-else class="my-1" style="font-size: 3rem">far fa-file</v-icon>
-      </router-link>
-
-      <router-link
-        v-else
-        :title="$t('edit.editMessage')"
-        :to="{ path: '/attachment/' + item.id }"
-      >
-        <v-icon class="my-1" style="font-size: 3rem">far fa-file</v-icon>
-      </router-link>
+          <v-icon v-else class="my-1" style="font-size: 3rem"
+            >far fa-file</v-icon
+          >
+        </router-link>
+        <router-link
+          v-else
+          :title="$t('edit.editMessage')"
+          :to="{ path: '/attachment/' + item.id }"
+        >
+          <v-icon class="my-1" style="font-size: 3rem">far fa-file</v-icon>
+        </router-link>
+      </div>
     </template>
 
     <template v-slot:item.id="{ item }">
@@ -90,7 +96,7 @@
 
     <template v-slot:item.reference__reference="{ item }">
       <router-link
-        :to="{ path: '/reference/' + item.reference_id }"
+        :to="{ path: '/reference/' + item.reference }"
         :title="$t('editReference.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
@@ -141,9 +147,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "AttachmentTable",
+  mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -173,35 +181,7 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [activeListMixin],
-  data: () => ({
-    headers: [
-      { text: "attachment.file", value: "uuid_filename", align: "center" },
-      { text: "common.id", value: "id" },
-      { text: "attachment.format", value: "attachment_format__value" },
-      { text: "attachment.imageNumber_short", value: "image_number" },
-      { text: "attachment.author", value: "author__agent" },
-      { text: "common.date", value: "date_created" },
-      { text: "attachment.specimen_short", value: "specimen" },
-      { text: "common.reference", value: "reference__reference" },
-      {
-        text: "attachment.specimenImageAttachment",
-        value: "specimen_image_attachment"
-      },
-      { text: "attachment.is_private_text_short", value: "is_private" },
-      { text: "", value: "link", sortable: false }
-    ]
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
+
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
@@ -229,14 +209,16 @@ export default {
 </script>
 
 <style>
-.attachment-table.v-data-table td,
-.attachment-table.v-data-table th {
-  padding: 0 8px;
-}
-
 .attachment-table-image-preview {
   max-height: 200px;
   max-width: 200px;
   border-radius: 0.25rem;
+}
+
+.image-link {
+  transition: opacity 200ms ease-in;
+}
+.image-link:hover {
+  opacity: 0.8;
 }
 </style>

@@ -15,7 +15,8 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :api-call="fetchReferences"
+      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :api-call="apiCall"
       :use-list-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -25,12 +26,12 @@
 <script>
 import ListModuleCore from "./ListModuleCore";
 import { fetchReferences } from "@/assets/js/api/apiCalls";
-import { fetchAddReferenceToLibrary } from "../assets/js/api/apiCalls";
 import { mapActions, mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import toastMixin from "../mixins/toastMixin";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -41,7 +42,7 @@ export default {
 
   name: "References",
 
-  mixins: [toastMixin, searchParametersMixin],
+  mixins: [toastMixin, searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
@@ -55,7 +56,9 @@ export default {
     ...mapGetters("user", ["getCurrentUser"])
   },
 
-  created() {
+  async created() {
+    await this.$_tableHeaderMixin_getDynamicFields();
+
     // Used by sidebar
     this.setActiveSearchParameters({
       search: this.librarySearchParameters,
@@ -91,10 +94,11 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
-    fetchReferences() {
-      return new Promise(resolve => {
-        resolve(fetchReferences(this.searchParameters));
-      });
+    apiCall() {
+      return fetchReferences(
+        this.searchParameters,
+        this.$_tableHeaderMixin_searchFields
+      );
     }
   }
 };

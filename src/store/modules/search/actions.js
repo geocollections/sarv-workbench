@@ -37,6 +37,7 @@ import {
   fetchAnalysisParameters,
   fetchTaxonPages,
   fetchLibraries,
+  fetchAllFields,
   fetchImagesets
 } from "@/assets/js/api/apiCalls";
 

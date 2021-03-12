@@ -1,7 +1,6 @@
 <template>
   <v-data-table
-    class="doi-table"
-    :headers="translatedHeaders"
+    :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     dense
     :items="response.results"
@@ -51,9 +50,11 @@
 
 <script>
 import moment from "moment";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   name: "DoiTable",
+  mixins: [tableHeaderMixin],
   props: {
     response: {
       type: Object
@@ -83,29 +84,6 @@ export default {
       default: "deep-orange"
     }
   },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "doi.identifier", value: "id" },
-      { text: "doi.creators", value: "creators" },
-      { text: "common.year", value: "publication_year" },
-      { text: "doi.title", value: "title" },
-      { text: "doi.resource_type", value: "resource_type__value" },
-      { text: "doi.datacite_created", value: "datacite_created" },
-      { text: "", value: "link", sortable: false }
-    ],
-    names: []
-  }),
-  computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    }
-  },
   methods: {
     getSarvDoiUrl(doiIdentifier) {
       if (doiIdentifier)
@@ -114,10 +92,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.doi-table.v-data-table td,
-.doi-table.v-data-table th {
-  padding: 0 8px;
-}
-</style>
