@@ -2144,7 +2144,7 @@ export function fetchMultiChangeSpecimen(data) {
 
 export function fetchCollections(data, dynamicSearch) {
   const fields =
-    "number,collection_id,name,name_long,name_en,name_long_en,type,type__value,type__value_en,classification,classification__class_field,agent,agent__agent,locality,locality__locality,locality__locality_en,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,number_objects,number_types,reference,reference__reference,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym";
+    "id,number,collection_id,name,name_long,name_en,name_long_en,type,type__value,type__value_en,classification,classification__class_field,agent,agent__agent,locality,locality__locality,locality__locality_en,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,number_objects,number_types,reference,reference__reference,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
