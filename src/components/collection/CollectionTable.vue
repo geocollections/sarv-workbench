@@ -20,7 +20,7 @@
   >
     <template v-slot:item.collection_id="{ item }">
       <router-link
-        :to="{ path: '/collection/' + item.collection_id }"
+        :to="{ path: '/collection/' + item.id }"
         :title="$t('editCollection.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
