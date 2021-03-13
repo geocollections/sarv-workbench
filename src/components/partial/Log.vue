@@ -220,4 +220,58 @@ export default {
   cursor: pointer;
   opacity: 0.8;
 }
+
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+  border-bottom-width: 2px;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+  border-bottom-width: 2px;
+}
+
+.table-bordered td,
+.table-bordered th {
+  border: 1px solid #dee2e6;
+  border-bottom-color: rgb(222, 226, 230);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-collapse: collapse;
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table td,
+.table th {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+th {
+  text-align: inherit;
+}
 </style>
