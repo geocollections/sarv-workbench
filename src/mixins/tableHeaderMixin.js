@@ -6,9 +6,9 @@ const tableHeaderMixin = {
       let table = this.$route.meta.object;
 
       if (this.$options.name.endsWith("Table")) {
-        table = this.$options.name
-          .substring(0, this.$options.name.indexOf("Table"))
-          .toLowerCase();
+        let splitName = this.$options.name.split(/(?=[A-Z])/);
+        splitName.pop();
+        table = splitName.join("_").toLowerCase();
       }
       return table;
     },
