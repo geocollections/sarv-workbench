@@ -2989,7 +2989,8 @@
     "confirm_deleting": "Kas olete kindel, et soovite kirje kustutada?",
     "globalNotificationIsAvailable": "Vaata üldist teadet!",
     "devNotification": "Külastate rakenduse <b>arendusversiooni</b>, kus võib esineda tõrkeid. Stabiilsema versiooni leiate siit: ",
-    "prodNotification": "Kas teadsite, et on olemas ka rakenduse <b>arendusversioon</b>, kus on olemas kõige viimased uuendused. Arendusversiooni leiate siit: "
+    "prodNotification": "Kas teadsite, et on olemas ka rakenduse <b>arendusversioon</b>, kus on olemas kõige viimased uuendused. Arendusversiooni leiate siit: ",
+    "containImages": "Vältige piltide kärpimist"
   },
   "logs": {
     "title": "Kirje ajalugu",
