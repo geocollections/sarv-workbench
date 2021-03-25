@@ -34,7 +34,7 @@
       </router-link>
     </template>
 
-    <template v-slot:item.locality="{ item }">
+    <template v-slot:item.locality__id="{ item }">
       <router-link
         :to="{ path: '/locality/' + item.locality }"
         :title="$t('editLocality.viewMessage')"
@@ -95,15 +95,38 @@
       <span v-else>{{ item.depth }}</span>
     </template>
 
-    <template v-slot:item.stratigraphy="{ item }">
-      <div>
+    <template v-slot:item.stratigraphy__id="{ item }">
+      <router-link
+        :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+        :title="$t('editStratigraphy.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
+        v-if="item.stratigraphy"
+      >
         <span
           v-translate="{
             et: item.stratigraphy__stratigraphy,
             en: item.stratigraphy__stratigraphy_en
           }"
         />
-      </div>
+      </router-link>
+    </template>
+
+    <template v-slot:item.lithostratigraphy__id="{ item }">
+      <router-link
+        :to="{ path: '/stratigraphy/' + item.lithostratigraphy }"
+        :title="$t('editStratigraphy.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
+        v-if="item.lithostratigraphy"
+      >
+        <span
+          v-translate="{
+            et: item.lithostratigraphy__stratigraphy,
+            en: item.lithostratigraphy__stratigraphy_en
+          }"
+        />
+      </router-link>
     </template>
 
     <template v-slot:item.storage__location="{ item }">

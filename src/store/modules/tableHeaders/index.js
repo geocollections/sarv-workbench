@@ -287,9 +287,10 @@ const state = {
     sample: [
       "id",
       "number",
-      "locality",
-      "stratigraphy",
+      "locality__id",
       "depth",
+      "stratigraphy__id",
+      "lithostratigraphy__id",
       "agent_collected__agent",
       "storage__location",
       "link"
