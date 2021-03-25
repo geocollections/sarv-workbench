@@ -31,9 +31,9 @@
           <v-icon>fas fa-home</v-icon>
         </v-btn>
         <v-btn text :to="{ path: '/dashboard' }" exact v-else>
-          <span>{{ $t("header.title") }}</span>
-          <span v-if="isBeta">-beta</span>
-          <span v-else-if="isLocal">-development</span>
+          <span class="text-none">{{ $t("header.title") }}</span>
+          <!--          <span v-if="isBeta">-beta</span>-->
+          <!--          <span v-else-if="isLocal">-development</span>-->
         </v-btn>
       </v-toolbar-items>
 

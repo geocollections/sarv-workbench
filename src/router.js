@@ -30,7 +30,7 @@ const router = new Router({
     },
     {
       path: "/",
-      name: "Geocollections Data Management",
+      name: "login",
       component: Login,
       meta: {
         isLogin: true,
@@ -2608,7 +2608,7 @@ router.beforeEach(async (to, from, next) => {
     if (checkCookiesAndStorage(loggedInUser)) {
       if (to.meta.requiresAuth) next();
       else {
-        if (to.name === "Geocollections Data Management")
+        if (to.name === "login")
           next({ path: "/dashboard" });
         else next();
       }

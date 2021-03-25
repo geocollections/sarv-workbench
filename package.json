@@ -1,15 +1,15 @@
 {
-  "name": "sarv-edit",
+  "name": "sarv-workbench",
   "version": "2.0.1",
   "description": "Application to work with SARV data.",
   "homepage": "https://edit.geocollections.info/",
   "bugs": {
-    "url": "https://github.com/geocollections/sarv-edit/issues",
+    "url": "https://github.com/geocollections/sarv-workbench/issues",
     "email": "olle.hints@taltech.ee"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/geocollections/sarv-edit.git"
+    "url": "https://github.com/geocollections/sarv-workbench.git"
   },
   "private": true,
   "scripts": {
