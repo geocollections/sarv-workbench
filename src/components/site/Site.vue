@@ -555,17 +555,17 @@
 
           <!-- PAGINATION -->
           <pagination
-              v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
-              class="pa-1"
-              :body-active-color="bodyActiveColor"
-              :count="relatedData[activeTab].count"
-              :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
-              :options="paginateByOptionsTranslated"
-              :page="relatedData.searchParameters[activeTab].page"
-              v-on:update:page="
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+            class="pa-1"
+            :body-active-color="bodyActiveColor"
+            :count="relatedData[activeTab].count"
+            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :options="paginateByOptionsTranslated"
+            :page="relatedData.searchParameters[activeTab].page"
+            v-on:update:page="
               relatedData.searchParameters[activeTab].page = $event
             "
-              v-on:update:paginateBy="
+            v-on:update:paginateBy="
               relatedData.searchParameters[activeTab].paginateBy = $event
             "
           />

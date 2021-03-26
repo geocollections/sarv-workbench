@@ -208,7 +208,11 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "reference", "reference");
     },
     autocompleteTranslatedReferenceSearch(value) {
-      this.$_autocompleteMixin_search(value, "reference", "translated_reference");
+      this.$_autocompleteMixin_search(
+        value,
+        "reference",
+        "translated_reference"
+      );
     },
     autocompleteSynonymSearch(value) {
       this.$_autocompleteMixin_search(value, "synonym", "synonym");

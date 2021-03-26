@@ -208,9 +208,9 @@
     </v-toolbar>
 
     <RelatedDataDeleteDialog
-        :dialog="deleteDialog"
-        @cancel="cancelDeletion"
-        @delete="runDeletion"
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
     />
   </div>
 </template>

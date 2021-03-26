@@ -342,7 +342,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/imageset/ImagesetTable.vue"),
+              component: () =>
+                import("./components/imageset/ImagesetTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "imageset",
@@ -2608,8 +2609,7 @@ router.beforeEach(async (to, from, next) => {
     if (checkCookiesAndStorage(loggedInUser)) {
       if (to.meta.requiresAuth) next();
       else {
-        if (to.name === "login")
-          next({ path: "/dashboard" });
+        if (to.name === "login") next({ path: "/dashboard" });
         else next();
       }
     } else {

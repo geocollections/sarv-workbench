@@ -39,45 +39,45 @@
       </template>
 
       <template v-slot:item.taxon="{ item }">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.taxon }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon__taxon }}
-          </router-link>
-          <router-link
-            v-else-if="item.taxon"
-            :to="{ path: '/taxon/' + item.taxon }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon.taxon }}
-          </router-link>
+        <router-link
+          v-if="$route.meta.isEdit"
+          :to="{ path: '/taxon/' + item.taxon }"
+          :title="$t('editTaxon.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.taxon__taxon }}
+        </router-link>
+        <router-link
+          v-else-if="item.taxon"
+          :to="{ path: '/taxon/' + item.taxon }"
+          :title="$t('editTaxon.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.taxon.taxon }}
+        </router-link>
       </template>
 
       <template v-slot:item.agent_identified="{ item }">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent_identified }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent_identified__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent_identified"
-            :to="{ path: '/agent/' + item.agent_identified.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent_identified.agent }}
-          </router-link>
+        <router-link
+          v-if="$route.meta.isEdit"
+          :to="{ path: '/agent/' + item.agent_identified }"
+          :title="$t('editAgent.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.agent_identified__agent }}
+        </router-link>
+        <router-link
+          v-else-if="item.agent_identified"
+          :to="{ path: '/agent/' + item.agent_identified.id }"
+          :title="$t('editAgent.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.agent_identified.agent }}
+        </router-link>
       </template>
 
       <template v-slot:item.extra="{ item }">
@@ -244,9 +244,9 @@
     </v-toolbar>
 
     <RelatedDataDeleteDialog
-        :dialog="deleteDialog"
-        @cancel="cancelDeletion"
-        @delete="runDeletion"
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
     />
   </div>
 </template>

@@ -470,10 +470,7 @@
 
           <!-- PAGINATION -->
           <pagination
-            v-if="
-              $route.meta.isEdit &&
-                relatedData[activeTab].count > 10
-            "
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
