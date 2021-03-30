@@ -1187,8 +1187,6 @@ export default {
       if (!this.isNotEmpty(uploadableObject.depth_interval))
         uploadableObject.depth_interval = null;
 
-      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
-
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {

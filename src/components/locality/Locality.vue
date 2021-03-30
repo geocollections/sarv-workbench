@@ -970,8 +970,6 @@ export default {
       if (!this.isNotEmpty(uploadableObject.depth))
         uploadableObject.depth = null;
 
-      // if (this.databaseId) uploadableObject.database = this.databaseId;
-
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {

@@ -816,8 +816,6 @@ export default {
 
       if (!this.isNotEmpty(uploadableObject.mass)) uploadableObject.mass = null;
 
-      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
-
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {

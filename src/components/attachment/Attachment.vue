@@ -4744,8 +4744,6 @@ export default {
         }
       });
 
-      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
-
       /* Related Data START */
       uploadableObject.related_data = {};
 

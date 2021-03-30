@@ -1404,8 +1404,6 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        if (this.isNotEmpty(this.getDatabaseId))
-          uploadableObject.database = this.getDatabaseId;
 
         this.relatedTabs.forEach(tab => {
           if (this.relatedData[tab.name].count > 0)
