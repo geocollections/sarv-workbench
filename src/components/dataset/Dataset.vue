@@ -545,8 +545,6 @@ export default {
         }
       });
 
-      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
-
       // Adding related data only on add view
       if (!this.$route.meta.isEdit) {
         uploadableObject.related_data = {};

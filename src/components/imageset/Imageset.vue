@@ -275,8 +275,6 @@ export default {
         }
       });
 
-      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
-
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
 
