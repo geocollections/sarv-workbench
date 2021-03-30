@@ -613,39 +613,21 @@
           />
 
           <!-- PAGINATION -->
-          <div
+          <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
-          >
-            <div class="mr-3 mb-3">
-              <v-select
-                v-model="relatedData.searchParameters[activeTab].paginateBy"
-                :color="bodyActiveColor"
-                dense
-                :items="paginateByOptionsTranslated"
-                :item-color="bodyActiveColor"
-                label="Paginate by"
-                hide-details
-              />
-            </div>
-
-            <div>
-              <v-pagination
-                v-model="relatedData.searchParameters[activeTab].page"
-                :color="bodyActiveColor"
-                circle
-                prev-icon="fas fa-angle-left"
-                next-icon="fas fa-angle-right"
-                :length="
-                  Math.ceil(
-                    relatedData[activeTab].count /
-                      relatedData.searchParameters[activeTab].paginateBy
-                  )
-                "
-                :total-visible="5"
-              />
-            </div>
-          </div>
+            class="pa-1"
+            :body-active-color="bodyActiveColor"
+            :count="relatedData[activeTab].count"
+            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :options="paginateByOptionsTranslated"
+            :page="relatedData.searchParameters[activeTab].page"
+            v-on:update:page="
+              relatedData.searchParameters[activeTab].page = $event
+            "
+            v-on:update:paginateBy="
+              relatedData.searchParameters[activeTab].paginateBy = $event
+            "
+          />
         </v-card>
       </v-tabs-items>
     </v-card>
@@ -762,11 +744,13 @@ import SpecimenHistoryTable from "./relatedTables/SpecimenHistoryTable";
 import SpecimenAnalysisTable from "./relatedTables/SpecimenAnalysisTable";
 import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 import { fetchListSpecimenSubtype } from "@/assets/js/api/apiCalls";
+import Pagination from "@/components/partial/Pagination";
 
 export default {
   name: "Specimen",
 
   components: {
+    Pagination,
     SpecimenAnalysisTable,
     SpecimenHistoryTable,
     SpecimenLocationTable,
@@ -1390,10 +1374,12 @@ export default {
         );
       }
 
-      query.then(response => {
-        this.relatedData[object].count = response.data.count;
-        this.relatedData[object].results = this.handleResponse(response);
-      });
+      if (query) {
+        query.then(response => {
+          this.relatedData[object].count = response.data.count;
+          this.relatedData[object].results = this.handleResponse(response);
+        });
+      }
     },
 
     addFiles(files, singleFileMetadata) {
@@ -1401,8 +1387,7 @@ export default {
     },
 
     addExistingFiles(files) {
-      console.log(files);
-      this.relatedData.attachment.count = files.length;
+      // this.relatedData.attachment.count = files.length;
       this.relatedData.attachment.results = files;
     }
   }

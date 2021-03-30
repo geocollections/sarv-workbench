@@ -70,7 +70,7 @@ const authenticationMixin = {
       fetchLogout().then(response => {
         if (response.status === 200) {
           this.$router.push({
-            name: "Geocollections Data Management",
+            name: "login",
             params: { dontShowSessionExpired: true }
           });
           this.$_authenticationMixin_toastSuccessMessage(

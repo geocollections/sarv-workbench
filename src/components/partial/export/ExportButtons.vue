@@ -38,7 +38,7 @@ export default {
   props: {
     filename: {
       type: String,
-      default: "Geocollections Data Management"
+      default: "sarv-workbench"
     },
     tableData: {
       type: Array

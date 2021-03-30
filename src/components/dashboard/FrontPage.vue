@@ -188,10 +188,10 @@
             <p>
               Vigadest anna teada githubis:
               <a
-                href="https://github.com/geocollections/sarv-edit"
+                href="https://github.com/geocollections/sarv-workbench"
                 target="HelpLink"
                 ><i class="fab fa-github"></i>
-                https://github.com/geocollections/sarv-edit</a
+                https://github.com/geocollections/sarv-workbench</a
               >
               või kirjuta:
               <a href="mailto:olle.hints@taltech.ee"

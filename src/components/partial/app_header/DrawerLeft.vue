@@ -57,7 +57,7 @@
         :value="true"
       >
         <template v-slot:activator>
-          <v-list-item-title>SARV2</v-list-item-title>
+          <v-list-item-title>{{ $t("header.title") }}</v-list-item-title>
         </template>
 
         <v-list-group

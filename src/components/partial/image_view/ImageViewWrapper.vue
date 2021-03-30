@@ -1,10 +1,18 @@
 <template>
   <div class="image-view-wrapper mx-3" v-if="data && data.length > 0">
+    <div class="mb-3">
+      <v-switch
+        v-model="containImages"
+        hide-details
+        :color="bodyActiveColor"
+        :label="$t('messages.containImages')"
+      />
+    </div>
     <v-row>
       <v-col
         v-for="(image, index) in data"
         :key="index"
-        class="my-3"
+        class="py-3"
         style="position:relative;"
         cols="6"
         sm="4"
@@ -15,7 +23,7 @@
           <template v-slot:activator="{ on }">
             <v-card
               flat
-              class="d-flex image-hover fill-height my-3"
+              class="d-flex image-hover fill-height"
               v-on="on"
               :class="
                 clearItemBackground
@@ -34,6 +42,7 @@
                 max-height="400"
                 min-width="72"
                 aspect-ratio="1"
+                :contain="containImages"
                 v-if="isImageFile(image)"
                 :src="getFileUrl(image.uuid_filename, 'small')"
                 :lazy-src="getFileUrl(image.uuid_filename, 'small')"
@@ -118,7 +127,7 @@
 
         <div
           class="d-flex flex-row justify-space-around"
-          style="position: absolute; padding-right: 30px; bottom: 0; width: 100%"
+          style="position: absolute; padding-right: 30px; bottom: 12px; width: 100%"
         >
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -213,6 +222,9 @@ export default {
     openFile: Boolean,
     showAttachmentLink: Boolean
   },
+  data: () => ({
+    containImages: false
+  }),
   computed: {
     editMessage() {
       if (this.object === "specimen") return "editSpecimen.editMessage";

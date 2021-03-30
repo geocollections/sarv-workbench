@@ -24,7 +24,7 @@
     "locality": "Locality",
     "year": "Year",
     "depth": "Depth",
-    "depth_interval": "Depth interval",
+    "depth_interval": "Depth (to)",
     "location": "Location",
     "storage": "Storage",
     "type": "Type",
@@ -95,7 +95,7 @@
     "overlay": "Logging in..."
   },
   "header": {
-    "title": "SARV2",
+    "title": "SARV workbench",
     "classifications": "Classifications",
     "attachment": "File",
     "attachments": "Files",
@@ -1002,7 +1002,7 @@
     "date_added": "Date added",
     "date_changed": "Date changed",
     "depth": "Depth",
-    "depth_interval": "Depth interval",
+    "depth_interval": "Depth (to)",
     "fossil__id": "Fossil ID",
     "fossil__value": "Fossil",
     "fossil__value_en": "Fossil EN",
@@ -1160,7 +1160,7 @@
     "date_added": "Date added",
     "date_changed": "Date changed",
     "depth": "Depth",
-    "depth_interval": "Depth interval",
+    "depth_interval": "Depth (to)",
     "id": "ID",
     "igsn": "IGSN",
     "epsg": "EPSG",
@@ -2988,7 +2988,8 @@
     "confirm_deleting": "Are you sure you would like to delete the record?",
     "globalNotificationIsAvailable": "View global notification!",
     "devNotification": "You are visiting the <b>development version</b> of the application. More stable version can be found here: ",
-    "prodNotification": "Did you know there is also a <b>development version</b>, which has all the latest features and functionality. Development version can be found here: "
+    "prodNotification": "Did you know there is also a <b>development version</b>, which has all the latest features and functionality. Development version can be found here: ",
+    "containImages": "Prevent image cropping"
   },
   "logs": {
     "title": "Editing history",

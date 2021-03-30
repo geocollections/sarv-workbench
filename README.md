@@ -1,4 +1,4 @@
-# sarv-edit
+# sarv-workbench
 
 ## Project setup
 ```

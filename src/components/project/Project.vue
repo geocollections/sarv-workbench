@@ -883,33 +883,35 @@ export default {
           this.relatedData.page.attachment_link
         );
       }
-      return new Promise(() => {
-        //resolve it for my sites table
-        // if(object === 'site') resolve(query);
+      if (query) {
+        return new Promise(() => {
+          //resolve it for my sites table
+          // if(object === 'site') resolve(query);
 
-        query.then(response => {
-          //projectagent do not have count value
-          if (response.status === 200)
-            this.relatedData[object] = response.data.results
-              ? response.data.results
-              : [];
+          query.then(response => {
+            //projectagent do not have count value
+            if (response.status === 200)
+              this.relatedData[object] = response.data.results
+                  ? response.data.results
+                  : [];
 
-          this.relatedData.count[object] = response.data.count;
-          this.relatedData[object] = this.fillRelatedDataAutocompleteFields(
-            this.relatedData[object],
-            object
-          );
+            this.relatedData.count[object] = response.data.count;
+            this.relatedData[object] = this.fillRelatedDataAutocompleteFields(
+                this.relatedData[object],
+                object
+            );
 
-          if (object === "projectagent") {
-            this.autocomplete.projectagent = this.relatedData[object];
-          }
-          if (object === "attachment_link") {
-            this.autocomplete.attachment = this.relatedData[object];
-          }
-          // if(object === 'site')  this.forceMapRerender()
-          this.setBlockVisibility(object, this.relatedData[object].length);
+            if (object === "projectagent") {
+              this.autocomplete.projectagent = this.relatedData[object];
+            }
+            if (object === "attachment_link") {
+              this.autocomplete.attachment = this.relatedData[object];
+            }
+            // if(object === 'site')  this.forceMapRerender()
+            this.setBlockVisibility(object, this.relatedData[object].length);
+          });
         });
-      });
+      }
     },
     setBlockVisibility(object, count) {
       if (object === "projectagent") this.block.members = count > 0;

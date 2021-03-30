@@ -285,11 +285,12 @@ const state = {
       "mindat_id"
     ],
     sample: [
-      "number",
       "id",
-      "locality",
+      "number",
+      "locality__id",
       "depth",
-      "stratigraphy",
+      "stratigraphy__id",
+      "lithostratigraphy__id",
       "agent_collected__agent",
       "storage__location",
       "link"

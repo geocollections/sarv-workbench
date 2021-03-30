@@ -533,39 +533,21 @@
           />
 
           <!-- PAGINATION -->
-          <div
+          <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
-          >
-            <div class="mr-3 mb-3">
-              <v-select
-                v-model="relatedData.searchParameters[activeTab].paginateBy"
-                :color="bodyActiveColor"
-                dense
-                :items="paginateByOptionsTranslated"
-                :item-color="bodyActiveColor"
-                label="Paginate by"
-                hide-details
-              />
-            </div>
-
-            <div>
-              <v-pagination
-                v-model="relatedData.searchParameters[activeTab].page"
-                :color="bodyActiveColor"
-                circle
-                prev-icon="fas fa-angle-left"
-                next-icon="fas fa-angle-right"
-                :length="
-                  Math.ceil(
-                    relatedData[activeTab].count /
-                      relatedData.searchParameters[activeTab].paginateBy
-                  )
-                "
-                :total-visible="5"
-              />
-            </div>
-          </div>
+            class="pa-1"
+            :body-active-color="bodyActiveColor"
+            :count="relatedData[activeTab].count"
+            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :options="paginateByOptionsTranslated"
+            :page="relatedData.searchParameters[activeTab].page"
+            v-on:update:page="
+              relatedData.searchParameters[activeTab].page = $event
+            "
+            v-on:update:paginateBy="
+              relatedData.searchParameters[activeTab].paginateBy = $event
+            "
+          />
         </v-card>
       </v-tabs-items>
     </v-card>
@@ -904,9 +886,11 @@ import DoiDateTable from "./relatedTables/DoiDateTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import toastMixin from "../../mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
+import Pagination from "@/components/partial/Pagination";
 
 export default {
   components: {
+    Pagination,
     DoiDateTable,
     DoiAgentTable,
     DoiGeolocationTable,
@@ -1534,7 +1518,7 @@ export default {
       }
 
       // Dataset and Reference are direct links and do not need extra request.
-      if (object !== "dataset" && object !== "reference") {
+      if (query && (object !== "dataset" && object !== "reference")) {
         query.then(response => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
@@ -2212,7 +2196,7 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.attachment_link.count = files.length;
+      // this.relatedData.attachment_link.count = files.length;
       this.relatedData.attachment_link.results = files;
     }
   }

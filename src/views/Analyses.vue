@@ -30,7 +30,7 @@
 <script>
 import ListModuleCore from "./ListModuleCore";
 import { fetchAnalyses } from "@/assets/js/api/apiCalls";
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";

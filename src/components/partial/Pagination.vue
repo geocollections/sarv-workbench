@@ -51,9 +51,7 @@ export default {
       type: Number
     }
   }
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

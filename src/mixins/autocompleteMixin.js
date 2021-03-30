@@ -106,13 +106,6 @@ const autocompleteMixin = {
     autocompleteStratigraphySearch(value) {
       this.$_autocompleteMixin_search(value, "stratigraphy", "stratigraphy");
     },
-    autocompleteStratigraphyOnlyChronoSearch(value) {
-      this.$_autocompleteMixin_search(
-        value,
-        "stratigraphy_chrono",
-        "stratigraphy"
-      );
-    },
     autocompleteLithostratigraphySearch(value) {
       this.$_autocompleteMixin_search(
         value,
@@ -215,7 +208,11 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "reference", "reference");
     },
     autocompleteTranslatedReferenceSearch(value) {
-      this.$_autocompleteMixin_search(value, "reference", "translated_reference");
+      this.$_autocompleteMixin_search(
+        value,
+        "reference",
+        "translated_reference"
+      );
     },
     autocompleteSynonymSearch(value) {
       this.$_autocompleteMixin_search(value, "synonym", "synonym");
@@ -446,11 +443,9 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "storage":
       return `location/?multi_search=value:${value};fields:location;lookuptype:icontains&fields=id,location`;
     case "stratigraphy":
-      return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
-    case "stratigraphy_chrono":
-      return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&type__value_en=chronostratigraphy&fields=id,stratigraphy,stratigraphy_en`;
+      return `stratigraphy/?type=1&multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
     case "lithostratigraphy":
-      return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&type__value_en=lithostratigraphy&fields=id,stratigraphy,stratigraphy_en`;
+      return `stratigraphy/?type=2&multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&type__value_en=lithostratigraphy&fields=id,stratigraphy,stratigraphy_en`;
     case "stratigraphy_top":
     case "stratigraphy_base":
       return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;

@@ -8,9 +8,11 @@
   >
     <lang-buttons v-if="$route.meta.isLogin" style="z-index: 3" />
     <div class="gradient"></div>
-    <v-container fill-height>
+    <v-container fill-height style="padding-bottom: 80px;">
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" xl="4" style="margin: 48px 0;">
+          <div class="sarv-title">{{ $t("header.title") }}</div>
+
           <GlobalAlertNotification />
 
           <DevNotification />
@@ -274,5 +276,16 @@ export default {
 .active-tab-color {
   background-color: #eceff1;
   color: #37474f !important;
+}
+
+.sarv-title {
+  z-index: 2;
+  color: white;
+  position: relative;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px #000;
 }
 </style>
