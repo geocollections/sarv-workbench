@@ -1106,10 +1106,12 @@ export default {
         );
       }
 
-      query.then(response => {
-        this.relatedData[type].count = response.data.count;
-        this.relatedData[type].results = this.handleResponse(response);
-      });
+      if (query) {
+        query.then(response => {
+          this.relatedData[type].count = response.data.count;
+          this.relatedData[type].results = this.handleResponse(response);
+        });
+      }
     },
 
     updateLocation(location) {

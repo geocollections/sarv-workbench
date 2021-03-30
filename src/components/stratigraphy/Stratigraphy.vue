@@ -1066,10 +1066,12 @@ export default {
         );
       }
 
-      query.then(response => {
-        this.relatedData[object].count = response.data.count;
-        this.relatedData[object].results = this.handleResponse(response);
-      });
+      if (query) {
+        query.then(response => {
+          this.relatedData[object].count = response.data.count;
+          this.relatedData[object].results = this.handleResponse(response);
+        });
+      }
     }
   }
 };

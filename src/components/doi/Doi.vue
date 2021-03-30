@@ -1518,7 +1518,7 @@ export default {
       }
 
       // Dataset and Reference are direct links and do not need extra request.
-      if (object !== "dataset" && object !== "reference") {
+      if (query && (object !== "dataset" && object !== "reference")) {
         query.then(response => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);

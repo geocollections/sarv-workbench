@@ -1190,10 +1190,12 @@ export default {
         );
       }
 
-      query.then(response => {
-        this.relatedData[object].results = this.handleResponse(response);
-        this.relatedData[object].count = response.data.count;
-      });
+      if (query) {
+        query.then(response => {
+          this.relatedData[object].results = this.handleResponse(response);
+          this.relatedData[object].count = response.data.count;
+        });
+      }
     },
 
     addFiles(files, singleFileMetadata) {
