@@ -220,7 +220,7 @@
                 :item-text="stratigraphyLabel"
                 :label="$t('common.stratigraphy')"
                 is-searchable
-                v-on:search:items="autocompleteStratigraphySearch"
+                v-on:search:items="autocompleteChronostratigraphySearch"
               />
             </v-col>
 
