@@ -85,10 +85,10 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <checkbox-wrapper
-                v-model="web_pages.public"
+                v-model="web_pages.is_private"
                 :color="bodyActiveColor"
                 :label="$t('web_pages.public')"
-                @change="web_pages.public = !web_pages.public"
+                @change="web_pages.is_private = !web_pages.is_private"
               />
             </v-col>
           </v-row>
@@ -180,7 +180,7 @@ export default {
           "title_en",
           "content_en",
           "content_et",
-          "public"
+          "is_private"
         ],
         web_pages: {},
         requiredFields: [],
