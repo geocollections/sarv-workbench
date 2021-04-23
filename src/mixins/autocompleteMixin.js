@@ -450,7 +450,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "storage":
       return `location/?multi_search=value:${value};fields:location;lookuptype:icontains&fields=id,location`;
     case "stratigraphy":
-      return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
+      return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en,hierarchy_string`;
     case "chronostratigraphy":
       return `stratigraphy/?type=1&multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
     case "lithostratigraphy":
