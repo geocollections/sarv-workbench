@@ -7,6 +7,7 @@
     @input="changeDrawerState"
     :dark="isDrawerDark"
     :color="drawerColor"
+    disable-resize-watcher
     style="z-index: 1100"
   >
     <v-list expand dense>
