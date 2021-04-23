@@ -7,7 +7,6 @@
     mobile-breakpoint="992"
     :dark="isDrawerDark"
     :color="drawerColor"
-    disable-resize-watcher
     style="z-index: 1100"
   >
     <template v-slot:prepend>
