@@ -409,6 +409,7 @@
       "info": "General info",
       "localityInfo": "Locality and stratigraphy",
       "details": "Specimen details",
+      "images": "Images",
       "description": "Remarks"
     },
     "keyword": {
@@ -1098,6 +1099,7 @@
     "loan": "Loan",
     "number_pieces": "Number of pieces",
     "save_as_new_sample": "Save as new sample",
+    "specimenImages": "Images",
     "relatedTables": {
       "specimen_identification": "Taxon names",
       "specimen_identification_geology": "Rock names",

@@ -1978,6 +1978,10 @@ export function fetchSpecimenImages(data, dynamicSearch) {
   }
 }
 
+export function fetchDirectSpecimenImages(specimenId) {
+  return get(`attachment/?specimen=${specimenId}&format=json`);
+}
+
 export function fetchListSpecimenKind() {
   return get(`list_specimen_kind/?format=json`);
 }
