@@ -755,6 +755,18 @@
         </div>
       </transition>
     </v-card>
+
+    <!-- IS_PRIVATE -->
+    <v-row no-gutters class="my-2">
+      <v-col>
+        <checkbox-wrapper
+          v-model="site.is_private"
+          :color="bodyActiveColor"
+          :label="$t('common.is_private')"
+          @change="site.is_private = !site.is_private"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -790,10 +802,12 @@ import SiteLocalityDescriptionTable from "./relatedTables/SiteLocalityDescriptio
 import SiteLocalityReferenceTable from "./relatedTables/SiteLocalityReferenceTable";
 import toastMixin from "@/mixins/toastMixin";
 import Pagination from "@/components/partial/Pagination";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
 
 export default {
   name: "Site",
   components: {
+    CheckboxWrapper,
     Pagination,
     SiteLocalityReferenceTable,
     SiteLocalityDescriptionTable,
@@ -1038,7 +1052,8 @@ export default {
           "remarks_location",
           "description",
           "remarks",
-          "area"
+          "area",
+          "is_private"
         ],
         siteGroundwaterCopyFields: [
           "id",
