@@ -1626,6 +1626,7 @@
     "database": "Andmebaas",
     "dataset_html": "HTML andmed",
     "link": "Link",
+    "resourceTypePlaceholder": "Dataset",
     "relatedTables": {
       "dataset_author": "Autorid",
       "dataset_reference": "Viited",

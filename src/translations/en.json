@@ -1628,6 +1628,7 @@
     "database": "Database",
     "dataset_html": "HTML data",
     "link": "Link",
+    "resourceTypePlaceholder": "Dataset",
     "relatedTables": {
       "dataset_author": "Authors",
       "dataset_reference": "References",
