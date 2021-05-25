@@ -97,6 +97,7 @@
                 <file-preview
                   :data="rawAttachment"
                   :rotation-degrees="imageRotationDegrees"
+                  :key="filePreviewKey"
                   object="attachment"
                   @rotate="imageRotationDegrees = $event"
                 />
@@ -4179,6 +4180,7 @@ export default {
     setInitialData() {
       return {
         imageRotationDegrees: 0,
+        filePreviewKey: Date.now(),
         relatedTabs: [
           {
             name: "attach_link__collection",
