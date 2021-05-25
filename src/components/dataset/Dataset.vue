@@ -517,6 +517,7 @@ import DatasetReferenceTable from "./relatedTables/DatasetReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import DatasetAnalysisTable from "./relatedTables/DatasetAnalysisTable";
 import Pagination from "@/components/partial/Pagination";
+import { orderBy } from "lodash";
 
 export default {
   name: "Dataset",
@@ -793,8 +794,8 @@ export default {
           dataset_author: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true]
+            sortBy: ["sort", "id"],
+            sortDesc: [false, false]
           },
           dataset_reference: {
             page: 1,
@@ -933,34 +934,36 @@ export default {
         let creatorsLong = "";
         let moreThanOneAuthor = datasetAuthor.length > 1;
 
-        datasetAuthor.forEach(agent => {
-          // Only Creators are added (agent_type 1 === Creator)
-          if (this.$route.meta.isEdit) {
-            if (agent?.agent_type === 1) {
-              if (agent?.agent__surename && agent?.agent__forename) {
-                creatorsLong += `${
-                  agent.agent__surename
-                }, ${agent.agent__forename.charAt(0)}., `;
-                creators += `${agent.agent__surename}, ${agent.agent__forename}; `;
-              } else if (agent?.name) {
-                creatorsLong += `${agent.name}; `;
-                creators += `${agent.name}; `;
+        orderBy(datasetAuthor, ["sort", "id"], ["asc", "asc"]).forEach(
+          agent => {
+            // Only Creators are added (agent_type 1 === Creator)
+            if (this.$route.meta.isEdit) {
+              if (agent?.agent_type === 1) {
+                if (agent?.agent__surename && agent?.agent__forename) {
+                  creatorsLong += `${
+                    agent.agent__surename
+                  }, ${agent.agent__forename.charAt(0)}., `;
+                  creators += `${agent.agent__surename}, ${agent.agent__forename}; `;
+                } else if (agent?.name) {
+                  creatorsLong += `${agent.name}; `;
+                  creators += `${agent.name}; `;
+                }
               }
-            }
-          } else {
-            if (agent?.agent_type?.id === 1) {
-              if (agent?.agent?.surename && agent?.agent?.forename) {
-                creatorsLong += `${
-                  agent.agent.surename
-                }, ${agent.agent.forename.charAt(0)}., `;
-                creators += `${agent.agent.surename}, ${agent.agent.forename}; `;
-              } else if (agent?.name) {
-                creators += `${agent.name}; `;
-                creatorsLong += `${agent.name}; `;
+            } else {
+              if (agent?.agent_type?.id === 1) {
+                if (agent?.agent?.surename && agent?.agent?.forename) {
+                  creatorsLong += `${
+                    agent.agent.surename
+                  }, ${agent.agent.forename.charAt(0)}., `;
+                  creators += `${agent.agent.surename}, ${agent.agent.forename}; `;
+                } else if (agent?.name) {
+                  creators += `${agent.name}; `;
+                  creatorsLong += `${agent.name}; `;
+                }
               }
             }
           }
-        });
+        );
 
         if (creators.length > 0) {
           creators = creators.trim().slice(0, -1);
@@ -973,7 +976,7 @@ export default {
           }
         }
       }
-    },
+    }
   }
 };
 </script>
