@@ -910,7 +910,9 @@
     "imageDescriptionEn": "Pildi kirjeldus en",
     "collapseMap": "Kaart",
     "dateDigitisedFree": "Digiteerimise kp vaba",
-    "map": "Kaart"
+    "map": "Kaart",
+    "rotateRight": "Pööra paremale",
+    "rotateLeft": "Pööra vasakule"
   },
   "imageset": {
     "author__agent": "Autor",
