@@ -674,16 +674,16 @@ const formManipulation = {
      *
      * @example bottomOptionClicked('SAVE', 'doi')
      */
-    bottomOptionClicked(choice, object) {
+    async bottomOptionClicked(choice, object) {
       // Setting 'initialEditViewDataHasChangedState' to false because of bottom option click
       // which is intended as an intentional click and shouldn't ask for confirmation.
       this.setInitialEditViewDataHasChangedState(false);
 
       if (choice === "SAVE") {
-        this.add(true, object);
+        await this.add(true, object);
 
         if (object === "attachment" && this?.imageRotationState)
-          this.rotateImageRequest(object, this.imageRotationDegrees);
+          await this.rotateImageRequest(object, this.imageRotationDegrees);
       }
 
       if (choice === "FINISH") {
@@ -692,10 +692,10 @@ const formManipulation = {
       }
 
       if (choice === "SAVE_AND_LEAVE") {
-        this.add(false, object);
+        await this.add(false, object);
 
         if (object === "attachment" && this?.imageRotationState)
-          this.rotateImageRequest(object, this.imageRotationDegrees);
+          await this.rotateImageRequest(object, this.imageRotationDegrees);
       }
 
       if (choice === "SAVE_AS_NEW") {
