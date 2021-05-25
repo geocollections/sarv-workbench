@@ -120,6 +120,15 @@
                     :label="$t('doi.agent_type')"
                   />
                 </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.orcid"
+                    :color="bodyActiveColor"
+                    :label="$t('doi.orcid')"
+                  />
+                </v-col>
+
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
                     v-model="item.agent"
@@ -141,14 +150,6 @@
                     v-model="item.sort"
                     :color="bodyActiveColor"
                     :label="$t('doi.sort')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.remarks"
-                    :color="bodyActiveColor"
-                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -232,10 +233,9 @@ export default {
       { text: "common.name", value: "name" },
       { text: "doi.affiliation", value: "affiliation" },
       { text: "doi.agent_type", value: "agent_type" },
+      { text: "doi.orcid", value: "orcid" },
       { text: "doi.agent", value: "agent" },
       { text: "doi.sort", value: "sort" },
-      { text: "dataset_author.agent", value: "agent" },
-      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
@@ -251,9 +251,9 @@ export default {
         id: 1,
         value: "Creator"
       },
+      orcid: "",
       agent: null,
-      sort: "",
-      remarks: ""
+      sort: ""
     },
     isNewItem: true,
     autocomplete: {
@@ -292,6 +292,7 @@ export default {
       if (typeof agent !== "undefined" && agent !== null) {
         this.item.name = agent.agent;
         this.item.affiliation = agent.institution__institution_name_en;
+        this.item.orcid = agent.orcid;
       }
     },
 
@@ -305,9 +306,9 @@ export default {
           id: 1,
           value: "Creator"
         },
+        orcid: "",
         agent: null,
-        sort: null,
-        remarks: ""
+        sort: null
       };
     },
 
@@ -358,8 +359,8 @@ export default {
 
       this.item.name = item.name;
       this.item.affiliation = item.affiliation;
+      this.item.orcid = item.orcid;
       this.item.sort = item.sort;
-      this.item.remarks = item.remarks;
 
       this.dialog = true;
     },
