@@ -183,17 +183,6 @@
             </v-col>
           </v-row>
 
-          <!-- LOCATION -->
-          <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
-              <textarea-wrapper
-                v-model="drillcore_box.location"
-                :color="bodyActiveColor"
-                :label="$t('drillcore_box.location')"
-              />
-            </v-col>
-          </v-row>
-
           <!-- REMARKS -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
@@ -424,7 +413,6 @@ export default {
           "stratigraphy_top_free",
           "depth_other",
           "stratigraphy_free",
-          "location",
           "remarks"
         ],
         autocomplete: {
