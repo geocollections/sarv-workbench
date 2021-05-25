@@ -680,8 +680,14 @@ const formManipulation = {
       this.setInitialEditViewDataHasChangedState(false);
 
       if (choice === "SAVE") {
-        if (object === "attachment" && this?.imageRotationState)
-          await this.rotateImageRequest(object, this.imageRotationDegrees);
+        if (object === "attachment" && this?.imageRotationState) {
+          // Saving rotation and resetting degrees
+          await this.rotateImageRequest(
+            object,
+            this.imageRotationDegreesForApi
+          );
+          this.imageRotationDegrees = 0;
+        }
 
         await this.add(true, object);
       }
@@ -692,8 +698,14 @@ const formManipulation = {
       }
 
       if (choice === "SAVE_AND_LEAVE") {
-        if (object === "attachment" && this?.imageRotationState)
-          await this.rotateImageRequest(object, this.imageRotationDegrees);
+        // Saving rotation and resetting degrees
+        if (object === "attachment" && this?.imageRotationState) {
+          await this.rotateImageRequest(
+            object,
+            this.imageRotationDegreesForApi
+          );
+          this.imageRotationDegrees = 0;
+        }
 
         await this.add(false, object);
       }

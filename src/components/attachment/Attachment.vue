@@ -96,8 +96,9 @@
               <v-col cols="12" md="6" class="pa-1">
                 <file-preview
                   :data="rawAttachment"
+                  :rotation-degrees="imageRotationDegrees"
                   object="attachment"
-                  @rotate="handleRotation"
+                  @rotate="imageRotationDegrees = $event"
                 />
               </v-col>
 
@@ -4055,7 +4056,15 @@ export default {
     },
 
     imageRotationState() {
-      return Math.abs(this.imageRotationDegrees) !== 0;
+      return Math.abs(this.imageRotationDegreesForApi) !== 0;
+    },
+
+    imageRotationDegreesForApi() {
+      let rotationForApi = Math.abs(this.imageRotationDegrees) % 360;
+      if (this.imageRotationDegrees < 0)
+        rotationForApi = Math.abs(rotationForApi);
+      else rotationForApi = -rotationForApi;
+      return rotationForApi;
     }
   },
 
@@ -5169,13 +5178,6 @@ export default {
         return year + "-" + month + "-" + day;
       }
       return null;
-    },
-
-    handleRotation(degrees) {
-      let rotationForApi = Math.abs(degrees) % 360;
-      if (degrees < 0) rotationForApi = Math.abs(rotationForApi);
-      else rotationForApi = -rotationForApi;
-      this.imageRotationDegrees = rotationForApi;
     }
   }
 };

@@ -112,12 +112,10 @@ export default {
   props: {
     data: {
       required: true
+    },
+    rotationDegrees: {
+      required: false
     }
-  },
-  data() {
-    return {
-      rotationDegrees: 0
-    };
   },
   name: "FilePreview",
   computed: {
@@ -245,8 +243,7 @@ export default {
     },
 
     rotateImage(deg) {
-      this.rotationDegrees += deg;
-      this.$emit("rotate", this.rotationDegrees);
+      this.$emit("rotate", this.rotationDegrees + deg);
     }
   }
 };
