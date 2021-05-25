@@ -3806,8 +3806,9 @@
       </div>
     </template>
 
+    <!--    NOTE: Removed new doi button #644 https://github.com/geocollections/sarv-workbench/issues/644-->
     <template v-slot:add-doi>
-      <div class="d-flex justify-end mt-3">
+      <div class="d-flex justify-end mt-3" v-if="false">
         <new-doi-button
           v-if="
             attachment &&
