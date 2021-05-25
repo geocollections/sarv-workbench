@@ -182,9 +182,9 @@
               </v-col>
             </v-row>
 
-            <!-- LOCALITY FREE and SITE  -->
+            <!-- LOCALITY FREE, SITE and PROJECT  -->
             <v-row no-gutters>
-              <v-col cols="12" md="6" class="pa-1">
+              <v-col cols="12" md="4" class="pa-1">
                 <input-wrapper
                   v-model="sample.locality_free"
                   :color="bodyActiveColor"
@@ -192,7 +192,22 @@
                 />
               </v-col>
 
-              <v-col cols="12" md="6" class="pa-1">
+              <v-col cols="12" md="4" class="pa-1">
+                <autocomplete-wrapper
+                  v-model="sample.project"
+                  :color="bodyActiveColor"
+                  :items="autocomplete.project"
+                  :loading="autocomplete.loaders.project"
+                  :item-text="nameLabel"
+                  :label="$t('site.project')"
+                  is-link
+                  route-object="project"
+                  is-searchable
+                  v-on:search:items="autocompleteProjectSearch"
+                />
+              </v-col>
+
+              <v-col cols="12" md="4" class="pa-1">
                 <autocomplete-wrapper
                   v-model="sample.site"
                   :color="bodyActiveColor"
@@ -658,9 +673,9 @@
               </v-col>
             </v-row>
 
-            <!-- AGENT_COLLECTED, DATE_COLLECTED and SITE -->
+            <!-- AGENT_COLLECTED, DATE_COLLECTED, PROJECT and SITE -->
             <v-row no-gutters>
-              <v-col cols="12" md="4" class="pa-1">
+              <v-col cols="12" md="3" class="pa-1">
                 <autocomplete-wrapper
                   v-model="sample.agent_collected"
                   :color="bodyActiveColor"
@@ -675,7 +690,7 @@
                 />
               </v-col>
 
-              <v-col cols="12" md="4" class="pa-1">
+              <v-col cols="12" md="3" class="pa-1">
                 <date-wrapper
                   v-model="sample.date_collected"
                   :color="bodyActiveColor"
@@ -687,7 +702,22 @@
                 />
               </v-col>
 
-              <v-col cols="12" md="4" class="pa-1">
+              <v-col cols="12" md="3" class="pa-1">
+                <autocomplete-wrapper
+                  v-model="sample.project"
+                  :color="bodyActiveColor"
+                  :items="autocomplete.project"
+                  :loading="autocomplete.loaders.project"
+                  :item-text="nameLabel"
+                  :label="$t('site.project')"
+                  is-link
+                  route-object="project"
+                  is-searchable
+                  v-on:search:items="autocompleteProjectSearch"
+                />
+              </v-col>
+
+              <v-col cols="12" md="3" class="pa-1">
                 <autocomplete-wrapper
                   v-model="sample.site"
                   :color="bodyActiveColor"
@@ -1199,7 +1229,8 @@ export default {
           "locality_free",
           "remarks",
           "is_private",
-          "site"
+          "site",
+          "project"
         ],
         simplifiedFormCopyFields: [
           "number",
@@ -1210,6 +1241,7 @@ export default {
           "classification_rock",
           "rock",
           "site",
+          "project",
           "agent_collected",
           "date_collected",
           "owner",
@@ -1237,6 +1269,7 @@ export default {
             taxon: false,
             preparation: false,
             site: false,
+            project: false,
             purpose: false
           },
           series: [],
@@ -1260,7 +1293,8 @@ export default {
           preparation: [],
           sampleAnalysis: [],
           samplePreparation: [],
-          site: []
+          site: [],
+          project: []
         },
         requiredFields: [],
         sample: {},
@@ -1404,7 +1438,6 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-
         this.relatedTabs.forEach(tab => {
           if (this.relatedData[tab.name].count > 0)
             if (tab.name === "attachment_link") {
@@ -1532,6 +1565,14 @@ export default {
       if (this.isNotEmpty(obj.site)) {
         this.sample.site = { id: obj.site, name: obj.site__name };
         this.autocomplete.site.push(this.sample.site);
+      }
+      if (this.isNotEmpty(obj.project)) {
+        this.sample.project = {
+          name: obj.project__name,
+          name_en: obj.project__name_en,
+          id: obj.project
+        };
+        this.autocomplete.project.push(this.sample.project);
       }
     },
 
