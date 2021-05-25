@@ -13,8 +13,8 @@ Vue.use(Vuex);
 
 function buildLocalStorageKey() {
   const hostname = window?.location?.hostname;
-  const devVersion = "_v1.0.11";
-  const liveVersion = "_v1.0.12";
+  const devVersion = "_v1.0.12";
+  const liveVersion = "_v1.0.13";
   const localVersion = "_v1.0.24";
 
   if (hostname) {

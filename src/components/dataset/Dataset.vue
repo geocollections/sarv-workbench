@@ -35,6 +35,18 @@
 
       <transition>
         <div v-show="block.requiredFields" class="pa-1">
+          <!-- TITLE -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="dataset.title"
+                :color="bodyActiveColor"
+                :label="$t('dataset.title')"
+                use-state
+              />
+            </v-col>
+          </v-row>
+
           <!-- RESOURCE TYPE and RESOURCE -->
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
@@ -92,27 +104,6 @@
                 item-value="test"
                 item-text="value"
                 :label="$t('doi.publisher')"
-                use-state
-              />
-            </v-col>
-          </v-row>
-
-          <!-- TITLE and TITLE_EN -->
-          <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
-              <input-wrapper
-                v-model="dataset.title"
-                :color="bodyActiveColor"
-                :label="$t('dataset.title')"
-                use-state
-              />
-            </v-col>
-
-            <v-col cols="12" md="6" class="pa-1">
-              <input-wrapper
-                v-model="dataset.title_en"
-                :color="bodyActiveColor"
-                :label="$t('dataset.title_en')"
                 use-state
               />
             </v-col>
@@ -227,25 +218,6 @@
                 v-model="dataset.methods"
                 :color="bodyActiveColor"
                 :label="$t('doi.methods')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- DESCRIPTION and DESCRIPTION_EN -->
-          <v-row no-gutters>
-            <v-col cols="12" md="12" class="pa-1">
-              <textarea-wrapper
-                v-model="dataset.description"
-                :color="bodyActiveColor"
-                :label="$t('common.description')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="12" class="pa-1">
-              <textarea-wrapper
-                v-model="dataset.description_en"
-                :color="bodyActiveColor"
-                :label="$t('common.description_en')"
               />
             </v-col>
           </v-row>
@@ -667,10 +639,6 @@ export default {
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "id",
-          "name",
-          "name_en",
-          "description",
-          "description_en",
           "dataset_html",
           "date",
           "date_txt",
@@ -684,7 +652,6 @@ export default {
           "publisher",
           "publication_year",
           "title",
-          "title_en",
           "title_alternative",
           "title_translated",
           "title_translated_language",
@@ -722,8 +689,7 @@ export default {
           "creators",
           "publication_year",
           "publisher",
-          "title",
-          "title_en"
+          "title"
         ],
         dataset: {},
         block: {
@@ -765,8 +731,6 @@ export default {
             this.$set(this, "dataset", this.handleResponse(response)[0]);
             // this.dataset = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.dataset);
-            // Todo: some fields got replaced https://github.com/geocollections/sarv-workbench/issues/642, remove the following method later
-            this.removeMe_setSomeFields_removeMe(this.dataset);
 
             this.removeUnnecessaryFields(this.dataset, this.copyFields);
             this.$emit("data-loaded", this.dataset);
@@ -1010,16 +974,6 @@ export default {
         }
       }
     },
-
-    removeMe_setSomeFields_removeMe(dataset) {
-      if (!dataset.creators && dataset.owner_txt)
-        this.dataset.creators = dataset.owner_txt;
-
-      if (!dataset.title && dataset.name) this.dataset.title = dataset.name;
-
-      if (!dataset.title_en && dataset.name_en)
-        this.dataset.title_en = dataset.name_en;
-    }
   }
 };
 </script>

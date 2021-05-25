@@ -910,7 +910,9 @@
     "imageDescriptionEn": "Image description en",
     "collapseMap": "Map",
     "dateDigitisedFree": "Date digitised free",
-    "map": "Map"
+    "map": "Map",
+    "rotateRight": "Rotate right",
+    "rotateLeft": "Rotate left"
   },
   "imageset": {
     "author__agent": "Author",
