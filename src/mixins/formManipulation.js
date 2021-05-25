@@ -680,10 +680,10 @@ const formManipulation = {
       this.setInitialEditViewDataHasChangedState(false);
 
       if (choice === "SAVE") {
-        await this.add(true, object);
-
         if (object === "attachment" && this?.imageRotationState)
           await this.rotateImageRequest(object, this.imageRotationDegrees);
+
+        await this.add(true, object);
       }
 
       if (choice === "FINISH") {
@@ -692,10 +692,10 @@ const formManipulation = {
       }
 
       if (choice === "SAVE_AND_LEAVE") {
-        await this.add(false, object);
-
         if (object === "attachment" && this?.imageRotationState)
           await this.rotateImageRequest(object, this.imageRotationDegrees);
+
+        await this.add(false, object);
       }
 
       if (choice === "SAVE_AS_NEW") {
