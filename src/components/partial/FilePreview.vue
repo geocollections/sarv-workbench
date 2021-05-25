@@ -278,8 +278,7 @@ img:hover {
   background-color: #fff;
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
-  /*max-width: 100%;*/
-  max-width: 600px;
+  max-width: 100%;
   max-height: 400px;
   height: auto;
   transition: 0.2s ease-in-out;
