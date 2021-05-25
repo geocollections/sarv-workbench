@@ -218,8 +218,7 @@ export default {
               path: "/attachment/add/digitised_reference",
               icon: "far fa-file-pdf"
             },
-            { title: "imagesets", path: "/imageset", icon: "fas fa-images" },
-            { title: "imageset", path: "/imageset/add", icon: "far fa-images" }
+            { title: "imagesets", path: "/imageset", icon: "fas fa-images" }
           ]
         },
         {
@@ -227,72 +226,16 @@ export default {
           title: "references",
           links: [
             { title: "myReferences", path: "/reference", icon: "fas fa-book" },
-            {
-              title: "reference",
-              path: "/reference/add",
-              icon: "far fa-plus-square"
-            },
             { title: "libraries", path: "/library", icon: "far fa-list-alt" },
-            {
-              title: "library",
-              path: "/library/add",
-              icon: "far fa-plus-square"
-            },
             { title: "journals", path: "/journal", icon: "fas fa-newspaper" },
-            {
-              title: "journal",
-              path: "/journal/add",
-              icon: "far fa-plus-square"
-            },
-            { title: "keywords", path: "/keyword", icon: "fas fa-scroll" },
-            {
-              title: "keyword",
-              path: "/keyword/add",
-              icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "doi",
-          title: "dois",
-          links: [
-            { title: "dois", path: "/doi", icon: "fas fa-database" },
-            { title: "doi", path: "/doi/add", icon: "far fa-plus-square" }
+            { title: "keywords", path: "/keyword", icon: "fas fa-scroll" }
           ]
         },
         {
           name: "project",
           title: "projects",
           links: [
-            { title: "editProject", path: "/project", icon: "fas fa-tasks" },
-            {
-              title: "addProject",
-              path: "/project/add",
-              icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "site",
-          title: "sites",
-          links: [
-            { title: "editSite", path: "/site", icon: "fas fa-globe" },
-            { title: "addSite", path: "/site/add", icon: "far fa-plus-square" },
-            {
-              title: "editSiteGroundwater",
-              path: "/site_groundwater",
-              icon: "fas fa-water"
-            },
-            {
-              title: "areas",
-              path: "/area",
-              icon: "fas fa-chart-area"
-            },
-            {
-              title: "area",
-              path: "/area/add",
-              icon: "far fa-plus-square"
-            }
+            { title: "editProject", path: "/project", icon: "fas fa-tasks" }
           ]
         },
         {
@@ -303,178 +246,6 @@ export default {
               title: "localities",
               path: "/locality",
               icon: "fas fa-map-marked-alt"
-            },
-            {
-              title: "locality",
-              path: "/locality/add",
-              icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "stratigraphy",
-          title: "stratigraphies",
-          links: [
-            {
-              title: "stratigraphies",
-              path: "/stratigraphy",
-              icon: "fas fa-layer-group"
-            },
-            {
-              title: "stratigraphy",
-              path: "/stratigraphy/add",
-              icon: "far fa-plus-square"
-            },
-            {
-              title: "stratigraphy_catalogue",
-              path: "/stratigraphy_catalogue",
-              icon: "fas fa-th-list"
-            }
-          ]
-        },
-        {
-          name: "sample",
-          title: "samples",
-          links: [
-            { title: "samples", path: "/sample", icon: "fas fa-vial" },
-            {
-              title: "sample",
-              path: "/sample/add",
-              icon: "far fa-plus-square"
-            },
-            {
-              title: "sample_import",
-              path: "/sample/import",
-              icon: "fas fa-file-import"
-            },
-            {
-              title: "sample_series",
-              path: "/sample_series",
-              icon: "fas fa-vials"
-            },
-            // {
-            //   title: "sample_serie",
-            //   path: "/sample_series/add",
-            //   icon: "far fa-plus-square"
-            // },
-            {
-              title: "editPreparation",
-              path: "/preparation",
-              icon: "fas fa-prescription-bottle"
-            },
-            {
-              title: "addPreparation",
-              path: "/preparation/add",
-              icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "analysis",
-          title: "analyses",
-          links: [
-            {
-              title: "editAnalysis",
-              path: "/analysis",
-              icon: "far fa-chart-bar"
-            },
-            {
-              title: "addAnalysis",
-              path: "/analysis/add",
-              icon: "far fa-plus-square"
-            },
-            {
-              title: "analysis_import",
-              path: "/analysis/import",
-              icon: "fas fa-file-import"
-            },
-            {
-              title: "editAnalysisParameter",
-              path: "/analysis_parameter",
-              icon: "fas fa-percent"
-            },
-            {
-              title: "addAnalysisParameter",
-              path: "/analysis_parameter/add",
-              icon: "far fa-plus-square"
-            },
-            {
-              title: "editAnalysisMethod",
-              path: "/analysis_method",
-              icon: "fas fa-screwdriver"
-            },
-            {
-              title: "addAnalysisMethod",
-              path: "/analysis_method/add",
-              icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "taxon",
-          title: "classifications",
-          links: [
-            { title: "taxa", path: "/taxon", icon: "fas fa-pastafarianism" },
-            {
-              title: "taxon",
-              path: "/taxon/add",
-              icon: "far fa-plus-square"
-            },
-            { title: "rocks", path: "/rock", icon: "far fa-gem" },
-            {
-              title: "rock",
-              path: "/rock/add",
-              icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "specimen",
-          title: "specimens",
-          links: [
-            { title: "specimens", path: "/specimen", icon: "fas fa-fish" },
-            {
-              title: "specimen",
-              path: "/specimen/add",
-              icon: "far fa-plus-square"
-            },
-            { title: "collections", path: "/collection", icon: "fas fa-boxes" },
-            {
-              title: "collection",
-              path: "/collection/add",
-              icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "selection_series",
-          title: "selectionSeries",
-          links: [
-            {
-              title: "selectionSeries",
-              path: "/selection_series",
-              icon: "fas fa-clipboard-list"
-            },
-            {
-              title: "selectionSerie",
-              path: "/selection_series/add",
-              icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "agent",
-          title: "agents",
-          links: [
-            {
-              title: "agents",
-              path: "/agent",
-              icon: "fas fa-users"
-            },
-            {
-              title: "agent",
-              path: "/agent/add",
-              icon: "far fa-plus-square"
             }
           ]
         },
@@ -488,19 +259,74 @@ export default {
               icon: "fas fa-box"
             },
             {
-              title: "drillcore",
-              path: "/drillcore/add",
-              icon: "far fa-plus-square"
-            },
-            {
               title: "drillcoreBoxes",
               path: "/drillcore_box",
               icon: "fas fa-boxes"
+            }
+          ]
+        },
+        {
+          name: "site",
+          title: "sites",
+          links: [
+            { title: "editSite", path: "/site", icon: "fas fa-globe" },
+            {
+              title: "editSiteGroundwater",
+              path: "/site_groundwater",
+              icon: "fas fa-water"
             },
             {
-              title: "drillcoreBox",
-              path: "/drillcore_box/add",
-              icon: "far fa-plus-square"
+              title: "areas",
+              path: "/area",
+              icon: "fas fa-chart-area"
+            }
+          ]
+        },
+        {
+          name: "sample",
+          title: "samples",
+          links: [
+            { title: "samples", path: "/sample", icon: "fas fa-vial" },
+            {
+              title: "sample_import",
+              path: "/sample/import",
+              icon: "fas fa-file-import"
+            },
+            {
+              title: "sample_series",
+              path: "/sample_series",
+              icon: "fas fa-vials"
+            },
+            {
+              title: "editPreparation",
+              path: "/preparation",
+              icon: "fas fa-prescription-bottle"
+            }
+          ]
+        },
+        {
+          name: "analysis",
+          title: "analyses",
+          links: [
+            {
+              title: "editAnalysis",
+              path: "/analysis",
+              icon: "far fa-chart-bar"
+            },
+            {
+              title: "analysis_import",
+              path: "/analysis/import",
+              icon: "fas fa-file-import"
+            },
+            {
+              title: "editAnalysisParameter",
+              path: "/analysis_parameter",
+              icon: "fas fa-percent"
+            },
+            {
+              title: "editAnalysisMethod",
+              path: "/analysis_method",
+              icon: "fas fa-screwdriver"
             }
           ]
         },
@@ -512,11 +338,65 @@ export default {
               title: "datasets",
               path: "/dataset",
               icon: "fas fa-database"
+            }
+          ]
+        },
+        {
+          name: "doi",
+          title: "dois",
+          links: [{ title: "dois", path: "/doi", icon: "fas fa-database" }]
+        },
+        {
+          name: "specimen",
+          title: "specimens",
+          links: [
+            { title: "specimens", path: "/specimen", icon: "fas fa-fish" },
+            { title: "collections", path: "/collection", icon: "fas fa-boxes" }
+          ]
+        },
+        {
+          name: "taxon",
+          title: "classifications",
+          links: [
+            { title: "taxa", path: "/taxon", icon: "fas fa-pastafarianism" },
+            { title: "rocks", path: "/rock", icon: "far fa-gem" }
+          ]
+        },
+        {
+          name: "stratigraphy",
+          title: "stratigraphies",
+          links: [
+            {
+              title: "stratigraphies",
+              path: "/stratigraphy",
+              icon: "fas fa-layer-group"
             },
             {
-              title: "dataset",
-              path: "/dataset/add",
-              icon: "far fa-plus-square"
+              title: "stratigraphy_catalogue",
+              path: "/stratigraphy_catalogue",
+              icon: "fas fa-th-list"
+            }
+          ]
+        },
+        {
+          name: "selection_series",
+          title: "selectionSeries",
+          links: [
+            {
+              title: "selectionSeries",
+              path: "/selection_series",
+              icon: "fas fa-clipboard-list"
+            }
+          ]
+        },
+        {
+          name: "agent",
+          title: "agents",
+          links: [
+            {
+              title: "agents",
+              path: "/agent",
+              icon: "fas fa-users"
             }
           ]
         }
@@ -530,11 +410,6 @@ export default {
               title: "locations",
               path: "/location",
               icon: "fas fa-location-arrow"
-            },
-            {
-              title: "location",
-              path: "/location/add",
-              icon: "far fa-plus-square"
             }
           ]
         },
@@ -546,11 +421,6 @@ export default {
               title: "visits",
               path: "/visit",
               icon: "fas fa-user-friends"
-            },
-            {
-              title: "visit",
-              path: "/visit/add",
-              icon: "far fa-plus-square"
             }
           ]
         },
@@ -562,11 +432,6 @@ export default {
               title: "loans",
               path: "/loan",
               icon: "fas fa-people-carry"
-            },
-            {
-              title: "loan",
-              path: "/loan/add",
-              icon: "far fa-plus-square"
             }
           ]
         },
@@ -578,11 +443,6 @@ export default {
               title: "accessions",
               path: "/accession",
               icon: "far fa-handshake"
-            },
-            {
-              title: "accession",
-              path: "/accession/add",
-              icon: "far fa-plus-square"
             }
           ]
         },
@@ -594,11 +454,6 @@ export default {
               title: "deaccessions",
               path: "/deaccession",
               icon: "fas fa-handshake-slash"
-            },
-            {
-              title: "deaccession",
-              path: "/deaccession/add",
-              icon: "far fa-plus-square"
             }
           ]
         },
@@ -610,11 +465,6 @@ export default {
               title: "web_news",
               path: "/web_news",
               icon: "far fa-newspaper"
-            },
-            {
-              title: "web_news_",
-              path: "/web_news/add",
-              icon: "far fa-plus-square"
             }
           ]
         },
@@ -628,19 +478,9 @@ export default {
               icon: "fas fa-pager"
             },
             {
-              title: "web_pages_",
-              path: "/web_pages/add",
-              icon: "far fa-plus-square"
-            },
-            {
               title: "editTaxonPage",
               path: "/taxon_page",
               icon: "fas fa-pager"
-            },
-            {
-              title: "addTaxonPage",
-              path: "/taxon_page/add",
-              icon: "far fa-plus-square"
             }
           ]
         }
