@@ -4529,6 +4529,10 @@ export function fetchAllFields(table, data = null) {
   return get(`dynamic_fields/${table}`);
 }
 
+export function fetchRotateImage(data) {
+  return post("rotate_image/", data);
+}
+
 /***********************
  ***  UNIVERSAL END  ***
  ***********************/

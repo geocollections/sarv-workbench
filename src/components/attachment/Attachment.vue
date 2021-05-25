@@ -94,7 +94,11 @@
           <div v-show="block.file" class="pa-1">
             <v-row no-gutters>
               <v-col cols="12" md="6" class="pa-1">
-                <file-preview :data="rawAttachment" object="attachment" />
+                <file-preview
+                  :data="rawAttachment"
+                  object="attachment"
+                  @rotate="handleRotation"
+                />
               </v-col>
 
               <v-col cols="12" md="6" class="pa-1">
@@ -4048,6 +4052,10 @@ export default {
         type => (type.disabled = !this.isValidToChangeTo(type.name))
       );
       return this.changeType;
+    },
+
+    imageRotationState() {
+      return Math.abs(this.imageRotationDegrees) !== 0;
     }
   },
 
@@ -4161,6 +4169,7 @@ export default {
 
     setInitialData() {
       return {
+        imageRotationDegrees: 0,
         relatedTabs: [
           {
             name: "attach_link__collection",
@@ -5160,6 +5169,13 @@ export default {
         return year + "-" + month + "-" + day;
       }
       return null;
+    },
+
+    handleRotation(degrees) {
+      let rotationForApi = Math.abs(degrees) % 360;
+      if (degrees < 0) rotationForApi = Math.abs(rotationForApi);
+      else rotationForApi = -rotationForApi;
+      this.imageRotationDegrees = rotationForApi;
     }
   }
 };

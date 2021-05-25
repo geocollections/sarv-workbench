@@ -161,7 +161,7 @@ export default {
       const width = document?.querySelector("img")?.offsetWidth;
 
       if (width > height) {
-        const isOdd = (this.rotationDegrees / 90) % 2 === 1;
+        const isOdd = (Math.abs(this.rotationDegrees) / 90) % 2 === 1;
         if (isOdd) {
           const margin = (width - height) / 2;
           style += ` margin: ${margin}px auto;`;
@@ -246,7 +246,7 @@ export default {
 
     rotateImage(deg) {
       this.rotationDegrees += deg;
-      console.log(this.rotationDegrees);
+      this.$emit("rotate", this.rotationDegrees);
     }
   }
 };
