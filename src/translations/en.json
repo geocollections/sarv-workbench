@@ -461,7 +461,10 @@
       "details": "Other info"
     },
     "dataset": {
-      "info": "General info"
+      "info": "General info",
+      "requiredFields": "Required fields",
+      "referenceAndLocality": "Reference ja Locality",
+      "description": "Remarks"
     },
     "stratigraphy": {
       "info": "General info",
@@ -1647,7 +1650,12 @@
     "database": "Database",
     "dataset_html": "HTML data",
     "link": "Link",
+    "authorTooltip": "Author field will be filled with records from 'Authors' tab",
+    "referenceAndLocality": "Reference and Locality",
     "resourceTypePlaceholder": "Dataset",
+    "reference": "Reference",
+    "title": "Title",
+    "title_en": "Title EN",
     "relatedTables": {
       "dataset_author": "Authors",
       "dataset_reference": "References",

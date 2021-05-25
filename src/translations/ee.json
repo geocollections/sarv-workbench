@@ -461,7 +461,10 @@
       "details": "Muu info"
     },
     "dataset": {
-      "info": "Üldinfo"
+      "info": "Üldinfo",
+      "requiredFields": "Kohustuslikud väljad",
+      "referenceAndLocality": "Kirjandus ja Lokaliteet",
+      "description": "Lisainfo"
     },
     "stratigraphy": {
       "info": "Üldinfo",
@@ -1646,6 +1649,11 @@
     "dataset_html": "HTML andmed",
     "link": "Link",
     "resourceTypePlaceholder": "Dataset",
+    "authorTooltip": "Autori lahter täidetakse 'Autorid' kirjetega",
+    "referenceAndLocality": "Kirjandus ja Lokaliteet",
+    "reference": "Kirjandus",
+    "title": "Pealkiri",
+    "title_en": "Pealkiri EN",
     "relatedTables": {
       "dataset_author": "Autorid",
       "dataset_reference": "Viited",
