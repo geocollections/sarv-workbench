@@ -912,7 +912,9 @@
     "dateDigitisedFree": "Date digitised free",
     "map": "Map",
     "rotateRight": "Rotate right",
-    "rotateLeft": "Rotate left"
+    "rotateLeft": "Rotate left",
+    "imageRotated": "Image successfully rotated!",
+    "imageRotationFailed": "Image rotation unsuccessful!"
   },
   "imageset": {
     "author__agent": "Author",

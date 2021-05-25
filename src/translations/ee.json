@@ -912,7 +912,9 @@
     "dateDigitisedFree": "Digiteerimise kp vaba",
     "map": "Kaart",
     "rotateRight": "Pööra paremale",
-    "rotateLeft": "Pööra vasakule"
+    "rotateLeft": "Pööra vasakule",
+    "imageRotated": "Pilt edukalt pööratud!",
+    "imageRotationFailed": "Pildi pööramine ebaõnnestus!"
   },
   "imageset": {
     "author__agent": "Autor",

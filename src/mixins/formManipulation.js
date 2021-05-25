@@ -863,10 +863,14 @@ const formManipulation = {
 
         const response = await fetchRotateImage(formData);
 
+        // Todo: Get success and error messages from api
         if (response) {
           this.filePreviewKey = Date.now();
           this.imageRotationDegrees = 0;
-        }
+
+          this.toastSuccess({ text: this.$t("attachment.imageRotated") });
+        } else
+          this.toastError({ text: this.$t("attachment.imageRotationFailed") });
 
         console.log(response);
       }
