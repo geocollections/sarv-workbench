@@ -229,6 +229,7 @@
     "specimen_analysis": "Specimen analysis",
     "dataset_author": "Dataset author",
     "dataset_reference": "Dataset reference",
+    "dataset_geolocation": "Dataset geolocation",
     "locality_stratigraphy": "Stratigraphic boundaries",
     "doi_agent": "Doi agent",
     "doi_date": "Doi date",
@@ -1663,7 +1664,8 @@
     "relatedTables": {
       "dataset_author": "Authors",
       "dataset_reference": "References",
-      "dataset_analysis": "Analyses"
+      "dataset_analysis": "Analyses",
+      "dataset_geolocation": "Locality"
     }
   },
   "dataset_reference": {

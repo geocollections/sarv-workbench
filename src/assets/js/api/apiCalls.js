@@ -3108,6 +3108,16 @@ export function fetchDatasetAnalyses(datasetId, searchParameters) {
   );
 }
 
+export function fetchDatasetGeolocation(id, searchParameters) {
+  let orderBy = buildOrderBy(
+      searchParameters.sortBy,
+      searchParameters.sortDesc
+  );
+  return get(
+      `dataset_geolocation/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
 /*********************
  ***  DATASET END  ***
  *********************/

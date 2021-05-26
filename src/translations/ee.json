@@ -229,6 +229,7 @@
     "specimen_analysis": "Eksemplari analüüs",
     "dataset_author": "Andmeseti autor",
     "dataset_reference": "Andmeseti kirjandus",
+    "dataset_geolocation": "Andmeseti lokaliteet",
     "locality_stratigraphy": "Stratigraafilised piirid",
     "doi_agent": "Doi isik/asutus",
     "doi_date": "Doi kuupäev",
@@ -1661,7 +1662,8 @@
     "relatedTables": {
       "dataset_author": "Autorid",
       "dataset_reference": "Viited",
-      "dataset_analysis": "Analüüsid"
+      "dataset_analysis": "Analüüsid",
+      "dataset_geolocation": "Lokaliteet"
     }
   },
   "dataset_reference": {

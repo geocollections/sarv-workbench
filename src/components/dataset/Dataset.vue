@@ -457,6 +457,19 @@
             :body-active-color="bodyActiveColor"
           />
 
+          <dataset-geolocation-table
+            v-show="activeTab === 'dataset_geolocation'"
+            :response="relatedData.dataset_geolocation"
+            :search-parameters="
+              relatedData.searchParameters.dataset_geolocation
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- PAGINATION -->
           <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -500,7 +513,9 @@ import {
   fetchDataset,
   fetchDatasetAnalyses,
   fetchDatasetAuthors,
+  fetchDatasetGeolocation,
   fetchDatasetReferences,
+  fetchDoiGeolocation,
   fetchDoiPublisher,
   fetchDoiResourceType,
   fetchListLanguages,
@@ -518,11 +533,13 @@ import requestsMixin from "../../mixins/requestsMixin";
 import DatasetAnalysisTable from "./relatedTables/DatasetAnalysisTable";
 import Pagination from "@/components/partial/Pagination";
 import { orderBy } from "lodash";
+import DatasetGeolocationTable from "@/components/dataset/relatedTables/DatasetGeolocationTable";
 
 export default {
   name: "Dataset",
 
   components: {
+    DatasetGeolocationTable,
     Pagination,
     DatasetAnalysisTable,
     DatasetReferenceTable,
@@ -634,7 +651,8 @@ export default {
         relatedTabs: [
           { name: "dataset_author", iconClass: "far fa-user" },
           { name: "dataset_reference", iconClass: "fas fa-book" },
-          { name: "dataset_analysis", iconClass: "far fa-chart-bar" }
+          { name: "dataset_analysis", iconClass: "far fa-chart-bar" },
+          { name: "dataset_geolocation", iconClass: "fas fa-globe-americas" }
         ],
         activeTab: "dataset_author",
         relatedData: this.setDefaultRelatedData(),
@@ -790,6 +808,7 @@ export default {
         dataset_author: { count: 0, results: [] },
         dataset_reference: { count: 0, results: [] },
         dataset_analysis: { count: 0, results: [] },
+        dataset_geolocation: { count: 0, results: [] },
         searchParameters: {
           dataset_author: {
             page: 1,
@@ -807,6 +826,12 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["analysis"],
+            sortDesc: [true]
+          },
+          dataset_geolocation: {
+            page: 1,
+            paginateBy: 10,
+            sortBy: ["id"],
             sortDesc: [true]
           }
         }
@@ -912,6 +937,11 @@ export default {
         query = fetchDatasetAnalyses(
           this.$route.params.id,
           this.relatedData.searchParameters.dataset_analysis
+        );
+      } else if (object === "dataset_geolocation") {
+        query = fetchDatasetGeolocation(
+          this.$route.params.id,
+          this.relatedData.searchParameters.dataset_geolocation
         );
       }
 
