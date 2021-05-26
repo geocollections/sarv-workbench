@@ -26,7 +26,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -208,6 +208,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -218,13 +224,20 @@ import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import { fetchListUnit } from "../../../assets/js/api/apiCalls";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "AnalysisResultsTable",
 
-  components: { AutocompleteWrapper, CheckboxWrapper, InputWrapper },
+  components: {
+    RelatedDataDeleteDialog,
+    AutocompleteWrapper,
+    CheckboxWrapper,
+    InputWrapper
+  },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -326,9 +339,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         parameter: null,
         unit: null,
@@ -342,31 +353,8 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "analysis_results",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "analysis_results",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.parameter !== "object" && item.parameter !== null) {
         this.item.parameter = {
@@ -403,14 +391,6 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "analysis_results",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
-    },
-
     fillListAutocompletes() {
       if (this.autocomplete.list_unit.length <= 1) {
         this.autocomplete.loaders.list_unit = true;
@@ -422,18 +402,6 @@ export default {
         });
         this.autocomplete.loaders.list_unit = false;
       }
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        } else if (typeof item[key] === "string" && item[key].length === 0) {
-          item[key] = null;
-        }
-      });
-      return item;
     }
   }
 };
