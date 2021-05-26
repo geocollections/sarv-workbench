@@ -3115,7 +3115,7 @@ export function fetchDatasetGeolocation(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `dataset_geolocation/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+    `dataset_geolocation/?dataset=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

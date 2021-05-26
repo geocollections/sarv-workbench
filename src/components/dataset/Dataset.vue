@@ -515,7 +515,6 @@ import {
   fetchDatasetAuthors,
   fetchDatasetGeolocation,
   fetchDatasetReferences,
-  fetchDoiGeolocation,
   fetchDoiPublisher,
   fetchDoiResourceType,
   fetchListLanguages,
