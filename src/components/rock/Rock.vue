@@ -243,7 +243,7 @@
                 is-searchable
                 is-link
                 route-object="stratigraphy"
-                v-on:search:items="autocompleteStratigraphySearch"
+                v-on:search:items="autocompleteChronostratigraphySearch"
               />
             </v-col>
 

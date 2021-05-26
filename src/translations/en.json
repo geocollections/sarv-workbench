@@ -229,6 +229,7 @@
     "specimen_analysis": "Specimen analysis",
     "dataset_author": "Dataset author",
     "dataset_reference": "Dataset reference",
+    "dataset_geolocation": "Dataset geolocation",
     "locality_stratigraphy": "Stratigraphic boundaries",
     "doi_agent": "Doi agent",
     "doi_date": "Doi date",
@@ -409,6 +410,7 @@
       "info": "General info",
       "localityInfo": "Locality and stratigraphy",
       "details": "Specimen details",
+      "images": "Images",
       "description": "Remarks"
     },
     "keyword": {
@@ -460,7 +462,10 @@
       "details": "Other info"
     },
     "dataset": {
-      "info": "General info"
+      "info": "General info",
+      "requiredFields": "Required fields",
+      "referenceAndLocality": "Reference ja Locality",
+      "description": "Remarks"
     },
     "stratigraphy": {
       "info": "General info",
@@ -906,7 +911,11 @@
     "imageDescriptionEn": "Image description en",
     "collapseMap": "Map",
     "dateDigitisedFree": "Date digitised free",
-    "map": "Map"
+    "map": "Map",
+    "rotateRight": "Rotate right",
+    "rotateLeft": "Rotate left",
+    "imageRotated": "Image successfully rotated!",
+    "imageRotationFailed": "Image rotation unsuccessful!"
   },
   "imageset": {
     "author__agent": "Author",
@@ -1098,6 +1107,7 @@
     "loan": "Loan",
     "number_pieces": "Number of pieces",
     "save_as_new_sample": "Save as new sample",
+    "specimenImages": "Images",
     "relatedTables": {
       "specimen_identification": "Taxon names",
       "specimen_identification_geology": "Rock names",
@@ -1595,6 +1605,25 @@
     }
   },
   "dataset": {
+    "creators": "Author",
+    "title": "Title",
+    "title_en": "Title EN",
+    "title_alternative": "Title, alt",
+    "title_translated": "Title, translated",
+    "title_translated_language__id": "Trans, title lang",
+    "publisher": "Publisher",
+    "publication_year": "Publication year",
+    "subjects": "Key words",
+    "language__id": "Language",
+    "resource_type": "Resource type",
+    "resource_type__id": "Resource type",
+    "version": "Version",
+    "resource": "Resource",
+    "methods": "Methods",
+    "abstract": "Abstract",
+    "locality__id": "Lokaliteet ID",
+    "reference__id": "Reference ID",
+
     "copyright_agent": "Copyright agent",
     "copyright_agent__id": "Copyright agent ID",
     "copyright_agent__agent": "Copyright agent",
@@ -1626,10 +1655,17 @@
     "database": "Database",
     "dataset_html": "HTML data",
     "link": "Link",
+    "authorTooltip": "Author field will be filled with records from 'Authors' tab",
+    "referenceAndLocality": "Reference and Locality",
+    "resourceTypePlaceholder": "Dataset",
+    "reference": "Reference",
+    "title": "Title",
+    "title_en": "Title EN",
     "relatedTables": {
       "dataset_author": "Authors",
       "dataset_reference": "References",
-      "dataset_analysis": "Analyses"
+      "dataset_analysis": "Analyses",
+      "dataset_geolocation": "Locality"
     }
   },
   "dataset_reference": {

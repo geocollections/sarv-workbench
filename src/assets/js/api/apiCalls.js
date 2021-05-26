@@ -1978,6 +1978,10 @@ export function fetchSpecimenImages(data, dynamicSearch) {
   }
 }
 
+export function fetchDirectSpecimenImages(specimenId) {
+  return get(`attachment/?specimen=${specimenId}&format=json`);
+}
+
 export function fetchListSpecimenKind() {
   return get(`list_specimen_kind/?format=json`);
 }
@@ -3030,14 +3034,15 @@ export function fetchDataset(id) {
 
 export function fetchDatasets(data, dynamicSearch) {
   const fields =
-    "name,name_en,description,description_en,dataset_html,date,date_txt,is_private,owner,owner__agent,owner_txt,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
+    "title,creators,publication_year,resource,name,name_en,description,description_en,dataset_html,date,date_txt,is_private,owner,owner__agent,owner_txt,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.name && data.name.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.name
-    };fields:name,name_en;lookuptype:${data.name__lookuptype || "icontains"}`;
+    };fields:title,title_translated,title_alternative;lookuptype:${data.name__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.owner && data.owner.trim().length > 0) {
@@ -3101,6 +3106,16 @@ export function fetchDatasetAnalyses(datasetId, searchParameters) {
   );
   return get(
     `dataset_analysis/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
+export function fetchDatasetGeolocation(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `dataset_geolocation/?dataset=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
@@ -4523,6 +4538,10 @@ export function fetchAllFields(table, data = null) {
   // if (data.show_all) return get(`fields/${table}?show_all=true`);
   // else return get(`fields/${table}`);
   return get(`dynamic_fields/${table}`);
+}
+
+export function fetchRotateImage(data) {
+  return post("rotate_image/", data);
 }
 
 /***********************

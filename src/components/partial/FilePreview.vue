@@ -4,6 +4,28 @@
     v-if="data"
   >
     <div class="align-center align-end my-2">
+      <div class="rotation d-flex flex-row justify-end mb-1" v-if="isImageFile">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on" @click="rotateImage(-90)"
+              ><v-icon>fas fa-undo-alt</v-icon></v-btn
+            >
+          </template>
+
+          <span>{{ $t("attachment.rotateLeft") }}</span>
+        </v-tooltip>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on" @click="rotateImage(90)"
+              ><v-icon>fas fa-redo-alt</v-icon></v-btn
+            >
+          </template>
+
+          <span>{{ $t("attachment.rotateRight") }}</span>
+        </v-tooltip>
+      </div>
+
       <!-- AUDIO -->
       <audio v-if="isAudioFile" controls>
         <source
@@ -25,6 +47,7 @@
       </video>
 
       <!-- IMAGE -->
+
       <img
         v-else-if="isImageFile"
         :src="getFileLink({ filename: data.uuid_filename, size: 'medium' })"
@@ -36,6 +59,7 @@
         "
         alt="Image preview..."
         class="img-thumbnail image"
+        :style="imageStyle"
       />
 
       <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
@@ -88,6 +112,9 @@ export default {
   props: {
     data: {
       required: true
+    },
+    rotationDegrees: {
+      required: false
     }
   },
   name: "FilePreview",
@@ -123,6 +150,23 @@ export default {
       return buttons.filter(btn =>
         btn === "original" ? true : this.isImageFile
       );
+    },
+
+    imageStyle() {
+      let style = `transform:rotate(${this.rotationDegrees}deg);`;
+
+      const height = document?.querySelector("img")?.offsetHeight;
+      const width = document?.querySelector("img")?.offsetWidth;
+
+      if (width > height) {
+        const isOdd = (Math.abs(this.rotationDegrees) / 90) % 2 === 1;
+        if (isOdd) {
+          const margin = (width - height) / 2;
+          style += ` margin: ${margin}px auto;`;
+        } else style = `transform:rotate(${this.rotationDegrees}deg);`;
+      }
+
+      return style;
     }
   },
   methods: {
@@ -196,6 +240,10 @@ export default {
         "",
         "width=" + params.width + ",height=" + params.height
       );
+    },
+
+    rotateImage(deg) {
+      this.$emit("rotate", this.rotationDegrees + deg);
     }
   }
 };
@@ -228,6 +276,9 @@ img:hover {
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   max-width: 100%;
+  max-height: 400px;
   height: auto;
+  transition: 0.2s ease-in-out;
+  transition-property: transform, margin;
 }
 </style>

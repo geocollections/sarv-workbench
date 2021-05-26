@@ -45,7 +45,7 @@
     </template>
 
     <template v-slot:item.public="{ item }">
-      <v-icon small v-if="!item.public" color="green">fas fa-check</v-icon>
+      <v-icon small v-if="item.public" color="green">fas fa-check</v-icon>
       <v-icon small v-else color="red">fas fa-minus</v-icon>
     </template>
   </v-data-table>

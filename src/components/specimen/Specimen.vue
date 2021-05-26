@@ -220,7 +220,7 @@
                 :item-text="stratigraphyLabel"
                 :label="$t('common.stratigraphy')"
                 is-searchable
-                v-on:search:items="autocompleteStratigraphySearch"
+                v-on:search:items="autocompleteChronostratigraphySearch"
               />
             </v-col>
 
@@ -478,6 +478,49 @@
       </transition>
     </v-card>
 
+    <!-- RELATED IMAGES -->
+    <v-card
+      class="mt-2"
+      id="block-images"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+      v-if="$route.meta.isEdit && specimenImages && specimenImages.length > 0"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.images = !block.images"
+        >
+          <span>{{ $t("specimen.specimenImages") }}</span>
+          <v-icon right>fas fa-images</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.images = !block.images"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.images ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.images" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <image-view-wrapper
+                :data="specimenImages"
+                :body-active-color="bodyActiveColor"
+                :body-color="bodyColor"
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS -->
     <v-card
       class="related-tabs mt-2"
@@ -712,6 +755,7 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
   fetchAccession,
   fetchDeaccession,
+  fetchDirectSpecimenImages,
   fetchListSpecimenKind,
   fetchListSpecimenOriginalStatus,
   fetchListSpecimenPresence,
@@ -745,11 +789,13 @@ import SpecimenAnalysisTable from "./relatedTables/SpecimenAnalysisTable";
 import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 import { fetchListSpecimenSubtype } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
+import ImageViewWrapper from "@/components/partial/image_view/ImageViewWrapper";
 
 export default {
   name: "Specimen",
 
   components: {
+    ImageViewWrapper,
     Pagination,
     SpecimenAnalysisTable,
     SpecimenHistoryTable,
@@ -887,6 +933,7 @@ export default {
         ],
         activeTab: "specimen_identification",
         relatedData: this.setDefaultRelatedData(),
+        specimenImages: null,
         copyFields: [
           "id",
           "specimen_id",
@@ -993,6 +1040,7 @@ export default {
           info: true,
           localityInfo: true,
           details: true,
+          images: true,
           description: true
         },
         paginateByOptions: [
@@ -1034,6 +1082,7 @@ export default {
         });
 
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.loadSpecimenImages(this.$route.params.id);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
 
@@ -1103,6 +1152,12 @@ export default {
       );
     },
 
+    loadSpecimenImages(specimenId) {
+      fetchDirectSpecimenImages(specimenId).then(
+        response => (this.specimenImages = this.handleResponse(response))
+      );
+    },
+
     setDefaultRelatedData() {
       return {
         specimen_identification: { count: 0, results: [] },
@@ -1166,7 +1221,7 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       Object.keys(uploadableObject).forEach(key => {
@@ -1217,6 +1272,7 @@ export default {
 
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
+      if (saveAsNew) delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

@@ -229,6 +229,7 @@
     "specimen_analysis": "Eksemplari analüüs",
     "dataset_author": "Andmeseti autor",
     "dataset_reference": "Andmeseti kirjandus",
+    "dataset_geolocation": "Andmeseti lokaliteet",
     "locality_stratigraphy": "Stratigraafilised piirid",
     "doi_agent": "Doi isik/asutus",
     "doi_date": "Doi kuupäev",
@@ -409,6 +410,7 @@
       "info": "Üldinfo",
       "localityInfo": "Leiuinfo",
       "details": "Säiliku info",
+      "images": "Pildid",
       "description": "Lisainfo"
     },
     "keyword": {
@@ -460,7 +462,10 @@
       "details": "Muu info"
     },
     "dataset": {
-      "info": "Üldinfo"
+      "info": "Üldinfo",
+      "requiredFields": "Kohustuslikud väljad",
+      "referenceAndLocality": "Kirjandus ja Lokaliteet",
+      "description": "Lisainfo"
     },
     "stratigraphy": {
       "info": "Üldinfo",
@@ -906,7 +911,11 @@
     "imageDescriptionEn": "Pildi kirjeldus en",
     "collapseMap": "Kaart",
     "dateDigitisedFree": "Digiteerimise kp vaba",
-    "map": "Kaart"
+    "map": "Kaart",
+    "rotateRight": "Pööra paremale",
+    "rotateLeft": "Pööra vasakule",
+    "imageRotated": "Pilt edukalt pööratud!",
+    "imageRotationFailed": "Pildi pööramine ebaõnnestus!"
   },
   "imageset": {
     "author__agent": "Autor",
@@ -1097,6 +1106,7 @@
     "loan": "Laen",
     "number_pieces": "Tükkide arv",
     "save_as_new_sample": "Salvesta uue proovina",
+    "specimenImages": "Pildid",
     "relatedTables": {
       "specimen_identification": "Taksoni nimed",
       "specimen_identification_geology": "Kivi nimed",
@@ -1593,6 +1603,25 @@
     }
   },
   "dataset": {
+    "creators": "Author",
+    "title": "Title",
+    "title_en": "Title EN",
+    "title_alternative": "Title, alt",
+    "title_translated": "Title, translated",
+    "title_translated_language__id": "Trans, title lang",
+    "publisher": "Publisher",
+    "publication_year": "Publication year",
+    "subjects": "Key words",
+    "language__id": "Language",
+    "resource_type": "Resource type",
+    "resource_type__id": "Resource type",
+    "version": "Version",
+    "resource": "Resource",
+    "methods": "Methods",
+    "abstract": "Abstract",
+    "locality__id": "Lokaliteet ID",
+    "reference__id": "Reference ID",
+
     "copyright_agent": "Autoriõigus",
     "copyright_agent__id": "Autoriõigus ID",
     "copyright_agent__agent": "Autoriõigus",
@@ -1624,10 +1653,17 @@
     "database": "Andmebaas",
     "dataset_html": "HTML andmed",
     "link": "Link",
+    "resourceTypePlaceholder": "Dataset",
+    "authorTooltip": "Autori lahter täidetakse 'Autorid' kirjetega",
+    "referenceAndLocality": "Kirjandus ja Lokaliteet",
+    "reference": "Kirjandus",
+    "title": "Pealkiri",
+    "title_en": "Pealkiri EN",
     "relatedTables": {
       "dataset_author": "Autorid",
       "dataset_reference": "Viited",
-      "dataset_analysis": "Analüüsid"
+      "dataset_analysis": "Analüüsid",
+      "dataset_geolocation": "Lokaliteet"
     }
   },
   "dataset_reference": {
@@ -1972,7 +2008,7 @@
     "stratigraphy_top": "Strat. ülemine",
     "stratigraphy_top_free": "Strat. ülemine txt",
     "stratigraphy_free": "Piirid jms",
-    "depth_other": "Muud sügavbused",
+    "depth_other": "Muud sügavused",
     "number_meters": "m kastis",
     "diameter": "d, mm",
     "location": "Asukoht",

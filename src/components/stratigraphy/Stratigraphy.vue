@@ -204,6 +204,7 @@
                 route-object="stratigraphy"
                 is-searchable
                 v-on:search:items="autocompleteStratigraphyParentSearch"
+                @input="updateHierarchyString"
               />
             </v-col>
 
@@ -995,7 +996,8 @@ export default {
         this.stratigraphy.parent = {
           id: obj.parent,
           stratigraphy: obj.parent__stratigraphy,
-          stratigraphy_en: obj.parent__stratigraphy_en
+          stratigraphy_en: obj.parent__stratigraphy_en,
+          hierarchy_string: obj.parent__hierarchy_string
         };
         this.autocomplete.parent_stratigraphy.push(this.stratigraphy.parent);
       }
@@ -1071,6 +1073,13 @@ export default {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
+      }
+    },
+
+    updateHierarchyString(parent) {
+      if (this.$route.meta.isEdit && parent?.hierarchy_string) {
+        this.stratigraphy.hierarchy_string =
+          parent.hierarchy_string + "-" + this.$route.params.id;
       }
     }
   }

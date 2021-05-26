@@ -1100,7 +1100,11 @@ export default {
         };
       }
       if (this.isNotEmpty(obj.parent)) {
-        this.taxon.parent = { id: obj.parent, taxon: obj.parent__taxon };
+        this.taxon.parent = {
+          id: obj.parent,
+          taxon: obj.parent__taxon,
+          hierarchy_string: obj.parent__hierarchy_string
+        };
         this.autocomplete.parent.push(this.taxon.parent);
       }
       if (this.isNotEmpty(obj.fossil_group)) {
@@ -1208,7 +1212,7 @@ export default {
     },
 
     updateHierarchyString(parentTaxon) {
-      if (this.$route.meta.isEdit && parentTaxon) {
+      if (this.$route.meta.isEdit && parentTaxon?.hierarchy_string) {
         this.taxon.hierarchy_string =
           parentTaxon.hierarchy_string + "-" + this.$route.params.id;
       }

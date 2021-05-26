@@ -91,48 +91,13 @@
             </v-col>
           </v-row>
 
-          <!-- DEPTH_START, STRATIGRAPHY_BASE and STRATIGRAPHY_BASE_FREE -->
+          <!-- DEPTH_START, STRATIGRAPHY_TOP and STRATIGRAPHY_TOP_FREE -->
           <v-row no-gutters>
             <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="drillcore_box.depth_start"
                 :color="bodyActiveColor"
                 :label="$t('drillcore_box.depth_start')"
-                type="number"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <autocomplete-wrapper
-                v-model="drillcore_box.stratigraphy_base"
-                :color="bodyActiveColor"
-                :items="autocomplete.stratigraphy_base"
-                :loading="autocomplete.loaders.stratigraphy_base"
-                :item-text="stratigraphyLabel"
-                :label="$t('drillcore_box.stratigraphy_base')"
-                is-link
-                route-object="stratigraphy"
-                is-searchable
-                v-on:search:items="autocompleteStratigraphyBaseSearch"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="drillcore_box.stratigraphy_base_free"
-                :color="bodyActiveColor"
-                :label="$t('drillcore_box.stratigraphy_base_free')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- DEPTH_END, STRATIGRAPHY_TOP and STRATIGRAPHY_TOP_FREE -->
-          <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="drillcore_box.depth_end"
-                :color="bodyActiveColor"
-                :label="$t('drillcore_box.depth_end')"
                 type="number"
               />
             </v-col>
@@ -161,6 +126,41 @@
             </v-col>
           </v-row>
 
+          <!-- DEPTH_END, STRATIGRAPHY_BASE and STRATIGRAPHY_BASE_FREE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="drillcore_box.depth_end"
+                :color="bodyActiveColor"
+                :label="$t('drillcore_box.depth_end')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="drillcore_box.stratigraphy_base"
+                :color="bodyActiveColor"
+                :items="autocomplete.stratigraphy_base"
+                :loading="autocomplete.loaders.stratigraphy_base"
+                :item-text="stratigraphyLabel"
+                :label="$t('drillcore_box.stratigraphy_base')"
+                is-link
+                route-object="stratigraphy"
+                is-searchable
+                v-on:search:items="autocompleteStratigraphyBaseSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="drillcore_box.stratigraphy_base_free"
+                :color="bodyActiveColor"
+                :label="$t('drillcore_box.stratigraphy_base_free')"
+              />
+            </v-col>
+          </v-row>
+
           <!-- DEPTH_OTHER -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
@@ -179,17 +179,6 @@
                 v-model="drillcore_box.stratigraphy_free"
                 :color="bodyActiveColor"
                 :label="$t('drillcore_box.stratigraphy_free')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- LOCATION -->
-          <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
-              <textarea-wrapper
-                v-model="drillcore_box.location"
-                :color="bodyActiveColor"
-                :label="$t('drillcore_box.location')"
               />
             </v-col>
           </v-row>
@@ -424,7 +413,6 @@ export default {
           "stratigraphy_top_free",
           "depth_other",
           "stratigraphy_free",
-          "location",
           "remarks"
         ],
         autocomplete: {
@@ -489,7 +477,7 @@ export default {
       }
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       Object.keys(uploadableObject).forEach(key => {
@@ -542,6 +530,7 @@ export default {
 
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
+      if (saveAsNew) delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

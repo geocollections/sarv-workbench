@@ -153,7 +153,15 @@ const state = {
       "database__acronym",
       "link"
     ],
-    dataset: ["id", "name", "date", "owner", "database__acronym", "link"],
+    dataset: [
+      "id",
+      "creators",
+      "publication_year",
+      "title",
+      "resource",
+      "database__acronym",
+      "link"
+    ],
     deaccession: [
       "number",
       "date_signed",

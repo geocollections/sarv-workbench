@@ -29,14 +29,14 @@
       </router-link>
     </template>
 
-    <template v-slot:item.name="{ item }">
+    <template v-slot:item.title="{ item }">
       <router-link
         :to="{ path: '/dataset/' + item.id }"
         :title="$t('editDataset.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        <span v-translate="{ et: item.name, en: item.name_en }"></span>
+        {{ item.title }}
       </router-link>
     </template>
 
@@ -45,18 +45,31 @@
       <span v-else>{{ item.date_txt }}</span>
     </template>
 
-    <template v-slot:item.owner="{ item }">
-      <router-link
-        :to="{ path: '/agent/' + item.owner }"
-        :title="$t('editAgent.editMessage')"
-        class="sarv-link"
-        :class="`${bodyActiveColor}--text`"
-        v-if="item.owner"
-      >
-        {{ item.owner__agent }}
-      </router-link>
-      <span v-else>{{ item.owner_txt }}</span>
+    <template v-slot:item.creators="{ item }">
+      <span v-if="item.creators">{{ item.creators }}</span>
+      <span v-else>{{ item.owner_txt || item.owner__agent }}</span>
     </template>
+
+    <template v-slot:item.publication_year="{ item }">
+      <span v-if="item.publication_year">{{ item.publication_year }}</span>
+      <span v-else-if="item.date">{{
+        item.date | moment("YYYY-MM-DD HH:mm")
+      }}</span>
+      <span v-else>{{ item.date_txt }}</span>
+    </template>
+
+    <!--    <template v-slot:item.owner="{ item }">-->
+    <!--      <router-link-->
+    <!--        :to="{ path: '/agent/' + item.owner }"-->
+    <!--        :title="$t('editAgent.editMessage')"-->
+    <!--        class="sarv-link"-->
+    <!--        :class="`${bodyActiveColor}&#45;&#45;text`"-->
+    <!--        v-if="item.owner"-->
+    <!--      >-->
+    <!--        {{ item.owner__agent }}-->
+    <!--      </router-link>-->
+    <!--      <span v-else>{{ item.owner_txt }}</span>-->
+    <!--    </template>-->
 
     <template v-slot:item.link="{ item }">
       <v-btn

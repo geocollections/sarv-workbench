@@ -94,7 +94,13 @@
           <div v-show="block.file" class="pa-1">
             <v-row no-gutters>
               <v-col cols="12" md="6" class="pa-1">
-                <file-preview :data="rawAttachment" object="attachment" />
+                <file-preview
+                  :data="rawAttachment"
+                  :rotation-degrees="imageRotationDegrees"
+                  :key="filePreviewKey"
+                  object="attachment"
+                  @rotate="imageRotationDegrees = $event"
+                />
               </v-col>
 
               <v-col cols="12" md="6" class="pa-1">
@@ -3806,8 +3812,9 @@
       </div>
     </template>
 
+    <!--    NOTE: Removed new doi button #644 https://github.com/geocollections/sarv-workbench/issues/644-->
     <template v-slot:add-doi>
-      <div class="d-flex justify-end mt-3">
+      <div class="d-flex justify-end mt-3" v-if="false">
         <new-doi-button
           v-if="
             attachment &&
@@ -4047,6 +4054,18 @@ export default {
         type => (type.disabled = !this.isValidToChangeTo(type.name))
       );
       return this.changeType;
+    },
+
+    imageRotationState() {
+      return Math.abs(this.imageRotationDegreesForApi) !== 0;
+    },
+
+    imageRotationDegreesForApi() {
+      let rotationForApi = Math.abs(this.imageRotationDegrees) % 360;
+      if (this.imageRotationDegrees < 0)
+        rotationForApi = Math.abs(rotationForApi);
+      else rotationForApi = -rotationForApi;
+      return rotationForApi;
     }
   },
 
@@ -4160,6 +4179,8 @@ export default {
 
     setInitialData() {
       return {
+        imageRotationDegrees: 0,
+        filePreviewKey: Date.now(),
         relatedTabs: [
           {
             name: "attach_link__collection",

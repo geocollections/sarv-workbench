@@ -4,6 +4,7 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import {
   fetchAttachmentForReference,
   fetchChangeRecordState,
+  fetchRotateImage,
   postRequest
 } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
@@ -673,12 +674,20 @@ const formManipulation = {
      *
      * @example bottomOptionClicked('SAVE', 'doi')
      */
-    bottomOptionClicked(choice, object) {
+    async bottomOptionClicked(choice, object) {
       // Setting 'initialEditViewDataHasChangedState' to false because of bottom option click
       // which is intended as an intentional click and shouldn't ask for confirmation.
       this.setInitialEditViewDataHasChangedState(false);
 
-      if (choice === "SAVE") this.add(true, object);
+      if (choice === "SAVE") {
+        if (object === "attachment" && this?.imageRotationState)
+          await this.rotateImageRequest(
+            object,
+            this.imageRotationDegreesForApi
+          );
+
+        await this.add(true, object);
+      }
 
       if (choice === "FINISH") {
         this[object].date_end = this.getCurrentFormattedDate();
@@ -686,7 +695,13 @@ const formManipulation = {
       }
 
       if (choice === "SAVE_AND_LEAVE") {
-        this.add(false, object);
+        if (object === "attachment" && this?.imageRotationState)
+          await this.rotateImageRequest(
+            object,
+            this.imageRotationDegreesForApi
+          );
+
+        await this.add(false, object);
       }
 
       if (choice === "SAVE_AS_NEW") {
@@ -834,6 +849,31 @@ const formManipulation = {
           this.toastError({ text: this.$t("messages.uploadError") });
         }
       );
+    },
+
+    async rotateImageRequest(object, degrees) {
+      if (this[object]?.id) {
+        let formData = new FormData();
+        const data = {
+          image_ids: [this[object].id],
+          degrees: degrees
+        };
+
+        formData.append("data", JSON.stringify({ ...data }));
+
+        const response = await fetchRotateImage(formData);
+
+        // Todo: Get success and error messages from api
+        if (response) {
+          this.filePreviewKey = Date.now();
+          this.imageRotationDegrees = 0;
+
+          this.toastSuccess({ text: this.$t("attachment.imageRotated") });
+        } else
+          this.toastError({ text: this.$t("attachment.imageRotationFailed") });
+
+        console.log(response);
+      }
     }
   }
 };

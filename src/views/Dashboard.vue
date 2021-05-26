@@ -6,9 +6,9 @@
 
     <v-main>
       <v-container fluid>
-        <GlobalAlertNotification />
+        <GlobalAlertNotification class="d-print-none" />
 
-        <DevNotification />
+        <DevNotification class="d-print-none" />
 
         <breadcrumbs
           class="d-print-none"

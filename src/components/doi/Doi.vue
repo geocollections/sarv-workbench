@@ -887,6 +887,7 @@ import requestsMixin from "../../mixins/requestsMixin";
 import toastMixin from "../../mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
 import Pagination from "@/components/partial/Pagination";
+import { orderBy } from "lodash";
 
 export default {
   components: {
@@ -1278,7 +1279,7 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       if (uploadableObject.egf) delete uploadableObject.egf;
@@ -1392,6 +1393,7 @@ export default {
 
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
+      if (saveAsNew) delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -1516,7 +1518,7 @@ export default {
       }
 
       // Dataset and Reference are direct links and do not need extra request.
-      if (query && (object !== "dataset" && object !== "reference")) {
+      if (query && object !== "dataset" && object !== "reference") {
         query.then(response => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
@@ -1556,7 +1558,7 @@ export default {
         let creatorsLong = "";
         let moreThanOneAuthor = doiAgent.length > 1;
 
-        doiAgent.forEach(agent => {
+        orderBy(doiAgent, ["sort", "id"], ["asc", "asc"]).forEach(agent => {
           // Only Creators are added (agent_type 1 === Creator)
           if (this.$route.meta.isEdit) {
             if (agent?.agent_type === 1) {

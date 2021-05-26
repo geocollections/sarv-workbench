@@ -1,5 +1,117 @@
 <template>
   <div class="dataset">
+    <!-- REQUIRED INFO -->
+    <v-card
+      class="mt-2"
+      id="block-requiredFields"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.requiredFields = !block.requiredFields"
+        >
+          <span :class="validate('dataset') ? 'green--text' : 'red--text'">{{
+            $t("common.requiredFields")
+          }}</span>
+          <v-icon
+            right
+            :class="validate('dataset') ? 'green--text' : 'red--text'"
+            >fas fa-project-diagram</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.requiredFields = !block.requiredFields"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.requiredFields ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.requiredFields" class="pa-1">
+          <!-- TITLE -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="dataset.title"
+                :color="bodyActiveColor"
+                :label="$t('dataset.title')"
+                use-state
+              />
+            </v-col>
+          </v-row>
+
+          <!-- RESOURCE TYPE and RESOURCE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                :value="$t('dataset.resourceTypePlaceholder')"
+                :label="$t('doi.resourceTypeGeneral')"
+                disabled
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="dataset.resource"
+                :color="bodyActiveColor"
+                :label="$t('doi.resource')"
+                use-state
+              />
+            </v-col>
+          </v-row>
+
+          <!-- CREATORS, YEAR and PUBLISHER -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <v-tooltip top z-index="60000">
+                <template v-slot:activator="{ on, attrs }">
+                  <input-wrapper
+                    v-on="on"
+                    v-bind="attrs"
+                    v-model="dataset.creators"
+                    :color="bodyActiveColor"
+                    :label="$t('doi.creators')"
+                    use-state
+                    readonly
+                  />
+                </template>
+                <span>{{ $t("dataset.authorTooltip") }}</span>
+              </v-tooltip>
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="dataset.publication_year"
+                :color="bodyActiveColor"
+                :label="$t('common.year')"
+                use-state
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="dataset.publisher"
+                :color="bodyActiveColor"
+                :items="autocomplete.publishers"
+                :loading="autocomplete.loaders.publishers"
+                item-value="test"
+                item-text="value"
+                :label="$t('doi.publisher')"
+                use-state
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -9,14 +121,8 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span :class="validate('dataset') ? 'green--text' : 'red--text'">{{
-            $t("common.generalInfo")
-          }}</span>
-          <v-icon
-            right
-            :class="validate('dataset') ? 'green--text' : 'red--text'"
-            >fas fa-project-diagram</v-icon
-          >
+          <span>{{ $t("common.generalInfo") }}</span>
+          <v-icon right>fas fa-project-diagram</v-icon>
         </div>
         <v-spacer></v-spacer>
         <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
@@ -28,42 +134,90 @@
 
       <transition>
         <div v-show="block.info" class="pa-1">
-          <!-- NAME and NAME_EN -->
+          <!-- TITLE ALTERNATIVE -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" class="pa-1">
               <input-wrapper
-                v-model="dataset.name"
+                v-model="dataset.title_alternative"
                 :color="bodyActiveColor"
-                :label="$t('common.name')"
-                use-state
-              />
-            </v-col>
-
-            <v-col cols="12" md="6" class="pa-1">
-              <input-wrapper
-                v-model="dataset.name_en"
-                :color="bodyActiveColor"
-                :label="$t('common.name_en')"
-                use-state
+                :label="$t('doi.title_alternative')"
               />
             </v-col>
           </v-row>
 
-          <!-- DESCRIPTION and DESCRIPTION_EN -->
+          <!-- TITLE TRANSLATED and TITLE TRANSLATED LANGUAGE -->
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
-              <textarea-wrapper
-                v-model="dataset.description"
+              <input-wrapper
+                v-model="dataset.title_translated"
                 :color="bodyActiveColor"
-                :label="$t('common.description')"
+                :label="$t('doi.title_translated')"
               />
             </v-col>
 
             <v-col cols="12" md="6" class="pa-1">
-              <textarea-wrapper
-                v-model="dataset.description_en"
+              <autocomplete-wrapper
+                v-model="dataset.title_translated_language"
                 :color="bodyActiveColor"
-                :label="$t('common.description_en')"
+                :items="autocomplete.language"
+                :loading="autocomplete.loaders.language"
+                :item-text="commonLabel"
+                :label="$t('doi.title_translated_language')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- LANGUAGE, VERSION -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="dataset.language"
+                :color="bodyActiveColor"
+                :items="autocomplete.language"
+                :loading="autocomplete.loaders.language"
+                :item-text="commonLabel"
+                :label="$t('doi.language')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="dataset.version"
+                :color="bodyActiveColor"
+                :label="$t('doi.version')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- SUBJECTS -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="dataset.subjects"
+                :color="bodyActiveColor"
+                :label="$t('doi.subjects')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- ABSTRACT -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="dataset.abstract"
+                :color="bodyActiveColor"
+                :label="$t('doi.abstract')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- METHODS -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="dataset.methods"
+                :color="bodyActiveColor"
+                :label="$t('doi.methods')"
               />
             </v-col>
           </v-row>
@@ -114,8 +268,104 @@
               />
             </v-col>
           </v-row>
+        </div>
+      </transition>
+    </v-card>
 
-          <!-- DATASET_HTML and REMARKS -->
+    <!-- REFERENCE and LOCALITY -->
+    <v-card
+      class="mt-2"
+      id="block-referenceAndLocality"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.referenceAndLocality = !block.referenceAndLocality"
+        >
+          <span>{{ $t("dataset.referenceAndLocality") }}</span>
+          <v-icon right>fas fa-book</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.referenceAndLocality = !block.referenceAndLocality"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.referenceAndLocality ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.referenceAndLocality" class="pa-1">
+          <!-- REFERENCE and LOCALITY -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="dataset.reference"
+                :color="bodyActiveColor"
+                :items="autocomplete.reference"
+                :loading="autocomplete.loaders.reference"
+                item-text="reference"
+                :label="$t('dataset.reference')"
+                is-link
+                route-object="reference"
+                is-searchable
+                v-on:search:items="autocompleteReferenceSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="dataset.locality"
+                :color="bodyActiveColor"
+                :items="autocomplete.locality"
+                :loading="autocomplete.loaders.locality"
+                :item-text="localityLabel"
+                :label="$t('common.locality')"
+                is-link
+                route-object="locality"
+                is-searchable
+                v-on:search:items="autocompleteLocalitySearch"
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- REMARKS -->
+    <v-card
+      class="mt-2"
+      id="block-description"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("common.remarks") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.description" class="pa-1">
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
               <textarea-wrapper
@@ -130,32 +380,6 @@
                 v-model="dataset.remarks"
                 :color="bodyActiveColor"
                 :label="$t('common.remarks')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- OWNER and OWNER_TXT -->
-          <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
-              <autocomplete-wrapper
-                v-model="dataset.owner"
-                :color="bodyActiveColor"
-                :items="autocomplete.owner"
-                :loading="autocomplete.loaders.owner"
-                item-text="agent"
-                :label="$t('common.owner')"
-                is-link
-                route-object="agent"
-                is-searchable
-                v-on:search:items="autocompleteOwner2Search"
-              />
-            </v-col>
-
-            <v-col cols="12" md="6" class="pa-1">
-              <input-wrapper
-                v-model="dataset.owner_txt"
-                :color="bodyActiveColor"
-                :label="$t('common.owner_txt')"
               />
             </v-col>
           </v-row>
@@ -233,6 +457,19 @@
             :body-active-color="bodyActiveColor"
           />
 
+          <dataset-geolocation-table
+            v-show="activeTab === 'dataset_geolocation'"
+            :response="relatedData.dataset_geolocation"
+            :search-parameters="
+              relatedData.searchParameters.dataset_geolocation
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- PAGINATION -->
           <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -276,7 +513,11 @@ import {
   fetchDataset,
   fetchDatasetAnalyses,
   fetchDatasetAuthors,
+  fetchDatasetGeolocation,
   fetchDatasetReferences,
+  fetchDoiPublisher,
+  fetchDoiResourceType,
+  fetchListLanguages,
   fetchListLicences
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
@@ -290,11 +531,14 @@ import DatasetReferenceTable from "./relatedTables/DatasetReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import DatasetAnalysisTable from "./relatedTables/DatasetAnalysisTable";
 import Pagination from "@/components/partial/Pagination";
+import { orderBy } from "lodash";
+import DatasetGeolocationTable from "@/components/dataset/relatedTables/DatasetGeolocationTable";
 
 export default {
   name: "Dataset",
 
   components: {
+    DatasetGeolocationTable,
     Pagination,
     DatasetAnalysisTable,
     DatasetReferenceTable,
@@ -363,6 +607,12 @@ export default {
         this.loadRelatedData(this.activeTab);
       },
       deep: true
+    },
+    "relatedData.dataset_author.results": {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) this.updateCreatorsField(newVal);
+      },
+      deep: true
     }
   },
 
@@ -400,16 +650,13 @@ export default {
         relatedTabs: [
           { name: "dataset_author", iconClass: "far fa-user" },
           { name: "dataset_reference", iconClass: "fas fa-book" },
-          { name: "dataset_analysis", iconClass: "far fa-chart-bar" }
+          { name: "dataset_analysis", iconClass: "far fa-chart-bar" },
+          { name: "dataset_geolocation", iconClass: "fas fa-globe-americas" }
         ],
         activeTab: "dataset_author",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "id",
-          "name",
-          "name_en",
-          "description",
-          "description_en",
           "dataset_html",
           "date",
           "date_txt",
@@ -418,25 +665,56 @@ export default {
           "owner_txt",
           "copyright_agent",
           "licence",
-          "remarks"
+          "remarks",
+          "creators",
+          "publisher",
+          "publication_year",
+          "title",
+          "title_alternative",
+          "title_translated",
+          "title_translated_language",
+          "abstract",
+          "resource_type",
+          "resource",
+          "methods",
+          "version",
+          "language",
+          "subjects",
+          "reference",
+          "locality"
         ],
         autocomplete: {
           loaders: {
+            resource_type: false,
+            publishers: false,
             copyright_agent: false,
             owner: false,
             agent: false,
-            reference: false
+            reference: false,
+            locality: false
           },
+          resource_type: [],
+          publishers: [],
           copyright_agent: [],
           licence: [],
           owner: [],
           agent: [],
-          reference: []
+          reference: [],
+          locality: []
         },
-        requiredFields: ["name", "name_en"],
+        requiredFields: [
+          "resource",
+          "creators",
+          "publication_year",
+          "publisher",
+          "title"
+        ],
         dataset: {},
         block: {
-          info: true
+          requiredFields: true,
+          info: true,
+          referenceAndLocality: false,
+          description: false
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -492,10 +770,33 @@ export default {
         );
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+
+        // NOTE: Dataset ID is 3
+        this.dataset.resource_type = 3;
       }
     },
 
     loadAutocompleteFields() {
+      fetchDoiResourceType().then(
+        response =>
+          (this.autocomplete.resource_type = this.handleResponse(response))
+      );
+      fetchDoiPublisher().then(response => {
+        this.autocomplete.publishers = [
+          ...this.autocomplete.publishers,
+          ...this.handleResponse(response)
+        ];
+        if (
+          !this.$route.meta.isEdit &&
+          !this.dataset.publisher &&
+          this.autocomplete.publishers.length > 0
+        ) {
+          this.dataset.publisher = this.autocomplete.publishers[0].value;
+        }
+      });
+      fetchListLanguages().then(
+        response => (this.autocomplete.language = this.handleResponse(response))
+      );
       fetchListLicences().then(
         response => (this.autocomplete.licence = this.handleResponse(response))
       );
@@ -506,12 +807,13 @@ export default {
         dataset_author: { count: 0, results: [] },
         dataset_reference: { count: 0, results: [] },
         dataset_analysis: { count: 0, results: [] },
+        dataset_geolocation: { count: 0, results: [] },
         searchParameters: {
           dataset_author: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true]
+            sortBy: ["sort", "id"],
+            sortDesc: [false, false]
           },
           dataset_reference: {
             page: 1,
@@ -523,6 +825,12 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["analysis"],
+            sortDesc: [true]
+          },
+          dataset_geolocation: {
+            page: 1,
+            paginateBy: 10,
+            sortBy: ["id"],
             sortDesc: [true]
           }
         }
@@ -594,6 +902,21 @@ export default {
         };
         this.autocomplete.owner.push(this.dataset.owner);
       }
+      if (this.isNotEmpty(obj.reference)) {
+        this.dataset.reference = {
+          id: obj.reference,
+          reference: obj.reference__reference
+        };
+        this.autocomplete.reference.push(this.dataset.reference);
+      }
+      if (this.isNotEmpty(obj.locality)) {
+        this.dataset.locality = {
+          id: obj.locality,
+          locality: obj.locality__locality,
+          locality_en: obj.locality__locality_en
+        };
+        this.autocomplete.locality.push(this.dataset.locality);
+      }
     },
 
     loadRelatedData(object) {
@@ -614,6 +937,11 @@ export default {
           this.$route.params.id,
           this.relatedData.searchParameters.dataset_analysis
         );
+      } else if (object === "dataset_geolocation") {
+        query = fetchDatasetGeolocation(
+          this.$route.params.id,
+          this.relatedData.searchParameters.dataset_geolocation
+        );
       }
 
       if (query) {
@@ -621,6 +949,61 @@ export default {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
+      }
+    },
+
+    /**
+     * Updates creators field using persons (Creators) in dataset_author tab
+     * Always overwrites creators field, because dataset_author is more reliable than user entered creators field!
+     * @param datasetAuthor
+     */
+    updateCreatorsField(datasetAuthor) {
+      if (datasetAuthor.length > 0) {
+        let creators = "";
+        let creatorsLong = "";
+        let moreThanOneAuthor = datasetAuthor.length > 1;
+
+        orderBy(datasetAuthor, ["sort", "id"], ["asc", "asc"]).forEach(
+          agent => {
+            // Only Creators are added (agent_type 1 === Creator)
+            if (this.$route.meta.isEdit) {
+              if (agent?.agent_type === 1) {
+                if (agent?.agent__surename && agent?.agent__forename) {
+                  creatorsLong += `${
+                    agent.agent__surename
+                  }, ${agent.agent__forename.charAt(0)}., `;
+                  creators += `${agent.agent__surename}, ${agent.agent__forename}; `;
+                } else if (agent?.name) {
+                  creatorsLong += `${agent.name}; `;
+                  creators += `${agent.name}; `;
+                }
+              }
+            } else {
+              if (agent?.agent_type?.id === 1) {
+                if (agent?.agent?.surename && agent?.agent?.forename) {
+                  creatorsLong += `${
+                    agent.agent.surename
+                  }, ${agent.agent.forename.charAt(0)}., `;
+                  creators += `${agent.agent.surename}, ${agent.agent.forename}; `;
+                } else if (agent?.name) {
+                  creators += `${agent.name}; `;
+                  creatorsLong += `${agent.name}; `;
+                }
+              }
+            }
+          }
+        );
+
+        if (creators.length > 0) {
+          creators = creators.trim().slice(0, -1);
+          creatorsLong = creatorsLong.trim().slice(0, -1);
+
+          if (moreThanOneAuthor) this.dataset.creators = creatorsLong;
+          else {
+            if (this.dataset.creators !== creatorsLong)
+              this.dataset.creators = creators;
+          }
+        }
       }
     }
   }

@@ -38,6 +38,11 @@
         </v-btn>
       </template>
 
+      <template v-slot:item.agent_type="{ item }">
+        <span v-if="$route.meta.isEdit">{{ item.agent_type__value }}</span>
+        <span v-else-if="item.agent_type">{{ item.agent_type.value }}</span>
+      </template>
+
       <template v-slot:item.agent="{ item }">
         <div v-if="isUsedAsRelatedData">
           <router-link
@@ -89,26 +94,62 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.name"
+                    :color="bodyActiveColor"
+                    :label="$t('common.name')"
+                    use-state
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.affiliation"
+                    :color="bodyActiveColor"
+                    :label="$t('doi.affiliation')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.agent_type"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.agent_type"
+                    :loading="autocomplete.loaders.agent_type"
+                    item-text="value"
+                    :label="$t('doi.agent_type')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.orcid"
+                    :color="bodyActiveColor"
+                    :label="$t('doi.orcid')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
                     v-model="item.agent"
                     :color="bodyActiveColor"
                     :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
                     item-text="agent"
-                    :label="$t('dataset_author.agent')"
-                    use-state
+                    :label="$t('doi.agent')"
                     is-link
                     route-object="agent"
                     is-searchable
                     v-on:search:items="autocompleteAgentSearch"
+                    @change="updateFieldsAccordingToAgent"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.remarks"
+                    v-model="item.sort"
                     :color="bodyActiveColor"
-                    :label="$t('common.remarks')"
+                    :label="$t('doi.sort')"
                   />
                 </v-col>
               </v-row>
@@ -139,6 +180,7 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import { fetchDoiAgentType } from "@/assets/js/api/apiCalls";
 
 export default {
   name: "DatasetAuthorTable",
@@ -187,8 +229,13 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "dataset_author.agent", value: "agent" },
-      { text: "common.remarks", value: "remarks" },
+      { text: "common.id", value: "id" },
+      { text: "common.name", value: "name" },
+      { text: "doi.affiliation", value: "affiliation" },
+      { text: "doi.agent_type", value: "agent_type" },
+      { text: "doi.orcid", value: "orcid" },
+      { text: "doi.agent", value: "agent" },
+      { text: "doi.sort", value: "sort" },
       {
         text: "common.actions",
         value: "action",
@@ -198,13 +245,22 @@ export default {
     ],
     dialog: false,
     item: {
+      name: "",
+      affiliation: "",
+      agent_type: {
+        id: 1,
+        value: "Creator"
+      },
+      orcid: "",
       agent: null,
-      remarks: ""
+      sort: ""
     },
     isNewItem: true,
     autocomplete: {
+      agent_type: [],
       agent: [],
       loaders: {
+        agent_type: false,
         agent: false
       }
     }
@@ -221,17 +277,38 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.agent === "object" && this.item.agent !== null;
+      return this.item.name !== null && this.item.name.length > 0;
+    }
+  },
+
+  watch: {
+    dialog() {
+      this.fillListAutocompletes();
     }
   },
 
   methods: {
+    updateFieldsAccordingToAgent(agent) {
+      if (typeof agent !== "undefined" && agent !== null) {
+        this.item.name = agent.agent;
+        this.item.affiliation = agent.institution__institution_name_en;
+        this.item.orcid = agent.orcid;
+      }
+    },
+
     cancel() {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
+        name: "",
+        affiliation: "",
+        agent_type: {
+          id: 1,
+          value: "Creator"
+        },
+        orcid: "",
         agent: null,
-        remarks: ""
+        sort: null
       };
     },
 
@@ -261,6 +338,14 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
+      if (typeof item.agent_type !== "object" && item.agent_type !== null) {
+        this.item.agent_type = {
+          id: item.agent_type,
+          value: item.agent_type__value,
+          value_en: item.agent_type__value_en
+        };
+      } else this.item.agent_type = item.agent_type;
+
       if (typeof item.agent !== "object" && item.agent !== null) {
         this.item.agent = {
           id: item.agent,
@@ -272,7 +357,10 @@ export default {
         this.autocomplete.agent.push(this.item.agent);
       }
 
-      this.item.remarks = item.remarks;
+      this.item.name = item.name;
+      this.item.affiliation = item.affiliation;
+      this.item.orcid = item.orcid;
+      this.item.sort = item.sort;
 
       this.dialog = true;
     },
@@ -283,6 +371,19 @@ export default {
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
+    },
+
+    fillListAutocompletes() {
+      if (this.autocomplete.agent_type.length <= 1) {
+        this.autocomplete.loaders.agent_type = true;
+        fetchDoiAgentType().then(response => {
+          if (response.status === 200) {
+            this.autocomplete.agent_type =
+              response.data.count > 0 ? response.data.results : [];
+          }
+        });
+        this.autocomplete.loaders.agent_type = false;
+      }
     },
 
     formatItem(item) {
