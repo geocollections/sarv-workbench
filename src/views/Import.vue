@@ -190,14 +190,22 @@ export default {
         await this.uploadImportedFileAsNewAttachment();
         await this.getNewlyAddedRecords();
       } else if (fileUploadResponse?.data?.error) {
-        let errorMessage = fileUploadResponse?.data?.error;
-        this.toastError({ text: errorMessage });
-        this.importResponse = errorMessage;
+        // Todo: Handle different errors
+        // invalid_column_names
+        // cant_insert_in
+        // wrong_data_type
+        // missing_records_database
+        // missing_columns
+        // missing_values
+        // non_unique_values_file
+        // non_unique_values_database
+        const error = JSON.stringify(fileUploadResponse.data.error);
+        this.toastError({ text: error });
+        this.importResponse = error;
       } else {
         this.toastError({ text: "File import failed!" });
         this.importResponse = fileUploadResponse?.data;
       }
-
       this.setLoadingState(false);
     },
 
