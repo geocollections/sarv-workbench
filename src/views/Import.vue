@@ -76,8 +76,8 @@
           {{ $t("messages.attachment_upload_success") }}
           <span class="font-weight-bold"
             >ID:
-            <router-link :to="`/attachment/${attachment[0].id}`">{{
-              attachment[0].id
+            <router-link :to="`/attachment/${attachment.attachment_id}`">{{
+              attachment.attachment_id
             }}</router-link></span
           >
         </v-alert>
@@ -249,7 +249,7 @@ export default {
             this.toastSuccess({
               text: this.$t("messages.attachment_upload_success")
             });
-            this.attachment = response.data.results;
+            this.attachment = response.data;
           } else {
             this.toastError({
               text: this.$t("messages.attachment_upload_error")
