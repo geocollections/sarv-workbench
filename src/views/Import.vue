@@ -20,24 +20,18 @@
         <v-row no-gutters>
           <v-col cols="12" class="pa-1 font-weight-bold">Request info:</v-col>
 
-          <v-col cols="12" class="pa-1 ml-4"
-            ><b>url</b>: {{ fileImportUrl }}</v-col
-          >
+          <v-col cols="12" class="pa-1 ml-4"><b>url</b>: {{ importUrl }}</v-col>
 
           <v-col cols="12" class="pa-1 ml-4" v-if="isFileAdded">
             <span>{{ $t("messages.file_import1") }}</span>
-            <span class="font-weight-bold ml-2"
-              >'{{ fileImport.file[0].name }}'</span
-            >
-            <span class="ml-1 mr-2"
-              >({{ getSizeAsMB(fileImport.file[0].size) }})</span
-            >
+            <span class="font-weight-bold ml-2">'{{ file[0].name }}'</span>
+            <span class="ml-1 mr-2">({{ getSizeAsMB(file[0].size) }})</span>
             <span>{{ $t("messages.file_import2") }}</span>
           </v-col>
 
-          <v-col cols="12" class="pa-1" v-if="fileImportResponse"
+          <v-col cols="12" class="pa-1" v-if="importResponse"
             ><b>{{ $t("messages.response") }}</b
-            >: {{ fileImportResponse }}</v-col
+            >: {{ importResponse }}</v-col
           >
         </v-row>
 
@@ -47,7 +41,7 @@
               @click="importFile"
               :color="bodyActiveColor"
               class="white--text"
-              :disabled="!isFileAdded || isFileImportSuccess"
+              :disabled="!isFileAdded"
               :loading="loadingState"
             >
               {{ $t("buttons.send_request") }}
@@ -59,7 +53,7 @@
     </v-card>
 
     <!-- ATTACHMENT SKELETON LOADER -->
-    <v-card v-show="loadingState" class="mt-2" elevation="4">
+    <v-card v-if="loadingState && !attachment" class="mt-2" elevation="4">
       <div class="pa-4 d-flex justify-center">
         <v-skeleton-loader
           style="height: 100px; width: 100px"
@@ -68,26 +62,17 @@
       </div>
     </v-card>
 
-    <!-- RECORDS ADDED SKELETON LOADER -->
-    <v-card
-      v-show="loadingState && (showSamplesCard || showAnalysesCard)"
-      class="mt-2"
-      elevation="4"
-    >
-      <v-skeleton-loader type="table"></v-skeleton-loader>
-    </v-card>
-
     <!-- ATTACHMENT CARD -->
     <v-card
       class="mt-2"
-      v-show="!loadingState && attachmentResponse"
+      v-if="!loadingState && attachment"
       elevation="4"
       :color="bodyColor.split('n-')[0] + 'n-5'"
     >
       <v-card-title>{{ $t("header.attachment") }}</v-card-title>
 
       <v-card-text>
-        <v-alert v-if="attachment" type="success" text border="right">
+        <v-alert type="success" text border="right">
           {{ $t("messages.attachment_upload_success") }}
           <span class="font-weight-bold"
             >ID:
@@ -96,37 +81,23 @@
             }}</router-link></span
           >
         </v-alert>
-
-        <v-alert v-else type="error" text border="right">
-          <span class="mr-2">
-            {{ $t("messages.attachment_upload_error") }}
-          </span>
-
-          <v-btn
-            v-if="
-              isFileAdded &&
-                isFileImportSuccess &&
-                !attachment &&
-                !isAttachmentSuccess
-            "
-            small
-            @click="retryUploadImportedFileAsNewAttachment"
-            :color="bodyActiveColor"
-            class="white--text"
-            :loading="loadingState"
-          >
-            {{ $t("buttons.try_again") }}
-            <v-icon right small>fas fa-undo-alt</v-icon>
-          </v-btn>
-        </v-alert>
       </v-card-text>
+    </v-card>
+
+    <!-- RECORDS ADDED SKELETON LOADER -->
+    <v-card
+      v-if="loadingState && (showSamplesCard || showAnalysesCard)"
+      class="mt-2"
+      elevation="4"
+    >
+      <v-skeleton-loader type="table"></v-skeleton-loader>
     </v-card>
 
     <!-- TODO: Records card (samples and analyses) -->
     <!-- RECORDS CARD -->
     <v-card
       class="mt-2"
-      v-show="!loadingState && recordsResponse"
+      v-if="!loadingState && records.count > 0"
       elevation="4"
       :color="bodyColor.split('n-')[0] + 'n-5'"
     >
@@ -145,6 +116,7 @@ import FileInput from "@/components/partial/inputs/FileInput";
 import toastMixin from "@/mixins/toastMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { postRequest } from "@/assets/js/api/apiCalls";
+
 export default {
   name: "Import",
 
@@ -153,18 +125,10 @@ export default {
   mixins: [toastMixin],
 
   data: () => ({
-    fileImport: {
-      url: "https://rwapi.geocollections.info/import/",
-      file: []
-    },
-    fileImportResponse: null,
-    isFileImportSuccess: false,
-    attachmentResponse: null,
-    isAttachmentSuccess: false,
-    isAttachmentRetrying: false,
+    url: "https://rwapi.geocollections.info/import/",
+    importResponse: null,
+    file: null,
     attachment: null,
-    recordsResponse: null,
-    isRecordsSuccess: false,
     records: {
       count: 0,
       results: []
@@ -177,11 +141,11 @@ export default {
     ...mapGetters("user", ["getCurrentUser"]),
 
     isFileAdded() {
-      return this.fileImport.file && this.fileImport.file.length === 1;
+      return this?.file?.length === 1;
     },
 
-    fileImportUrl() {
-      return this.fileImport.url + this.$route.meta.object;
+    importUrl() {
+      return this.url + this.$route.meta.object;
     },
 
     showSamplesCard() {
@@ -197,17 +161,13 @@ export default {
     ...mapActions("search", ["setLoadingState", "setLoadingType"]),
 
     addFiles(files) {
-      this.fileImport.file = files;
+      this.file = files;
     },
 
     clearFiles() {
-      this.fileImport.file = [];
-      this.isFileImportSuccess = false;
-      this.fileImportResponse = null;
-      this.attachmentResponse = null;
+      this.file = null;
+      this.importResponse = null;
       this.attachment = null;
-      this.recordsResponse = null;
-      this.isRecordsSuccess = false;
       this.records = {
         count: 0,
         results: []
@@ -220,60 +180,40 @@ export default {
 
       let fileUploadResponse = await this.uploadFile();
 
-      if (fileUploadResponse) {
-        this.isFileImportSuccess = fileUploadResponse.status
-          .toString()
-          .startsWith("2");
+      if (fileUploadResponse?.data?.message) {
+        const message = fileUploadResponse.data.message;
 
-        if (this.isFileImportSuccess) {
-          if (fileUploadResponse?.data?.message) {
-            let message = fileUploadResponse.data.message;
+        this.toastSuccess({ text: message });
 
-            if (message.includes("skipped rows"))
-              this.toastInfo({
-                text: "File partially imported! (skipped rows)"
-              });
-            else this.toastSuccess({ text: "File successfully imported!" });
+        this.importResponse = message;
 
-            this.fileImportResponse = message;
-
-            await this.uploadImportedFileAsNewAttachment();
-            await this.getNewlyAddedRecords();
-          } else if (fileUploadResponse?.data?.error) {
-            let errorMessage = fileUploadResponse?.data?.error;
-            this.toastError({ text: errorMessage });
-            this.fileImportResponse = errorMessage;
-          }
-        } else {
-          this.toastError({ text: "File import failed!" });
-          this.fileImportResponse = fileUploadResponse?.data;
-        }
-
-        this.setLoadingState(false);
+        await this.uploadImportedFileAsNewAttachment();
+        await this.getNewlyAddedRecords();
+      } else if (fileUploadResponse?.data?.error) {
+        let errorMessage = fileUploadResponse?.data?.error;
+        this.toastError({ text: errorMessage });
+        this.importResponse = errorMessage;
+      } else {
+        this.toastError({ text: "File import failed!" });
+        this.importResponse = fileUploadResponse?.data;
       }
+
+      this.setLoadingState(false);
     },
 
     async uploadFile() {
       let formData = new FormData();
 
-      if (this.fileImport.file && this.fileImport.file.length > 0) {
-        this.fileImport.file.forEach((file, index) => {
+      if (this?.file?.length > 0) {
+        this.file.forEach((file, index) => {
           formData.append("file" + [index], file);
         });
       }
 
       try {
-        let response = await postRequest(
-          "",
-          formData,
-          this.fileImportUrl,
-          true
-        );
-        this.isFileImportSuccess = true;
-        return response;
+        return await postRequest("", formData, this.importUrl, true);
       } catch (err) {
         console.log(err);
-        this.isFileImportSuccess = false;
         return false;
       }
     },
@@ -282,18 +222,18 @@ export default {
       console.log(this.getCurrentUser.id);
       let data = {
         description: `See fail loodi kasutades faili importi. Failinimi: ${
-          this.fileImport.file[0].name
+          this?.file?.[0]?.name
         }, Kuupäev: ${new Date().toISOString().split("T")[0]}`,
         description_en: `This attachment was created using file import. Filename: ${
-          this.fileImport.file[0].name
+          this?.file?.[0]?.name
         }, Date: ${new Date().toISOString().split("T")[0]}`,
         is_private: true,
-        author: this.getCurrentUser.id
+        author: this?.getCurrentUser?.id
       };
 
       let formData = new FormData();
       formData.append("data", JSON.stringify(data));
-      formData.append("file0", this.fileImport.file[0]);
+      formData.append("file0", this.file[0]);
 
       await postRequest("add/attachment/", formData, "", true).then(
         response => {
@@ -301,34 +241,21 @@ export default {
             this.toastSuccess({
               text: this.$t("messages.attachment_upload_success")
             });
-            this.attachmentResponse = response.data;
             this.attachment = response.data.results;
-            this.isAttachmentSuccess = true;
           } else {
             this.toastError({
               text: this.$t("messages.attachment_upload_error")
             });
-            this.attachmentResponse = response.data;
             this.attachment = null;
-            this.isAttachmentSuccess = false;
           }
         },
         errResponse => {
           this.toastError({
             text: this.$t("messages.attachment_upload_error")
           });
-          this.attachmentResponse = errResponse;
           this.attachment = null;
-          this.isAttachmentSuccess = false;
         }
       );
-    },
-
-    async retryUploadImportedFileAsNewAttachment() {
-      this.setLoadingState(true);
-      this.setLoadingType("add");
-      await this.uploadImportedFileAsNewAttachment();
-      this.setLoadingState(false);
     },
 
     async getNewlyAddedRecords() {
