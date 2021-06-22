@@ -247,7 +247,6 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import { fetchListLanguages } from "@/assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
@@ -318,7 +317,6 @@ export default {
         align: "center"
       }
     ],
-    dialog: false,
     item: {
       reference: null,
       agent: null,
@@ -327,7 +325,6 @@ export default {
       description: "",
       remarks: ""
     },
-    isNewItem: true,
     autocomplete: {
       reference: [],
       agent: [],
@@ -401,8 +398,6 @@ export default {
       this.item.date_free = item.date_free;
       this.item.description = item.description;
       this.item.remarks = item.remarks;
-
-      this.dialog = true;
     },
 
     fillListAutocompletes() {
