@@ -384,9 +384,18 @@
             </v-col>
           </v-row>
 
-          <!-- MAAAMET PA AND EELIS ID -->
+          <!-- MINDAT_ID, MAAAMET PA AND EELIS ID -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="locality.mindat_id"
+                :color="bodyActiveColor"
+                label="Mindat ID"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="locality.maaamet_pa_id"
                 :color="bodyActiveColor"
@@ -395,7 +404,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="locality.eelis"
                 :color="bodyActiveColor"
@@ -766,6 +775,7 @@ export default {
           "stratigraphy_top_free",
           "stratigraphy_base_free",
           "maaamet_pa_id",
+          "mindat_id",
           "eelis",
           "remarks_location",
           "remarks",
