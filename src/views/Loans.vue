@@ -35,14 +35,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -56,14 +56,14 @@ export default {
         id: "date_start",
         title: "loan.date_start",
         type: "text",
-        isDate: true
+        isDate: true,
       },
       {
         id: "date_end",
         title: "loan.date_end",
         type: "text",
-        isDate: true
-      }
+        isDate: true,
+      },
     ]);
   },
 
@@ -73,8 +73,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

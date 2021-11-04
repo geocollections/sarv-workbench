@@ -61,7 +61,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_base__stratigraphy,
-                en: item.stratigraphy_base__stratigraphy_en
+                en: item.stratigraphy_base__stratigraphy_en,
               }"
             />
           </router-link>
@@ -75,7 +75,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_base.stratigraphy,
-                en: item.stratigraphy_base.stratigraphy_en
+                en: item.stratigraphy_base.stratigraphy_en,
               }"
             />
           </router-link>
@@ -90,7 +90,7 @@
           <span
             v-translate="{
               et: item.stratigraphy_base__stratigraphy,
-              en: item.stratigraphy_base__stratigraphy_en
+              en: item.stratigraphy_base__stratigraphy_en,
             }"
           />
         </router-link>
@@ -108,7 +108,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_top__stratigraphy,
-                en: item.stratigraphy_top__stratigraphy_en
+                en: item.stratigraphy_top__stratigraphy_en,
               }"
             />
           </router-link>
@@ -122,7 +122,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_top.stratigraphy,
-                en: item.stratigraphy_top.stratigraphy_en
+                en: item.stratigraphy_top.stratigraphy_en,
               }"
             />
           </router-link>
@@ -137,7 +137,7 @@
           <span
             v-translate="{
               et: item.stratigraphy_top__stratigraphy,
-              en: item.stratigraphy_top__stratigraphy_en
+              en: item.stratigraphy_top__stratigraphy_en,
             }"
           />
         </router-link>
@@ -283,44 +283,44 @@ export default {
 
   components: {
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -338,8 +338,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -351,7 +351,7 @@ export default {
       depth_other: "",
       number_meters: "",
       diameter: "",
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -359,24 +359,24 @@ export default {
       stratigraphy_top: [],
       loaders: {
         stratigraphy_base: false,
-        stratigraphy_top: false
-      }
-    }
+        stratigraphy_top: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
 
     isItemValid() {
       return this.item.number !== null && this.item.number.length > 0;
-    }
+    },
   },
 
   methods: {
@@ -392,7 +392,7 @@ export default {
         depth_other: "",
         number_meters: "",
         diameter: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -404,13 +404,13 @@ export default {
         this.$emit("related:add", {
           table: "drillcore_box",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "drillcore_box",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -429,7 +429,7 @@ export default {
         this.item.stratigraphy_base = {
           id: item.stratigraphy_base,
           stratigraphy: item.stratigraphy_base__stratigraphy,
-          stratigraphy_en: item.stratigraphy_base__stratigraphy_en
+          stratigraphy_en: item.stratigraphy_base__stratigraphy_en,
         };
         this.autocomplete.stratigraphy_base.push(this.item.stratigraphy_base);
       } else if (item.stratigraphy_base !== null) {
@@ -444,7 +444,7 @@ export default {
         this.item.stratigraphy_top = {
           id: item.stratigraphy_top,
           stratigraphy: item.stratigraphy_top__stratigraphy,
-          stratigraphy_en: item.stratigraphy_top__stratigraphy_en
+          stratigraphy_en: item.stratigraphy_top__stratigraphy_en,
         };
         this.autocomplete.stratigraphy_top.push(this.item.stratigraphy_top);
       } else if (item.stratigraphy_top !== null) {
@@ -467,12 +467,12 @@ export default {
       this.$emit("related:delete", {
         table: "drillcore_box",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -481,8 +481,8 @@ export default {
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

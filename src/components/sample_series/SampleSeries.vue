@@ -369,7 +369,7 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import {
   fetchSampleSeriesAttachments,
   fetchSampleSeriesDetail,
-  fetchSampleSeriesSamples
+  fetchSampleSeriesSamples,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -392,25 +392,25 @@ export default {
     DateWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin, requestsMixin],
@@ -427,7 +427,7 @@ export default {
         request: "FETCH_SAMPLE_SERIES",
         title: "header.sample_series",
         object: "sample_series",
-        field: "name"
+        field: "name",
       });
     }
 
@@ -436,30 +436,30 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("search", ["sample_seriesSearchParameters"]),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -469,7 +469,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -479,7 +479,7 @@ export default {
       return {
         relatedTabs: [
           { name: "samples", iconClass: "fas fa-vial" },
-          { name: "attachments", iconClass: "far fa-file" }
+          { name: "attachments", iconClass: "far fa-file" },
         ],
         activeTab: "samples",
         relatedData: this.setDefaultRelatedData(),
@@ -506,7 +506,7 @@ export default {
           "locality_free",
           "remarks",
           "owner",
-          "is_private"
+          "is_private",
         ],
         autocomplete: {
           loaders: {
@@ -514,18 +514,18 @@ export default {
             stratigraphy_top: false,
             agent_collected: false,
             locality: false,
-            agent: false
+            agent: false,
           },
           stratigraphy_base: [],
           stratigraphy_top: [],
           agent_collected: [],
           locality: [],
-          owner: []
+          owner: [],
         },
         sample_series: {},
         requiredFields: ["name"],
         block: {
-          info: true
+          info: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -534,8 +534,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -548,7 +548,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchSampleSeriesDetail(this.$route.params.id).then(response => {
+        fetchSampleSeriesDetail(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -565,7 +565,7 @@ export default {
         });
 
         // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -580,22 +580,22 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           attachments: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -611,25 +611,23 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (
             tab.name === "attachments" &&
             this.relatedData[tab.name].count > 0
           ) {
-            uploadableObject.related_data.attachment = this.relatedData.attachments.results.map(
-              item => {
+            uploadableObject.related_data.attachment =
+              this.relatedData.attachments.results.map((item) => {
                 return { id: item.id };
-              }
-            );
+              });
           }
         });
       } else {
         if (this.relatedData.attachments.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachments.results.map(
-            item => {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachments.results.map((item) => {
               return { id: item.id };
-            }
-          );
+            });
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -647,7 +645,7 @@ export default {
         this.sample_series.stratigraphy_base = {
           id: obj.stratigraphy_base,
           stratigraphy: obj.stratigraphy_base__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en
+          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
         };
         this.autocomplete.stratigraphy_base.push(
           this.sample_series.stratigraphy_base
@@ -657,7 +655,7 @@ export default {
         this.sample_series.stratigraphy_top = {
           id: obj.stratigraphy_top,
           stratigraphy: obj.stratigraphy_top__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en
+          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en,
         };
         this.autocomplete.stratigraphy_top.push(
           this.sample_series.stratigraphy_top
@@ -666,7 +664,7 @@ export default {
       if (this.isNotEmpty(obj.agent_collected)) {
         this.sample_series.agent_collected = {
           id: obj.agent_collected,
-          agent: obj.agent_collected__agent
+          agent: obj.agent_collected__agent,
         };
         this.autocomplete.agent_collected.push(
           this.sample_series.agent_collected
@@ -676,7 +674,7 @@ export default {
         this.sample_series.locality = {
           id: obj.locality,
           locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en
+          locality_en: obj.locality__locality_en,
         };
         this.autocomplete.locality.push(this.sample_series.locality);
       }
@@ -702,7 +700,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -716,8 +714,8 @@ export default {
     addExistingFiles(files) {
       // this.relatedData.attachments.count = files.length;
       this.relatedData.attachments.results = files;
-    }
-  }
+    },
+  },
 };
 </script>
 

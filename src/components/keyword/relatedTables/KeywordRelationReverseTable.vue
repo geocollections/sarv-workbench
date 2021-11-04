@@ -44,7 +44,7 @@
         <div
           v-translate="{
             et: item.keyword_relation_type__reverse,
-            en: item.keyword_relation_type__reverse_en
+            en: item.keyword_relation_type__reverse_en,
           }"
         ></div>
       </template>
@@ -70,54 +70,54 @@ export default {
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
     headers: [
       {
         text: "keyword.keyword_relation_type_reverse",
-        value: "keyword_relation_type"
+        value: "keyword_relation_type",
       },
-      { text: "keyword.keyword", value: "keyword" }
-    ]
+      { text: "keyword.keyword", value: "keyword" },
+    ],
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

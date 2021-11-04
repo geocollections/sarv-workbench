@@ -28,7 +28,7 @@
         <span
           v-translate="{
             et: item.name,
-            en: item.name_en
+            en: item.name_en,
           }"
         />
       </router-link>
@@ -38,7 +38,7 @@
       <span
         v-translate="{
           et: item.area_type__name,
-          en: item.area_type__name_en
+          en: item.area_type__name_en,
         }"
       />
     </template>
@@ -47,7 +47,7 @@
       <span
         v-translate="{
           et: item.maakond__maakond,
-          en: item.maakond__maakond_en
+          en: item.maakond__maakond_en,
         }"
       />
     </template>
@@ -62,32 +62,32 @@ export default {
   mixins: [tableHeaderMixin],
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
-  }
+      default: "deep-orange",
+    },
+  },
 };
 </script>

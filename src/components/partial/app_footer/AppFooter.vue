@@ -39,8 +39,8 @@ export default {
   computed: {
     isEditOrAddView() {
       return typeof this.$route.meta.isEdit !== "undefined";
-    }
-  }
+    },
+  },
 };
 </script>
 

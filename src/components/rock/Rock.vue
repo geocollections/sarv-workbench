@@ -520,7 +520,7 @@ import {
   fetchRockProperties,
   fetchRockReferences,
   fetchRockSynonyms,
-  fetchRockTrees
+  fetchRockTrees,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -553,32 +553,32 @@ export default {
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
   ],
 
   data() {
@@ -589,21 +589,21 @@ export default {
     ...mapState("search", ["rockSearchParameters"]),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
     },
 
     computedRelatedTabs() {
-      return this.relatedTabs.filter(tab => {
+      return this.relatedTabs.filter((tab) => {
         if (tab.name === "rock_classification") {
           if (this.$route.meta.isEdit) return tab;
         } else return tab;
       });
-    }
+    },
   },
 
   created() {
@@ -614,7 +614,7 @@ export default {
         request: "FETCH_ROCKS",
         title: "header.rocks",
         object: "rock",
-        field: "name_en"
+        field: "name_en",
       });
     }
 
@@ -623,19 +623,19 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         if (this.$route.meta.isEdit) {
           this.loadRelatedData(this.activeTab);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -645,7 +645,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -662,7 +662,7 @@ export default {
           { name: "rock_locality", iconClass: "fas fa-map-marked-alt" },
           { name: "rock_synonym", iconClass: "far fa-copy" },
           { name: "rock_reference", iconClass: "fas fa-book" },
-          { name: "rock_classification", iconClass: "fas fa-project-diagram" }
+          { name: "rock_classification", iconClass: "fas fa-project-diagram" },
         ],
         activeTab: "rock_tree",
         relatedData: this.setDefaultRelatedData(),
@@ -698,7 +698,7 @@ export default {
           "formula_html",
           "remarks",
           "is_private",
-          "in_portal"
+          "in_portal",
         ],
         autocomplete: {
           loaders: {
@@ -706,18 +706,18 @@ export default {
             rock_rank: false,
             rock: false,
             stratigraphy: false,
-            lithostratigraphy: false
+            lithostratigraphy: false,
           },
           rock_type: [],
           rock_rank: [],
           rock: [],
           stratigraphy: [],
-          lithostratigraphy: []
+          lithostratigraphy: [],
         },
         requiredFields: ["name"],
         rock: {},
         block: {
-          info: true
+          info: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -726,8 +726,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -742,7 +742,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchRock(this.$route.params.id).then(response => {
+        fetchRock(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -761,7 +761,7 @@ export default {
 
         this.loadAutocompleteFields();
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -769,11 +769,11 @@ export default {
 
     loadAutocompleteFields() {
       fetchListRockType().then(
-        response =>
+        (response) =>
           (this.autocomplete.rock_type = this.handleResponse(response))
       );
       fetchListRockRank().then(
-        response =>
+        (response) =>
           (this.autocomplete.rock_rank = this.handleResponse(response))
       );
     },
@@ -782,103 +782,103 @@ export default {
       return {
         rock_tree: {
           count: 0,
-          results: []
+          results: [],
         },
         rock_mineral: {
           count: 0,
-          results: []
+          results: [],
         },
         rock_element: {
           count: 0,
-          results: []
+          results: [],
         },
         rock_property: {
           count: 0,
-          results: []
+          results: [],
         },
         rock_image: {
           count: 0,
-          results: []
+          results: [],
         },
         rock_locality: {
           count: 0,
-          results: []
+          results: [],
         },
         rock_synonym: {
           count: 0,
-          results: []
+          results: [],
         },
         rock_reference: {
           count: 0,
-          results: []
+          results: [],
         },
         rock_classification: {
           count: 0,
-          results: []
+          results: [],
         },
         searchParameters: {
           rock_tree: {
             page: 1,
             paginateBy: 10,
             sortBy: ["rock_classification"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           rock_mineral: {
             page: 1,
             paginateBy: 10,
             sortBy: ["sort"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           rock_element: {
             page: 1,
             paginateBy: 10,
             sortBy: ["element__element"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           rock_property: {
             page: 1,
             paginateBy: 10,
             sortBy: ["property_type"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           rock_image: {
             page: 1,
             paginateBy: 10,
             sortBy: ["attachment"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           rock_locality: {
             page: 1,
             paginateBy: 10,
             sortBy: ["locality"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           rock_synonym: {
             page: 1,
             paginateBy: 10,
             sortBy: ["name"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           rock_reference: {
             page: 1,
             paginateBy: 10,
             sortBy: ["reference"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           rock_classification: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -893,14 +893,13 @@ export default {
 
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0) {
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ].results;
+            uploadableObject.related_data[tab.name] =
+              this.relatedData[tab.name].results;
 
-            uploadableObject.related_data[tab.name].forEach(item => {
-              Object.keys(item).forEach(key => {
+            uploadableObject.related_data[tab.name].forEach((item) => {
+              Object.keys(item).forEach((key) => {
                 if (typeof item[key] === "object" && item[key] !== null) {
                   item[key] = item[key].id ? item[key].id : null;
                 }
@@ -922,18 +921,18 @@ export default {
       this.rock.rock_type = {
         id: obj.rock_type,
         value: obj.rock_type__name,
-        value_en: obj.rock_type__name_en
+        value_en: obj.rock_type__name_en,
       };
       this.rock.rock_rank = {
         id: obj.rock_rank,
         value: obj.rock_rank__name,
-        value_en: obj.rock_rank__name_en
+        value_en: obj.rock_rank__name_en,
       };
       if (this.isNotEmpty(obj.stratigraphy)) {
         this.rock.stratigraphy = {
           id: obj.stratigraphy,
           stratigraphy: obj.stratigraphy__stratigraphy,
-          stratigraphy_en: obj.stratigraphy__stratigraphy_en
+          stratigraphy_en: obj.stratigraphy__stratigraphy_en,
         };
         this.autocomplete.stratigraphy.push(this.rock.stratigraphy);
       }
@@ -941,7 +940,7 @@ export default {
         this.rock.lithostratigraphy = {
           id: obj.lithostratigraphy,
           stratigraphy: obj.lithostratigraphy__stratigraphy,
-          stratigraphy_en: obj.lithostratigraphy__stratigraphy_en
+          stratigraphy_en: obj.lithostratigraphy__stratigraphy_en,
         };
         this.autocomplete.lithostratigraphy.push(this.rock.lithostratigraphy);
       }
@@ -949,7 +948,7 @@ export default {
         this.rock.synonym_of = {
           id: obj.synonym_of,
           name: obj.synonym_of__name,
-          name_en: obj.synonym_of__name_en
+          name_en: obj.synonym_of__name_en,
         };
         this.autocomplete.rock.push(this.rock.synonym_of);
       }
@@ -1006,17 +1005,17 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.$set(this.relatedData[object], "count", response.data.count);
           this.$set(
-              this.relatedData[object],
-              "results",
-              this.handleResponse(response)
+            this.relatedData[object],
+            "results",
+            this.handleResponse(response)
           );
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

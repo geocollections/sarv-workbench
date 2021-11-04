@@ -4,12 +4,8 @@
     <div class="map-links text-right" v-if="isLocationSet">
       <span class="google-map">
         <a
-          :href="
-            `https://www.google.com/maps/?q=${this.location.lat},${this.location.lng}`
-          "
-          :title="
-            `https://www.google.com/maps/?q=${this.location.lat},${this.location.lng}`
-          "
+          :href="`https://www.google.com/maps/?q=${this.location.lat},${this.location.lng}`"
+          :title="`https://www.google.com/maps/?q=${this.location.lat},${this.location.lng}`"
           target="_blank"
           >Google Maps</a
         >
@@ -17,12 +13,10 @@
       <span> | </span>
       <span class="xgis2">
         <a
-          :href="
-            `https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${this.geoToLest(
-              this.location.lat,
-              this.location.lng
-            )}&moot=20000&tooltip=test`
-          "
+          :href="`https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${this.geoToLest(
+            this.location.lat,
+            this.location.lng
+          )}&moot=20000&tooltip=test`"
           title="TODO"
           target="_blank"
           >Estonian Geoportal</a
@@ -47,26 +41,26 @@ export default {
   props: {
     location: {
       type: Object,
-      required: true
+      required: true,
     },
     locations: {
       type: Array,
-      default: null
+      default: null,
     },
     mode: {
       type: String,
-      default: "single"
+      default: "single",
     },
     gpsCoords: {
       type: Boolean,
-      default: false
+      default: false,
     },
     module: {
-      type: String
+      type: String,
     },
     showMap: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
 
   data() {
@@ -85,11 +79,11 @@ export default {
             "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
             {
               attribution:
-                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             }
           ),
           minZoom: 1,
-          maxZoom: 18
+          maxZoom: 18,
         },
         {
           name: "OpenStreetMap",
@@ -98,9 +92,9 @@ export default {
             {
               attribution:
                 '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-              minZoom: 1
+              minZoom: 1,
             }
-          )
+          ),
         },
         {
           name: "OpenTopoMap",
@@ -109,9 +103,9 @@ export default {
             {
               attribution:
                 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-              minZoom: 1
+              minZoom: 1,
             }
-          )
+          ),
         },
         {
           name: "Maaameti fotokaart",
@@ -125,9 +119,9 @@ export default {
               detectRetina: true,
               zIndex: 1,
               updateWhenIdle: true,
-              continuousWorld: true
+              continuousWorld: true,
             }
-          )
+          ),
         },
         {
           name: "Maaameti kaart",
@@ -141,10 +135,10 @@ export default {
               detectRetina: true,
               zIndex: 1,
               updateWhenIdle: true,
-              continuousWorld: true
+              continuousWorld: true,
             }
-          )
-        }
+          ),
+        },
       ],
       overlayMaps: [
         {
@@ -159,30 +153,28 @@ export default {
               detectRetina: true,
               zIndex: 2,
               updateWhenIdle: true,
-              continuousWorld: true
+              continuousWorld: true,
             }
           ),
           minZoom: 6,
-          maxZoom: 18
-        }
+          maxZoom: 18,
+        },
       ],
       zoom: 11, //SET DEFAULT ZOOM LEVEL,
       gpsID: null,
       markerIcon: new L.DivIcon({
-        html:
-          '<i class="fas fa-map-marker-alt fa-3x" style="color: #007bff;"></i>',
+        html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #007bff;"></i>',
         iconSize: [29, 37],
         iconAnchor: [12, 36],
         popupAnchor: [2, -34],
-        className: "clean-icon"
+        className: "clean-icon",
       }),
       gpsIcon: new L.DivIcon({
-        html:
-          '<i class="fas fa-map-marker-alt fa-3x" style="color: #dc3545;"></i>',
+        html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #dc3545;"></i>',
         iconSize: [29, 37],
         iconAnchor: [12, 36],
         popupAnchor: [2, -34],
-        className: "clean-icon"
+        className: "clean-icon",
       }),
       measureOptions: {
         position: "bottomright",
@@ -190,8 +182,8 @@ export default {
         secondaryLengthUnit: "meters",
         primaryAreaUnit: "hectares",
         secondaryAreaUnit: "sqmeters",
-        thousandsSep: " "
-      }
+        thousandsSep: " ",
+      },
     };
   },
 
@@ -208,7 +200,7 @@ export default {
       );
     },
 
-    ...mapState("map", ["defaultLayer"])
+    ...mapState("map", ["defaultLayer"]),
   },
 
   created() {
@@ -232,7 +224,7 @@ export default {
     },
 
     location: {
-      handler: function(newVal, oldVal) {
+      handler: function (newVal, oldVal) {
         if (
           newVal &&
           (newVal.lat !== oldVal.lat || newVal.lng !== oldVal.lng)
@@ -247,20 +239,22 @@ export default {
             this.marker = null;
             // #523 removing event listener (just in case) and adding it again when there is no marker
             this.map.off("click");
-            this.map.on("click", event => this.updateCoordinates(event.latlng));
+            this.map.on("click", (event) =>
+              this.updateCoordinates(event.latlng)
+            );
           }
         }
-      }
+      },
     },
 
     locations: {
-      handler: function(newVal) {
+      handler: function (newVal) {
         if (this.mode === "multiple") this.setMarkers(newVal);
       },
-      deep: true
+      deep: true,
     },
 
-    currentLocation: function(newVal, oldVal) {
+    currentLocation: function (newVal, oldVal) {
       // Centers map on GPS marker on 1st update and only if there are no other markers
       if (newVal && oldVal === null) {
         if (!this.isLocationSet && !this.areLocationsSet)
@@ -272,7 +266,7 @@ export default {
       // } else if (newVal === null && this.marker !== null) {
       //   this.map.setView(this.marker._latlng, this.zoom);
       // }
-    }
+    },
   },
 
   methods: {
@@ -281,16 +275,16 @@ export default {
     initMap() {
       this.map = L.map("map", {
         layers: [this.tileProviders[0].leafletObject],
-        scrollWheelZoom: false
+        scrollWheelZoom: false,
       }).setView(this.center, this.zoom);
 
       let baseLayers = {};
-      this.tileProviders.forEach(provider => {
+      this.tileProviders.forEach((provider) => {
         baseLayers[provider.name] = provider.leafletObject;
       });
       let overlayMaps = {};
       this.overlayMaps.forEach(
-        provider => (overlayMaps[provider.name] = provider.leafletObject)
+        (provider) => (overlayMaps[provider.name] = provider.leafletObject)
       );
 
       L.control.layers(baseLayers, overlayMaps).addTo(this.map);
@@ -317,7 +311,7 @@ export default {
       this.map.on("baselayerchange", this.handleLayerChange);
 
       //ZOOM ACTIVATED
-      this.map.on("zoomend", event => (this.zoom = event.target._zoom));
+      this.map.on("zoomend", (event) => (this.zoom = event.target._zoom));
 
       if (this.mode === "multiple") this.setMarkers(this.locations);
 
@@ -326,7 +320,7 @@ export default {
           this.addMarker(this.location);
           this.map.setView(this.marker._latlng, this.zoom);
         } else {
-          this.map.on("click", event => this.updateCoordinates(event.latlng));
+          this.map.on("click", (event) => this.updateCoordinates(event.latlng));
         }
       }
     },
@@ -334,7 +328,7 @@ export default {
     handleLayerChange(event) {
       this.updateDefaultLayer(event.name);
 
-      this.tileProviders.forEach(tile => {
+      this.tileProviders.forEach((tile) => {
         if (tile.name === event.name) {
           this.map.options.minZoom = tile.minZoom;
           this.map.options.maxZoom = tile.maxZoom;
@@ -360,12 +354,12 @@ export default {
         if (this.markerLayer !== null) this.map.removeLayer(this.markerLayer);
         this.markers = [];
 
-        newVal.forEach(entity => {
+        newVal.forEach((entity) => {
           if (entity.latitude && entity.longitude) {
             let marker = L.marker(
               {
                 lat: parseFloat(entity.latitude),
-                lng: parseFloat(entity.longitude)
+                lng: parseFloat(entity.longitude),
               },
               { icon: this.markerIcon }
             );
@@ -384,7 +378,7 @@ export default {
               marker.bindTooltip(entity.name, {
                 permanent: true,
                 direction: "right",
-                offset: [10, -23]
+                offset: [10, -23],
               });
             }
             this.markers.push(marker);
@@ -429,10 +423,10 @@ export default {
         icon: this.markerIcon,
         draggable: true,
         clickable: false,
-        zIndexOffset: 100
+        zIndexOffset: 100,
       })
         .addTo(this.map)
-        .on("dragend", event => this.updateCoordinates(event.target._latlng));
+        .on("dragend", (event) => this.updateCoordinates(event.target._latlng));
 
       // Recenter after every coordinate change
       this.map.setView(this.marker._latlng, this.zoom);
@@ -446,7 +440,7 @@ export default {
         );
       } else
         this.toastError({
-          text: "Geolocation is not supported by this browser."
+          text: "Geolocation is not supported by this browser.",
         });
     },
 
@@ -460,12 +454,12 @@ export default {
           { icon: this.gpsIcon, zIndexOffset: -1 }
         )
           .addTo(this.map)
-          .on("click", event => this.handleGPSMarkerClick(event, position));
+          .on("click", (event) => this.handleGPSMarkerClick(event, position));
 
         this.currentLocation.bindTooltip("GPS", {
           permanent: true,
           direction: "right",
-          offset: [10, -23]
+          offset: [10, -23],
         });
       }
     },
@@ -542,8 +536,8 @@ export default {
       e = p * Math.sin(FII) + FE;
 
       return [n, e];
-    }
-  }
+    },
+  },
 };
 </script>
 

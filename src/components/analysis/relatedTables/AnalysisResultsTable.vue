@@ -234,44 +234,44 @@ export default {
     RelatedDataDeleteDialog,
     AutocompleteWrapper,
     CheckboxWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -279,7 +279,7 @@ export default {
       { text: "analysis.relatedTables.result_name", value: "name" },
       {
         text: "analysis.relatedTables.parameter",
-        value: "parameter"
+        value: "parameter",
       },
       { text: "analysis.relatedTables.unit_value", value: "unit" },
       { text: "analysis.relatedTables.result_value", value: "value" },
@@ -291,8 +291,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -304,7 +304,7 @@ export default {
       value_min: "",
       value_bin: false,
       value_txt: "",
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -312,30 +312,30 @@ export default {
       list_unit: [],
       loaders: {
         analysis_parameter: false,
-        list_unit: false
-      }
-    }
+        list_unit: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
 
     isItemValid() {
       return this.item.name.length > 0;
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -349,7 +349,7 @@ export default {
         value_min: "",
         value_bin: false,
         value_txt: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -360,7 +360,7 @@ export default {
         this.item.parameter = {
           id: item.parameter,
           parameter: item.parameter__parameter,
-          parameter_html: item.parameter__parameter_html
+          parameter_html: item.parameter__parameter_html,
         };
         this.autocomplete.analysis_parameter.push(this.item.parameter);
       } else if (item.parameter !== null) {
@@ -372,7 +372,7 @@ export default {
         this.item.unit = {
           id: item.unit,
           value: item.unit__value,
-          value_en: item.unit_value_en
+          value_en: item.unit_value_en,
         };
         this.autocomplete.list_unit.push(this.item.unit);
       } else if (item.unit !== null) {
@@ -394,7 +394,7 @@ export default {
     fillListAutocompletes() {
       if (this.autocomplete.list_unit.length <= 1) {
         this.autocomplete.loaders.list_unit = true;
-        fetchListUnit().then(response => {
+        fetchListUnit().then((response) => {
           if (response.status === 200) {
             this.autocomplete.list_unit =
               response.data.count > 0 ? response.data.results : [];
@@ -402,8 +402,8 @@ export default {
         });
         this.autocomplete.loaders.list_unit = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

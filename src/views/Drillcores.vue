@@ -35,13 +35,13 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
   name: "Drillcores",
   mixins: [searchParametersMixin, tableHeaderMixin],
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
   async created() {
@@ -50,12 +50,12 @@ export default {
       {
         id: "drillcore",
         title: "drillcore.drillcoreAndLocality",
-        type: "text"
+        type: "text",
       },
       { id: "id", title: "drillcore.drillcoreId", type: "number" },
       { id: "boxes", title: "drillcore.boxes", type: "text" },
       { id: "locality", title: "drillcore.depth", type: "text" },
-      { id: "storage", title: "drillcore.storage", type: "text" }
+      { id: "storage", title: "drillcore.storage", type: "text" },
     ]);
   },
   methods: {
@@ -64,8 +64,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

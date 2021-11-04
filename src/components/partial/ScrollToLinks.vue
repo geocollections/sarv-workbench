@@ -31,23 +31,23 @@ export default {
   data: () => ({
     duration: 100,
     easing: "easeInOutCubic",
-    offset: 5
+    offset: 5,
   }),
   computed: {
     // ...mapState("settings", ["formSections"])
     ...mapState("settings", {
-      formSections: function(state) {
+      formSections: function (state) {
         return state.formSections[this.$route.meta.object];
-      }
+      },
     }),
 
     scrollToOptions() {
       return {
         duration: this.duration,
         offset: this.offset,
-        easing: this.easing
+        easing: this.easing,
       };
-    }
+    },
   },
   methods: {
     getIcon(name) {
@@ -80,8 +80,8 @@ export default {
 
     getIconPack() {
       return "fas";
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -334,7 +334,7 @@
               <v-btn
                 :to="{
                   name: 'Taxon add',
-                  query: { preparation: JSON.stringify(preparation) }
+                  query: { preparation: JSON.stringify(preparation) },
                 }"
                 target="newTaxonWindow"
                 :color="bodyActiveColor"
@@ -356,7 +356,15 @@
           <!-- PAGINATION -->
           <div
             v-if="relatedData.taxa.count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between pa-1 mt-2"
+            class="
+              d-flex
+              flex-column
+              justify-space-around
+              flex-md-row
+              justify-md-space-between
+              pa-1
+              mt-2
+            "
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -425,7 +433,7 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import cloneDeep from "lodash/cloneDeep";
 import {
   fetchLinkedTaxa,
-  fetchPreparation
+  fetchPreparation,
 } from "../../assets/js/api/apiCalls";
 
 import ExportButtons from "../partial/export/ExportButtons";
@@ -447,24 +455,24 @@ export default {
     InputWrapper,
     CheckboxWrapper,
     TaxonListTable,
-    ExportButtons
+    ExportButtons,
   },
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
   data() {
@@ -479,7 +487,7 @@ export default {
         request: "FETCH_PREPARATIONS",
         title: "header.preparations",
         object: "preparation",
-        field: "preparation_number"
+        field: "preparation_number",
       });
     }
 
@@ -487,16 +495,16 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["preparationSearchParameters"])
+    ...mapState("search", ["preparationSearchParameters"]),
   },
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters.taxon": {
       handler(newVal) {
@@ -505,13 +513,13 @@ export default {
         }
       },
       immediate: true,
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
     fetchLinkedTaxaWrapper() {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         resolve(
           fetchLinkedTaxa(
             this.relatedData.searchParameters.taxon,
@@ -542,7 +550,7 @@ export default {
           "is_private",
           "storage",
           "owner",
-          "remarks"
+          "remarks",
         ],
         autocomplete: {
           loaders: {
@@ -552,7 +560,7 @@ export default {
             agent: false,
             identification_agent: false,
             storage: false,
-            owner: false
+            owner: false,
           },
           sample: [],
           analysis: [],
@@ -560,7 +568,7 @@ export default {
           agent: [],
           identification_agent: [],
           storage: [],
-          owner: []
+          owner: [],
         },
         requiredFields: ["preparation_number"],
         preparation: {},
@@ -568,7 +576,7 @@ export default {
           info: true,
           details: true,
           description: true,
-          taxa: true
+          taxa: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -577,8 +585,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -592,7 +600,7 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
         this.$emit("set-object", "preparation");
-        fetchPreparation(this.$route.params.id).then(response => {
+        fetchPreparation(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -618,26 +626,26 @@ export default {
       return {
         taxa: {
           count: 0,
-          results: []
+          results: [],
         },
         count: {
-          sample: 0
+          sample: 0,
         },
         searchParameters: {
           taxon: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -659,7 +667,7 @@ export default {
       if (this.isNotEmpty(obj.sample)) {
         this.preparation.sample = {
           id: obj.sample,
-          number: obj.sample__number
+          number: obj.sample__number,
         };
         this.autocomplete.sample.push(this.preparation.sample);
       }
@@ -670,21 +678,21 @@ export default {
       if (this.isNotEmpty(obj.taxon)) {
         this.preparation.taxon = {
           id: obj.taxon,
-          taxon: obj.taxon__taxon
+          taxon: obj.taxon__taxon,
         };
         this.autocomplete.taxon.push(this.preparation.taxon);
       }
       if (this.isNotEmpty(obj.agent)) {
         this.preparation.agent = {
           id: obj.agent,
-          agent: obj.agent__agent
+          agent: obj.agent__agent,
         };
         this.autocomplete.agent.push(this.preparation.agent);
       }
       if (this.isNotEmpty(obj.identification_agent)) {
         this.preparation.identification_agent = {
           id: obj.identification_agent,
-          agent: obj.identification_agent__agent
+          agent: obj.identification_agent__agent,
         };
         this.autocomplete.identification_agent.push(
           this.preparation.identification_agent
@@ -693,33 +701,33 @@ export default {
       if (this.isNotEmpty(obj.storage)) {
         this.preparation.storage = {
           id: obj.storage,
-          location: obj.storage__location
+          location: obj.storage__location,
         };
         this.autocomplete.storage.push(this.preparation.storage);
       }
       if (this.isNotEmpty(obj.owner)) {
         this.preparation.owner = {
           id: obj.owner,
-          agent: obj.owner__agent
+          agent: obj.owner__agent,
         };
         this.autocomplete.owner.push(this.preparation.owner);
       }
     },
 
-    searchRelatedData: debounce(function(
+    searchRelatedData: debounce(function (
       searchParameters,
       apiCall,
       relatedObject
     ) {
-      apiCall().then(response => {
+      apiCall().then((response) => {
         if (response.status === 200) {
           this.relatedData[relatedObject].count = response.data.count;
           this.relatedData[relatedObject].results = response.data.results;
         }
       });
     },
-    50)
-  }
+    50),
+  },
 };
 </script>
 

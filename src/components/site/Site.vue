@@ -253,7 +253,7 @@
                 v-bind:locations="[]"
                 v-bind:location="{
                   lat: site.latitude ? site.latitude.toString() : null,
-                  lng: site.longitude ? site.longitude.toString() : null
+                  lng: site.longitude ? site.longitude.toString() : null,
                 }"
                 v-on:update-coordinates="updateLocation"
               />
@@ -487,7 +487,7 @@
                 <v-btn
                   :to="{
                     name: 'Sample add',
-                    query: { site: JSON.stringify(site) }
+                    query: { site: JSON.stringify(site) },
                   }"
                   target="newSiteWindow"
                   :color="bodyActiveColor"
@@ -785,7 +785,7 @@ import {
   fetchSiteLocalityReferences,
   fetchSiteGroundwaterUsingSite,
   postRequest,
-  fetchListSiteType
+  fetchListSiteType,
 } from "../../assets/js/api/apiCalls";
 import MapComponent from "../partial/MapComponent";
 import sidebarMixin from "../../mixins/sidebarMixin";
@@ -817,24 +817,24 @@ export default {
     InputWrapper,
     SampleTable,
     MapComponent,
-    ExportButtons
+    ExportButtons,
   },
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
-    }
+      default: "grey lighten-4",
+    },
   },
   mixins: [
     formManipulation,
@@ -842,7 +842,7 @@ export default {
     formSectionsMixin,
     sidebarMixin,
     requestsMixin,
-    toastMixin
+    toastMixin,
   ],
   data() {
     return this.setInitialData();
@@ -851,7 +851,7 @@ export default {
     ...mapState("search", [
       "siteSearchParameters",
       "sidebarUserAction",
-      "activeProject"
+      "activeProject",
     ]),
 
     ...mapState("map", ["showMap"]),
@@ -864,17 +864,17 @@ export default {
       },
       set(value) {
         this.updateShowMap(value);
-      }
+      },
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
   created() {
     // USED BY SIDEBAR
@@ -884,7 +884,7 @@ export default {
         request: "FETCH_SITES",
         title: "header.sites",
         object: "site",
-        field: "name"
+        field: "name",
       });
     } else {
       // Add view
@@ -894,7 +894,7 @@ export default {
         this.site.project = {
           id: this.activeProject.id,
           name: this.activeProject.name,
-          name_en: this.activeProject.name_en
+          name_en: this.activeProject.name_en,
         };
         this.setSiteName(this.site.project.id);
       }
@@ -906,7 +906,7 @@ export default {
         this.site.project = {
           id: dataFromProject.id,
           name: dataFromProject.name,
-          name_en: dataFromProject.name_en
+          name_en: dataFromProject.name_en,
         };
         this.autocomplete.project.push(this.site.project);
         this.setSiteName(dataFromProject.id);
@@ -917,7 +917,7 @@ export default {
         this.site.area = {
           id: dataFromArea.id,
           name: dataFromArea.name,
-          name_en: dataFromArea.name_en
+          name_en: dataFromArea.name_en,
         };
         this.autocomplete.area.push(this.site.area);
       }
@@ -934,21 +934,21 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
-      }
+      },
     },
     sidebarUserAction(newVal) {
       this.handleUserAction(newVal, "site", this.site);
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         if (this.$route.meta.isEdit) {
           this.loadRelatedData(this.activeTab);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -969,7 +969,7 @@ export default {
 
         delete uploadableObject.id;
 
-        Object.keys(uploadableObject).forEach(key => {
+        Object.keys(uploadableObject).forEach((key) => {
           if (typeof uploadableObject[key] === "undefined")
             uploadableObject[key] = null;
           else if (
@@ -984,7 +984,7 @@ export default {
         formData.append("data", JSON.stringify(uploadableObject));
 
         postRequest(url, formData)
-          .then(response => {
+          .then((response) => {
             if (response.status === 200) {
               if (response.data) {
                 if (response.data.error) {
@@ -999,7 +999,7 @@ export default {
               }
             }
           })
-          .catch(err => {
+          .catch((err) => {
             this.toastError({ text: this.$t("messages.uploadError") });
           });
       } else {
@@ -1011,7 +1011,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -1023,7 +1023,7 @@ export default {
           { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "samples", iconClass: "fas fa-vial" },
           { name: "locality_description", iconClass: "fas fa-align-left" },
-          { name: "locality_reference", iconClass: "fas fa-book" }
+          { name: "locality_reference", iconClass: "fas fa-book" },
         ],
         activeTab: "attachment_link",
         relatedData: this.setDefaultRelatedData(),
@@ -1053,7 +1053,7 @@ export default {
           "description",
           "remarks",
           "area",
-          "is_private"
+          "is_private",
         ],
         siteGroundwaterCopyFields: [
           "id",
@@ -1070,7 +1070,7 @@ export default {
           "url_veka",
           "remarks",
           "kataster_id",
-          "keskkonnaregister_id"
+          "keskkonnaregister_id",
         ],
         autocomplete: {
           loaders: {
@@ -1079,14 +1079,14 @@ export default {
             coordMethod: false,
             locality: false,
             area: false,
-            site_type: false
+            site_type: false,
           },
           project: [],
           attachment: [],
           coordMethod: [],
           locality: [],
           area: [],
-          site_type: []
+          site_type: [],
         },
         requiredFields: ["latitude", "longitude"],
         site: {},
@@ -1095,7 +1095,7 @@ export default {
           info: !this.$route.meta.isEdit,
           location: this.$route.meta.isEdit,
           description: false,
-          groundwater: false
+          groundwater: false,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -1104,8 +1104,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -1115,11 +1115,11 @@ export default {
     },
 
     loadFullInfo() {
-      fetchListCoordinateMethod().then(response => {
+      fetchListCoordinateMethod().then((response) => {
         this.autocomplete.coordMethod = this.handleResponse(response);
       });
 
-      fetchListSiteType().then(response => {
+      fetchListSiteType().then((response) => {
         this.autocomplete.site_type = this.handleResponse(response);
       });
 
@@ -1127,7 +1127,7 @@ export default {
         this.setLoadingState(true);
         this.$emit("set-object", "site");
 
-        fetchSite(this.$route.params.id).then(response => {
+        fetchSite(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -1145,22 +1145,24 @@ export default {
           }
         });
 
-        fetchSiteGroundwaterUsingSite(this.$route.params.id).then(response => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$set(
-              this,
-              "site_groundwater",
-              this.handleResponse(response)[0]
-            );
-            this.removeUnnecessaryFields(
-              this.site_groundwater,
-              this.siteGroundwaterCopyFields
-            );
+        fetchSiteGroundwaterUsingSite(this.$route.params.id).then(
+          (response) => {
+            let handledResponse = this.handleResponse(response);
+            if (handledResponse.length > 0) {
+              this.$set(
+                this,
+                "site_groundwater",
+                this.handleResponse(response)[0]
+              );
+              this.removeUnnecessaryFields(
+                this.site_groundwater,
+                this.siteGroundwaterCopyFields
+              );
+            }
           }
-        });
+        );
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -1170,45 +1172,45 @@ export default {
       return {
         attachment_link: {
           count: 0,
-          results: []
+          results: [],
         },
         samples: {
           count: 0,
-          results: []
+          results: [],
         },
         locality_description: {
           count: 0,
-          results: []
+          results: [],
         },
         locality_reference: {
           count: 0,
-          results: []
+          results: [],
         },
         searchParameters: {
           attachment_link: {
             page: 1,
             paginateBy: 25,
-            orderBy: "-id"
+            orderBy: "-id",
           },
           samples: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           locality_description: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           locality_reference: {
             page: 1,
             paginateBy: 25,
             sortBy: ["reference"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
@@ -1264,7 +1266,7 @@ export default {
         ).toFixed(6);
       else uploadableObject.longitude = null;
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -1280,22 +1282,20 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name !== "samples") {
               if (tab.name === "attachment_link") {
-                uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-                  item => {
+                uploadableObject.related_data.attachment =
+                  this.relatedData.attachment_link.results.map((item) => {
                     return { id: item.id };
-                  }
-                );
+                  });
               } else {
-                uploadableObject.related_data[tab.name] = this.relatedData[
-                  tab.name
-                ].results;
+                uploadableObject.related_data[tab.name] =
+                  this.relatedData[tab.name].results;
 
-                uploadableObject.related_data[tab.name].forEach(item => {
-                  Object.keys(item).forEach(key => {
+                uploadableObject.related_data[tab.name].forEach((item) => {
+                  Object.keys(item).forEach((key) => {
                     if (typeof item[key] === "object" && item[key] !== null) {
                       item[key] = item[key].id ? item[key].id : null;
                     }
@@ -1306,11 +1306,10 @@ export default {
         });
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-            item => {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment_link.results.map((item) => {
               return { id: item.id };
-            }
-          );
+            });
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -1328,7 +1327,7 @@ export default {
         this.site.area = {
           name: obj.area__name,
           name_en: obj.area__name_en,
-          id: obj.area
+          id: obj.area,
         };
         this.autocomplete.area.push(this.site.area);
       }
@@ -1336,25 +1335,25 @@ export default {
         this.site.project = {
           name: obj.project__name,
           name_en: obj.project__name_en,
-          id: obj.project
+          id: obj.project,
         };
         this.autocomplete.project.push(this.site.project);
       }
       this.site.coord_det_method = {
         value: obj.coord_det_method__value,
         value_en: obj.coord_det_method__value_en,
-        id: obj.coord_det_method
+        id: obj.coord_det_method,
       };
       this.site.site_type = {
         value: obj.site_type__value,
         value_en: obj.site_type__value_en,
-        id: obj.site_type
+        id: obj.site_type,
       };
       if (this.isNotEmpty(obj.locality__id)) {
         this.site.locality = {
           id: obj.locality__id,
           locality_en: obj.locality__locality_en,
-          locality: obj.locality__locality
+          locality: obj.locality__locality,
         };
         this.autocomplete.locality.push(this.site.locality);
       }
@@ -1386,7 +1385,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -1409,7 +1408,7 @@ export default {
         this.site.coord_det_method = {
           id: 6,
           value: "GPS",
-          value_en: "GPS"
+          value_en: "GPS",
         };
       } else {
         this.site.location_accuracy = null;
@@ -1427,7 +1426,7 @@ export default {
     },
 
     setSiteName(projectId) {
-      fetchLastSiteName(projectId).then(response => {
+      fetchLastSiteName(projectId).then((response) => {
         if (response.data.results && response.data.results.length > 0) {
           let newName = this.calculateNextName(response.data.results[0].name);
           this.site.name = newName;
@@ -1457,20 +1456,20 @@ export default {
       site.date_end = this.unformatISOStringToDate(site.date_end);
     },
 
-    searchRelatedData: debounce(function(
+    searchRelatedData: debounce(function (
       searchParameters,
       apiCall,
       relatedObject
     ) {
-      apiCall().then(response => {
+      apiCall().then((response) => {
         if (response.status === 200) {
           this.relatedData[relatedObject].count = response.data.count;
           this.relatedData[relatedObject].results = response.data.results;
         }
       });
     },
-    50)
-  }
+    50),
+  },
 };
 </script>
 

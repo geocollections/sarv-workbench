@@ -13,26 +13,26 @@ const tableHeaderMixin = {
       return table;
     },
     ...mapState("tableHeaders", {
-      tableHeaders: function(state) {
+      tableHeaders: function (state) {
         return state[this.$_tableHeaderMixin_tableName];
       },
-      $_tableHeaderMixin_searchFields: function(state) {
+      $_tableHeaderMixin_searchFields: function (state) {
         return state.searchFields[this.$_tableHeaderMixin_tableName];
-      }
+      },
     }),
 
     $_tableHeaderMixin_allHeaders() {
-      return this.tableHeaders.map(item => {
+      return this.tableHeaders.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text)
+          text: this.$t(item.text),
         };
       });
     },
 
     $_tableHeaderMixin_shownHeaders() {
-      return this.$_tableHeaderMixin_allHeaders.filter(item => item.show);
-    }
+      return this.$_tableHeaderMixin_allHeaders.filter((item) => item.show);
+    },
   },
 
   methods: {
@@ -41,7 +41,7 @@ const tableHeaderMixin = {
       "getDynamicFields",
       "setDefaultTableHeaders",
       "updateDynamicSearchField",
-      "resetDynamicSearchField"
+      "resetDynamicSearchField",
     ]),
 
     async $_tableHeaderMixin_getDynamicFields(table = this.$route.meta.object) {
@@ -64,8 +64,8 @@ const tableHeaderMixin = {
       table = this.$route.meta.object
     ) {
       this.resetDynamicSearchField(table);
-    }
-  }
+    },
+  },
 };
 
 export default tableHeaderMixin;

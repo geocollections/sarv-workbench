@@ -21,7 +21,7 @@
       <template v-if="useState || isDate" v-slot:append>
         <div
           class="v-input__icon v-input__icon--clear"
-          style="cursor: pointer;"
+          style="cursor: pointer"
           v-if="isDate"
         >
           <v-icon @click="$emit('date:clear')">fas fa-times</v-icon>
@@ -51,8 +51,8 @@ export default {
   props: {
     isDate: Boolean,
     useState: Boolean,
-    useCustomState: Boolean
-  }
+    useCustomState: Boolean,
+  },
 };
 </script>
 

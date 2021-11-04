@@ -32,14 +32,14 @@ export default {
         {
           key: "natarc",
           url: "https://natarc.ut.ee",
-          icon: require("../../assets/img/NATARC_transparent.png")
+          icon: require("../../assets/img/NATARC_transparent.png"),
         },
         {
           key: "sarv",
           url: "https://geocollections.info",
-          icon: require("../../assets/img/sarv_logo.svg")
-        }
-      ]
+          icon: require("../../assets/img/sarv_logo.svg"),
+        },
+      ],
     };
   },
   computed: {
@@ -48,13 +48,13 @@ export default {
         "align-self-center": true,
         "pa-2": true,
         "d-block": this.$vuetify.breakpoint.xsOnly,
-        "d-sm-none": this.$vuetify.breakpoint.xsOnly
+        "d-sm-none": this.$vuetify.breakpoint.xsOnly,
       };
     },
     getHeight() {
       return this.$vuetify.breakpoint.smAndUp ? 100 : 45;
-    }
-  }
+    },
+  },
 };
 </script>
 

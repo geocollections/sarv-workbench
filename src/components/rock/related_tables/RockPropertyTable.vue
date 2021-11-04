@@ -44,14 +44,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.property_type__property,
-              en: item.property_type__property_en
+              en: item.property_type__property_en,
             }"
           />
           <div
             v-else-if="item.property_type"
             v-translate="{
               et: item.property_type.property,
-              en: item.property_type.property_en
+              en: item.property_type.property_en,
             }"
           />
         </div>
@@ -59,7 +59,7 @@
           v-else
           v-translate="{
             et: item.property_type__property,
-            en: item.property_type__property_en
+            en: item.property_type__property_en,
           }"
         />
       </template>
@@ -176,44 +176,44 @@ export default {
   components: {
     CheckboxWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -228,8 +228,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -238,23 +238,23 @@ export default {
       value_min: "",
       value_max: "",
       is_private: false,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
       property_type: [],
       loaders: {
-        property_type: false
-      }
-    }
+        property_type: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -264,13 +264,13 @@ export default {
         typeof this.item.property_type !== "undefined" &&
         this.item.property_type !== null
       );
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -283,7 +283,7 @@ export default {
         value_min: "",
         value_max: "",
         is_private: false,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -295,13 +295,13 @@ export default {
         this.$emit("related:add", {
           table: "rock_property",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "rock_property",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -320,7 +320,7 @@ export default {
         this.item.property_type = {
           id: item.property_type,
           property: item.property_type__property,
-          property_en: item.property_type__property_en
+          property_en: item.property_type__property_en,
         };
         this.autocomplete.property_type.push(this.item.property_type);
       } else if (item.property_type !== null) {
@@ -341,14 +341,14 @@ export default {
       this.$emit("related:delete", {
         table: "rock_property",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.property_type.length <= 1) {
         this.autocomplete.loaders.property_type = true;
-        fetchListRockPropertyType().then(response => {
+        fetchListRockPropertyType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.property_type =
               response.data.count > 0 ? response.data.results : [];
@@ -359,15 +359,15 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

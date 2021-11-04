@@ -34,7 +34,7 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   name: "Agents",
@@ -43,7 +43,7 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -53,7 +53,7 @@ export default {
       { id: "id", title: "common.id", type: "number" },
       { id: "agent", title: "common.name", type: "text" },
       { id: "forename", title: "common.forename", type: "text" },
-      { id: "surename", title: "common.surename", type: "text" }
+      { id: "surename", title: "common.surename", type: "text" },
     ]);
   },
 
@@ -63,8 +63,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

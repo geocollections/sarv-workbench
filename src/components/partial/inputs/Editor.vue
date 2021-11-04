@@ -2,7 +2,7 @@
   <div class="editor">
     <label
       class="v-label mb-0 mx-2"
-      style="font-size: 14px;"
+      style="font-size: 14px"
       v-if="$attrs.label"
       >{{ $attrs.label }}</label
     >
@@ -23,7 +23,7 @@ export default {
   inheritAttrs: false,
 
   components: {
-    ckeditor: CKEditor.component
+    ckeditor: CKEditor.component,
   },
 
   data() {
@@ -34,11 +34,11 @@ export default {
     setDefaultEditorConfig() {
       return {
         editorConfig: {
-          language: this.$i18n.locale === "ee" ? "et" : "en"
-        }
+          language: this.$i18n.locale === "ee" ? "et" : "en",
+        },
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

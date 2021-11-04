@@ -79,7 +79,7 @@
         class="mt-0"
         v-if="
           data.attachment_format__value &&
-            data.attachment_format__value !== null
+          data.attachment_format__value !== null
         "
       >
         <v-col cols="12">
@@ -149,7 +149,7 @@
 <script>
 export default {
   props: ["data", "reference"],
-  name: "FileInformation"
+  name: "FileInformation",
 };
 </script>
 

@@ -15,7 +15,7 @@ import { mapState } from "vuex";
 export default {
   name: "SpinnerWrapper",
   components: {
-    Spinner
+    Spinner,
   },
   computed: {
     ...mapState("search", ["loadingState", "loadingType", "loadingPercent"]),
@@ -26,8 +26,8 @@ export default {
       else if (this.loadingType === "add")
         return `${this.$t("common.loadingAdd")} ${this.loadingPercent} %`;
       else return `${this.$t("common.loading")}`;
-    }
-  }
+    },
+  },
 };
 </script>
 

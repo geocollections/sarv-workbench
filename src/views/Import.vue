@@ -103,9 +103,7 @@
     >
       <v-card-title>{{ $t(`header.${$route.meta.object}`) }}</v-card-title>
 
-      <div>
-        Todo: Records here
-      </div>
+      <div>Todo: Records here</div>
     </v-card>
   </div>
 </template>
@@ -131,8 +129,8 @@ export default {
     attachment: null,
     records: {
       count: 0,
-      results: []
-    }
+      results: [],
+    },
   }),
 
   computed: {
@@ -154,7 +152,7 @@ export default {
 
     showAnalysesCard() {
       return this.$route.meta.object === "analysis";
-    }
+    },
   },
 
   methods: {
@@ -170,7 +168,7 @@ export default {
       this.attachment = null;
       this.records = {
         count: 0,
-        results: []
+        results: [],
       };
     },
 
@@ -236,7 +234,7 @@ export default {
           this?.file?.[0]?.name
         }, Date: ${new Date().toISOString().split("T")[0]}`,
         is_private: true,
-        author: this?.getCurrentUser?.id
+        author: this?.getCurrentUser?.id,
       };
 
       let formData = new FormData();
@@ -244,22 +242,22 @@ export default {
       formData.append("file0", this.file[0]);
 
       await postRequest("add/attachment/", formData, "", true).then(
-        response => {
+        (response) => {
           if (response && response.status === 200) {
             this.toastSuccess({
-              text: this.$t("messages.attachment_upload_success")
+              text: this.$t("messages.attachment_upload_success"),
             });
             this.attachment = response.data;
           } else {
             this.toastError({
-              text: this.$t("messages.attachment_upload_error")
+              text: this.$t("messages.attachment_upload_error"),
             });
             this.attachment = null;
           }
         },
-        errResponse => {
+        (errResponse) => {
           this.toastError({
-            text: this.$t("messages.attachment_upload_error")
+            text: this.$t("messages.attachment_upload_error"),
           });
           this.attachment = null;
         }
@@ -277,8 +275,8 @@ export default {
 
     getSizeAsMB(size) {
       if (size) return (size / 1000000).toFixed(2) + " MB";
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -25,12 +25,12 @@ export default {
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
-    showFab: false
+    showFab: false,
   }),
 
   methods: {
@@ -43,8 +43,8 @@ export default {
 
     toTop() {
       this.$vuetify.goTo(0);
-    }
-  }
+    },
+  },
 };
 </script>
 

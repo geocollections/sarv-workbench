@@ -77,32 +77,32 @@ export default {
   name: "TaxonListTable",
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   data: () => ({
     expanded: [],
@@ -114,27 +114,27 @@ export default {
       { text: "taxon.parent__taxon", value: "taxon__parent__taxon" },
       {
         text: "taxon.fossil_group__taxon",
-        value: "taxon__fossil_group__taxon"
+        value: "taxon__fossil_group__taxon",
       },
-      { text: "", value: "link", sortable: false }
+      { text: "", value: "link", sortable: false },
     ],
-    names: []
+    names: [],
   }),
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
-    }
+    },
   },
   methods: {
     getFossilsUrl(id) {
       return `https://fossiilid.info/${id}`;
-    }
-  }
+    },
+  },
 };
 </script>
 

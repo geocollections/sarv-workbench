@@ -71,9 +71,9 @@
 export default {
   props: {
     data: Array,
-    activeTab: String
+    activeTab: String,
   },
-  name: "LibraryReferenceListView"
+  name: "LibraryReferenceListView",
 };
 </script>
 

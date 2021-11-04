@@ -306,7 +306,17 @@
           <!-- PAGINATION -->
           <div
             v-if="specimens.count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none pa-1 mt-2"
+            class="
+              d-flex
+              flex-column
+              justify-space-around
+              flex-md-row
+              justify-md-space-between
+              mt-3
+              d-print-none
+              pa-1
+              mt-2
+            "
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -388,7 +398,7 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
   fetchCollection,
   fetchListCollectionType,
-  fetchSpecimens
+  fetchSpecimens,
 } from "../../assets/js/api/apiCalls";
 import { cloneDeep } from "lodash";
 import SpecimenTable from "../specimen/SpecimenTable";
@@ -404,20 +414,20 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
-    SpecimenTable
+    SpecimenTable,
   },
 
   props: {
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
@@ -431,13 +441,13 @@ export default {
     ...mapState("detail", ["collectionDetail"]),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   created() {
@@ -448,7 +458,7 @@ export default {
         request: "FETCH_COLLECTIONS",
         title: "header.collections",
         object: "collection",
-        field: "number"
+        field: "number",
       });
     } else {
       // Adding collection default values from local storage
@@ -467,15 +477,15 @@ export default {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
 
     specimenSearchParameters: {
       handler() {
         this.getSpecimensBelongingToCollection();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -499,7 +509,7 @@ export default {
           "reference",
           "remarks",
           "number_objects",
-          "number_types"
+          "number_types",
         ],
         autocomplete: {
           loaders: {
@@ -508,14 +518,14 @@ export default {
             agent: false,
             locality: false,
             stratigraphy: false,
-            reference: false
+            reference: false,
           },
           type: [],
           classification: [],
           agent: [],
           locality: [],
           stratigraphy: [],
-          reference: []
+          reference: [],
         },
         requiredFields: ["collection_id", "number"],
         collection: {},
@@ -523,13 +533,13 @@ export default {
           info: true,
           relatedInfo: true,
           description: true,
-          specimen: true
+          specimen: true,
         },
         filterSpecimens: "",
         databaseAcronym: "",
         specimens: {
           count: 0,
-          results: []
+          results: [],
         },
         specimenSearchParameters: {
           idSpecimen: null,
@@ -541,7 +551,7 @@ export default {
           agent_collected: null,
           page: 1,
           paginateBy: 25,
-          orderBy: "-id"
+          orderBy: "-id",
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -550,8 +560,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -567,7 +577,7 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
         this.$emit("set-object", "collection");
-        fetchCollection(this.$route.params.id).then(response => {
+        fetchCollection(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -593,7 +603,7 @@ export default {
     },
 
     getSpecimensBelongingToCollection() {
-      fetchSpecimens(this.specimenSearchParameters).then(response => {
+      fetchSpecimens(this.specimenSearchParameters).then((response) => {
         if (response.status === 200) {
           this.specimens.count = response.data.count;
           this.specimens.results = response.data.results;
@@ -604,7 +614,7 @@ export default {
     loadAutocompleteFields(regularAutocompleteFields = true) {
       if (regularAutocompleteFields) {
         fetchListCollectionType().then(
-          response => (this.autocomplete.type = this.handleResponse(response))
+          (response) => (this.autocomplete.type = this.handleResponse(response))
         );
       }
     },
@@ -616,7 +626,7 @@ export default {
         this.saveFields({ key: "collectionDetail", value: objectToUpload });
       }
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -639,14 +649,14 @@ export default {
         this.collection.type = {
           id: obj.type,
           value: obj.type__value,
-          value_en: obj.type__value_en
+          value_en: obj.type__value_en,
         };
       }
       if (this.isNotEmpty(obj.classification)) {
         this.collection.classification = {
           id: obj.classification,
           class_field: obj.classification__class_field,
-          class_en: obj.classification__class_en
+          class_en: obj.classification__class_en,
         };
         this.autocomplete.classification.push(this.collection.classification);
       }
@@ -658,7 +668,7 @@ export default {
         this.collection.locality = {
           id: obj.locality,
           locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en
+          locality_en: obj.locality__locality_en,
         };
         this.autocomplete.locality.push(this.collection.locality);
       }
@@ -666,19 +676,19 @@ export default {
         this.collection.stratigraphy = {
           id: obj.stratigraphy,
           stratigraphy: obj.stratigraphy__stratigraphy,
-          stratigraphy_en: obj.stratigraphy__stratigraphy_en
+          stratigraphy_en: obj.stratigraphy__stratigraphy_en,
         };
         this.autocomplete.stratigraphy.push(this.collection.stratigraphy);
       }
       if (this.isNotEmpty(obj.reference)) {
         this.collection.reference = {
           id: obj.reference,
-          reference: obj.reference__reference
+          reference: obj.reference__reference,
         };
         this.autocomplete.reference.push(this.collection.reference);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -54,14 +54,14 @@
           v-if="$route.meta.isEdit"
           v-translate="{
             et: item.analysis_method__analysis_method,
-            en: item.analysis_method__method_en
+            en: item.analysis_method__method_en,
           }"
         />
         <span
           v-else-if="item.analysis_method"
           v-translate="{
             et: item.analysis_method.analysis_method,
-            en: item.analysis_method.method_en
+            en: item.analysis_method.method_en,
           }"
         />
       </template>
@@ -232,39 +232,39 @@ export default {
     RelatedDataDeleteDialog,
     DateWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -282,8 +282,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -294,7 +294,7 @@ export default {
       date_end: null,
       date_free: "",
       agent: null,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -302,9 +302,9 @@ export default {
       agent: [],
       loaders: {
         analysis_method: false,
-        agent: false
-      }
-    }
+        agent: false,
+      },
+    },
   }),
 
   computed: {
@@ -313,7 +313,7 @@ export default {
         typeof this.item.analysis_method !== "undefined" &&
         this.item.analysis_method !== null
       );
-    }
+    },
   },
 
   methods: {
@@ -326,7 +326,7 @@ export default {
         date_end: null,
         date_free: "",
         agent: null,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -336,7 +336,7 @@ export default {
       if (typeof item.agent !== "object" && item.agent !== null) {
         this.item.agent = {
           id: item.agent,
-          agent: item.agent__agent
+          agent: item.agent__agent,
         };
         this.autocomplete.agent.push(this.item.agent);
       } else if (item.agent !== null) {
@@ -351,7 +351,7 @@ export default {
         this.item.analysis_method = {
           id: item.analysis_method,
           analysis_method: item.analysis_method__analysis_method,
-          method_en: item.analysis_method__method_en
+          method_en: item.analysis_method__method_en,
         };
       } else this.item.analysis_method = item.analysis_method;
 
@@ -368,7 +368,7 @@ export default {
     fillListAutocompletes() {
       if (this.autocomplete.analysis_method.length <= 1) {
         this.autocomplete.loaders.analysis_method = true;
-        fetchAnalysisMethod().then(response => {
+        fetchAnalysisMethod().then((response) => {
           if (response.status === 200) {
             this.autocomplete.analysis_method =
               response.data.count > 0 ? response.data.results : [];
@@ -376,8 +376,8 @@ export default {
         });
         this.autocomplete.loaders.analysis_method = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

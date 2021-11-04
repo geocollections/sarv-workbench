@@ -53,7 +53,7 @@
                             ? item.drillcore_box__depth_end
                             : ''
                         } m)`
-                  }`
+                  }`,
                 }"
               />
             </router-link>
@@ -77,10 +77,10 @@ export default {
     LocationListView,
     ReferenceListView,
     SampleListView,
-    SpecimenListView
+    SpecimenListView,
   },
   props: ["module", "data", "bodyColor", "bodyActiveColor"],
-  name: "ListView"
+  name: "ListView",
 };
 </script>
 

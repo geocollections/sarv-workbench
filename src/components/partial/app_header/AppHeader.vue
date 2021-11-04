@@ -83,7 +83,7 @@
             :color="navbarColor"
             :dark="navbarDark"
             dense
-            style="border-radius: 0;"
+            style="border-radius: 0"
           >
             <v-list-item
               @click="changeLang('ee')"
@@ -163,13 +163,13 @@ export default {
   name: "AppBar",
   components: {
     DrawerLeft,
-    DrawerRight
+    DrawerRight,
   },
   mixins: [authenticationMixin],
   data: () => ({
     drawer: null,
     drawerRight: false,
-    showDropdown: false
+    showDropdown: false,
   }),
   computed: {
     isBeta() {
@@ -195,9 +195,9 @@ export default {
       "drawerState",
       "drawerRightState",
       "shortcuts",
-      "lang"
+      "lang",
     ]),
-    ...mapGetters("user", ["getCurrentUser", "isUserSuperuser"])
+    ...mapGetters("user", ["getCurrentUser", "isUserSuperuser"]),
   },
   created() {
     this.fetchActiveSarvIssues();
@@ -206,7 +206,7 @@ export default {
     ...mapActions("settings", [
       "updateDrawerState",
       "updateDrawerRightState",
-      "updateLang"
+      "updateLang",
     ]),
     ...mapGetters("search", ["getActiveSarvIssuesCount"]),
 
@@ -218,8 +218,8 @@ export default {
       this.$moment.locale(newLang === "ee" ? "et" : "en");
       this.updateLang(newLang);
       this.toastInfo({ text: this.$t("messages.langChange") });
-    }
-  }
+    },
+  },
 };
 </script>
 

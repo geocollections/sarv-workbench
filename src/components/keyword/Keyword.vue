@@ -173,8 +173,8 @@
           <keyword-relation-reverse-table
             v-show="
               activeTab === 'keyword_relation' &&
-                $route.meta.isEdit &&
-                relatedData.keyword_relation_reverse.count > 0
+              $route.meta.isEdit &&
+              relatedData.keyword_relation_reverse.count > 0
             "
             :response="relatedData.keyword_relation_reverse"
             :search-parameters="
@@ -235,7 +235,7 @@ import {
   fetchListLanguages,
   fetchKeyword,
   fetchKeywordRelation,
-  fetchKeywordRelationReverse
+  fetchKeywordRelationReverse,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
@@ -257,24 +257,24 @@ export default {
     Editor,
     InputWrapper,
     AutocompleteWrapper,
-    CheckboxWrapper
+    CheckboxWrapper,
   },
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   mixins: [formManipulation, autocompleteMixin, requestsMixin],
 
@@ -298,18 +298,18 @@ export default {
       // });
 
       return this.relatedTabs.filter(
-        tabs => tabs.name !== "keyword_relation_reverse"
+        (tabs) => tabs.name !== "keyword_relation_reverse"
       );
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   created() {
@@ -320,7 +320,7 @@ export default {
         request: "FETCH_KEYWORDS",
         title: "header.keywords",
         object: "keyword",
-        field: "keyword"
+        field: "keyword",
       });
     }
 
@@ -329,19 +329,19 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         if (this.$route.meta.isEdit) {
           this.loadRelatedData(this.activeTab);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -355,7 +355,7 @@ export default {
       if (type) {
         this.$store.dispatch("updateActiveTab", {
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -365,7 +365,7 @@ export default {
       return {
         relatedTabs: [
           { name: "keyword_relation", iconClass: "fas fa-book-open" },
-          { name: "keyword_relation_reverse", iconClass: "fas fa-book-open" }
+          { name: "keyword_relation_reverse", iconClass: "fas fa-book-open" },
         ],
         activeTab: "keyword_relation",
         relatedData: this.setDefaultRelatedData(),
@@ -378,28 +378,28 @@ export default {
           "description",
           "is_primary",
           "is_preferred",
-          "is_private"
+          "is_private",
         ],
         autocomplete: {
           loaders: {
-            keyword_category: false
+            keyword_category: false,
           },
           language: [],
-          keyword_category: []
+          keyword_category: [],
         },
         requiredFields: ["keyword", "language"],
         keyword: {
           language: {
             id: 1,
             value: "inglise",
-            value_en: "English"
+            value_en: "English",
           },
           is_primary: false,
-          is_preferred: true
+          is_preferred: true,
         },
         block: {
           info: true,
-          description: false
+          description: false,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -408,8 +408,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -419,14 +419,14 @@ export default {
     },
 
     loadFullInfo() {
-      fetchListLanguages().then(response => {
+      fetchListLanguages().then((response) => {
         this.autocomplete.language = this.handleResponse(response);
       });
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchKeyword(this.$route.params.id).then(response => {
+        fetchKeyword(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -443,7 +443,7 @@ export default {
           }
         });
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -453,33 +453,33 @@ export default {
       return {
         keyword_relation: {
           count: 0,
-          results: []
+          results: [],
         },
         keyword_relation_reverse: {
           count: 0,
-          results: []
+          results: [],
         },
         searchParameters: {
           keyword_relation: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           keyword_relation_reverse: {
             page: 1,
             paginateBy: 100,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -520,13 +520,13 @@ export default {
       this.keyword.language = {
         id: obj.language,
         value: obj.language__value,
-        value_en: obj.language__value_en
+        value_en: obj.language__value_en,
       };
       if (this.isNotEmpty(obj.keyword_category)) {
         this.keyword.keyword_category = {
           id: obj.keyword_category,
           name: obj.keyword_category__name,
-          name_en: obj.keyword_category__name_en
+          name_en: obj.keyword_category__name_en,
         };
         this.autocomplete.keyword_category.push(this.keyword.keyword_category);
       }
@@ -548,13 +548,13 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

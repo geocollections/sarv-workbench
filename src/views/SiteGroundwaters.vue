@@ -35,14 +35,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -54,45 +54,45 @@ export default {
       {
         title: "site_groundwater.aquifer_system",
         id: "aquifer_system",
-        type: "text"
+        type: "text",
       },
       { title: "site_groundwater.aquifer", id: "aquifer", type: "text" },
       {
         title: "site_groundwater.well_depth",
         id: "well_depth",
-        type: "number"
+        type: "number",
       },
       {
         title: "site_groundwater.filter_type",
         id: "filter_type",
-        type: "text"
+        type: "text",
       },
       {
         title: "site_groundwater.filter_top",
         id: "filter_top",
-        type: "text"
+        type: "text",
       },
       {
         title: "site_groundwater.filter_top_z",
         id: "filter_top_z",
-        type: "text"
+        type: "text",
       },
       {
         title: "site_groundwater.filter_bottom",
         id: "filter_bottom",
-        type: "text"
+        type: "text",
       },
       {
         title: "site_groundwater.filter_bottom_z",
         id: "filter_bottom_z",
-        type: "text"
+        type: "text",
       },
       {
         title: "site_groundwater.url_veka_short",
         id: "url_veka",
-        type: "text"
+        type: "text",
       },
-      { title: "common.remarks", id: "remarks", type: "text" }
+      { title: "common.remarks", id: "remarks", type: "text" },
     ]);
   },
 
@@ -102,8 +102,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

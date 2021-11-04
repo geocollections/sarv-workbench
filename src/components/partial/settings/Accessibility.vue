@@ -28,13 +28,13 @@ export default {
     bodyDark: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "black"
-    }
+      default: "black",
+    },
   },
   computed: {
     ...mapState("settings", ["recentUrlsState"]),
@@ -44,13 +44,13 @@ export default {
       },
       set(value) {
         this.updateRecentUrlsState(value);
-      }
-    }
+      },
+    },
   },
 
   methods: {
-    ...mapActions("settings", ["updateRecentUrlsState"])
-  }
+    ...mapActions("settings", ["updateRecentUrlsState"]),
+  },
 };
 </script>
 

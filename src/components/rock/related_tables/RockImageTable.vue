@@ -82,7 +82,7 @@
             <div
               v-translate="{
                 et: item.link__name,
-                en: item.link__name_en
+                en: item.link__name_en,
               }"
             />
           </router-link>
@@ -96,7 +96,7 @@
             <div
               v-translate="{
                 et: item.link.name,
-                en: item.link.name_en
+                en: item.link.name_en,
               }"
             />
           </router-link>
@@ -111,7 +111,7 @@
           <div
             v-translate="{
               et: item.link__name,
-              en: item.link__name_en
+              en: item.link__name_en,
             }"
           />
         </router-link>
@@ -241,44 +241,44 @@ export default {
   components: {
     CheckboxWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -294,8 +294,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -305,7 +305,7 @@ export default {
       title_en: "",
       sort: "",
       is_private: false,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -313,17 +313,17 @@ export default {
       rock: [],
       loaders: {
         attachment: false,
-        rock: false
-      }
-    }
+        rock: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -333,7 +333,7 @@ export default {
         typeof this.item.attachment !== "undefined" &&
         this.item.attachment !== null
       );
-    }
+    },
   },
 
   methods: {
@@ -347,7 +347,7 @@ export default {
         title_en: "",
         sort: "",
         is_private: false,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -359,13 +359,13 @@ export default {
         this.$emit("related:add", {
           table: "rock_image",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "rock_image",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -380,7 +380,7 @@ export default {
       if (typeof item.attachment !== "object" && item.attachment !== null) {
         this.item.attachment = {
           id: item.attachment,
-          original_filename: item.attachment__original_filename
+          original_filename: item.attachment__original_filename,
         };
         this.autocomplete.attachment.push(this.item.attachment);
       } else if (item.attachment !== null) {
@@ -392,7 +392,7 @@ export default {
         this.item.link = {
           id: item.link,
           name: item.link__name,
-          name_en: item.link__name_en
+          name_en: item.link__name_en,
         };
         this.autocomplete.rock.push(this.item.link);
       } else if (item.link !== null) {
@@ -413,12 +413,12 @@ export default {
       this.$emit("related:delete", {
         table: "rock_image",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -429,8 +429,8 @@ export default {
 
     customLabelForAttachment(option) {
       return `${option.id} - (${option.original_filename})`;
-    }
-  }
+    },
+  },
 };
 </script>
 

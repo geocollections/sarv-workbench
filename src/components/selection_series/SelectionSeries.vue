@@ -183,7 +183,7 @@
                       {{
                         relatedData.specimen.results
                           .slice(0, 5)
-                          .map(item => item.specimen)
+                          .map((item) => item.specimen)
                           .join(", ")
                       }}, ...
                     </div>
@@ -191,7 +191,7 @@
                     <div v-else class="font-weight-bold">
                       {{
                         relatedData.specimen.results
-                          .map(item => item.specimen)
+                          .map((item) => item.specimen)
                           .join(", ")
                       }}
                     </div>
@@ -294,7 +294,7 @@ import {
   fetchSelectedSamples,
   fetchSelectedSpecimens,
   fetchSelectedTaxa,
-  fetchSelectionSerie
+  fetchSelectionSerie,
 } from "../../assets/js/api/apiCalls";
 
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -303,7 +303,7 @@ import SelectionSeriesDataTable from "./relatedTables/SelectionSeriesDataTable";
 import { mapActions, mapState } from "vuex";
 import {
   fetchAllSelections,
-  fetchMultiChangeSpecimen
+  fetchMultiChangeSpecimen,
 } from "@/assets/js/api/apiCalls";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
@@ -316,32 +316,32 @@ export default {
     Pagination,
     AutocompleteWrapper,
     SelectionSeriesDataTable,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
     formManipulation,
     formSectionsMixin,
     requestsMixin,
-    autocompleteMixin
+    autocompleteMixin,
   ],
 
   data() {
@@ -356,7 +356,7 @@ export default {
         request: "FETCH_SELECTION_SERIES",
         title: "header.selectionSeries",
         object: "selection_series",
-        field: "name"
+        field: "name",
       });
     }
 
@@ -369,40 +369,40 @@ export default {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         if (this.$route.meta.isEdit) {
           this.loadRelatedData(this.activeTab);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("search", ["selection_seriesSearchParameters"]),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
     },
 
     isRelatedDataFilled() {
       let result = Object.keys(this.relatedData).find(
-        item => this.relatedData[item]?.count > 0
+        (item) => this.relatedData[item]?.count > 0
       );
       return !!result;
     },
 
     isSpecimenInSelection() {
       return this.relatedData.specimen.count > 0;
-    }
+    },
   },
 
   methods: {
@@ -416,21 +416,21 @@ export default {
         allSelections.status === 200 &&
         allSelections?.data?.results
       ) {
-        let listOfIds = allSelections.data.results.map(item => item.id);
+        let listOfIds = allSelections.data.results.map((item) => item.id);
 
         let formData = new FormData();
         formData.append(
           "data",
           JSON.stringify({
-            delete: listOfIds
+            delete: listOfIds,
           })
         );
 
         let multiRemoveResponse = await fetchMultiRemoveRecordFromSelection(
           formData
         ).then(
-          response => response,
-          errResponse => errResponse
+          (response) => response,
+          (errResponse) => errResponse
         );
 
         if (multiRemoveResponse) {
@@ -441,7 +441,7 @@ export default {
           );
 
           if (multiRemoveResponse.status === 200)
-            this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+            this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
         }
       }
 
@@ -455,7 +455,7 @@ export default {
           page: 1,
           paginateBy: 1000,
           sortBy: ["specimen"],
-          sortDesc: [true]
+          sortDesc: [true],
         }
       );
 
@@ -464,10 +464,10 @@ export default {
         specimenSelectionResponse?.data?.results
       ) {
         let updatedSpecimenObjects = specimenSelectionResponse.data.results.map(
-          specimen => {
+          (specimen) => {
             return {
               id: specimen.specimen,
-              storage: this.new_specimen_storage.id
+              storage: this.new_specimen_storage.id,
             };
           }
         );
@@ -477,13 +477,13 @@ export default {
         formData.append(
           "data",
           JSON.stringify({
-            change: updatedSpecimenObjects
+            change: updatedSpecimenObjects,
           })
         );
 
         let multiChangeResponse = await fetchMultiChangeSpecimen(formData).then(
-          response => response,
-          errResponse => errResponse
+          (response) => response,
+          (errResponse) => errResponse
         );
 
         if (multiChangeResponse) {
@@ -504,7 +504,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -519,7 +519,7 @@ export default {
           { name: "locality", iconClass: "fas fa-map-marked-alt" },
           { name: "reference", iconClass: "fas fa-book" },
           { name: "taxon", iconClass: "fas fa-pastafarianism" },
-          { name: "analysis", iconClass: "fas fa-chart-bar" }
+          { name: "analysis", iconClass: "fas fa-chart-bar" },
         ],
         activeTab: "specimen",
         relatedData: this.setDefaultRelatedData(),
@@ -529,9 +529,9 @@ export default {
         new_specimen_storage: null,
         autocomplete: {
           loaders: {
-            storage: false
+            storage: false,
           },
-          storage: []
+          storage: [],
         },
         clearSelectionModal: false,
         changeStorageDialog: false,
@@ -543,8 +543,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -558,7 +558,7 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
         this.$emit("set-object", "selection_series");
-        fetchSelectionSerie(this.$route.params.id).then(response => {
+        fetchSelectionSerie(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -582,7 +582,7 @@ export default {
           }
         });
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -608,45 +608,45 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["specimen"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           sample: {
             page: 1,
             paginateBy: 10,
             sortBy: ["sample"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           attachment: {
             page: 1,
             paginateBy: 10,
             sortBy: ["attachment"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           locality: {
             page: 1,
             paginateBy: 10,
             sortBy: ["locality"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           reference: {
             page: 1,
             paginateBy: 10,
             sortBy: ["reference"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           taxon: {
             page: 1,
             paginateBy: 10,
             sortBy: ["taxon"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           analysis: {
             page: 1,
             paginateBy: 10,
             sortBy: ["analysis"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
@@ -690,13 +690,13 @@ export default {
         );
       }
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

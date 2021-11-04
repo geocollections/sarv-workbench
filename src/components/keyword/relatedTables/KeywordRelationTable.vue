@@ -43,14 +43,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.keyword_relation_type__name,
-              en: item.keyword_relation_type__name_en
+              en: item.keyword_relation_type__name_en,
             }"
           ></div>
           <div
             v-else-if="item.keyword_relation_type"
             v-translate="{
               et: item.keyword_relation_type.name,
-              en: item.keyword_relation_type.name_en
+              en: item.keyword_relation_type.name_en,
             }"
           ></div>
         </div>
@@ -58,7 +58,7 @@
           v-else
           v-translate="{
             et: item.keyword_relation_type__name,
-            en: item.keyword_relation_type__name_en
+            en: item.keyword_relation_type__name_en,
           }"
         ></div>
       </template>
@@ -180,40 +180,40 @@ export default {
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     isKeywordBaseTerm: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
 
   data: () => ({
@@ -224,13 +224,13 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
       keyword_relation_type: null,
-      related_keyword: null
+      related_keyword: null,
     },
     isNewItem: true,
     autocomplete: {
@@ -238,21 +238,21 @@ export default {
       keyword: [],
       loaders: {
         keyword_relation_type: false,
-        keyword: false
-      }
-    }
+        keyword: false,
+      },
+    },
   }),
 
   computed: {
     translatedAndFilteredHeaders() {
       return this.headers
-        .map(header => {
+        .map((header) => {
           return {
             ...header,
-            text: this.$t(header.text)
+            text: this.$t(header.text),
           };
         })
-        .filter(header => {
+        .filter((header) => {
           if (this.isKeywordBaseTerm) {
             return header.value !== "action";
           } else return header;
@@ -266,13 +266,13 @@ export default {
         typeof this.item.related_keyword === "object" &&
         this.item.related_keyword !== null
       );
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -281,7 +281,7 @@ export default {
       this.isNewItem = true;
       this.item = {
         keyword_relation_type: null,
-        related_keyword: null
+        related_keyword: null,
       };
     },
 
@@ -293,13 +293,13 @@ export default {
         this.$emit("related:add", {
           table: "keyword_relation",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "keyword_relation",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -318,7 +318,7 @@ export default {
         this.item.keyword_relation_type = {
           id: item.keyword_relation_type,
           name: item.keyword_relation_type__name,
-          name_en: item.keyword_relation_type__name_en
+          name_en: item.keyword_relation_type__name_en,
         };
         this.autocomplete.keyword_relation_type.push(
           this.item.keyword_relation_type
@@ -336,7 +336,7 @@ export default {
       ) {
         this.item.related_keyword = {
           id: item.related_keyword,
-          keyword: item.related_keyword__keyword
+          keyword: item.related_keyword__keyword,
         };
         this.autocomplete.keyword.push(this.item.related_keyword);
       } else {
@@ -351,12 +351,12 @@ export default {
       this.$emit("related:delete", {
         table: "keyword_relation",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -368,7 +368,7 @@ export default {
     fillListAutocompletes() {
       if (this.autocomplete.keyword_relation_type.length <= 1) {
         this.autocomplete.loaders.keyword_relation_type = true;
-        fetchKeywordRelationType().then(response => {
+        fetchKeywordRelationType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.keyword_relation_type =
               response.data.count > 0 ? response.data.results : [];
@@ -376,8 +376,8 @@ export default {
         });
         this.autocomplete.loaders.keyword_relation_type = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

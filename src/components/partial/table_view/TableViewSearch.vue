@@ -77,7 +77,7 @@
                     <v-select
                       :value="
                         searchParameters[`${field.id}__lookuptype`] ||
-                          'icontains'
+                        'icontains'
                       "
                       :color="bodyActiveColor"
                       :item-color="bodyActiveColor"
@@ -342,7 +342,7 @@
                   @change="
                     $_tableHeaderMixin_updateTableHeaders({
                       event: $event,
-                      table: $route.meta.object
+                      table: $route.meta.object,
                     })
                   "
                   class="chips-select"
@@ -381,39 +381,39 @@ export default {
   props: {
     showSearch: {
       type: Boolean,
-      required: true
+      required: true,
     },
     filters: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
-      }
+      },
     },
     searchParameters: {
-      type: Object
+      type: Object,
     },
     colSize: {
       type: Number,
-      default: 6
-    }
+      default: 6,
+    },
   },
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
     ...mapState("search", ["lookUpTypes"]),
 
     translatedLookUpTypes() {
-      return this.lookUpTypes.map(item => {
+      return this.lookUpTypes.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text)
+          text: this.$t(item.text),
         };
       });
-    }
+    },
   },
   data: () => ({
     date_start: false,
     date_end: false,
-    calendarMenus: ["date_start", "date_end"]
+    calendarMenus: ["date_start", "date_end"],
   }),
   methods: {
     updateDate(event, fieldId, index) {
@@ -427,11 +427,11 @@ export default {
       this.$_tableHeaderMixin_resetDynamicSearchFields();
     },
 
-    updateDynamicSearchFieldsDebounced: debounce(function(payload) {
+    updateDynamicSearchFieldsDebounced: debounce(function (payload) {
       this.$_tableHeaderMixin_updateDynamicSearchField(payload);
       // }, 400) TODO: For Testing Purposes
-    }, 0)
-  }
+    }, 0),
+  },
 };
 </script>
 

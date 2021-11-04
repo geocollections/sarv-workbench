@@ -6,7 +6,7 @@
         'drawer-left-margin': drawerState,
         'drawer-left-margin-0': !drawerState,
         'drawer-right-margin': drawerRightState,
-        'drawer-right-margin-0': !drawerRightState
+        'drawer-right-margin-0': !drawerRightState,
       }"
     >
       <v-btn
@@ -175,35 +175,35 @@ export default {
     isNavbarDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     navbarColor: {
       type: String,
       required: false,
-      default: "blue-grey"
+      default: "blue-grey",
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
-    }
+      default: "grey lighten-4",
+    },
   },
   data() {
     return {
       previousId: null,
       nextId: null,
       listOfIDs: [],
-      bottomNav: "recent"
+      bottomNav: "recent",
     };
   },
   computed: {
     ...mapState("search", ["sidebarList", "loadingState"]),
 
-    ...mapState("settings", ["drawerState", "drawerRightState"])
+    ...mapState("settings", ["drawerState", "drawerRightState"]),
   },
   watch: {
     sidebarList: {
-      handler: function(newVal) {
+      handler: function (newVal) {
         if (
           newVal &&
           newVal.results &&
@@ -214,17 +214,17 @@ export default {
         }
       },
       deep: true,
-      immediate: true
+      immediate: true,
     },
     "$route.params.id": {
-      handler: function(newVal) {
+      handler: function (newVal) {
         if (newVal && this.$route.meta.isEdit) {
           this.previousId = this.calculatePreviousId(this.listOfIDs, newVal);
           this.nextId = this.calculateNextId(this.listOfIDs, newVal);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     ...mapActions("detail", ["setInitialEditViewDataHasChangedState"]),
@@ -245,12 +245,12 @@ export default {
     previousPage() {
       this.setInitialEditViewDataHasChangedState(false);
       this.$router.push({
-        path: `/${this.$route.meta.object}/${this.previousId}`
+        path: `/${this.$route.meta.object}/${this.previousId}`,
       });
     },
 
     initNavigationButtons(list) {
-      this.listOfIDs = list.map(item => item.id);
+      this.listOfIDs = list.map((item) => item.id);
       this.previousId = this.calculatePreviousId(
         this.listOfIDs,
         this.$route.params.id
@@ -276,8 +276,8 @@ export default {
         if (nextIndex >= 0) return records[nextIndex];
         else return null;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -155,44 +155,44 @@ export default {
 
   components: {
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -208,8 +208,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -219,7 +219,7 @@ export default {
       title: "",
       author: null,
       author_txt: "",
-      date_txt: ""
+      date_txt: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -227,30 +227,30 @@ export default {
       language: [],
       loaders: {
         agent: false,
-        language: false
-      }
-    }
+        language: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
 
     isItemValid() {
       return this.item.frontpage !== null && this.item.frontpage.length > 0;
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -264,7 +264,7 @@ export default {
         title: "",
         author: null,
         author_txt: "",
-        date_txt: ""
+        date_txt: "",
       };
     },
 
@@ -276,13 +276,13 @@ export default {
         this.$emit("related:add", {
           table: "taxon_page",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "taxon_page",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -297,7 +297,7 @@ export default {
       if (typeof item.author !== "object" && item.author !== null) {
         this.item.author = {
           id: item.author,
-          agent: item.author__agent
+          agent: item.author__agent,
         };
         this.autocomplete.agent.push(this.item.author);
       } else if (item.author !== null) {
@@ -320,18 +320,18 @@ export default {
       this.$emit("related:delete", {
         table: "taxon_page",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.language.length <= 1) {
         this.autocomplete.loaders.language = true;
-        fetchListLanguages().then(response => {
+        fetchListLanguages().then((response) => {
           if (response.status === 200) {
             this.autocomplete.language =
               response.data.count > 0
-                ? response.data.results.map(item => item.iso1)
+                ? response.data.results.map((item) => item.iso1)
                 : [];
           }
         });
@@ -340,15 +340,15 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -34,7 +34,7 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   name: "Sites",
@@ -44,17 +44,17 @@ export default {
   props: {
     project: {
       type: String,
-      default: null
+      default: null,
     },
 
     page: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -69,14 +69,14 @@ export default {
         id: "date_start",
         title: "common.date_start",
         type: "text",
-        isDate: true
+        isDate: true,
       },
       {
         id: "date_end",
         title: "common.date_end",
         type: "text",
-        isDate: true
-      }
+        isDate: true,
+      },
     ]);
   },
 
@@ -86,8 +86,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

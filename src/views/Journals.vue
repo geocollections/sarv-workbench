@@ -36,14 +36,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -52,7 +52,7 @@ export default {
     this.setActiveSearchParametersFilters([
       { id: "journal", title: "journal.journalFilter", type: "text" },
       { id: "publisher", title: "journal.publisherFilter", type: "text" },
-      { id: "remarks", title: "journal.remarksFilter", type: "text" }
+      { id: "remarks", title: "journal.remarksFilter", type: "text" },
     ]);
   },
 
@@ -62,8 +62,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

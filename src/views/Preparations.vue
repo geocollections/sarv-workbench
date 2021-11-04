@@ -38,7 +38,7 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   name: "Preparations",
@@ -47,7 +47,7 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -57,8 +57,8 @@ export default {
       {
         id: "preparation_number",
         title: "preparation.preparation_number",
-        type: "text"
-      }
+        type: "text",
+      },
     ]);
   },
 
@@ -68,8 +68,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

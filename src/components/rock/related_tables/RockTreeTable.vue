@@ -44,14 +44,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.rock_classification__name,
-              en: item.rock_classification__name_en
+              en: item.rock_classification__name_en,
             }"
           />
           <div
             v-else-if="item.rock_classification"
             v-translate="{
               et: item.rock_classification.name,
-              en: item.rock_classification.name_en
+              en: item.rock_classification.name_en,
             }"
           />
         </div>
@@ -59,7 +59,7 @@
           v-else
           v-translate="{
             et: item.rock_classification__name,
-            en: item.rock_classification__name_en
+            en: item.rock_classification__name_en,
           }"
         />
       </template>
@@ -76,7 +76,7 @@
             <div
               v-translate="{
                 et: item.parent__name,
-                en: item.parent__name_en
+                en: item.parent__name_en,
               }"
             />
           </router-link>
@@ -90,7 +90,7 @@
             <div
               v-translate="{
                 et: item.parent.name,
-                en: item.parent.name_en
+                en: item.parent.name_en,
               }"
             />
           </router-link>
@@ -105,7 +105,7 @@
           <div
             v-translate="{
               et: item.parent__name,
-              en: item.parent__name_en
+              en: item.parent__name_en,
             }"
           />
         </router-link>
@@ -221,44 +221,44 @@ export default {
   components: {
     CheckboxWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -272,8 +272,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -281,7 +281,7 @@ export default {
       parent: null,
       parent_string: "",
       is_preferred: false,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -289,17 +289,17 @@ export default {
       rock: [],
       loaders: {
         rock_classification: false,
-        rock: false
-      }
-    }
+        rock: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -309,7 +309,7 @@ export default {
         typeof this.item.rock_classification !== "undefined" &&
         this.item.rock_classification !== null
       );
-    }
+    },
   },
 
   methods: {
@@ -321,7 +321,7 @@ export default {
         parent: null,
         parent_string: "",
         is_preferred: false,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -333,13 +333,13 @@ export default {
         this.$emit("related:add", {
           table: "rock_tree",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "rock_tree",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -358,7 +358,7 @@ export default {
         this.item.rock_classification = {
           id: item.rock_classification,
           name: item.rock_classification__name,
-          name_en: item.rock_classification__name_en
+          name_en: item.rock_classification__name_en,
         };
         this.autocomplete.rock_classification.push(
           this.item.rock_classification
@@ -374,7 +374,7 @@ export default {
         this.item.parent = {
           id: item.parent,
           name: item.parent__name,
-          name_en: item.parent__name_en
+          name_en: item.parent__name_en,
         };
         this.autocomplete.rock.push(this.item.parent);
       } else if (item.parent !== null) {
@@ -393,20 +393,20 @@ export default {
       this.$emit("related:delete", {
         table: "rock_tree",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

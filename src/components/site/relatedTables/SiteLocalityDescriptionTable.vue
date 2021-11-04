@@ -44,14 +44,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.rock__name,
-              en: item.rock__name_en
+              en: item.rock__name_en,
             }"
           />
           <span
             v-else-if="item.rock"
             v-translate="{
               et: item.rock.name,
-              en: item.rock.name_en
+              en: item.rock.name_en,
             }"
           />
         </div>
@@ -59,7 +59,7 @@
           v-else
           v-translate="{
             et: item.rock__name,
-            en: item.rock__name_en
+            en: item.rock__name_en,
           }"
         ></div>
       </template>
@@ -76,7 +76,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy__stratigraphy,
-                en: item.stratigraphy__stratigraphy_en
+                en: item.stratigraphy__stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -90,7 +90,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy.stratigraphy,
-                en: item.stratigraphy.stratigraphy_en
+                en: item.stratigraphy.stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -105,7 +105,7 @@
           <span
             v-translate="{
               et: item.stratigraphy__stratigraphy,
-              en: item.stratigraphy__stratigraphy_en
+              en: item.stratigraphy__stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -338,44 +338,44 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
-    CheckboxWrapper
+    CheckboxWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -397,8 +397,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -419,7 +419,7 @@ export default {
       year: new Date().getFullYear().toString(),
       remarks: "",
       is_preferred: false,
-      is_private: false
+      is_private: false,
     },
     isNewItem: true,
     autocomplete: {
@@ -431,22 +431,22 @@ export default {
         rock: false,
         stratigraphy: false,
         reference: false,
-        agent: false
-      }
-    }
+        agent: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
 
-    ...mapGetters("user", ["getCurrentUser"])
+    ...mapGetters("user", ["getCurrentUser"]),
   },
 
   watch: {
@@ -457,14 +457,14 @@ export default {
             id: newVal.id,
             agent: newVal.agent,
             forename: newVal.forename,
-            surename: newVal.surename
+            surename: newVal.surename,
           };
           this.autocomplete.agent.push(this.item.agent);
         }
       },
       immediate: true,
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -489,7 +489,7 @@ export default {
         year: new Date().getFullYear().toString(),
         remarks: "",
         is_preferred: false,
-        is_private: false
+        is_private: false,
       };
     },
 
@@ -501,13 +501,13 @@ export default {
         this.$emit("related:add", {
           table: "locality_description",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "locality_description",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -523,7 +523,7 @@ export default {
         this.item.rock = {
           id: item.rock,
           name: item.rock__name,
-          name_ne: item.rock__name_en
+          name_ne: item.rock__name_en,
         };
         this.autocomplete.rock.push(this.item.rock);
       } else if (item.rock !== null) {
@@ -535,7 +535,7 @@ export default {
         this.item.stratigraphy = {
           id: item.stratigraphy,
           stratigraphy: item.stratigraphy__stratigraphy,
-          stratigraphy_en: item.stratigraphy__stratigraphy_en
+          stratigraphy_en: item.stratigraphy__stratigraphy_en,
         };
         this.autocomplete.stratigraphy.push(this.item.stratigraphy);
       } else if (item.stratigraphy !== null) {
@@ -546,7 +546,7 @@ export default {
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
-          reference: item.reference__reference
+          reference: item.reference__reference,
         };
         this.autocomplete.reference.push(this.item.reference);
       } else if (item.reference !== null) {
@@ -557,7 +557,7 @@ export default {
       if (typeof item.agent !== "object" && item.agent !== null) {
         this.item.agent = {
           id: item.agent,
-          agent: item.agent__agent
+          agent: item.agent__agent,
         };
         this.autocomplete.agent.push(this.item.agent);
       } else if (item.agent !== null) {
@@ -587,20 +587,20 @@ export default {
       this.$emit("related:delete", {
         table: "locality_description",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

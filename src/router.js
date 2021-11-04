@@ -18,7 +18,7 @@ const router = new Router({
       if (isSameRoute(to, from))
         return {
           x: from?.meta?.scrollbar?.x || 0,
-          y: from?.meta?.scrollbar?.y || 0
+          y: from?.meta?.scrollbar?.y || 0,
         };
       else return { x: 0, y: 0 };
     }
@@ -26,7 +26,7 @@ const router = new Router({
   routes: [
     {
       path: "*",
-      redirect: "/"
+      redirect: "/",
     },
     {
       path: "/",
@@ -34,8 +34,8 @@ const router = new Router({
       component: Login,
       meta: {
         isLogin: true,
-        requiresAuth: false
-      }
+        requiresAuth: false,
+      },
     },
     {
       path: "/dashboard",
@@ -46,34 +46,34 @@ const router = new Router({
           component: () => import("./components/dashboard/FrontPage.vue"),
           meta: {
             requiresAuth: true,
-            object: "dashboard"
-          }
+            object: "dashboard",
+          },
         },
         {
           path: "/settings",
           component: () => import("./views/Settings.vue"),
           meta: {
             requiresAuth: true,
-            object: "settings"
-          }
+            object: "settings",
+          },
         },
         {
           path: "/admin",
           component: () => import("./views/Admin.vue"),
           meta: {
             requiresAuth: true,
-            object: "admin"
+            object: "admin",
           },
           beforeEnter: (to, from, next) => {
             if (store?.getters?.["user/isUserSuperuser"]) next();
             else next("/");
-          }
+          },
         },
         {
           path: "/attachment",
           component: () => import("./views/Attachments.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -83,17 +83,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "attachment",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/attachment/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -104,16 +104,16 @@ const router = new Router({
                 table: "attachment",
                 heading: "editAttachment.heading",
                 requiresAuth: true,
-                object: "attachment"
-              }
-            }
-          ]
+                object: "attachment",
+              },
+            },
+          ],
         },
         {
           path: "/attachment/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -127,24 +127,24 @@ const router = new Router({
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive"
+                    name: "header.photoArchive",
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "header.specimenImage"
+                    name: "header.specimenImage",
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "header.otherFiles"
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "header.digitisedReference"
-                  }
+                    name: "header.digitisedReference",
+                  },
                 ],
                 requiresAuth: true,
-                object: "attachment"
-              }
+                object: "attachment",
+              },
             },
             {
               path: "photo_archive",
@@ -156,25 +156,25 @@ const router = new Router({
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive"
+                    name: "header.photoArchive",
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "header.specimenImage"
+                    name: "header.specimenImage",
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "header.otherFiles"
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "header.digitisedReference"
-                  }
+                    name: "header.digitisedReference",
+                  },
                 ],
                 requiresAuth: true,
                 object: "attachment",
-                child: "photo_archive"
-              }
+                child: "photo_archive",
+              },
             },
             {
               path: "specimen_image",
@@ -185,25 +185,25 @@ const router = new Router({
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive"
+                    name: "header.photoArchive",
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "header.specimenImage"
+                    name: "header.specimenImage",
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "header.otherFiles"
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "header.digitisedReference"
-                  }
+                    name: "header.digitisedReference",
+                  },
                 ],
                 requiresAuth: true,
                 object: "attachment",
-                child: "specimen_image"
-              }
+                child: "specimen_image",
+              },
             },
             {
               path: "other_file",
@@ -214,25 +214,25 @@ const router = new Router({
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive"
+                    name: "header.photoArchive",
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "header.specimenImage"
+                    name: "header.specimenImage",
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "header.otherFiles"
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "header.digitisedReference"
-                  }
+                    name: "header.digitisedReference",
+                  },
                 ],
                 requiresAuth: true,
                 object: "attachment",
-                child: "other_file"
-              }
+                child: "other_file",
+              },
             },
             {
               path: "digitised_reference",
@@ -243,33 +243,33 @@ const router = new Router({
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive"
+                    name: "header.photoArchive",
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "header.specimenImage"
+                    name: "header.specimenImage",
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "header.otherFiles"
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "header.digitisedReference"
-                  }
+                    name: "header.digitisedReference",
+                  },
                 ],
                 requiresAuth: true,
                 object: "attachment",
-                child: "digitised_reference"
-              }
-            }
-          ]
+                child: "digitised_reference",
+              },
+            },
+          ],
         },
         {
           path: "/reference",
           component: () => import("./views/References.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -280,17 +280,17 @@ const router = new Router({
                 requiresAuth: true,
                 table: "reference",
                 isTableView: true,
-                object: "reference"
-              }
-            }
-          ]
+                object: "reference",
+              },
+            },
+          ],
         },
         {
           path: "/reference/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -302,16 +302,16 @@ const router = new Router({
                 heading: "editReference.heading",
 
                 requiresAuth: true,
-                object: "reference"
-              }
-            }
-          ]
+                object: "reference",
+              },
+            },
+          ],
         },
         {
           path: "/reference/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -324,20 +324,20 @@ const router = new Router({
                 subForms: [
                   {
                     path: "/reference/add",
-                    name: "common.reference"
-                  }
+                    name: "common.reference",
+                  },
                 ],
                 requiresAuth: true,
-                object: "reference"
-              }
-            }
-          ]
+                object: "reference",
+              },
+            },
+          ],
         },
         {
           path: "/imageset",
           component: () => import("./views/Imagesets.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -347,17 +347,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "imageset",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/imageset/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -368,16 +368,16 @@ const router = new Router({
                 table: "imageset",
                 heading: "editImageset.heading",
                 requiresAuth: true,
-                object: "imageset"
-              }
-            }
-          ]
+                object: "imageset",
+              },
+            },
+          ],
         },
         {
           path: "/imageset/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -388,16 +388,16 @@ const router = new Router({
                 addNew: "header.addImageset",
                 subForms: [{ path: "/imageset/add", name: "header.imageset" }],
                 requiresAuth: true,
-                object: "imageset"
-              }
-            }
-          ]
+                object: "imageset",
+              },
+            },
+          ],
         },
         {
           path: "/journal",
           component: () => import("./views/Journals.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -406,17 +406,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "journal",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/journal/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -427,16 +427,16 @@ const router = new Router({
                 table: "journal",
                 heading: "editJournal.heading",
                 requiresAuth: true,
-                object: "journal"
-              }
-            }
-          ]
+                object: "journal",
+              },
+            },
+          ],
         },
         {
           path: "/journal/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -447,16 +447,16 @@ const router = new Router({
                 addNew: "header.journal",
                 subForms: [{ path: "/journal/add", name: "header.journal" }],
                 requiresAuth: true,
-                object: "journal"
-              }
-            }
-          ]
+                object: "journal",
+              },
+            },
+          ],
         },
         {
           path: "/locality",
           component: () => import("./views/Localities.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -466,17 +466,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "locality",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/locality/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -487,16 +487,16 @@ const router = new Router({
                 table: "locality",
                 heading: "editLocality.heading",
                 requiresAuth: true,
-                object: "locality"
-              }
-            }
-          ]
+                object: "locality",
+              },
+            },
+          ],
         },
         {
           path: "/locality/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -507,16 +507,16 @@ const router = new Router({
                 addNew: "header.addLocality",
                 subForms: [{ path: "/locality/add", name: "header.locality" }],
                 requiresAuth: true,
-                object: "locality"
-              }
-            }
-          ]
+                object: "locality",
+              },
+            },
+          ],
         },
         {
           path: "/sample",
           component: () => import("./views/Samples.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -526,17 +526,17 @@ const router = new Router({
                 requiresAuth: true,
                 table: "sample",
                 object: "sample",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/sample/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -548,16 +548,16 @@ const router = new Router({
                 table: "sample",
                 heading: "editSample.heading",
                 requiresAuth: true,
-                object: "sample"
-              }
-            }
-          ]
+                object: "sample",
+              },
+            },
+          ],
         },
         {
           path: "/sample/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -569,10 +569,10 @@ const router = new Router({
                 addNew: "header.addSample",
                 subForms: [{ path: "/sample/add", name: "header.sample" }],
                 requiresAuth: true,
-                object: "sample"
-              }
-            }
-          ]
+                object: "sample",
+              },
+            },
+          ],
         },
         {
           path: "/sample/import",
@@ -580,14 +580,14 @@ const router = new Router({
           component: () => import("./views/Import.vue"),
           meta: {
             requiresAuth: true,
-            object: "sample"
-          }
+            object: "sample",
+          },
         },
         {
           path: "/project",
           component: () => import("./views/Projects.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -596,16 +596,16 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "project",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/project/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -622,22 +622,22 @@ const router = new Router({
                     isEdit: false,
                     addNew: "header.addProject",
                     subForms: [
-                      { path: "/project/add", name: "editProject.heading" }
+                      { path: "/project/add", name: "editProject.heading" },
                     ],
                     requiresAuth: true,
-                    object: "project"
-                  }
-                }
-              ]
-            }
-          ]
+                    object: "project",
+                  },
+                },
+              ],
+            },
+          ],
         },
         {
           path: "/project/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -655,18 +655,18 @@ const router = new Router({
                     heading: "editProject.heading",
                     // isSidebarShown: true,
                     requiresAuth: true,
-                    object: "project"
-                  }
-                }
-              ]
-            }
-          ]
+                    object: "project",
+                  },
+                },
+              ],
+            },
+          ],
         },
         {
           path: "/site",
           component: () => import("./views/Sites.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -675,17 +675,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "site",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/site/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -698,16 +698,16 @@ const router = new Router({
                 heading: "editSite.heading",
                 // isSidebarShown: true,
                 requiresAuth: true,
-                object: "site"
-              }
-            }
-          ]
+                object: "site",
+              },
+            },
+          ],
         },
         {
           path: "/site/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -719,10 +719,10 @@ const router = new Router({
                 addNew: "header.addSite",
                 subForms: [{ path: "/site/add", name: "editSite.heading" }],
                 requiresAuth: true,
-                object: "site"
-              }
-            }
-          ]
+                object: "site",
+              },
+            },
+          ],
         },
         // {
         //   path: "/site/import",
@@ -737,7 +737,7 @@ const router = new Router({
           path: "/library",
           component: () => import("./views/Libraries.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -746,17 +746,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "library",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/library/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -767,16 +767,16 @@ const router = new Router({
                 table: "library",
                 heading: "editLibrary.heading",
                 requiresAuth: true,
-                object: "library"
-              }
-            }
-          ]
+                object: "library",
+              },
+            },
+          ],
         },
         {
           path: "/library/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -787,16 +787,16 @@ const router = new Router({
                 addNew: "header.library",
                 subForms: [{ path: "/library/add", name: "header.library" }],
                 requiresAuth: true,
-                object: "library"
-              }
-            }
-          ]
+                object: "library",
+              },
+            },
+          ],
         },
         {
           path: "/doi",
           component: () => import("./views/Dois.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -805,17 +805,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "doi",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/doi/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -826,16 +826,16 @@ const router = new Router({
                 table: "doi",
                 heading: "editDoi.heading",
                 requiresAuth: true,
-                object: "doi"
-              }
-            }
-          ]
+                object: "doi",
+              },
+            },
+          ],
         },
         {
           path: "/doi/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -846,7 +846,7 @@ const router = new Router({
                 addNew: "header.addDoi",
                 subForms: [{ path: "/doi/add", name: "header.doi" }],
                 requiresAuth: true,
-                object: "doi"
+                object: "doi",
               },
               children: [
                 {
@@ -858,18 +858,18 @@ const router = new Router({
                     addNew: "header.addDoiEgf",
                     subForms: [{ path: "/doi/add", name: "header.doi" }],
                     requiresAuth: true,
-                    object: "doi"
-                  }
-                }
-              ]
-            }
-          ]
+                    object: "doi",
+                  },
+                },
+              ],
+            },
+          ],
         },
         {
           path: "/analysis",
           component: () => import("./views/Analyses.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -879,17 +879,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "analysis",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/analysis/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -900,16 +900,16 @@ const router = new Router({
                 table: "analysis",
                 heading: "editAnalysis.heading",
                 requiresAuth: true,
-                object: "analysis"
-              }
-            }
-          ]
+                object: "analysis",
+              },
+            },
+          ],
         },
         {
           path: "/analysis/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -921,10 +921,10 @@ const router = new Router({
                 addNew: "header.addAnalysis",
                 subForms: [{ path: "/analysis/add", name: "header.analysis" }],
                 requiresAuth: true,
-                object: "analysis"
-              }
-            }
-          ]
+                object: "analysis",
+              },
+            },
+          ],
         },
         {
           path: "/analysis/import",
@@ -932,14 +932,14 @@ const router = new Router({
           component: () => import("./views/Import.vue"),
           meta: {
             requiresAuth: true,
-            object: "analysis"
-          }
+            object: "analysis",
+          },
         },
         {
           path: "/specimen",
           component: () => import("./views/Specimens.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -949,17 +949,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "specimen",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/specimen/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -970,16 +970,16 @@ const router = new Router({
                 table: "specimen",
                 heading: "editSpecimen.heading",
                 requiresAuth: true,
-                object: "specimen"
-              }
-            }
-          ]
+                object: "specimen",
+              },
+            },
+          ],
         },
         {
           path: "/specimen/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -991,16 +991,16 @@ const router = new Router({
                 addNew: "header.addSpecimen",
                 subForms: [{ path: "/specimen/add", name: "header.specimen" }],
                 requiresAuth: true,
-                object: "specimen"
-              }
-            }
-          ]
+                object: "specimen",
+              },
+            },
+          ],
         },
         {
           path: "/keyword",
           component: () => import("./views/Keywords.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1009,17 +1009,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "keyword",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/keyword/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1030,16 +1030,16 @@ const router = new Router({
                 table: "keyword",
                 heading: "editKeyword.heading",
                 requiresAuth: true,
-                object: "keyword"
-              }
-            }
-          ]
+                object: "keyword",
+              },
+            },
+          ],
         },
         {
           path: "/keyword/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1051,16 +1051,16 @@ const router = new Router({
                 addNew: "header.addKeyword",
                 subForms: [{ path: "/keyword/add", name: "header.keyword" }],
                 requiresAuth: true,
-                object: "keyword"
-              }
-            }
-          ]
+                object: "keyword",
+              },
+            },
+          ],
         },
         {
           path: "/collection",
           component: () => import("./views/Collections.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1070,17 +1070,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "collection",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/collection/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1091,16 +1091,16 @@ const router = new Router({
                 table: "collection",
                 heading: "editCollection.heading",
                 requiresAuth: true,
-                object: "collection"
-              }
-            }
-          ]
+                object: "collection",
+              },
+            },
+          ],
         },
         {
           path: "/collection/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1111,19 +1111,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.addCollection",
                 subForms: [
-                  { path: "/collection/add", name: "header.collection" }
+                  { path: "/collection/add", name: "header.collection" },
                 ],
                 requiresAuth: true,
-                object: "collection"
-              }
-            }
-          ]
+                object: "collection",
+              },
+            },
+          ],
         },
         {
           path: "/taxon",
           component: () => import("./views/Taxa.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1132,17 +1132,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "taxon",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/taxon/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1153,16 +1153,16 @@ const router = new Router({
                 table: "taxon",
                 heading: "editTaxon.heading",
                 requiresAuth: true,
-                object: "taxon"
-              }
-            }
-          ]
+                object: "taxon",
+              },
+            },
+          ],
         },
         {
           path: "/taxon/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1174,16 +1174,16 @@ const router = new Router({
                 addNew: "header.addTaxon",
                 subForms: [{ path: "/taxon/add", name: "header.taxon" }],
                 requiresAuth: true,
-                object: "taxon"
-              }
-            }
-          ]
+                object: "taxon",
+              },
+            },
+          ],
         },
         {
           path: "/selection_series",
           component: () => import("./views/SelectionSeries.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1195,17 +1195,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "selection_series",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/selection_series/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1217,16 +1217,16 @@ const router = new Router({
                 table: "selection_series",
                 heading: "editSelectionSeries.heading",
                 requiresAuth: true,
-                object: "selection_series"
-              }
-            }
-          ]
+                object: "selection_series",
+              },
+            },
+          ],
         },
         {
           path: "/selection_series/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1240,20 +1240,20 @@ const router = new Router({
                 subForms: [
                   {
                     path: "/selection_series/add",
-                    name: "header.selectionSeries"
-                  }
+                    name: "header.selectionSeries",
+                  },
                 ],
                 requiresAuth: true,
-                object: "selection_series"
-              }
-            }
-          ]
+                object: "selection_series",
+              },
+            },
+          ],
         },
         {
           path: "/agent",
           component: () => import("./views/Agents.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1262,17 +1262,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "agent",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/agent/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1283,16 +1283,16 @@ const router = new Router({
                 table: "agent",
                 heading: "editAgent.heading",
                 requiresAuth: true,
-                object: "agent"
-              }
-            }
-          ]
+                object: "agent",
+              },
+            },
+          ],
         },
         {
           path: "/agent/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1304,16 +1304,16 @@ const router = new Router({
                 addNew: "header.addAgent",
                 subForms: [{ path: "/agent/add", name: "header.agent" }],
                 requiresAuth: true,
-                object: "agent"
-              }
-            }
-          ]
+                object: "agent",
+              },
+            },
+          ],
         },
         {
           path: "/drillcore",
           component: () => import("./views/Drillcores.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1323,17 +1323,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "drillcore",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/drillcore/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1344,16 +1344,16 @@ const router = new Router({
                 table: "drillcore",
                 heading: "editDrillcore.heading",
                 requiresAuth: true,
-                object: "drillcore"
-              }
-            }
-          ]
+                object: "drillcore",
+              },
+            },
+          ],
         },
         {
           path: "/drillcore/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1364,19 +1364,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.addDrillcore",
                 subForms: [
-                  { path: "/drillcore/add", name: "header.drillcore" }
+                  { path: "/drillcore/add", name: "header.drillcore" },
                 ],
                 requiresAuth: true,
-                object: "drillcore"
-              }
-            }
-          ]
+                object: "drillcore",
+              },
+            },
+          ],
         },
         {
           path: "/preparation",
           component: () => import("./views/Preparations.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1386,17 +1386,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "preparation",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/preparation/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1408,16 +1408,16 @@ const router = new Router({
                 table: "preparation",
                 heading: "editPreparation.heading",
                 requiresAuth: true,
-                object: "preparation"
-              }
-            }
-          ]
+                object: "preparation",
+              },
+            },
+          ],
         },
         {
           path: "/preparation/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1429,19 +1429,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.addPreparation",
                 subForms: [
-                  { path: "/preparation/add", name: "header.preparation" }
+                  { path: "/preparation/add", name: "header.preparation" },
                 ],
                 requiresAuth: true,
-                object: "preparation"
-              }
-            }
-          ]
+                object: "preparation",
+              },
+            },
+          ],
         },
         {
           path: "/dataset",
           component: () => import("./views/Datasets.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1450,17 +1450,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "dataset",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/dataset/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1471,16 +1471,16 @@ const router = new Router({
                 table: "dataset",
                 heading: "editDataset.heading",
                 requiresAuth: true,
-                object: "dataset"
-              }
-            }
-          ]
+                object: "dataset",
+              },
+            },
+          ],
         },
         {
           path: "/dataset/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1492,16 +1492,16 @@ const router = new Router({
                 addNew: "header.addDataset",
                 subForms: [{ path: "/dataset/add", name: "header.dataset" }],
                 requiresAuth: true,
-                object: "dataset"
-              }
-            }
-          ]
+                object: "dataset",
+              },
+            },
+          ],
         },
         {
           path: "/stratigraphy",
           component: () => import("./views/Stratigraphies.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1511,17 +1511,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "stratigraphy",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/stratigraphy/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1533,16 +1533,16 @@ const router = new Router({
                 table: "stratigraphy",
                 heading: "editStratigraphy.heading",
                 requiresAuth: true,
-                object: "stratigraphy"
-              }
-            }
-          ]
+                object: "stratigraphy",
+              },
+            },
+          ],
         },
         {
           path: "/stratigraphy/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1554,27 +1554,27 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.stratigraphy",
                 subForms: [
-                  { path: "/stratigraphy/add", name: "header.stratigraphy" }
+                  { path: "/stratigraphy/add", name: "header.stratigraphy" },
                 ],
                 requiresAuth: true,
-                object: "stratigraphy"
-              }
-            }
-          ]
+                object: "stratigraphy",
+              },
+            },
+          ],
         },
         {
           path: "/stratigraphy_catalogue",
           component: () =>
             import("./components/stratigraphy/StratigraphyCatalogue.vue"),
           meta: {
-            requiresAuth: true
-          }
+            requiresAuth: true,
+          },
         },
         {
           path: "/area",
           component: () => import("./views/Areas.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1583,17 +1583,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "area",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/area/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1604,16 +1604,16 @@ const router = new Router({
                 table: "area",
                 heading: "editArea.heading",
                 requiresAuth: true,
-                object: "area"
-              }
-            }
-          ]
+                object: "area",
+              },
+            },
+          ],
         },
         {
           path: "/area/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1625,10 +1625,10 @@ const router = new Router({
                 addNew: "header.area",
                 subForms: [{ path: "/area/add", name: "header.area" }],
                 requiresAuth: true,
-                object: "area"
-              }
-            }
-          ]
+                object: "area",
+              },
+            },
+          ],
         },
         // {
         //   path: "/area/import",
@@ -1643,7 +1643,7 @@ const router = new Router({
           path: "/drillcore_box",
           component: () => import("./views/DrillcoreBoxes.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1653,17 +1653,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "drillcore_box",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/drillcore_box/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1675,16 +1675,16 @@ const router = new Router({
                 table: "drillcore_box",
                 heading: "editDrillcoreBox.heading",
                 requiresAuth: true,
-                object: "drillcore_box"
-              }
-            }
-          ]
+                object: "drillcore_box",
+              },
+            },
+          ],
         },
         {
           path: "/drillcore_box/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1696,19 +1696,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.drillcoreBox",
                 subForms: [
-                  { path: "/drillcore_box/add", name: "header.drillcore_box" }
+                  { path: "/drillcore_box/add", name: "header.drillcore_box" },
                 ],
                 requiresAuth: true,
-                object: "drillcore_box"
-              }
-            }
-          ]
+                object: "drillcore_box",
+              },
+            },
+          ],
         },
         {
           path: "/location",
           component: () => import("./views/Locations.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1718,17 +1718,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "location",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/location/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1739,16 +1739,16 @@ const router = new Router({
                 table: "location",
                 heading: "editLocation.heading",
                 requiresAuth: true,
-                object: "location"
-              }
-            }
-          ]
+                object: "location",
+              },
+            },
+          ],
         },
         {
           path: "/location/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1760,16 +1760,16 @@ const router = new Router({
                 addNew: "header.location",
                 subForms: [{ path: "/location/add", name: "header.location" }],
                 requiresAuth: true,
-                object: "location"
-              }
-            }
-          ]
+                object: "location",
+              },
+            },
+          ],
         },
         {
           path: "/rock",
           component: () => import("./views/Rocks.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1778,17 +1778,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "rock",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/rock/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1799,16 +1799,16 @@ const router = new Router({
                 table: "rock",
                 heading: "editRock.heading",
                 requiresAuth: true,
-                object: "rock"
-              }
-            }
-          ]
+                object: "rock",
+              },
+            },
+          ],
         },
         {
           path: "/rock/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1820,16 +1820,16 @@ const router = new Router({
                 addNew: "header.rock",
                 subForms: [{ path: "/rock/add", name: "header.rock" }],
                 requiresAuth: true,
-                object: "rock"
-              }
-            }
-          ]
+                object: "rock",
+              },
+            },
+          ],
         },
         {
           path: "/deaccession",
           component: () => import("./views/Deaccessions.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1839,17 +1839,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "deaccession",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/deaccession/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1861,16 +1861,16 @@ const router = new Router({
                 table: "deaccession",
                 heading: "editDeaccession.heading",
                 requiresAuth: true,
-                object: "deaccession"
-              }
-            }
-          ]
+                object: "deaccession",
+              },
+            },
+          ],
         },
         {
           path: "/deaccession/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1882,19 +1882,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.deaccession",
                 subForms: [
-                  { path: "/deaccession/add", name: "header.deaccession" }
+                  { path: "/deaccession/add", name: "header.deaccession" },
                 ],
                 requiresAuth: true,
-                object: "deaccession"
-              }
-            }
-          ]
+                object: "deaccession",
+              },
+            },
+          ],
         },
         {
           path: "/accession",
           component: () => import("./views/Accessions.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1904,17 +1904,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "accession",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/accession/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1925,16 +1925,16 @@ const router = new Router({
                 table: "accession",
                 heading: "editAccession.heading",
                 requiresAuth: true,
-                object: "accession"
-              }
-            }
-          ]
+                object: "accession",
+              },
+            },
+          ],
         },
         {
           path: "/accession/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1945,19 +1945,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.accession",
                 subForms: [
-                  { path: "/accession/add", name: "header.accession" }
+                  { path: "/accession/add", name: "header.accession" },
                 ],
                 requiresAuth: true,
-                object: "accession"
-              }
-            }
-          ]
+                object: "accession",
+              },
+            },
+          ],
         },
         {
           path: "/visit",
           component: () => import("./views/Visits.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1966,17 +1966,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "visit",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/visit/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -1987,16 +1987,16 @@ const router = new Router({
                 table: "visit",
                 heading: "editVisit.heading",
                 requiresAuth: true,
-                object: "visit"
-              }
-            }
-          ]
+                object: "visit",
+              },
+            },
+          ],
         },
         {
           path: "/visit/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2008,16 +2008,16 @@ const router = new Router({
                 addNew: "header.visit",
                 subForms: [{ path: "/visit/add", name: "header.visit" }],
                 requiresAuth: true,
-                object: "visit"
-              }
-            }
-          ]
+                object: "visit",
+              },
+            },
+          ],
         },
         {
           path: "/loan",
           component: () => import("./views/Loans.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2026,17 +2026,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "loan",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/loan/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2047,16 +2047,16 @@ const router = new Router({
                 table: "loan",
                 heading: "editLoan.heading",
                 requiresAuth: true,
-                object: "loan"
-              }
-            }
-          ]
+                object: "loan",
+              },
+            },
+          ],
         },
         {
           path: "/loan/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2068,16 +2068,16 @@ const router = new Router({
                 addNew: "header.loan",
                 subForms: [{ path: "/loan/add", name: "header.loan" }],
                 requiresAuth: true,
-                object: "loan"
-              }
-            }
-          ]
+                object: "loan",
+              },
+            },
+          ],
         },
         {
           path: "/web_news",
           component: () => import("./views/WebNews.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2086,17 +2086,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "web_news",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/web_news/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2107,16 +2107,16 @@ const router = new Router({
                 table: "web_news",
                 heading: "editWebNews.heading",
                 requiresAuth: true,
-                object: "web_news"
-              }
-            }
-          ]
+                object: "web_news",
+              },
+            },
+          ],
         },
         {
           path: "/web_news/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2128,16 +2128,16 @@ const router = new Router({
                 addNew: "header.web_news",
                 subForms: [{ path: "/web_news/add", name: "header.web_news" }],
                 requiresAuth: true,
-                object: "web_news"
-              }
-            }
-          ]
+                object: "web_news",
+              },
+            },
+          ],
         },
         {
           path: "/web_pages",
           component: () => import("./views/WebPages.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2147,17 +2147,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "web_pages",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/web_pages/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2168,16 +2168,16 @@ const router = new Router({
                 table: "web_pages",
                 heading: "editWebPages.heading",
                 requiresAuth: true,
-                object: "web_pages"
-              }
-            }
-          ]
+                object: "web_pages",
+              },
+            },
+          ],
         },
         {
           path: "/web_pages/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2188,19 +2188,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.web_pages",
                 subForms: [
-                  { path: "/web_pages/add", name: "header.web_pages" }
+                  { path: "/web_pages/add", name: "header.web_pages" },
                 ],
                 requiresAuth: true,
-                object: "web_pages"
-              }
-            }
-          ]
+                object: "web_pages",
+              },
+            },
+          ],
         },
         {
           path: "/taxon_page",
           component: () => import("./views/TaxonPages.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2210,17 +2210,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "taxon_page",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/taxon_page/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2231,16 +2231,16 @@ const router = new Router({
                 table: "taxon_page",
                 heading: "editTaxonPages.heading",
                 requiresAuth: true,
-                object: "taxon_page"
-              }
-            }
-          ]
+                object: "taxon_page",
+              },
+            },
+          ],
         },
         {
           path: "/taxon_page/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2251,19 +2251,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.taxon_pages",
                 subForms: [
-                  { path: "/taxon_page/add", name: "header.taxon_pages" }
+                  { path: "/taxon_page/add", name: "header.taxon_pages" },
                 ],
                 requiresAuth: true,
-                object: "taxon_page"
-              }
-            }
-          ]
+                object: "taxon_page",
+              },
+            },
+          ],
         },
         {
           path: "/sample_series",
           component: () => import("./views/SampleSeries.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2273,17 +2273,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "sample_series",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/sample_series/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2295,16 +2295,16 @@ const router = new Router({
                 table: "sample_series",
                 heading: "editSampleSeries.heading",
                 requiresAuth: true,
-                object: "sample_series"
-              }
-            }
-          ]
+                object: "sample_series",
+              },
+            },
+          ],
         },
         {
           path: "/sample_series/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2316,19 +2316,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.sample_series",
                 subForms: [
-                  { path: "/sample_series/add", name: "header.sample_series" }
+                  { path: "/sample_series/add", name: "header.sample_series" },
                 ],
                 requiresAuth: true,
-                object: "sample_series"
-              }
-            }
-          ]
+                object: "sample_series",
+              },
+            },
+          ],
         },
         {
           path: "/sarv_issue",
           component: () => import("./views/SarvIssues.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2338,17 +2338,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "sarv_issue",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/sarv_issue/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2359,16 +2359,16 @@ const router = new Router({
                 table: "sarv_issue",
                 heading: "editSarvIssue.heading",
                 requiresAuth: true,
-                object: "sarv_issue"
-              }
-            }
-          ]
+                object: "sarv_issue",
+              },
+            },
+          ],
         },
         {
           path: "/sarv_issue/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2379,19 +2379,19 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.sarv_issue",
                 subForms: [
-                  { path: "/sarv_issue/add", name: "header.sarv_issue" }
+                  { path: "/sarv_issue/add", name: "header.sarv_issue" },
                 ],
                 requiresAuth: true,
-                object: "sarv_issue"
-              }
-            }
-          ]
+                object: "sarv_issue",
+              },
+            },
+          ],
         },
         {
           path: "/analysis_parameter",
           component: () => import("./views/AnalysisParameters.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2403,17 +2403,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "analysis_parameter",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/analysis_parameter/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2425,16 +2425,16 @@ const router = new Router({
                 table: "analysis_parameter",
                 heading: "editAnalysisParameter.heading",
                 requiresAuth: true,
-                object: "analysis_parameter"
-              }
-            }
-          ]
+                object: "analysis_parameter",
+              },
+            },
+          ],
         },
         {
           path: "/analysis_parameter/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2448,20 +2448,20 @@ const router = new Router({
                 subForms: [
                   {
                     path: "/analysis_parameter/add",
-                    name: "header.analysis_parameter"
-                  }
+                    name: "header.analysis_parameter",
+                  },
                 ],
                 requiresAuth: true,
-                object: "analysis_parameter"
-              }
-            }
-          ]
+                object: "analysis_parameter",
+              },
+            },
+          ],
         },
         {
           path: "/analysis_method",
           component: () => import("./views/AnalysisMethods.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2471,17 +2471,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "analysis_method",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/analysis_method/:id(\\d+)",
           props: true,
           component: () => import("./views/EditForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2493,16 +2493,16 @@ const router = new Router({
                 table: "analysis_method",
                 heading: "editAnalysisMethod.heading",
                 requiresAuth: true,
-                object: "analysis_method"
-              }
-            }
-          ]
+                object: "analysis_method",
+              },
+            },
+          ],
         },
         {
           path: "/analysis_method/add",
           component: () => import("./views/AddForm.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2516,20 +2516,20 @@ const router = new Router({
                 subForms: [
                   {
                     path: "/analysis_method/add",
-                    name: "header.analysis_method"
-                  }
+                    name: "header.analysis_method",
+                  },
                 ],
                 requiresAuth: true,
-                object: "analysis_method"
-              }
-            }
-          ]
+                object: "analysis_method",
+              },
+            },
+          ],
         },
         {
           path: "/site_groundwater",
           component: () => import("./views/SiteGroundwaters.vue"),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
@@ -2541,17 +2541,17 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "site_groundwater",
-                isTableView: true
-              }
-            }
-          ]
+                isTableView: true,
+              },
+            },
+          ],
         },
         {
           path: "/test-dev",
           component: () => import("./components/partial/test/Test.vue"),
           meta: {
-            requiresAuth: true
-          }
+            requiresAuth: true,
+          },
         },
         {
           path: "/hierarchy_update",
@@ -2559,35 +2559,35 @@ const router = new Router({
           component: () =>
             import("./components/partial/hierarchy_update/HierarchyUpdate.vue"),
           meta: {
-            requiresAuth: true
-          }
-        }
-      ]
+            requiresAuth: true,
+          },
+        },
+      ],
     },
     {
       path: "/loan_print/:id(\\d+)",
       name: "Loan print",
       component: () => import("./components/loan/LoanPrint.vue"),
       meta: {
-        requiresAuth: true
-      }
+        requiresAuth: true,
+      },
     },
     {
       path: "/drillcore_print/:id(\\d+)",
       name: "Drillcore print",
-      component: data => import("./components/drillcore/DrillcorePrint.vue"),
+      component: (data) => import("./components/drillcore/DrillcorePrint.vue"),
       meta: {
-        requiresAuth: true
-      }
-    }
-  ]
+        requiresAuth: true,
+      },
+    },
+  ],
 });
 
 router.beforeEach(async (to, from, next) => {
   // Adding scrollbar location to fromRoute
   from.meta.scrollbar = {
     x: document.documentElement.scrollLeft,
-    y: document.documentElement.scrollTop
+    y: document.documentElement.scrollTop,
   };
   // console.log('--- FROM ---');
   // console.log(from);
@@ -2597,8 +2597,8 @@ router.beforeEach(async (to, from, next) => {
   const loginPath = window.location.pathname;
 
   const loginStateResponse = await fetchIsLoggedIn().then(
-    response => response,
-    errResponse => errResponse
+    (response) => response,
+    (errResponse) => errResponse
   );
 
   const isLoggedIn = handleResponse(loginStateResponse);
@@ -2624,7 +2624,7 @@ router.beforeEach(async (to, from, next) => {
           timeout: 5000,
           closeOnEscape: true,
           pauseOnHover: false,
-          displayMode: "replace"
+          displayMode: "replace",
         });
       }
     }
@@ -2662,10 +2662,10 @@ function removeBrowserDataAndLogout() {
         timeout: 5000,
         closeOnEscape: true,
         pauseOnHover: false,
-        displayMode: "replace"
+        displayMode: "replace",
       });
     },
-    errResponse => console.log("LOGOUT ERROR: " + JSON.stringify(errResponse))
+    (errResponse) => console.log("LOGOUT ERROR: " + JSON.stringify(errResponse))
   );
 }
 

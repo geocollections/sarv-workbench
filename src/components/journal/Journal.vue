@@ -119,25 +119,25 @@ export default {
 
   components: {
     TextareaWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, formSectionsMixin],
@@ -154,7 +154,7 @@ export default {
         request: "FETCH_JOURNALS",
         title: "header.journals",
         object: "journal",
-        field: "journal_name"
+        field: "journal_name",
       });
     }
 
@@ -163,15 +163,15 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
-    ...mapState("search", ["journalSearchParameters"])
+    ...mapState("search", ["journalSearchParameters"]),
   },
 
   methods: {
@@ -182,11 +182,11 @@ export default {
           "journal_name",
           "journal_short",
           "publisher",
-          "remarks"
+          "remarks",
         ],
         requiredFields: ["journal_name"],
         journal: {},
-        block: { requiredFields: true, info: true }
+        block: { requiredFields: true, info: true },
       };
     },
 
@@ -199,7 +199,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchJournal(this.$route.params.id).then(response => {
+        fetchJournal(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -224,8 +224,8 @@ export default {
       console.log("This object is sent in string format:");
       console.log(objectToUpload);
       return JSON.stringify(objectToUpload);
-    }
-  }
+    },
+  },
 };
 </script>
 

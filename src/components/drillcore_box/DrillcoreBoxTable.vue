@@ -28,7 +28,7 @@
         <span
           v-translate="{
             et: item.drillcore__drillcore,
-            en: item.drillcore__drillcore_en
+            en: item.drillcore__drillcore_en,
           }"
         />
       </router-link>
@@ -56,7 +56,7 @@
         <span
           v-translate="{
             et: item.stratigraphy_base__stratigraphy,
-            en: item.stratigraphy_base__stratigraphy_en
+            en: item.stratigraphy_base__stratigraphy_en,
           }"
         />
       </router-link>
@@ -73,7 +73,7 @@
         <span
           v-translate="{
             et: item.stratigraphy_top__stratigraphy,
-            en: item.stratigraphy_top__stratigraphy_en
+            en: item.stratigraphy_top__stratigraphy_en,
           }"
         />
       </router-link>
@@ -102,38 +102,38 @@ export default {
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   methods: {
     getEmaUrl(params) {
       return `https://geoloogia.info/${params.object}/${params.id}`;
-    }
-  }
+    },
+  },
 };
 </script>

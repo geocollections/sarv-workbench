@@ -94,7 +94,7 @@ const mutations = {
 
   TOGGLE_GLOBAL_NOTIFICATION(state) {
     state.globalNotificationState = !state.globalNotificationState;
-  }
+  },
 };
 
 export default mutations;

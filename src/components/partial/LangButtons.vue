@@ -30,12 +30,12 @@ export default {
   props: {
     isDark: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   mixins: [toastMixin],
   computed: {
-    ...mapState("settings", ["lang"])
+    ...mapState("settings", ["lang"]),
   },
   methods: {
     ...mapActions("settings", ["updateLang"]),
@@ -46,8 +46,8 @@ export default {
       this.$moment.locale(newLang === "ee" ? "et" : "en");
       this.updateLang(newLang);
       this.toastInfo({ text: this.$t("messages.langChange") });
-    }
-  }
+    },
+  },
 };
 </script>
 

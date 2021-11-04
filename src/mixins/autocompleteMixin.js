@@ -63,7 +63,7 @@ const autocompleteMixin = {
         ? "parameter_name"
         : "parameter_name_en";
     },
-    ...mapGetters("user", ["getCurrentUser"])
+    ...mapGetters("user", ["getCurrentUser"]),
   },
   methods: {
     autocompleteAnalysisSearch(value) {
@@ -388,7 +388,7 @@ const autocompleteMixin = {
      * @param groupByField {String} - Field used to group results
      * @param clearAutocomplete {Boolean} - If set to false then autocomplete won't get cleared when multiselect field is cleared (needed in reference keywords search)
      */
-    $_autocompleteMixin_search: debounce(function(
+    $_autocompleteMixin_search: debounce(function (
       value,
       type,
       options,
@@ -409,15 +409,15 @@ const autocompleteMixin = {
           if (query.length === 0) return;
 
           this.autocomplete.loaders[options] = true;
-          autocompleteSearch(query).then(response => {
+          autocompleteSearch(query).then((response) => {
             this.autocomplete.loaders[options] = false;
             this.autocomplete[options] = handleResponse(response);
           });
         }
       }
     },
-    500)
-  }
+    500),
+  },
 };
 
 /**

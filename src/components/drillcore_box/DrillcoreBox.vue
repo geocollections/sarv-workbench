@@ -289,7 +289,7 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import {
   fetchDrillcoreBox,
-  fetchDrillcoreBoxAttachments
+  fetchDrillcoreBoxAttachments,
 } from "@/assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -307,25 +307,25 @@ export default {
     FileInput,
     TextareaWrapper,
     InputWrapper,
-    AutocompleteWrapper
+    AutocompleteWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin, requestsMixin],
@@ -342,7 +342,7 @@ export default {
         request: "FETCH_DRILLCORE_BOXES",
         title: "header.drillcoreBoxes",
         object: "drillcore_box",
-        field: "number"
+        field: "number",
       });
     }
 
@@ -351,33 +351,33 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         if (this.$route.meta.isEdit) {
           this.loadRelatedData(this.activeTab);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("search", ["drillcore_boxSearchParameters"]),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -387,7 +387,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -413,25 +413,25 @@ export default {
           "stratigraphy_top_free",
           "depth_other",
           "stratigraphy_free",
-          "remarks"
+          "remarks",
         ],
         autocomplete: {
           loaders: {
             drillcore: false,
             storage: false,
             stratigraphy_base: false,
-            stratigraphy_top: false
+            stratigraphy_top: false,
           },
           drillcore: [],
           storage: [],
           stratigraphy_base: [],
-          stratigraphy_top: []
+          stratigraphy_top: [],
         },
         requiredFields: ["drillcore", "number"],
         drillcore_box: {},
         searchParameters: this.setDefaultSearchParameters(),
         block: {
-          info: true
+          info: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -440,8 +440,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -454,7 +454,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchDrillcoreBox(this.$route.params.id).then(response => {
+        fetchDrillcoreBox(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -471,7 +471,7 @@ export default {
           }
         });
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -480,7 +480,7 @@ export default {
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -496,21 +496,19 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "attachment") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment.results.map(
-                item => {
+              uploadableObject.related_data.attachment =
+                this.relatedData.attachment.results.map((item) => {
                   return { id: item.id };
-                }
-              );
+                });
             } else {
-              uploadableObject.related_data[tab.name] = this.relatedData[
-                tab.name
-              ].results;
+              uploadableObject.related_data[tab.name] =
+                this.relatedData[tab.name].results;
 
-              uploadableObject.related_data[tab.name].forEach(item => {
-                Object.keys(item).forEach(key => {
+              uploadableObject.related_data[tab.name].forEach((item) => {
+                Object.keys(item).forEach((key) => {
                   if (typeof item[key] === "object" && item[key] !== null) {
                     item[key] = item[key].id ? item[key].id : null;
                   }
@@ -520,11 +518,10 @@ export default {
         });
       } else {
         if (this.relatedData.attachment.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment.results.map(
-            item => {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment.results.map((item) => {
               return { id: item.id };
-            }
-          );
+            });
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -542,14 +539,14 @@ export default {
         this.drillcore_box.drillcore = {
           drillcore: obj.drillcore__drillcore,
           drillcore_en: obj.drillcore__drillcore_en,
-          id: obj.drillcore
+          id: obj.drillcore,
         };
         this.autocomplete.drillcore.push(this.drillcore_box.drillcore);
       }
       if (this.isNotEmpty(obj.storage)) {
         this.drillcore_box.storage = {
           id: obj.storage,
-          location: obj.storage__location
+          location: obj.storage__location,
         };
         this.autocomplete.storage.push(this.drillcore_box.storage);
       }
@@ -557,7 +554,7 @@ export default {
         this.drillcore_box.stratigraphy_top = {
           stratigraphy: obj.stratigraphy_top__stratigraphy,
           stratigraphy_en: obj.stratigraphy_top__stratigraphy_en,
-          id: obj.stratigraphy_top
+          id: obj.stratigraphy_top,
         };
         this.autocomplete.stratigraphy_top.push(
           this.drillcore_box.stratigraphy_top
@@ -567,7 +564,7 @@ export default {
         this.drillcore_box.stratigraphy_base = {
           stratigraphy: obj.stratigraphy_base__stratigraphy,
           stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
-          id: obj.stratigraphy_base
+          id: obj.stratigraphy_base,
         };
         this.autocomplete.stratigraphy_base.push(
           this.drillcore_box.stratigraphy_base
@@ -583,9 +580,9 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["is_preferred"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
@@ -600,7 +597,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -628,15 +625,15 @@ export default {
         page: 1,
         paginateBy: 10,
         sortBy: ["drillcore"],
-        sortDesc: [true]
+        sortDesc: [true],
       };
     },
 
     handleChangeObjectsState(data) {
       this.changeObjectsState({ table: "attachment", ...data });
       // this.loadRelatedData("attachment");
-    }
-  }
+    },
+  },
 };
 </script>
 

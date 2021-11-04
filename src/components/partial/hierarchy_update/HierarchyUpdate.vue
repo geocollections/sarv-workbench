@@ -1,7 +1,7 @@
 <template>
   <div class="hierarchy-update">
     <v-card class="mt-2">
-      <v-card-title class="justify-center" style="word-break: break-word;">
+      <v-card-title class="justify-center" style="word-break: break-word">
         Todo: Hierarchy update for different tables
       </v-card-title>
     </v-card>
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: "HierarchyUpdate"
+  name: "HierarchyUpdate",
 };
 </script>
 

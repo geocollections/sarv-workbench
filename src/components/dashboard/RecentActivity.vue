@@ -28,7 +28,7 @@
                     class="sarv-link text-capitalize"
                     :class="bodyActiveColor + '--text'"
                     :to="{
-                      path: '/' + entity.table_name + '/' + entity.row_id
+                      path: '/' + entity.table_name + '/' + entity.row_id,
                     }"
                   >
                     {{ entity.table_name }}: {{ entity.row_id }}
@@ -73,7 +73,7 @@
                     class="sarv-link text-capitalize"
                     :class="bodyActiveColor + '--text'"
                     :to="{
-                      path: '/' + entity.table_name + '/' + entity.row_id
+                      path: '/' + entity.table_name + '/' + entity.row_id,
                     }"
                   >
                     {{ entity.table_name }}: {{ entity.row_id }}
@@ -103,15 +103,15 @@ export default {
   data() {
     return {
       recentlyInserted: [],
-      recentlyUpdated: []
+      recentlyUpdated: [],
     };
   },
 
   computed: {
-    ...mapGetters("user", ["isUserAllowedTo"])
+    ...mapGetters("user", ["isUserAllowedTo"]),
   },
 
-  created: function() {
+  created: function () {
     this.getRecentlyInsertedActivities();
     this.getRecentlyUpdatedActivities();
   },
@@ -119,8 +119,8 @@ export default {
     getRecentlyInsertedActivities() {
       fetchLatestLogs({
         user: this.user,
-        command: "INSERT"
-      }).then(response => {
+        command: "INSERT",
+      }).then((response) => {
         if (response.status === 200) {
           if (response.data.count > 0) {
             this.recentlyInserted = response.data.results;
@@ -134,8 +134,8 @@ export default {
     getRecentlyUpdatedActivities() {
       fetchLatestLogs({
         user: this.user,
-        command: "UPDATE"
-      }).then(response => {
+        command: "UPDATE",
+      }).then((response) => {
         if (response.status === 200) {
           if (response.data.count > 0) {
             this.recentlyUpdated = response.data.results;
@@ -144,8 +144,8 @@ export default {
           }
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

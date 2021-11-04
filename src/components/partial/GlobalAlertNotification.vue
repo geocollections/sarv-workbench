@@ -27,7 +27,7 @@
       </div>
 
       <v-btn
-        style="z-index: 3;"
+        style="z-index: 3"
         color="white"
         class="info"
         icon
@@ -48,7 +48,7 @@ export default {
   name: "GlobalAlertNotification",
   data: () => ({
     pageId: 77,
-    page: null
+    page: null,
   }),
   computed: {
     ...mapState("settings", ["globalNotificationState"]),
@@ -57,7 +57,7 @@ export default {
       return this.$i18n.locale === "ee"
         ? this.page.content_et
         : this.page.content_en;
-    }
+    },
   },
   created() {
     this.getNotificationData();
@@ -65,7 +65,7 @@ export default {
   watch: {
     "$route.path"() {
       this.getNotificationData();
-    }
+    },
   },
   methods: {
     ...mapActions("settings", ["toggleGlobalNotification"]),
@@ -73,8 +73,8 @@ export default {
     async getNotificationData() {
       let response = await StaticPageService.getPage(this.pageId);
       if (response && response?.results?.[0]) this.page = response.results[0];
-    }
-  }
+    },
+  },
 };
 </script>
 

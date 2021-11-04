@@ -103,25 +103,25 @@ export default {
   components: {
     Editor,
     CheckboxWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin],
@@ -138,7 +138,7 @@ export default {
         request: "FETCH_WEB_NEWS",
         title: "header.web_news",
         object: "web_news",
-        field: "title_en"
+        field: "title_en",
       });
     }
 
@@ -147,15 +147,15 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
-    ...mapState("search", ["web_newsSearchParameters"])
+    ...mapState("search", ["web_newsSearchParameters"]),
   },
 
   methods: {
@@ -167,13 +167,13 @@ export default {
           "title_en",
           "text_en",
           "text_et",
-          "is_private"
+          "is_private",
         ],
         web_news: {},
         requiredFields: [],
         block: {
-          info: true
-        }
+          info: true,
+        },
       };
     },
 
@@ -186,7 +186,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchWebNewsDetail(this.$route.params.id).then(response => {
+        fetchWebNewsDetail(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -208,7 +208,7 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -224,8 +224,8 @@ export default {
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
-    }
-  }
+    },
+  },
 };
 </script>
 

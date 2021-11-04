@@ -36,8 +36,8 @@ export default {
   name: "SelectWrapper",
   inheritAttrs: false,
   props: {
-    translationPrefix: String
-  }
+    translationPrefix: String,
+  },
 };
 </script>
 

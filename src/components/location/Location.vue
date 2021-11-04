@@ -191,7 +191,7 @@
                 <v-btn
                   :to="{
                     name: 'Specimen add',
-                    query: { storage: JSON.stringify(location) }
+                    query: { storage: JSON.stringify(location) },
                   }"
                   target="newSpecimenWindow"
                   :color="bodyActiveColor"
@@ -244,7 +244,7 @@
                   :search-parameters="relatedData.searchParameters.specimen"
                   v-show="
                     currentViewType === 'table' &&
-                      relatedData.specimen.count > 0
+                    relatedData.specimen.count > 0
                   "
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
@@ -278,7 +278,7 @@
                 <v-btn
                   :to="{
                     name: 'Sample add',
-                    query: { storage: JSON.stringify(location) }
+                    query: { storage: JSON.stringify(location) },
                   }"
                   target="newSampleWindow"
                   :color="bodyActiveColor"
@@ -485,7 +485,7 @@ import {
   fetchLocationAttachment,
   fetchLocationSamples,
   fetchLocationSpecimens,
-  fetchMultiChangeSpecimen
+  fetchMultiChangeSpecimen,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import { mapActions, mapState } from "vuex";
@@ -510,25 +510,25 @@ export default {
     FileInput,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin, requestsMixin],
@@ -545,7 +545,7 @@ export default {
         request: "FETCH_LOCATIONS",
         title: "header.locations",
         object: "location",
-        field: "location"
+        field: "location",
       });
     }
 
@@ -554,22 +554,22 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
+      deep: true,
     },
     itemsRegistered: {
-      handler: function() {
+      handler: function () {
         this.location.number_items_registered = this.itemsRegistered;
-      }
-    }
+      },
+    },
   },
 
   computed: {
@@ -583,10 +583,10 @@ export default {
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
     },
@@ -594,26 +594,26 @@ export default {
     // Returns objects which are valid for location change
     relatedDataObjects() {
       return Object.keys(this.relatedData).filter(
-        item => item !== "attachment_link" && item !== "searchParameters"
+        (item) => item !== "attachment_link" && item !== "searchParameters"
       );
     },
 
     filledRelatedDataObjects() {
       return this.relatedDataObjects.filter(
-        item => this.relatedData[item].count > 0
+        (item) => this.relatedData[item].count > 0
       );
     },
 
     doesRelatedDataExist() {
       let listOfBooleans = this.relatedDataObjects.map(
-        item => this.relatedData[item].count > 0
+        (item) => this.relatedData[item].count > 0
       );
       return listOfBooleans.includes(true);
     },
 
     itemsRegistered() {
       return this.relatedData.specimen.count + this.relatedData.sample.count;
-    }
+    },
   },
 
   methods: {
@@ -628,11 +628,11 @@ export default {
       ) {
         console.log("change");
 
-        this.filledRelatedDataObjects.forEach(async table => {
-          let updatedObjects = this.relatedData[table].results.map(item => {
+        this.filledRelatedDataObjects.forEach(async (table) => {
+          let updatedObjects = this.relatedData[table].results.map((item) => {
             return {
               storage: this.new_storage.id,
-              id: item.id
+              id: item.id,
             };
           });
 
@@ -640,7 +640,7 @@ export default {
           formData.append(
             "data",
             JSON.stringify({
-              change: updatedObjects
+              change: updatedObjects,
             })
           );
 
@@ -648,8 +648,8 @@ export default {
             table,
             formData
           ).then(
-            response => response,
-            errResponse => errResponse
+            (response) => response,
+            (errResponse) => errResponse
           );
 
           if (multiChangeResponse)
@@ -667,7 +667,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -678,7 +678,7 @@ export default {
         relatedTabs: [
           { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "specimen", iconClass: "fas fa-fish" },
-          { name: "sample", iconClass: "fas fa-vial" }
+          { name: "sample", iconClass: "fas fa-vial" },
         ],
         relatedData: this.setDefaultRelatedData(),
         activeTab: "attachment_link",
@@ -693,21 +693,21 @@ export default {
           "stratigraphy_free",
           "date_collected_free",
           "contents",
-          "remarks"
+          "remarks",
         ],
         autocomplete: {
           loaders: {
             agent: false,
-            storage: false
+            storage: false,
           },
           agent: [],
-          storage: []
+          storage: [],
         },
         location: {},
         requiredFields: ["location"],
         block: {
           info: true,
-          storage: true
+          storage: true,
         },
         new_storage: null,
         changeStorageDialog: false,
@@ -718,8 +718,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -732,7 +732,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchLocation(this.$route.params.id).then(response => {
+        fetchLocation(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -750,7 +750,7 @@ export default {
         });
 
         // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           this.loadRelatedData(tab.name);
         });
       } else {
@@ -768,28 +768,28 @@ export default {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           specimen: {
             page: 1,
             paginateBy: 100,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           sample: {
             page: 1,
             paginateBy: 100,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -805,21 +805,19 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0)
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-                item => {
+              uploadableObject.related_data.attachment =
+                this.relatedData.attachment_link.results.map((item) => {
                   return { id: item.id };
-                }
-              );
+                });
             } else {
-              uploadableObject.related_data[tab.name] = this.relatedData[
-                tab.name
-              ].results;
+              uploadableObject.related_data[tab.name] =
+                this.relatedData[tab.name].results;
 
-              uploadableObject.related_data[tab.name].forEach(item => {
-                Object.keys(item).forEach(key => {
+              uploadableObject.related_data[tab.name].forEach((item) => {
+                Object.keys(item).forEach((key) => {
                   if (typeof item[key] === "object" && item[key] !== null) {
                     item[key] = item[key].id ? item[key].id : null;
                   }
@@ -829,11 +827,10 @@ export default {
         });
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-            item => {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment_link.results.map((item) => {
               return { id: item.id };
-            }
-          );
+            });
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -850,14 +847,14 @@ export default {
       if (this.isNotEmpty(obj.agent)) {
         this.location.agent = {
           id: obj.agent,
-          agent: obj.agent__agent
+          agent: obj.agent__agent,
         };
         this.autocomplete.agent.push(this.location.agent);
       }
       if (this.isNotEmpty(obj.parent_location)) {
         this.location.parent_location = {
           id: obj.parent_location,
-          location: obj.parent_location__location
+          location: obj.parent_location__location,
         };
         this.autocomplete.storage.push(this.location.parent_location);
       }
@@ -884,7 +881,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[type].count = response.data.count;
           this.relatedData[type].results = this.handleResponse(response);
         });
@@ -898,8 +895,8 @@ export default {
     addExistingFiles(files) {
       // this.relatedData.attachment_link.count = files.length;
       this.relatedData.attachment_link.results = files;
-    }
-  }
+    },
+  },
 };
 </script>
 

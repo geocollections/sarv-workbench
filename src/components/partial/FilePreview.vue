@@ -1,6 +1,13 @@
 <template>
   <div
-    class="file-preview d-flex flex-column align-center justify-center fill-height"
+    class="
+      file-preview
+      d-flex
+      flex-column
+      align-center
+      justify-center
+      fill-height
+    "
     v-if="data"
   >
     <div class="align-center align-end my-2">
@@ -54,7 +61,7 @@
         :title="getFileLink({ filename: data.uuid_filename, size: 'medium' })"
         @click="
           openUrlInNewWindow({
-            url: getFileLink({ filename: data.uuid_filename, size: 'medium' })
+            url: getFileLink({ filename: data.uuid_filename, size: 'medium' }),
           })
         "
         alt="Image preview..."
@@ -68,7 +75,7 @@
         class="far fa-5x link"
         @click="
           openUrlInNewWindow({
-            url: getFileLink({ filename: data.uuid_filename })
+            url: getFileLink({ filename: data.uuid_filename }),
           })
         "
         :title="getFileLink({ filename: data.uuid_filename })"
@@ -90,14 +97,14 @@
             openUrlInNewWindow({
               url: getFileLink({
                 filename: data.uuid_filename,
-                size: btn === 'original' ? '' : btn
-              })
+                size: btn === 'original' ? '' : btn,
+              }),
             })
           "
           :title="
             getFileLink({
               filename: data.uuid_filename,
-              size: btn === 'original' ? '' : btn
+              size: btn === 'original' ? '' : btn,
             })
           "
           >{{ $t(`common.${btn}`) }}</v-btn
@@ -111,11 +118,11 @@
 export default {
   props: {
     data: {
-      required: true
+      required: true,
     },
     rotationDegrees: {
-      required: false
-    }
+      required: false,
+    },
   },
   name: "FilePreview",
   computed: {
@@ -147,7 +154,7 @@ export default {
 
     buttons() {
       let buttons = ["small", "medium", "large", "original"];
-      return buttons.filter(btn =>
+      return buttons.filter((btn) =>
         btn === "original" ? true : this.isImageFile
       );
     },
@@ -167,7 +174,7 @@ export default {
       }
 
       return style;
-    }
+    },
   },
   methods: {
     getAttachmentIcon(attachment) {
@@ -244,8 +251,8 @@ export default {
 
     rotateImage(deg) {
       this.$emit("rotate", this.rotationDegrees + deg);
-    }
-  }
+    },
+  },
 };
 </script>
 

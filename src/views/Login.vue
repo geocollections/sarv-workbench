@@ -3,14 +3,14 @@
     class="login"
     :style="{
       backgroundImage: `url('${image}')`,
-      transition: 'background 5s ease-in-out'
+      transition: 'background 5s ease-in-out',
     }"
   >
     <lang-buttons v-if="$route.meta.isLogin" style="z-index: 3" />
     <div class="gradient"></div>
-    <v-container fill-height style="padding-bottom: 80px;">
+    <v-container fill-height style="padding-bottom: 80px">
       <v-row align="center" justify="center">
-        <v-col sm="10" md="8" lg="6" xl="4" style="margin: 48px 0;">
+        <v-col sm="10" md="8" lg="6" xl="4" style="margin: 48px 0">
           <div class="sarv-title">{{ $t("header.title") }}</div>
 
           <GlobalAlertNotification />
@@ -181,7 +181,7 @@ export default {
     DevNotification,
     GlobalAlertNotification,
     SiteIcons,
-    LangButtons
+    LangButtons,
   },
   mixins: [authenticationMixin],
   data: () => ({
@@ -190,15 +190,15 @@ export default {
     valid: true,
     user: {
       username: "",
-      password: null
+      password: null,
     },
     usernameRules: [
-      v => !!v || "Name is required",
-      v => (v && v.trim().length > 0) || "Name cant be empty"
+      (v) => !!v || "Name is required",
+      (v) => (v && v.trim().length > 0) || "Name cant be empty",
     ],
     passwordRules: [
-      v => !!v || "Password is required",
-      v => (v && v.trim().length > 0) || "Password cant be empty"
+      (v) => !!v || "Password is required",
+      (v) => (v && v.trim().length > 0) || "Password cant be empty",
     ],
     showPassword: false,
     passMessage: null,
@@ -208,11 +208,11 @@ export default {
     imageId: 0,
     images: [
       // "/img/sarv-edit/background_1.jpg",
-      "/img/sarv-edit/background_2.jpg"
+      "/img/sarv-edit/background_2.jpg",
       // "/img/sarv-edit/background_3.jpg",
       // "/img/sarv-edit/background_4.jpg"
     ],
-    imageInterval: 60000
+    imageInterval: 60000,
   }),
 
   created() {
@@ -229,7 +229,7 @@ export default {
     image() {
       console.log(this.$constants.IMAGE_URL);
       return this.$constants.IMAGE_URL + this.images[this.imageId];
-    }
+    },
   },
 
   methods: {
@@ -237,7 +237,7 @@ export default {
       if (this.valid && !this.loggingIn) {
         this.authenticate("password", {
           user: this.user.username,
-          pwd: this.user.password
+          pwd: this.user.password,
         });
       }
     },
@@ -252,8 +252,8 @@ export default {
           else this.imageId++;
         }, this.imageInterval);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

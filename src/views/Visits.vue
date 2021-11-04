@@ -35,14 +35,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -54,14 +54,14 @@ export default {
         id: "date_arrived",
         title: "visit.date_arrived",
         type: "text",
-        isDate: true
+        isDate: true,
       },
       {
         id: "date_left",
         title: "visit.date_left",
         type: "text",
-        isDate: true
-      }
+        isDate: true,
+      },
     ]);
   },
 
@@ -71,8 +71,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

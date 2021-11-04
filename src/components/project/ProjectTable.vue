@@ -44,7 +44,7 @@
       <span
         v-translate="{
           et: item.project_type__name,
-          en: item.project_type__name_en
+          en: item.project_type__name_en,
         }"
       ></span>
     </template>
@@ -68,32 +68,32 @@ export default {
   mixins: [tableHeaderMixin],
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   data: () => ({
     expanded: [],
@@ -104,24 +104,24 @@ export default {
       { text: "common.date_start", value: "date_start" },
       { text: "common.date_end", value: "date_end" },
       { text: "common.date_txt", value: "date_free" },
-      { text: "common.owner", value: "owner__agent" }
+      { text: "common.owner", value: "owner__agent" },
     ],
-    names: []
+    names: [],
   }),
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
-    }
+    },
   },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
-    }
-  }
+    },
+  },
 };
 </script>
