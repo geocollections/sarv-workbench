@@ -16,7 +16,7 @@ executors:
       IMAGE_NAME_SARV_WB: geocollections/sarv-wb
       IMAGE_NAME_SARV_WB_DEV: geocollections/sarv-wb-dev
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: circleci/node:lts-stretch
 
 jobs:
 
