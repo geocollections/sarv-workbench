@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@4.1.0
+  node: circleci/node@4.7.0
 
 parameters:
   package-version:
@@ -16,7 +16,7 @@ executors:
       IMAGE_NAME_SARV_WB: geocollections/sarv-wb
       IMAGE_NAME_SARV_WB_DEV: geocollections/sarv-wb-dev
     docker:
-      - image: circleci/node:lts-stretch
+      - image: cimg/node:14.18.1
 
 jobs:
 
