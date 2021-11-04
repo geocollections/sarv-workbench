@@ -6,7 +6,7 @@ orbs:
 parameters:
   package-version:
     type: string
-    default: "2.1.1"
+    default: "2.1.2"
 
 executors:
   docker-publisher:
@@ -16,7 +16,7 @@ executors:
       IMAGE_NAME_SARV_WB: geocollections/sarv-wb
       IMAGE_NAME_SARV_WB_DEV: geocollections/sarv-wb-dev
     docker:
-      - image: cimg/node:14.18.1
+      - image: cimg/node:lts
 
 jobs:
 
@@ -154,7 +154,7 @@ jobs:
   # OLD
   checkout_code:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
       - checkout
@@ -165,7 +165,7 @@ jobs:
 
   bundle_dependencies:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
@@ -186,7 +186,7 @@ jobs:
 
   build_dependencies:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
@@ -203,7 +203,7 @@ jobs:
 
   deploy_to_dev:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
@@ -221,7 +221,7 @@ jobs:
 
   deploy_to_dev_2:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
@@ -239,7 +239,7 @@ jobs:
 
   deploy_to_prod:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
