@@ -28,7 +28,7 @@ const requestsMixin = {
         formData.append("data", JSON.stringify(uploadableObject));
 
         this.$_requestsMixin_httpRequestWrapper(url, formData).then(
-          response => {
+          (response) => {
             console.log(response);
             if (response) {
               this.loadRelatedData(table);
@@ -39,7 +39,7 @@ const requestsMixin = {
         let clonedRawItem = cloneDeep(payload.rawItem);
 
         // Changes every empty string to null (is needed for float fields which give error on add #384)
-        Object.keys(clonedRawItem).forEach(key => {
+        Object.keys(clonedRawItem).forEach((key) => {
           if (
             typeof clonedRawItem[key] === "string" &&
             clonedRawItem[key].length === 0
@@ -73,7 +73,7 @@ const requestsMixin = {
         formData.append("data", JSON.stringify(uploadableObject));
 
         this.$_requestsMixin_httpRequestWrapper(url, formData).then(
-          response => {
+          (response) => {
             console.log(response);
             if (response) {
               this.loadRelatedData(table);
@@ -93,8 +93,8 @@ const requestsMixin = {
           payload.table,
           payload.item.id
         ).then(
-          response => response,
-          errResponse => errResponse
+          (response) => response,
+          (errResponse) => errResponse
         );
 
         if (deleteResponse) {
@@ -114,14 +114,14 @@ const requestsMixin = {
     },
 
     $_requestsMixin_httpRequestWrapper(url, formData) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         this.$_requestsMixin_httpRequest(url, formData, resolve);
       });
     },
 
     $_requestsMixin_httpRequest(url, formData, resolve) {
       postRequest(url, formData).then(
-        response => {
+        (response) => {
           if (response.status === 200) {
             this.$_requestsMixin_toastResponseMessage(response);
             if (!!response.data && !!response.data.id) {
@@ -129,7 +129,7 @@ const requestsMixin = {
             } else resolve(false);
           } else resolve(false);
         },
-        errResponse => {
+        (errResponse) => {
           console.log("ERROR: " + JSON.stringify(errResponse));
           this.toastError({ text: this.$t("messages.uploadError") });
           resolve(false);
@@ -186,11 +186,11 @@ const requestsMixin = {
           this.toastError({
             text: isDelete
               ? this.$t("messages.deleteError")
-              : this.$t("messages.uploadError")
+              : this.$t("messages.uploadError"),
           });
       }
-    }
-  }
+    },
+  },
 };
 
 export default requestsMixin;

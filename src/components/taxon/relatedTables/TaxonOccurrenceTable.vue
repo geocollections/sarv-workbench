@@ -82,7 +82,7 @@
             <span
               v-translate="{
                 et: item.locality__locality,
-                en: item.locality__locality_en
+                en: item.locality__locality_en,
               }"
             />
           </router-link>
@@ -96,7 +96,7 @@
             <span
               v-translate="{
                 et: item.locality.locality,
-                en: item.locality.locality_en
+                en: item.locality.locality_en,
               }"
             />
           </router-link>
@@ -111,7 +111,7 @@
           <span
             v-translate="{
               et: item.locality__locality,
-              en: item.locality__locality_en
+              en: item.locality__locality_en,
             }"
           />
         </router-link>
@@ -129,7 +129,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_base__stratigraphy,
-                en: item.stratigraphy_base__stratigraphy_en
+                en: item.stratigraphy_base__stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -143,7 +143,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_base.stratigraphy,
-                en: item.stratigraphy_base.stratigraphy_en
+                en: item.stratigraphy_base.stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -158,7 +158,7 @@
           <span
             v-translate="{
               et: item.stratigraphy_base__stratigraphy,
-              en: item.stratigraphy_base__stratigraphy_en
+              en: item.stratigraphy_base__stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -176,7 +176,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_top__stratigraphy,
-                en: item.stratigraphy_top__stratigraphy_en
+                en: item.stratigraphy_top__stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -190,7 +190,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_top.stratigraphy,
-                en: item.stratigraphy_top.stratigraphy_en
+                en: item.stratigraphy_top.stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -205,7 +205,7 @@
           <span
             v-translate="{
               et: item.stratigraphy_top__stratigraphy,
-              en: item.stratigraphy_top__stratigraphy_en
+              en: item.stratigraphy_top__stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -215,7 +215,7 @@
         <div
           v-translate="{
             et: item.stratigraphic_distribution,
-            en: item.stratigraphic_distribution_en
+            en: item.stratigraphic_distribution_en,
           }"
         ></div>
       </template>
@@ -388,44 +388,44 @@ export default {
   components: {
     RelatedDataDeleteDialog,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -437,15 +437,15 @@ export default {
       { text: "taxon.stratigraphy_top", value: "stratigraphy_top" },
       {
         text: "taxon.stratigraphic_distribution",
-        value: "stratigraphic_distribution"
+        value: "stratigraphic_distribution",
       },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     item: {
       reference: null,
@@ -457,7 +457,7 @@ export default {
       stratigraphy_top: null,
       stratigraphic_distribution: "",
       stratigraphic_distribution_en: "",
-      remarks: ""
+      remarks: "",
     },
     autocomplete: {
       reference: [],
@@ -468,9 +468,9 @@ export default {
         reference: false,
         locality: false,
         stratigraphy_base: false,
-        stratigraphy_top: false
-      }
-    }
+        stratigraphy_top: false,
+      },
+    },
   }),
 
   computed: {
@@ -479,7 +479,7 @@ export default {
         typeof this.item.reference !== "undefined" &&
         this.item.reference !== null
       );
-    }
+    },
   },
 
   methods: {
@@ -494,7 +494,7 @@ export default {
         stratigraphy_top: null,
         stratigraphic_distribution: "",
         stratigraphic_distribution_en: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -505,7 +505,7 @@ export default {
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
-          reference: item.reference__reference
+          reference: item.reference__reference,
         };
         this.autocomplete.reference.push(this.item.reference);
       } else if (item.reference !== null) {
@@ -517,7 +517,7 @@ export default {
         this.item.locality = {
           id: item.locality,
           locality: item.locality__locality,
-          locality_en: item.locality__locality_en
+          locality_en: item.locality__locality_en,
         };
         this.autocomplete.locality.push(this.item.locality);
       } else if (item.locality !== null) {
@@ -532,7 +532,7 @@ export default {
         this.item.stratigraphy_base = {
           id: item.stratigraphy_base,
           stratigraphy: item.stratigraphy_base__stratigraphy,
-          stratigraphy_en: item.stratigraphy_base__stratigraphy_en
+          stratigraphy_en: item.stratigraphy_base__stratigraphy_en,
         };
         this.autocomplete.stratigraphy_base.push(this.item.stratigraphy_base);
       } else if (item.stratigraphy_base !== null) {
@@ -547,7 +547,7 @@ export default {
         this.item.stratigraphy_top = {
           id: item.stratigraphy_top,
           stratigraphy: item.stratigraphy_top__stratigraphy,
-          stratigraphy_en: item.stratigraphy_top__stratigraphy_en
+          stratigraphy_en: item.stratigraphy_top__stratigraphy_en,
         };
         this.autocomplete.stratigraphy_top.push(this.item.stratigraphy_top);
       } else if (item.stratigraphy_top !== null) {
@@ -562,8 +562,8 @@ export default {
         item.stratigraphic_distribution_en;
       this.item.locality_free = item.locality_free;
       this.item.remarks = item.remarks;
-    }
-  }
+    },
+  },
 };
 </script>
 

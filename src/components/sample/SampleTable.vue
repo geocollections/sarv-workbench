@@ -45,7 +45,7 @@
         <span
           v-translate="{
             et: item.locality__locality,
-            en: item.locality__locality_en
+            en: item.locality__locality_en,
           }"
         />
       </router-link>
@@ -63,7 +63,7 @@
             v-if="item.site__name || item.site__name_en"
             v-translate="{
               et: item.site__name,
-              en: item.site__name_en
+              en: item.site__name_en,
             }"
           />
           <span v-else>{{ item.site }}</span>
@@ -82,7 +82,7 @@
         <span
           v-translate="{
             et: item.locality__locality,
-            en: item.locality__locality_en
+            en: item.locality__locality_en,
           }"
         />
       </router-link>
@@ -106,7 +106,7 @@
         <span
           v-translate="{
             et: item.stratigraphy__stratigraphy,
-            en: item.stratigraphy__stratigraphy_en
+            en: item.stratigraphy__stratigraphy_en,
           }"
         />
       </router-link>
@@ -123,7 +123,7 @@
         <span
           v-translate="{
             et: item.lithostratigraphy__stratigraphy,
-            en: item.lithostratigraphy__stratigraphy_en
+            en: item.lithostratigraphy__stratigraphy_en,
           }"
         />
       </router-link>
@@ -140,7 +140,7 @@
         <span
           v-translate="{
             et: item.storage__location,
-            en: item.storage__location
+            en: item.storage__location,
           }"
         />
       </router-link>
@@ -170,37 +170,37 @@ export default {
   mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   methods: {
     getEmaUrl(params) {
       return `https://geoloogia.info/${params.object}/${params.id}`;
-    }
-  }
+    },
+  },
 };
 </script>

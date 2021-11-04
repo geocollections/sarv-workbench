@@ -36,21 +36,21 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     buttonPath: {
       type: String,
-      required: true
+      required: true,
     },
     showImportButton: {
       type: Boolean,
       required: false,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
-    ...mapState("settings", ["bodyActiveColor", "bodyActiveColorDark"])
-  }
+    ...mapState("settings", ["bodyActiveColor", "bodyActiveColorDark"]),
+  },
 };
 </script>
 

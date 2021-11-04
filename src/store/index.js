@@ -29,11 +29,11 @@ function buildLocalStorageKey() {
 const vuexLocal = new VuexPersistence({
   key: buildLocalStorageKey(),
   storage: window.localStorage,
-  reducer: state => ({
+  reducer: (state) => ({
     ...state,
     search: { ...state.search, loadingState: false, loadingPercent: 0 },
-    settings: { ...state.settings, showGlobalNotification: true }
-  })
+    settings: { ...state.settings, showGlobalNotification: true },
+  }),
 });
 
 export default new Vuex.Store({
@@ -44,8 +44,8 @@ export default new Vuex.Store({
     settings,
     user,
     admin,
-    tableHeaders
+    tableHeaders,
   },
   plugins: [vuexLocal.plugin],
-  strict: process.env.NODE_ENV !== "production"
+  strict: process.env.NODE_ENV !== "production",
 });

@@ -33,7 +33,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import ListModuleCore from "./ListModuleCore";
 import {
   fetchDrillcoreBoxes,
-  fetchDrillcoreBoxImages
+  fetchDrillcoreBoxImages,
 } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapState } from "vuex";
@@ -47,7 +47,7 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -55,12 +55,12 @@ export default {
     await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "storage", title: "drillcore.storage", type: "text" },
-      { id: "drillcore", title: "drillcore.drillcore", type: "text" }
+      { id: "drillcore", title: "drillcore.drillcore", type: "text" },
     ]);
   },
 
   computed: {
-    ...mapState("search", ["drillcore_boxViewType"])
+    ...mapState("search", ["drillcore_boxViewType"]),
   },
   methods: {
     apiCall() {
@@ -85,8 +85,8 @@ export default {
         this.updateSearchParamsByField(["id"], "sortBy");
         this.updateSearchParamsByField([true], "sortDesc");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -79,10 +79,10 @@ export default {
     useState: Boolean,
     useCustomState: Boolean,
     noCache: Boolean,
-    attachmentRelatedData: Boolean
+    attachmentRelatedData: Boolean,
   },
   data: () => ({
-    search: null
+    search: null,
   }),
   computed: {
     ...mapState("settings", ["bodyColor"]),
@@ -96,7 +96,7 @@ export default {
           return false;
         }
       } else return false;
-    }
+    },
   },
   watch: {
     search(newVal, oldVal) {
@@ -112,7 +112,7 @@ export default {
       ) {
         this.$emit("search:items", newVal);
       }
-    }
+    },
   },
   methods: {
     attachmentRelatedDataLabel(option, attrs) {
@@ -192,8 +192,8 @@ export default {
       if (this.search && this.search.length > 0) {
         this.search = null;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -158,24 +158,24 @@ export default {
   components: {
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
   data() {
@@ -189,7 +189,7 @@ export default {
         request: "FETCH_ANALYSIS_PARAMETERS",
         title: "header.analysis_parameter",
         object: "analysis_parameter",
-        field: "parameter"
+        field: "parameter",
       });
     }
 
@@ -197,15 +197,15 @@ export default {
   },
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   computed: {
-    ...mapState("search", ["analysis_parameterSearchParameters"])
+    ...mapState("search", ["analysis_parameterSearchParameters"]),
   },
   methods: {
     setInitialData() {
@@ -218,20 +218,20 @@ export default {
           "parameter_html",
           "synonyms",
           "parent_parameter",
-          "remarks"
+          "remarks",
         ],
         autocomplete: {
           loaders: {
-            analysis_parameter: false
+            analysis_parameter: false,
           },
-          analysis_parameter: []
+          analysis_parameter: [],
         },
         requiredFields: ["parameter"],
         analysis_parameter: {},
         block: {
           info: true,
-          description: true
-        }
+          description: true,
+        },
       };
     },
 
@@ -244,7 +244,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchAnalysisParameter(this.$route.params.id).then(response => {
+        fetchAnalysisParameter(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -275,7 +275,7 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -298,14 +298,14 @@ export default {
         this.analysis_parameter.parent_parameter = {
           id: obj.parent_parameter,
           parameter_name: obj.parent_parameter__parameter_name,
-          parameter_name_en: obj.parent_parameter__parameter_name_en
+          parameter_name_en: obj.parent_parameter__parameter_name_en,
         };
         this.autocomplete.analysis_parameter.push(
           this.analysis_parameter.parent_parameter
         );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

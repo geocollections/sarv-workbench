@@ -38,7 +38,7 @@ import {
   fetchTaxonPages,
   fetchLibraries,
   fetchAllFields,
-  fetchImagesets
+  fetchImagesets,
 } from "@/assets/js/api/apiCalls";
 
 const actions = {
@@ -75,31 +75,31 @@ const actions = {
   },
 
   FETCH_PROJECTS({ commit, state }) {
-    return fetchProjects(state.activeSearchParams.search).then(resp =>
+    return fetchProjects(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_SITES({ commit, state }) {
-    return fetchSites(state.activeSearchParams.search).then(resp =>
+    return fetchSites(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_ATTACHMENTS({ commit, state }) {
-    return fetchAttachments(state.activeSearchParams.search).then(resp =>
+    return fetchAttachments(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_REFERENCES({ commit, state }) {
-    return fetchReferences(state.activeSearchParams.search).then(resp =>
+    return fetchReferences(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_LIBRARIES({ commit, state }) {
-    return fetchLibraries(state.activeSearchParams.search).then(resp =>
+    return fetchLibraries(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
@@ -108,179 +108,181 @@ const actions = {
     return fetchImagesets(
       state.activeSearchParams.search,
       rootGetters["user/getCurrentUser"].id
-    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
+    ).then((resp) => commit("SET_SIDEBAR_LIST", resp));
   },
 
   FETCH_LOCALITIES({ commit, state }) {
-    return fetchLocalities(state.activeSearchParams.search).then(resp =>
+    return fetchLocalities(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_ANALYSIS_PARAMETERS({ commit, state }) {
-    return fetchAnalysisParameters(state.activeSearchParams.search).then(resp =>
-      commit("SET_SIDEBAR_LIST", resp)
+    return fetchAnalysisParameters(state.activeSearchParams.search).then(
+      (resp) => commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_ANALYSIS_METHODS({ commit, state }) {
-    return fetchAnalysisMethods(state.activeSearchParams.search).then(resp =>
+    return fetchAnalysisMethods(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_SAMPLES({ commit, state }) {
-    return fetchSamples(state.activeSearchParams.search).then(resp =>
+    return fetchSamples(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_ANALYSES({ commit, state }) {
-    return fetchAnalyses(state.activeSearchParams.search).then(resp =>
+    return fetchAnalyses(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_DOIS({ commit, state }) {
-    return fetchDois(state.activeSearchParams.search).then(resp =>
+    return fetchDois(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_SPECIMENS({ commit, state }) {
-    return fetchSpecimens(state.activeSearchParams.search).then(resp =>
+    return fetchSpecimens(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_KEYWORDS({ commit, state }) {
-    return fetchKeywords(state.activeSearchParams.search).then(resp =>
+    return fetchKeywords(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_JOURNALS({ commit, state }) {
-    return fetchJournals(state.activeSearchParams.search).then(resp =>
+    return fetchJournals(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_COLLECTIONS({ commit, state }) {
-    return fetchCollections(state.activeSearchParams.search).then(resp => {
+    return fetchCollections(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_TAXA({ commit, state }) {
-    return fetchTaxa(state.activeSearchParams.search).then(resp => {
+    return fetchTaxa(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_SELECTION_SERIES({ commit, state }) {
-    return fetchSelectionSeries(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
+    return fetchSelectionSeries(state.activeSearchParams.search).then(
+      (resp) => {
+        commit("SET_SIDEBAR_LIST", resp);
+      }
+    );
   },
 
   FETCH_AGENTS({ commit, state }) {
-    return fetchAgents(state.activeSearchParams.search).then(resp => {
+    return fetchAgents(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_PREPARATIONS({ commit, state }) {
-    return fetchPreparations(state.activeSearchParams.search).then(resp => {
+    return fetchPreparations(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_DRILLCORES({ commit, state }) {
-    return fetchDrillcores(state.activeSearchParams.search).then(resp => {
+    return fetchDrillcores(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_DATASETS({ commit, state }) {
-    return fetchDatasets(state.activeSearchParams.search).then(resp => {
+    return fetchDatasets(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_STRATIGRAPHY({ commit, state }) {
-    return fetchStratigraphies(state.activeSearchParams.search).then(resp => {
+    return fetchStratigraphies(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_AREAS({ commit, state }) {
-    return fetchAreas(state.activeSearchParams.search).then(resp => {
+    return fetchAreas(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_DRILLCORE_BOXES({ commit, state }) {
-    return fetchDrillcoreBoxes(state.activeSearchParams.search).then(resp => {
+    return fetchDrillcoreBoxes(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_LOCATIONS({ commit, state }) {
-    return fetchLocations(state.activeSearchParams.search).then(resp => {
+    return fetchLocations(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_ROCKS({ commit, state }) {
-    return fetchRocks(state.activeSearchParams.search).then(resp => {
+    return fetchRocks(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_DEACCESSIONS({ commit, state }) {
-    return fetchDeaccessions(state.activeSearchParams.search).then(resp => {
+    return fetchDeaccessions(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_ACCESSIONS({ commit, state }) {
-    return fetchAccessions(state.activeSearchParams.search).then(resp => {
+    return fetchAccessions(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_VISITS({ commit, state }) {
-    return fetchVisits(state.activeSearchParams.search).then(resp => {
+    return fetchVisits(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_LOANS({ commit, state }) {
-    return fetchLoans(state.activeSearchParams.search).then(resp => {
+    return fetchLoans(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_WEB_PAGES({ commit, state }) {
-    return fetchWebPages(state.activeSearchParams.search).then(resp => {
+    return fetchWebPages(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_TAXON_PAGES({ commit, state }) {
-    return fetchTaxonPages(state.activeSearchParams.search).then(resp => {
+    return fetchTaxonPages(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_WEB_NEWS({ commit, state }) {
-    return fetchWebNews(state.activeSearchParams.search).then(resp => {
+    return fetchWebNews(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_SAMPLE_SERIES({ commit, state }) {
-    return fetchSampleSeries(state.activeSearchParams.search).then(resp => {
+    return fetchSampleSeries(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
@@ -289,13 +291,13 @@ const actions = {
     return fetchSarvIssues(
       state.activeSearchParams.search,
       rootGetters["user/getUserId"]
-    ).then(resp => {
+    ).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   fetchActiveSarvIssues({ commit, rootGetters }) {
-    return fetchActiveSarvIssues(rootGetters["user/getUserId"]).then(resp => {
+    return fetchActiveSarvIssues(rootGetters["user/getUserId"]).then((resp) => {
       commit("SET_ACTIVE_SARV_ISSUES", resp);
     });
   },
@@ -352,7 +354,7 @@ const actions = {
     fetchActiveSelectionSeriesList(
       payload.routeObject,
       payload.selectionSeriesId
-    ).then(response => {
+    ).then((response) => {
       let results = response?.data?.results || null;
       if (results && results.length > 0) {
         // results = results.map(item => item[payload.routeObject]);
@@ -362,7 +364,7 @@ const actions = {
   },
 
   getActiveLibraryList({ commit }, payload) {
-    fetchActiveLibraryList(payload.libraryId).then(response => {
+    fetchActiveLibraryList(payload.libraryId).then((response) => {
       let results = response?.data?.results || null;
       if (results && results.length > 0) {
         // results = results.map(item => item.reference);
@@ -377,7 +379,7 @@ const actions = {
 
   resetActiveLibraryList({ commit }) {
     commit("RESET_ACTIVE_LIBRARY_LIST");
-  }
+  },
 };
 
 export default actions;

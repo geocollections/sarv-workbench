@@ -39,7 +39,7 @@ export default {
   components: {
     ListModuleCore,
     TableViewSearch,
-    TableViewTitle
+    TableViewTitle,
   },
 
   name: "SamplesSeries",
@@ -48,7 +48,7 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -60,8 +60,8 @@ export default {
       {
         id: "agent_collected",
         title: "specimen.agent_collected",
-        type: "text"
-      }
+        type: "text",
+      },
     ]);
   },
 
@@ -71,8 +71,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

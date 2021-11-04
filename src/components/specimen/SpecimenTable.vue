@@ -38,24 +38,26 @@
       <div
         v-if="
           names &&
-            names.length > 0 &&
-            names.find(specimen => specimen.id === item.id)
+          names.length > 0 &&
+          names.find((specimen) => specimen.id === item.id)
         "
       >
-        <div v-if="names.find(specimen => specimen.id === item.id).taxonId">
+        <div v-if="names.find((specimen) => specimen.id === item.id).taxonId">
           <i
             v-translate="{
-              et: names.find(specimen => specimen.id === item.id).name,
-              en: names.find(specimen => specimen.id === item.id).name_en
+              et: names.find((specimen) => specimen.id === item.id).name,
+              en: names.find((specimen) => specimen.id === item.id).name_en,
             }"
           />
         </div>
 
-        <div v-else-if="names.find(specimen => specimen.id === item.id).rockId">
+        <div
+          v-else-if="names.find((specimen) => specimen.id === item.id).rockId"
+        >
           <i
             v-translate="{
-              et: names.find(specimen => specimen.id === item.id).name,
-              en: names.find(specimen => specimen.id === item.id).name_en
+              et: names.find((specimen) => specimen.id === item.id).name,
+              en: names.find((specimen) => specimen.id === item.id).name_en,
             }"
           />
         </div>
@@ -63,8 +65,8 @@
         <i
           v-else
           v-translate="{
-            et: names.find(specimen => specimen.id === item.id).name,
-            en: names.find(specimen => specimen.id === item.id).name_en
+            et: names.find((specimen) => specimen.id === item.id).name,
+            en: names.find((specimen) => specimen.id === item.id).name_en,
           }"
         />
       </div>
@@ -81,7 +83,7 @@
         <span
           v-translate="{
             et: item.locality__locality,
-            en: item.locality__locality_en
+            en: item.locality__locality_en,
           }"
         />
       </router-link>
@@ -99,16 +101,14 @@
         <span
           v-translate="{
             et: item.stratigraphy__stratigraphy,
-            en: item.stratigraphy__stratigraphy_en
+            en: item.stratigraphy__stratigraphy_en,
           }"
         />
-        <span v-if="item.stratigraphy && item.lithostratigraphy">
-          |
-        </span>
+        <span v-if="item.stratigraphy && item.lithostratigraphy"> | </span>
         <span
           v-translate="{
             et: item.lithostratigraphy__stratigraphy,
-            en: item.lithostratigraphy__stratigraphy_en
+            en: item.lithostratigraphy__stratigraphy_en,
           }"
         />
       </div>
@@ -125,7 +125,7 @@
         <span
           v-translate="{
             et: item.storage__location,
-            en: item.storage__location
+            en: item.storage__location,
           }"
         />
       </router-link>
@@ -149,7 +149,7 @@
 <script>
 import {
   fetchSpecimenIdentificationGeologiesList,
-  fetchSpecimenIdentificationsList
+  fetchSpecimenIdentificationsList,
 } from "../../assets/js/api/apiCalls";
 import { mapState } from "vuex";
 import activeListMixin from "../../mixins/activeListMixin";
@@ -160,43 +160,43 @@ export default {
   mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   data: () => ({
-    names: []
+    names: [],
   }),
   watch: {
     "response.results": {
       handler(newVal) {
         this.getNames(newVal);
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     getGeoDetailUrl(params) {
@@ -213,7 +213,7 @@ export default {
 
     async getNames(listOfSpecimens) {
       if (listOfSpecimens && listOfSpecimens.length > 0) {
-        let listOfIds = listOfSpecimens.map(specimen => specimen.id);
+        let listOfIds = listOfSpecimens.map((specimen) => specimen.id);
 
         const taxonResponse = await fetchSpecimenIdentificationsList(listOfIds);
         const rockResponse = await fetchSpecimenIdentificationGeologiesList(
@@ -225,20 +225,20 @@ export default {
           let rockList = [];
 
           if (taxonResponse.data.count > 0) {
-            taxonList = taxonResponse.data.results.map(entity => {
+            taxonList = taxonResponse.data.results.map((entity) => {
               return {
                 id: entity.specimen_id,
                 name: entity.taxon__taxon ? entity.taxon__taxon : entity.name,
                 name_en: entity.taxon__taxon
                   ? entity.taxon__taxon
                   : entity.name,
-                taxonId: entity.taxon
+                taxonId: entity.taxon,
               };
             });
           }
 
           if (rockResponse.data.count > 0) {
-            rockList = rockResponse.data.results.map(entity => {
+            rockList = rockResponse.data.results.map((entity) => {
               let name = "";
               let name_en = "";
 
@@ -270,20 +270,20 @@ export default {
                 id: entity.specimen_id,
                 name: name,
                 name_en: name_en,
-                rockId: entity.rock
+                rockId: entity.rock,
               };
             });
           }
 
           if (taxonList.length > 0 && rockList.length > 0) {
-            rockList.forEach(rock => {
-              let item = taxonList.find(taxon => rock.id === taxon.id);
+            rockList.forEach((rock) => {
+              let item = taxonList.find((taxon) => rock.id === taxon.id);
               item ? this.names.push(item) : this.names.push(rock);
             });
 
-            taxonList.forEach(taxonItem => {
+            taxonList.forEach((taxonItem) => {
               let secondItem = rockList.find(
-                rockItem => taxonItem.id === rockItem.id
+                (rockItem) => taxonItem.id === rockItem.id
               );
               secondItem
                 ? this.names.push(secondItem)
@@ -294,7 +294,7 @@ export default {
           else if (rockList.length > 0) this.names = rockList;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>

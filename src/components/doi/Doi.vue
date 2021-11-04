@@ -644,9 +644,9 @@
         <v-btn
           v-if="
             $route.meta.isEdit &&
-              showMetadataButton &&
-              validate('doi') &&
-              doiContainsFile
+            showMetadataButton &&
+            validate('doi') &&
+            doiContainsFile
           "
           class="mr-2 mb-2 text-none"
           :disabled="loadingState"
@@ -670,9 +670,9 @@
         <v-btn
           v-if="
             $route.meta.isEdit &&
-              showDoiUrlButton &&
-              validate('doi') &&
-              doiContainsFile
+            showDoiUrlButton &&
+            validate('doi') &&
+            doiContainsFile
           "
           class="mr-2 mb-2 text-none"
           :disabled="loadingState"
@@ -766,7 +766,7 @@
                 :class="{
                   'diff-inserted scroll-inserted': entity[0] === 1,
                   'diff-deleted scroll-deleted': entity[0] === -1,
-                  'diff-equal scroll-equal': entity[0] === 0
+                  'diff-equal scroll-equal': entity[0] === 0,
                 }"
               >
                 <span>{{ entity[1] }}</span>
@@ -819,7 +819,12 @@
                 DataCite URL ({{ $t("doi.currentUrl") }}):
                 <a
                   :href="dataciteURL"
-                  class="font-weight-bold red--text text-decoration-underline url-link"
+                  class="
+                    font-weight-bold
+                    red--text
+                    text-decoration-underline
+                    url-link
+                  "
                   target="OldDoi"
                   :title="$t('doi.currentUrl')"
                   >{{ dataciteURL }}</a
@@ -830,7 +835,12 @@
                 SARV URL ({{ $t("doi.newUrl") }}):
                 <a
                   :href="doiURL"
-                  class="font-weight-bold green--text text-decoration-underline url-link"
+                  class="
+                    font-weight-bold
+                    green--text
+                    text-decoration-underline
+                    url-link
+                  "
                   target="NewDoi"
                   :title="$t('doi.newUrl')"
                   >{{ doiURL }}</a
@@ -870,7 +880,7 @@ import {
   fetchRegisterDoiUrlToDataCite,
   fetchDoiUsingEGF,
   fetchAgentUsingName,
-  fetchDoiPublisher
+  fetchDoiPublisher,
 } from "@/assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
@@ -900,25 +910,25 @@ export default {
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
@@ -926,7 +936,7 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     requestsMixin,
-    toastMixin
+    toastMixin,
   ],
 
   name: "Doi",
@@ -943,7 +953,7 @@ export default {
         request: "FETCH_DOIS",
         title: "header.dois",
         object: "doi",
-        field: "title"
+        field: "title",
       });
     }
 
@@ -952,22 +962,22 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
-      }
+      },
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
+      deep: true,
     },
     "relatedData.doi_agent.results": {
       handler(newVal) {
         if (newVal && newVal.length > 0) this.updateDoiCreatorsField(newVal);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
@@ -981,10 +991,10 @@ export default {
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
     },
@@ -1010,7 +1020,7 @@ export default {
       // Does not apply to egf #516
       if (this.doi.egf) return true;
       else return this.relatedData.attachment_link.count > 0;
-    }
+    },
   },
 
   methods: {
@@ -1020,7 +1030,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -1034,9 +1044,9 @@ export default {
           { name: "doi_geolocation", iconClass: "fas fa-globe-americas" },
           {
             name: "doi_related_identifier",
-            iconClass: "fas fa-project-diagram"
+            iconClass: "fas fa-project-diagram",
           },
-          { name: "doi_date", iconClass: "far fa-calendar-alt" }
+          { name: "doi_date", iconClass: "far fa-calendar-alt" },
         ],
         activeTab: "doi_agent",
         relatedData: this.setDefaultRelatedData(),
@@ -1067,7 +1077,7 @@ export default {
           "is_locked",
           "datacite_created",
           "datacite_updated",
-          "egf"
+          "egf",
         ],
         autocomplete: {
           loaders: {
@@ -1085,7 +1095,7 @@ export default {
             doi_agent: false,
             locality: false,
             doi_date_type: false,
-            attachment_public: false
+            attachment_public: false,
           },
           resource_type: [],
           doi_publisher: [],
@@ -1101,7 +1111,7 @@ export default {
           doi_agent: [],
           locality: [],
           doi_date_type: [],
-          attachment: []
+          attachment: [],
         },
         requiredFields: [
           "resource_type",
@@ -1109,7 +1119,7 @@ export default {
           "creators",
           "publication_year",
           "publisher",
-          "title"
+          "title",
         ],
         doi: {},
         block: {
@@ -1119,7 +1129,7 @@ export default {
           description: true,
           datacite: true,
           dataciteDiff: false,
-          dataciteUrlDiff: false
+          dataciteUrlDiff: false,
         },
         showMetadataButton: false,
         showDoiUrlButton: false,
@@ -1136,8 +1146,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -1158,7 +1168,7 @@ export default {
         this.setLoadingType("fetch");
         this.$emit("set-object", "doi");
 
-        fetchDoi(this.$route.params.id).then(response => {
+        fetchDoi(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -1183,16 +1193,16 @@ export default {
           this.checkDoiUrl();
 
           // Load Related Data which is in tabs
-          this.relatedTabs.forEach(tab => {
+          this.relatedTabs.forEach((tab) => {
             this.loadRelatedData(tab.name);
           });
         });
       } else if (this.$route.meta.isEGF && !this.$route.meta.isEdit) {
-        fetchDoiUsingEGF(this.$route.params.id).then(response => {
+        fetchDoiUsingEGF(this.$route.params.id).then((response) => {
           if (response?.data) this.assignEgfFieldsToDoiObject(response?.data);
           else
             this.toastError({
-              text: `Couldn't fetch <b>Fond</b> with an ID: <b>${this.$route.params.id}</b>`
+              text: `Couldn't fetch <b>Fond</b> with an ID: <b>${this.$route.params.id}</b>`,
             });
         });
       } else {
@@ -1205,13 +1215,13 @@ export default {
 
     loadAutocompleteFields() {
       fetchDoiResourceType().then(
-        response =>
+        (response) =>
           (this.autocomplete.resource_type = this.handleResponse(response))
       );
-      fetchDoiPublisher().then(response => {
+      fetchDoiPublisher().then((response) => {
         this.autocomplete.doi_publisher = [
           ...this.autocomplete.doi_publisher,
-          ...this.handleResponse(response)
+          ...this.handleResponse(response),
         ];
         if (
           !this.$route.meta.isEdit &&
@@ -1224,10 +1234,12 @@ export default {
         }
       });
       fetchListLanguages().then(
-        response => (this.autocomplete.language = this.handleResponse(response))
+        (response) =>
+          (this.autocomplete.language = this.handleResponse(response))
       );
       fetchListLicences().then(
-        response => (this.autocomplete.licence = this.handleResponse(response))
+        (response) =>
+          (this.autocomplete.licence = this.handleResponse(response))
       );
     },
 
@@ -1245,37 +1257,37 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           doi_related_identifier: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           doi_geolocation: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           doi_agent: {
             page: 1,
             paginateBy: 25,
             sortBy: ["sort", "id"],
-            sortDesc: [false, false]
+            sortDesc: [false, false],
           },
           doi_date: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
+            sortDesc: [true],
+          },
         },
         count: {
           reference: 0,
-          dataset: 0
-        }
+          dataset: 0,
+        },
       };
     },
 
@@ -1284,7 +1296,7 @@ export default {
 
       if (uploadableObject.egf) delete uploadableObject.egf;
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -1310,30 +1322,29 @@ export default {
       // Adding related data
       uploadableObject.related_data = {};
       if (this.relatedData.attachment_link.results.length > 0) {
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-          item => {
+        uploadableObject.related_data.attachment =
+          this.relatedData.attachment_link.results.map((item) => {
             return {
               // ...item,
               id: item.id,
-              is_locked: true
+              is_locked: true,
             };
-          }
-        );
+          });
       } else uploadableObject.related_data.attachment = null;
 
       if (!this.$route.meta.isEdit) {
         if (this.relatedData.doi_agent.results.length > 0) {
           let clonedData = cloneDeep(this.relatedData.doi_agent.results);
           uploadableObject.related_data.doi_agent = clonedData
-            .filter(entity => this.isNotEmpty(entity.name))
-            .map(entity => {
+            .filter((entity) => this.isNotEmpty(entity.name))
+            .map((entity) => {
               return {
                 affiliation: entity?.affiliation || null,
                 agent: entity?.agent?.id || null,
                 agent_type: entity?.agent_type?.id || null,
                 name: entity?.name || null,
                 orcid: entity?.orcid || null,
-                sort: entity?.sort || null
+                sort: entity?.sort || null,
               };
             });
           if (uploadableObject.related_data.doi_agent.length === 0)
@@ -1344,13 +1355,13 @@ export default {
           let clonedData = cloneDeep(this.relatedData.doi_geolocation.results);
           uploadableObject.related_data.doi_geolocation = clonedData
             // .filter(entity => this.isNotEmpty(entity.locality))
-            .map(entity => {
+            .map((entity) => {
               return {
                 polygon: entity?.polygon || null,
                 locality: entity?.locality?.id || null,
                 place: entity?.place || null,
                 point_latitude: entity?.point_latitude || null,
-                point_longitude: entity?.point_longitude || null
+                point_longitude: entity?.point_longitude || null,
               };
             });
           if (uploadableObject.related_data.doi_geolocation.length === 0)
@@ -1362,13 +1373,13 @@ export default {
             this.relatedData.doi_related_identifier.results
           );
           uploadableObject.related_data.doi_related_identifier = clonedData
-            .filter(entity => this.isNotEmpty(entity.identifier_type))
-            .map(entity => {
+            .filter((entity) => this.isNotEmpty(entity.identifier_type))
+            .map((entity) => {
               return {
                 identifier_type: entity?.identifier_type?.id || null,
                 relation_type: entity?.relation_type?.id || null,
                 remarks: entity?.remarks || null,
-                value: entity?.value || null
+                value: entity?.value || null,
               };
             });
           if (uploadableObject.related_data.doi_related_identifier.length === 0)
@@ -1379,11 +1390,11 @@ export default {
           let clonedData = cloneDeep(this.relatedData.doi_date.results);
           uploadableObject.related_data.doi_date = clonedData
             // .filter(entity => this.isNotEmpty(entity.date))
-            .map(entity => {
+            .map((entity) => {
               return {
                 date: entity?.date || null,
                 date_type: entity?.date_type?.id || null,
-                remarks: entity?.remarks || null
+                remarks: entity?.remarks || null,
               };
             });
           if (uploadableObject.related_data.doi_date.length === 0)
@@ -1403,12 +1414,12 @@ export default {
     fillAutocompleteFields(obj) {
       this.doi.resource_type = {
         id: obj.resource_type,
-        value: obj.resource_type__value
+        value: obj.resource_type__value,
       };
       this.doi.title_translated_language = {
         id: obj.title_translated_language,
         value: obj.title_translated_language__value,
-        value_en: obj.title_translated_language__value_en
+        value_en: obj.title_translated_language__value_en,
       };
       if (this.isNotEmpty(obj.owner)) {
         this.doi.owner = { id: obj.owner, agent: obj.owner__agent };
@@ -1417,42 +1428,42 @@ export default {
       this.doi.language = {
         id: obj.language,
         value: obj.language__value,
-        value_en: obj.language__value_en
+        value_en: obj.language__value_en,
       };
       if (this.isNotEmpty(obj.copyright_agent)) {
         this.doi.copyright_agent = {
           id: obj.copyright_agent,
-          agent: obj.copyright_agent__agent
+          agent: obj.copyright_agent__agent,
         };
         this.autocomplete.copyright_agent.push(this.doi.copyright_agent);
       }
       this.doi.licence = {
         id: obj.licence,
         licence: obj.licence__licence,
-        licence_en: obj.licence__licence_en
+        licence_en: obj.licence__licence_en,
       };
 
       // Filling related data, doing it here because there is only 1 reference and 1 dataset
       // Reference and Dataset are direct links and should be added without relatedData object.
       this.doi.reference = {
         id: obj.reference,
-        reference: obj.reference__reference
+        reference: obj.reference__reference,
       };
       this.doi.dataset = {
         id: obj.dataset,
         name: obj.dataset__name,
-        name_en: obj.dataset__name_en
+        name_en: obj.dataset__name_en,
       };
 
       if (this.doi.publisher) {
         if (
           !this.autocomplete.doi_publisher.some(
-            item => item.value === this.doi.publisher
+            (item) => item.value === this.doi.publisher
           )
         ) {
           this.autocomplete.doi_publisher = [
             ...this.autocomplete.doi_publisher,
-            { value: this.doi.publisher }
+            { value: this.doi.publisher },
           ];
         }
       }
@@ -1470,7 +1481,7 @@ export default {
         this.relatedData.count[object] = 1;
         this.relatedData[object] = {
           id: doi.reference__id,
-          reference: doi.reference__reference
+          reference: doi.reference__reference,
         };
         this.autocomplete.reference.push(this.relatedData[object]);
         this.setBlockVisibility(object, this.relatedData.count[object]);
@@ -1485,7 +1496,7 @@ export default {
         this.relatedData[object] = {
           id: doi.dataset__id,
           name: doi.dataset__name,
-          name_en: doi.dataset__name_en
+          name_en: doi.dataset__name_en,
         };
         this.autocomplete.dataset.push(this.relatedData[object]);
         this.setBlockVisibility(object, this.relatedData.count[object]);
@@ -1519,7 +1530,7 @@ export default {
 
       // Dataset and Reference are direct links and do not need extra request.
       if (query && object !== "dataset" && object !== "reference") {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -1558,7 +1569,7 @@ export default {
         let creatorsLong = "";
         let moreThanOneAuthor = doiAgent.length > 1;
 
-        orderBy(doiAgent, ["sort", "id"], ["asc", "asc"]).forEach(agent => {
+        orderBy(doiAgent, ["sort", "id"], ["asc", "asc"]).forEach((agent) => {
           // Only Creators are added (agent_type 1 === Creator)
           if (this.$route.meta.isEdit) {
             if (agent?.agent_type === 1) {
@@ -1623,7 +1634,7 @@ export default {
                 this.showUpdateMessage = true;
                 this.toastInfo({
                   text: this.$t("doi.dataCiteNeedsUpdate"),
-                  timeout: 7000
+                  timeout: 7000,
                 });
               }
             }
@@ -1636,7 +1647,7 @@ export default {
                 this.showDataCiteUrlButton = true;
                 this.toastInfo({
                   text: this.$t("doi.dataCiteUrlNeedsUpdate"),
-                  timeout: 7000
+                  timeout: 7000,
                 });
               }
             }
@@ -1649,12 +1660,12 @@ export default {
               if (this.$i18n.locale === "ee")
                 this.toastInfo({
                   text: dataCiteResponse[0].error_et,
-                  timeout: 7000
+                  timeout: 7000,
                 });
               else
                 this.toastInfo({
                   text: dataCiteResponse[0].error,
-                  timeout: 7000
+                  timeout: 7000,
                 });
             }
           } else {
@@ -1662,12 +1673,12 @@ export default {
             if (this.$i18n.locale === "ee")
               this.toastInfo({
                 text: dataCiteResponse[0].error_et,
-                timeout: 7000
+                timeout: 7000,
               });
             else
               this.toastInfo({
                 text: dataCiteResponse[0].error,
-                timeout: 7000
+                timeout: 7000,
               });
           }
         }
@@ -1698,7 +1709,7 @@ export default {
           this.setLoadingType("fetch");
 
           fetchRegisterMetadataToDataCite(this.$route.params.id).then(
-            response => {
+            (response) => {
               if (response.status === 200) {
                 if (
                   typeof response.data.results !== "undefined" &&
@@ -1710,7 +1721,7 @@ export default {
                         this.$t("doi.dataciteMetadataUpdated") +
                         " DataCite response: " +
                         response.data.results[0].content,
-                      timeout: 5000
+                      timeout: 5000,
                     });
                     this.setCurrentTimeToDataCiteDateFields();
                     this.showMetadataButton = false;
@@ -1720,7 +1731,7 @@ export default {
                     this.checkDoiUrl();
                   } else {
                     this.toastError({
-                      text: this.$t("doi.dataciteMetadataUpdateFailed")
+                      text: this.$t("doi.dataciteMetadataUpdateFailed"),
                     });
                     this.setLoadingState(false);
                   }
@@ -1745,7 +1756,7 @@ export default {
           this.setLoadingType("fetch");
 
           fetchRegisterDoiUrlToDataCite(this.$route.params.id).then(
-            response => {
+            (response) => {
               if (response.status === 200) {
                 if (
                   typeof response.data.results !== "undefined" &&
@@ -1757,13 +1768,13 @@ export default {
                         this.$t("doi.dataciteUrlUpdated") +
                         " DataCite response: " +
                         response.data.results[0].content,
-                      timeout: 5000
+                      timeout: 5000,
                     });
                     this.showDoiUrlButton = false;
                     this.showDoiUrlUpdateMessage = false;
                   } else {
                     this.toastError({
-                      text: this.$t("doi.dataciteUrlUpdateFailed")
+                      text: this.$t("doi.dataciteUrlUpdateFailed"),
                     });
                   }
                 }
@@ -1777,7 +1788,7 @@ export default {
 
     // Checks metadata from DataCite
     checkMetadata() {
-      fetchCheckMetadataInDataCite(this.$route.params.id).then(response => {
+      fetchCheckMetadataInDataCite(this.$route.params.id).then((response) => {
         if (response.status === 200) {
           if (
             typeof response.data.results !== "undefined" &&
@@ -1790,7 +1801,7 @@ export default {
                 this.sarvXML = response.data.results[0].sarv_xml;
                 this.dataciteXML = response.data.results[0].datacite_xml;
                 this.toastInfo({
-                  text: this.$t("doi.dataciteMetadataNeedsUpdate")
+                  text: this.$t("doi.dataciteMetadataNeedsUpdate"),
                 });
               } else {
                 this.showMetadataButton = false;
@@ -1820,7 +1831,7 @@ export default {
 
     // Checks DOI url from DataCite
     checkDoiUrl() {
-      fetchCheckDoiUrlInDataCite(this.$route.params.id).then(response => {
+      fetchCheckDoiUrlInDataCite(this.$route.params.id).then((response) => {
         if (response.status === 200) {
           if (
             typeof response.data.results !== "undefined" &&
@@ -1856,7 +1867,7 @@ export default {
         this.doi.licence = {
           id: 3,
           licence: "CC BY 4.0",
-          licence_en: "CC BY 4.0"
+          licence_en: "CC BY 4.0",
         };
         this.doi.subjects = ""; // Needed because otherwise undefined will be written also.
         this.doi.remarks = ""; // Needed because otherwise undefined will be written also.
@@ -1873,7 +1884,7 @@ export default {
 
           let formattedCreatorsList = [];
           if (creatorsList && creatorsList.length > 0) {
-            creatorsList.forEach(creator => {
+            creatorsList.forEach((creator) => {
               let firstName = creator.substring(
                 0,
                 creator.lastIndexOf(".") + 1
@@ -1890,8 +1901,8 @@ export default {
                 agent: null,
                 agent_type: {
                   id: 1,
-                  value: "Creator"
-                }
+                  value: "Creator",
+                },
                 // agent_type__value: "Creator"
               });
             });
@@ -1904,7 +1915,7 @@ export default {
           this.doi.language = {
             id: 4,
             value: "eesti",
-            value_en: "Estonian"
+            value_en: "Estonian",
           };
         }
         if (egfDoiObject.title_eng) {
@@ -1912,7 +1923,7 @@ export default {
           this.doi.title_translated_language = {
             id: 1,
             value: "inglise",
-            value_en: "English"
+            value_en: "English",
           };
         }
         if (
@@ -1925,7 +1936,7 @@ export default {
             this.doi.language = {
               id: 5,
               value: "vene",
-              value_en: "Russian"
+              value_en: "Russian",
             };
           }
         }
@@ -1959,7 +1970,7 @@ export default {
           else funderList.push(egfDoiObject.funder);
 
           if (funderList && funderList.length > 0) {
-            funderList.forEach(funder => {
+            funderList.forEach((funder) => {
               this.relatedData.doi_agent.count++;
               this.relatedData.doi_agent.results.push({
                 affiliation: "",
@@ -1968,8 +1979,8 @@ export default {
                 name: funder,
                 agent_type: {
                   id: 22,
-                  value: "Sponsor"
-                }
+                  value: "Sponsor",
+                },
                 // 22,
                 // agent_type__value: "Sponsor"
               });
@@ -1983,7 +1994,7 @@ export default {
           else performerList.push(egfDoiObject.performer);
 
           if (performerList && performerList.length > 0) {
-            performerList.forEach(performer => {
+            performerList.forEach((performer) => {
               this.relatedData.doi_agent.count++;
               this.relatedData.doi_agent.results.push({
                 affiliation: "",
@@ -1992,8 +2003,8 @@ export default {
                 name: performer,
                 agent_type: {
                   id: 12,
-                  value: "Producer"
-                }
+                  value: "Producer",
+                },
                 // agent_type__value: "Producer"
               });
             });
@@ -2059,15 +2070,15 @@ export default {
               );
               this.relatedData.doi_geolocation.count++;
               this.relatedData.doi_geolocation.results.push({
-                polygon: coordinates
+                polygon: coordinates,
               });
             } else if (egfDoiObject.geometry.type === "MultiPolygon") {
-              egfDoiObject.geometry.coordinates.forEach(coordinates => {
+              egfDoiObject.geometry.coordinates.forEach((coordinates) => {
                 this.swapCoordinates(coordinates[0]);
 
                 this.relatedData.doi_geolocation.count++;
                 this.relatedData.doi_geolocation.results.push({
-                  polygon: JSON.stringify(coordinates[0])
+                  polygon: JSON.stringify(coordinates[0]),
                 });
               });
             }
@@ -2078,7 +2089,7 @@ export default {
 
     swapCoordinates(arr) {
       if (arr && arr.length > 0) {
-        arr.forEach(el => this.swapArrayElements(el, 0, 1));
+        arr.forEach((el) => this.swapArrayElements(el, 0, 1));
       }
     },
 
@@ -2106,7 +2117,7 @@ export default {
           if (creator.trim().length > 0) {
             fetchAgentUsingName(creator.trim())
               .then(
-                response => {
+                (response) => {
                   let agentObject = this.handleResponse(response)[0];
 
                   if (this.isNotEmpty(agentObject)) {
@@ -2116,16 +2127,16 @@ export default {
                       agentObject.institution__institution_name_en;
                     doiAgentObject.agent = {
                       id: agentObject.id,
-                      agent: agentObject.agent
+                      agent: agentObject.agent,
                     };
                     doiAgentObject.agent_type = {
                       id: 1,
-                      value: "Creator"
+                      value: "Creator",
                     };
                     doiAgentObject.sort = index + 1;
                     if (
                       !this.relatedData["doi_agent"].results.find(
-                        agent =>
+                        (agent) =>
                           agent.id === doiAgentObject.agent ||
                           agent.name === doiAgentObject.name
                       )
@@ -2136,18 +2147,18 @@ export default {
                       );
                     } else
                       this.toastError({
-                        text: `Author(s) with the same information already exists!`
+                        text: `Author(s) with the same information already exists!`,
                       });
                   } else {
                     doiAgentObject.name = creator.trim();
                     doiAgentObject.agent_type = {
                       id: 1,
-                      value: "Creator"
+                      value: "Creator",
                     };
                     doiAgentObject.sort = index + 1;
                     if (
                       !this.relatedData["doi_agent"].results.find(
-                        agent => agent.name === doiAgentObject.name
+                        (agent) => agent.name === doiAgentObject.name
                       )
                     ) {
                       this.relatedData["doi_agent"].count++;
@@ -2156,7 +2167,7 @@ export default {
                       );
                     } else
                       this.toastError({
-                        text: `Author(s) with the same name already exists!`
+                        text: `Author(s) with the same name already exists!`,
                       });
                   }
                 },
@@ -2165,14 +2176,14 @@ export default {
                   doiAgentObject.sort = index + 1;
                   if (
                     !this.relatedData["doi_agent"].results.find(
-                      agent => agent.name === doiAgentObject.name
+                      (agent) => agent.name === doiAgentObject.name
                     )
                   ) {
                     this.relatedData["doi_agent"].count++;
                     this.relatedData["doi_agent"].results.push(doiAgentObject);
                   } else
                     this.toastError({
-                      text: `Author(s) with the same name already exists!`
+                      text: `Author(s) with the same name already exists!`,
                     });
                 }
               )
@@ -2198,8 +2209,8 @@ export default {
     addExistingFiles(files) {
       // this.relatedData.attachment_link.count = files.length;
       this.relatedData.attachment_link.results = files;
-    }
-  }
+    },
+  },
 };
 </script>
 

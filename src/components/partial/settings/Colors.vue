@@ -301,7 +301,7 @@ export default {
       "blue-grey",
       "grey",
       "black",
-      "white"
+      "white",
     ],
     colorsLight: [
       "red lighten-4",
@@ -322,8 +322,8 @@ export default {
       "deep-orange lighten-4",
       "brown lighten-4",
       "blue-grey lighten-4",
-      "grey lighten-4"
-    ]
+      "grey lighten-4",
+    ],
     // { name: "red", hex: "#F44336" },
     // { name: "pink", hex: "#E91E63" },
     // { name: "purple", hex: "#9C27B0" },
@@ -359,7 +359,7 @@ export default {
       "drawerLeftActiveColor",
       "drawerRightColor",
       "drawerRightDark",
-      "drawerRightActiveColor"
+      "drawerRightActiveColor",
     ]),
 
     myBodyColor: {
@@ -369,7 +369,7 @@ export default {
 
       set(value) {
         this.updateBodyColor(value);
-      }
+      },
     },
 
     myBodyDark: {
@@ -379,7 +379,7 @@ export default {
 
       set(value) {
         this.updateBodyDark(value);
-      }
+      },
     },
 
     myBodyActiveColor: {
@@ -389,7 +389,7 @@ export default {
 
       set(value) {
         this.updateBodyActiveColor(value);
-      }
+      },
     },
 
     myBodyActiveColorDark: {
@@ -399,7 +399,7 @@ export default {
 
       set(value) {
         this.updateBodyActiveColorDark(value);
-      }
+      },
     },
 
     myNavbarColor: {
@@ -409,7 +409,7 @@ export default {
 
       set(value) {
         this.updateNavbarColor(value);
-      }
+      },
     },
 
     myNavbarDark: {
@@ -419,7 +419,7 @@ export default {
 
       set(value) {
         this.updateNavbarDark(value);
-      }
+      },
     },
 
     myDrawerLeftColor: {
@@ -429,7 +429,7 @@ export default {
 
       set(value) {
         this.updateDrawerLeftColor(value);
-      }
+      },
     },
 
     myDrawerLeftDark: {
@@ -439,7 +439,7 @@ export default {
 
       set(value) {
         this.updateDrawerLeftDark(value);
-      }
+      },
     },
 
     myDrawerLeftActiveColor: {
@@ -449,7 +449,7 @@ export default {
 
       set(value) {
         this.updateDrawerLeftActiveColor(value);
-      }
+      },
     },
 
     myDrawerRightColor: {
@@ -459,7 +459,7 @@ export default {
 
       set(value) {
         this.updateDrawerRightColor(value);
-      }
+      },
     },
 
     myDrawerRightDark: {
@@ -469,7 +469,7 @@ export default {
 
       set(value) {
         this.updateDrawerRightDark(value);
-      }
+      },
     },
 
     myDrawerRightActiveColor: {
@@ -479,8 +479,8 @@ export default {
 
       set(value) {
         this.updateDrawerLeftRightColor(value);
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -498,9 +498,9 @@ export default {
       "updateDrawerRightColor",
       "updateDrawerRightDark",
       "updateDrawerLeftRightColor",
-      "resetColors"
-    ])
-  }
+      "resetColors",
+    ]),
+  },
 };
 </script>
 

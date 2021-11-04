@@ -40,7 +40,7 @@ export default {
   components: {
     ListModuleCore,
     TableViewSearch,
-    TableViewTitle
+    TableViewTitle,
   },
 
   name: "Analyses",
@@ -49,12 +49,12 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
   computed: {
-    ...mapState("search", ["selection_seriesSearchParameters"])
+    ...mapState("search", ["selection_seriesSearchParameters"]),
   },
 
   async created() {
@@ -65,7 +65,7 @@ export default {
       request: "FETCH_SELECTION_SERIES",
       title: "header.selection_series",
       object: "selection_series",
-      field: "name"
+      field: "name",
     });
 
     this.setActiveSearchParametersFilters([
@@ -73,13 +73,13 @@ export default {
       {
         id: "analysis_method",
         title: "analysis.analysis_method",
-        type: "text"
+        type: "text",
       },
       { id: "agentAndLab", title: "analysis.agentAndLab", type: "text" },
       { id: "sample", title: "analysis.sampleIdAndNumber", type: "text" },
       { id: "datasetId", title: "analysis.datasetId", type: "number" },
       { id: "selectionId", title: "specimen.selectionId", type: "number" },
-      { id: "selection", title: "specimen.selection", type: "text" }
+      { id: "selection", title: "specimen.selection", type: "text" },
     ]);
   },
 
@@ -91,8 +91,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

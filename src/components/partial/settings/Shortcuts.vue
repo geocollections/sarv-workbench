@@ -56,7 +56,7 @@
 
           <draggable v-model="myShortcuts" tag="tbody" handle=".handle">
             <tr v-for="(entity, index) in myShortcuts" :key="index">
-              <td class="handle text-center" style="vertical-align: middle;">
+              <td class="handle text-center" style="vertical-align: middle">
                 <v-icon color="black">fas fa-align-justify</v-icon>
               </td>
 
@@ -82,7 +82,7 @@
                 ></v-text-field>
               </td>
 
-              <td class="vuetify-checkbox" style="vertical-align: middle;">
+              <td class="vuetify-checkbox" style="vertical-align: middle">
                 <v-checkbox
                   :input-value="entity.isAlwaysVisible"
                   hide-details
@@ -92,7 +92,7 @@
                 ></v-checkbox>
               </td>
 
-              <td class="text-center" style="vertical-align: middle;">
+              <td class="text-center" style="vertical-align: middle">
                 <v-btn
                   icon
                   :title="$t('settings.removeShortcut')"
@@ -117,7 +117,7 @@ import toastMixin from "../../../mixins/toastMixin";
 
 export default {
   components: {
-    draggable
+    draggable,
   },
 
   name: "Shortcuts",
@@ -126,20 +126,20 @@ export default {
     bodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "black"
-    }
+      default: "black",
+    },
   },
 
   mixins: [toastMixin],
 
   data() {
     return {
-      origin: ""
+      origin: "",
     };
   },
 
@@ -152,8 +152,8 @@ export default {
       },
       set(value) {
         this.setShortcuts(value);
-      }
-    }
+      },
+    },
   },
 
   created() {
@@ -171,7 +171,7 @@ export default {
       "removeShortcut",
       "shortcutUpdateTitle",
       "shortcutUpdatePath",
-      "shortcutUpdateIsAlwaysVisible"
+      "shortcutUpdateIsAlwaysVisible",
     ]),
 
     updateTitle(event, index) {
@@ -189,8 +189,8 @@ export default {
     saveShortcuts() {
       this.setShortcuts(this.myShortcuts);
       this.toastSuccess({ text: this.$t("settings.shortcutsSaved") });
-    }
-  }
+    },
+  },
 };
 </script>
 

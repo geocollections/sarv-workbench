@@ -34,14 +34,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -52,8 +52,8 @@ export default {
       {
         id: "title",
         title: "web_pages.title",
-        type: "text"
-      }
+        type: "text",
+      },
     ]);
   },
 
@@ -63,8 +63,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

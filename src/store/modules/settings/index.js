@@ -22,7 +22,7 @@ const state = {
   shortcuts: [],
   lang: "ee",
   formSections: {},
-  globalNotificationState: true
+  globalNotificationState: true,
 };
 
 export default {
@@ -30,5 +30,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

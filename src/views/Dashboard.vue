@@ -35,7 +35,7 @@ export default {
     DevNotification,
     GlobalAlertNotification,
     Breadcrumbs,
-    AppHeader
+    AppHeader,
   },
   name: "Dashboard",
   computed: {
@@ -44,14 +44,14 @@ export default {
       "bodyColor",
       "bodyActiveColor",
       "recentUrls",
-      "recentUrlsState"
+      "recentUrlsState",
     ]),
-    ...mapGetters("tableHeaders", ["getListOfAllTables"])
+    ...mapGetters("tableHeaders", ["getListOfAllTables"]),
   },
   beforeRouteUpdate(to, from, next) {
     this.updateRecentUrls({
       text: from.path,
-      href: from.path
+      href: from.path,
     });
     next();
   },
@@ -59,14 +59,14 @@ export default {
     this.fetchActiveSarvIssues();
     this.fetchLastLoggedInDate();
     // Filling all dynamic fields
-    this.getListOfAllTables().forEach(table => this.getDynamicFields(table));
+    this.getListOfAllTables().forEach((table) => this.getDynamicFields(table));
   },
   methods: {
     ...mapActions("settings", ["updateRecentUrls"]),
     ...mapActions("search", ["fetchActiveSarvIssues"]),
     ...mapActions("user", ["fetchLastLoggedInDate"]),
-    ...mapActions("tableHeaders", ["getDynamicFields"])
-  }
+    ...mapActions("tableHeaders", ["getDynamicFields"]),
+  },
 };
 </script>
 

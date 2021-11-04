@@ -167,39 +167,39 @@ export default {
   components: {
     RelatedDataDeleteDialog,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -212,15 +212,15 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
       preparation_number: "",
       taxon: null,
       storage: null,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -228,9 +228,9 @@ export default {
       storage: [],
       loaders: {
         taxon: false,
-        storage: false
-      }
-    }
+        storage: false,
+      },
+    },
   }),
 
   computed: {
@@ -239,7 +239,7 @@ export default {
         this.item.preparation_number !== null &&
         this.item.preparation_number.length > 0
       );
-    }
+    },
   },
 
   methods: {
@@ -248,7 +248,7 @@ export default {
         preparation_number: "",
         taxon: null,
         storage: null,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -258,7 +258,7 @@ export default {
       if (typeof item.taxon !== "object" && item.taxon !== null) {
         this.item.taxon = {
           id: item.taxon,
-          taxon: item.taxon__taxon
+          taxon: item.taxon__taxon,
         };
         this.autocomplete.taxon.push(this.item.taxon);
       } else if (item.taxon !== null) {
@@ -269,7 +269,7 @@ export default {
       if (typeof item.storage !== "object" && item.storage !== null) {
         this.item.storage = {
           id: item.storage,
-          location: item.storage__location
+          location: item.storage__location,
         };
         this.autocomplete.storage.push(this.item.storage);
       } else if (item.storage !== null) {
@@ -281,8 +281,8 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

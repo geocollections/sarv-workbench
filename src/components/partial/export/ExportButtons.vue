@@ -38,21 +38,21 @@ export default {
   props: {
     filename: {
       type: String,
-      default: "sarv-workbench"
+      default: "sarv-workbench",
     },
     tableData: {
-      type: Array
+      type: Array,
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     clipboardClass: {
       type: String,
-      required: false
+      required: false,
     },
-    small: Boolean
+    small: Boolean,
   },
   name: "ExportButtons",
   mixins: [toastMixin],
@@ -80,7 +80,7 @@ export default {
           a.download = this.filename + ".csv";
           document.body.appendChild(a);
           a.click();
-          setTimeout(function() {
+          setTimeout(function () {
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
           }, 0);
@@ -166,7 +166,7 @@ export default {
         a.download = this.filename + ".ris";
         document.body.appendChild(a);
         a.click();
-        setTimeout(function() {
+        setTimeout(function () {
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
         }, 0);
@@ -179,7 +179,7 @@ export default {
       let risString = "";
 
       if (jsonArray && jsonArray.length > 0) {
-        jsonArray.forEach(item => {
+        jsonArray.forEach((item) => {
           // Only write to string if type exists
           if (item.type && item.type__ris_type) {
             risString += "TY  - " + item.type__ris_type + "\n";
@@ -193,7 +193,7 @@ export default {
             if (item.author) {
               if (item.author.includes(".,")) {
                 // Multiple authors
-                item.author.split(".,").forEach(author => {
+                item.author.split(".,").forEach((author) => {
                   if (author.charAt(author.length - 1) === ".")
                     risString += "AU  - " + author.trim() + "\n";
                   else risString += "AU  - " + author.trim() + ".\n";
@@ -202,7 +202,7 @@ export default {
                 item.author
                   .split("&")
                   .forEach(
-                    author => (risString += "AU  - " + author.trim() + "\n")
+                    (author) => (risString += "AU  - " + author.trim() + "\n")
                   );
               } else risString += "AU  - " + item.author.trim() + "\n";
             }
@@ -270,7 +270,7 @@ export default {
                 item.author_keywords
                   .split(",")
                   .forEach(
-                    keyword => (risString += "KW  - " + keyword.trim() + "\n")
+                    (keyword) => (risString += "KW  - " + keyword.trim() + "\n")
                   );
               else risString += "KW  - " + item.author_keywords.trim() + "\n";
             }
@@ -285,8 +285,8 @@ export default {
         });
       }
       return risString;
-    }
-  }
+    },
+  },
 };
 </script>
 

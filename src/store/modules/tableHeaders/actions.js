@@ -32,7 +32,7 @@ const actions = {
 
   resetDynamicSearchField({ commit }, table) {
     commit("RESET_DYNAMIC_SEARCH_FIELDS", { table: table });
-  }
+  },
 };
 
 export default actions;

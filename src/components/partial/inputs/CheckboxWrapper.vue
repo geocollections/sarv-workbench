@@ -13,7 +13,7 @@
 <script>
 export default {
   name: "CheckboxWrapper",
-  inheritAttrs: false
+  inheritAttrs: false,
 };
 </script>
 

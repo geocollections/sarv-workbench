@@ -429,7 +429,7 @@ import {
   fetchLoan,
   fetchLoanSamples,
   fetchLoanSpecimens,
-  fetchSelectedSpecimens
+  fetchSelectedSpecimens,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -441,7 +441,7 @@ import LoanSpecimenTable from "./relatedTables/LoanSpecimenTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import {
   fetchIdsUsingSelection,
-  fetchMultiAddLoanLists
+  fetchMultiAddLoanLists,
 } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
 
@@ -456,25 +456,25 @@ export default {
     DateWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin, requestsMixin],
@@ -491,7 +491,7 @@ export default {
         request: "FETCH_LOANS",
         title: "header.loans",
         object: "loan",
-        field: "loan_number"
+        field: "loan_number",
       });
     }
 
@@ -500,17 +500,17 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
@@ -518,13 +518,13 @@ export default {
     ...mapState("search", ["loanSearchParameters"]),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -534,7 +534,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -544,7 +544,7 @@ export default {
       return {
         relatedTabs: [
           { name: "loan_specimen", iconClass: "fas fa-fish" },
-          { name: "loan_sample", iconClass: "fas fa-vial" }
+          { name: "loan_sample", iconClass: "fas fa-vial" },
         ],
         activeTab: "loan_specimen",
         relatedData: this.setDefaultRelatedData(),
@@ -565,25 +565,25 @@ export default {
           "special",
           "date_signed",
           "date_returned",
-          "remarks"
+          "remarks",
         ],
         autocomplete: {
           loaders: {
             agent: false,
             list_loan_type: false,
             list_loan_delivery_method: false,
-            selection_series: false
+            selection_series: false,
           },
           agent: [],
           list_loan_type: [],
           list_loan_delivery_method: [],
-          selection_series: []
+          selection_series: [],
         },
         loan: {},
         requiredFields: ["loan_number", "date_start"],
         block: {
           info: true,
-          selection_series: true
+          selection_series: true,
         },
         selection_series: null,
         selectionSeriesDialog: false,
@@ -594,8 +594,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -610,7 +610,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchLoan(this.$route.params.id).then(response => {
+        fetchLoan(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -627,7 +627,7 @@ export default {
         });
 
         // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -642,36 +642,35 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["specimen"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           loan_sample: {
             page: 1,
             paginateBy: 10,
             sortBy: ["sample"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     loadAutocompleteFields() {
       fetchListLoanType().then(
-        response =>
+        (response) =>
           (this.autocomplete.list_loan_type = this.handleResponse(response))
       );
 
       fetchListLoanDeliveryMethod().then(
-        response =>
-          (this.autocomplete.list_loan_delivery_method = this.handleResponse(
-            response
-          ))
+        (response) =>
+          (this.autocomplete.list_loan_delivery_method =
+            this.handleResponse(response))
       );
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -693,40 +692,40 @@ export default {
       if (this.isNotEmpty(obj.borrower)) {
         this.loan.borrower = {
           id: obj.borrower,
-          agent: obj.borrower__agent
+          agent: obj.borrower__agent,
         };
         this.autocomplete.agent.push(this.loan.borrower);
       }
       if (this.isNotEmpty(obj.borrower_institution)) {
         this.loan.borrower_institution = {
           id: obj.borrower_institution,
-          agent: obj.borrower_institution__agent
+          agent: obj.borrower_institution__agent,
         };
         this.autocomplete.agent.push(this.loan.borrower_institution);
       }
       if (this.isNotEmpty(obj.loaner)) {
         this.loan.loaner = {
           id: obj.loaner,
-          agent: obj.loaner__agent
+          agent: obj.loaner__agent,
         };
         this.autocomplete.agent.push(this.loan.loaner);
       }
       if (this.isNotEmpty(obj.deliverer)) {
         this.loan.deliverer = {
           id: obj.deliverer,
-          agent: obj.deliverer__agent
+          agent: obj.deliverer__agent,
         };
         this.autocomplete.agent.push(this.loan.deliverer);
       }
       this.loan.delivery_method = {
         id: obj.delivery_method,
         value: obj.delivery_method__value,
-        value_en: obj.delivery_method__value_en
+        value_en: obj.delivery_method__value_en,
       };
       this.loan.type = {
         id: obj.type,
         value: obj.type__value,
-        value_en: obj.type__value_en
+        value_en: obj.type__value_en,
       };
     },
 
@@ -746,7 +745,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -773,11 +772,11 @@ export default {
       );
 
       if (response?.data?.results) {
-        let listOfObjects = response.data.results.map(item => {
+        let listOfObjects = response.data.results.map((item) => {
           return {
             [table]: item[table],
             loan: this.$route.params.id,
-            database: this.getDatabaseId
+            database: this.getDatabaseId,
           };
         });
 
@@ -787,7 +786,7 @@ export default {
         formData.append(
           "data",
           JSON.stringify({
-            add: listOfObjects
+            add: listOfObjects,
           })
         );
 
@@ -795,8 +794,8 @@ export default {
           `loan_${table}`,
           formData
         ).then(
-          response => response,
-          errResponse => errResponse
+          (response) => response,
+          (errResponse) => errResponse
         );
 
         if (multiAddResponse) {
@@ -807,7 +806,7 @@ export default {
           );
 
           if (multiAddResponse.status === 200)
-            this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+            this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
         }
       }
     },
@@ -815,8 +814,8 @@ export default {
     customSelectionSeriesLabel(option) {
       if (option.name) return `${option.id} - ${option.name}`;
       else return `${option.id}`;
-    }
-  }
+    },
+  },
 };
 </script>
 

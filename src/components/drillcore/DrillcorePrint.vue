@@ -4,7 +4,7 @@
       :data="result"
       :title="{
         et: result[0].drillcore_box__drillcore__drillcore,
-        en: result[0].drillcore_box__drillcore__drillcore_en
+        en: result[0].drillcore_box__drillcore__drillcore_en,
       }"
     >
       <template v-slot:itemTitle="{ item }">
@@ -17,7 +17,7 @@
           <h5
             v-translate="{
               et: `Kast nr. ${item.drillcore_box__number} ${boxRange(item)}`,
-              en: `Box nr. ${item.drillcore_box__number} ${boxRange(item)}`
+              en: `Box nr. ${item.drillcore_box__number} ${boxRange(item)}`,
             }"
           ></h5>
         </router-link>
@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       count: 0,
-      result: []
+      result: [],
     };
   },
   mixins: [formManipulation],
@@ -45,9 +45,9 @@ export default {
       page: 1,
       paginateBy: 1000,
       sortBy: ["drillcore_box__depth_start"],
-      sortDesc: [false]
+      sortDesc: [false],
     });
-    query.then(response => {
+    query.then((response) => {
       this.count = response.data.count;
       this.result = this.handleResponse(response);
     });
@@ -58,10 +58,11 @@ export default {
         return "";
       }
 
-      return `(${item.drillcore_box__depth_start ??
-        ""} - ${item.drillcore_box__depth_end ?? ""} m)`;
-    }
-  }
+      return `(${item.drillcore_box__depth_start ?? ""} - ${
+        item.drillcore_box__depth_end ?? ""
+      } m)`;
+    },
+  },
 };
 </script>
 

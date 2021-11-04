@@ -7,13 +7,13 @@ import {
   fetchMultiRemoveRecordFromSelection,
   fetchMultiRemoveReferencesFromLibrary,
   fetchRemoveRecordFromSelection,
-  fetchRemoveReferenceFromLibrary
+  fetchRemoveReferenceFromLibrary,
 } from "../assets/js/api/apiCalls";
 import { cloneDeep } from "lodash";
 
 const activeListMixin = {
   data: () => ({
-    selected: []
+    selected: [],
   }),
 
   computed: {
@@ -21,8 +21,8 @@ const activeListMixin = {
       "activeSelectionSeriesList",
       "activeLibraryList",
       "activeSelectionSeries",
-      "activeLibrary"
-    ])
+      "activeLibrary",
+    ]),
   },
 
   watch: {
@@ -39,7 +39,7 @@ const activeListMixin = {
           this.fillSelectedValues(newVal);
         }
       },
-      immediate: true
+      immediate: true,
     },
 
     activeLibraryList: {
@@ -48,22 +48,24 @@ const activeListMixin = {
           this.fillSelectedValues(newVal);
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
     ...mapActions("search", [
       "getActiveSelectionSeriesList",
-      "getActiveLibraryList"
+      "getActiveLibraryList",
     ]),
 
     fillSelectedValues(activeList) {
       if (activeList && activeList.length > 0) {
         if (this?.response?.results && this.response.results.length > 0) {
-          let listOfIds = activeList.map(item => item[this.$route.meta.object]);
+          let listOfIds = activeList.map(
+            (item) => item[this.$route.meta.object]
+          );
           let listOfSelectedItems = [];
-          this.response.results.forEach(item => {
+          this.response.results.forEach((item) => {
             if (listOfIds.includes(item.id)) listOfSelectedItems.push(item);
           });
           this.selected = cloneDeep(listOfSelectedItems);
@@ -79,23 +81,23 @@ const activeListMixin = {
             "data",
             JSON.stringify({
               [relation]: selection?.item?.id,
-              selection: this.activeSelectionSeries.id
+              selection: this.activeSelectionSeries.id,
             })
           );
 
           fetchAddItemToSelection(formData).then(
-            response => {
+            (response) => {
               this.handleResponseMessages(response, true);
               this.getActiveSelectionSeriesList({
                 routeObject: this.$route.meta.object,
-                selectionSeriesId: this.activeSelectionSeries.id
+                selectionSeriesId: this.activeSelectionSeries.id,
               });
             },
-            errResponse => {
+            (errResponse) => {
               this.handleResponseMessages(errResponse, false);
               this.getActiveSelectionSeriesList({
                 routeObject: this.$route.meta.object,
-                selectionSeriesId: this.activeSelectionSeries.id
+                selectionSeriesId: this.activeSelectionSeries.id,
               });
             }
           );
@@ -105,22 +107,22 @@ const activeListMixin = {
             this.activeSelectionSeriesList.length > 0
           ) {
             let id = this.activeSelectionSeriesList.find(
-              item => item[this.$route.meta.object] === selection.item.id
+              (item) => item[this.$route.meta.object] === selection.item.id
             )?.id;
             if (id) {
               fetchRemoveRecordFromSelection(id).then(
-                response => {
+                (response) => {
                   this.handleResponseMessages(response, true, true);
                   this.getActiveSelectionSeriesList({
                     routeObject: this.$route.meta.object,
-                    selectionSeriesId: this.activeSelectionSeries.id
+                    selectionSeriesId: this.activeSelectionSeries.id,
                   });
                 },
-                errResponse => {
+                (errResponse) => {
                   this.handleResponseMessages(errResponse, false, true);
                   this.getActiveSelectionSeriesList({
                     routeObject: this.$route.meta.object,
-                    selectionSeriesId: this.activeSelectionSeries.id
+                    selectionSeriesId: this.activeSelectionSeries.id,
                   });
                 }
               );
@@ -138,40 +140,40 @@ const activeListMixin = {
             "data",
             JSON.stringify({
               reference: selection?.item?.id,
-              library: this.activeLibrary.id
+              library: this.activeLibrary.id,
             })
           );
 
           fetchAddReferenceToLibrary(formData).then(
-            response => {
+            (response) => {
               this.handleResponseMessages(response, true);
               this.getActiveLibraryList({
-                libraryId: this.activeLibrary.id
+                libraryId: this.activeLibrary.id,
               });
             },
-            errResponse => {
+            (errResponse) => {
               this.handleResponseMessages(errResponse, false);
               this.getActiveLibraryList({
-                libraryId: this.activeLibrary.id
+                libraryId: this.activeLibrary.id,
               });
             }
           );
         } else {
           if (this.activeLibraryList && this.activeLibraryList.length > 0) {
             let id = this.activeLibraryList.find(
-              item => item.reference === selection.item.id
+              (item) => item.reference === selection.item.id
             )?.id;
             fetchRemoveReferenceFromLibrary(id).then(
-              response => {
+              (response) => {
                 this.handleResponseMessages(response, true, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.id
+                  libraryId: this.activeLibrary.id,
                 });
               },
-              errResponse => {
+              (errResponse) => {
                 this.handleResponseMessages(errResponse, false, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.id
+                  libraryId: this.activeLibrary.id,
                 });
               }
             );
@@ -192,13 +194,13 @@ const activeListMixin = {
           const keyForListOfObjects =
             relation === "reference" ? "library" : "selection";
 
-          listOfObjects = selection.items.map(item => {
+          listOfObjects = selection.items.map((item) => {
             return {
               [relation]: item.id,
               [keyForListOfObjects]:
                 relation === "reference"
                   ? this.activeLibrary.id
-                  : this.activeSelectionSeries.id
+                  : this.activeSelectionSeries.id,
             };
           });
 
@@ -208,12 +210,12 @@ const activeListMixin = {
 
             listOfObjects.forEach((uploadableItem, index) => {
               let duplicate = this[keyForActiveList].find(
-                item => item[relation] === uploadableItem[relation]
+                (item) => item[relation] === uploadableItem[relation]
               );
               if (duplicate) listOfDuplicateIds.push(duplicate[relation]);
             });
             listOfObjects = listOfObjects.filter(
-              item => !listOfDuplicateIds.includes(item[relation])
+              (item) => !listOfDuplicateIds.includes(item[relation])
             );
           }
 
@@ -221,39 +223,39 @@ const activeListMixin = {
           formData.append(
             "data",
             JSON.stringify({
-              add: listOfObjects
+              add: listOfObjects,
             })
           );
 
           if (relation === "reference") {
             fetchMultiAddReferencesToLibrary(formData).then(
-              response => {
+              (response) => {
                 this.handleResponseMessages(response, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.id
+                  libraryId: this.activeLibrary.id,
                 });
               },
-              errResponse => {
+              (errResponse) => {
                 this.handleResponseMessages(errResponse, false);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.id
+                  libraryId: this.activeLibrary.id,
                 });
               }
             );
           } else {
             fetchMultiAddRecordToSelection(formData).then(
-              response => {
+              (response) => {
                 this.handleResponseMessages(response, true);
                 this.getActiveSelectionSeriesList({
                   routeObject: this.$route.meta.object,
-                  selectionSeriesId: this.activeSelectionSeries.id
+                  selectionSeriesId: this.activeSelectionSeries.id,
                 });
               },
-              errResponse => {
+              (errResponse) => {
                 this.handleResponseMessages(errResponse, false);
                 this.getActiveSelectionSeriesList({
                   routeObject: this.$route.meta.object,
-                  selectionSeriesId: this.activeSelectionSeries.id
+                  selectionSeriesId: this.activeSelectionSeries.id,
                 });
               }
             );
@@ -262,9 +264,9 @@ const activeListMixin = {
           let listOfIds = [];
 
           if (this[keyForActiveList] && this[keyForActiveList].length > 0) {
-            selection.items.forEach(deletableItem => {
+            selection.items.forEach((deletableItem) => {
               let id = this[keyForActiveList].find(
-                item => item[relation] === deletableItem.id
+                (item) => item[relation] === deletableItem.id
               )?.id;
               if (id) listOfIds.push(id);
             });
@@ -274,39 +276,39 @@ const activeListMixin = {
           formData.append(
             "data",
             JSON.stringify({
-              delete: listOfIds
+              delete: listOfIds,
             })
           );
 
           if (relation === "reference") {
             fetchMultiRemoveReferencesFromLibrary(formData).then(
-              response => {
+              (response) => {
                 this.handleResponseMessages(response, true, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.id
+                  libraryId: this.activeLibrary.id,
                 });
               },
-              errResponse => {
+              (errResponse) => {
                 this.handleResponseMessages(errResponse, false, true);
                 this.getActiveLibraryList({
-                  libraryId: this.activeLibrary.id
+                  libraryId: this.activeLibrary.id,
                 });
               }
             );
           } else {
             fetchMultiRemoveRecordFromSelection(formData).then(
-              response => {
+              (response) => {
                 this.handleResponseMessages(response, true, true);
                 this.getActiveSelectionSeriesList({
                   routeObject: this.$route.meta.object,
-                  selectionSeriesId: this.activeSelectionSeries.id
+                  selectionSeriesId: this.activeSelectionSeries.id,
                 });
               },
-              errResponse => {
+              (errResponse) => {
                 this.handleResponseMessages(errResponse, false, true);
                 this.getActiveSelectionSeriesList({
                   routeObject: this.$route.meta.object,
-                  selectionSeriesId: this.activeSelectionSeries.id
+                  selectionSeriesId: this.activeSelectionSeries.id,
                 });
               }
             );
@@ -347,11 +349,11 @@ const activeListMixin = {
         this.toastError({
           text: isDelete
             ? this.$t("messages.deleteError")
-            : this.$t("messages.uploadError")
+            : this.$t("messages.uploadError"),
         });
       }
-    }
-  }
+    },
+  },
 };
 
 export default activeListMixin;

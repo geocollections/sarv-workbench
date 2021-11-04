@@ -136,25 +136,25 @@ export default {
   components: {
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
@@ -165,7 +165,7 @@ export default {
 
   computed: {
     ...mapState("search", ["imagesetSearchParameters"]),
-    ...mapState("detail", ["imagesetDetail"])
+    ...mapState("detail", ["imagesetDetail"]),
   },
 
   created() {
@@ -178,7 +178,7 @@ export default {
         request: "FETCH_IMAGESETS",
         title: "header.imageset",
         object: "imageset",
-        field: "imageset_number"
+        field: "imageset_number",
       });
     }
 
@@ -189,7 +189,7 @@ export default {
         id: this.getCurrentUser.id,
         agent: this.getCurrentUser.agent,
         forename: this.getCurrentUser.forename,
-        surename: this.getCurrentUser.surename
+        surename: this.getCurrentUser.surename,
       };
       this.autocomplete.agent.push(this.imageset.author);
     }
@@ -197,17 +197,17 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
 
-    "imageset.imageset_number": function(newVal) {
+    "imageset.imageset_number": function (newVal) {
       if (newVal && newVal.trim().length > 0) {
         this.isInImagesetTable(newVal);
       }
-    }
+    },
   },
 
   methods: {
@@ -221,14 +221,14 @@ export default {
         copyFields: ["id", "imageset_number", "author", "description"],
         autocomplete: {
           loaders: {
-            agent: false
+            agent: false,
           },
-          agent: []
+          agent: [],
         },
         requiredFields: ["imageset_number", "author"],
         imageset: {},
         imagesetNumberExists: false,
-        block: { info: true }
+        block: { info: true },
       };
     },
 
@@ -236,7 +236,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchImageset(this.$route.params.id).then(response => {
+        fetchImageset(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -262,7 +262,7 @@ export default {
       if (!this.$route.meta.isEdit)
         this.saveFields({ key: "imagesetDetail", value: objectToUpload });
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -285,14 +285,14 @@ export default {
       if (this.isNotEmpty(obj.author)) {
         this.imageset.author = {
           id: obj.author,
-          agent: obj.author__agent
+          agent: obj.author__agent,
         };
         this.autocomplete.agent.push(this.imageset.author);
       }
     },
 
     isInImagesetTable(query) {
-      fetchIsImagesetNumberInImageset(query).then(response => {
+      fetchIsImagesetNumberInImageset(query).then((response) => {
         if (response.status === 200) {
           this.imagesetNumberExists = response.data.count > 0;
         }
@@ -302,8 +302,8 @@ export default {
     clearLocalStorage() {
       this.resetFields("imagesetDetail");
       this.toastInfo({ text: this.$t("messages.defaultsRemoved") });
-    }
-  }
+    },
+  },
 };
 </script>
 

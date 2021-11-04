@@ -35,14 +35,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewSearch,
-    TableViewTitle
+    TableViewTitle,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -55,8 +55,8 @@ export default {
       {
         id: "keyword_category",
         title: "keyword.keyword_category",
-        type: "text"
-      }
+        type: "text",
+      },
     ]);
   },
 
@@ -67,8 +67,8 @@ export default {
         [],
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

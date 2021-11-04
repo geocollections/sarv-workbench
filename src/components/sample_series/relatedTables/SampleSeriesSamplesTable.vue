@@ -61,7 +61,7 @@
           <span
             v-translate="{
               et: item.locality__locality,
-              en: item.locality__locality_en
+              en: item.locality__locality_en,
             }"
           />
         </router-link>
@@ -79,7 +79,7 @@
           <span
             v-translate="{
               et: item.stratigraphy__stratigraphy,
-              en: item.stratigraphy__stratigraphy_en
+              en: item.stratigraphy__stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -97,7 +97,7 @@
           <span
             v-translate="{
               et: item.lithostratigraphy__stratigraphy,
-              en: item.lithostratigraphy__stratigraphy_en
+              en: item.lithostratigraphy__stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -244,32 +244,32 @@ export default {
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -277,11 +277,11 @@ export default {
       { text: "common.number", value: "number" },
       {
         text: "common.locality",
-        value: "locality"
+        value: "locality",
       },
       {
         text: "common.depth",
-        value: "depth"
+        value: "depth",
       },
       { text: "common.depth_interval", value: "depth_interval" },
       { text: "common.stratigraphy", value: "stratigraphy" },
@@ -292,8 +292,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -304,7 +304,7 @@ export default {
       stratigraphy: null,
       lithostratigraphy: null,
       stratigraphy_free: "",
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -314,24 +314,24 @@ export default {
       loaders: {
         locality: false,
         stratigraphy: false,
-        lithostratigraphy: false
-      }
-    }
+        lithostratigraphy: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
 
     isItemValid() {
       return this.item.number !== null && this.item.number.length > 0;
-    }
+    },
   },
 
   methods: {
@@ -346,7 +346,7 @@ export default {
         stratigraphy: null,
         lithostratigraphy: null,
         stratigraphy_free: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -358,13 +358,13 @@ export default {
         this.$emit("related:add", {
           table: "sample",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "sample",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -380,7 +380,7 @@ export default {
         this.item.locality = {
           id: item.locality,
           locality: item.locality__locality,
-          locality_en: item.locality__locality_en
+          locality_en: item.locality__locality_en,
         };
         this.autocomplete.locality.push(this.item.locality);
       } else if (item.locality !== null) {
@@ -392,7 +392,7 @@ export default {
         this.item.stratigraphy = {
           id: item.stratigraphy,
           stratigraphy: item.stratigraphy__stratigraphy,
-          stratigraphy_en: item.stratigraphy__stratigraphy_en
+          stratigraphy_en: item.stratigraphy__stratigraphy_en,
         };
         this.autocomplete.stratigraphy.push(this.item.stratigraphy);
       } else if (item.stratigraphy !== null) {
@@ -407,7 +407,7 @@ export default {
         this.item.lithostratigraphy = {
           id: item.lithostratigraphy,
           stratigraphy: item.lithostratigraphy__stratigraphy,
-          stratigraphy_en: item.lithostratigraphy__stratigraphy_en
+          stratigraphy_en: item.lithostratigraphy__stratigraphy_en,
         };
         this.autocomplete.lithostratigraphy.push(this.item.lithostratigraphy);
       } else if (item.lithostratigraphy !== null) {
@@ -428,20 +428,20 @@ export default {
       this.$emit("related:delete", {
         table: "sample",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

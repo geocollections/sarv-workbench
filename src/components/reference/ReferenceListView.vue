@@ -70,8 +70,8 @@
           <a
             v-if="
               entity.attachment__filename === null &&
-                entity.url &&
-                getUrl(entity.url)
+              entity.url &&
+              getUrl(entity.url)
             "
             :href="getUrl(entity.url)"
             :title="getUrl(entity.url)"
@@ -91,13 +91,13 @@
 export default {
   props: {
     data: {
-      type: Array
+      type: Array,
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   name: "ReferenceListView",
   methods: {
@@ -136,14 +136,13 @@ export default {
         "",
         "width=1000,height=900"
       );
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-.list /*:not(:first-child)*/
- {
+.list /*:not(:first-child)*/ {
   /*border-top: dotted 1.2pt #ccc;*/
   padding: 0.2em 0 0 4em;
   text-indent: -4em;

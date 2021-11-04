@@ -7,7 +7,7 @@ const toastMixin = {
       this.$toast.success(data.text, "OK", {
         position: "topCenter",
         timeout: data.timeout,
-        pauseOnHover: false
+        pauseOnHover: false,
       });
     },
 
@@ -20,7 +20,7 @@ const toastMixin = {
         timeout: data.timeout,
         closeOnEscape: true,
         pauseOnHover: false,
-        displayMode: "replace"
+        displayMode: "replace",
       });
     },
 
@@ -31,10 +31,10 @@ const toastMixin = {
       this.$toast.info(data.text, "Info", {
         position: "topCenter",
         timeout: data.timeout,
-        pauseOnHover: false
+        pauseOnHover: false,
       });
-    }
-  }
+    },
+  },
 };
 
 export default toastMixin;

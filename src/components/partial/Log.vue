@@ -40,10 +40,8 @@
                     </td>
                     <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
                     <td>{{ entity.command }}</td>
-                    <td style="max-width: 25rem; padding:0.3rem; margin: 0;">
-                      <div
-                        style="max-height: 10rem !important; overflow: auto;"
-                      >
+                    <td style="max-width: 25rem; padding: 0.3rem; margin: 0">
+                      <div style="max-height: 10rem !important; overflow: auto">
                         <div
                           v-for="(changes, field) in handleChanges(
                             entity.changes
@@ -54,15 +52,15 @@
                             class="mb-3"
                             v-if="
                               changes &&
-                                (changes.old !== '' ||
-                                  (changes.old === '' &&
-                                    (changes.new !== null ||
-                                      changes.new !== ''))) &&
-                                (changes.new !== null ||
-                                  (changes.new === null &&
-                                    (changes.old !== null ||
-                                      changes.old !== ''))) &&
-                                changes.old !== changes.new
+                              (changes.old !== '' ||
+                                (changes.old === '' &&
+                                  (changes.new !== null ||
+                                    changes.new !== ''))) &&
+                              (changes.new !== null ||
+                                (changes.new === null &&
+                                  (changes.old !== null ||
+                                    changes.old !== ''))) &&
+                              changes.old !== changes.new
                             "
                           >
                             <div class="log-title mb-1">{{ field }}</div>
@@ -119,44 +117,44 @@ import { fetchSpecificLogs } from "@/assets/js/api/apiCalls";
 export default {
   props: {
     table: {
-      type: String
+      type: String,
     },
     objectData: {
-      type: Object
+      type: Object,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   name: "Log",
   data() {
     return {
       block: { logs: false },
-      logs: []
+      logs: [],
     };
   },
   watch: {
     objectData: {
-      handler: function() {
+      handler: function () {
         this.getLogs();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     getLogs() {
       fetchSpecificLogs({
         table_name: this.table,
         row_id: this.objectData.id,
-        order_by: "-id"
-      }).then(response => {
+        order_by: "-id",
+      }).then((response) => {
         if (response.status === 200) {
           if (response.data.count > 0) {
             this.logs = response.data.results;
@@ -187,8 +185,8 @@ export default {
           return {};
         }
       } else return {};
-    }
-  }
+    },
+  },
 };
 </script>
 

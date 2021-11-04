@@ -48,7 +48,7 @@
         <span
           v-translate="{
             et: item.sample__locality__locality,
-            en: item.sample__locality__locality_en
+            en: item.sample__locality__locality_en,
           }"
         ></span>
       </router-link>
@@ -58,7 +58,7 @@
       <div
         v-translate="{
           et: item.sample__stratigraphy__stratigraphy,
-          en: item.sample__stratigraphy__stratigraphy_en
+          en: item.sample__stratigraphy__stratigraphy_en,
         }"
       ></div>
     </template>
@@ -97,37 +97,37 @@ export default {
   mixins: [tableHeaderMixin],
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
-    }
-  }
+    },
+  },
 };
 </script>

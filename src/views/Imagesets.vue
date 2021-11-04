@@ -36,14 +36,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewSearch,
-    TableViewTitle
+    TableViewTitle,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -52,12 +52,12 @@ export default {
 
     this.setActiveSearchParametersFilters([
       { id: "number", title: "imageset.imagesetNumber", type: "text" },
-      { id: "description", title: "imageset.description", type: "text" }
+      { id: "description", title: "imageset.description", type: "text" },
     ]);
   },
 
   computed: {
-    ...mapGetters("user", ["getCurrentUser"])
+    ...mapGetters("user", ["getCurrentUser"]),
   },
 
   methods: {
@@ -67,8 +67,8 @@ export default {
         this.getCurrentUser.id,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

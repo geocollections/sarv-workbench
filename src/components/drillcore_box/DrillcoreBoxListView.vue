@@ -48,16 +48,16 @@ export default {
   name: "DrillcoreBoxListView",
   props: {
     data: {
-      type: Array
+      type: Array,
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     title: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   methods: {
     openFileInNewWindow(file) {
@@ -96,8 +96,8 @@ export default {
         // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
         return !!(fileType.includes("jpg") || fileType.includes("png"));
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

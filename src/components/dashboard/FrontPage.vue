@@ -55,9 +55,9 @@
       class="mt-0"
       v-if="
         isUserAllowedTo('add', 'site') &&
-          isUserAllowedTo('add', 'sample') &&
-          isUserAllowedTo('add', 'specimen') &&
-          isUserAllowedTo('add', 'attachment')
+        isUserAllowedTo('add', 'sample') &&
+        isUserAllowedTo('add', 'specimen') &&
+        isUserAllowedTo('add', 'attachment')
       "
     >
       <v-col>
@@ -220,7 +220,7 @@ export default {
     Messages,
     ImageViewWrapper,
     RecentActivity,
-    SitesMap
+    SitesMap,
   },
   name: "front-page",
   mixins: [formSectionsMixin],
@@ -228,7 +228,7 @@ export default {
   data: () => ({
     block: { map: true, help: true, files: true },
     recentFilesPaginateBy: 12,
-    recentFiles: null
+    recentFiles: null,
   }),
 
   computed: {
@@ -237,8 +237,8 @@ export default {
     ...mapGetters("user", [
       "getCurrentUser",
       "getLastLoginDate",
-      "isUserAllowedTo"
-    ])
+      "isUserAllowedTo",
+    ]),
   },
 
   watch: {
@@ -246,8 +246,8 @@ export default {
       handler(newVal) {
         this.getRecentFiles(newVal);
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   created() {
@@ -258,14 +258,14 @@ export default {
     ...mapActions("search", ["fetchActiveSarvIssues"]),
 
     getRecentFiles(paginateBy) {
-      fetchRecentFiles(this.getCurrentUser.id, paginateBy).then(response => {
+      fetchRecentFiles(this.getCurrentUser.id, paginateBy).then((response) => {
         if (response.status === 200) {
           if (response.data.count > 0) this.recentFiles = response.data.results;
           else this.recentFiles = [];
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

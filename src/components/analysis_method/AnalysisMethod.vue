@@ -129,24 +129,24 @@ export default {
   components: {
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
   data() {
@@ -160,7 +160,7 @@ export default {
         request: "FETCH_ANALYSIS_METHODS",
         title: "header.analysis_method",
         object: "analysis_method",
-        field: "analysis_method"
+        field: "analysis_method",
       });
     }
 
@@ -168,15 +168,15 @@ export default {
   },
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   computed: {
-    ...mapState("search", ["analysis_methodSearchParameters"])
+    ...mapState("search", ["analysis_methodSearchParameters"]),
   },
   methods: {
     setInitialData() {
@@ -186,20 +186,20 @@ export default {
           "analysis_method",
           "method_en",
           "parent_method",
-          "remarks"
+          "remarks",
         ],
         autocomplete: {
           loaders: {
-            analysis_method: false
+            analysis_method: false,
           },
-          analysis_method: []
+          analysis_method: [],
         },
         requiredFields: ["analysis_method"],
         analysis_method: {},
         block: {
           info: true,
-          description: true
-        }
+          description: true,
+        },
       };
     },
 
@@ -212,7 +212,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchAnalysisMethodDetail(this.$route.params.id).then(response => {
+        fetchAnalysisMethodDetail(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -240,7 +240,7 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -263,14 +263,14 @@ export default {
         this.analysis_method.parent_method = {
           id: obj.parent_method,
           analysis_method: obj.parent_method__analysis_method,
-          method_en: obj.parent_method__method_en
+          method_en: obj.parent_method__method_en,
         };
         this.autocomplete.analysis_method.push(
           this.analysis_method.parent_method
         );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

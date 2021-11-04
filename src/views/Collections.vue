@@ -41,14 +41,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -61,7 +61,11 @@ export default {
       { id: "agent", title: "collection.agent", type: "text" },
       { id: "locality", title: "collection.locality", type: "text" },
       { id: "reference", title: "common.reference", type: "text" },
-      { id: "classification", title: "collection.classification", type: "text" }
+      {
+        id: "classification",
+        title: "collection.classification",
+        type: "text",
+      },
     ]);
   },
 
@@ -71,8 +75,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

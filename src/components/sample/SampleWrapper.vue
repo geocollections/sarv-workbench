@@ -16,9 +16,9 @@ export default {
   props: {
     simpleView: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 </script>
 

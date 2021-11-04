@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: "ObjectDoesNotExist"
+  name: "ObjectDoesNotExist",
 };
 </script>
 

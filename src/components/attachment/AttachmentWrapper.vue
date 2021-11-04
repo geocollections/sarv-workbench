@@ -35,21 +35,21 @@ export default {
   name: "AttachmentWrapper",
   props: {
     isPhotoArchive: {
-      type: Boolean
+      type: Boolean,
     },
     isSpecimenImage: {
-      type: Boolean
+      type: Boolean,
     },
     isOtherFile: {
-      type: Boolean
+      type: Boolean,
     },
     isDigitisedReference: {
-      type: Boolean
+      type: Boolean,
     },
     isLocked: {
-      type: Boolean
-    }
-  }
+      type: Boolean,
+    },
+  },
 };
 </script>
 

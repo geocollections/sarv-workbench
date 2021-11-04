@@ -187,44 +187,44 @@ export default {
 
   components: {
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -240,8 +240,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -249,11 +249,11 @@ export default {
       affiliation: "",
       agent_type: {
         id: 1,
-        value: "Creator"
+        value: "Creator",
       },
       orcid: "",
       agent: null,
-      sort: ""
+      sort: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -261,30 +261,30 @@ export default {
       agent: [],
       loaders: {
         agent_type: false,
-        agent: false
-      }
-    }
+        agent: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
 
     isItemValid() {
       return this.item.name !== null && this.item.name.length > 0;
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -304,11 +304,11 @@ export default {
         affiliation: "",
         agent_type: {
           id: 1,
-          value: "Creator"
+          value: "Creator",
         },
         orcid: "",
         agent: null,
-        sort: null
+        sort: null,
       };
     },
 
@@ -320,13 +320,13 @@ export default {
         this.$emit("related:add", {
           table: "dataset_author",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "dataset_author",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -342,14 +342,14 @@ export default {
         this.item.agent_type = {
           id: item.agent_type,
           value: item.agent_type__value,
-          value_en: item.agent_type__value_en
+          value_en: item.agent_type__value_en,
         };
       } else this.item.agent_type = item.agent_type;
 
       if (typeof item.agent !== "object" && item.agent !== null) {
         this.item.agent = {
           id: item.agent,
-          agent: item.agent__agent
+          agent: item.agent__agent,
         };
         this.autocomplete.agent.push(this.item.agent);
       } else if (item.agent !== null) {
@@ -369,14 +369,14 @@ export default {
       this.$emit("related:delete", {
         table: "dataset_author",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.agent_type.length <= 1) {
         this.autocomplete.loaders.agent_type = true;
-        fetchDoiAgentType().then(response => {
+        fetchDoiAgentType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.agent_type =
               response.data.count > 0 ? response.data.results : [];
@@ -387,15 +387,15 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

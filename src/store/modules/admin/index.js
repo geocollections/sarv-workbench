@@ -1,17 +1,17 @@
 import { fetchCurrentlyActiveUsers } from "../../../assets/js/api/apiCalls";
 
 const state = {
-  activeUsers: null
+  activeUsers: null,
 };
 
 const getters = {};
 
 const actions = {
   fetchActiveUsers({ commit }) {
-    return fetchCurrentlyActiveUsers().then(resp => {
+    return fetchCurrentlyActiveUsers().then((resp) => {
       commit("SET_ACTIVE_USERS", resp);
     });
-  }
+  },
 };
 
 const mutations = {
@@ -21,10 +21,10 @@ const mutations = {
     } else {
       state.activeUsers = {
         count: 0,
-        results: []
+        results: [],
       };
     }
-  }
+  },
 };
 
 export default {
@@ -32,5 +32,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

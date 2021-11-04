@@ -48,7 +48,7 @@
           <span
             v-translate="{
               et: item.locality__locality,
-              en: item.locality__locality_en
+              en: item.locality__locality_en,
             }"
           ></span>
         </router-link>
@@ -62,7 +62,7 @@
           <span
             v-translate="{
               et: item.locality.locality,
-              en: item.locality.locality_en
+              en: item.locality.locality_en,
             }"
           ></span>
         </router-link>
@@ -170,32 +170,32 @@ export default {
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -208,23 +208,23 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
       locality: null,
       pages: "",
       figures: "",
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
       locality: [],
       loaders: {
-        locality: false
-      }
-    }
+        locality: false,
+      },
+    },
   }),
 
   computed: {
@@ -232,7 +232,7 @@ export default {
       return (
         typeof this.item.locality === "object" && this.item.locality !== null
       );
-    }
+    },
   },
 
   methods: {
@@ -241,7 +241,7 @@ export default {
         locality: null,
         pages: "",
         figures: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -252,7 +252,7 @@ export default {
         this.item.locality = {
           id: item.locality,
           locality: item.locality__locality,
-          locality_en: item.locality__locality_en
+          locality_en: item.locality__locality_en,
         };
         this.autocomplete.locality.push(this.item.locality);
       } else {
@@ -265,8 +265,8 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

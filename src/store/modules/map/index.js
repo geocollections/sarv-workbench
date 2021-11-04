@@ -1,6 +1,6 @@
 const state = {
   showMap: true,
-  defaultLayer: "CartoDB"
+  defaultLayer: "CartoDB",
 };
 
 const getters = {};
@@ -12,7 +12,7 @@ const actions = {
 
   updateDefaultLayer({ commit }, layerName) {
     commit("UPDATE_DEFAULT_LAYER", layerName);
-  }
+  },
 };
 
 const mutations = {
@@ -22,7 +22,7 @@ const mutations = {
 
   UPDATE_DEFAULT_LAYER(state, layerName) {
     state.defaultLayer = layerName;
-  }
+  },
 };
 
 export default {
@@ -30,5 +30,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

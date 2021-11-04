@@ -23,15 +23,15 @@
               style="font-size: 1.2rem"
               v-translate="{
                 et: loan.loaner__institution__institution_name,
-                en: loan.loaner__institution__institution_name_en
+                en: loan.loaner__institution__institution_name_en,
               }"
             />
           </v-col>
-          <v-col cols="12" style="font-size: 0.8rem;">
+          <v-col cols="12" style="font-size: 0.8rem">
             {{ loanReturnAddress }}
           </v-col>
           <v-col cols="12">
-            <v-divider class="mt-1" style="border-color: black;"></v-divider>
+            <v-divider class="mt-1" style="border-color: black"></v-divider>
           </v-col>
         </v-row>
 
@@ -68,7 +68,7 @@
                 <span
                   v-translate="{
                     et: loan.borrower__profession,
-                    en: loan.borrower__profession_en
+                    en: loan.borrower__profession_en,
                   }"
                 ></span
               ></span>
@@ -77,7 +77,7 @@
             <div
               v-translate="{
                 et: loan.borrower_institution__institution_name,
-                en: loan.borrower_institution__institution_name_en
+                en: loan.borrower_institution__institution_name_en,
               }"
             ></div>
 
@@ -96,7 +96,7 @@
             <div
               v-translate="{
                 et: loan.borrower_institution__country__value,
-                en: loan.borrower_institution__country__value_en
+                en: loan.borrower_institution__country__value_en,
               }"
             ></div>
 
@@ -121,13 +121,13 @@
               <span
                 v-translate="{
                   et: ' ',
-                  en: ' for '
+                  en: ' for ',
                 }"
               ></span>
               <span
                 v-translate="{
                   et: loan.type__value,
-                  en: loan.type__value_en
+                  en: loan.type__value_en,
                 }"
               ></span>
               <span v-if="loan.project">
@@ -139,7 +139,7 @@
               <span
                 v-translate="{
                   et: loan.loaner__institution__institution_name,
-                  en: loan.loaner__institution__institution_name_en
+                  en: loan.loaner__institution__institution_name_en,
                 }"
               ></span>
               {{ $t("loan_print.specimen_info3") }}
@@ -153,21 +153,21 @@
               <span
                 v-translate="{
                   et: loan.delivery_method__value,
-                  en: loan.delivery_method__value_en
+                  en: loan.delivery_method__value_en,
                 }"
               ></span>
               <span v-if="loan.deliverer">
                 <span
                   v-translate="{
                     et: ' ',
-                    en: ' by '
+                    en: ' by ',
                   }"
                 ></span>
                 {{ loan.deliverer__agent
                 }}<span
                   v-translate="{
                     et: ' poolt.',
-                    en: '.'
+                    en: '.',
                   }"
                 ></span>
               </span>
@@ -180,27 +180,27 @@
               {{ loan.borrower__forename }} {{ loan.borrower__surename }} (<span
                 v-translate="{
                   et: loan.borrower_institution__institution_name,
-                  en: loan.borrower_institution__institution_name_en
+                  en: loan.borrower_institution__institution_name_en,
                 }"
               ></span
               >)
               <span
                 v-translate="{
                   et: ' ',
-                  en: ' for '
+                  en: ' for ',
                 }"
               ></span>
               <span
                 v-translate="{
                   et: loan.type__value,
-                  en: loan.type__value_en
+                  en: loan.type__value_en,
                 }"
               ></span>
               <span v-if="loan.project"> ({{ loan.project }})</span>
               <span
                 v-translate="{
                   et: ' jaoks.',
-                  en: '.'
+                  en: '.',
                 }"
               ></span>
               {{ $t("loan_print.sample_info2") }}
@@ -211,20 +211,20 @@
               <span
                 v-translate="{
                   et: loan.delivery_method__value,
-                  en: loan.delivery_method__value_en
+                  en: loan.delivery_method__value_en,
                 }"
               ></span>
               <span
                 v-translate="{
                   et: ' ',
-                  en: ' by '
+                  en: ' by ',
                 }"
               ></span>
               <span>{{ loan.borrower__surename }}</span>
               <span
                 v-translate="{
                   et: ' poolt',
-                  en: ''
+                  en: '',
                 }"
               ></span
               >.
@@ -266,27 +266,27 @@
                       <div
                         v-if="
                           names &&
-                            names.length > 0 &&
-                            names.find(
-                              specimen => specimen.id === item.specimen
-                            )
+                          names.length > 0 &&
+                          names.find(
+                            (specimen) => specimen.id === item.specimen
+                          )
                         "
                       >
                         <div
                           v-if="
                             names.find(
-                              specimen => specimen.id === item.specimen
+                              (specimen) => specimen.id === item.specimen
                             ).taxonId
                           "
                         >
                           <i
                             v-translate="{
                               et: names.find(
-                                specimen => specimen.id === item.specimen
+                                (specimen) => specimen.id === item.specimen
                               ).name,
                               en: names.find(
-                                specimen => specimen.id === item.specimen
-                              ).name_en
+                                (specimen) => specimen.id === item.specimen
+                              ).name_en,
                             }"
                           />
                         </div>
@@ -294,18 +294,18 @@
                         <div
                           v-else-if="
                             names.find(
-                              specimen => specimen.id === item.specimen
+                              (specimen) => specimen.id === item.specimen
                             ).rockId
                           "
                         >
                           <i
                             v-translate="{
                               et: names.find(
-                                specimen => specimen.id === item.specimen
+                                (specimen) => specimen.id === item.specimen
                               ).name,
                               en: names.find(
-                                specimen => specimen.id === item.specimen
-                              ).name_en
+                                (specimen) => specimen.id === item.specimen
+                              ).name_en,
                             }"
                           />
                         </div>
@@ -314,11 +314,11 @@
                           v-else
                           v-translate="{
                             et: names.find(
-                              specimen => specimen.id === item.specimen
+                              (specimen) => specimen.id === item.specimen
                             ).name,
                             en: names.find(
-                              specimen => specimen.id === item.specimen
-                            ).name_en
+                              (specimen) => specimen.id === item.specimen
+                            ).name_en,
                           }"
                         />
                       </div>
@@ -326,13 +326,13 @@
                     <td
                       v-translate="{
                         et: item.specimen__locality__locality,
-                        en: item.specimen__locality__locality_en
+                        en: item.specimen__locality__locality_en,
                       }"
                     ></td>
                     <td
                       v-translate="{
                         et: item.specimen__stratigraphy__stratigraphy,
-                        en: item.specimen__stratigraphy__stratigraphy_en
+                        en: item.specimen__stratigraphy__stratigraphy_en,
                       }"
                     ></td>
                     <td>{{ item.specimen__agent_collected__agent }}</td>
@@ -377,9 +377,7 @@
                     <td>{{ item.sample__agent_collected__agent }}</td>
                     <td>
                       <a
-                        :href="
-                          `https://geocollections.info/sample/${item.sample}`
-                        "
+                        :href="`https://geocollections.info/sample/${item.sample}`"
                         class="sarv-link"
                         target="LoanSampleWindow"
                       >
@@ -397,22 +395,22 @@
 
         <v-row no-gutters class="mt-12 pt-12" v-if="loanSpecimens.length > 0">
           <v-col cols="4">
-            <div class="text-center" style="color: transparent;">.</div>
-            <div style="border-bottom: 1px solid black;"></div>
+            <div class="text-center" style="color: transparent">.</div>
+            <div style="border-bottom: 1px solid black"></div>
             <div class="text-center">
               {{ loan.borrower__forename }} {{ loan.borrower__surename }}
             </div>
           </v-col>
           <v-col cols="4" class="px-2">
-            <div class="text-center" style="color: transparent;">.</div>
-            <div style="border-bottom: 1px solid black;"></div>
+            <div class="text-center" style="color: transparent">.</div>
+            <div style="border-bottom: 1px solid black"></div>
             <div class="text-center">
               {{ loanerSignature }}
             </div>
           </v-col>
           <v-col cols="4">
             <div class="text-center">{{ loan.date_start }}</div>
-            <div style="border-bottom: 1px solid black;"></div>
+            <div style="border-bottom: 1px solid black"></div>
             <div class="text-center">{{ $t("loan_print.date") }}</div>
           </v-col>
         </v-row>
@@ -428,7 +426,7 @@
               <span
                 v-translate="{
                   et: loan.loaner__institution__institution_name,
-                  en: loan.loaner__institution__institution_name_en
+                  en: loan.loaner__institution__institution_name_en,
                 }"
               />
               {{ $t("loan_print.specimen_extra0a") }}
@@ -443,7 +441,7 @@
               <span
                 v-translate="{
                   et: loan.loaner__institution__institution_name,
-                  en: loan.loaner__institution__institution_name_en
+                  en: loan.loaner__institution__institution_name_en,
                 }"
               />
             </div>
@@ -457,7 +455,7 @@
               <span
                 v-translate="{
                   et: loan.loaner__institution__institution_name,
-                  en: loan.loaner__institution__institution_name_en
+                  en: loan.loaner__institution__institution_name_en,
                 }"
               />
               {{ $t("loan_print.specimen_extra5a") }}
@@ -479,7 +477,7 @@
               <span
                 v-translate="{
                   et: loan.loaner__institution__institution_name,
-                  en: loan.loaner__institution__institution_name_en
+                  en: loan.loaner__institution__institution_name_en,
                 }"
               ></span
               >.
@@ -497,14 +495,14 @@
               <span
                 v-translate="{
                   et: loan.loaner__institution__institution_name + '.',
-                  en: loan.loaner__institution__institution_name_en
+                  en: loan.loaner__institution__institution_name_en,
                 }"
               ></span>
               {{ $t("loan_print.sample_extra2a") }}
               <span
                 v-translate="{
                   et: loan.loaner__institution__institution_name,
-                  en: loan.loaner__institution__institution_name_en
+                  en: loan.loaner__institution__institution_name_en,
                 }"
               ></span
               >.
@@ -520,7 +518,7 @@
         <v-row no-gutters class="mt-12 pt-12 mb-4">
           <v-col cols="4"></v-col>
           <v-col cols="4" class="pr-2">
-            <div style="border-bottom: 1px solid black;"></div>
+            <div style="border-bottom: 1px solid black"></div>
             <div v-if="loanSpecimens.length > 0">
               <div class="text-center">
                 {{ $t("loan_print.name_and_signature") }}
@@ -536,7 +534,7 @@
             </div>
           </v-col>
           <v-col cols="4">
-            <div style="border-bottom: 1px solid black;"></div>
+            <div style="border-bottom: 1px solid black"></div>
             <div class="text-center">{{ $t("loan_print.date") }}</div>
           </v-col>
         </v-row>
@@ -551,7 +549,7 @@ import {
   fetchLoanSamples,
   fetchLoanSpecimens,
   fetchSpecimenIdentificationGeologiesList,
-  fetchSpecimenIdentificationsList
+  fetchSpecimenIdentificationsList,
 } from "../../assets/js/api/apiCalls";
 import LangButtons from "../partial/LangButtons";
 
@@ -563,7 +561,7 @@ export default {
     isLoading: false,
     loanSpecimens: [],
     loanSamples: [],
-    names: []
+    names: [],
   }),
   computed: {
     loanReturnAddress() {
@@ -592,21 +590,21 @@ export default {
       if (this.loan.loaner__profession)
         signature += `, ${this.loan.loaner__profession}`;
       return signature;
-    }
+    },
   },
   watch: {
     "$route.params.id": {
       handler(newVal) {
         this.fetchLoanInfo(newVal);
       },
-      immediate: true
+      immediate: true,
     },
     loanSpecimens: {
       handler(newVal) {
         this.getNames(newVal);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     async fetchLoanInfo(id) {
@@ -629,7 +627,7 @@ export default {
 
     async getNames(listOfSpecimens) {
       if (listOfSpecimens && listOfSpecimens.length > 0) {
-        let listOfIds = listOfSpecimens.map(specimen => specimen.specimen);
+        let listOfIds = listOfSpecimens.map((specimen) => specimen.specimen);
 
         const taxonResponse = await fetchSpecimenIdentificationsList(listOfIds);
         const rockResponse = await fetchSpecimenIdentificationGeologiesList(
@@ -641,20 +639,20 @@ export default {
           let rockList = [];
 
           if (taxonResponse.data.count > 0) {
-            taxonList = taxonResponse.data.results.map(entity => {
+            taxonList = taxonResponse.data.results.map((entity) => {
               return {
                 id: entity.specimen_id,
                 name: entity.taxon__taxon ? entity.taxon__taxon : entity.name,
                 name_en: entity.taxon__taxon
                   ? entity.taxon__taxon
                   : entity.name,
-                taxonId: entity.taxon_id
+                taxonId: entity.taxon_id,
               };
             });
           }
 
           if (rockResponse.data.count > 0) {
-            rockList = rockResponse.data.results.map(entity => {
+            rockList = rockResponse.data.results.map((entity) => {
               let name = "";
               let name_en = "";
 
@@ -686,22 +684,22 @@ export default {
                 id: entity.specimen_id,
                 name: name,
                 name_en: name_en,
-                rockId: entity.rock_id
+                rockId: entity.rock_id,
               };
             });
           }
 
           if (taxonList.length > 0 && rockList.length > 0) {
-            rockList.forEach(taxon => {
-              let item = taxonList.find(rock => taxon.id === rock.id);
+            rockList.forEach((taxon) => {
+              let item = taxonList.find((rock) => taxon.id === rock.id);
               item ? this.names.push(item) : this.names.push(taxon);
             });
           } else if (taxonList.length > 0) this.names = taxonList;
           else if (rockList.length > 0) this.names = rockList;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

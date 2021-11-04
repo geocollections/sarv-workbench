@@ -44,14 +44,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.type__value,
-              en: item.type__value_en
+              en: item.type__value_en,
             }"
           />
           <span
             v-else-if="item.type"
             v-translate="{
               et: item.type.value,
-              en: item.type.value_en
+              en: item.type.value_en,
             }"
           />
         </div>
@@ -59,7 +59,7 @@
           v-else
           v-translate="{
             et: item.type__value,
-            en: item.type__value_en
+            en: item.type__value_en,
           }"
         ></div>
       </template>
@@ -164,44 +164,44 @@ export default {
   components: {
     DateWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -215,8 +215,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -224,36 +224,36 @@ export default {
       value_old: "",
       value_new: "",
       date: null,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
       type: [],
       loaders: {
-        type: false
-      }
-    }
+        type: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
 
     isItemValid() {
       return typeof this.item.type !== "undefined" && this.item.type !== null;
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -265,7 +265,7 @@ export default {
         value_old: "",
         value_new: "",
         date: null,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -277,13 +277,13 @@ export default {
         this.$emit("related:add", {
           table: "specimen_history",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "specimen_history",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -299,7 +299,7 @@ export default {
         this.item.type = {
           id: item.type,
           value: item.type__value,
-          value_en: item.type__value_en
+          value_en: item.type__value_en,
         };
       }
 
@@ -315,14 +315,14 @@ export default {
       this.$emit("related:delete", {
         table: "specimen_history",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.type.length <= 1) {
         this.autocomplete.loaders.type = true;
-        fetchListHistoryType().then(response => {
+        fetchListHistoryType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.type =
               response.data.count > 0 ? response.data.results : [];
@@ -333,7 +333,7 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -348,8 +348,8 @@ export default {
           this.item[fieldToBeUpdated] = date;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -16,12 +16,12 @@ export default {
   props: {
     isViewOnly: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     polygon: {
-      type: String
-    }
+      type: String,
+    },
   },
 
   data: () => ({
@@ -38,11 +38,11 @@ export default {
           "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
           {
             attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
           }
         ),
         minZoom: 1,
-        maxZoom: 18
+        maxZoom: 18,
       },
       {
         name: "OpenStreetMap",
@@ -51,9 +51,9 @@ export default {
           {
             attribution:
               '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            minZoom: 1
+            minZoom: 1,
           }
-        )
+        ),
       },
       {
         name: "OpenTopoMap",
@@ -62,9 +62,9 @@ export default {
           {
             attribution:
               'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-            minZoom: 1
+            minZoom: 1,
           }
-        )
+        ),
       },
       {
         name: "Maaameti fotokaart",
@@ -78,9 +78,9 @@ export default {
             updateWhenIdle: true,
             zIndex: 1,
             worldCopyJump: true,
-            continuousWorld: true
+            continuousWorld: true,
           }
-        )
+        ),
       },
       {
         name: "Maaameti kaart",
@@ -94,10 +94,10 @@ export default {
             updateWhenIdle: true,
             zIndex: 1,
             worldCopyJump: true,
-            continuousWorld: true
+            continuousWorld: true,
           }
-        )
-      }
+        ),
+      },
     ],
     overlayMaps: [
       {
@@ -112,17 +112,17 @@ export default {
             detectRetina: true,
             zIndex: 2,
             updateWhenIdle: true,
-            continuousWorld: true
+            continuousWorld: true,
           }
         ),
         minZoom: 6,
-        maxZoom: 18
-      }
-    ]
+        maxZoom: 18,
+      },
+    ],
   }),
 
   computed: {
-    ...mapState("map", ["defaultLayer"])
+    ...mapState("map", ["defaultLayer"]),
   },
 
   mounted() {
@@ -145,7 +145,7 @@ export default {
           this.map.invalidateSize();
         });
       },
-      immediate: true
+      immediate: true,
     },
 
     newPolygon(newVal) {
@@ -153,7 +153,7 @@ export default {
         this.newPolygon.on("pm:edit", this.handlePmEdit);
         this.newPolygon.on("pm:cut", this.handlePmCut);
       }
-    }
+    },
   },
 
   methods: {
@@ -164,19 +164,19 @@ export default {
         layers: [this.tileProviders[0].leafletObject],
         scrollWheelZoom: false,
         minZoom: this.minZoom,
-        maxZoom: this.maxZoom
+        maxZoom: this.maxZoom,
       }).fitBounds([
         [59.8937871096, 21.5136411202],
-        [57.3959015512, 28.3681954033]
+        [57.3959015512, 28.3681954033],
       ]);
 
       let baseLayers = {};
-      this.tileProviders.forEach(provider => {
+      this.tileProviders.forEach((provider) => {
         baseLayers[provider.name] = provider.leafletObject;
       });
       let overlayMaps = {};
       this.overlayMaps.forEach(
-        provider => (overlayMaps[provider.name] = provider.leafletObject)
+        (provider) => (overlayMaps[provider.name] = provider.leafletObject)
       );
 
       L.control.layers(baseLayers, overlayMaps).addTo(this.map);
@@ -198,7 +198,7 @@ export default {
           drawCircleMarker: false,
           drawPolyline: false,
           drawRectangle: false,
-          drawCircle: false
+          drawCircle: false,
         });
 
         this.map.on("pm:create", this.handlePmCreate);
@@ -263,11 +263,11 @@ export default {
 
         let newCoordinates = [];
 
-        coordinates.forEach(polygonArrays => {
+        coordinates.forEach((polygonArrays) => {
           if (type === "MultiPolygon") {
             let polygon = [];
-            polygonArrays.forEach(polygonItem => {
-              let switchedPolygonArray = polygonItem.map(latLngArray => {
+            polygonArrays.forEach((polygonItem) => {
+              let switchedPolygonArray = polygonItem.map((latLngArray) => {
                 return [latLngArray[1], latLngArray[0]];
               });
               polygon.push(switchedPolygonArray);
@@ -275,7 +275,7 @@ export default {
 
             newCoordinates.push(polygon);
           } else {
-            let switchedPolygonArray = polygonArrays.map(latLngArray => {
+            let switchedPolygonArray = polygonArrays.map((latLngArray) => {
               return [latLngArray[1], latLngArray[0]];
             });
             newCoordinates.push(switchedPolygonArray);
@@ -306,8 +306,8 @@ export default {
           "#polygon-map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label > div > input"
         ).checked = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

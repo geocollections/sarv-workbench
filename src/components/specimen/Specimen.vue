@@ -769,7 +769,7 @@ import {
   fetchSpecimenIdentificationGeologies,
   fetchSpecimenIdentifications,
   fetchSpecimenLocations,
-  fetchSpecimenReferences
+  fetchSpecimenReferences,
 } from "../../assets/js/api/apiCalls";
 import { mapActions, mapState } from "vuex";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
@@ -809,25 +809,25 @@ export default {
     DateWrapper,
     TextareaWrapper,
     InputWrapper,
-    AutocompleteWrapper
+    AutocompleteWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
@@ -835,7 +835,7 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     requestsMixin,
-    saveAsNewMixin
+    saveAsNewMixin,
   ],
 
   data() {
@@ -850,7 +850,7 @@ export default {
         request: "FETCH_SPECIMENS",
         title: "header.specimens",
         object: "specimen",
-        field: "specimen_id"
+        field: "specimen_id",
       });
     }
 
@@ -858,7 +858,7 @@ export default {
       let storage = JSON.parse(this.$route.query.storage);
       this.specimen.storage = {
         id: storage.id,
-        location: storage.location
+        location: storage.location,
       };
       this.autocomplete.storage.push(this.specimen.storage);
     }
@@ -868,24 +868,24 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("search", ["specimenSearchParameters"]),
     ...mapState("search", {
-      activeRelatedDataTab: state => state.activeRelatedDataTab.specimen
+      activeRelatedDataTab: (state) => state.activeRelatedDataTab.specimen,
     }),
 
     isFossil() {
@@ -895,13 +895,13 @@ export default {
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -912,7 +912,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -929,7 +929,7 @@ export default {
           { name: "attachment", iconClass: "far fa-folder-open" },
           { name: "specimen_location", iconClass: "fas fa-globe-europe" },
           { name: "specimen_history", iconClass: "fas fa-history" },
-          { name: "analysis", iconClass: "far fa-chart-bar" }
+          { name: "analysis", iconClass: "far fa-chart-bar" },
         ],
         activeTab: "specimen_identification",
         relatedData: this.setDefaultRelatedData(),
@@ -972,7 +972,7 @@ export default {
           "status",
           "original_status",
           "parent",
-          "number_pieces"
+          "number_pieces",
         ],
         autocomplete: {
           loaders: {
@@ -1003,7 +1003,7 @@ export default {
             list_specimen_type: false,
             list_history_type: false,
             analysis_method: false,
-            parent: false
+            parent: false,
           },
           coll: [],
           specimen_kind: [],
@@ -1032,7 +1032,7 @@ export default {
           list_specimen_type: [],
           list_history_type: [],
           analysis_method: [],
-          parent: []
+          parent: [],
         },
         requiredFields: ["fossil"],
         specimen: {},
@@ -1041,7 +1041,7 @@ export default {
           localityInfo: true,
           details: true,
           images: true,
-          description: true
+          description: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -1050,8 +1050,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -1065,7 +1065,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        fetchSpecimen(this.$route.params.id).then(response => {
+        fetchSpecimen(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -1081,7 +1081,7 @@ export default {
           this.setLoadingState(false);
         });
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
         this.loadSpecimenImages(this.$route.params.id);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
@@ -1117,44 +1117,43 @@ export default {
 
     loadAutocompleteFields() {
       fetchListSpecimenKind().then(
-        response =>
+        (response) =>
           (this.autocomplete.specimen_kind = this.handleResponse(response))
       );
       fetchListSpecimenOriginalStatus().then(
-        response =>
-          (this.autocomplete.specimen_original_status = this.handleResponse(
-            response
-          ))
+        (response) =>
+          (this.autocomplete.specimen_original_status =
+            this.handleResponse(response))
       );
       fetchListSpecimenPresence().then(
-        response =>
+        (response) =>
           (this.autocomplete.specimen_presence = this.handleResponse(response))
       );
       fetchListSpecimenStatus().then(
-        response =>
+        (response) =>
           (this.autocomplete.specimen_status = this.handleResponse(response))
       );
       fetchListSpecimenType().then(
-        response =>
+        (response) =>
           (this.autocomplete.specimen_type = this.handleResponse(response))
       );
       fetchListSpecimenSubtype().then(
-        response =>
+        (response) =>
           (this.autocomplete.specimen_subtype = this.handleResponse(response))
       );
       fetchAccession().then(
-        response =>
+        (response) =>
           (this.autocomplete.accession = this.handleResponse(response))
       );
       fetchDeaccession().then(
-        response =>
+        (response) =>
           (this.autocomplete.deaccession = this.handleResponse(response))
       );
     },
 
     loadSpecimenImages(specimenId) {
       fetchDirectSpecimenImages(specimenId).then(
-        response => (this.specimenImages = this.handleResponse(response))
+        (response) => (this.specimenImages = this.handleResponse(response))
       );
     },
 
@@ -1173,58 +1172,58 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["taxon", "current"],
-            sortDesc: [true, true]
+            sortDesc: [true, true],
           },
           specimen_identification_geology: {
             page: 1,
             paginateBy: 10,
             sortBy: ["rock", "current"],
-            sortDesc: [true, true]
+            sortDesc: [true, true],
           },
           specimen_reference: {
             page: 1,
             paginateBy: 10,
             sortBy: ["reference"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           specimen_description: {
             page: 1,
             paginateBy: 10,
             sortBy: ["length"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           attachment: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           specimen_location: {
             page: 1,
             paginateBy: 10,
             sortBy: ["number"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           specimen_history: {
             page: 1,
             paginateBy: 10,
             sortBy: ["type"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           analysis: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -1245,14 +1244,13 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0) {
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ].results;
+            uploadableObject.related_data[tab.name] =
+              this.relatedData[tab.name].results;
 
-            uploadableObject.related_data[tab.name].forEach(item => {
-              Object.keys(item).forEach(key => {
+            uploadableObject.related_data[tab.name].forEach((item) => {
+              Object.keys(item).forEach((key) => {
                 if (typeof item[key] === "object" && item[key] !== null) {
                   item[key] = item[key].id ? item[key].id : null;
                 }
@@ -1262,11 +1260,10 @@ export default {
         });
       } else {
         if (this.relatedData.attachment.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment.results.map(
-            item => {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment.results.map((item) => {
               return { id: item.id };
-            }
-          );
+            });
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -1287,23 +1284,23 @@ export default {
       this.specimen.fossil = {
         id: obj.fossil,
         value: obj.fossil__value,
-        value_en: obj.fossil__value_en
+        value_en: obj.fossil__value_en,
       };
       this.specimen.type = {
         id: obj.type,
         value: obj.type__value,
-        value_en: obj.type__value_en
+        value_en: obj.type__value_en,
       };
       this.specimen.subtype_id = {
         id: obj.subtype_id,
         value: obj.subtype_id__value,
-        value_en: obj.subtype_id__value_en
+        value_en: obj.subtype_id__value_en,
       };
       if (this.isNotEmpty(obj.locality)) {
         this.specimen.locality = {
           id: obj.locality,
           locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en
+          locality_en: obj.locality__locality_en,
         };
         this.autocomplete.locality.push(this.specimen.locality);
       }
@@ -1315,7 +1312,7 @@ export default {
         this.specimen.stratigraphy = {
           id: obj.stratigraphy,
           stratigraphy: obj.stratigraphy__stratigraphy,
-          stratigraphy_en: obj.stratigraphy__stratigraphy_en
+          stratigraphy_en: obj.stratigraphy__stratigraphy_en,
         };
         this.autocomplete.stratigraphy.push(this.specimen.stratigraphy);
       }
@@ -1323,7 +1320,7 @@ export default {
         this.specimen.lithostratigraphy = {
           id: obj.lithostratigraphy,
           stratigraphy: obj.lithostratigraphy__stratigraphy,
-          stratigraphy_en: obj.lithostratigraphy__stratigraphy_en
+          stratigraphy_en: obj.lithostratigraphy__stratigraphy_en,
         };
         this.autocomplete.lithostratigraphy.push(
           this.specimen.lithostratigraphy
@@ -1332,19 +1329,19 @@ export default {
       if (this.isNotEmpty(obj.agent_collected)) {
         this.specimen.agent_collected = {
           id: obj.agent_collected,
-          agent: obj.agent_collected__agent
+          agent: obj.agent_collected__agent,
         };
         this.autocomplete.agent_collected.push(this.specimen.agent_collected);
       }
       this.specimen.presence = {
         id: obj.presence,
         value: obj.presence__value,
-        value_en: obj.presence__value_en
+        value_en: obj.presence__value_en,
       };
       if (this.isNotEmpty(obj.storage)) {
         this.specimen.storage = {
           id: obj.storage,
-          location: obj.storage__location
+          location: obj.storage__location,
         };
         this.autocomplete.storage.push(this.specimen.storage);
       }
@@ -1352,32 +1349,32 @@ export default {
         this.specimen.classification = {
           id: obj.classification,
           class_field: obj.classification__class_field,
-          class_en: obj.classification__class_en
+          class_en: obj.classification__class_en,
         };
         this.autocomplete.classification.push(this.specimen.classification);
       }
       this.specimen.accession = {
         id: obj.accession,
-        number: obj.accession__number
+        number: obj.accession__number,
       };
       this.specimen.deaccession = {
         id: obj.deaccession,
-        number: obj.deaccession__number
+        number: obj.deaccession__number,
       };
       this.specimen.status = {
         id: obj.status,
         value: obj.status__value,
-        value_en: obj.status__value_en
+        value_en: obj.status__value_en,
       };
       this.specimen.original_status = {
         id: obj.original_status,
         value: obj.original_status__value,
-        value_en: obj.original_status__value_en
+        value_en: obj.original_status__value_en,
       };
       if (this.isNotEmpty(obj.parent)) {
         this.specimen.parent = {
           id: obj.parent,
-          specimen_id: obj.parent__specimen_id
+          specimen_id: obj.parent__specimen_id,
         };
         this.autocomplete.parent.push(this.specimen.parent);
       }
@@ -1429,7 +1426,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -1443,8 +1440,8 @@ export default {
     addExistingFiles(files) {
       // this.relatedData.attachment.count = files.length;
       this.relatedData.attachment.results = files;
-    }
-  }
+    },
+  },
 };
 </script>
 

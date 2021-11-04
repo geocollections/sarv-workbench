@@ -39,12 +39,12 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
   computed: {
-    ...mapGetters("user", ["getUserId"])
+    ...mapGetters("user", ["getUserId"]),
   },
 
   async created() {
@@ -54,7 +54,7 @@ export default {
     this.setActiveSearchParametersFilters([
       { id: "title", title: "sarv_issue.title", type: "text" },
       { id: "description", title: "sarv_issue.description", type: "text" },
-      { id: "from_user", title: "sarv_issue.from_user", type: "text" }
+      { id: "from_user", title: "sarv_issue.from_user", type: "text" },
     ]);
   },
 
@@ -68,8 +68,8 @@ export default {
         this.getUserId,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

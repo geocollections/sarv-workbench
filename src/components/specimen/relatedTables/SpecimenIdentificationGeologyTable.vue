@@ -42,14 +42,14 @@
           v-if="$route.meta.isEdit"
           v-translate="{
             et: item.rock__name,
-            en: item.rock__name_en
+            en: item.rock__name_en,
           }"
         />
         <span
           v-else-if="item.rock"
           v-translate="{
             et: item.rock.name,
-            en: item.rock.name_en
+            en: item.rock.name_en,
           }"
         />
       </template>
@@ -101,14 +101,14 @@
           v-if="$route.meta.isEdit"
           v-translate="{
             et: item.type__value,
-            en: item.type__value_en
+            en: item.type__value_en,
           }"
         />
         <span
           v-else-if="item.type"
           v-translate="{
             et: item.type.value,
-            en: item.type.value_en
+            en: item.type.value_en,
           }"
         />
       </template>
@@ -295,44 +295,44 @@ export default {
     DateWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isAddNewAvailable: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -344,19 +344,19 @@ export default {
       { text: "common.reference", value: "reference" },
       {
         text: "common.date",
-        value: "date_identified"
+        value: "date_identified",
       },
       { text: "common.type", value: "type" },
       {
         text: "specimen_identification_geology.current",
-        value: "current"
+        value: "current",
       },
       {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     item: {
       rock: null,
@@ -366,7 +366,7 @@ export default {
       reference: null,
       date_identified: null,
       type: null,
-      current: true
+      current: true,
     },
     autocomplete: {
       rock: [],
@@ -377,21 +377,21 @@ export default {
         rock: false,
         agent: false,
         reference: false,
-        type: false
-      }
-    }
+        type: false,
+      },
+    },
   }),
 
   computed: {
     isItemValid() {
       return typeof this.item.rock === "object" && this.item.rock !== null;
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -404,7 +404,7 @@ export default {
         reference: null,
         date_identified: null,
         type: null,
-        current: true
+        current: true,
       };
     },
 
@@ -415,7 +415,7 @@ export default {
         this.item.rock = {
           id: item.rock,
           name: item.rock__name,
-          name_en: item.rock__name_en
+          name_en: item.rock__name_en,
         };
         this.autocomplete.rock.push(this.item.rock);
       } else if (item.rock !== null) {
@@ -426,7 +426,7 @@ export default {
       if (typeof item.agent !== "object" && item.agent !== null) {
         this.item.agent = {
           id: item.agent,
-          agent: item.agent__agent
+          agent: item.agent__agent,
         };
         this.autocomplete.agent.push(this.item.agent);
       } else if (item.agent !== null) {
@@ -438,14 +438,14 @@ export default {
         this.item.type = {
           id: item.type,
           value: item.type__value,
-          value_en: item.type__value_en
+          value_en: item.type__value_en,
         };
       }
 
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
-          reference: item.reference__reference
+          reference: item.reference__reference,
         };
         this.autocomplete.reference.push(this.item.reference);
       } else if (item.reference !== null) {
@@ -462,7 +462,7 @@ export default {
     fillListAutocompletes() {
       if (this.autocomplete.type.length <= 1) {
         this.autocomplete.loaders.type = true;
-        fetchListIdentificationType().then(response => {
+        fetchListIdentificationType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.type =
               response.data.count > 0 ? response.data.results : [];
@@ -470,8 +470,8 @@ export default {
         });
         this.autocomplete.loaders.type = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

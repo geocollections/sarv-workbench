@@ -193,7 +193,9 @@
                 v-bind:locations="[]"
                 v-bind:location="{
                   lat: locality.latitude ? locality.latitude.toString() : null,
-                  lng: locality.longitude ? locality.longitude.toString() : null
+                  lng: locality.longitude
+                    ? locality.longitude.toString()
+                    : null,
                 }"
                 v-on:update-coordinates="updateLocation"
               />
@@ -612,7 +614,7 @@ import {
   fetchLocalityAttachment,
   fetchLocalityStratigraphy,
   fetchSiteLocalityDescriptions,
-  fetchLocalityDescriptions
+  fetchLocalityDescriptions,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
@@ -646,27 +648,27 @@ export default {
     CheckboxWrapper,
     TextareaWrapper,
     InputWrapper,
-    MapComponent
+    MapComponent,
   },
 
   props: {
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
   ],
 
   data() {
@@ -681,7 +683,7 @@ export default {
         request: "FETCH_LOCALITIES",
         title: "header.localities",
         object: "locality",
-        field: "locality_en"
+        field: "locality_en",
       });
     }
     this.loadFullInfo();
@@ -689,17 +691,17 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
@@ -713,7 +715,7 @@ export default {
       },
       set(value) {
         this.updateShowMap(value);
-      }
+      },
     },
 
     activeRelatedDataTab() {
@@ -724,13 +726,13 @@ export default {
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -741,7 +743,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -754,7 +756,7 @@ export default {
           { name: "locality_synonym", iconClass: "fas fa-font" },
           { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "locality_stratigraphy", iconClass: "fas fa-globe-asia" },
-          { name: "locality_description", iconClass: "fas fa-align-left" }
+          { name: "locality_description", iconClass: "fas fa-align-left" },
         ],
         activeTab: "locality_reference",
         relatedData: this.setDefaultRelatedData(),
@@ -788,7 +790,7 @@ export default {
           "coord_det_agent",
           "country",
           "stratigraphy_top",
-          "stratigraphy_base"
+          "stratigraphy_base",
         ],
         autocomplete: {
           loaders: {
@@ -799,7 +801,7 @@ export default {
             reference: false,
             synonym: false,
             attachment: false,
-            stratigraphy: false
+            stratigraphy: false,
           },
           localityTypes: [],
           locality: [],
@@ -815,7 +817,7 @@ export default {
           stratigraphy_base: [],
           synonym: [],
           attachment: [],
-          stratigraphy: []
+          stratigraphy: [],
         },
         requiredFields: ["locality", "locality_en"],
         locality: {},
@@ -823,7 +825,7 @@ export default {
           info: true,
           map: true,
           additionalInfo: true,
-          description: true
+          description: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -832,8 +834,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -849,7 +851,7 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
 
-        fetchLocality(this.$route.params.id).then(response => {
+        fetchLocality(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -868,7 +870,7 @@ export default {
         });
 
         // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           this.loadRelatedData(tab.name);
         });
       } else {
@@ -881,22 +883,23 @@ export default {
 
     loadAutocompleteFields() {
       fetchListLocalityTypes().then(
-        response =>
+        (response) =>
           (this.autocomplete.localityTypes = this.handleResponse(response))
       );
       fetchListLocalityExtent().then(
-        response => (this.autocomplete.extent = this.handleResponse(response))
+        (response) => (this.autocomplete.extent = this.handleResponse(response))
       );
       fetchListCoordinateMethod().then(
-        response =>
+        (response) =>
           (this.autocomplete.coordMethod = this.handleResponse(response))
       );
       fetchListCoordinatePrecision().then(
-        response =>
+        (response) =>
           (this.autocomplete.coordPrecision = this.handleResponse(response))
       );
       fetchListCountry().then(
-        response => (this.autocomplete.country = this.handleResponse(response))
+        (response) =>
+          (this.autocomplete.country = this.handleResponse(response))
       );
     },
 
@@ -908,40 +911,40 @@ export default {
         locality_stratigraphy: { count: 0, results: [] },
         locality_description: {
           count: 0,
-          results: []
+          results: [],
         },
         searchParameters: {
           locality_reference: {
             page: 1,
             paginateBy: 25,
             sortBy: ["reference"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           locality_synonym: {
             page: 1,
             paginateBy: 25,
             sortBy: ["synonym"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           attachment_link: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           locality_stratigraphy: {
             page: 1,
             paginateBy: 25,
             sortBy: ["depth_base", "depth_top"],
-            sortDesc: [false, false]
+            sortDesc: [false, false],
           },
           locality_description: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
@@ -964,7 +967,7 @@ export default {
         ).toFixed(6);
       else uploadableObject.longitude = null;
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -983,21 +986,19 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0)
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-                item => {
+              uploadableObject.related_data.attachment =
+                this.relatedData.attachment_link.results.map((item) => {
                   return { id: item.id };
-                }
-              );
+                });
             } else {
-              uploadableObject.related_data[tab.name] = this.relatedData[
-                tab.name
-              ].results;
+              uploadableObject.related_data[tab.name] =
+                this.relatedData[tab.name].results;
 
-              uploadableObject.related_data[tab.name].forEach(item => {
-                Object.keys(item).forEach(key => {
+              uploadableObject.related_data[tab.name].forEach((item) => {
+                Object.keys(item).forEach((key) => {
                   if (typeof item[key] === "object" && item[key] !== null) {
                     item[key] = item[key].id ? item[key].id : null;
                   }
@@ -1007,11 +1008,10 @@ export default {
         });
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-            item => {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment_link.results.map((item) => {
               return { id: item.id };
-            }
-          );
+            });
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -1028,48 +1028,48 @@ export default {
       this.locality.type = {
         value: obj.type__value,
         value_en: obj.type__value_en,
-        id: obj.type__id
+        id: obj.type__id,
       };
       if (this.isNotEmpty(obj.parent__id)) {
         this.locality.parent = {
           locality: obj.parent__locality,
           locality_en: obj.parent__locality_en,
-          id: obj.parent__id
+          id: obj.parent__id,
         };
         this.autocomplete.locality.push(this.locality.parent);
       }
       this.locality.extent = {
         value: obj.extent__value,
         value_en: obj.extent__value_en,
-        id: obj.extent__id
+        id: obj.extent__id,
       };
       this.locality.coord_det_precision = {
         value: obj.coord_det_precision__value,
         value_en: obj.coord_det_precision__value_en,
-        id: obj.coord_det_precision__id
+        id: obj.coord_det_precision__id,
       };
       this.locality.coord_det_method = {
         value: obj.coord_det_method__value,
         value_en: obj.coord_det_method__value_en,
-        id: obj.coord_det_method__id
+        id: obj.coord_det_method__id,
       };
       if (this.isNotEmpty(obj.coord_det_agent__id)) {
         this.locality.coord_det_agent = {
           agent: obj.coord_det_agent__agent,
-          id: obj.coord_det_agent__id
+          id: obj.coord_det_agent__id,
         };
         this.autocomplete.agent.push(this.locality.coord_det_agent);
       }
       this.locality.country = {
         value: obj.country__value,
         value_en: obj.country__value_en,
-        id: obj.country__id
+        id: obj.country__id,
       };
       if (this.isNotEmpty(obj.stratigraphy_top__id)) {
         this.locality.stratigraphy_top = {
           stratigraphy: obj.stratigraphy_top__stratigraphy,
           stratigraphy_en: obj.stratigraphy_top__stratigraphy_en,
-          id: obj.stratigraphy_top__id
+          id: obj.stratigraphy_top__id,
         };
         this.autocomplete.stratigraphy_top.push(this.locality.stratigraphy_top);
       }
@@ -1077,7 +1077,7 @@ export default {
         this.locality.stratigraphy_base = {
           stratigraphy: obj.stratigraphy_base__stratigraphy,
           stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
-          id: obj.stratigraphy_base__id
+          id: obj.stratigraphy_base__id,
         };
         this.autocomplete.stratigraphy_base.push(
           this.locality.stratigraphy_base
@@ -1116,7 +1116,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[type].count = response.data.count;
           this.relatedData[type].results = this.handleResponse(response);
         });
@@ -1135,8 +1135,8 @@ export default {
     addExistingFiles(files) {
       // this.relatedData.attachment_link.count = files.length;
       this.relatedData.attachment_link.results = files;
-    }
-  }
+    },
+  },
 };
 </script>
 

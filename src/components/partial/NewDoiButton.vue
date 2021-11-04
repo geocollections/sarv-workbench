@@ -20,28 +20,28 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true
+      required: true,
     },
     rawData: {
-      type: Object
+      type: Object,
     },
     relatedData: {
-      type: Object
+      type: Object,
     },
     attachment: {
-      type: Array
+      type: Array,
     },
     object: {
       type: String,
       default: "reference",
-      required: true
-    }
+      required: true,
+    },
   },
   name: "NewDoiButton",
   mixins: [toastMixin],
   data() {
     return {
-      sendingData: false
+      sendingData: false,
     };
   },
   methods: {
@@ -59,7 +59,7 @@ export default {
           doiFormData.append("data", JSON.stringify(doi));
 
           fetchAddDoi(doiFormData).then(
-            response => {
+            (response) => {
               if (response && response.data) {
                 if (typeof response.data.message !== "undefined")
                   this.toastSuccess({ text: response.data.message });
@@ -95,29 +95,28 @@ export default {
           reference: this.data.id,
           subjects:
             this.relatedData.keyword && this.relatedData.keyword.length > 0
-              ? this.relatedData.keyword.map(item => item.keyword).join(", ")
+              ? this.relatedData.keyword.map((item) => item.keyword).join(", ")
               : null,
           resource_type: 12,
           version: "1.0",
           formats: "pdf",
-          related_data: {}
+          related_data: {},
         };
 
         if (this.attachment)
           doiObject.related_data.attachment = [
-            { attachment: this.attachment[0].id }
+            { attachment: this.attachment[0].id },
           ];
         if (
           this.relatedData.locality_reference &&
           this.relatedData.locality_reference.length > 0
         ) {
-          doiObject.related_data.doi_geolocation = this.relatedData.locality_reference.map(
-            item => {
+          doiObject.related_data.doi_geolocation =
+            this.relatedData.locality_reference.map((item) => {
               return {
-                id: item.locality
+                id: item.locality,
               };
-            }
-          );
+            });
         }
       } else if (object === "attachment") {
         doiObject = {
@@ -135,7 +134,7 @@ export default {
           abstract: this.data.description_en,
           subjects:
             this.relatedData.keyword && this.relatedData.keyword.length > 0
-              ? this.relatedData.keyword.map(item => item.keyword).join(", ")
+              ? this.relatedData.keyword.map((item) => item.keyword).join(", ")
               : null,
           resource_type: 14,
           version: "1.0",
@@ -149,9 +148,9 @@ export default {
             : null,
           related_data: {
             attachment: [
-              { attachment: this.data.id, remarks: this.data.remarks }
-            ]
-          }
+              { attachment: this.data.id, remarks: this.data.remarks },
+            ],
+          },
         };
 
         if (this.data.author) {
@@ -161,7 +160,7 @@ export default {
               : null,
             agent: this.data.author.id,
             name: this.data.author.agent,
-            orcid: this.data.author.orcid ? this.data.author.orcid : null
+            orcid: this.data.author.orcid ? this.data.author.orcid : null,
           };
         } else if (this.data.author_free) {
           doiObject.related_data.doi_agent = { name: this.data.author_free };
@@ -169,7 +168,7 @@ export default {
 
         if (this.data.locality) {
           doiObject.related_data.doi_geolocation = [
-            { id: this.data.locality.id }
+            { id: this.data.locality.id },
           ];
         } else if (this.data.image_place) {
           doiObject.related_data.doi_geolocation = [
@@ -180,14 +179,14 @@ export default {
                 : null,
               point_longitude: this.data.image_longitude
                 ? this.data.image_longitude
-                : null
-            }
+                : null,
+            },
           ];
         }
       }
       return doiObject;
-    }
-  }
+    },
+  },
 };
 </script>
 

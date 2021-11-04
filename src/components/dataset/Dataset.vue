@@ -518,7 +518,7 @@ import {
   fetchDoiPublisher,
   fetchDoiResourceType,
   fetchListLanguages,
-  fetchListLicences
+  fetchListLicences,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -547,32 +547,32 @@ export default {
     AutocompleteWrapper,
     DateWrapper,
     TextareaWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
   ],
 
   data() {
@@ -587,7 +587,7 @@ export default {
         request: "FETCH_DATASETS",
         title: "header.datasets",
         object: "dataset",
-        field: "name"
+        field: "name",
       });
     }
 
@@ -596,40 +596,40 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
+      deep: true,
     },
     "relatedData.dataset_author.results": {
       handler(newVal) {
         if (newVal && newVal.length > 0) this.updateCreatorsField(newVal);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("search", ["datasetSearchParameters"]),
     ...mapState("search", {
-      activeRelatedDataTab: state => state.activeRelatedDataTab.dataset
+      activeRelatedDataTab: (state) => state.activeRelatedDataTab.dataset,
     }),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -639,7 +639,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -651,7 +651,7 @@ export default {
           { name: "dataset_author", iconClass: "far fa-user" },
           { name: "dataset_reference", iconClass: "fas fa-book" },
           { name: "dataset_analysis", iconClass: "far fa-chart-bar" },
-          { name: "dataset_geolocation", iconClass: "fas fa-globe-americas" }
+          { name: "dataset_geolocation", iconClass: "fas fa-globe-americas" },
         ],
         activeTab: "dataset_author",
         relatedData: this.setDefaultRelatedData(),
@@ -681,7 +681,7 @@ export default {
           "language",
           "subjects",
           "reference",
-          "locality"
+          "locality",
         ],
         autocomplete: {
           loaders: {
@@ -691,7 +691,7 @@ export default {
             owner: false,
             agent: false,
             reference: false,
-            locality: false
+            locality: false,
           },
           resource_type: [],
           publishers: [],
@@ -700,21 +700,21 @@ export default {
           owner: [],
           agent: [],
           reference: [],
-          locality: []
+          locality: [],
         },
         requiredFields: [
           "resource",
           "creators",
           "publication_year",
           "publisher",
-          "title"
+          "title",
         ],
         dataset: {},
         block: {
           requiredFields: true,
           info: true,
           referenceAndLocality: false,
-          description: false
+          description: false,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -723,9 +723,9 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
+          { text: "main.pagination", value: 1000 },
         ],
-        dateState: false
+        dateState: false,
       };
     },
 
@@ -741,7 +741,7 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
         this.$emit("set-object", "dataset");
-        fetchDataset(this.$route.params.id).then(response => {
+        fetchDataset(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -760,13 +760,13 @@ export default {
         });
 
         // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
 
         this.$on("tab-changed", this.setTab);
 
         this.$emit(
           "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
+          this.relatedTabs.map((tab) => tab.name)
         );
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
@@ -778,13 +778,13 @@ export default {
 
     loadAutocompleteFields() {
       fetchDoiResourceType().then(
-        response =>
+        (response) =>
           (this.autocomplete.resource_type = this.handleResponse(response))
       );
-      fetchDoiPublisher().then(response => {
+      fetchDoiPublisher().then((response) => {
         this.autocomplete.publishers = [
           ...this.autocomplete.publishers,
-          ...this.handleResponse(response)
+          ...this.handleResponse(response),
         ];
         if (
           !this.$route.meta.isEdit &&
@@ -795,10 +795,12 @@ export default {
         }
       });
       fetchListLanguages().then(
-        response => (this.autocomplete.language = this.handleResponse(response))
+        (response) =>
+          (this.autocomplete.language = this.handleResponse(response))
       );
       fetchListLicences().then(
-        response => (this.autocomplete.licence = this.handleResponse(response))
+        (response) =>
+          (this.autocomplete.licence = this.handleResponse(response))
       );
     },
 
@@ -813,34 +815,34 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["sort", "id"],
-            sortDesc: [false, false]
+            sortDesc: [false, false],
           },
           dataset_reference: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           dataset_analysis: {
             page: 1,
             paginateBy: 10,
             sortBy: ["analysis"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           dataset_geolocation: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -857,14 +859,13 @@ export default {
       if (!this.$route.meta.isEdit) {
         uploadableObject.related_data = {};
 
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0) {
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ].results;
+            uploadableObject.related_data[tab.name] =
+              this.relatedData[tab.name].results;
 
-            uploadableObject.related_data[tab.name].forEach(item => {
-              Object.keys(item).forEach(key => {
+            uploadableObject.related_data[tab.name].forEach((item) => {
+              Object.keys(item).forEach((key) => {
                 if (typeof item[key] === "object" && item[key] !== null) {
                   item[key] = item[key].id ? item[key].id : null;
                 }
@@ -886,26 +887,26 @@ export default {
       if (this.isNotEmpty(obj.copyright_agent)) {
         this.dataset.copyright_agent = {
           id: obj.copyright_agent,
-          agent: obj.copyright_agent__agent
+          agent: obj.copyright_agent__agent,
         };
         this.autocomplete.copyright_agent.push(this.dataset.copyright_agent);
       }
       this.dataset.licence = {
         id: obj.licence,
         licence: obj.licence__licence,
-        licence_en: obj.licence__licence_en
+        licence_en: obj.licence__licence_en,
       };
       if (this.isNotEmpty(obj.owner)) {
         this.dataset.owner = {
           id: obj.owner,
-          agent: obj.owner__agent
+          agent: obj.owner__agent,
         };
         this.autocomplete.owner.push(this.dataset.owner);
       }
       if (this.isNotEmpty(obj.reference)) {
         this.dataset.reference = {
           id: obj.reference,
-          reference: obj.reference__reference
+          reference: obj.reference__reference,
         };
         this.autocomplete.reference.push(this.dataset.reference);
       }
@@ -913,7 +914,7 @@ export default {
         this.dataset.locality = {
           id: obj.locality,
           locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en
+          locality_en: obj.locality__locality_en,
         };
         this.autocomplete.locality.push(this.dataset.locality);
       }
@@ -945,7 +946,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -964,7 +965,7 @@ export default {
         let moreThanOneAuthor = datasetAuthor.length > 1;
 
         orderBy(datasetAuthor, ["sort", "id"], ["asc", "asc"]).forEach(
-          agent => {
+          (agent) => {
             // Only Creators are added (agent_type 1 === Creator)
             if (this.$route.meta.isEdit) {
               if (agent?.agent_type === 1) {
@@ -1005,8 +1006,8 @@ export default {
           }
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

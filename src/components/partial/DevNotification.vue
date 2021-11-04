@@ -46,8 +46,8 @@ export default {
 
     isProductionUrl() {
       return document.location.hostname.startsWith("edit.");
-    }
-  }
+    },
+  },
 };
 </script>
 

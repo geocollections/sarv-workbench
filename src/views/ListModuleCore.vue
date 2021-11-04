@@ -161,35 +161,35 @@ export default {
     ScrollToTop,
     ExportButtons,
     ListView,
-    ImageView
+    ImageView,
   },
   props: {
     apiCall: {
       type: Function,
-      required: true
+      required: true,
     },
     module: {
       type: String,
-      default: null
+      default: null,
     },
     searchParameters: {
-      type: Object
+      type: Object,
     },
     dynamicSearchFields: {
-      type: Array
+      type: Array,
     },
     exportButtons: {
       type: Boolean,
-      default: true
+      default: true,
     },
     useListView: {
       type: Boolean,
-      default: false
+      default: false,
     },
     useImageView: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   mixins: [toastMixin, activeListMixin],
   name: "ListModuleCore",
@@ -202,15 +202,15 @@ export default {
         { text: "main.pagination", value: 100 },
         { text: "main.pagination", value: 250 },
         { text: "main.pagination", value: 500 },
-        { text: "main.pagination", value: 1000 }
+        { text: "main.pagination", value: 1000 },
       ],
       filterTable: "",
       noResults: null,
       isLoading: false,
       response: {
         count: 0,
-        results: []
-      }
+        results: [],
+      },
     };
   },
 
@@ -224,7 +224,7 @@ export default {
 
       set(value) {
         this.updateViewType({ module: this.module, type: value });
-      }
+      },
     },
 
     isCurrentViewTypeTable() {
@@ -240,13 +240,13 @@ export default {
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
   watch: {
     searchParameters: {
@@ -254,13 +254,13 @@ export default {
         this.search();
       },
       immediate: true,
-      deep: true
+      deep: true,
     },
     dynamicSearchFields: {
       handler() {
         this.search();
       },
-      deep: true
+      deep: true,
     },
     currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
@@ -280,13 +280,13 @@ export default {
         if (oldVal === "table") this.$emit("search:images", false);
         else this.$emit("search:images", true);
       }
-    }
+    },
   },
 
   methods: {
     ...mapActions("search", ["updateViewType"]),
 
-    search: debounce(async function() {
+    search: debounce(async function () {
       this.isLoading = true;
 
       const response = await this.apiCall();
@@ -326,7 +326,7 @@ export default {
       //   });
 
       fetchChangeRecordState(this.module, id, formData).then(
-        response => {
+        (response) => {
           if (response && response.data) {
             if (this.$i18n.locale === "ee") {
               if (response.data.message_et)
@@ -341,14 +341,14 @@ export default {
             }
           }
         },
-        errResponse => {
+        (errResponse) => {
           if (errResponse && errResponse.data && errResponse.data.error)
             this.toastError({ text: errResponse.data.error });
           this.toastError({ text: this.$t("messages.uploadError") });
         }
       );
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

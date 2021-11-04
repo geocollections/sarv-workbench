@@ -44,7 +44,7 @@ const state = {
     agent: [],
     drillcore: [],
     drillcore_box: [],
-    dataset: []
+    dataset: [],
   },
   attachmentSearchParameters: {
     id: null,
@@ -60,7 +60,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   attachmentViewType: "table",
   referenceSearchParameters: {
@@ -79,7 +79,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   referenceViewType: "table",
   selection_seriesSearchParameters: {
@@ -90,7 +90,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   selection_seriesViewType: "table",
   librarySearchParameters: {
@@ -102,7 +102,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   libraryViewType: "table",
   journalSearchParameters: {
@@ -112,7 +112,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   journalViewType: "table",
   keywordSearchParameters: {
@@ -124,7 +124,7 @@ const state = {
     page: 1,
     paginateBy: 10,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   keywordViewType: "table",
   doiSearchParameters: {
@@ -135,7 +135,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   doiViewType: "table",
   projectSearchParameters: {
@@ -144,7 +144,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   projectViewType: "table",
   siteSearchParameters: {
@@ -157,7 +157,7 @@ const state = {
     page: 1,
     paginateBy: 10,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   siteViewType: "table",
   site_groundwaterSearchParameters: {
@@ -176,7 +176,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   site_groundwaterViewType: "table",
   areaSearchParameters: {
@@ -187,7 +187,7 @@ const state = {
     page: 1,
     paginateBy: 10,
     sortBy: ["name"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   areaViewType: "table",
   localitySearchParameters: {
@@ -202,7 +202,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   localityViewType: "table",
   stratigraphySearchParameters: {
@@ -215,7 +215,7 @@ const state = {
     page: 1,
     paginateBy: 10,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   stratigraphyViewType: "table",
   sampleSearchParameters: {
@@ -234,7 +234,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   sampleViewType: "table",
   isSampleSimpleView: false,
@@ -245,7 +245,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   sample_seriesViewType: "table",
   analysisSearchParameters: {
@@ -259,7 +259,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   analysisViewType: "table",
   preparationSearchParameters: {
@@ -267,7 +267,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   preparationViewType: "table",
   taxonSearchParameters: {
@@ -281,7 +281,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   taxonViewType: "table",
   rockSearchParameters: {
@@ -296,7 +296,7 @@ const state = {
     page: 1,
     paginateBy: 10,
     sortBy: ["name"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   rockViewType: "table",
   specimenSearchParameters: {
@@ -317,7 +317,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   specimenViewType: "table",
   collectionSearchParameters: {
@@ -331,7 +331,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["collection_id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   collectionViewType: "table",
   locationSearchParameters: {
@@ -344,7 +344,7 @@ const state = {
     page: 1,
     paginateBy: 10,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   locationViewType: "table",
   agentSearchParameters: {
@@ -355,7 +355,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["agent"],
-    sortDesc: [false]
+    sortDesc: [false],
   },
   agentViewType: "table",
   drillcoreSearchParameters: {
@@ -366,7 +366,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   drillcoreViewType: "table",
   drillcore_boxSearchParameters: {
@@ -375,7 +375,7 @@ const state = {
     page: 1,
     paginateBy: 10,
     sortBy: ["drillcore"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   drillcore_boxViewType: "table",
   datasetSearchParameters: {
@@ -386,7 +386,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   datasetViewType: "table",
   visitSearchParameters: {
@@ -396,7 +396,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   visitViewType: "table",
   loanSearchParameters: {
@@ -409,7 +409,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   loanViewType: "table",
   accessionSearchParameters: {
@@ -418,7 +418,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["number"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   accessionViewType: "table",
   deaccessionSearchParameters: {
@@ -427,7 +427,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["number"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   deaccessionViewType: "table",
   web_newsSearchParameters: {
@@ -436,7 +436,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   web_newsViewType: "table",
   web_pagesSearchParameters: {
@@ -445,7 +445,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   web_pagesViewType: "table",
   taxon_pageSearchParameters: {
@@ -456,7 +456,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   taxon_pageViewType: "table",
   sarv_issueSearchParameters: {
@@ -466,7 +466,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["response"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   sarv_issueViewType: "table",
   analysis_parameterSearchParameters: {
@@ -477,7 +477,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   analysis_parameterViewType: "table",
   analysis_methodSearchParameters: {
@@ -488,7 +488,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   analysis_methodViewType: "table",
   imagesetSearchParameters: {
@@ -497,7 +497,7 @@ const state = {
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
-    sortDesc: [true]
+    sortDesc: [true],
   },
   imagesetViewType: "table",
   activeSarvIssues: null,
@@ -512,10 +512,10 @@ const state = {
     { text: "main.between", value: "range", symbol: "<>" },
     { text: "main.doesnotequal", value: "iexact!", symbol: "!=" },
     { text: "main.doesnotcontain", value: "icontains!", symbol: "!*" },
-    { text: "main.hierarchy", value: "hierarchy", symbol: "-·=" }
+    { text: "main.hierarchy", value: "hierarchy", symbol: "-·=" },
   ],
   activeSelectionSeriesList: null,
-  activeLibraryList: null
+  activeLibraryList: null,
 };
 
 export default {
@@ -523,5 +523,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

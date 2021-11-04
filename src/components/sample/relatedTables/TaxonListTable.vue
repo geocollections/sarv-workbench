@@ -269,39 +269,39 @@ export default {
     CheckboxWrapper,
     DateWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -318,8 +318,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -330,7 +330,7 @@ export default {
       date_identified: "",
       extra: "",
       is_private: false,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -338,9 +338,9 @@ export default {
       agent: [],
       loaders: {
         taxon: false,
-        agent: false
-      }
-    }
+        agent: false,
+      },
+    },
   }),
 
   computed: {
@@ -350,7 +350,7 @@ export default {
       //   this.item.name.length > 0
       // );
       return true;
-    }
+    },
   },
 
   methods: {
@@ -364,7 +364,7 @@ export default {
         extra: "",
         // preparation: null,
         is_private: false,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -374,7 +374,7 @@ export default {
       if (typeof item.taxon !== "object" && item.taxon !== null) {
         this.item.taxon = {
           id: item.taxon,
-          taxon: item.taxon__taxon
+          taxon: item.taxon__taxon,
         };
         this.autocomplete.taxon.push(this.item.taxon);
       } else if (item.taxon !== null) {
@@ -388,7 +388,7 @@ export default {
       ) {
         this.item.agent_identified = {
           id: item.agent_identified,
-          agent: item.agent_identified__agent
+          agent: item.agent_identified__agent,
         };
         this.autocomplete.agent.push(this.item.agent_identified);
       } else if (item.agent_identified !== null) {
@@ -404,8 +404,8 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

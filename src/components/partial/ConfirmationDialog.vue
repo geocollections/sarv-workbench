@@ -52,14 +52,14 @@ export default {
   props: {
     dialog: {
       type: Boolean,
-      default: false
+      default: false,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
-    }
-  }
+      default: "grey lighten-4",
+    },
+  },
 };
 </script>
 

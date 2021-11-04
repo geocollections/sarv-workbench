@@ -66,9 +66,9 @@
     <object-permissions
       v-if="
         typeof data === 'object' &&
-          data !== null &&
-          objectExists &&
-          enablePermissions
+        data !== null &&
+        objectExists &&
+        enablePermissions
       "
       class="d-print-none"
       :table="$route.meta.table"
@@ -124,7 +124,7 @@ export default {
     ObjectDoesNotExist,
     ScrollToLinks,
     BottomOptions,
-    Log
+    Log,
   },
   data() {
     return {
@@ -135,7 +135,7 @@ export default {
       objectExists: true,
       confirmationDialog: false,
       resolve: null,
-      reject: null
+      reject: null,
     };
   },
 
@@ -145,7 +145,7 @@ export default {
       "bodyActiveColor",
       "bodyActiveColorDark",
       "navbarDark",
-      "navbarColor"
+      "navbarColor",
     ]),
 
     ...mapState("detail", ["initialEditViewDataHasChangedState"]),
@@ -168,11 +168,11 @@ export default {
         "selection_series",
         "library",
         "doi",
-        "selection"
+        "selection",
       ];
 
       return availableTables.includes(table);
-    }
+    },
   },
 
   async beforeRouteUpdate(to, from, next) {
@@ -210,11 +210,11 @@ export default {
       handler(newVal) {
         this.updateInitialEditViewDataHasChangedState({
           initialData: this.initialData,
-          currentData: newVal
+          currentData: newVal,
         });
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -222,7 +222,7 @@ export default {
 
     openConfirmationDialog() {
       this.confirmationDialog = true;
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         this.resolve = resolve;
       });
     },
@@ -246,8 +246,8 @@ export default {
 
     toggleObjectState(state) {
       this.objectExists = state;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

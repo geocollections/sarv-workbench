@@ -307,7 +307,7 @@
                       )}`,
                       en: `Box nr. ${item.drillcore_box__number} ${boxRange(
                         item
-                      )}`
+                      )}`,
                     }"
                   ></h5>
                 </router-link>
@@ -363,7 +363,7 @@ import {
   fetchDrillcoreAttachments,
   fetchDrillcoreStudies,
   fetchListDrillcoreStorage,
-  fetchRelatedDrillcoreBoxes
+  fetchRelatedDrillcoreBoxes,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -391,32 +391,32 @@ export default {
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
   ],
 
   data() {
@@ -431,7 +431,7 @@ export default {
         request: "FETCH_DRILLCORES",
         title: "header.drillcores",
         object: "drillcore",
-        field: "drillcore"
+        field: "drillcore",
       });
     }
 
@@ -440,34 +440,34 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("search", ["drillcoreSearchParameters"]),
     ...mapState("search", {
-      activeRelatedDataTab: state => state.activeRelatedDataTab.drillcore
+      activeRelatedDataTab: (state) => state.activeRelatedDataTab.drillcore,
     }),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -477,14 +477,15 @@ export default {
         return "";
       }
 
-      return `(${item.drillcore_box__depth_start ??
-        ""} - ${item.drillcore_box__depth_end ?? ""} m)`;
+      return `(${item.drillcore_box__depth_start ?? ""} - ${
+        item.drillcore_box__depth_end ?? ""
+      } m)`;
     },
     setTab(type) {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -496,7 +497,7 @@ export default {
           { name: "drillcore_box", iconClass: "fas fa-box" },
           { name: "drillcore_box_images", iconClass: "fas fa-camera-retro" },
           { name: "drillcore_study", iconClass: "fas fa-school" },
-          { name: "attachment_link", iconClass: "far fa-folder-open" }
+          { name: "attachment_link", iconClass: "far fa-folder-open" },
         ],
         activeTab: "drillcore_box",
         relatedData: this.setDefaultRelatedData(),
@@ -516,7 +517,7 @@ export default {
           "direction_lr",
           "depth",
           "remarks",
-          "is_private"
+          "is_private",
         ],
         autocomplete: {
           loaders: {
@@ -526,7 +527,7 @@ export default {
             storage: false,
             attachment: false,
             stratigraphy_base: false,
-            stratigraphy_top: false
+            stratigraphy_top: false,
           },
           locality: [],
           agent: [],
@@ -534,13 +535,13 @@ export default {
           storage: [],
           attachment: [],
           stratigraphy_base: [],
-          stratigraphy_top: []
+          stratigraphy_top: [],
         },
         requiredFields: ["drillcore", "drillcore_en"],
         drillcore: {},
         block: {
           info: true,
-          details: true
+          details: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -549,8 +550,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -566,7 +567,7 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
         this.$emit("set-object", "drillcore");
-        fetchDrillcore(this.$route.params.id).then(response => {
+        fetchDrillcore(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -585,13 +586,13 @@ export default {
         });
 
         // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
 
         this.$on("tab-changed", this.setTab);
 
         this.$emit(
           "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
+          this.relatedTabs.map((tab) => tab.name)
         );
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
@@ -600,10 +601,9 @@ export default {
 
     loadAutocompleteFields() {
       fetchListDrillcoreStorage().then(
-        response =>
-          (this.autocomplete.list_drillcore_storage = this.handleResponse(
-            response
-          ))
+        (response) =>
+          (this.autocomplete.list_drillcore_storage =
+            this.handleResponse(response))
       );
     },
 
@@ -618,34 +618,34 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           drillcore_box_images: {
             page: 1,
             paginateBy: 10,
             sortBy: ["drillcore_box__depth_start"],
-            sortDesc: [false]
+            sortDesc: [false],
           },
           drillcore_study: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           attachment_link: {
             page: 1,
             paginateBy: 10,
             sortBy: ["original_filename"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -661,21 +661,19 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0)
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-                item => {
+              uploadableObject.related_data.attachment =
+                this.relatedData.attachment_link.results.map((item) => {
                   return { id: item.id };
-                }
-              );
+                });
             } else {
-              uploadableObject.related_data[tab.name] = this.relatedData[
-                tab.name
-              ].results;
+              uploadableObject.related_data[tab.name] =
+                this.relatedData[tab.name].results;
 
-              uploadableObject.related_data[tab.name].forEach(item => {
-                Object.keys(item).forEach(key => {
+              uploadableObject.related_data[tab.name].forEach((item) => {
+                Object.keys(item).forEach((key) => {
                   if (typeof item[key] === "object" && item[key] !== null) {
                     item[key] = item[key].id ? item[key].id : null;
                   }
@@ -685,11 +683,10 @@ export default {
         });
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-            item => {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment_link.results.map((item) => {
               return { id: item.id };
-            }
-          );
+            });
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -707,26 +704,26 @@ export default {
         this.drillcore.locality = {
           id: obj.locality,
           locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en
+          locality_en: obj.locality__locality_en,
         };
         this.autocomplete.locality.push(this.drillcore.locality);
       }
       if (this.isNotEmpty(obj.agent)) {
         this.drillcore.agent = {
           id: obj.agent,
-          agent: obj.agent__agent
+          agent: obj.agent__agent,
         };
         this.autocomplete.agent.push(this.drillcore.agent);
       }
       this.drillcore.depository = {
         id: obj.depository,
         value: obj.depository__value,
-        value_en: obj.depository__value_en
+        value_en: obj.depository__value_en,
       };
       if (this.isNotEmpty(obj.storage)) {
         this.drillcore.storage = {
           id: obj.storage,
-          location: obj.storage__location
+          location: obj.storage__location,
         };
         this.autocomplete.storage.push(this.drillcore.storage);
       }
@@ -758,7 +755,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -767,7 +764,7 @@ export default {
 
     openDrillcorePrintView(id) {
       let routeData = this.$router.resolve({
-        path: "/drillcore_print/" + id
+        path: "/drillcore_print/" + id,
       });
       window.open(routeData.href, "_blank", "width=1000,height=750");
     },
@@ -778,8 +775,8 @@ export default {
     addExistingFiles(files) {
       // this.relatedData.attachment_link.count = files.length;
       this.relatedData.attachment_link.results = files;
-    }
-  }
+    },
+  },
 };
 </script>
 

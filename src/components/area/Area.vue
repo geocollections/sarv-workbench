@@ -271,7 +271,7 @@
                 <v-btn
                   :to="{
                     name: 'Site add',
-                    query: { area: JSON.stringify(area) }
+                    query: { area: JSON.stringify(area) },
                   }"
                   target="newAreaWindow"
                   :color="bodyActiveColor"
@@ -350,7 +350,7 @@ import {
   fetchAreaLocalityReferences,
   fetchLinkedAreaSites,
   fetchListAreaTypes,
-  fetchListMaakond
+  fetchListMaakond,
 } from "../../assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import Editor from "../partial/inputs/Editor";
@@ -374,25 +374,25 @@ export default {
     Editor,
     TextareaWrapper,
     InputWrapper,
-    AutocompleteWrapper
+    AutocompleteWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin, requestsMixin],
@@ -409,7 +409,7 @@ export default {
         request: "FETCH_AREAS",
         title: "header.areas",
         object: "area",
-        field: "name"
+        field: "name",
       });
     }
 
@@ -426,30 +426,30 @@ export default {
       },
       set(value) {
         this.updateShowMap(value);
-      }
+      },
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
     },
 
     computedRelatedTabs() {
-      return this.relatedTabs.filter(tab => tab.name !== "sites");
-    }
+      return this.relatedTabs.filter((tab) => tab.name !== "sites");
+    },
   },
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters.sites": {
       handler(newVal) {
@@ -458,16 +458,16 @@ export default {
         // }
       },
       immediate: true,
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         if (this.$route.meta.isEdit) {
           this.loadRelatedData(this.activeTab);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -478,14 +478,14 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
     },
 
     fetchLinkedSiteWrapper() {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         resolve(
           fetchLinkedAreaSites(
             this.relatedData.searchParameters.sites,
@@ -495,12 +495,12 @@ export default {
       });
     },
 
-    searchRelatedData: debounce(function(
+    searchRelatedData: debounce(function (
       searchParameters,
       apiCall,
       relatedObject
     ) {
-      apiCall().then(response => {
+      apiCall().then((response) => {
         if (response.status === 200) {
           this.relatedData[relatedObject].count = response.data.count;
           this.relatedData[relatedObject].results = response.data.results;
@@ -513,7 +513,7 @@ export default {
       return {
         relatedTabs: [
           { name: "sites", iconClass: "fas fa-globe-americas" },
-          { name: "locality_reference", iconClass: "fas fa-book" }
+          { name: "locality_reference", iconClass: "fas fa-book" },
         ],
         activeTab: "sites",
         copyFields: [
@@ -529,23 +529,23 @@ export default {
           "maakond",
           "description",
           "description_en",
-          "remarks"
+          "remarks",
           // "polygon"
         ],
         autocomplete: {
           loaders: {
             area_type: false,
-            maakond: false
+            maakond: false,
           },
           language: [],
           area_type: [],
-          maakond: []
+          maakond: [],
         },
         requiredFields: ["name"],
         area: {},
         block: {
           info: true,
-          sites: true
+          sites: true,
         },
         relatedData: this.setDefaultRalatedData(),
         paginateByOptions: [
@@ -555,8 +555,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -566,18 +566,18 @@ export default {
     },
 
     loadFullInfo() {
-      fetchListAreaTypes().then(response => {
+      fetchListAreaTypes().then((response) => {
         this.autocomplete.area_type = this.handleResponse(response);
       });
 
-      fetchListMaakond().then(response => {
+      fetchListMaakond().then((response) => {
         this.autocomplete.maakond = this.handleResponse(response);
       });
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchArea(this.$route.params.id).then(response => {
+        fetchArea(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -594,7 +594,7 @@ export default {
           }
         });
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -604,33 +604,33 @@ export default {
       return {
         sites: {
           count: 0,
-          results: []
+          results: [],
         },
         locality_reference: {
           count: 0,
-          results: []
+          results: [],
         },
         searchParameters: {
           sites: {
             page: 1,
             paginateBy: 100,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           locality_reference: {
             page: 1,
             paginateBy: 25,
             sortBy: ["reference"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -647,14 +647,13 @@ export default {
       if (!this.$route.meta.isEdit) {
         uploadableObject.related_data = {};
 
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0) {
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ].results;
+            uploadableObject.related_data[tab.name] =
+              this.relatedData[tab.name].results;
 
-            uploadableObject.related_data[tab.name].forEach(item => {
-              Object.keys(item).forEach(key => {
+            uploadableObject.related_data[tab.name].forEach((item) => {
+              Object.keys(item).forEach((key) => {
                 if (typeof item[key] === "object" && item[key] !== null) {
                   item[key] = item[key].id ? item[key].id : null;
                 }
@@ -676,12 +675,12 @@ export default {
       this.area.area_type = {
         id: obj.area_type,
         name: obj.area_type__name,
-        name_en: obj.area_type__name_en
+        name_en: obj.area_type__name_en,
       };
       this.area.maakond = {
         id: obj.maakond,
         maakond: obj.maakond__maakond,
-        maakond_en: obj.maakond__maakond_en
+        maakond_en: obj.maakond__maakond_en,
       };
     },
 
@@ -701,13 +700,13 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -149,25 +149,25 @@ export default {
     InputWrapper,
     CheckboxWrapper,
     Editor,
-    AutocompleteWrapper
+    AutocompleteWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin],
@@ -184,7 +184,7 @@ export default {
         request: "FETCH_TAXON_PAGES",
         title: "header.taxon_pages",
         object: "taxon_page",
-        field: "title"
+        field: "title",
       });
     }
 
@@ -193,15 +193,15 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
-    ...mapState("search", ["taxon_pagesSearchParameters"])
+    ...mapState("search", ["taxon_pagesSearchParameters"]),
   },
 
   methods: {
@@ -216,35 +216,35 @@ export default {
           "on_frontpage",
           "taxon",
           "content",
-          "author"
+          "author",
         ],
         autocomplete: {
           loaders: {
             taxon: false,
-            agent: false
+            agent: false,
           },
           taxon: [],
-          agent: []
+          agent: [],
         },
         taxon_page: {},
         requiredFields: ["taxon"],
         block: {
-          info: true
-        }
+          info: true,
+        },
       };
     },
     fillAutocompleteFields(obj) {
       if (this.isNotEmpty(obj.taxon)) {
         this.taxon_page.taxon = {
           id: obj.taxon,
-          taxon: obj.taxon__taxon
+          taxon: obj.taxon__taxon,
         };
         this.autocomplete.taxon.push(this.taxon_page.taxon);
       }
       if (this.isNotEmpty(obj.author)) {
         this.taxon_page.author = {
           id: obj.agent,
-          agent: obj.author__agent
+          agent: obj.author__agent,
         };
         this.autocomplete.agent.push(this.taxon_page.author);
       }
@@ -258,7 +258,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchTaxonPagesDetail(this.$route.params.id).then(response => {
+        fetchTaxonPagesDetail(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -280,7 +280,7 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -296,8 +296,8 @@ export default {
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -21,8 +21,9 @@
             class="sarv-link"
             :title="
               $t(
-                `edit${object.charAt(0).toUpperCase() +
-                  object.slice(1)}.editMessage`
+                `edit${
+                  object.charAt(0).toUpperCase() + object.slice(1)
+                }.editMessage`
               )
             "
             :class="`${bodyActiveColor}--text`"
@@ -40,35 +41,35 @@ export default {
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     headers: {
-      type: Array
+      type: Array,
     },
     object: {
-      type: String
+      type: String,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
-  }
+      default: "deep-orange",
+    },
+  },
 };
 </script>
 

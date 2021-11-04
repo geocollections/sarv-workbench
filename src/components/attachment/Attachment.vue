@@ -162,7 +162,7 @@
                     "
                     :success="
                       isNotEmpty(attachment.author) ||
-                        isNotEmpty(attachment.author_free)
+                      isNotEmpty(attachment.author_free)
                     "
                     is-link
                     route-object="agent"
@@ -185,7 +185,7 @@
                     "
                     :success="
                       isNotEmpty(attachment.author_free) ||
-                        isNotEmpty(attachment.author)
+                      isNotEmpty(attachment.author)
                     "
                   />
                 </v-col>
@@ -416,7 +416,7 @@
                         : null,
                       lng: attachment.image_longitude
                         ? attachment.image_longitude.toString()
-                        : null
+                        : null,
                     }"
                     v-on:update-coordinates="updateLocation"
                   ></map-component>
@@ -725,7 +725,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__collection &&
-                      relatedData.attach_link__collection.length > 0
+                    relatedData.attach_link__collection.length > 0
                   "
                 >
                   <p class="h4">
@@ -744,8 +744,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__collection"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__collection"
                           :key="index"
                         >
                           <td>
@@ -754,7 +755,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'collection',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -792,7 +793,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__specimen &&
-                      relatedData.attach_link__specimen.length > 0
+                    relatedData.attach_link__specimen.length > 0
                   "
                 >
                   <p class="h4">
@@ -811,8 +812,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__specimen"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__specimen"
                           :key="index"
                         >
                           <td>
@@ -821,7 +823,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'specimen',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -856,7 +858,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__sample &&
-                      relatedData.attach_link__sample.length > 0
+                    relatedData.attach_link__sample.length > 0
                   "
                 >
                   <p class="h4">
@@ -875,8 +877,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__sample"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__sample"
                           :key="index"
                         >
                           <td>
@@ -885,7 +888,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'sample',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -914,7 +917,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__sample_series &&
-                      relatedData.attach_link__sample_series.length > 0
+                    relatedData.attach_link__sample_series.length > 0
                   "
                 >
                   <p class="h4">
@@ -935,8 +938,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__sample_series"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__sample_series"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -965,7 +969,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__analysis &&
-                      relatedData.attach_link__analysis.length > 0
+                    relatedData.attach_link__analysis.length > 0
                   "
                 >
                   <p class="h4">
@@ -984,8 +988,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__analysis"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__analysis"
                           :key="index"
                         >
                           <td>
@@ -994,7 +999,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'analysis',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -1006,7 +1011,7 @@
                             <span
                               v-if="
                                 entity.sample__number !== null &&
-                                  entity.sample__number
+                                entity.sample__number
                               "
                               >{{ entity.sample__number }}</span
                             >
@@ -1032,7 +1037,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__dataset &&
-                      relatedData.attach_link__dataset.length > 0
+                    relatedData.attach_link__dataset.length > 0
                   "
                 >
                   <p class="h4">
@@ -1051,8 +1056,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__dataset"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__dataset"
                           :key="index"
                         >
                           <td>
@@ -1061,7 +1067,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'dataset',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -1096,7 +1102,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__doi &&
-                      relatedData.attach_link__doi.length > 0
+                    relatedData.attach_link__doi.length > 0
                   "
                 >
                   <p class="h4">
@@ -1115,8 +1121,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__doi"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__doi"
                           :key="index"
                         >
                           <td>
@@ -1125,7 +1132,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'doi',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -1154,7 +1161,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__locality &&
-                      relatedData.attach_link__locality.length > 0
+                    relatedData.attach_link__locality.length > 0
                   "
                 >
                   <p class="h4">
@@ -1173,8 +1180,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__locality"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__locality"
                           :key="index"
                         >
                           <td>
@@ -1183,7 +1191,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'locality',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -1218,7 +1226,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__drillcore &&
-                      relatedData.attach_link__drillcore.length > 0
+                    relatedData.attach_link__drillcore.length > 0
                   "
                 >
                   <p class="h4">
@@ -1237,8 +1245,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__drillcore"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__drillcore"
                           :key="index"
                         >
                           <td>
@@ -1247,7 +1256,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'drillcore',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -1285,7 +1294,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__drillcore_box &&
-                      relatedData.attach_link__drillcore_box.length > 0
+                    relatedData.attach_link__drillcore_box.length > 0
                   "
                 >
                   <p class="h4">
@@ -1306,8 +1315,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__drillcore_box"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__drillcore_box"
                           :key="index"
                         >
                           <td>
@@ -1316,7 +1326,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'corebox',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -1355,7 +1365,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__preparation !== null &&
-                      relatedData.attach_link__preparation.length > 0
+                    relatedData.attach_link__preparation.length > 0
                   "
                 >
                   <p class="h4">
@@ -1376,8 +1386,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__preparation"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__preparation"
                           :key="index"
                         >
                           <td>
@@ -1386,7 +1397,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'preparation',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -1418,7 +1429,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__reference !== null &&
-                      relatedData.attach_link__reference.length > 0
+                    relatedData.attach_link__reference.length > 0
                   "
                 >
                   <p class="h4">
@@ -1437,8 +1448,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__reference"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__reference"
                           :key="index"
                         >
                           <td>
@@ -1447,7 +1459,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'reference',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -1479,7 +1491,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__storage !== null &&
-                      relatedData.attach_link__storage.length > 0
+                    relatedData.attach_link__storage.length > 0
                   "
                 >
                   <p class="h4">
@@ -1498,8 +1510,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__storage"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__storage"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -1531,7 +1544,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__project !== null &&
-                      relatedData.attach_link__project.length > 0
+                    relatedData.attach_link__project.length > 0
                   "
                 >
                   <p class="h4">
@@ -1550,8 +1563,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__project"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__project"
                           :key="index"
                         >
                           <td>
@@ -1588,7 +1602,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__site !== null &&
-                      relatedData.attach_link__site.length > 0
+                    relatedData.attach_link__site.length > 0
                   "
                 >
                   <p class="h4">
@@ -1607,8 +1621,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__site"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__site"
                           :key="index"
                         >
                           <td>
@@ -1695,7 +1710,7 @@
                     "
                     :success="
                       isNotEmpty(attachment.author) ||
-                        isNotEmpty(attachment.author_free)
+                      isNotEmpty(attachment.author_free)
                     "
                     is-link
                     route-object="agent"
@@ -1718,7 +1733,7 @@
                     "
                     :success="
                       isNotEmpty(attachment.author_free) ||
-                        isNotEmpty(attachment.author)
+                      isNotEmpty(attachment.author)
                     "
                   />
                 </v-col>
@@ -2010,7 +2025,7 @@
                     "
                     :success="
                       isNotEmpty(attachment.author) ||
-                        isNotEmpty(attachment.author_free)
+                      isNotEmpty(attachment.author_free)
                     "
                     is-link
                     route-object="agent"
@@ -2033,7 +2048,7 @@
                     "
                     :success="
                       isNotEmpty(attachment.author_free) ||
-                        isNotEmpty(attachment.author)
+                      isNotEmpty(attachment.author)
                     "
                   />
                 </v-col>
@@ -2249,7 +2264,7 @@
                         : null,
                       lng: attachment.image_longitude
                         ? attachment.image_longitude.toString()
-                        : null
+                        : null,
                     }"
                     v-on:update-coordinates="updateLocation"
                   ></map-component>
@@ -2508,7 +2523,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__collection &&
-                      relatedData.attach_link__collection.length > 0
+                    relatedData.attach_link__collection.length > 0
                   "
                 >
                   <p class="h4">
@@ -2527,8 +2542,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__collection"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__collection"
                           :key="index"
                         >
                           <td>
@@ -2537,7 +2553,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'collection',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -2575,7 +2591,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__specimen &&
-                      relatedData.attach_link__specimen.length > 0
+                    relatedData.attach_link__specimen.length > 0
                   "
                 >
                   <p class="h4">
@@ -2594,8 +2610,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__specimen"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__specimen"
                           :key="index"
                         >
                           <td>
@@ -2604,7 +2621,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'specimen',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -2639,7 +2656,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__sample &&
-                      relatedData.attach_link__sample.length > 0
+                    relatedData.attach_link__sample.length > 0
                   "
                 >
                   <p class="h4">
@@ -2658,8 +2675,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__sample"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__sample"
                           :key="index"
                         >
                           <td>
@@ -2668,7 +2686,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'sample',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -2697,7 +2715,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__sample_series &&
-                      relatedData.attach_link__sample_series.length > 0
+                    relatedData.attach_link__sample_series.length > 0
                   "
                 >
                   <p class="h4">
@@ -2718,8 +2736,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__sample_series"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__sample_series"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -2748,7 +2767,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__analysis &&
-                      relatedData.attach_link__analysis.length > 0
+                    relatedData.attach_link__analysis.length > 0
                   "
                 >
                   <p class="h4">
@@ -2767,8 +2786,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__analysis"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__analysis"
                           :key="index"
                         >
                           <td>
@@ -2777,7 +2797,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'analysis',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -2789,7 +2809,7 @@
                             <span
                               v-if="
                                 entity.sample__number !== null &&
-                                  entity.sample__number
+                                entity.sample__number
                               "
                               >{{ entity.sample__number }}</span
                             >
@@ -2815,7 +2835,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__dataset &&
-                      relatedData.attach_link__dataset.length > 0
+                    relatedData.attach_link__dataset.length > 0
                   "
                 >
                   <p class="h4">
@@ -2834,8 +2854,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__dataset"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__dataset"
                           :key="index"
                         >
                           <td>
@@ -2844,7 +2865,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'dataset',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -2879,7 +2900,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__doi &&
-                      relatedData.attach_link__doi.length > 0
+                    relatedData.attach_link__doi.length > 0
                   "
                 >
                   <p class="h4">
@@ -2898,8 +2919,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__doi"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__doi"
                           :key="index"
                         >
                           <td>
@@ -2908,7 +2930,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'doi',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -2937,7 +2959,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__locality &&
-                      relatedData.attach_link__locality.length > 0
+                    relatedData.attach_link__locality.length > 0
                   "
                 >
                   <p class="h4">
@@ -2956,8 +2978,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__locality"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__locality"
                           :key="index"
                         >
                           <td>
@@ -2966,7 +2989,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'locality',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -3001,7 +3024,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__drillcore &&
-                      relatedData.attach_link__drillcore.length > 0
+                    relatedData.attach_link__drillcore.length > 0
                   "
                 >
                   <p class="h4">
@@ -3020,8 +3043,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__drillcore"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__drillcore"
                           :key="index"
                         >
                           <td>
@@ -3030,7 +3054,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'drillcore',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -3068,7 +3092,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__drillcore_box &&
-                      relatedData.attach_link__drillcore_box.length > 0
+                    relatedData.attach_link__drillcore_box.length > 0
                   "
                 >
                   <p class="h4">
@@ -3089,8 +3113,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__drillcore_box"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__drillcore_box"
                           :key="index"
                         >
                           <td>
@@ -3099,7 +3124,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'corebox',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -3138,7 +3163,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__preparation !== null &&
-                      relatedData.attach_link__preparation.length > 0
+                    relatedData.attach_link__preparation.length > 0
                   "
                 >
                   <p class="h4">
@@ -3159,8 +3184,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__preparation"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__preparation"
                           :key="index"
                         >
                           <td>
@@ -3169,7 +3195,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'preparation',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -3201,7 +3227,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__reference !== null &&
-                      relatedData.attach_link__reference.length > 0
+                    relatedData.attach_link__reference.length > 0
                   "
                 >
                   <p class="h4">
@@ -3220,8 +3246,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__reference"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__reference"
                           :key="index"
                         >
                           <td>
@@ -3230,7 +3257,7 @@
                               @click="
                                 openGeoInNewWindow({
                                   object: 'reference',
-                                  id: entity.id
+                                  id: entity.id,
                                 })
                               "
                             >
@@ -3262,7 +3289,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__storage !== null &&
-                      relatedData.attach_link__storage.length > 0
+                    relatedData.attach_link__storage.length > 0
                   "
                 >
                   <p class="h4">
@@ -3281,8 +3308,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__storage"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__storage"
                           :key="index"
                         >
                           <td>
@@ -3319,7 +3347,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__project !== null &&
-                      relatedData.attach_link__project.length > 0
+                    relatedData.attach_link__project.length > 0
                   "
                 >
                   <p class="h4">
@@ -3338,8 +3366,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__project"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__project"
                           :key="index"
                         >
                           <td>
@@ -3376,7 +3405,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__site !== null &&
-                      relatedData.attach_link__site.length > 0
+                    relatedData.attach_link__site.length > 0
                   "
                 >
                   <p class="h4">
@@ -3395,8 +3424,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__site"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__site"
                           :key="index"
                         >
                           <td>
@@ -3432,7 +3462,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__locality_description !== null &&
-                      relatedData.attach_link__locality_description.length > 0
+                    relatedData.attach_link__locality_description.length > 0
                   "
                 >
                   <p class="h4">
@@ -3455,8 +3485,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__locality_description"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__locality_description"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -3487,7 +3518,7 @@
                   class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__taxon !== null &&
-                      relatedData.attach_link__taxon.length > 0
+                    relatedData.attach_link__taxon.length > 0
                   "
                 >
                   <p class="h4">
@@ -3507,8 +3538,9 @@
 
                       <tbody>
                         <tr
-                          v-for="(entity,
-                          index) in relatedData.attach_link__taxon"
+                          v-for="(
+                            entity, index
+                          ) in relatedData.attach_link__taxon"
                           :key="index"
                         >
                           <td>
@@ -3757,9 +3789,9 @@
                   class="subtitle-1"
                   v-if="
                     currentAttachmentType !==
-                      getAttachmentTypeAsString(
-                        attachment.specimen_image_attachment
-                      )
+                    getAttachmentTypeAsString(
+                      attachment.specimen_image_attachment
+                    )
                   "
                 >
                   <b>{{ $t("attachment." + currentAttachmentType) }} </b>
@@ -3818,9 +3850,9 @@
         <new-doi-button
           v-if="
             attachment &&
-              rawAttachment &&
-              validate('attachment') &&
-              isUserAllowedTo('add', 'doi')
+            rawAttachment &&
+            validate('attachment') &&
+            isUserAllowedTo('add', 'doi')
           "
           object="attachment"
           :data="attachment"
@@ -3860,7 +3892,7 @@ import {
   fetchAttachmentLinkTaxa,
   fetchListAttachmentType,
   fetchListImageType,
-  fetchListLicences
+  fetchListLicences,
 } from "../../assets/js/api/apiCalls";
 import AttachmentWrapper from "./AttachmentWrapper";
 import MapComponent from "../partial/MapComponent";
@@ -3891,25 +3923,25 @@ export default {
     FilePreview,
     FileInformation,
     AttachmentWrapper,
-    MapComponent
+    MapComponent,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin, toastMixin],
@@ -3929,7 +3961,7 @@ export default {
       "otherFiles",
       "otherFilesKeywords",
       "digitisedReference",
-      "digitisedReferenceKeywords"
+      "digitisedReferenceKeywords",
     ]),
     ...mapGetters("user", ["isUserAllowedTo"]),
 
@@ -3939,7 +3971,7 @@ export default {
       },
       set(value) {
         this.updateShowMap(value);
-      }
+      },
     },
 
     isPhotoArchive() {
@@ -4051,7 +4083,7 @@ export default {
 
     computedChangeType() {
       this.changeType.forEach(
-        type => (type.disabled = !this.isValidToChangeTo(type.name))
+        (type) => (type.disabled = !this.isValidToChangeTo(type.name))
       );
       return this.changeType;
     },
@@ -4066,7 +4098,7 @@ export default {
         rotationForApi = Math.abs(rotationForApi);
       else rotationForApi = -rotationForApi;
       return rotationForApi;
-    }
+    },
   },
 
   created() {
@@ -4076,14 +4108,14 @@ export default {
         request: "FETCH_ATTACHMENTS",
         title: "header.attachments",
         object: "attachment",
-        field: "original_filename"
+        field: "original_filename",
       });
     }
   },
 
   watch: {
     "$route.path": {
-      handler: function(newVal, oldVal) {
+      handler: function (newVal, oldVal) {
         this.reloadData();
         if (!this.$route.meta.isEdit) {
           if (oldVal) this.clearUploadedFiles();
@@ -4150,16 +4182,16 @@ export default {
               id: this.getCurrentUser.id,
               agent: this.getCurrentUser.agent,
               forename: this.getCurrentUser.forename,
-              surename: this.getCurrentUser.surename
+              surename: this.getCurrentUser.surename,
             });
             this.autocomplete.agent.push(this.attachment.author);
           }
         }
       },
-      immediate: true
+      immediate: true,
     },
     attachment: {
-      handler: function(newVal) {
+      handler: function (newVal) {
         if (this.isNotEmpty(newVal)) {
           this.isAttachmentLocked = newVal.is_locked;
           this.isAttachmentPhotoArchive =
@@ -4170,8 +4202,8 @@ export default {
           this.isAttachmentDigitisedReference =
             newVal.specimen_image_attachment === 4;
         }
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -4185,88 +4217,88 @@ export default {
           {
             name: "attach_link__collection",
             name_short: "collection",
-            iconClass: "fas fa-server"
+            iconClass: "fas fa-server",
           },
           {
             name: "attach_link__specimen",
             name_short: "specimen",
-            iconClass: "fas fa-flask"
+            iconClass: "fas fa-flask",
           },
           {
             name: "attach_link__sample",
             name_short: "sample",
-            iconClass: "fas fa-vial"
+            iconClass: "fas fa-vial",
           },
           {
             name: "attach_link__sample_series",
             name_short: "sample_series",
-            iconClass: "fas fa-vials"
+            iconClass: "fas fa-vials",
           },
           {
             name: "attach_link__analysis",
             name_short: "analysis",
-            iconClass: "fas fa-chart-pie"
+            iconClass: "fas fa-chart-pie",
           },
           {
             name: "attach_link__dataset",
             name_short: "dataset",
-            iconClass: "fas fa-server"
+            iconClass: "fas fa-server",
           },
           {
             name: "attach_link__doi",
             name_short: "doi",
-            iconClass: "fas fa-database"
+            iconClass: "fas fa-database",
           },
           {
             name: "attach_link__locality",
             name_short: "locality",
-            iconClass: "fas fa-map-marker-alt"
+            iconClass: "fas fa-map-marker-alt",
           },
           {
             name: "attach_link__drillcore",
             name_short: "drillcore",
-            iconClass: "fas fa-tools"
+            iconClass: "fas fa-tools",
           },
           {
             name: "attach_link__drillcore_box",
             name_short: "drillcore_box",
-            iconClass: "fas fa-boxes"
+            iconClass: "fas fa-boxes",
           },
           {
             name: "attach_link__preparation",
             name_short: "preparation",
-            iconClass: "fas fa-prescription-bottle"
+            iconClass: "fas fa-prescription-bottle",
           },
           {
             name: "attach_link__reference",
             name_short: "reference",
-            iconClass: "fas fa-book"
+            iconClass: "fas fa-book",
           },
           {
             name: "attach_link__storage",
             name_short: "storage",
-            iconClass: "fas fa-archive"
+            iconClass: "fas fa-archive",
           },
           {
             name: "attach_link__project",
             name_short: "project",
-            iconClass: "fas fa-project-diagram"
+            iconClass: "fas fa-project-diagram",
           },
           {
             name: "attach_link__site",
             name_short: "site",
-            iconClass: "fas fa-map-pin"
+            iconClass: "fas fa-map-pin",
           },
           {
             name: "attach_link__locality_description",
             name_short: "locality_description",
-            iconClass: "fas fa-align-left"
+            iconClass: "fas fa-align-left",
           },
           {
             name: "attach_link__taxon",
             name_short: "taxon",
-            iconClass: "fas fa-pastafarianism"
-          }
+            iconClass: "fas fa-pastafarianism",
+          },
         ],
         ratings: [
           { value: 5 },
@@ -4279,13 +4311,13 @@ export default {
           { value: -2 },
           { value: -3 },
           { value: -4 },
-          { value: -5 }
+          { value: -5 },
         ],
         changeType: [
           { name: "specimenImage", value: 1, disabled: false },
           { name: "photoArchive", value: 2, disabled: false },
           { name: "otherFile", value: 3, disabled: false },
-          { name: "digitisedReference", value: 4, disabled: false }
+          { name: "digitisedReference", value: 4, disabled: false },
         ],
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
@@ -4321,7 +4353,7 @@ export default {
           "specimen_image_attachment",
           "stars",
           "storage",
-          "type"
+          "type",
         ],
         autocomplete: {
           loaders: {
@@ -4352,7 +4384,7 @@ export default {
             attach_link__project: false,
             attach_link__site: false,
             attach_link__locality_description: false,
-            attach_link__taxon: false
+            attach_link__taxon: false,
           },
           agent: [],
           imageset: [],
@@ -4381,19 +4413,19 @@ export default {
           attach_link__project: [],
           attach_link__site: [],
           attach_link__locality_description: [],
-          attach_link__taxon: []
+          attach_link__taxon: [],
         },
         requiredFields: {
           photo_archive: ["imageset"],
           specimen_image: [this.$route.meta.isEdit ? "specimen" : "author"],
           other_file: ["description", "description_en"],
-          digitised_reference: ["reference"]
+          digitised_reference: ["reference"],
         },
         optionalFields: {
           photo_archive: ["author", "author_free"],
           specimen_image: ["author", "author_free"],
           other_file: ["author", "author_free"],
-          digitised_reference: []
+          digitised_reference: [],
         },
         attachment: this.setDefaultAttachmentFields(),
         rawAttachment: null,
@@ -4405,7 +4437,7 @@ export default {
           map: true,
           description: true,
           relatedData: true,
-          changeType: false
+          changeType: false,
         },
         files: [],
         selectedRelatedTable: null,
@@ -4413,7 +4445,7 @@ export default {
         isAttachmentPhotoArchive: false,
         isAttachmentSpecimenImage: false,
         isAttachmentOtherFile: false,
-        isAttachmentDigitisedReference: false
+        isAttachmentDigitisedReference: false,
       };
     },
 
@@ -4429,7 +4461,7 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
         // fetchAttachment(this.$route.params.id).then(
-        fetchAttachment(this.$route.params.id).then(response => {
+        fetchAttachment(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -4460,227 +4492,259 @@ export default {
     ) {
       if (regularAutocompleteFields) {
         fetchListLicences().then(
-          response =>
+          (response) =>
             (this.autocomplete.licence = this.handleResponse(response))
         );
         fetchListImageType().then(
-          response =>
+          (response) =>
             (this.autocomplete.image_type = this.handleResponse(response))
         );
         fetchListAttachmentType().then(
-          response => (this.autocomplete.type = this.handleResponse(response))
+          (response) => (this.autocomplete.type = this.handleResponse(response))
         );
       }
 
       if (relatedDataAutocompleteFields) {
-        fetchAttachmentKeyword(this.$route.params.id).then(response => {
+        fetchAttachmentKeyword(this.$route.params.id).then((response) => {
           let referenceKeyword = this.handleResponse(response);
-          this.relatedData.keyword = referenceKeyword.map(entity => {
+          this.relatedData.keyword = referenceKeyword.map((entity) => {
             return {
               keyword: entity.keyword__keyword,
-              id: entity.keyword
+              id: entity.keyword,
             };
           });
           this.autocomplete.keyword = this.relatedData.keyword;
         });
 
-        fetchAttachmentLinkCollections(this.$route.params.id).then(response => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__collection = collections.map(entity => {
-            return {
-              id: entity.collection,
-              name: entity.collection__name,
-              name_en: entity.collection__name_en
-            };
-          });
-          this.autocomplete.attach_link__collection = this.relatedData.attach_link__collection;
-        });
-        fetchAttachmentLinkSpecimens(this.$route.params.id).then(response => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__specimen = collections.map(entity => {
-            return {
-              id: entity.specimen,
-              specimen_id: entity.specimen_id,
-              coll__number: entity.specimen__coll__number
-            };
-          });
-          this.autocomplete.attach_link__specimen = this.relatedData.attach_link__specimen;
-        });
-        fetchAttachmentLinkSamples(this.$route.params.id).then(response => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__sample = collections.map(entity => {
-            return {
-              id: entity.sample,
-              number: entity.sample__number
-            };
-          });
-          this.autocomplete.attach_link__sample = this.relatedData.attach_link__sample;
-        });
-        fetchAttachmentLinkSampleSeries(this.$route.params.id).then(
-          response => {
+        fetchAttachmentLinkCollections(this.$route.params.id).then(
+          (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__sample_series = collections.map(
-              entity => {
+            this.relatedData.attach_link__collection = collections.map(
+              (entity) => {
                 return {
-                  id: entity.sample_series,
-                  name: entity.sample_series__name
+                  id: entity.collection,
+                  name: entity.collection__name,
+                  name_en: entity.collection__name_en,
                 };
               }
             );
-            this.autocomplete.attach_link__sample_series = this.relatedData.attach_link__sample_series;
+            this.autocomplete.attach_link__collection =
+              this.relatedData.attach_link__collection;
           }
         );
-        fetchAttachmentLinkAnalyses(this.$route.params.id).then(response => {
+        fetchAttachmentLinkSpecimens(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__analysis = collections.map(entity => {
+          this.relatedData.attach_link__specimen = collections.map((entity) => {
             return {
-              id: entity.analysis,
-              sample__number: entity.analysis__sample__number
+              id: entity.specimen,
+              specimen_id: entity.specimen_id,
+              coll__number: entity.specimen__coll__number,
             };
           });
-          this.autocomplete.attach_link__analysis = this.relatedData.attach_link__analysis;
+          this.autocomplete.attach_link__specimen =
+            this.relatedData.attach_link__specimen;
         });
-        fetchAttachmentLinkDatasets(this.$route.params.id).then(response => {
+        fetchAttachmentLinkSamples(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__dataset = collections.map(entity => {
+          this.relatedData.attach_link__sample = collections.map((entity) => {
+            return {
+              id: entity.sample,
+              number: entity.sample__number,
+            };
+          });
+          this.autocomplete.attach_link__sample =
+            this.relatedData.attach_link__sample;
+        });
+        fetchAttachmentLinkSampleSeries(this.$route.params.id).then(
+          (response) => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__sample_series = collections.map(
+              (entity) => {
+                return {
+                  id: entity.sample_series,
+                  name: entity.sample_series__name,
+                };
+              }
+            );
+            this.autocomplete.attach_link__sample_series =
+              this.relatedData.attach_link__sample_series;
+          }
+        );
+        fetchAttachmentLinkAnalyses(this.$route.params.id).then((response) => {
+          let collections = this.handleResponse(response);
+          this.relatedData.attach_link__analysis = collections.map((entity) => {
+            return {
+              id: entity.analysis,
+              sample__number: entity.analysis__sample__number,
+            };
+          });
+          this.autocomplete.attach_link__analysis =
+            this.relatedData.attach_link__analysis;
+        });
+        fetchAttachmentLinkDatasets(this.$route.params.id).then((response) => {
+          let collections = this.handleResponse(response);
+          this.relatedData.attach_link__dataset = collections.map((entity) => {
             return {
               id: entity.dataset,
               name: entity.dataset__name,
-              name_en: entity.dataset__name_en
+              name_en: entity.dataset__name_en,
             };
           });
-          this.autocomplete.attach_link__dataset = this.relatedData.attach_link__dataset;
+          this.autocomplete.attach_link__dataset =
+            this.relatedData.attach_link__dataset;
         });
-        fetchAttachmentLinkLocalities(this.$route.params.id).then(response => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__locality = collections.map(entity => {
-            return {
-              id: entity.locality,
-              locality: entity.locality__locality,
-              locality_en: entity.locality__locality_en
-            };
-          });
-          this.autocomplete.attach_link__locality = this.relatedData.attach_link__locality;
-        });
-        fetchAttachmentLinkDrillcores(this.$route.params.id).then(response => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__drillcore = collections.map(entity => {
-            return {
-              id: entity.drillcore,
-              drillcore: entity.drillcore__drillcore,
-              drillcore_en: entity.drillcore__drillcore_en
-            };
-          });
-          this.autocomplete.attach_link__drillcore = this.relatedData.attach_link__drillcore;
-        });
+        fetchAttachmentLinkLocalities(this.$route.params.id).then(
+          (response) => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__locality = collections.map(
+              (entity) => {
+                return {
+                  id: entity.locality,
+                  locality: entity.locality__locality,
+                  locality_en: entity.locality__locality_en,
+                };
+              }
+            );
+            this.autocomplete.attach_link__locality =
+              this.relatedData.attach_link__locality;
+          }
+        );
+        fetchAttachmentLinkDrillcores(this.$route.params.id).then(
+          (response) => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__drillcore = collections.map(
+              (entity) => {
+                return {
+                  id: entity.drillcore,
+                  drillcore: entity.drillcore__drillcore,
+                  drillcore_en: entity.drillcore__drillcore_en,
+                };
+              }
+            );
+            this.autocomplete.attach_link__drillcore =
+              this.relatedData.attach_link__drillcore;
+          }
+        );
         fetchAttachmentLinkDrillcoreBoxes(this.$route.params.id).then(
-          response => {
+          (response) => {
             let collections = this.handleResponse(response);
             this.relatedData.attach_link__drillcore_box = collections.map(
-              entity => {
+              (entity) => {
                 return {
                   id: entity.drillcore_box,
                   drillcore__drillcore:
                     entity.drillcore_box__drillcore__drillcore,
                   drillcore__drillcore_en:
-                    entity.drillcore_box__drillcore__drillcore_en
+                    entity.drillcore_box__drillcore__drillcore_en,
                 };
               }
             );
-            this.autocomplete.attach_link__drillcore_box = this.relatedData.attach_link__drillcore_box;
+            this.autocomplete.attach_link__drillcore_box =
+              this.relatedData.attach_link__drillcore_box;
           }
         );
         fetchAttachmentLinkPreparations(this.$route.params.id).then(
-          response => {
+          (response) => {
             let collections = this.handleResponse(response);
             this.relatedData.attach_link__preparation = collections.map(
-              entity => {
+              (entity) => {
                 return {
                   id: entity.preparation,
-                  preparation_number: entity.preparation__preparation_number
+                  preparation_number: entity.preparation__preparation_number,
                 };
               }
             );
-            this.autocomplete.attach_link__preparation = this.relatedData.attach_link__preparation;
+            this.autocomplete.attach_link__preparation =
+              this.relatedData.attach_link__preparation;
           }
         );
-        fetchAttachmentLinkReferences(this.$route.params.id).then(response => {
+        fetchAttachmentLinkReferences(this.$route.params.id).then(
+          (response) => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__reference = collections.map(
+              (entity) => {
+                return {
+                  id: entity.reference,
+                  reference: entity.reference__reference,
+                };
+              }
+            );
+            this.autocomplete.attach_link__reference =
+              this.relatedData.attach_link__reference;
+          }
+        );
+        fetchAttachmentLinkDois(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__reference = collections.map(entity => {
-            return {
-              id: entity.reference,
-              reference: entity.reference__reference
-            };
-          });
-          this.autocomplete.attach_link__reference = this.relatedData.attach_link__reference;
-        });
-        fetchAttachmentLinkDois(this.$route.params.id).then(response => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__doi = collections.map(entity => {
+          this.relatedData.attach_link__doi = collections.map((entity) => {
             return {
               id: entity.doi,
-              identifier: entity.doi__identifier
+              identifier: entity.doi__identifier,
             };
           });
-          this.autocomplete.attach_link__doi = this.relatedData.attach_link__doi;
+          this.autocomplete.attach_link__doi =
+            this.relatedData.attach_link__doi;
         });
-        fetchAttachmentLinkStorages(this.$route.params.id).then(response => {
+        fetchAttachmentLinkStorages(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__storage = collections.map(entity => {
+          this.relatedData.attach_link__storage = collections.map((entity) => {
             return {
               id: entity.storage,
               location: entity.storage__location,
-              contents: entity.storage__contents
+              contents: entity.storage__contents,
             };
           });
-          this.autocomplete.attach_link__storage = this.relatedData.attach_link__storage;
+          this.autocomplete.attach_link__storage =
+            this.relatedData.attach_link__storage;
         });
-        fetchAttachmentLinkProjects(this.$route.params.id).then(response => {
+        fetchAttachmentLinkProjects(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__project = collections.map(entity => {
+          this.relatedData.attach_link__project = collections.map((entity) => {
             return {
               id: entity.project,
               name: entity.project__name,
-              name_en: entity.project__name_en
+              name_en: entity.project__name_en,
             };
           });
-          this.autocomplete.attach_link__project = this.relatedData.attach_link__project;
+          this.autocomplete.attach_link__project =
+            this.relatedData.attach_link__project;
         });
-        fetchAttachmentLinkSites(this.$route.params.id).then(response => {
+        fetchAttachmentLinkSites(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__site = collections.map(entity => {
+          this.relatedData.attach_link__site = collections.map((entity) => {
             return {
               id: entity.site,
               name: entity.site__name,
-              name_en: entity.site__name_en
+              name_en: entity.site__name_en,
             };
           });
-          this.autocomplete.attach_link__site = this.relatedData.attach_link__site;
+          this.autocomplete.attach_link__site =
+            this.relatedData.attach_link__site;
         });
         fetchAttachmentLinkLocalityDescriptions(this.$route.params.id).then(
-          response => {
+          (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__locality_description = collections.map(
-              entity => {
+            this.relatedData.attach_link__locality_description =
+              collections.map((entity) => {
                 return {
                   id: entity.locality_description,
-                  description: entity.locality_description__description
+                  description: entity.locality_description__description,
                 };
-              }
-            );
-            this.autocomplete.attach_link__locality_description = this.relatedData.attach_link__locality_description;
+              });
+            this.autocomplete.attach_link__locality_description =
+              this.relatedData.attach_link__locality_description;
           }
         );
-        fetchAttachmentLinkTaxa(this.$route.params.id).then(response => {
+        fetchAttachmentLinkTaxa(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__taxon = collections.map(entity => {
+          this.relatedData.attach_link__taxon = collections.map((entity) => {
             return {
               id: entity.taxon,
               taxon: entity.taxon__taxon,
-              author_year: entity.taxon__author_year
+              author_year: entity.taxon__author_year,
             };
           });
-          this.autocomplete.attach_link__taxon = this.relatedData.attach_link__taxon;
+          this.autocomplete.attach_link__taxon =
+            this.relatedData.attach_link__taxon;
         });
       }
     },
@@ -4709,12 +4773,12 @@ export default {
           keyword: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
-          }
+            orderBy: "id",
+          },
         },
         count: {
-          keyword: 0
-        }
+          keyword: 0,
+        },
       };
     },
 
@@ -4726,13 +4790,13 @@ export default {
           this.saveFields({ key: "photoArchive", value: objectToUpload });
           this.saveFields({
             key: "photoArchiveKeywords",
-            value: objectToUpload
+            value: objectToUpload,
           });
         } else if (this.isSpecimenImage) {
           this.saveFields({ key: "specimenImage", value: objectToUpload });
           this.saveFields({
             key: "specimenImageKeywords",
-            value: objectToUpload
+            value: objectToUpload,
           });
         } else if (this.isOtherFile) {
           this.saveFields({ key: "otherFiles", value: objectToUpload });
@@ -4752,7 +4816,7 @@ export default {
         ).toFixed(6);
       else uploadableObject.image_longitude = null;
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -4771,9 +4835,9 @@ export default {
       if (!this.isDigitisedReference) {
         if (this.isNotEmpty(this.relatedData.keyword))
           uploadableObject.related_data.keyword = this.relatedData.keyword.map(
-            keyword => {
+            (keyword) => {
               return {
-                id: keyword.id
+                id: keyword.id,
               };
             }
           );
@@ -4781,16 +4845,16 @@ export default {
       }
 
       if (this.isPhotoArchive || this.isOtherFile) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (
             this.relatedData[tab.name] &&
             this.relatedData[tab.name].length > 0
           ) {
             uploadableObject.related_data[tab.name] = this.relatedData[
               tab.name
-            ].map(entity => {
+            ].map((entity) => {
               return {
-                id: entity.id
+                id: entity.id,
               };
             });
           } else uploadableObject.related_data[tab.name] = null;
@@ -4807,21 +4871,21 @@ export default {
       if (this.isNotEmpty(obj.agent_digitised__id)) {
         this.attachment.agent_digitised = {
           id: obj.agent_digitised__id,
-          agent: obj.agent_digitised__agent
+          agent: obj.agent_digitised__agent,
         };
         this.autocomplete.agent_digitised.push(this.attachment.agent_digitised);
       }
       if (this.isNotEmpty(obj.author_id)) {
         this.attachment.author = {
           id: obj.author_id,
-          agent: obj.author__agent
+          agent: obj.author__agent,
         };
         this.autocomplete.agent.push(this.attachment.author);
       }
       if (this.isNotEmpty(obj.copyright_agent__id)) {
         this.attachment.copyright_agent = {
           id: obj.copyright_agent__id,
-          agent: obj.copyright_agent__agent
+          agent: obj.copyright_agent__agent,
         };
         this.autocomplete.copyright_agent.push(this.attachment.copyright_agent);
       }
@@ -4829,13 +4893,13 @@ export default {
         this.attachment.image_type = {
           id: obj.image_type__id,
           value: obj.image_type__value,
-          value_en: obj.image_type__value_en
+          value_en: obj.image_type__value_en,
         };
       }
       if (this.isNotEmpty(obj.imageset__id)) {
         this.attachment.imageset = {
           id: obj.imageset__id,
-          imageset_number: obj.imageset__imageset_number
+          imageset_number: obj.imageset__imageset_number,
         };
         this.autocomplete.imageset.push(this.attachment.imageset);
       }
@@ -4843,14 +4907,14 @@ export default {
         this.attachment.licence = {
           id: obj.licence__id,
           licence: obj.licence__licence,
-          licence_en: obj.licence__licence_en
+          licence_en: obj.licence__licence_en,
         };
       }
       if (this.isNotEmpty(obj.locality)) {
         this.attachment.locality = {
           id: obj.locality,
           locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en
+          locality_en: obj.locality__locality_en,
         };
         this.autocomplete.locality.push(this.attachment.locality);
       }
@@ -4858,14 +4922,14 @@ export default {
         this.attachment.specimen = {
           id: obj.specimen__id,
           specimen_id: obj.specimen_id,
-          coll__number: obj.specimen__coll__number
+          coll__number: obj.specimen__coll__number,
         };
         this.autocomplete.specimen.push(this.attachment.specimen);
       }
       if (this.isNotEmpty(obj.reference)) {
         this.attachment.reference = {
           id: obj.reference,
-          reference: obj.reference__reference
+          reference: obj.reference__reference,
         };
         this.autocomplete.reference.push(this.attachment.reference);
       }
@@ -4873,13 +4937,13 @@ export default {
         this.attachment.type = {
           id: obj.type,
           value: obj.type__value,
-          value_en: obj.type__value_en
+          value_en: obj.type__value_en,
         };
       }
       if (this.isNotEmpty(obj.coll)) {
         this.attachment.coll = {
           id: obj.coll,
-          number: obj.coll__number
+          number: obj.coll__number,
         };
       }
     },
@@ -4928,7 +4992,8 @@ export default {
             metadata.ImageDescription &&
             metadata.ImageDescription.trim().length > 0
           ) {
-            this.attachment.image_description_en = metadata.ImageDescription.trim();
+            this.attachment.image_description_en =
+              metadata.ImageDescription.trim();
           }
         } else {
           if (
@@ -5058,7 +5123,7 @@ export default {
       this.attachment = this.setDefaultAttachmentFields();
 
       this.toastInfo({
-        text: this.$t("messages.defaultsRemovedAndFieldsCleared")
+        text: this.$t("messages.defaultsRemovedAndFieldsCleared"),
       });
     },
 
@@ -5142,14 +5207,14 @@ export default {
         image_type: {
           id: 5,
           value: "digipilt",
-          value_en: "digital image"
+          value_en: "digital image",
         },
         type: {
           id: 1,
           value: "foto",
-          value_en: "image"
+          value_en: "image",
         },
-        stars: 0
+        stars: 0,
       };
       if (this.isPhotoArchive) defaultFields.specimen_image_attachment = 2;
       else if (this.isSpecimenImage)
@@ -5160,7 +5225,7 @@ export default {
         defaultFields.type = {
           id: 4,
           value: "publikatsioon",
-          value_en: "publication"
+          value_en: "publication",
         };
         defaultFields.stars = null;
       }
@@ -5180,8 +5245,8 @@ export default {
         return year + "-" + month + "-" + day;
       }
       return null;
-    }
-  }
+    },
+  },
 };
 </script>
 

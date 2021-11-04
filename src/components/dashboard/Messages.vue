@@ -32,7 +32,7 @@
       >
         <div
           class="d-flex flex-column small-custom"
-          style="word-break: break-word;"
+          style="word-break: break-word"
         >
           <div>
             <span class="font-weight-bold text-uppercase">{{
@@ -84,7 +84,7 @@
             absolute
             x-small
             :color="bodyActiveColor"
-            style="right: 8px;"
+            style="right: 8px"
           >
             {{ $t("sarv_issue.answer") }}
             <v-icon x-small class="ml-1">fas fa-reply</v-icon>
@@ -101,19 +101,19 @@ export default {
   props: {
     sarvIssues: {
       type: Object,
-      required: true
+      required: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
-  }
+      default: "deep-orange",
+    },
+  },
 };
 </script>
 

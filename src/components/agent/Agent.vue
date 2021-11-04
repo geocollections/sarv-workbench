@@ -350,7 +350,7 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
   fetchAgent,
   fetchListAgentType,
-  fetchListCountry
+  fetchListCountry,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -365,24 +365,24 @@ export default {
     TextareaWrapper,
     DateWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
   data() {
@@ -396,7 +396,7 @@ export default {
         request: "FETCH_AGENTS",
         title: "header.agents",
         object: "agent",
-        field: "agent"
+        field: "agent",
       });
     }
 
@@ -404,15 +404,15 @@ export default {
   },
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   computed: {
-    ...mapState("search", ["agentSearchParameters"])
+    ...mapState("search", ["agentSearchParameters"]),
   },
   methods: {
     setInitialData() {
@@ -442,27 +442,27 @@ export default {
           "date_deceased",
           "old_name",
           "new_name",
-          "remarks"
+          "remarks",
         ],
         autocomplete: {
           loaders: {
             agent_type: false,
             institution: false,
-            list_country: false
+            list_country: false,
           },
           agent_type: [],
           institution: [],
-          list_country: []
+          list_country: [],
         },
         requiredFields: ["agent", "type"],
         agent: {},
         block: {
           info: true,
           details: true,
-          description: true
+          description: true,
         },
         menuDateBorn: false,
-        menuDateDeceased: false
+        menuDateDeceased: false,
       };
     },
 
@@ -477,7 +477,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchAgent(this.$route.params.id).then(response => {
+        fetchAgent(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -501,12 +501,12 @@ export default {
 
     loadAutocompleteFields() {
       fetchListCountry().then(
-        response =>
+        (response) =>
           (this.autocomplete.list_country = this.handleResponse(response))
       );
 
       fetchListAgentType().then(
-        response =>
+        (response) =>
           (this.autocomplete.agent_type = this.handleResponse(response))
       );
     },
@@ -514,7 +514,7 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -536,22 +536,22 @@ export default {
       this.agent.type = {
         id: obj.type,
         value: obj.type__value,
-        value_en: obj.type__value_en
+        value_en: obj.type__value_en,
       };
       if (this.isNotEmpty(obj.institution)) {
         this.agent.institution = {
           id: obj.institution,
-          agent: obj.institution__agent
+          agent: obj.institution__agent,
         };
         this.autocomplete.institution.push(this.agent.institution);
       }
       this.agent.country = {
         id: obj.country,
         value: obj.country__value,
-        value_en: obj.country__value_en
+        value_en: obj.country__value_en,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

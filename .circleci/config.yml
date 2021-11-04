@@ -6,7 +6,7 @@ orbs:
 parameters:
   package-version:
     type: string
-    default: "1.0.5"
+    default: "2.1.1"
 
 executors:
   docker-publisher:
@@ -16,7 +16,7 @@ executors:
       IMAGE_NAME_SARV_WB: geocollections/sarv-wb
       IMAGE_NAME_SARV_WB_DEV: geocollections/sarv-wb-dev
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: circleci/node:lts-stretch
 
 jobs:
 

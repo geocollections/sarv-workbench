@@ -32,7 +32,7 @@
       <span
         v-translate="{
           et: item.name,
-          en: item.name_en
+          en: item.name_en,
         }"
       ></span>
     </template>
@@ -41,7 +41,7 @@
       <span
         v-translate="{
           et: item.name_long,
-          en: item.name_long_en
+          en: item.name_long_en,
         }"
       ></span>
     </template>
@@ -69,37 +69,37 @@ export default {
   mixins: [tableHeaderMixin],
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
-    }
-  }
+    },
+  },
 };
 </script>

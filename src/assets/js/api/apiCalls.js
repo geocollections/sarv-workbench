@@ -8,14 +8,14 @@ const api = {
   url: "https://rwapi.geocollections.info/",
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
-  publicApi: "https://api.geocollections.info/"
+  publicApi: "https://api.geocollections.info/",
 };
 
 const attachmentFields =
   "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number";
 
 // Add a request interceptor
-axios.interceptors.request.use(function(config) {
+axios.interceptors.request.use(function (config) {
   if (config.url.includes("rwapi") && !config.url.includes("/egf/")) {
     let csrftoken = Vue.$cookies.get("csrftoken");
     config.withCredentials = true;
@@ -26,7 +26,7 @@ axios.interceptors.request.use(function(config) {
 });
 
 // Add a response interceptor
-axios.interceptors.response.use(function(response) {
+axios.interceptors.response.use(function (response) {
   if (response.status === 200 && response.config.url.includes("rwapi")) {
     // Showing Missing permissions message
     if (response.data.error_permissions) {
@@ -38,7 +38,7 @@ axios.interceptors.response.use(function(response) {
           timeout: 5000,
           closeOnEscape: true,
           pauseOnHover: false,
-          displayMode: "replace"
+          displayMode: "replace",
         }
       );
     }
@@ -52,7 +52,7 @@ axios.interceptors.response.use(function(response) {
         timeout: 5000,
         closeOnEscape: true,
         pauseOnHover: false,
-        displayMode: "replace"
+        displayMode: "replace",
       });
       router.push({ path: "/" });
     }
@@ -63,7 +63,7 @@ axios.interceptors.response.use(function(response) {
         position: "topCenter",
         timeout: 99999999999,
         pauseOnHover: false,
-        displayMode: "replace"
+        displayMode: "replace",
       });
     }
   }
@@ -99,10 +99,10 @@ async function post(
     loginOptions = {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       data: qs.stringify(data),
-      url
+      url,
     };
   }
 
@@ -177,8 +177,9 @@ export function fetchAttachments(data, dynamicSearch) {
     searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
   if (data.image_number !== null && data.image_number.trim().length > 0) {
-    searchFields += `image_number__${data.image_number__lookuptype ||
-      "icontains"}=${data.image_number}`;
+    searchFields += `image_number__${
+      data.image_number__lookuptype || "icontains"
+    }=${data.image_number}`;
   }
   if (data.filename !== null && data.filename.trim().length > 0) {
     searchFields +=
@@ -451,13 +452,15 @@ export async function fetchReferences(data, dynamicSearch) {
     searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
-      "icontains"}=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${
+      data.selectionId__lookuptype || "icontains"
+    }=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
-      "icontains"}=${data.selection}`;
+    searchFields += `&selection__selection__name__${
+      data.selection__lookuptype || "icontains"
+    }=${data.selection}`;
   }
   if (
     data.libraryAuthorIdTitle &&
@@ -470,12 +473,14 @@ export async function fetchReferences(data, dynamicSearch) {
       `${data.libraryAuthorIdTitle__lookuptype || "icontains"}&distinct=true`;
   }
   if (data.userAdded && data.userAdded.trim().length > 0) {
-    searchFields += `&user_added__${data.userAdded__lookuptype ||
-      "icontains"}=${data.userAdded}`;
+    searchFields += `&user_added__${
+      data.userAdded__lookuptype || "icontains"
+    }=${data.userAdded}`;
   }
   if (data.keywords !== null && data.keywords.trim().length > 0) {
-    searchFields += `&referencekeywords__keyword__keyword__${data.keywords__lookuptype ||
-      "icontains"}=${data.keywords}`;
+    searchFields += `&referencekeywords__keyword__keyword__${
+      data.keywords__lookuptype || "icontains"
+    }=${data.keywords}`;
   }
   if (data.isEstonianReference) {
     searchFields += `&is_estonian_reference=${data.isEstonianReference}`;
@@ -505,12 +510,14 @@ function fetchReferenceIDsUsingReferenceKeyword(data) {
   let searchFields = "";
 
   if (data.author !== null && data.author.trim().length > 0) {
-    searchFields += `reference__author__${data.author__lookuptype ||
-      "icontains"}=${data.author}`;
+    searchFields += `reference__author__${
+      data.author__lookuptype || "icontains"
+    }=${data.author}`;
   }
   if (data.year !== null && data.year.trim().length > 0) {
-    searchFields += `&reference__year__${data.year__lookuptype ||
-      "icontains"}=${data.year}`;
+    searchFields += `&reference__year__${
+      data.year__lookuptype || "icontains"
+    }=${data.year}`;
   }
   if (data.title !== null && data.title.trim().length > 0) {
     searchFields +=
@@ -536,8 +543,9 @@ function fetchReferenceIDsUsingReferenceKeyword(data) {
   if (data.keywords !== null && data.keywords.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.keywords
-    };fields:keyword__keyword,keyword_txt;lookuptype:${data.keywords__lookuptype ||
-      "icontains"}`;
+    };fields:keyword__keyword,keyword_txt;lookuptype:${
+      data.keywords__lookuptype || "icontains"
+    }`;
   }
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += `&reference__id__${data.id__lookuptype || "icontains"}=${
@@ -555,8 +563,9 @@ function fetchReferenceIDsUsingReferenceKeyword(data) {
       `${data.libraryAuthorIdTitle__lookuptype || "icontains"}&distinct=true`;
   }
   if (data.userAdded && data.userAdded.trim().length > 0) {
-    searchFields += `&reference__user_added__${data.userAdded__lookuptype ||
-      "icontains"}=${data.userAdded}`;
+    searchFields += `&reference__user_added__${
+      data.userAdded__lookuptype || "icontains"
+    }=${data.userAdded}`;
   }
   if (data.isEstonianReference) {
     searchFields += `&reference__is_estonian_reference=${data.isEstonianReference}`;
@@ -673,8 +682,9 @@ export function fetchLocalities(data, dynamicSearch) {
   if (data.locality !== null && data.locality.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.locality
-    };fields:locality_en,locality;lookuptype:${data.locality__lookuptype ||
-      "icontains"}`;
+    };fields:locality_en,locality;lookuptype:${
+      data.locality__lookuptype || "icontains"
+    }`;
   }
 
   if (data.number !== null && data.number.trim().length > 0) {
@@ -686,8 +696,9 @@ export function fetchLocalities(data, dynamicSearch) {
   if (data.country !== null && data.country.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.country
-    };fields:country__value_en,country__value;lookuptype:${data.country__lookuptype ||
-      "icontains"}`;
+    };fields:country__value_en,country__value;lookuptype:${
+      data.country__lookuptype || "icontains"
+    }`;
   }
 
   if (data.agent !== null && data.agent.trim().length > 0) {
@@ -697,13 +708,15 @@ export function fetchLocalities(data, dynamicSearch) {
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
-      "icontains"}=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${
+      data.selectionId__lookuptype || "icontains"
+    }=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
-      "icontains"}=${data.selection}`;
+    searchFields += `&selection__selection__name__${
+      data.selection__lookuptype || "icontains"
+    }=${data.selection}`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -843,70 +856,81 @@ export function fetchSamples(data, dynamicSearch) {
   if (data.number !== null && data.number.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.number
-    };fields:number,number_additional,number_field;lookuptype:${data.number__lookuptype ||
-      "icontains"}`;
+    };fields:number,number_additional,number_field;lookuptype:${
+      data.number__lookuptype || "icontains"
+    }`;
   }
 
   if (data.locality !== null && data.locality.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.locality
-    };fields:locality__locality_en,locality__locality,locality_free,site__name,site__name_en,site__id;lookuptype:${data.locality__lookuptype ||
-      "icontains"}`;
+    };fields:locality__locality_en,locality__locality,locality_free,site__name,site__name_en,site__id;lookuptype:${
+      data.locality__lookuptype || "icontains"
+    }`;
   }
 
   if (data.depth !== null && data.depth.trim().length > 0) {
     //searchFields += '&depth__exact='+data.depth
     searchFields += `&multi_search=value:${
       data.depth
-    };fields:depth,depth_interval;lookuptype:${data.depth__lookuptype ||
-      "icontains"}`;
+    };fields:depth,depth_interval;lookuptype:${
+      data.depth__lookuptype || "icontains"
+    }`;
   }
   if (data.stratigraphy !== null && data.stratigraphy.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.stratigraphy
-    };fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:${data.stratigraphy__lookuptype ||
-      "icontains"}`;
+    };fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:${
+      data.stratigraphy__lookuptype || "icontains"
+    }`;
   }
 
   if (data.agent !== null && data.agent.trim().length > 0) {
-    searchFields += `&agent_collected__agent__${data.agent__lookuptype ||
-      "icontains"}=${data.agent}`;
+    searchFields += `&agent_collected__agent__${
+      data.agent__lookuptype || "icontains"
+    }=${data.agent}`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&storage__location__${data.storage__lookuptype ||
-      "icontains"}=${data.storage}`;
+    searchFields += `&storage__location__${
+      data.storage__lookuptype || "icontains"
+    }=${data.storage}`;
   }
 
   if (data.site !== null && data.site.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.site
-    };fields:site__id,site__name,site__project__id,site__project__name;lookuptype:${data.site__lookuptype ||
-      "icontains"}`;
+    };fields:site__id,site__name,site__project__id,site__project__name;lookuptype:${
+      data.site__lookuptype || "icontains"
+    }`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
-      "icontains"}=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${
+      data.selectionId__lookuptype || "icontains"
+    }=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
-      "icontains"}=${data.selection}`;
+    searchFields += `&selection__selection__name__${
+      data.selection__lookuptype || "icontains"
+    }=${data.selection}`;
   }
 
   if (data.loan && data.loan.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.loan
-    };fields:loansample__loan__id,loansample__loan__loan_number;lookuptype:${data.loan__lookuptype ||
-      "icontains"}`;
+    };fields:loansample__loan__id,loansample__loan__loan_number;lookuptype:${
+      data.loan__lookuptype || "icontains"
+    }`;
   }
 
   if (data.series && data.series.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.series
-    };fields:series__id,series__name;lookuptype:${data.series__lookuptype ||
-      "icontains"}`;
+    };fields:series__id,series__name;lookuptype:${
+      data.series__lookuptype || "icontains"
+    }`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -1005,8 +1029,9 @@ export function fetchLibraries(data, dynamicSearch) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.author_txt !== null && data.author_txt.trim().length > 0) {
-    searchFields += `author_txt__${data.author_txt__lookuptype ||
-      "icontains"}=${data.author_txt}`;
+    searchFields += `author_txt__${
+      data.author_txt__lookuptype || "icontains"
+    }=${data.author_txt}`;
   }
 
   if (data.year !== null && data.year.trim().length > 0) {
@@ -1018,13 +1043,15 @@ export function fetchLibraries(data, dynamicSearch) {
   if (data.title !== null && data.title.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.title
-    };fields:title,title_en;lookuptype:${data.title__lookuptype ||
-      "icontains"}`;
+    };fields:title,title_en;lookuptype:${
+      data.title__lookuptype || "icontains"
+    }`;
   }
 
   if (data.reference !== null && data.reference.trim().length > 0) {
-    searchFields += `&libraryreference_library__reference__reference__${data.reference__lookuptype ||
-      "icontains"}=${data.reference}&distinct=true`;
+    searchFields += `&libraryreference_library__reference__reference__${
+      data.reference__lookuptype || "icontains"
+    }=${data.reference}&distinct=true`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -1054,8 +1081,9 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.author_txt !== null &&
     data.author_txt.trim().length > 0
   ) {
-    searchFields += `&library__author_txt__${data.author_txt__lookuptype ||
-      "icontains"}=${data.author_txt}`;
+    searchFields += `&library__author_txt__${
+      data.author_txt__lookuptype || "icontains"
+    }=${data.author_txt}`;
   }
 
   if (
@@ -1075,8 +1103,9 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
   ) {
     searchFields += `&multi_search=value:${
       data.title
-    };fields:library__title,library__title_en;lookuptype:${data.title__lookuptype ||
-      "icontains"}`;
+    };fields:library__title,library__title_en;lookuptype:${
+      data.title__lookuptype || "icontains"
+    }`;
   }
 
   if (
@@ -1084,8 +1113,9 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.reference !== null &&
     data.reference.trim().length > 0
   ) {
-    searchFields += `&library__libraryreference_library__reference__reference__${data.reference__lookuptype ||
-      "icontains"}=${data.reference}&distinct=true`;
+    searchFields += `&library__libraryreference_library__reference__reference__${
+      data.reference__lookuptype || "icontains"
+    }=${data.reference}&distinct=true`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -1156,8 +1186,9 @@ export function fetchDois(data, dynamicSearch) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.identifier !== null && data.identifier.trim().length > 0) {
-    searchFields += `&identifier__${data.identifier__lookuptype ||
-      "icontains"}=${data.identifier}`;
+    searchFields += `&identifier__${
+      data.identifier__lookuptype || "icontains"
+    }=${data.identifier}`;
   }
 
   if (data.creators !== null && data.creators.trim().length > 0) {
@@ -1170,8 +1201,9 @@ export function fetchDois(data, dynamicSearch) {
     data.publication_year !== null &&
     data.publication_year.trim().length > 0
   ) {
-    searchFields += `&publication_year__${data.publication_year__lookuptype ||
-      "icontains"}=${data.publication_year}`;
+    searchFields += `&publication_year__${
+      data.publication_year__lookuptype || "icontains"
+    }=${data.publication_year}`;
   }
 
   if (data.title !== null && data.title.trim().length > 0) {
@@ -1436,8 +1468,9 @@ export function fetchSites(data, dynamicSearch) {
   if (data.project !== null && data.project.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.project
-    };fields:project__name,project__name_en;lookuptype:${data.project__lookuptype ||
-      "icontains"}`;
+    };fields:project__name,project__name_en;lookuptype:${
+      data.project__lookuptype || "icontains"
+    }`;
   }
 
   if (data.date_start !== null) {
@@ -1611,37 +1644,43 @@ export function fetchAnalyses(data, dynamicSearch) {
   if (data.analysis_method !== null && data.analysis_method.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.analysis_method
-    };fields:analysis_method__analysis_method,analysis_method__method_en;lookuptype:${data.analysis_method__lookuptype ||
-      "icontains"}`;
+    };fields:analysis_method__analysis_method,analysis_method__method_en;lookuptype:${
+      data.analysis_method__lookuptype || "icontains"
+    }`;
   }
 
   if (data.agentAndLab !== null && data.agentAndLab.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.agentAndLab
-    };fields:agent__agent,lab_txt;lookuptype:${data.agentAndLab__lookuptype ||
-      "icontains"}`;
+    };fields:agent__agent,lab_txt;lookuptype:${
+      data.agentAndLab__lookuptype || "icontains"
+    }`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
-      "icontains"}=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${
+      data.selectionId__lookuptype || "icontains"
+    }=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
-      "icontains"}=${data.selection}`;
+    searchFields += `&selection__selection__name__${
+      data.selection__lookuptype || "icontains"
+    }=${data.selection}`;
   }
 
   if (data.sample && data.sample.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.sample
-    };fields:sample__id,sample__number,sample__number_additional;lookuptype:${data.sample__lookuptype ||
-      "icontains"}`;
+    };fields:sample__id,sample__number,sample__number_additional;lookuptype:${
+      data.sample__lookuptype || "icontains"
+    }`;
   }
 
   if (data.datasetId && data.datasetId.trim().length > 0) {
-    searchFields += `&dataset__id__${data.datasetId__lookuptype ||
-      "icontains"}=${data.datasetId}`;
+    searchFields += `&dataset__id__${
+      data.datasetId__lookuptype || "icontains"
+    }=${data.datasetId}`;
   }
 
   // if (typeof agent !== "undefined" && agent !== null) {
@@ -1702,15 +1741,17 @@ export function fetchJournals(data, dynamicSearch) {
   if (data.journal !== null && data.journal.trim().length > 0) {
     searchFields += `multi_search=value:${
       data.journal
-    };fields:journal_name,journal_short,journal_original;lookuptype:${data.journal__lookuptype ||
-      "icontains"}`;
+    };fields:journal_name,journal_short,journal_original;lookuptype:${
+      data.journal__lookuptype || "icontains"
+    }`;
   }
 
   if (data.publisher !== null && data.publisher.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.publisher
-    };fields:publisher,publisher_place;lookuptype:${data.publisher__lookuptype ||
-      "icontains"}`;
+    };fields:publisher,publisher_place;lookuptype:${
+      data.publisher__lookuptype || "icontains"
+    }`;
   }
 
   if (data.remarks !== null && data.remarks.trim().length > 0) {
@@ -1783,20 +1824,23 @@ export function fetchSpecimens(data, dynamicSearch) {
   if (data.specimenNr && data.specimenNr.trim().length > 0) {
     searchFields += `multi_search=value:${
       data.specimenNr
-    };fields:specimen_id,specimen_nr;lookuptype:${data.specimenNr__lookuptype ||
-      "icontains"}`;
+    };fields:specimen_id,specimen_nr;lookuptype:${
+      data.specimenNr__lookuptype || "icontains"
+    }`;
   }
 
   if (data.collNumber && data.collNumber.trim().length > 0) {
-    searchFields += `&coll__number__${data.collNumber__lookuptype ||
-      "icontains"}=${data.collNumber}`;
+    searchFields += `&coll__number__${
+      data.collNumber__lookuptype || "icontains"
+    }=${data.collNumber}`;
   }
 
   if (data.fossil && data.fossil.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.fossil
-    };fields:specimenidentification__name,specimenidentification__taxon__taxon;lookuptype:${data.fossil__lookuptype ||
-      "icontains"}`;
+    };fields:specimenidentification__name,specimenidentification__taxon__taxon;lookuptype:${
+      data.fossil__lookuptype || "icontains"
+    }`;
   }
 
   if (data.mineralRock && data.mineralRock.trim().length > 0) {
@@ -1805,65 +1849,75 @@ export function fetchSpecimens(data, dynamicSearch) {
       searchFields += "&distinct=true";
     searchFields += `&multi_search=value:${
       data.mineralRock
-    };fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:${data.mineralRock__lookuptype ||
-      "icontains"}`;
+    };fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:${
+      data.mineralRock__lookuptype || "icontains"
+    }`;
   }
 
   if (data.locality && data.locality.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.locality
-    };fields:locality__locality,locality__locality_en,locality_free;lookuptype:${data.locality__lookuptype ||
-      "icontains"}`;
+    };fields:locality__locality,locality__locality_en,locality_free;lookuptype:${
+      data.locality__lookuptype || "icontains"
+    }`;
   }
 
   if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.stratigraphy
-    };fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:${data.stratigraphy__lookuptype ||
-      "icontains"}`;
+    };fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:${
+      data.stratigraphy__lookuptype || "icontains"
+    }`;
   }
 
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.agent_collected
-    };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:${data.agent_collected__lookuptype ||
-      "icontains"}`;
+    };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:${
+      data.agent_collected__lookuptype || "icontains"
+    }`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&storage__location__${data.storage__lookuptype ||
-      "icontains"}=${data.storage}`;
+    searchFields += `&storage__location__${
+      data.storage__lookuptype || "icontains"
+    }=${data.storage}`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
-      "icontains"}=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${
+      data.selectionId__lookuptype || "icontains"
+    }=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
-      "icontains"}=${data.selection}`;
+    searchFields += `&selection__selection__name__${
+      data.selection__lookuptype || "icontains"
+    }=${data.selection}`;
   }
 
   if (data.loan && data.loan.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.loan
-    };fields:loanspecimen__loan__id,loanspecimen__loan__loan_number;lookuptype:${data.loan__lookuptype ||
-      "icontains"}`;
+    };fields:loanspecimen__loan__id,loanspecimen__loan__loan_number;lookuptype:${
+      data.loan__lookuptype || "icontains"
+    }`;
   }
 
   if (data.reference && data.reference.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.reference
-    };fields:specimenreference__reference__reference,specimenreference__reference__id;lookuptype:${data.reference__lookuptype ||
-      "icontains"}`;
+    };fields:specimenreference__reference__reference,specimenreference__reference__id;lookuptype:${
+      data.reference__lookuptype || "icontains"
+    }`;
   }
 
   if (data.classification && data.classification.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.classification
-    };fields:classification__class_field,classification__class_en,classification__class_lat,classification__class_en_synonym,classification__class_synonym;lookuptype:${data.classification__lookuptype ||
-      "icontains"}`;
+    };fields:classification__class_field,classification__class_en,classification__class_lat,classification__class_en_synonym,classification__class_synonym;lookuptype:${
+      data.classification__lookuptype || "icontains"
+    }`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -1890,25 +1944,29 @@ export function fetchSpecimenImages(data, dynamicSearch) {
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
     searchFields += `multi_search=value:${
       data.idSpecimen
-    };fields:specimen__id,specimen__specimen_id,specimen__specimen_nr;lookuptype:${data.idSpecimen__lookuptype ||
-      "icontains"}`;
+    };fields:specimen__id,specimen__specimen_id,specimen__specimen_nr;lookuptype:${
+      data.idSpecimen__lookuptype || "icontains"
+    }`;
   }
 
   if (data.specimenNr && data.specimenNr.trim().length > 0) {
-    searchFields += `&specimen__specimen_nr__${data.specimenNr__lookuptype ||
-      "icontains"}=${data.specimenNr}`;
+    searchFields += `&specimen__specimen_nr__${
+      data.specimenNr__lookuptype || "icontains"
+    }=${data.specimenNr}`;
   }
 
   if (data.collNumber && data.collNumber.trim().length > 0) {
-    searchFields += `&specimen__coll__number__${data.collNumber__lookuptype ||
-      "icontains"}=${data.collNumber}`;
+    searchFields += `&specimen__coll__number__${
+      data.collNumber__lookuptype || "icontains"
+    }=${data.collNumber}`;
   }
 
   if (data.fossil && data.fossil.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.fossil
-    };fields:specimen__specimenidentification__name,specimen__specimenidentification__taxon__taxon;lookuptype:${data.fossil__lookuptype ||
-      "icontains"}`;
+    };fields:specimen__specimenidentification__name,specimen__specimenidentification__taxon__taxon;lookuptype:${
+      data.fossil__lookuptype || "icontains"
+    }`;
   }
 
   if (data.mineralRock && data.mineralRock.trim().length > 0) {
@@ -1917,44 +1975,51 @@ export function fetchSpecimenImages(data, dynamicSearch) {
       searchFields += "&distinct=true";
     searchFields += `&multi_search=value:${
       data.mineralRock
-    };fields:specimen__specimenidentificationgeologies__name,specimen__specimenidentificationgeologies__name_en,specimen__specimenidentificationgeologies__rock__name,specimen__specimenidentificationgeologies__rock__name_en;lookuptype:${data.mineralRock__lookuptype ||
-      "icontains"}`;
+    };fields:specimen__specimenidentificationgeologies__name,specimen__specimenidentificationgeologies__name_en,specimen__specimenidentificationgeologies__rock__name,specimen__specimenidentificationgeologies__rock__name_en;lookuptype:${
+      data.mineralRock__lookuptype || "icontains"
+    }`;
   }
 
   if (data.locality && data.locality.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.locality
-    };fields:specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free;lookuptype:${data.locality__lookuptype ||
-      "icontains"}`;
+    };fields:specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free;lookuptype:${
+      data.locality__lookuptype || "icontains"
+    }`;
   }
 
   if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.stratigraphy
-    };fields:specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en;lookuptype:${data.stratigraphy__lookuptype ||
-      "icontains"}`;
+    };fields:specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en;lookuptype:${
+      data.stratigraphy__lookuptype || "icontains"
+    }`;
   }
 
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.agent_collected
-    };fields:specimen__agent_collected__agent,specimen__agent_collected__forename,specimen__agent_collected__surename,specimen__agent_collected_free;lookuptype:${data.agent_collected__lookuptype ||
-      "icontains"}`;
+    };fields:specimen__agent_collected__agent,specimen__agent_collected__forename,specimen__agent_collected__surename,specimen__agent_collected_free;lookuptype:${
+      data.agent_collected__lookuptype || "icontains"
+    }`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&specimen__storage__location__${data.storage__lookuptype ||
-      "icontains"}=${data.storage}`;
+    searchFields += `&specimen__storage__location__${
+      data.storage__lookuptype || "icontains"
+    }=${data.storage}`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&specimen__selection__selection__id__${data.selectionId__lookuptype ||
-      "icontains"}=${data.selectionId}`;
+    searchFields += `&specimen__selection__selection__id__${
+      data.selectionId__lookuptype || "icontains"
+    }=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&specimen__selection__selection__name__${data.selection__lookuptype ||
-      "icontains"}=${data.selection}`;
+    searchFields += `&specimen__selection__selection__name__${
+      data.selection__lookuptype || "icontains"
+    }=${data.selection}`;
   }
 
   if (data.loan && data.loan.trim().length > 0) {
@@ -2157,43 +2222,49 @@ export function fetchCollections(data, dynamicSearch) {
   }
 
   if (data.number && data.number.trim().length > 0) {
-    searchFields += `&collection_id__${data.number__lookuptype ||
-      "icontains"}=${data.number}`;
+    searchFields += `&collection_id__${
+      data.number__lookuptype || "icontains"
+    }=${data.number}`;
   }
 
   if (data.name && data.name.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.name
-    };fields:name,name_en,name_long,name_long_en;lookuptype:${data.name__lookuptype ||
-      "icontains"}`;
+    };fields:name,name_en,name_long,name_long_en;lookuptype:${
+      data.name__lookuptype || "icontains"
+    }`;
   }
 
   if (data.agent && data.agent.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.agent
-    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${data.agent__lookuptype ||
-      "icontains"}`;
+    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${
+      data.agent__lookuptype || "icontains"
+    }`;
   }
 
   if (data.locality && data.locality.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.locality
-    };fields:locality__id,locality__locality,locality__locality_en;lookuptype:${data.locality__lookuptype ||
-      "icontains"}`;
+    };fields:locality__id,locality__locality,locality__locality_en;lookuptype:${
+      data.locality__lookuptype || "icontains"
+    }`;
   }
 
   if (data.reference && data.reference.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.reference
-    };fields:reference__id,reference__reference;lookuptype:${data.reference__lookuptype ||
-      "icontains"}`;
+    };fields:reference__id,reference__reference;lookuptype:${
+      data.reference__lookuptype || "icontains"
+    }`;
   }
 
   if (data.classification && data.classification.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.classification
-    };fields:classification__id,classification__class_field,classification__class_en,classification__class_lat,classification__class_synonym,classification__class_en_synonym;lookuptype:${data.classification__lookuptype ||
-      "icontains"}`;
+    };fields:classification__id,classification__class_field,classification__class_en,classification__class_lat,classification__class_synonym,classification__class_en_synonym;lookuptype:${
+      data.classification__lookuptype || "icontains"
+    }`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -2244,33 +2315,39 @@ export function fetchTaxa(data, dynamicSearch) {
   }
 
   if (data.author_year && data.author_year.trim().length > 0) {
-    searchFields += `&author_year__${data.author_year__lookuptype ||
-      "icontains"}=${data.author_year}`;
+    searchFields += `&author_year__${
+      data.author_year__lookuptype || "icontains"
+    }=${data.author_year}`;
   }
 
   if (data.parent__taxon && data.parent__taxon.trim().length > 0) {
-    searchFields += `&parent__taxon__${data.parent__taxon__lookuptype ||
-      "icontains"}=${data.parent__taxon}`;
+    searchFields += `&parent__taxon__${
+      data.parent__taxon__lookuptype || "icontains"
+    }=${data.parent__taxon}`;
   }
 
   if (data.taxon_epithet && data.taxon_epithet.trim().length > 0) {
-    searchFields += `&taxon_epithet__${data.taxon_epithet__lookuptype ||
-      "icontains"}=${data.taxon_epithet}`;
+    searchFields += `&taxon_epithet__${
+      data.taxon_epithet__lookuptype || "icontains"
+    }=${data.taxon_epithet}`;
   }
 
   if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__${data.user_added__lookuptype ||
-      "icontains"}=${data.user_added}`;
+    searchFields += `&user_added__${
+      data.user_added__lookuptype || "icontains"
+    }=${data.user_added}`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
-      "icontains"}=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${
+      data.selectionId__lookuptype || "icontains"
+    }=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
-      "icontains"}=${data.selection}`;
+    searchFields += `&selection__selection__name__${
+      data.selection__lookuptype || "icontains"
+    }=${data.selection}`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -2441,14 +2518,16 @@ export function fetchKeywords(data, listOfIDs, dynamicSearch) {
   if (data.language && data.language.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.language
-    };fields:language__value,language__value_en;lookuptype:${data.language__lookuptype ||
-      "icontains"}`;
+    };fields:language__value,language__value_en;lookuptype:${
+      data.language__lookuptype || "icontains"
+    }`;
   }
   if (data.keyword_category && data.keyword_category.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.keyword_category
-    };fields:keyword_category__name,keyword_category__name_en;lookuptype:${data.keyword_category__lookuptype ||
-      "icontains"}`;
+    };fields:keyword_category__name,keyword_category__name_en;lookuptype:${
+      data.keyword_category__lookuptype || "icontains"
+    }`;
   }
   if (data.related_keyword && data.related_keyword.trim().length > 0) {
     searchFields += `&related_keyword__keyword__icontains=${data.related_keyword}`;
@@ -2600,8 +2679,9 @@ export function fetchSelectionSeries(data, dynamicSearch) {
     }`;
   }
   if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__${data.user_added__lookuptype ||
-      "icontains"}=${data.user_added}`;
+    searchFields += `&user_added__${
+      data.user_added__lookuptype || "icontains"
+    }=${data.user_added}`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -2758,8 +2838,9 @@ export function fetchDrillcores(data, dynamicSearch) {
   if (data.drillcore && data.drillcore.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.drillcore
-    };fields:drillcore,drillcore_en,locality__locality,locality__locality_en;lookuptype:${data.drillcore__lookuptype ||
-      "icontains"}`;
+    };fields:drillcore,drillcore_en,locality__locality,locality__locality_en;lookuptype:${
+      data.drillcore__lookuptype || "icontains"
+    }`;
   }
 
   if (data.boxes && data.boxes.trim().length > 0) {
@@ -2771,15 +2852,17 @@ export function fetchDrillcores(data, dynamicSearch) {
   if (data.locality && data.locality.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.locality
-    };fields:depth,locality__depth;lookuptype:${data.locality__lookuptype ||
-      "icontains"}`;
+    };fields:depth,locality__depth;lookuptype:${
+      data.locality__lookuptype || "icontains"
+    }`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.storage
-    };fields:storage__location,depository__value;lookuptype:${data.storage__lookuptype ||
-      "icontains"}`;
+    };fields:storage__location,depository__value;lookuptype:${
+      data.storage__lookuptype || "icontains"
+    }`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -2860,15 +2943,17 @@ export function fetchDrillcoreBoxes(data, dynamicSearch) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `storage__location__${data.storage__lookuptype ||
-      "icontains"}=${data.storage}`;
+    searchFields += `storage__location__${
+      data.storage__lookuptype || "icontains"
+    }=${data.storage}`;
   }
 
   if (data.drillcore && data.drillcore.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.drillcore
-    };fields:drillcore__drillcore,drillcore__drillcore_en;lookuptype:${data.drillcore__lookuptype ||
-      "icontains"}`;
+    };fields:drillcore__drillcore,drillcore__drillcore_en;lookuptype:${
+      data.drillcore__lookuptype || "icontains"
+    }`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -2892,15 +2977,17 @@ export function fetchDrillcoreBoxImages(data, dynamicSearch) {
   let searchFields = "";
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `drillcore_box__storage__location__${data.storage__lookuptype ||
-      "icontains"}=${data.storage}`;
+    searchFields += `drillcore_box__storage__location__${
+      data.storage__lookuptype || "icontains"
+    }=${data.storage}`;
   }
 
   if (data.drillcore && data.drillcore.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.drillcore
-    };fields:drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en;lookuptype:${data.drillcore__lookuptype ||
-      "icontains"}`;
+    };fields:drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en;lookuptype:${
+      data.drillcore__lookuptype || "icontains"
+    }`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch, "drillcore_box__");
@@ -2958,8 +3045,9 @@ export function fetchPreparations(data, dynamicSearch) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.preparation_number && data.preparation_number.trim().length > 0) {
-    searchFields += `preparation_number__${data.preparation_number__lookuptype ||
-      "icontains"}=${data.preparation_number}`;
+    searchFields += `preparation_number__${
+      data.preparation_number__lookuptype || "icontains"
+    }=${data.preparation_number}`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -3041,15 +3129,17 @@ export function fetchDatasets(data, dynamicSearch) {
   if (data.name && data.name.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.name
-    };fields:title,title_translated,title_alternative;lookuptype:${data.name__lookuptype ||
-      "icontains"}`;
+    };fields:title,title_translated,title_alternative;lookuptype:${
+      data.name__lookuptype || "icontains"
+    }`;
   }
 
   if (data.owner && data.owner.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.owner
-    };fields:owner__id,owner__agent,owner__forename,owner__surename,owner_txt;lookuptype:${data.owner__lookuptype ||
-      "icontains"}`;
+    };fields:owner__id,owner__agent,owner__forename,owner__surename,owner_txt;lookuptype:${
+      data.owner__lookuptype || "icontains"
+    }`;
   }
 
   if (data.date && data.date.trim().length > 0) {
@@ -3144,50 +3234,57 @@ export function fetchStratigraphies(data, dynamicSearch) {
   if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.stratigraphy
-    };fields:stratigraphy,stratigraphy_en;lookuptype:${data.stratigraphy__lookuptype ||
-      "icontains"}`;
+    };fields:stratigraphy,stratigraphy_en;lookuptype:${
+      data.stratigraphy__lookuptype || "icontains"
+    }`;
   }
 
   if (data.type && data.type.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.type
-    };fields:type__value,type__value_en;lookuptype:${data.type__lookuptype ||
-      "icontains"}`;
+    };fields:type__value,type__value_en;lookuptype:${
+      data.type__lookuptype || "icontains"
+    }`;
   }
 
   if (data.rank && data.rank.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.rank
-    };fields:rank__value,rank__value_en;lookuptype:${data.rank__lookuptype ||
-      "icontains"}`;
+    };fields:rank__value,rank__value_en;lookuptype:${
+      data.rank__lookuptype || "icontains"
+    }`;
   }
 
   if (data.scope && data.scope.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.scope
-    };fields:scope__value,scope__value_en;lookuptype:${data.scope__lookuptype ||
-      "icontains"}`;
+    };fields:scope__value,scope__value_en;lookuptype:${
+      data.scope__lookuptype || "icontains"
+    }`;
   }
 
   if (data.parent && data.parent.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.parent
-    };fields:parent__id,parent__stratigraphy,parent__stratigraphy_en;lookuptype:${data.parent__lookuptype ||
-      "icontains"}`;
+    };fields:parent__id,parent__stratigraphy,parent__stratigraphy_en;lookuptype:${
+      data.parent__lookuptype || "icontains"
+    }`;
   }
 
   if (data.indexes && data.indexes.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.indexes
-    };fields:index_main,index_additional,index_old;lookuptype:${data.indexes__lookuptype ||
-      "icontains"}`;
+    };fields:index_main,index_additional,index_old;lookuptype:${
+      data.indexes__lookuptype || "icontains"
+    }`;
   }
 
   if (data.author && data.author.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.author
-    };fields:author_free,user_added;lookuptype:${data.author__lookuptype ||
-      "icontains"}`;
+    };fields:author_free,user_added;lookuptype:${
+      data.author__lookuptype || "icontains"
+    }`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -3306,8 +3403,9 @@ export function fetchAreas(data, dynamicSearch) {
   if (data.type && data.type.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.type
-    };fields:area_type__name,area_type__name_en;lookuptype:${data.type__lookuptype ||
-      "icontains"}`;
+    };fields:area_type__name,area_type__name_en;lookuptype:${
+      data.type__lookuptype || "icontains"
+    }`;
   }
 
   if (data.area_ha && data.area_ha.trim().length > 0) {
@@ -3319,8 +3417,9 @@ export function fetchAreas(data, dynamicSearch) {
   if (data.maakond && data.maakond.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.maakond
-    };fields:maakond__maakond,maakond__maakond_en;lookuptype:${data.maakond__lookuptype ||
-      "icontains"}`;
+    };fields:maakond__maakond,maakond__maakond_en;lookuptype:${
+      data.maakond__lookuptype || "icontains"
+    }`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -3393,18 +3492,21 @@ export function fetchLocations(data, dynamicSearch) {
     }`;
   }
   if (data.location_location && data.location_location.trim().length > 0) {
-    searchFields += `&location_location__${data.location_location__lookuptype ||
-      "icontains"}=${data.location_location}`;
+    searchFields += `&location_location__${
+      data.location_location__lookuptype || "icontains"
+    }=${data.location_location}`;
   }
   if (data.stratigraphy_free && data.stratigraphy_free.trim().length > 0) {
-    searchFields += `&stratigraphy_free__${data.stratigraphy_free__lookuptype ||
-      "icontains"}=${data.stratigraphy_free}`;
+    searchFields += `&stratigraphy_free__${
+      data.stratigraphy_free__lookuptype || "icontains"
+    }=${data.stratigraphy_free}`;
   }
   if (data.agent && data.agent.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.agent
-    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${data.agent__lookuptype ||
-      "icontains"}`;
+    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${
+      data.agent__lookuptype || "icontains"
+    }`;
   }
   // if (data.user_added && data.user_added.trim().length > 0) {
   //   searchFields += `&user_added__${data.user_added__lookuptype ||
@@ -3447,22 +3549,26 @@ export function fetchLocationImages(data, dynamicSearch) {
   }
 
   if (data.location && data.location.trim().length > 0) {
-    searchFields += `&storage__location__${data.location__lookuptype ||
-      "icontains"}=${data.location}`;
+    searchFields += `&storage__location__${
+      data.location__lookuptype || "icontains"
+    }=${data.location}`;
   }
   if (data.location_location && data.location_location.trim().length > 0) {
-    searchFields += `&storage__location_location__${data.location_location__lookuptype ||
-      "icontains"}=${data.location_location}`;
+    searchFields += `&storage__location_location__${
+      data.location_location__lookuptype || "icontains"
+    }=${data.location_location}`;
   }
   if (data.stratigraphy_free && data.stratigraphy_free.trim().length > 0) {
-    searchFields += `&storage__stratigraphy_free__${data.stratigraphy_free__lookuptype ||
-      "icontains"}=${data.stratigraphy_free}`;
+    searchFields += `&storage__stratigraphy_free__${
+      data.stratigraphy_free__lookuptype || "icontains"
+    }=${data.stratigraphy_free}`;
   }
   if (data.agent && data.agent.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.agent
-    };fields:storage__agent__id,storage__agent__agent,storage__agent__forename,storage__agent__surename;lookuptype:${data.agent__lookuptype ||
-      "icontains"}`;
+    };fields:storage__agent__id,storage__agent__agent,storage__agent__forename,storage__agent__surename;lookuptype:${
+      data.agent__lookuptype || "icontains"
+    }`;
   }
   // if (data.user_added && data.user_added.trim().length > 0) {
   //   searchFields += `&user_added__${data.user_added__lookuptype ||
@@ -3473,8 +3579,9 @@ export function fetchLocationImages(data, dynamicSearch) {
   //     "icontains"}=${data.date_added}`;
   // }
   if (data.contents && data.contents.trim().length > 0) {
-    searchFields += `&storage__contents__${data.contents__lookuptype ||
-      "icontains"}=${data.contents}`;
+    searchFields += `&storage__contents__${
+      data.contents__lookuptype || "icontains"
+    }=${data.contents}`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch, "storage__");
@@ -3561,18 +3668,21 @@ export function fetchRocks(data, dynamicSearch) {
   if (data.rock_type && data.rock_type.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.rock_type
-    };fields:rock_type__name,rock_type__name_en;lookuptype:${data.rock_type__lookuptype ||
-      "icontains"}`;
+    };fields:rock_type__name,rock_type__name_en;lookuptype:${
+      data.rock_type__lookuptype || "icontains"
+    }`;
   }
   if (data.rock_rank && data.rock_rank.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.rock_rank
-    };fields:rock_rank__name,rock_rank__name_en;lookuptype:${data.rock_rank__lookuptype ||
-      "icontains"}`;
+    };fields:rock_rank__name,rock_rank__name_en;lookuptype:${
+      data.rock_rank__lookuptype || "icontains"
+    }`;
   }
   if (data.user_changed && data.user_changed.trim().length > 0) {
-    searchFields += `&user_changed__${data.user_changed__lookuptype ||
-      "icontains"}=${data.user_changed}`;
+    searchFields += `&user_changed__${
+      data.user_changed__lookuptype || "icontains"
+    }=${data.user_changed}`;
   }
   if (data.id && data.id.trim().length > 0) {
     searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
@@ -3728,8 +3838,9 @@ export function fetchVisits(data, dynamicSearch) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.visitor && data.visitor.trim().length > 0) {
-    searchFields += `&visitor__agent__${data.visitor__lookuptype ||
-      "icontains"}=${data.visitor}`;
+    searchFields += `&visitor__agent__${
+      data.visitor__lookuptype || "icontains"
+    }=${data.visitor}`;
   }
 
   if (data.date_arrived !== null) {
@@ -3788,8 +3899,9 @@ export function fetchLoans(data, dynamicSearch) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.loan_number && data.loan_number.trim().length > 0) {
-    searchFields += `&loan_number__${data.loan_number__lookuptype ||
-      "icontains"}=${data.loan_number}`;
+    searchFields += `&loan_number__${
+      data.loan_number__lookuptype || "icontains"
+    }=${data.loan_number}`;
   }
 
   if (data.project && data.project.trim().length > 0) {
@@ -3799,8 +3911,9 @@ export function fetchLoans(data, dynamicSearch) {
   }
 
   if (data.borrower && data.borrower.trim().length > 0) {
-    searchFields += `&borrower__agent__${data.borrower__lookuptype ||
-      "icontains"}=${data.borrower}`;
+    searchFields += `&borrower__agent__${
+      data.borrower__lookuptype || "icontains"
+    }=${data.borrower}`;
   }
 
   if (data.date_start !== null) {
@@ -3858,7 +3971,7 @@ export function fetchLoanSpecimens(id, searchParameters) {
       page: 1,
       paginateBy: 1000,
       sortBy: ["specimen__specimen_id"],
-      sortDesc: [false]
+      sortDesc: [false],
     };
   }
   let orderBy = buildOrderBy(
@@ -3876,7 +3989,7 @@ export function fetchLoanSamples(id, searchParameters) {
       page: 1,
       paginateBy: 1000,
       sortBy: ["sample"],
-      sortDesc: [true]
+      sortDesc: [true],
     };
   }
   let orderBy = buildOrderBy(
@@ -3916,8 +4029,9 @@ export function fetchAccessions(data, dynamicSearch) {
     }`;
   }
   if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__${data.description__lookuptype ||
-      "icontains"}=${data.description}`;
+    searchFields += `&description__${
+      data.description__lookuptype || "icontains"
+    }=${data.description}`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -3959,8 +4073,9 @@ export function fetchDeaccessions(data, dynamicSearch) {
     }`;
   }
   if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__${data.description__lookuptype ||
-      "icontains"}=${data.description}`;
+    searchFields += `&description__${
+      data.description__lookuptype || "icontains"
+    }=${data.description}`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -4096,8 +4211,9 @@ export function fetchTaxonPages(data, dynamicSearch) {
   if (data.taxon && data.taxon.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.taxon
-    };fields:taxon__id,taxon__taxon;lookuptype:${data.taxon__lookuptype ||
-      "icontains"}`;
+    };fields:taxon__id,taxon__taxon;lookuptype:${
+      data.taxon__lookuptype || "icontains"
+    }`;
   }
 
   if (data.on_frontpage) {
@@ -4144,8 +4260,9 @@ export function fetchSiteGroundwaters(data, dynamicSearch) {
   if (data.site && data.site.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.site
-    };fields:site__name,site__name_en;lookuptype:${data.site__lookuptype ||
-      "icontains"}`;
+    };fields:site__name,site__name_en;lookuptype:${
+      data.site__lookuptype || "icontains"
+    }`;
   }
   if (data.type_txt && data.type_txt.trim().length > 0) {
     searchFields += `&type_txt__${data.type_txt__lookuptype || "icontains"}=${
@@ -4153,8 +4270,9 @@ export function fetchSiteGroundwaters(data, dynamicSearch) {
     }`;
   }
   if (data.aquifer_system && data.aquifer_system.trim().length > 0) {
-    searchFields += `&aquifer_system__${data.aquifer_system__lookuptype ||
-      "icontains"}=${data.aquifer_system}`;
+    searchFields += `&aquifer_system__${
+      data.aquifer_system__lookuptype || "icontains"
+    }=${data.aquifer_system}`;
   }
   if (data.aquifer && data.aquifer.trim().length > 0) {
     searchFields += `&aquifer__${data.aquifer__lookuptype || "icontains"}=${
@@ -4162,28 +4280,34 @@ export function fetchSiteGroundwaters(data, dynamicSearch) {
     }`;
   }
   if (data.well_depth && data.well_depth.trim().length > 0) {
-    searchFields += `&well_depth__${data.well_depth__lookuptype ||
-      "icontains"}=${data.well_depth}`;
+    searchFields += `&well_depth__${
+      data.well_depth__lookuptype || "icontains"
+    }=${data.well_depth}`;
   }
   if (data.filter_type && data.filter_type.trim().length > 0) {
-    searchFields += `&filter_type__${data.filter_type__lookuptype ||
-      "icontains"}=${data.filter_type}`;
+    searchFields += `&filter_type__${
+      data.filter_type__lookuptype || "icontains"
+    }=${data.filter_type}`;
   }
   if (data.filter_top && data.filter_top.trim().length > 0) {
-    searchFields += `&filter_top__${data.filter_top__lookuptype ||
-      "icontains"}=${data.filter_top}`;
+    searchFields += `&filter_top__${
+      data.filter_top__lookuptype || "icontains"
+    }=${data.filter_top}`;
   }
   if (data.filter_top_z && data.filter_top_z.trim().length > 0) {
-    searchFields += `&filter_top_z__${data.filter_top_z__lookuptype ||
-      "icontains"}=${data.filter_top_z}`;
+    searchFields += `&filter_top_z__${
+      data.filter_top_z__lookuptype || "icontains"
+    }=${data.filter_top_z}`;
   }
   if (data.filter_bottom && data.filter_bottom.trim().length > 0) {
-    searchFields += `&filter_bottom__${data.filter_bottom__lookuptype ||
-      "icontains"}=${data.filter_bottom}`;
+    searchFields += `&filter_bottom__${
+      data.filter_bottom__lookuptype || "icontains"
+    }=${data.filter_bottom}`;
   }
   if (data.filter_bottom_z && data.filter_bottom_z.trim().length > 0) {
-    searchFields += `&filter_bottom_z__${data.filter_bottom_z__lookuptype ||
-      "icontains"}=${data.filter_bottom_z}`;
+    searchFields += `&filter_bottom_z__${
+      data.filter_bottom_z__lookuptype || "icontains"
+    }=${data.filter_bottom_z}`;
   }
   if (data.url_veka && data.url_veka.trim().length > 0) {
     searchFields += `&url_veka__${data.url_veka__lookuptype || "icontains"}=${
@@ -4242,13 +4366,15 @@ export function fetchSarvIssues(data, currentUserId, dynamicSearch) {
   }
 
   if (data.description !== null && data.description.trim().length > 0) {
-    searchFields += `&description__${data.description__lookuptype ||
-      "icontains"}=${data.description}`;
+    searchFields += `&description__${
+      data.description__lookuptype || "icontains"
+    }=${data.description}`;
   }
 
   if (data.from_user !== null && data.from_user.trim().length > 0) {
-    searchFields += `&from_user__username__${data.from_user__lookuptype ||
-      "icontains"}=${data.from_user}`;
+    searchFields += `&from_user__username__${
+      data.from_user__lookuptype || "icontains"
+    }=${data.from_user}`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -4312,14 +4438,16 @@ export function fetchSampleSeries(data, dynamicSearch) {
   if (data.locality && data.locality.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.locality
-    };fields:locality_free,locality__locality,locality__locality_en;lookuptype:${data.locality__lookuptype ||
-      "icontains"}`;
+    };fields:locality_free,locality__locality,locality__locality_en;lookuptype:${
+      data.locality__lookuptype || "icontains"
+    }`;
   }
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.agent_collected
-    };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:${data.agent_collected__lookuptype ||
-      "icontains"}`;
+    };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:${
+      data.agent_collected__lookuptype || "icontains"
+    }`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -4376,13 +4504,15 @@ export function fetchAnalysisParameters(data, dynamicSearch) {
   }
 
   if (data.parameter_name && data.parameter_name.trim().length > 0) {
-    searchFields += `&parameter_name__${data.parameter_name__lookuptype ||
-      "icontains"}=${data.parameter_name}`;
+    searchFields += `&parameter_name__${
+      data.parameter_name__lookuptype || "icontains"
+    }=${data.parameter_name}`;
   }
 
   if (data.parameter_name_en && data.parameter_name_en.trim().length > 0) {
-    searchFields += `&parameter_name_en__${data.parameter_name__lookuptype ||
-      "icontains"}=${data.parameter_name_en}`;
+    searchFields += `&parameter_name_en__${
+      data.parameter_name__lookuptype || "icontains"
+    }=${data.parameter_name_en}`;
   }
 
   if (data.remarks && data.remarks.trim().length > 0) {
@@ -4433,8 +4563,9 @@ export function fetchAnalysisMethods(data, dynamicSearch) {
     //   "icontains"}=${data.analysis_method}`;
     searchFields += `&multi_search=value:${
       data.analysis_method
-    };fields:analysis_method,method_en;lookuptype:${data.analysis_method__lookuptype ||
-      "icontains"}`;
+    };fields:analysis_method,method_en;lookuptype:${
+      data.analysis_method__lookuptype || "icontains"
+    }`;
     // searchFields +=
     //     "&multi_search=value:" +
     //     data.analysis_method +
@@ -4446,8 +4577,9 @@ export function fetchAnalysisMethods(data, dynamicSearch) {
     data.parent_method__analysis_method &&
     data.parent_method__analysis_method.trim().length > 0
   ) {
-    searchFields += `&parent_method__analysis_method__${data.parent_method__analysis_method__lookuptype ||
-      "icontains"}=${data.parent_method__analysis_method}`;
+    searchFields += `&parent_method__analysis_method__${
+      data.parent_method__analysis_method__lookuptype || "icontains"
+    }=${data.parent_method__analysis_method}`;
   }
 
   if (data.remarks && data.remarks.trim().length > 0) {
@@ -4494,13 +4626,15 @@ export function fetchImagesets(data, author, dynamicSearch) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.number && data.number.trim().length > 0) {
-    searchFields += `&imageset_number__${data.number__lookuptype ||
-      "icontains"}=${data.number}`;
+    searchFields += `&imageset_number__${
+      data.number__lookuptype || "icontains"
+    }=${data.number}`;
   }
 
   if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__${data.description__lookuptype ||
-      "icontains"}=${data.description}`;
+    searchFields += `&description__${
+      data.description__lookuptype || "icontains"
+    }=${data.description}`;
   }
 
   searchFields += buildDynamicSearch(dynamicSearch);
@@ -4602,7 +4736,7 @@ function buildOrderBy(sortBy, sortDesc) {
 function buildDynamicSearch(data, prefix = "") {
   let result = "";
   if (data?.length > 0) {
-    data.forEach(item => {
+    data.forEach((item) => {
       if (item.value)
         result += `&${prefix}${item.id}__${item.lookUpType}=${item.value}`;
     });

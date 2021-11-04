@@ -2,29 +2,29 @@ import { fetchLastLoggedInDate } from "../../../assets/js/api/apiCalls";
 
 const state = {
   authUser: null,
-  lastLogin: null
+  lastLogin: null,
 };
 
 const getters = {
-  getPermissions: state => {
+  getPermissions: (state) => {
     return state.authUser?.permissions;
   },
 
-  getDatabaseId: state => {
+  getDatabaseId: (state) => {
     return state.authUser?.database_id;
   },
 
-  getCurrentUser: state => {
+  getCurrentUser: (state) => {
     return {
       id: state.authUser?.agent_id,
       agent: state.authUser?.agent,
       forename: state.authUser?.name,
       surename: state.authUser?.surname,
-      user: state.authUser?.user
+      user: state.authUser?.user,
     };
   },
 
-  getUserId: state => {
+  getUserId: (state) => {
     return state.authUser?.user_id;
   },
 
@@ -34,17 +34,17 @@ const getters = {
     } else return false;
   },
 
-  isUserSuperuser: state => {
+  isUserSuperuser: (state) => {
     return state.authUser?.is_superuser;
   },
 
-  isUserStaff: staff => {
+  isUserStaff: (staff) => {
     return state.authUser?.is_staff;
   },
 
-  getLastLoginDate: state => {
+  getLastLoginDate: (state) => {
     return state.lastLogin?.session_start;
-  }
+  },
 };
 
 const actions = {
@@ -57,10 +57,10 @@ const actions = {
   },
 
   fetchLastLoggedInDate({ commit, rootGetters }) {
-    return fetchLastLoggedInDate(rootGetters["user/getUserId"]).then(resp => {
+    return fetchLastLoggedInDate(rootGetters["user/getUserId"]).then((resp) => {
       commit("SET_LAST_LOGIN", resp);
     });
-  }
+  },
 };
 
 const mutations = {
@@ -72,7 +72,7 @@ const mutations = {
     if (payload?.data?.results && payload?.data?.results.length === 1) {
       state.lastLogin = payload.data.results[0];
     }
-  }
+  },
 };
 
 export default {
@@ -80,5 +80,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

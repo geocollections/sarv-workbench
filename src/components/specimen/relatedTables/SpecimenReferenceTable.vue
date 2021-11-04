@@ -157,35 +157,35 @@ export default {
   components: {
     RelatedDataDeleteDialog,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -198,21 +198,21 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     item: {
       reference: null,
       pages: "",
       figures: "",
-      remarks: ""
+      remarks: "",
     },
     autocomplete: {
       reference: [],
       loaders: {
-        reference: false
-      }
-    }
+        reference: false,
+      },
+    },
   }),
 
   computed: {
@@ -220,7 +220,7 @@ export default {
       return (
         typeof this.item.reference === "object" && this.item.reference !== null
       );
-    }
+    },
   },
 
   methods: {
@@ -229,7 +229,7 @@ export default {
         reference: null,
         pages: "",
         figures: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -239,7 +239,7 @@ export default {
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
-          reference: item.reference__reference
+          reference: item.reference__reference,
         };
         this.autocomplete.reference.push(this.item.reference);
       } else if (item.reference !== null) {
@@ -250,8 +250,8 @@ export default {
       this.item.pages = item.pages;
       this.item.figures = item.figures;
       this.item.remarks = item.remarks;
-    }
-  }
+    },
+  },
 };
 </script>
 

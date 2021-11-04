@@ -12,7 +12,7 @@ const state = {
   imagesetDetail: null,
   referenceDetail: null,
   collectionDetail: null,
-  initialEditViewDataHasChangedState: false
+  initialEditViewDataHasChangedState: false,
 };
 
 const getters = {};
@@ -59,7 +59,7 @@ const actions = {
 
   setInitialEditViewDataHasChangedState({ commit }, bool) {
     commit("UPDATE_INITIAL_EDIT_VIEW_DATA_HAS_CHANGED_STATE", bool);
-  }
+  },
 };
 
 const mutations = {
@@ -73,7 +73,7 @@ const mutations = {
 
   UPDATE_INITIAL_EDIT_VIEW_DATA_HAS_CHANGED_STATE(state, payload) {
     state.initialEditViewDataHasChangedState = payload;
-  }
+  },
 };
 
 export default {
@@ -81,5 +81,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

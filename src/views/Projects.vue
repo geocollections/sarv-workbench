@@ -34,7 +34,7 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   name: "Projects",
@@ -43,7 +43,7 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -51,7 +51,7 @@ export default {
     await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "name", title: "common.name", type: "text" },
-      { id: "id", title: "common.id", type: "number" }
+      { id: "id", title: "common.id", type: "number" },
     ]);
   },
 
@@ -61,8 +61,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

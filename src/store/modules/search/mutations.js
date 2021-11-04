@@ -19,7 +19,7 @@ const mutations = {
   },
 
   RESET_SEARCH_PARAMETERS(state, payload) {
-    Object.keys(state[`${payload}SearchParameters`]).forEach(key => {
+    Object.keys(state[`${payload}SearchParameters`]).forEach((key) => {
       if (key === "page") state[`${payload}SearchParameters`][key] = 1;
       else if (key === "paginateBy")
         state[`${payload}SearchParameters`][key] = 50;
@@ -57,7 +57,7 @@ const mutations = {
       page: payload?.data?.page,
       totalPages: payload?.data?.page
         ? payload.data.page.split(" of ")[1]
-        : null
+        : null,
     };
   },
 
@@ -123,7 +123,7 @@ const mutations = {
 
   SET_ACTIVE_LIBRARY_LIST(state, payload) {
     state.activeLibraryList = payload || null;
-  }
+  },
 };
 
 export default mutations;
