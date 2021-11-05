@@ -278,18 +278,19 @@ workflows:
           filters:
             branches:
               only: development
-      - run_docker_image_sarv_wb:
-          requires:
-            - publish_docker_image
-          filters:
-            branches:
-              only: sarv
-      - run_docker_image_sarv_wb_dev:
-          requires:
-            - publish_docker_image
-          filters:
-            branches:
-              only: sarv-dev
+# TODO: Currently disabled
+#      - run_docker_image_sarv_wb:
+#          requires:
+#            - publish_docker_image
+#          filters:
+#            branches:
+#              only: sarv
+#      - run_docker_image_sarv_wb_dev:
+#          requires:
+#            - publish_docker_image
+#          filters:
+#            branches:
+#              only: sarv-dev
 
       # OLD
       - checkout_code:
