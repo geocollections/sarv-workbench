@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import StaticPageService from "@/middleware/StaticPageService";
 import { mapActions, mapState } from "vuex";
 
 export default {
@@ -71,8 +70,8 @@ export default {
     ...mapActions("settings", ["toggleGlobalNotification"]),
 
     async getNotificationData() {
-      let response = await StaticPageService.getPage(this.pageId);
-      if (response && response?.results?.[0]) this.page = response.results[0];
+      let response = await this.$api.public.getDetail("web_pages", this.pageId);
+      if (response) this.page = response;
     },
   },
 };

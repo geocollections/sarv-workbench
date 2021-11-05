@@ -7,6 +7,7 @@ import VueCookies from "vue-cookies";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import constants from "@/plugins/constants";
+import api from "@/plugins/api";
 // import moment from "moment";
 require("moment/locale/et");
 
@@ -24,6 +25,11 @@ Vue.use(VueI18n);
 Vue.use(VueCookies);
 Vue.use(require("vue-moment"));
 Vue.use(constants);
+Vue.use(api, {
+  public_url: process.env.VUE_APP_PUBLIC_API_URL,
+  rwapi_url: process.env.VUE_APP_RWAPI_URL,
+  auth_url: process.env.VUE_APP_AUTH_URL,
+});
 
 Vue.config.productionTip = false;
 

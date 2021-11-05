@@ -92,7 +92,11 @@
     "idCardMessage": "Kontrolli, et ID-kaart oleks lugejas ja arvutiga ühendatud",
     "username": "Kasutajanimi",
     "loginButton": "LOGI SISSE",
-    "overlay": "Login sisse..."
+    "overlay": "Login sisse...",
+    "socials": "Socials",
+    "signInWithGoogle": "Logi sisse Googlega",
+    "signInWithFacebook": "Logi sisse Facebookiga",
+    "signInWithOrcid": "logi sisse ORCID-ga"
   },
   "header": {
     "title": "SARV töölaud",

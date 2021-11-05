@@ -34,9 +34,12 @@
               <v-tab class="font-weight-bold">{{ $t("login.idCard") }}</v-tab>
 
               <v-tab class="font-weight-bold">{{ $t("login.password") }}</v-tab>
+
+              <v-tab class="font-weight-bold">{{ $t("login.socials") }}</v-tab>
             </v-tabs>
 
             <v-tabs-items v-model="tab">
+              <!-- ID CARD -->
               <v-tab-item>
                 <v-card flat :color="bodyColor.split('n-')[0] + 'n-5'">
                   <v-card-text>
@@ -60,7 +63,7 @@
                   <v-card-actions class="justify-center pa-4 pt-2">
                     <v-btn
                       id="login-id"
-                      @click="authenticate('id')"
+                      @click="login('idcard')"
                       :loading="loggingIn"
                       color="green darken-3"
                       dark
@@ -72,6 +75,7 @@
                 </v-card>
               </v-tab-item>
 
+              <!-- PASSWORD -->
               <v-tab-item>
                 <v-card flat :color="bodyColor.split('n-')[0] + 'n-5'">
                   <v-card-text>
@@ -90,9 +94,10 @@
                       <b>{{ passMessage }}</b>
                     </v-alert>
 
-                    <v-form v-model="valid">
+                    <v-form v-model="isValid">
                       <v-text-field
                         id="username-field"
+                        autocomplete="username"
                         v-model="user.username"
                         :rules="usernameRules"
                         :label="$t('login.username')"
@@ -105,6 +110,7 @@
 
                       <v-text-field
                         id="password-field"
+                        autocomplete="current-password"
                         v-model="user.password"
                         :rules="passwordRules"
                         :label="$t('login.password')"
@@ -123,17 +129,51 @@
                       <div class="text-center mt-2">
                         <v-btn
                           id="login-pass"
-                          @click="login"
-                          :disabled="!valid"
+                          @click="login('password')"
+                          :disabled="!isValid"
                           :loading="loggingIn"
                           color="green darken-3"
-                          :dark="valid"
+                          :dark="isValid"
                         >
                           {{ $t("login.loginButton") }}
                           <v-icon small right>fas fa-sign-in-alt</v-icon>
                         </v-btn>
                       </div>
                     </v-form>
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+
+              <!-- SOCIALS -->
+              <v-tab-item>
+                <v-card flat :color="bodyColor.split('n-')[0] + 'n-5'">
+                  <v-card-text
+                    class="d-flex flex-column justify-center align-center"
+                  >
+                    <v-btn
+                      class="my-1 white--text text-none"
+                      width="250"
+                      color="#ea4335"
+                      @click="login('google')"
+                      ><v-icon small left light>fab fa-google</v-icon
+                      >{{ $t("login.signInWithGoogle") }}</v-btn
+                    >
+                    <v-btn
+                      class="my-1 white--text text-none"
+                      width="250"
+                      color="#3b5998"
+                      @click="login('facebook')"
+                      ><v-icon small left light>fab fa-facebook-f</v-icon
+                      >{{ $t("login.signInWithFacebook") }}</v-btn
+                    >
+                    <v-btn
+                      class="my-1 white--text text-none"
+                      width="250"
+                      color="#a6ce39"
+                      @click="login('orcid')"
+                      ><v-icon small left light>fab fa-orcid</v-icon
+                      >{{ $t("login.signInWithOrcid") }}</v-btn
+                    >
                   </v-card-text>
                 </v-card>
               </v-tab-item>
@@ -187,7 +227,7 @@ export default {
   data: () => ({
     tab: null,
     loggingIn: false,
-    valid: true,
+    isValid: true,
     user: {
       username: "",
       password: null,
@@ -233,12 +273,34 @@ export default {
   },
 
   methods: {
-    login() {
-      if (this.valid && !this.loggingIn) {
-        this.authenticate("password", {
-          user: this.user.username,
-          pwd: this.user.password,
-        });
+    async login(type) {
+      if (this.isValid && !this.loggingIn) {
+        let response;
+        const AVAILABLE_LOGIN_TYPES = [
+          "password",
+          "idcard",
+          "google",
+          "facebook",
+          "orcid",
+        ];
+        if (AVAILABLE_LOGIN_TYPES.includes(type)) {
+          if (type === "password") {
+            const formData = new FormData();
+            formData.set("login", this.user.username);
+            formData.set("password", this.user.password);
+            response = await this.$api.auth.login(formData);
+          } else if (type === "idcard") {
+            response = await this.$api.auth.loginIDCard();
+          } else {
+            response = await this.$api.auth.loginSocial(type);
+          }
+
+          console.log(response);
+          if (response?.detail === "Login successful!") {
+            this.toastSuccess({ text: response.detail });
+            await this.$router.push("Dashboard");
+          } else this.toastError({ text: response.detail });
+        }
       }
     },
     handleKeyUp(event) {
