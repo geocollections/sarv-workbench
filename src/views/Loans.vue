@@ -47,7 +47,6 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "loan_number", title: "loan.loan_number", type: "text" },
       { id: "project", title: "loan.project", type: "text" },

@@ -52,7 +52,6 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "storage", title: "drillcore.storage", type: "text" },
       { id: "drillcore", title: "drillcore.drillcore", type: "text" },

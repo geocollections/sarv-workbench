@@ -4,7 +4,7 @@ class PublicApiService {
     this.service = axios.create({});
   }
   async getDetail(table, id) {
-    const url = `${this.baseURL}/${table}/${id}`;
+    const url = `${this.baseURL}/${table}/${id}/`;
     try {
       const res = await this.service.get(url);
       return res.data;

@@ -76,6 +76,19 @@ class AuthService {
       return err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`;
     }
   }
+
+  async isLoggedIn() {
+    const url = `${this.baseURL}/is_logged_in/`;
+    try {
+      const res = await this.service.get(url);
+      return res.data?.detail ?? false;
+    } catch (err) {
+      console.error(
+        err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`
+      );
+      return false;
+    }
+  }
 }
 
 export default AuthService;

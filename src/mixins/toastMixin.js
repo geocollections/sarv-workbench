@@ -1,23 +1,17 @@
 const toastMixin = {
   methods: {
     toastSuccess(data) {
-      if (!data.timeout) data.timeout = 5000;
-      if (!data.text) data.text = "OK";
-
-      this.$toast.success(data.text, "OK", {
+      this.$toast.success(data?.text ?? "OK", "OK", {
         position: "topCenter",
-        timeout: data.timeout,
+        timeout: data?.timeout ?? 5000,
         pauseOnHover: false,
       });
     },
 
     toastError(data) {
-      if (!data.timeout) data.timeout = 5000;
-      if (!data.text) data.text = "Error";
-
-      this.$toast.error(data.text, "Error", {
+      this.$toast.error(data?.text || "Error", "Error", {
         position: "topCenter",
-        timeout: data.timeout,
+        timeout: data?.timeout ?? 5000,
         closeOnEscape: true,
         pauseOnHover: false,
         displayMode: "replace",
@@ -25,12 +19,9 @@ const toastMixin = {
     },
 
     toastInfo(data) {
-      if (!data.timeout) data.timeout = 5000;
-      if (!data.text) data.text = "Info";
-
-      this.$toast.info(data.text, "Info", {
+      this.$toast.info(data?.text ?? "Info", "Info", {
         position: "topCenter",
-        timeout: data.timeout,
+        timeout: data?.timeout ?? 5000,
         pauseOnHover: false,
       });
     },

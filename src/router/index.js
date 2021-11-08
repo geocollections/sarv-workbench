@@ -2,9 +2,10 @@ import Vue from "vue";
 import Router from "vue-router";
 import Login from "../views/Login.vue";
 import Dashboard from "../views/Dashboard.vue";
-import { fetchIsLoggedIn, fetchLogout } from "@/assets/js/api/apiCalls";
 import store from "../store";
+import api from "@/plugins/api";
 Vue.use(Router);
+Vue.use(api);
 
 const router = new Router({
   mode: "history",
@@ -98,7 +99,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/attachment/Attachment.vue"),
+              component: () =>
+                import("../components/attachment/Attachment.vue"),
               meta: {
                 isEdit: true,
                 table: "attachment",
@@ -120,7 +122,8 @@ const router = new Router({
               path: "",
               redirect: "photo_archive",
               name: "Attachment add",
-              component: () => import("../components/attachment/Attachment.vue"),
+              component: () =>
+                import("../components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -149,7 +152,8 @@ const router = new Router({
             {
               path: "photo_archive",
               name: "photo_archive add",
-              component: () => import("../components/attachment/Attachment.vue"),
+              component: () =>
+                import("../components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -178,7 +182,8 @@ const router = new Router({
             },
             {
               path: "specimen_image",
-              component: () => import("../components/attachment/Attachment.vue"),
+              component: () =>
+                import("../components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -207,7 +212,8 @@ const router = new Router({
             },
             {
               path: "other_file",
-              component: () => import("../components/attachment/Attachment.vue"),
+              component: () =>
+                import("../components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -236,7 +242,8 @@ const router = new Router({
             },
             {
               path: "digitised_reference",
-              component: () => import("../components/attachment/Attachment.vue"),
+              component: () =>
+                import("../components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -1085,7 +1092,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/collection/Collection.vue"),
+              component: () =>
+                import("../components/collection/Collection.vue"),
               meta: {
                 isEdit: true,
                 table: "collection",
@@ -1106,7 +1114,8 @@ const router = new Router({
             {
               path: "",
               name: "Collection add",
-              component: () => import("../components/collection/Collection.vue"),
+              component: () =>
+                import("../components/collection/Collection.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addCollection",
@@ -2082,7 +2091,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/web_news/WebNewsTable.vue"),
+              component: () =>
+                import("../components/web_news/WebNewsTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "web_news",
@@ -2225,7 +2235,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/taxon_pages/TaxonPage.vue"),
+              component: () =>
+                import("../components/taxon_pages/TaxonPage.vue"),
               meta: {
                 isEdit: true,
                 table: "taxon_page",
@@ -2246,7 +2257,8 @@ const router = new Router({
             {
               path: "",
               name: "Taxon pages add",
-              component: () => import("../components/taxon_pages/TaxonPage.vue"),
+              component: () =>
+                import("../components/taxon_pages/TaxonPage.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.taxon_pages",
@@ -2419,7 +2431,9 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/analysis_parameter/AnalysisParameter.vue"),
+                import(
+                  "../components/analysis_parameter/AnalysisParameter.vue"
+                ),
               meta: {
                 isEdit: true,
                 table: "analysis_parameter",
@@ -2441,7 +2455,9 @@ const router = new Router({
               path: "",
               name: "Analysis parameter add",
               component: () =>
-                import("../components/analysis_parameter/AnalysisParameter.vue"),
+                import(
+                  "../components/analysis_parameter/AnalysisParameter.vue"
+                ),
               meta: {
                 isEdit: false,
                 addNew: "header.analysis_parameter",
@@ -2557,7 +2573,9 @@ const router = new Router({
           path: "/hierarchy_update",
           name: "Hierarchy update",
           component: () =>
-            import("../components/partial/hierarchy_update/HierarchyUpdate.vue"),
+            import(
+              "../components/partial/hierarchy_update/HierarchyUpdate.vue"
+            ),
           meta: {
             requiresAuth: true,
           },
@@ -2596,89 +2614,18 @@ router.beforeEach(async (to, from, next) => {
 
   const loginPath = window.location.pathname;
 
-  const loginStateResponse = await fetchIsLoggedIn().then(
-    (response) => response,
-    (errResponse) => errResponse
-  );
-
-  const isLoggedIn = handleResponse(loginStateResponse);
+  const isLoggedIn = await Vue.prototype.$api.auth.isLoggedIn();
+  // console.log(isLoggedIn);
 
   if (isLoggedIn) {
-    const loggedInUser = getLoggedInUser(loginStateResponse);
-
-    if (checkCookiesAndStorage(loggedInUser)) {
-      if (to.meta.requiresAuth) next();
-      else {
-        if (to.name === "login") next({ path: "/dashboard" });
-        else next();
-      }
-    } else {
-      removeBrowserDataAndLogout();
-      next({ path: "/" });
-    }
-  } else {
-    if (from.fullPath !== "/") {
-      if (to.params.dontShowSessionExpired === false) {
-        Vue.prototype.toast.error("Please log back in", "Session expired", {
-          position: "topCenter",
-          timeout: 5000,
-          closeOnEscape: true,
-          pauseOnHover: false,
-          displayMode: "replace",
-        });
-      }
-    }
-
-    if (to.meta.requiresAuth) next({ path: "/", query: { from: loginPath } });
+    if (to.name === "login") next({ path: "/dashboard" });
     else next();
+  } else {
+    if (to.meta.requiresAuth)
+      next({ name: "login", query: { from: loginPath } });
+    next();
   }
 });
-
-function checkCookiesAndStorage(user) {
-  if (user.length > 0) {
-    // Getting user data from cookies and storage
-    let csrftoken = Vue.$cookies.get("csrftoken");
-    let csrftokenLocalhost = Vue.$cookies.get("csrftokenLocalhost");
-    let authUser = store?.state?.user?.authUser;
-
-    if ((csrftoken || csrftokenLocalhost) && authUser) {
-      if (authUser.user) return authUser.user === user;
-      else return false; // User field does not exist in authUser
-    }
-    return false; // Some user data is missing or it has been tampered
-  } else return false; // User is empty
-}
-
-function removeBrowserDataAndLogout() {
-  // Deleting cookies and local storage
-  Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
-  Vue.$cookies.remove("csrftoken", null, "geocollections.info");
-
-  // Sending logout request to API
-  fetchLogout().then(
-    () => {
-      Vue.prototype.toast.error("Please log back in", "Session expired", {
-        position: "topCenter",
-        timeout: 5000,
-        closeOnEscape: true,
-        pauseOnHover: false,
-        displayMode: "replace",
-      });
-    },
-    (errResponse) => console.log("LOGOUT ERROR: " + JSON.stringify(errResponse))
-  );
-}
-
-function handleResponse(response) {
-  if (response.status === 200) {
-    return !!response?.data?.results?.success;
-  } else return false;
-}
-
-function getLoggedInUser(response) {
-  if (handleResponse(response)) return response.data.results.user;
-  else return "";
-}
 
 function isSameRoute(routeTo, routeFrom) {
   let toPath = routeTo.path.split("/")[1];

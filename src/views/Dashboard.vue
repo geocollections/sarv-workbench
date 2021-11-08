@@ -55,17 +55,9 @@ export default {
     });
     next();
   },
-  created() {
-    this.fetchActiveSarvIssues();
-    this.fetchLastLoggedInDate();
-    // Filling all dynamic fields
-    this.getListOfAllTables().forEach((table) => this.getDynamicFields(table));
-  },
   methods: {
     ...mapActions("settings", ["updateRecentUrls"]),
     ...mapActions("search", ["fetchActiveSarvIssues"]),
-    ...mapActions("user", ["fetchLastLoggedInDate"]),
-    ...mapActions("tableHeaders", ["getDynamicFields"]),
   },
 };
 </script>

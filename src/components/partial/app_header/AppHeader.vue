@@ -117,7 +117,7 @@
               <v-list-item-title>{{ $t("header.admin") }}</v-list-item-title>
             </v-list-item>
 
-            <v-list-item @click="logOut()">
+            <v-list-item @click="logout()">
               <v-list-item-icon
                 ><v-icon>fas fa-sign-out-alt</v-icon></v-list-item-icon
               >
@@ -154,10 +154,10 @@
 </template>
 
 <script>
-import authenticationMixin from "../../../mixins/authenticationMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
 import DrawerLeft from "./DrawerLeft";
 import DrawerRight from "./DrawerRight";
+import toastMixin from "@/mixins/toastMixin";
 
 export default {
   name: "AppBar",
@@ -165,7 +165,7 @@ export default {
     DrawerLeft,
     DrawerRight,
   },
-  mixins: [authenticationMixin],
+  mixins: [toastMixin],
   data: () => ({
     drawer: null,
     drawerRight: false,
@@ -212,12 +212,24 @@ export default {
 
     ...mapActions("search", ["fetchActiveSarvIssues"]),
 
+    ...mapActions("user", ["removeAuthUser"]),
+
     changeLang(newLang) {
       if (this.lang === newLang) return;
       this.$i18n.locale = newLang;
       this.$moment.locale(newLang === "ee" ? "et" : "en");
       this.updateLang(newLang);
       this.toastInfo({ text: this.$t("messages.langChange") });
+    },
+
+    async logout() {
+      const response = await this.$api.auth.logout();
+      this.removeAuthUser();
+      await this.$router.push({
+        name: "login",
+        params: { dontShowSessionExpired: true },
+      });
+      this.toastSuccess({ text: response.detail });
     },
   },
 };

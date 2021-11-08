@@ -48,7 +48,6 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "name", title: "rock.name", type: "text" },
       { id: "name_en", title: "rock.name_en", type: "text" },

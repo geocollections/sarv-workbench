@@ -48,8 +48,6 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getDynamicFields();
-
     this.setActiveSearchParametersFilters([
       { id: "number", title: "imageset.imagesetNumber", type: "text" },
       { id: "description", title: "imageset.description", type: "text" },

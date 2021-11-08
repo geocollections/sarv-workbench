@@ -23,27 +23,23 @@
         <b>{{ item.table }}</b>
       </template>
 
-      <template v-slot:item.add_perms="{ item }">
-        <v-icon v-if="item.add_perms" color="green" small>fas fa-check</v-icon>
+      <template v-slot:item.add="{ item }">
+        <v-icon v-if="item.add" color="green" small>fas fa-check</v-icon>
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
 
-      <template v-slot:item.change_perms="{ item }">
-        <v-icon v-if="item.change_perms" color="green" small
-          >fas fa-check</v-icon
-        >
+      <template v-slot:item.change="{ item }">
+        <v-icon v-if="item.change" color="green" small>fas fa-check</v-icon>
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
 
-      <template v-slot:item.delete_perms="{ item }">
-        <v-icon v-if="item.delete_perms" color="green" small
-          >fas fa-check</v-icon
-        >
+      <template v-slot:item.delete="{ item }">
+        <v-icon v-if="item.delete" color="green" small>fas fa-check</v-icon>
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
 
-      <template v-slot:item.view_perms="{ item }">
-        <v-icon v-if="item.view_perms" color="green" small>fas fa-check</v-icon>
+      <template v-slot:item.view="{ item }">
+        <v-icon v-if="item.view" color="green" small>fas fa-check</v-icon>
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
     </v-data-table>
@@ -56,7 +52,7 @@ export default {
 
   props: {
     perms: {
-      type: Object,
+      type: Array,
       required: true,
     },
     bodyColor: {
@@ -74,10 +70,10 @@ export default {
   data: () => ({
     headers: [
       { text: "settings.table", value: "table" },
-      { text: "settings.add_perms", value: "add_perms", align: "center" },
-      { text: "settings.change_perms", value: "change_perms", align: "center" },
-      { text: "settings.delete_perms", value: "delete_perms", align: "center" },
-      { text: "settings.view_perms", value: "view_perms", align: "center" },
+      { text: "settings.add_perms", value: "add", align: "center" },
+      { text: "settings.change_perms", value: "change", align: "center" },
+      { text: "settings.delete_perms", value: "delete", align: "center" },
+      { text: "settings.view_perms", value: "view", align: "center" },
     ],
     search: "",
   }),
@@ -93,17 +89,20 @@ export default {
     },
 
     computedPerms() {
-      if (typeof this.perms !== "undefined" && this.perms !== null) {
-        return Object.entries(this.perms).map((perm) => {
-          return {
-            table: perm[0],
-            add_perms: !!perm[1][0],
-            change_perms: !!perm[1][1],
-            delete_perms: !!perm[1][2],
-            view_perms: !!perm[1][3],
-          };
-        });
-      } else return [];
+      return this.perms.reduce((prev, curr) => {
+        const action = curr.codename.split("_")[0];
+        const table = curr.codename.split("_")[1];
+
+        const tablePerms = prev.find((item) => item.table === table);
+
+        if (tablePerms) tablePerms[action] = true;
+        else
+          prev.push({
+            table,
+            [action]: true,
+          });
+        return prev;
+      }, []);
     },
   },
 };

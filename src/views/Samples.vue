@@ -62,7 +62,6 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getDynamicFields();
     // Used by sidebar
     this.setActiveSearchParameters({
       search: this.selection_seriesSearchParameters,

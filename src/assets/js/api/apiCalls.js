@@ -1,11 +1,12 @@
 import Vue from "vue";
 import qs from "qs";
-import router from "../../../router";
+import VueIzitoast from "vue-izitoast";
 
 const axios = require("axios");
 
 const api = {
-  url: "https://rwapi.geocollections.info/",
+  // url: "https://rwapi.geocollections.info/",
+  url: "http://localhost:7000/api/",
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",
@@ -14,25 +15,80 @@ const api = {
 const attachmentFields =
   "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number";
 
-// Add a request interceptor
-axios.interceptors.request.use(function (config) {
-  if (config.url.includes("rwapi") && !config.url.includes("/egf/")) {
-    let csrftoken = Vue.$cookies.get("csrftoken");
-    config.withCredentials = true;
-    config.headers["X-CSRFTOKEN"] = csrftoken;
-  }
+// // Add a request interceptor
+// axios.interceptors.request.use(function (config) {
+//   if (config.url.includes("rwapi") && !config.url.includes("/egf/")) {
+//     let csrftoken = Vue.$cookies.get("csrftoken");
+//     config.withCredentials = true;
+//     config.headers["X-CSRFTOKEN"] = csrftoken;
+//   }
+//
+//   return config;
+// });
+//
+// // Add a response interceptor
+// axios.interceptors.response.use(function (response) {
+//   if (response.status === 200 && response.config.url.includes("rwapi")) {
+//     // Showing Missing permissions message
+//     if (response.data.error_permissions) {
+//       Vue.prototype.toast.error(
+//         response.data.error_permissions,
+//         "Missing permissions",
+//         {
+//           position: "topCenter",
+//           timeout: 5000,
+//           closeOnEscape: true,
+//           pauseOnHover: false,
+//           displayMode: "replace",
+//         }
+//       );
+//     }
+//
+//     // Destroying session and redirecting to login view
+//     if (response.data.error_not_logged_in) {
+//       Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
+//       Vue.$cookies.remove("csrftoken", null, "geocollections.info");
+//       Vue.prototype.toast.error("Please log back in", "Session expired", {
+//         position: "topCenter",
+//         timeout: 5000,
+//         closeOnEscape: true,
+//         pauseOnHover: false,
+//         displayMode: "replace",
+//       });
+//       router.push({ path: "/" });
+//     }
+//
+//     // Showing link error message
+//     if (response.data.link_error) {
+//       Vue.prototype.toast.error(response.data.link_error, "Error", {
+//         position: "topCenter",
+//         timeout: 99999999999,
+//         pauseOnHover: false,
+//         displayMode: "replace",
+//       });
+//     }
+//   }
+//
+//   return response;
+// });
 
-  return config;
-});
+async function get(child = "", customUrl) {
+  let url = api.url + child;
+  if (customUrl) url = customUrl + child;
+  const service = axios.create({
+    withCredentials: true,
+    xsrfCookieName: "csrftoken",
+    xsrfHeaderName: "X-CSRFToken",
+  });
 
-// Add a response interceptor
-axios.interceptors.response.use(function (response) {
-  if (response.status === 200 && response.config.url.includes("rwapi")) {
-    // Showing Missing permissions message
-    if (response.data.error_permissions) {
+  try {
+    return await service.get(url);
+  } catch (err) {
+    if (err.response.status === 403) {
+      const table = child.includes("/") ? child.split("/")[0] : child;
       Vue.prototype.toast.error(
-        response.data.error_permissions,
-        "Missing permissions",
+        `Table: <b>${table}</b>. You do not have permission to perform this action.`,
+        "Forbidden",
         {
           position: "topCenter",
           timeout: 5000,
@@ -41,44 +97,17 @@ axios.interceptors.response.use(function (response) {
           displayMode: "replace",
         }
       );
-    }
-
-    // Destroying session and redirecting to login view
-    if (response.data.error_not_logged_in) {
-      Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
-      Vue.$cookies.remove("csrftoken", null, "geocollections.info");
-      Vue.prototype.toast.error("Please log back in", "Session expired", {
+    } else {
+      Vue.prototype.toast.error(JSON.stringify(err?.response?.data), {
         position: "topCenter",
         timeout: 5000,
         closeOnEscape: true,
         pauseOnHover: false,
         displayMode: "replace",
       });
-      router.push({ path: "/" });
     }
-
-    // Showing link error message
-    if (response.data.link_error) {
-      Vue.prototype.toast.error(response.data.link_error, "Error", {
-        position: "topCenter",
-        timeout: 99999999999,
-        pauseOnHover: false,
-        displayMode: "replace",
-      });
-    }
-  }
-
-  return response;
-});
-
-async function get(child = "", customUrl) {
-  let url = api.url + child;
-  if (customUrl) url = customUrl + child;
-
-  try {
-    return await axios.get(url);
-  } catch (error) {
-    return error.request();
+    return err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`;
+    // return error.request();
   }
 }
 

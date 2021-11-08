@@ -183,37 +183,17 @@
       </v-row>
     </v-container>
     <site-icons style="z-index: 3"></site-icons>
-    <!--  Load in background images  -->
-    <!--    <img-->
-    <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_1.jpg`"-->
-    <!--      alt="background_image_1"-->
-    <!--      v-show="false"-->
-    <!--    />-->
-    <img
-      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_2.jpg`"
-      alt="background_image_2"
-      v-show="false"
-    />
-    <!--    <img-->
-    <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_3.jpg`"-->
-    <!--      alt="background_image_3"-->
-    <!--      v-show="false"-->
-    <!--    />-->
-    <!--    <img-->
-    <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_4.jpg`"-->
-    <!--      alt="background_image_4"-->
-    <!--      v-show="false"-->
-    <!--    />-->
+    <img :src="image" alt="background_image_2" v-show="false" />
   </v-main>
 </template>
 
 <script>
-import authenticationMixin from "../mixins/authenticationMixin";
 import LangButtons from "../components/partial/LangButtons";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import SiteIcons from "@/components/partial/SiteIcons";
 import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
 import DevNotification from "@/components/partial/DevNotification";
+import toastMixin from "@/mixins/toastMixin";
 
 export default {
   name: "Login",
@@ -223,7 +203,7 @@ export default {
     SiteIcons,
     LangButtons,
   },
-  mixins: [authenticationMixin],
+  mixins: [toastMixin],
   data: () => ({
     tab: null,
     loggingIn: false,
@@ -245,19 +225,10 @@ export default {
     passError: false,
     idMessage: null,
     idError: false,
-    imageId: 0,
-    images: [
-      // "/img/sarv-edit/background_1.jpg",
-      "/img/sarv-edit/background_2.jpg",
-      // "/img/sarv-edit/background_3.jpg",
-      // "/img/sarv-edit/background_4.jpg"
-    ],
-    imageInterval: 60000,
   }),
 
   created() {
     window.addEventListener("keyup", this.handleKeyUp);
-    this.changeImage();
   },
 
   beforeDestroy() {
@@ -267,12 +238,13 @@ export default {
   computed: {
     ...mapState("settings", ["bodyColor"]),
     image() {
-      console.log(this.$constants.IMAGE_URL);
-      return this.$constants.IMAGE_URL + this.images[this.imageId];
+      return `${this.$constants.IMAGE_URL}img/sarv-edit/background_2.jpg`;
     },
   },
 
   methods: {
+    ...mapActions("user", ["setAuthUser", "removeAuthUser"]),
+
     async login(type) {
       if (this.isValid && !this.loggingIn) {
         let response;
@@ -297,23 +269,17 @@ export default {
 
           console.log(response);
           if (response?.detail === "Login successful!") {
+            this.setAuthUser(response);
             this.toastSuccess({ text: response.detail });
             await this.$router.push("Dashboard");
           } else this.toastError({ text: response.detail });
         }
       }
     },
+
     handleKeyUp(event) {
       if (this.tab === 1 && (event.key === "Enter" || event.keyCode === 13))
         this.login();
-    },
-    changeImage() {
-      if (this.images.length > 1) {
-        setInterval(() => {
-          if (this.imageId >= this.images.length - 1) this.imageId = 0;
-          else this.imageId++;
-        }, this.imageInterval);
-      }
     },
   },
 };

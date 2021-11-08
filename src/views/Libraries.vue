@@ -47,8 +47,6 @@ export default {
   },
 
   async created() {
-    await this.$_tableHeaderMixin_getDynamicFields();
-
     this.setActiveSearchParametersFilters([
       { id: "author_txt", title: "library.author_txt", type: "text" },
       { id: "year", title: "common.year", type: "number" },
