@@ -103,15 +103,37 @@ export default {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
     apiCall() {
-      return this.specimenViewType === "image"
-        ? fetchSpecimenImages(
-            this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
-          )
-        : fetchSpecimens(
-            this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
-          );
+      if (this.specimenViewType === "image") {
+        const legacyQueryString = fetchSpecimenImages(
+          this.searchParameters,
+          this.$_tableHeaderMixin_searchFields
+        );
+        return this.$api.rw.getLegacy(
+          "attachment",
+          {
+            defaultParams: {
+              nest: 1,
+            },
+          },
+          legacyQueryString,
+          this.searchParameters
+        );
+      } else {
+        const legacyQueryString = fetchSpecimens(
+          this.searchParameters,
+          this.$_tableHeaderMixin_searchFields
+        );
+        return this.$api.rw.getLegacy(
+          "specimen",
+          {
+            defaultParams: {
+              nest: 1,
+            },
+          },
+          legacyQueryString,
+          this.searchParameters
+        );
+      }
     },
     searchSpecimenImages(searchImages) {
       // Just to trigger change

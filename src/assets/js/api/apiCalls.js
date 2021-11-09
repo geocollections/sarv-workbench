@@ -1953,15 +1953,18 @@ export function fetchSpecimens(data, dynamicSearch) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
-  if (searchFields.length > 0) {
-    return get(
-      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
+  if (searchFields.length > 0) return `?${searchFields}`
+  else return ""
+  //
+  // if (searchFields.length > 0) {
+  //   return get(
+  //     `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  //   );
+  // } else {
+  //   return get(
+  //     `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  //   );
+  // }
 }
 
 export function fetchSpecimenImages(data, dynamicSearch) {
@@ -2058,18 +2061,20 @@ export function fetchSpecimenImages(data, dynamicSearch) {
   searchFields += buildDynamicSearch(dynamicSearch, "specimen__");
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (searchFields.length > 0) {
-    return get(
-      `attachment/?${searchFields}&specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `attachment/?specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
+  if (searchFields.length > 0) return `?${searchFields}&specimen_image_attachment=1`
+  else return `?specimen_image_attachment=1`
+  //
+  // orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+  //
+  // if (searchFields.length > 0) {
+  //   return get(
+  //     `attachment/?${searchFields}&specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  //   );
+  // } else {
+  //   return get(
+  //     `attachment/?specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  //   );
+  // }
 }
 
 export function fetchDirectSpecimenImages(specimenId) {

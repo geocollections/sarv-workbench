@@ -284,69 +284,44 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", ["updateViewType"]),
+    ...mapActions("search", ["updateViewType", "setSidebarList"]),
 
     search: debounce(async function () {
       this.isLoading = true;
 
       const response = await this.apiCall();
+      console.log(response);
 
       this.isLoading = false;
 
+      this.noResults = response?.count === 0;
+
       if (response?.status === 200) {
+        // Todo: Old rwapi (should be replace)
         if (response?.data?.count === 0) this.noResults = true;
         if (response?.data?.count > 0) this.noResults = false;
         this.response.count = response.data.count ?? 0;
         this.response.results = response.data.results ?? [];
+      } else {
+        // Todo: New rwapi, this should be only one (for now)
+        this.response.count = response?.count ?? 0;
+        this.response.results = response?.results ?? [];
+        this.noResults = this.response.count === 0;
+
+        this.setSidebarList({
+          module: this.module,
+          response,
+          page: this.searchParameters.page,
+          paginateBy: this.searchParameters.paginateBy,
+        });
       }
     }, 500),
 
     changeObjectsPrivacyState(state, id) {
       let formData = new FormData();
-      formData.append("data", JSON.stringify({ is_private: state }));
+      formData.set("is_private", state);
 
-      // const response = await fetchChangeRecordState(this.module, id, formData);
-      //
-      // if (response?.data) {
-      //   if (response?.data?.message)
-      //     this.toastSuccess({
-      //       text: `${response?.data?.message}${
-      //         this.$i18n.locale === "ee" ? "_et" : ""
-      //       }`
-      //     });
-      //   else if (response?.data?.error)
-      //     this.toastSuccess({
-      //       text: `${response?.data?.error}${
-      //         this.$i18n.locale === "ee" ? "_et" : ""
-      //       }`
-      //     });
-      // } else
-      //   this.toastError({
-      //     text: response?.data?.error ?? this.$t("messages.uploadError")
-      //   });
-
-      fetchChangeRecordState(this.module, id, formData).then(
-        (response) => {
-          if (response && response.data) {
-            if (this.$i18n.locale === "ee") {
-              if (response.data.message_et)
-                this.toastSuccess({ text: response.data.message_et });
-              else if (response.data.error_et)
-                this.toastError({ text: response.data.error_et });
-            } else {
-              if (response.data.message)
-                this.toastSuccess({ text: response.data.message });
-              else if (response.data.error)
-                this.toastError({ text: response.data.error });
-            }
-          }
-        },
-        (errResponse) => {
-          if (errResponse && errResponse.data && errResponse.data.error)
-            this.toastError({ text: errResponse.data.error });
-          this.toastError({ text: this.$t("messages.uploadError") });
-        }
-      );
+      this.$api.rw.put(this.module, id, formData);
     },
   },
 };

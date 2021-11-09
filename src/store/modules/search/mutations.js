@@ -52,13 +52,31 @@ const mutations = {
   },
 
   SET_SIDEBAR_LIST(state, payload) {
-    state.sidebarList = {
-      results: payload?.data?.results,
-      page: payload?.data?.page,
-      totalPages: payload?.data?.page
-        ? payload.data.page.split(" of ")[1]
-        : null,
-    };
+    if (payload?.response) {
+      // Todo: New implementation of module data in right drawer (now fetching from list module core)
+      const count = payload?.response?.count;
+      let totalPages = null;
+      if (payload?.paginateBy && count) totalPages = count / totalPages;
+      state.sidebarList = {
+        ...state.sidebarList,
+        [payload.module]: {
+          results: payload?.response?.results,
+          count: payload?.response?.count,
+          page: payload?.page ?? 1,
+          totalPages: payload?.paginateBy,
+        },
+      };
+    } else {
+      // Todo: Old now, should be removed after apiCall changed and stroage saved from listModuleCore
+      state.sidebarList = {
+        results: payload?.data?.results,
+        page: payload?.data?.page,
+        totalPages: payload?.data?.page
+          ? payload.data.page.split(" of ")[1]
+          : null,
+      };
+
+    }
   },
 
   SET_ACTIVE_SARV_ISSUES(state, payload) {

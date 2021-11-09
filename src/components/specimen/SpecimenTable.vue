@@ -215,10 +215,36 @@ export default {
       if (listOfSpecimens && listOfSpecimens.length > 0) {
         let listOfIds = listOfSpecimens.map((specimen) => specimen.id);
 
-        const taxonResponse = await fetchSpecimenIdentificationsList(listOfIds);
-        const rockResponse = await fetchSpecimenIdentificationGeologiesList(
-          listOfIds
+        // const taxonResponse = await fetchSpecimenIdentificationsList(listOfIds);
+        const taxonResponse = await this.$api.rw.get(
+          "specimen_identification",
+          {
+            defaultParams: {
+              specimen__in: listOfIds.toString(),
+              current: true,
+            },
+            options: {
+              sortBy: ["name"],
+              sortDesc: [false],
+            },
+          }
         );
+        const rockResponse = await this.$api.rw.get(
+          "specimen_identification_geology",
+          {
+            defaultParams: {
+              specimen__in: listOfIds.toString(),
+              current: true,
+            },
+            options: {
+              sortBy: ["name"],
+              sortDesc: [false],
+            },
+          }
+        );
+        // const rockResponse = await fetchSpecimenIdentificationGeologiesList(
+        //   listOfIds
+        // );
 
         if (taxonResponse.status === 200 && rockResponse.status === 200) {
           let taxonList = [];

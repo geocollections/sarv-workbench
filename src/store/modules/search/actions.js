@@ -302,6 +302,10 @@ const actions = {
     });
   },
 
+  setSidebarList({ commit }, payload) {
+    commit("SET_SIDEBAR_LIST", payload);
+  },
+
   setActiveSarvIssues({ commit }, issues) {
     // Todo: Pointless line (should be removed after new api service is implemented)
     const data = issues?.data ?? issues;
