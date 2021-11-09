@@ -450,6 +450,7 @@ export default {
     },
 
     addFile(file) {
+      if (!Array.isArray(file)) file = [file];
       if (this.acceptMultiple) {
         if (this.files) file.forEach((item) => this.files.push(item));
         else this.files = file;
