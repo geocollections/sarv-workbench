@@ -1,5 +1,9 @@
-class RWApiService {
+import Vue from "vue";
+import ApiService from "@/services/ApiService";
+
+class RWApiService extends ApiService {
   constructor({ axios, url }) {
+    super();
     this.baseURL = url || process.env.VUE_APP_RWAPI_URL;
     this.service = axios.create({
       withCredentials: true,
@@ -15,6 +19,22 @@ class RWApiService {
       return res.data;
     } catch (err) {
       return err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`;
+    }
+  }
+
+  async get(table, { defaultParams, options }) {
+    const url = `${this.baseURL}/${table}`;
+    const params = {
+      ...defaultParams,
+      ...this.getSortByParams(options),
+      ...this.getPaginationParams(options),
+    };
+    try {
+      const res = await this.service.get(url, { params });
+      return res.data;
+    } catch (err) {
+      this.toastError(err, url);
+      return this.handleError(err, url);
     }
   }
 

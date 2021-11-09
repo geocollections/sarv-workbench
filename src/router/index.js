@@ -2615,6 +2615,7 @@ router.beforeEach(async (to, from, next) => {
   const loginPath = window.location.pathname;
 
   const isLoggedIn = await Vue.prototype.$api.auth.isLoggedIn();
+  // Todo: Fetch account status and override if not same
   // console.log(isLoggedIn);
 
   if (isLoggedIn) {

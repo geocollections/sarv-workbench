@@ -4179,10 +4179,10 @@ export default {
 
           if (!this.isDigitisedReference) {
             this.$set(this.attachment, "author", {
-              id: this.getCurrentUser.id,
-              agent: this.getCurrentUser.agent,
-              forename: this.getCurrentUser.forename,
-              surename: this.getCurrentUser.surename,
+              id: this.getCurrentAgent.id,
+              agent: this.getCurrentAgent.agent,
+              forename: this.getCurrentAgent.forename,
+              surename: this.getCurrentAgent.surename,
             });
             this.autocomplete.agent.push(this.attachment.author);
           }

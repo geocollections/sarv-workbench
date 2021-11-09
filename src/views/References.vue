@@ -53,7 +53,7 @@ export default {
   computed: {
     ...mapState("search", ["librarySearchParameters"]),
 
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentAgent"]),
   },
 
   async created() {
@@ -64,7 +64,7 @@ export default {
       title: "header.libraries",
       object: "library",
       field: "title_en",
-      agent: this.getCurrentUser,
+      agent: this.getCurrentAgent,
     });
 
     this.setActiveSearchParametersFilters([

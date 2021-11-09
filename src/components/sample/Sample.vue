@@ -1627,14 +1627,14 @@ export default {
         this.autocomplete.site.push(this.sample.site);
       }
       this.sample.agent_collected = {
-        id: this.getCurrentUser.id,
-        agent: this.getCurrentUser.user,
+        id: this.getCurrentAgent.id,
+        agent: this.getCurrentAgent.user,
       };
       this.autocomplete.agent.push(this.sample.agent_collected);
       this.sample.date_collected = this.getCurrentFormattedDate("YYYY-MM-DD");
       this.sample.owner = {
-        id: this.getCurrentUser.id,
-        agent: this.getCurrentUser.user,
+        id: this.getCurrentAgent.id,
+        agent: this.getCurrentAgent.user,
       };
       this.autocomplete.agent.push(this.sample.owner);
 

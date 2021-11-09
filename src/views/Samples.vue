@@ -58,7 +58,7 @@ export default {
   computed: {
     ...mapState("search", ["selection_seriesSearchParameters"]),
 
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentAgent"]),
   },
 
   async created() {

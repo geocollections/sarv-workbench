@@ -46,7 +46,6 @@ export default {
       "recentUrls",
       "recentUrlsState",
     ]),
-    ...mapGetters("tableHeaders", ["getListOfAllTables"]),
   },
   beforeRouteUpdate(to, from, next) {
     this.updateRecentUrls({
@@ -57,7 +56,6 @@ export default {
   },
   methods: {
     ...mapActions("settings", ["updateRecentUrls"]),
-    ...mapActions("search", ["fetchActiveSarvIssues"]),
   },
 };
 </script>
@@ -71,12 +69,7 @@ export default {
   margin-bottom: 44px;
 }
 
-/* BOOTSTRAP OVERRIDE, remove after integration */
-.container--fluid {
-  max-width: 100%;
-}
-
-/* Custom override for xl screens */
+/* Overrides container max-width for xl screens (default is 1785px) */
 @media (min-width: 1904px) {
   .container {
     max-width: 1264px !important;

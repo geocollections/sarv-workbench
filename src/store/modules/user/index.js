@@ -11,7 +11,7 @@ const getters = {
     return state.authUser?.database_id;
   },
 
-  getCurrentUser: (state) => {
+  getCurrentAgent: (state) => {
     return {
       id: state.authUser?.agent_id,
       agent: state.authUser?.agent,

@@ -136,7 +136,7 @@ export default {
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
     ...mapState("search", ["loadingState"]),
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentAgent"]),
 
     isFileAdded() {
       return this?.file?.length === 1;
@@ -225,7 +225,7 @@ export default {
     },
 
     async uploadImportedFileAsNewAttachment() {
-      console.log(this.getCurrentUser.id);
+      console.log(this.getCurrentAgent.id);
       let data = {
         description: `See fail loodi kasutades faili importi. Failinimi: ${
           this?.file?.[0]?.name
@@ -234,7 +234,7 @@ export default {
           this?.file?.[0]?.name
         }, Date: ${new Date().toISOString().split("T")[0]}`,
         is_private: true,
-        author: this?.getCurrentUser?.id,
+        author: this?.getCurrentAgent?.id,
       };
 
       let formData = new FormData();

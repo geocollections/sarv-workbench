@@ -63,7 +63,7 @@ const autocompleteMixin = {
         ? "parameter_name"
         : "parameter_name_en";
     },
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentAgent"]),
   },
   methods: {
     autocompleteAnalysisSearch(value) {
@@ -403,7 +403,7 @@ const autocompleteMixin = {
           let query = buildAutocompleteQuery(
             type,
             value,
-            this.getCurrentUser,
+            this.getCurrentAgent,
             groupByField
           );
           if (query.length === 0) return;

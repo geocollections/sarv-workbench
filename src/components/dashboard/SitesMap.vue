@@ -151,12 +151,12 @@ export default {
 
   computed: {
     ...mapState("map", ["defaultLayer"]),
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentAgent"]),
   },
 
   created() {
-    if (this.getCurrentUser && this.getCurrentUser.id)
-      this.fetchRecentData(this.getCurrentUser.id);
+    if (this.getCurrentAgent && this.getCurrentAgent.id)
+      this.fetchRecentData(this.getCurrentAgent.id);
   },
 
   watch: {
@@ -176,13 +176,16 @@ export default {
     showMap(newVal) {
       if (newVal && this.map) {
         this.map.invalidateSize();
-        let bounds = new L.featureGroup([
+        let listOfDifferentItems = [
           ...this.sites,
           ...this.samples,
           ...this.specimens,
           ...this.images,
-        ]).getBounds();
-        this.map.fitBounds(bounds, { maxZoom: 10 });
+        ];
+        if (listOfDifferentItems.length > 0) {
+          let bounds = new L.featureGroup(listOfDifferentItems).getBounds();
+          this.map.fitBounds(bounds, { maxZoom: 10 });
+        }
       }
     },
   },

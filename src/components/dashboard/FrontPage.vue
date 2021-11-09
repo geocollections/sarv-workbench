@@ -7,8 +7,8 @@
           <v-card-title class="pl-0">
             <span class="table-title text-capitalize break-word">
               {{
-                `${$t("frontPage.welcome")}, ${getCurrentUser.forename} ${
-                  getCurrentUser.surename
+                `${$t("frontPage.welcome")}, ${getCurrentAgent.forename} ${
+                  getCurrentAgent.surename
                 }!`
               }}
             </span>
@@ -89,7 +89,13 @@
     </v-row>
 
     <!-- IMAGES/FILES -->
-    <v-row v-if="isUserAllowedTo('add', 'attachment')">
+    <v-row
+      v-if="
+        isUserAllowedTo('add', 'attachment') &&
+        recentFiles &&
+        recentFiles.length > 0
+      "
+    >
       <v-col>
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
           <v-card-title class="pt-2 pb-1">
@@ -145,7 +151,7 @@
 
     <!-- RECENT ACTIVITY -->
     <recent-activity
-      :user="getCurrentUser.user"
+      :user="getCurrentAgent.user"
       :body-color="bodyColor"
       :body-active-color="bodyActiveColor"
     />
@@ -212,7 +218,6 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
 import SitesMap from "./SitesMap";
 import ImageViewWrapper from "../partial/image_view/ImageViewWrapper";
-import { fetchRecentFiles } from "../../assets/js/api/apiCalls";
 import Messages from "./Messages";
 
 export default {
@@ -235,9 +240,10 @@ export default {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
     ...mapState("search", ["activeSarvIssues"]),
     ...mapGetters("user", [
-      "getCurrentUser",
+      "getCurrentAgent",
       "getLastLoginDate",
       "isUserAllowedTo",
+      "getUserId",
     ]),
   },
 
@@ -250,20 +256,35 @@ export default {
     },
   },
 
-  created() {
-    this.fetchActiveSarvIssues();
+  async created() {
+    const response = await this.$api.rw.get("sarv_issue", {
+      defaultParams: {
+        to_user: this.getUserId,
+        or_search: "response__isnull:true OR response: ",
+      },
+      options: {
+        sortBy: ["id"],
+        sortDesc: [true],
+      },
+    });
+    this.setActiveSarvIssues(response);
   },
 
   methods: {
-    ...mapActions("search", ["fetchActiveSarvIssues"]),
+    ...mapActions("search", ["setActiveSarvIssues"]),
 
-    getRecentFiles(paginateBy) {
-      fetchRecentFiles(this.getCurrentUser.id, paginateBy).then((response) => {
-        if (response.status === 200) {
-          if (response.data.count > 0) this.recentFiles = response.data.results;
-          else this.recentFiles = [];
-        }
+    async getRecentFiles(paginateBy) {
+      const response = await this.$api.rw.get("attachment", {
+        defaultParams: {
+          author: this.getCurrentAgent.id,
+        },
+        options: {
+          sortBy: ["id"],
+          sortDesc: [true],
+          itemsPerPage: paginateBy,
+        },
       });
+      this.recentFiles = response?.results;
     },
   },
 };

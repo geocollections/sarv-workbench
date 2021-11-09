@@ -55,14 +55,14 @@ export default {
   },
 
   computed: {
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentAgent"]),
   },
 
   methods: {
     apiCall() {
       return fetchImagesets(
         this.searchParameters,
-        this.getCurrentUser.id,
+        this.getCurrentAgent.id,
         this.$_tableHeaderMixin_searchFields
       );
     },

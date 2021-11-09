@@ -773,8 +773,8 @@ export default {
 
         //set default user
         this.project.owner = {
-          agent: this.getCurrentUser.user,
-          id: this.getCurrentUser.id,
+          agent: this.getCurrentAgent.user,
+          id: this.getCurrentAgent.id,
         };
         this.autocomplete.agent.push(this.project.owner);
       }

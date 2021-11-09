@@ -24,7 +24,7 @@ const formManipulation = {
   },
   computed: {
     ...mapState("search", ["loadingState"]),
-    ...mapGetters("user", ["getCurrentUser", "getDatabaseId"]),
+    ...mapGetters("user", ["getCurrentAgent", "getDatabaseId"]),
   },
   methods: {
     ...mapActions("search", [
@@ -352,7 +352,7 @@ const formManipulation = {
                 relatedObject +
                 ": " +
                 this[relatedObject].id,
-            author: file.type.includes("pdf") ? null : this.getCurrentUser.id,
+            author: file.type.includes("pdf") ? null : this.getCurrentAgent.id,
             date_created: file.type.includes("pdf")
               ? null
               : this.getCurrentFormattedDate("YYYY-MM-DD"),
@@ -420,7 +420,7 @@ const formManipulation = {
               relatedObject +
               ": " +
               this[relatedObject].id,
-            author: this.getCurrentUser.id,
+            author: this.getCurrentAgent.id,
             date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
             is_private: true,
             is_preferred:

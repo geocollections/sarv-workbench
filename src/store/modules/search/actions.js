@@ -107,7 +107,7 @@ const actions = {
   FETCH_IMAGESETS({ commit, state, rootGetters }) {
     return fetchImagesets(
       state.activeSearchParams.search,
-      rootGetters["user/getCurrentUser"].id
+      rootGetters["user/getCurrentAgent"].id
     ).then((resp) => commit("SET_SIDEBAR_LIST", resp));
   },
 
@@ -300,6 +300,12 @@ const actions = {
     return fetchActiveSarvIssues(rootGetters["user/getUserId"]).then((resp) => {
       commit("SET_ACTIVE_SARV_ISSUES", resp);
     });
+  },
+
+  setActiveSarvIssues({ commit }, issues) {
+    // Todo: Pointless line (should be removed after new api service is implemented)
+    const data = issues?.data ?? issues;
+    commit("SET_ACTIVE_SARV_ISSUES", data);
   },
 
   updateIsSampleSimpleView({ commit }, boolVal) {

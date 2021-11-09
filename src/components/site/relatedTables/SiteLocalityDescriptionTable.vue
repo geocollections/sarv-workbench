@@ -446,11 +446,11 @@ export default {
       });
     },
 
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentAgent"]),
   },
 
   watch: {
-    getCurrentUser: {
+    getCurrentAgent: {
       handler(newVal) {
         if (newVal) {
           this.item.agent = {

@@ -1,7 +1,7 @@
 <template>
   <v-card tile id="app-bar" class="d-print-none">
     <drawer-left
-      :current-user="getCurrentUser"
+      :current-user="getCurrentAgent"
       :user-shortcuts="shortcuts"
       :drawerState="drawerState"
       :drawer-color="drawerLeftColor"
@@ -72,7 +72,7 @@
         <v-menu v-model="showDropdown" offset-y z-index="50100">
           <template v-slot:activator="{ on }">
             <v-btn text v-on="on">
-              {{ getCurrentUser.forename }}&nbsp;
+              {{ getCurrentAgent.forename }}&nbsp;
               <v-icon>{{
                 showDropdown ? "fas fa-caret-up" : "fas fa-caret-down"
               }}</v-icon>
@@ -197,7 +197,7 @@ export default {
       "shortcuts",
       "lang",
     ]),
-    ...mapGetters("user", ["getCurrentUser", "isUserSuperuser"]),
+    ...mapGetters("user", ["getCurrentAgent", "isUserSuperuser"]),
   },
   created() {
     this.fetchActiveSarvIssues();

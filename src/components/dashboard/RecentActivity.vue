@@ -1,7 +1,11 @@
 <template>
   <v-row class="recent-activity">
     <!-- RECENTLY ADDED -->
-    <v-col cols="12" md="6">
+    <v-col
+      cols="12"
+      md="6"
+      v-if="recentlyInserted && recentlyInserted.length > 0"
+    >
       <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title>
           <span>
@@ -46,7 +50,11 @@
     </v-col>
 
     <!-- RECENTLY UPDATED -->
-    <v-col cols="12" md="6">
+    <v-col
+      cols="12"
+      md="6"
+      v-if="recentlyUpdated && recentlyUpdated.length > 0"
+    >
       <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title>
           <span>
@@ -93,7 +101,6 @@
 </template>
 
 <script>
-import { fetchLatestLogs } from "@/assets/js/api/apiCalls";
 import moment from "moment";
 import { mapGetters } from "vuex";
 
@@ -116,34 +123,34 @@ export default {
     this.getRecentlyUpdatedActivities();
   },
   methods: {
-    getRecentlyInsertedActivities() {
-      fetchLatestLogs({
-        user: this.user,
-        command: "INSERT",
-      }).then((response) => {
-        if (response.status === 200) {
-          if (response.data.count > 0) {
-            this.recentlyInserted = response.data.results;
-          } else {
-            this.recentlyInserted = [];
-          }
-        }
+    async getRecentlyInsertedActivities() {
+      const response = await this.$api.rw.get("log", {
+        defaultParams: {
+          user: this.user,
+          command: "INSERT",
+        },
+        options: {
+          sortBy: ["id"],
+          sortDesc: [true],
+          itemsPerPage: 10,
+        },
       });
+      this.recentlyInserted = response?.results ?? [];
     },
 
-    getRecentlyUpdatedActivities() {
-      fetchLatestLogs({
-        user: this.user,
-        command: "UPDATE",
-      }).then((response) => {
-        if (response.status === 200) {
-          if (response.data.count > 0) {
-            this.recentlyUpdated = response.data.results;
-          } else {
-            this.recentlyUpdated = [];
-          }
-        }
+    async getRecentlyUpdatedActivities() {
+      const response = await this.$api.rw.get("log", {
+        defaultParams: {
+          user: this.user,
+          command: "UPDATE",
+        },
+        options: {
+          sortBy: ["id"],
+          sortDesc: [true],
+          itemsPerPage: 10,
+        },
       });
+      this.recentlyUpdated = response?.results ?? [];
     },
   },
 };

@@ -193,7 +193,7 @@ export default {
   computed: {
     ...mapState("search", ["sarv_issueSearchParameters"]),
 
-    ...mapGetters("user", ["getCurrentUser", "getUserId"]),
+    ...mapGetters("user", ["getCurrentAgent", "getUserId"]),
 
     canUserWriteAResponse() {
       if (this.$route.meta.isEdit && this.sarv_issue) {
