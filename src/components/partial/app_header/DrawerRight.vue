@@ -692,27 +692,27 @@ export default {
   },
 
   watch: {
-    "activeSearchParams.request": {
-      handler(newVal) {
-        if (newVal) {
-          this.$store.dispatch(`search/${newVal}`);
-        }
-      },
-      immediate: true,
-    },
-    "activeSearchParams.search": {
-      handler(newVal) {
-        if (
-          this.$route.params.id &&
-          newVal &&
-          this?.activeSearchParams?.request
-        ) {
-          this.$store.dispatch(`search/${this.activeSearchParams.request}`);
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
+    // "activeSearchParams.request": {
+    //   handler(newVal) {
+    //     if (newVal) {
+    //       this.$store.dispatch(`search/${newVal}`);
+    //     }
+    //   },
+    //   immediate: true,
+    // },
+    // "activeSearchParams.search": {
+    //   handler(newVal) {
+    //     if (
+    //       this.$route.params.id &&
+    //       newVal &&
+    //       this?.activeSearchParams?.request
+    //     ) {
+    //       this.$store.dispatch(`search/${this.activeSearchParams.request}`);
+    //     }
+    //   },
+    //   deep: true,
+    //   immediate: true,
+    // },
 
     searchParameters: {
       handler() {

@@ -12,17 +12,18 @@ class RWApiService extends ApiService {
     });
   }
 
-  async getDetail(table, id) {
+  async getDetail(table, id, params) {
     const url = `${this.baseURL}/${table}/${id}/`;
     try {
-      const res = await this.service.get(url);
+      const res = await this.service.get(url, { params });
       return res.data;
     } catch (err) {
-      return err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`;
+      this.toastError(err, url);
+      return this.handleError(err, url);
     }
   }
 
-  async get(table, { defaultParams, options }) {
+  async get(table, { defaultParams, options } = {}) {
     const url = `${this.baseURL}/${table}/`;
     const params = {
       ...defaultParams,
@@ -51,8 +52,6 @@ class RWApiService extends ApiService {
       ...this.getSortByParams({ sortBy, sortDesc }),
       ...this.getPaginationParams({ page, paginateBy }),
     };
-    console.log(url);
-    console.log(params);
     try {
       const res = await this.service.get(url, { params });
       return res.data;

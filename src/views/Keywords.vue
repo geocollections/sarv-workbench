@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import ListModuleCore from "./ListModuleCore";
+import ListModuleCore from "../components/ListModuleCore";
 import { fetchKeywords } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";

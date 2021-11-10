@@ -5135,6 +5135,16 @@ const state = {
       show: true,
     },
     {
+      value: "specimen_full_name",
+      text: "specimen.specimen_full_name",
+      show: true,
+    },
+    {
+      value: "identification",
+      text: "specimen.identification",
+      show: true,
+    },
+    {
       value: "specimen_id",
       text: "specimen.specimen_id",
       show: true,
@@ -12532,6 +12542,8 @@ const state = {
     ],
     specimen: [
       "id",
+      "specimen_full_name",
+      "identification",
       "specimen_id",
       "name",
       "locality__locality",

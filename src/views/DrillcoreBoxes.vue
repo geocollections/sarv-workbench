@@ -30,7 +30,7 @@
 <script>
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import ListModuleCore from "./ListModuleCore";
+import ListModuleCore from "../components/ListModuleCore";
 import {
   fetchDrillcoreBoxes,
   fetchDrillcoreBoxImages,

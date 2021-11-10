@@ -144,12 +144,12 @@
 </template>
 
 <script>
-import ExportButtons from "../components/partial/export/ExportButtons";
-import ListView from "../components/partial/ListView";
+import ExportButtons from "./partial/export/ExportButtons";
+import ListView from "./partial/ListView";
 import debounce from "lodash/debounce";
-import ImageView from "../components/partial/ImageView";
+import ImageView from "./partial/ImageView";
 import { mapActions, mapState } from "vuex";
-import ScrollToTop from "../components/partial/ScrollToTop";
+import ScrollToTop from "./partial/ScrollToTop";
 import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
 import Pagination from "@/components/partial/Pagination";

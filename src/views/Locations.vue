@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import ListModuleCore from "./ListModuleCore";
+import ListModuleCore from "../components/ListModuleCore";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import { fetchLocations, fetchLocationImages } from "../assets/js/api/apiCalls";

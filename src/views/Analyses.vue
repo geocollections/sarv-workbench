@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import ListModuleCore from "./ListModuleCore";
+import ListModuleCore from "../components/ListModuleCore";
 import { fetchAnalyses } from "@/assets/js/api/apiCalls";
 import { mapActions, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";

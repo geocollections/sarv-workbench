@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import ListModuleCore from "./ListModuleCore";
+import ListModuleCore from "../components/ListModuleCore";
 import { fetchDois } from "../assets/js/api/apiCalls";
 import { mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";

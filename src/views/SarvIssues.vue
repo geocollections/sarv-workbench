@@ -25,7 +25,7 @@
 <script>
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import ListModuleCore from "./ListModuleCore";
+import ListModuleCore from "../components/ListModuleCore";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions, mapGetters } from "vuex";
 import { fetchSarvIssues } from "@/assets/js/api/apiCalls";

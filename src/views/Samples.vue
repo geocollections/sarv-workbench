@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import ListModuleCore from "./ListModuleCore";
+import ListModuleCore from "../components/ListModuleCore";
 import { fetchSamples } from "@/assets/js/api/apiCalls";
 import { mapActions, mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";

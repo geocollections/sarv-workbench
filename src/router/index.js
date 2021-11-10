@@ -944,7 +944,7 @@ const router = new Router({
         },
         {
           path: "/specimen",
-          component: () => import("../views/Specimens.vue"),
+          component: () => import("../views/specimen/Specimens.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -971,7 +971,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/specimen/Specimen.vue"),
+              component: () => import("../views/specimen/Specimen.vue"),
               meta: {
                 isEdit: true,
                 table: "specimen",
@@ -992,7 +992,7 @@ const router = new Router({
             {
               path: "",
               name: "Specimen add",
-              component: () => import("../components/specimen/Specimen.vue"),
+              component: () => import("../views/specimen/Specimen.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addSpecimen",

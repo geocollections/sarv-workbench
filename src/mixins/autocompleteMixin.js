@@ -2,6 +2,7 @@ import { autocompleteSearch } from "@/assets/js/api/apiCalls";
 import { mapGetters } from "vuex";
 import debounce from "lodash/debounce";
 
+// Todo: Rename to autocompleteSearchMixin
 const autocompleteMixin = {
   computed: {
     commonLabel() {

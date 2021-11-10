@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import ListModuleCore from "./ListModuleCore";
+import ListModuleCore from "../../components/ListModuleCore";
 import { mapActions, mapState } from "vuex";
-import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
 import { fetchSpecimenImages, fetchSpecimens } from "@/assets/js/api/apiCalls";
-import searchParametersMixin from "../mixins/searchParametersMixin";
+import searchParametersMixin from "../../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
