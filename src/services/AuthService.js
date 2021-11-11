@@ -89,6 +89,19 @@ class AuthService {
       return false;
     }
   }
+
+  async accountStatus() {
+    const url = `${this.baseURL}/status/`;
+    try {
+      const res = await this.service.get(url);
+      return res.data;
+    } catch (err) {
+      // console.error(
+      //   err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`
+      // );
+      return false;
+    }
+  }
 }
 
 export default AuthService;

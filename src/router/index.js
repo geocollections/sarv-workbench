@@ -2615,15 +2615,28 @@ router.beforeEach(async (to, from, next) => {
   const loginPath = window.location.pathname;
 
   const isLoggedIn = await Vue.prototype.$api.auth.isLoggedIn();
-  // Todo: Fetch account status and override if not same
-  // console.log(isLoggedIn);
+
+  // Fetches account status and overrides if not the same as in store
+  const accountsStatus = await Vue.prototype.$api.auth.accountStatus();
+  if (accountsStatus) {
+    const stringOfAuthUserFromStore = JSON.stringify(
+      store?.state?.user?.authUser
+    );
+    const stringOfAuthUserFromApi = JSON.stringify(accountsStatus);
+    if (stringOfAuthUserFromStore !== stringOfAuthUserFromApi) {
+      console.log("setting auth user");
+      await store.dispatch("user/setAuthUser", accountsStatus);
+    }
+  }
 
   if (isLoggedIn) {
     if (to.name === "login") next({ path: "/dashboard" });
     else next();
   } else {
-    if (to.meta.requiresAuth)
+    if (to.meta.requiresAuth) {
+      store.dispatch("user/removeAuthUser");
       next({ name: "login", query: { from: loginPath } });
+    }
     next();
   }
 });
