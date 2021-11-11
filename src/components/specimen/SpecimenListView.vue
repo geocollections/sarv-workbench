@@ -307,7 +307,7 @@ export default {
   padding-right: 1mm;
   border-bottom: solid 0.5pt #000;
   margin-bottom: 0.5mm;
-  font-size: 9.5pt;
+  font-size: 10pt;
   font-weight: bold;
 }
 
