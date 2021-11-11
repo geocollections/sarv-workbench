@@ -279,7 +279,7 @@ export default {
 
     handleKeyUp(event) {
       if (this.tab === 1 && (event.key === "Enter" || event.keyCode === 13))
-        this.login();
+        this.login("password");
     },
   },
 };
