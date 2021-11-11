@@ -53,7 +53,7 @@ class ApiService {
     });
   }
 
-  toastSuccess(text, url) {
+  toastSuccess(text) {
     Vue.prototype.toast.success(text, "OK", {
       position: "topCenter",
       timeout: 3000,

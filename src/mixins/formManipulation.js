@@ -139,200 +139,164 @@ const formManipulation = {
       } else return false;
     },
 
-    add(
+    async add(
       addAnother,
       object,
       returnPromise = false,
       saveAsNew = false,
       saveAsDifferentObject
     ) {
-      return new Promise((resolve) => {
-        if (
-          this.validate(object) &&
-          !this.loadingState &&
-          !this.isObjectLocked(object)
-        ) {
-          let objectToUpload = cloneDeep(this[object]);
+      if (
+        this.validate(object) &&
+        !this.loadingState &&
+        !this.isObjectLocked(object)
+      ) {
+        let objectToUpload = cloneDeep(this[object]);
 
-          // Todo: Fix unique fields error, i.e. taxon
-          if (saveAsNew) delete objectToUpload.id;
+        // Todo: Fix unique fields error, i.e. taxon
+        if (saveAsNew) delete objectToUpload.id;
 
-          if (saveAsDifferentObject) {
-            if (objectToUpload.id) delete objectToUpload.id;
-            object = saveAsDifferentObject;
-            this.updateNewObjectsFields(objectToUpload, saveAsDifferentObject);
-          }
-
-          let url = objectToUpload.id
-            ? `change/${object}/${objectToUpload.id}`
-            : `add/${object}/`;
+        if (saveAsDifferentObject) {
           if (objectToUpload.id) delete objectToUpload.id;
+          object = saveAsDifferentObject;
+          this.updateNewObjectsFields(objectToUpload, saveAsDifferentObject);
+        }
 
-          const dataToUpload = this.formatDataForUpload(
-            objectToUpload,
-            saveAsNew
-          );
-          let formData = new FormData();
-          formData.append("data", dataToUpload);
+        let url = objectToUpload.id
+          ? `${object}/${objectToUpload.id}/`
+          : `${object}/`;
+        const method = objectToUpload?.id ? "put" : "post";
+        const objectId = objectToUpload?.id;
+        if (objectToUpload.id) delete objectToUpload.id;
 
-          if (object === "attachment" && this.files && this.files.length > 0) {
-            for (let file in this.files) {
-              if (file === "100" && this.files.length >= 100) break;
-              else formData.append("file" + file, this.files[file]);
-            }
+        const dataToUpload = this.formatDataForUpload(
+          objectToUpload,
+          saveAsNew
+        );
+        let formData = new FormData();
+        Object.keys(dataToUpload).forEach((key) =>
+          formData.set(key, dataToUpload[key])
+        );
+
+        if (object === "attachment" && this.files && this.files.length > 0) {
+          for (let file in this.files) {
+            if (file === "100" && this.files.length >= 100) break;
+            else formData.append("file" + file, this.files[file]);
           }
+        }
 
-          this.saveData(object, formData, url).then(
-            (savedObjectId) => {
-              console.log(savedObjectId);
-              console.log("^^^^^^ Saved object ID ^^^^^^ ");
+        let response;
+        if (method === "post") {
+          response = await this.$api.rw.post(object, formData);
+        } else if (method === "put") {
+          response = await this.$api.rw.put(object, objectId, formData);
+        }
 
-              if (
-                this.$route.meta.isEdit &&
-                addAnother &&
-                object === "sarv_issue"
-              ) {
-                this.setInitialResponse(this[object]);
-              }
+        console.log(response);
+        let savedObjectId = response.id;
 
-              if (saveAsNew) {
-                if (this.isNotEmpty(savedObjectId)) {
+        if (this.$route.meta.isEdit && addAnother && object === "sarv_issue") {
+          this.setInitialResponse(this[object]);
+        }
+
+        if (saveAsNew) {
+          if (this.isNotEmpty(savedObjectId)) {
+            this.$router.push({
+              path: "/" + object + "/" + savedObjectId,
+            });
+          }
+        } else {
+          if (this.$route.meta.isEdit && !saveAsDifferentObject)
+            this.$emit("data-loaded", this[object]);
+
+          if (!returnPromise) {
+            if (addAnother) {
+              // Save
+              if (this.isNotEmpty(savedObjectId) && !this.$route.meta.isEdit) {
+                // savedObjectId exists and is add view
+                if (object === "imageset") {
+                  this.$router.push({
+                    name: "photo_archive add",
+                    params: {
+                      imageset: {
+                        id: savedObjectId,
+                        imageset_number: this[object].imageset_number,
+                      },
+                    },
+                  });
+                } else if (object === "journal") {
+                  this.$router.push({
+                    name: "reference add",
+                    params: {
+                      journal: {
+                        id: savedObjectId,
+                        journal_name: this[object].journal_name,
+                      },
+                    },
+                  });
+                } else
                   this.$router.push({
                     path: "/" + object + "/" + savedObjectId,
                   });
-                }
-              } else {
-                if (this.$route.meta.isEdit && !saveAsDifferentObject)
-                  this.$emit("data-loaded", this[object]);
-
-                if (!returnPromise) {
-                  if (addAnother) {
-                    // Save
-                    if (
-                      this.isNotEmpty(savedObjectId) &&
-                      !this.$route.meta.isEdit
-                    ) {
-                      // savedObjectId exists and is add view
-                      if (object === "imageset") {
-                        this.$router.push({
-                          name: "photo_archive add",
-                          params: {
-                            imageset: {
-                              id: savedObjectId,
-                              imageset_number: this[object].imageset_number,
-                            },
-                          },
-                        });
-                      } else if (object === "journal") {
-                        this.$router.push({
-                          name: "reference add",
-                          params: {
-                            journal: {
-                              id: savedObjectId,
-                              journal_name: this[object].journal_name,
-                            },
-                          },
-                        });
-                      } else
-                        this.$router.push({
-                          path: "/" + object + "/" + savedObjectId,
-                        });
-                    }
-                  } else {
-                    // Save and leave
-                    if (this.isNotEmpty(savedObjectId))
-                      this.$router.push({ path: "/" + object });
-                  }
-                } else resolve(savedObjectId);
               }
-            },
-            () => resolve(false)
-          );
-        } else if (this.loadingState) {
-          // This runs only if loadingState is true which shouldn't happen normally
-          this.toastError({ text: this.$t("messages.easterEggError") });
-          resolve(false);
-        } else {
-          if (object === "attachment" && this.isAttachmentLocked)
-            this.toastError({ text: this.$t("messages.lockedForm") });
-          if (object === "sarv_issue" && this.isNotEmpty(this.initialResponse))
-            this.toastError({ text: this.$t("sarv_issue.message_answered") });
-          else this.toastError({ text: this.$t("messages.checkForm") });
-          resolve(false);
+            } else {
+              // Save and leave
+              if (this.isNotEmpty(savedObjectId))
+                this.$router.push({ path: "/" + object });
+            }
+          }
         }
-      });
+      }
     },
 
-    saveData(object, formData, url) {
-      return new Promise((resolve) => {
-        this.request(object, formData, url, resolve);
-      });
+    async saveData(object, formData, url, method) {
+      return await this.request(object, formData, url, method);
     },
 
-    request(object, formData, url, resolve) {
+    async request(object, formData, url, method) {
       this.setLoadingState(true);
       this.setLoadingType(url.startsWith("change") ? "edit" : "add");
       this.setLoadingPercent(0);
 
-      postRequest(url, formData, "", false, {
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.lengthComputable) {
-            let loadingPercent = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            this.setLoadingPercent(loadingPercent);
-          }
-        },
-      }).then(
-        (response) => {
-          console.log(response);
-          this.setLoadingState(false);
-          if (response.status === 200) {
-            if (response.data) {
-              if (this.$i18n.locale === "ee") {
-                if (response.data.message_et)
-                  this.toastSuccess({
-                    text: response?.data?.message_et.toString() || "Success",
-                  });
-                else if (response.data.message)
-                  this.toastSuccess({
-                    text: response?.data?.message.toString() || "Success",
-                  });
-                else if (response.data.error_et)
-                  this.toastError({
-                    text: response?.data?.error_et.toString() || "Error",
-                  });
-                else if (response.data.error)
-                  this.toastError({
-                    text: response?.data?.error.toString() || "Error",
-                  });
-              } else {
-                if (response.data.message)
-                  this.toastSuccess({
-                    text: response?.data?.message.toString() || "Success",
-                  });
-                else if (response.data.error)
-                  this.toastError({
-                    text: response?.data?.error.toString() || "Error",
-                  });
-              }
+      const response = await postRequest(url, formData, "", method);
+      this.setLoadingState(false);
 
-              if (object === "attachment" && response.data.attachments_ids) {
-                if (response.data.attachments_ids.length > 1)
-                  resolve(response.data.attachments_ids);
-                resolve(response.data.attachments_ids[0]);
-              } else if (response.data.id) resolve(response.data.id);
-              else resolve(undefined);
-            } else resolve(undefined);
-          } else resolve(undefined);
-        },
-        (errResponse) => {
-          this.setLoadingState(false);
-          console.log("ERROR: " + JSON.stringify(errResponse));
-          this.toastError({ text: this.$t("messages.uploadError") });
-          resolve(undefined);
+      console.log(response);
+      this.toastSuccess({
+        text: method === "post" ? "Record Added" : "Record changed",
+      });
+
+      if (response.status === 200) {
+        if (response.data) {
+          if (this.$i18n.locale === "ee") {
+            if (response.data.message_et)
+              this.toastSuccess({
+                text: response?.data?.message_et.toString() || "Success",
+              });
+            else if (response.data.message)
+              this.toastSuccess({
+                text: response?.data?.message.toString() || "Success",
+              });
+            else if (response.data.error_et)
+              this.toastError({
+                text: response?.data?.error_et.toString() || "Error",
+              });
+            else if (response.data.error)
+              this.toastError({
+                text: response?.data?.error.toString() || "Error",
+              });
+          } else {
+            if (response.data.message)
+              this.toastSuccess({
+                text: response?.data?.message.toString() || "Success",
+              });
+            else if (response.data.error)
+              this.toastError({
+                text: response?.data?.error.toString() || "Error",
+              });
+          }
         }
-      );
+      }
     },
 
     // Currently this method has only one use case and it is in Reference.vue when adding digital version (pdf)

@@ -254,32 +254,18 @@ export default {
   },
 
   methods: {
-    getObjectPerms() {
+    async getObjectPerms() {
       if (this.objectData.id && this.table) {
-        fetchObjectPermissions(this.objectData.id, this.table).then(
-          (response) => {
-            if (response.status === 200) {
-              if (
-                typeof response.data.user !== "undefined" &&
-                response.data.user !== null &&
-                response.data.user.length > 0
-              ) {
-                this.assignPerms(response.data.user, "user");
-              }
-
-              if (
-                typeof response.data.group !== "undefined" &&
-                response.data.group !== null &&
-                response.data.group.length > 0
-              ) {
-                this.assignPerms(response.data.group, "group");
-              }
-            }
-          }
+        const response = await this.$api.rw.getObjectPermissions(
+          this.table,
+          this.objectData.id
         );
+        if (response?.user) this.assignPerms(response.user, "user");
+        if (response?.group) this.assignPerms(response.group, "group");
       }
     },
 
+    // Todo: Refactor + add delete perms
     assignPerms(arrayOfPerms, identifier) {
       if (arrayOfPerms && arrayOfPerms.length > 0) {
         arrayOfPerms.forEach((perm) => {
@@ -291,7 +277,7 @@ export default {
 
             if (perm.permission__codename.includes("change")) {
               this.object_permissions.change_user.push(object);
-            } else {
+            } else if (perm.permission__codename.includes("add")) {
               this.object_permissions.view_user.push(object);
             }
           } else {
@@ -300,7 +286,7 @@ export default {
 
             if (perm.permission__codename.includes("change")) {
               this.object_permissions.change_group.push(object);
-            } else {
+            } else if (perm.permission__codename.includes("add")) {
               this.object_permissions.view_group.push(object);
             }
           }

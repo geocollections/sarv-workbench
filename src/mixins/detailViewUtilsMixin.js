@@ -4,7 +4,11 @@ const detailViewUtilsMixin = {
   methods: {
     fillAutocompleteFields(obj) {
       Object.entries(obj).forEach((entry) => {
-        if (isPlainObject(entry[1])) this.autocomplete[entry[0]].push(entry[1]);
+        if (isPlainObject(entry[1])) {
+          // If autocomplete field doesn't exist then creates it (better to initialise it in data and remove the creation here)
+          if (!this.autocomplete?.[entry[0]]) this.autocomplete[entry[0]] = [];
+          this.autocomplete[entry[0]].push(entry[1]);
+        }
       });
     },
 
@@ -41,6 +45,14 @@ const detailViewUtilsMixin = {
             })
         )
       );
+    },
+
+    cleanObject(obj) {
+      for (let i in obj) {
+        if (typeof obj[i] === "object") obj[i] = obj[i]?.id;
+        if (obj[i] === null || obj[i] === undefined) delete obj[i];
+      }
+      return obj;
     },
   },
 };

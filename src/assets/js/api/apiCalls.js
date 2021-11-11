@@ -107,41 +107,55 @@ async function get(child = "", customUrl) {
       });
     }
     return err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`;
-    // return error.request();
   }
 }
 
-async function post(
-  child,
-  data,
-  customUrl = "",
-  returnErrorResponse = false,
-  config = {}
-) {
-  let url = api.url + child;
+async function post(child, data, customUrl, method) {
+  let url = api.url + child + "dsfs";
   if (customUrl && customUrl.length > 0) url = customUrl + child + "/";
-  let useLoginOptions = false;
-  let loginOptions;
-
-  if (child.includes("login")) {
-    useLoginOptions = true;
-    loginOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      data: qs.stringify(data),
-      url,
-    };
-  }
+  const service = axios.create({
+    method,
+    withCredentials: true,
+    xsrfCookieName: "csrftoken",
+    xsrfHeaderName: "X-CSRFToken",
+  });
 
   try {
-    if (useLoginOptions) return await axios(loginOptions);
-    else return await axios.post(url, data, config);
-  } catch (error) {
-    // console.log(error.response);
-    if (returnErrorResponse) return error.response;
-    else return error.request();
+    const res = await service({ url, data });
+    Vue.prototype.toast.success(
+      method === "post" ? "Record added" : "Record changed",
+      "OK",
+      {
+        position: "topCenter",
+        timeout: 5000,
+        pauseOnHover: false,
+      }
+    );
+    return res?.data;
+  } catch (err) {
+    if (err?.response?.status === 403) {
+      const table = child.includes("/") ? child.split("/")[0] : child;
+      Vue.prototype.toast.error(
+        `Table: <b>${table}</b>. You do not have permission to perform this action.`,
+        "Forbidden",
+        {
+          position: "topCenter",
+          timeout: 5000,
+          closeOnEscape: true,
+          pauseOnHover: false,
+          displayMode: "replace",
+        }
+      );
+    } else {
+      Vue.prototype.toast.error(JSON.stringify(err?.response?.data), {
+        position: "topCenter",
+        timeout: 5000,
+        closeOnEscape: true,
+        pauseOnHover: false,
+        displayMode: "replace",
+      });
+    }
+    return err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`;
   }
 }
 
@@ -181,14 +195,8 @@ export function fetchIsLoggedIn() {
  ***  LOGIN END  ***
  *******************/
 
-export function postRequest(
-  url,
-  data,
-  customUrl = "",
-  returnErrorResponse = false,
-  config = {}
-) {
-  return post(url, data, customUrl, returnErrorResponse, config);
+export function postRequest(url, data, customUrl = "", method = "post") {
+  return post(url, data, customUrl, method);
 }
 
 /*************************
@@ -1953,8 +1961,8 @@ export function fetchSpecimens(data, dynamicSearch) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
-  if (searchFields.length > 0) return `?${searchFields}`
-  else return ""
+  if (searchFields.length > 0) return `?${searchFields}`;
+  else return "";
   //
   // if (searchFields.length > 0) {
   //   return get(
@@ -2061,8 +2069,9 @@ export function fetchSpecimenImages(data, dynamicSearch) {
   searchFields += buildDynamicSearch(dynamicSearch, "specimen__");
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-  if (searchFields.length > 0) return `?${searchFields}&specimen_image_attachment=1`
-  else return `?specimen_image_attachment=1`
+  if (searchFields.length > 0)
+    return `?${searchFields}&specimen_image_attachment=1`;
+  else return `?specimen_image_attachment=1`;
   //
   // orderBy = buildOrderBy(data.sortBy, data.sortDesc);
   //

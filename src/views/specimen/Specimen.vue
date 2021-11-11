@@ -748,7 +748,7 @@
 </template>
 
 <script>
-import { cloneDeep } from "lodash";
+import { cloneDeep, isPlainObject } from "lodash";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
@@ -898,46 +898,6 @@ export default {
         activeTab: "specimen_identification",
         relatedData: this.setDefaultRelatedData(),
         specimenImages: null,
-        copyFields: [
-          "id",
-          "specimen_id",
-          "coll",
-          "specimen_nr",
-          "number_field",
-          "fossil",
-          "type",
-          "subtype_id",
-          "part",
-          "locality",
-          "locality_free",
-          "depth",
-          "depth_interval",
-          "sample",
-          "sample_number",
-          "stratigraphy",
-          "lithostratigraphy",
-          "agent_collected",
-          "agent_collected_free",
-          "date_collected",
-          "date_collected_free",
-          "agent_collected",
-          "presence",
-          "storage",
-          "classification",
-          "locality_is_private",
-          "remarks_collecting",
-          "stratigraphy_free",
-          "accession",
-          "deaccession",
-          "remarks",
-          "remarks_internal",
-          "is_private",
-          "tags",
-          "status",
-          "original_status",
-          "parent",
-          "number_pieces",
-        ],
         listOfAutocompleteTables: [
           "list_specimen_kind",
           "list_specimen_original_status",
@@ -978,6 +938,7 @@ export default {
             attachment: false,
             analysis_method: false,
             parent: false,
+            fossil: false,
           },
           list_specimen_kind: [],
           list_specimen_original_status: [],
@@ -1006,9 +967,53 @@ export default {
           attachment: [],
           analysis_method: [],
           parent: [],
+          fossil: [],
         },
         requiredFields: ["fossil"],
-        specimen: {},
+        specimen: {
+          id: null,
+          specimen_id: null,
+          collection: null,
+          specimen_nr: null,
+          number_field: null,
+          part: null,
+          number_pieces: null,
+          locality_free: null,
+          locality_free_en: null,
+          locality_is_private: false,
+          depth: null,
+          depth_interval: null,
+          sample_number: null,
+          remarks_collecting: null,
+          stratigraphy_free: null,
+          agent_collected_free: null,
+          date_collected: null,
+          date_collected_free: null,
+          remarks: null,
+          remarks_internal: null,
+          tags: null,
+          location: null,
+          is_private: false,
+          coll: null,
+          type: null,
+          subtype_id: null,
+          fossil: null,
+          kind: null,
+          classification: null,
+          locality: null,
+          sample: null,
+          parent: null,
+          stratigraphy: null,
+          lithostratigraphy: null,
+          agent_collected: null,
+          presence: null,
+          storage: null,
+          status: null,
+          original_status: null,
+          database: null,
+          accession: null,
+          deaccession: null,
+        },
         block: {
           info: true,
           localityInfo: true,
@@ -1039,7 +1044,6 @@ export default {
           this.$emit("object-exists", true);
           this.$set(this, "specimen", res);
 
-          this.removeUnnecessaryFields(this.specimen, this.copyFields);
           this.fillAutocompleteFields(this.specimen);
           this.$emit("data-loaded", this.specimen);
 
@@ -1052,8 +1056,6 @@ export default {
         } else this.$emit("object-exists", false);
 
         this.setLoadingState(false);
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
     },
 
@@ -1131,24 +1133,6 @@ export default {
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      if (!this.isNotEmpty(uploadableObject.depth))
-        uploadableObject.depth = null;
-      if (!this.isNotEmpty(uploadableObject.depth_interval))
-        uploadableObject.depth_interval = null;
-
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
@@ -1179,9 +1163,9 @@ export default {
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
 
-      console.log("This object is sent in string format:");
+      uploadableObject = this.cleanObject(uploadableObject);
       console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
+      return uploadableObject;
     },
 
     addFiles(files, singleFileMetadata) {
