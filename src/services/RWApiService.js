@@ -65,6 +65,7 @@ class RWApiService extends ApiService {
     const url = `${this.baseURL}/${table}/`;
     try {
       const res = await this.service.post(url, formData);
+      // Todo: handle attachment resonse (maybe clean/format it in backend side)
       this.toastSuccess("Record added!");
       return res.data;
     } catch (err) {

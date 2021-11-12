@@ -9,7 +9,7 @@ const mutations = {
 
   UPDATE_SEARCH_PARAMETERS_BY_FIELD(state, payload) {
     state[`${payload.module}SearchParameters`] = {
-      ...[`${payload.module}SearchParameters`],
+      ...state[`${payload.module}SearchParameters`],
       [payload.field]: payload.value,
     };
   },

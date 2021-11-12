@@ -72,7 +72,7 @@ const router = new Router({
         },
         {
           path: "/attachment",
-          component: () => import("../views/Attachments.vue"),
+          component: () => import("../views/attachment/Attachments.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -100,7 +100,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/attachment/Attachment.vue"),
+                import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: true,
                 table: "attachment",
@@ -123,7 +123,7 @@ const router = new Router({
               redirect: "photo_archive",
               name: "Attachment add",
               component: () =>
-                import("../components/attachment/Attachment.vue"),
+                import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -153,7 +153,7 @@ const router = new Router({
               path: "photo_archive",
               name: "photo_archive add",
               component: () =>
-                import("../components/attachment/Attachment.vue"),
+                import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -183,7 +183,7 @@ const router = new Router({
             {
               path: "specimen_image",
               component: () =>
-                import("../components/attachment/Attachment.vue"),
+                import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -213,7 +213,7 @@ const router = new Router({
             {
               path: "other_file",
               component: () =>
-                import("../components/attachment/Attachment.vue"),
+                import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -243,7 +243,7 @@ const router = new Router({
             {
               path: "digitised_reference",
               component: () =>
-                import("../components/attachment/Attachment.vue"),
+                import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",

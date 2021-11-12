@@ -148,7 +148,7 @@ const formManipulation = {
         if (module === "attachment" && this?.files?.length > 0) {
           for (let file in this.files) {
             if (file === "100" && this.files.length >= 100) break;
-            else formData.append("files", this.files[file]);
+            else formData.append(`file${file}`, this.files[file]);
           }
         }
 
@@ -160,13 +160,22 @@ const formManipulation = {
         }
         console.log(response);
 
-        const newRecordId = response?.id;
+        let newRecordId = response?.id;
+        if (module === "attachment")
+          newRecordId =
+            response?.uploaded_ids?.[response?.uploaded_ids?.length - 1];
 
         if (newRecordId) {
           if (saveAndLeave) this.$router.push({ path: `/${module}` });
-          else if (data?.id === newRecordId)
-            this.$emit("data-loaded", response);
-          else this.$router.push({ path: `/${module}/${newRecordId}` });
+          else if (data?.id === newRecordId) {
+            let dataLoaded = response;
+            if (module === "attachment")
+              dataLoaded =
+                response?.uploaded_attachments?.[
+                  response?.uploaded_attachments?.length - 1
+                ];
+            this.$emit("data-loaded", dataLoaded);
+          } else this.$router.push({ path: `/${module}/${newRecordId}` });
           return response;
         } else {
           this.toastInfo({
@@ -290,7 +299,7 @@ const formManipulation = {
       console.log(files);
       console.log(totalAttachmentCount);
       console.log(singleFileMetadata);
-      let attach_link = `attach_link__${
+      let attach_link = `${
         relatedObject === "location" ? "storage" : relatedObject
       }`;
 

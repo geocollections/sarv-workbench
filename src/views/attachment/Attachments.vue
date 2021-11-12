@@ -27,12 +27,12 @@
 </template>
 
 <script>
-import ListModuleCore from "../components/ListModuleCore";
-import { fetchAttachments } from "@/assets/js/api/apiCalls";
+import ListModuleCore from "../../components/ListModuleCore";
+import { fetchAttachments, fetchSpecimenImages } from "@/assets/js/api/apiCalls";
 import { mapActions, mapState } from "vuex";
-import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import searchParametersMixin from "../mixins/searchParametersMixin";
+import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
+import searchParametersMixin from "../../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
@@ -82,9 +82,20 @@ export default {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
     apiCall() {
-      return fetchAttachments(
+      console.log(this.searchParameters)
+      const legacyQueryString = fetchAttachments(
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
+      );
+      return this.$api.rw.getLegacy(
+        "attachment",
+        {
+          defaultParams: {
+            nest: 1,
+          },
+        },
+        legacyQueryString,
+        this.searchParameters
       );
     },
   },

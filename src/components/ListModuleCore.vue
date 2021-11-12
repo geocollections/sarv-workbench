@@ -297,13 +297,13 @@ export default {
       this.noResults = response?.count === 0;
 
       if (response?.status === 200) {
-        // Todo: Old rwapi (should be replace)
+        // Todo: Old rwapi (should be replaced)
         if (response?.data?.count === 0) this.noResults = true;
         if (response?.data?.count > 0) this.noResults = false;
         this.response.count = response.data.count ?? 0;
         this.response.results = response.data.results ?? [];
       } else {
-        // Todo: New rwapi, this should be only one (for now)
+        // Todo: New rwapi, this should be the only one (for now)
         this.response.count = response?.count ?? 0;
         this.response.results = response?.results ?? [];
         this.noResults = this.response.count === 0;

@@ -103,6 +103,7 @@ export default {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
     apiCall() {
+      console.log(this.searchParameters)
       if (this.specimenViewType === "image") {
         const legacyQueryString = fetchSpecimenImages(
           this.searchParameters,

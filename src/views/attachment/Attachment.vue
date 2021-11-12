@@ -628,6 +628,7 @@
 
         <!-- RELATED DATA -->
         <v-card
+          v-if="$route.meta.isEdit"
           class="mt-2"
           id="block-relatedData"
           :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -662,8 +663,8 @@
                     :color="bodyActiveColor"
                     :label="$t('attachment.relatedData')"
                     :items="relatedTabs"
-                    item-text="name_short"
-                    translation-prefix="attachment.relatedTables.attach_link__"
+                    item-text="name"
+                    translation-prefix="attachment.relatedTables."
                   />
                 </v-col>
 
@@ -674,24 +675,13 @@
                   v-if="selectedRelatedTable"
                 >
                   <autocomplete-wrapper
-                    v-model="
-                      relatedData['attach_link__' + selectedRelatedTable]
-                    "
+                    v-model="relatedData[selectedRelatedTable]"
                     :color="bodyActiveColor"
-                    :items="
-                      autocomplete['attach_link__' + selectedRelatedTable]
-                    "
-                    :loading="
-                      autocomplete.loaders[
-                        'attach_link__' + selectedRelatedTable
-                      ]
-                    "
+                    :items="autocomplete[selectedRelatedTable]"
+                    :loading="autocomplete.loaders[selectedRelatedTable]"
                     :item-text="customLabelForRelatedData"
                     :label="
-                      $t(
-                        'attachment.relatedTables.attach_link__' +
-                          selectedRelatedTable
-                      )
+                      $t('attachment.relatedTables.' + selectedRelatedTable)
                     "
                     is-link
                     is-searchable
@@ -705,12 +695,8 @@
                     attachment-related-data
                     :multiple="true"
                     v-on:chip:close="
-                      relatedData[
-                        'attach_link__' + selectedRelatedTable
-                      ].splice(
-                        relatedData[
-                          'attach_link__' + selectedRelatedTable
-                        ].indexOf($event),
+                      relatedData[selectedRelatedTable].splice(
+                        relatedData[selectedRelatedTable].indexOf($event),
                         1
                       )
                     "
@@ -724,12 +710,11 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__collection &&
-                    relatedData.attach_link__collection.length > 0
+                    relatedData.collection && relatedData.collection.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__collection") }}
+                    {{ $t("attachment.relatedTables.collection") }}
                   </p>
 
                   <div class="table-responsive">
@@ -744,9 +729,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__collection"
+                          v-for="(entity, index) in relatedData.collection"
                           :key="index"
                         >
                           <td>
@@ -773,12 +756,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__collection.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.collection.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -791,13 +769,10 @@
                 <!-- SPECIMEN -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__specimen &&
-                    relatedData.attach_link__specimen.length > 0
-                  "
+                  v-if="relatedData.specimen && relatedData.specimen.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__specimen") }}
+                    {{ $t("attachment.relatedTables.specimen") }}
                   </p>
 
                   <div class="table-responsive">
@@ -812,9 +787,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__specimen"
+                          v-for="(entity, index) in relatedData.specimen"
                           :key="index"
                         >
                           <td>
@@ -841,9 +814,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__specimen.splice(index, 1)
-                            "
+                            @click="relatedData.specimen.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -856,13 +827,10 @@
                 <!-- SAMPLE -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__sample &&
-                    relatedData.attach_link__sample.length > 0
-                  "
+                  v-if="relatedData.sample && relatedData.sample.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__sample") }}
+                    {{ $t("attachment.relatedTables.sample") }}
                   </p>
 
                   <div class="table-responsive">
@@ -877,9 +845,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__sample"
+                          v-for="(entity, index) in relatedData.sample"
                           :key="index"
                         >
                           <td>
@@ -900,9 +866,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__sample.splice(index, 1)
-                            "
+                            @click="relatedData.sample.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -916,14 +880,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__sample_series &&
-                    relatedData.attach_link__sample_series.length > 0
+                    relatedData.sample_series &&
+                    relatedData.sample_series.length > 0
                   "
                 >
                   <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attach_link__sample_series")
-                    }}
+                    {{ $t("attachment.relatedTables.sample_series") }}
                   </p>
 
                   <div class="table-responsive">
@@ -938,9 +900,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__sample_series"
+                          v-for="(entity, index) in relatedData.sample_series"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -949,12 +909,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__sample_series.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.sample_series.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -967,13 +922,10 @@
                 <!-- ANALYSIS -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__analysis &&
-                    relatedData.attach_link__analysis.length > 0
-                  "
+                  v-if="relatedData.analysis && relatedData.analysis.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__analysis") }}
+                    {{ $t("attachment.relatedTables.analysis") }}
                   </p>
 
                   <div class="table-responsive">
@@ -988,9 +940,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__analysis"
+                          v-for="(entity, index) in relatedData.analysis"
                           :key="index"
                         >
                           <td>
@@ -1020,9 +970,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__analysis.splice(index, 1)
-                            "
+                            @click="relatedData.analysis.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1035,13 +983,10 @@
                 <!-- DATASET -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__dataset &&
-                    relatedData.attach_link__dataset.length > 0
-                  "
+                  v-if="relatedData.dataset && relatedData.dataset.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__dataset") }}
+                    {{ $t("attachment.relatedTables.dataset") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1056,9 +1001,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__dataset"
+                          v-for="(entity, index) in relatedData.dataset"
                           :key="index"
                         >
                           <td>
@@ -1085,9 +1028,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__dataset.splice(index, 1)
-                            "
+                            @click="relatedData.dataset.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1100,13 +1041,10 @@
                 <!-- DOI -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__doi &&
-                    relatedData.attach_link__doi.length > 0
-                  "
+                  v-if="relatedData.doi && relatedData.doi.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__doi") }}
+                    {{ $t("attachment.relatedTables.doi") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1121,9 +1059,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__doi"
+                          v-for="(entity, index) in relatedData.doi"
                           :key="index"
                         >
                           <td>
@@ -1144,9 +1080,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__doi.splice(index, 1)
-                            "
+                            @click="relatedData.doi.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1159,13 +1093,10 @@
                 <!-- LOCALITY -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__locality &&
-                    relatedData.attach_link__locality.length > 0
-                  "
+                  v-if="relatedData.locality && relatedData.locality.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__locality") }}
+                    {{ $t("attachment.relatedTables.locality") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1180,9 +1111,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__locality"
+                          v-for="(entity, index) in relatedData.locality"
                           :key="index"
                         >
                           <td>
@@ -1209,9 +1138,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__locality.splice(index, 1)
-                            "
+                            @click="relatedData.locality.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1225,12 +1152,11 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__drillcore &&
-                    relatedData.attach_link__drillcore.length > 0
+                    relatedData.drillcore && relatedData.drillcore.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__drillcore") }}
+                    {{ $t("attachment.relatedTables.drillcore") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1245,9 +1171,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__drillcore"
+                          v-for="(entity, index) in relatedData.drillcore"
                           :key="index"
                         >
                           <td>
@@ -1274,12 +1198,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__drillcore.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.drillcore.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1293,14 +1212,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__drillcore_box &&
-                    relatedData.attach_link__drillcore_box.length > 0
+                    relatedData.drillcore_box &&
+                    relatedData.drillcore_box.length > 0
                   "
                 >
                   <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attach_link__drillcore_box")
-                    }}
+                    {{ $t("attachment.relatedTables.drillcore_box") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1315,9 +1232,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__drillcore_box"
+                          v-for="(entity, index) in relatedData.drillcore_box"
                           :key="index"
                         >
                           <td>
@@ -1345,12 +1260,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__drillcore_box.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.drillcore_box.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1364,14 +1274,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__preparation !== null &&
-                    relatedData.attach_link__preparation.length > 0
+                    relatedData.preparation !== null &&
+                    relatedData.preparation.length > 0
                   "
                 >
                   <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attach_link__preparation")
-                    }}
+                    {{ $t("attachment.relatedTables.preparation") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1386,9 +1294,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__preparation"
+                          v-for="(entity, index) in relatedData.preparation"
                           :key="index"
                         >
                           <td>
@@ -1409,12 +1315,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__preparation.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.preparation.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1428,8 +1329,8 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__reference !== null &&
-                    relatedData.attach_link__reference.length > 0
+                    relatedData.reference !== null &&
+                    relatedData.reference.length > 0
                   "
                 >
                   <p class="h4">
@@ -1448,9 +1349,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__reference"
+                          v-for="(entity, index) in relatedData.reference"
                           :key="index"
                         >
                           <td>
@@ -1471,12 +1370,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__reference.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.reference.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1490,12 +1384,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__storage !== null &&
-                    relatedData.attach_link__storage.length > 0
+                    relatedData.storage !== null &&
+                    relatedData.storage.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__storage") }}
+                    {{ $t("attachment.relatedTables.storage") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1510,9 +1404,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__storage"
+                          v-for="(entity, index) in relatedData.storage"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -1527,9 +1419,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__storage.splice(index, 1)
-                            "
+                            @click="relatedData.storage.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1543,12 +1433,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__project !== null &&
-                    relatedData.attach_link__project.length > 0
+                    relatedData.project !== null &&
+                    relatedData.project.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__project") }}
+                    {{ $t("attachment.relatedTables.project") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1563,9 +1453,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__project"
+                          v-for="(entity, index) in relatedData.project"
                           :key="index"
                         >
                           <td>
@@ -1585,9 +1473,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__project.splice(index, 1)
-                            "
+                            @click="relatedData.project.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -1601,12 +1487,11 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__site !== null &&
-                    relatedData.attach_link__site.length > 0
+                    relatedData.site !== null && relatedData.site.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__site") }}
+                    {{ $t("attachment.relatedTables.site") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1621,9 +1506,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__site"
+                          v-for="(entity, index) in relatedData.site"
                           :key="index"
                         >
                           <td>
@@ -1642,9 +1525,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__site.splice(index, 1)
-                            "
+                            @click="relatedData.site.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -2460,8 +2341,8 @@
                     :color="bodyActiveColor"
                     :label="$t('attachment.relatedData')"
                     :items="relatedTabs"
-                    item-text="name_short"
-                    translation-prefix="attachment.relatedTables.attach_link__"
+                    item-text="name"
+                    translation-prefix="attachment.relatedTables."
                   />
                 </v-col>
 
@@ -2472,24 +2353,13 @@
                   v-if="selectedRelatedTable"
                 >
                   <autocomplete-wrapper
-                    v-model="
-                      relatedData['attach_link__' + selectedRelatedTable]
-                    "
+                    v-model="relatedData[selectedRelatedTable]"
                     :color="bodyActiveColor"
-                    :items="
-                      autocomplete['attach_link__' + selectedRelatedTable]
-                    "
-                    :loading="
-                      autocomplete.loaders[
-                        'attach_link__' + selectedRelatedTable
-                      ]
-                    "
+                    :items="autocomplete[selectedRelatedTable]"
+                    :loading="autocomplete.loaders[selectedRelatedTable]"
                     :item-text="customLabelForRelatedData"
                     :label="
-                      $t(
-                        'attachment.relatedTables.attach_link__' +
-                          selectedRelatedTable
-                      )
+                      $t('attachment.relatedTables.' + selectedRelatedTable)
                     "
                     is-link
                     is-searchable
@@ -2503,12 +2373,8 @@
                     attachment-related-data
                     :multiple="true"
                     v-on:chip:close="
-                      relatedData[
-                        'attach_link__' + selectedRelatedTable
-                      ].splice(
-                        relatedData[
-                          'attach_link__' + selectedRelatedTable
-                        ].indexOf($event),
+                      relatedData[selectedRelatedTable].splice(
+                        relatedData[selectedRelatedTable].indexOf($event),
                         1
                       )
                     "
@@ -2522,12 +2388,11 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__collection &&
-                    relatedData.attach_link__collection.length > 0
+                    relatedData.collection && relatedData.collection.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__collection") }}
+                    {{ $t("attachment.relatedTables.collection") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2542,9 +2407,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__collection"
+                          v-for="(entity, index) in relatedData.collection"
                           :key="index"
                         >
                           <td>
@@ -2571,12 +2434,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__collection.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.collection.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -2589,13 +2447,10 @@
                 <!-- SPECIMEN -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__specimen &&
-                    relatedData.attach_link__specimen.length > 0
-                  "
+                  v-if="relatedData.specimen && relatedData.specimen.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__specimen") }}
+                    {{ $t("attachment.relatedTables.specimen") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2610,9 +2465,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__specimen"
+                          v-for="(entity, index) in relatedData.specimen"
                           :key="index"
                         >
                           <td>
@@ -2639,9 +2492,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__specimen.splice(index, 1)
-                            "
+                            @click="relatedData.specimen.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -2654,13 +2505,10 @@
                 <!-- SAMPLE -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__sample &&
-                    relatedData.attach_link__sample.length > 0
-                  "
+                  v-if="relatedData.sample && relatedData.sample.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__sample") }}
+                    {{ $t("attachment.relatedTables.sample") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2675,9 +2523,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__sample"
+                          v-for="(entity, index) in relatedData.sample"
                           :key="index"
                         >
                           <td>
@@ -2698,9 +2544,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__sample.splice(index, 1)
-                            "
+                            @click="relatedData.sample.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -2714,14 +2558,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__sample_series &&
-                    relatedData.attach_link__sample_series.length > 0
+                    relatedData.sample_series &&
+                    relatedData.sample_series.length > 0
                   "
                 >
                   <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attach_link__sample_series")
-                    }}
+                    {{ $t("attachment.relatedTables.sample_series") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2736,9 +2578,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__sample_series"
+                          v-for="(entity, index) in relatedData.sample_series"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -2747,12 +2587,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__sample_series.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.sample_series.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -2765,13 +2600,10 @@
                 <!-- ANALYSIS -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__analysis &&
-                    relatedData.attach_link__analysis.length > 0
-                  "
+                  v-if="relatedData.analysis && relatedData.analysis.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__analysis") }}
+                    {{ $t("attachment.relatedTables.analysis") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2786,9 +2618,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__analysis"
+                          v-for="(entity, index) in relatedData.analysis"
                           :key="index"
                         >
                           <td>
@@ -2818,9 +2648,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__analysis.splice(index, 1)
-                            "
+                            @click="relatedData.analysis.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -2833,13 +2661,10 @@
                 <!-- DATASET -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__dataset &&
-                    relatedData.attach_link__dataset.length > 0
-                  "
+                  v-if="relatedData.dataset && relatedData.dataset.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__dataset") }}
+                    {{ $t("attachment.relatedTables.dataset") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2854,9 +2679,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__dataset"
+                          v-for="(entity, index) in relatedData.dataset"
                           :key="index"
                         >
                           <td>
@@ -2883,9 +2706,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__dataset.splice(index, 1)
-                            "
+                            @click="relatedData.dataset.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -2898,13 +2719,10 @@
                 <!-- DOI -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__doi &&
-                    relatedData.attach_link__doi.length > 0
-                  "
+                  v-if="relatedData.doi && relatedData.doi.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__doi") }}
+                    {{ $t("attachment.relatedTables.doi") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2919,9 +2737,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__doi"
+                          v-for="(entity, index) in relatedData.doi"
                           :key="index"
                         >
                           <td>
@@ -2942,9 +2758,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__doi.splice(index, 1)
-                            "
+                            @click="relatedData.doi.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -2957,13 +2771,10 @@
                 <!-- LOCALITY -->
                 <div
                   class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attach_link__locality &&
-                    relatedData.attach_link__locality.length > 0
-                  "
+                  v-if="relatedData.locality && relatedData.locality.length > 0"
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__locality") }}
+                    {{ $t("attachment.relatedTables.locality") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2978,9 +2789,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__locality"
+                          v-for="(entity, index) in relatedData.locality"
                           :key="index"
                         >
                           <td>
@@ -3007,9 +2816,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__locality.splice(index, 1)
-                            "
+                            @click="relatedData.locality.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -3023,12 +2830,11 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__drillcore &&
-                    relatedData.attach_link__drillcore.length > 0
+                    relatedData.drillcore && relatedData.drillcore.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__drillcore") }}
+                    {{ $t("attachment.relatedTables.drillcore") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3043,9 +2849,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__drillcore"
+                          v-for="(entity, index) in relatedData.drillcore"
                           :key="index"
                         >
                           <td>
@@ -3072,12 +2876,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__drillcore.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.drillcore.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -3091,14 +2890,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__drillcore_box &&
-                    relatedData.attach_link__drillcore_box.length > 0
+                    relatedData.drillcore_box &&
+                    relatedData.drillcore_box.length > 0
                   "
                 >
                   <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attach_link__drillcore_box")
-                    }}
+                    {{ $t("attachment.relatedTables.drillcore_box") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3113,9 +2910,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__drillcore_box"
+                          v-for="(entity, index) in relatedData.drillcore_box"
                           :key="index"
                         >
                           <td>
@@ -3143,12 +2938,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__drillcore_box.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.drillcore_box.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -3162,14 +2952,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__preparation !== null &&
-                    relatedData.attach_link__preparation.length > 0
+                    relatedData.preparation !== null &&
+                    relatedData.preparation.length > 0
                   "
                 >
                   <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attach_link__preparation")
-                    }}
+                    {{ $t("attachment.relatedTables.preparation") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3184,9 +2972,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__preparation"
+                          v-for="(entity, index) in relatedData.preparation"
                           :key="index"
                         >
                           <td>
@@ -3207,12 +2993,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__preparation.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.preparation.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -3226,8 +3007,8 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__reference !== null &&
-                    relatedData.attach_link__reference.length > 0
+                    relatedData.reference !== null &&
+                    relatedData.reference.length > 0
                   "
                 >
                   <p class="h4">
@@ -3246,9 +3027,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__reference"
+                          v-for="(entity, index) in relatedData.reference"
                           :key="index"
                         >
                           <td>
@@ -3269,12 +3048,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__reference.splice(
-                                index,
-                                1
-                              )
-                            "
+                            @click="relatedData.reference.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -3288,12 +3062,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__storage !== null &&
-                    relatedData.attach_link__storage.length > 0
+                    relatedData.storage !== null &&
+                    relatedData.storage.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__storage") }}
+                    {{ $t("attachment.relatedTables.storage") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3308,9 +3082,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__storage"
+                          v-for="(entity, index) in relatedData.storage"
                           :key="index"
                         >
                           <td>
@@ -3330,9 +3102,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__storage.splice(index, 1)
-                            "
+                            @click="relatedData.storage.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -3346,12 +3116,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__project !== null &&
-                    relatedData.attach_link__project.length > 0
+                    relatedData.project !== null &&
+                    relatedData.project.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__project") }}
+                    {{ $t("attachment.relatedTables.project") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3366,9 +3136,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__project"
+                          v-for="(entity, index) in relatedData.project"
                           :key="index"
                         >
                           <td>
@@ -3388,9 +3156,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__project.splice(index, 1)
-                            "
+                            @click="relatedData.project.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -3404,12 +3170,11 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__site !== null &&
-                    relatedData.attach_link__site.length > 0
+                    relatedData.site !== null && relatedData.site.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__site") }}
+                    {{ $t("attachment.relatedTables.site") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3424,9 +3189,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__site"
+                          v-for="(entity, index) in relatedData.site"
                           :key="index"
                         >
                           <td>
@@ -3445,9 +3208,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__site.splice(index, 1)
-                            "
+                            @click="relatedData.site.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -3461,16 +3222,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__locality_description !== null &&
-                    relatedData.attach_link__locality_description.length > 0
+                    relatedData.locality_description !== null &&
+                    relatedData.locality_description.length > 0
                   "
                 >
                   <p class="h4">
-                    {{
-                      $t(
-                        "attachment.relatedTables.attach_link__locality_description"
-                      )
-                    }}
+                    {{ $t("attachment.relatedTables.locality_description") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3487,7 +3244,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__locality_description"
+                          ) in relatedData.locality_description"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -3499,10 +3256,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__locality_description.splice(
-                                index,
-                                1
-                              )
+                              relatedData.locality_description.splice(index, 1)
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -3517,12 +3271,11 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__taxon !== null &&
-                    relatedData.attach_link__taxon.length > 0
+                    relatedData.taxon !== null && relatedData.taxon.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__taxon") }}
+                    {{ $t("attachment.relatedTables.taxon") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3538,9 +3291,7 @@
 
                       <tbody>
                         <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attach_link__taxon"
+                          v-for="(entity, index) in relatedData.taxon"
                           :key="index"
                         >
                           <td>
@@ -3560,9 +3311,7 @@
 
                           <td
                             class="text-center delete-relation"
-                            @click="
-                              relatedData.attach_link__taxon.splice(index, 1)
-                            "
+                            @click="relatedData.taxon.splice(index, 1)"
                           >
                             <i class="fas fa-times"></i>
                           </td>
@@ -3894,19 +3643,21 @@ import {
   fetchListImageType,
   fetchListLicences,
 } from "../../assets/js/api/apiCalls";
-import AttachmentWrapper from "./AttachmentWrapper";
-import MapComponent from "../partial/MapComponent";
-import FileInformation from "../partial/FileInformation";
-import FilePreview from "../partial/FilePreview";
-import NewDoiButton from "../partial/NewDoiButton";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import DateWrapper from "../partial/inputs/DateWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import SelectWrapper from "../partial/inputs/SelectWrapper";
-import FileInput from "../partial/inputs/FileInput";
+import AttachmentWrapper from "../../components/attachment/AttachmentWrapper";
+import MapComponent from "../../components/partial/MapComponent";
+import FileInformation from "../../components/partial/FileInformation";
+import FilePreview from "../../components/partial/FilePreview";
+import NewDoiButton from "../../components/partial/NewDoiButton";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import DateWrapper from "../../components/partial/inputs/DateWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import SelectWrapper from "../../components/partial/inputs/SelectWrapper";
+import FileInput from "../../components/partial/inputs/FileInput";
 import toastMixin from "../../mixins/toastMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "Attachment",
@@ -3944,7 +3695,14 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, toastMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    toastMixin,
+    globalUtilsMixin,
+    detailViewUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
@@ -4101,18 +3859,6 @@ export default {
     },
   },
 
-  created() {
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.attachmentSearchParameters,
-        request: "FETCH_ATTACHMENTS",
-        title: "header.attachments",
-        object: "attachment",
-        field: "original_filename",
-      });
-    }
-  },
-
   watch: {
     "$route.path": {
       handler: function (newVal, oldVal) {
@@ -4215,88 +3961,71 @@ export default {
         filePreviewKey: Date.now(),
         relatedTabs: [
           {
-            name: "attach_link__collection",
-            name_short: "collection",
+            name: "collection",
             iconClass: "fas fa-server",
           },
           {
-            name: "attach_link__specimen",
-            name_short: "specimen",
+            name: "specimen",
             iconClass: "fas fa-flask",
           },
           {
-            name: "attach_link__sample",
-            name_short: "sample",
+            name: "sample",
             iconClass: "fas fa-vial",
           },
           {
-            name: "attach_link__sample_series",
-            name_short: "sample_series",
+            name: "sample_series",
             iconClass: "fas fa-vials",
           },
           {
-            name: "attach_link__analysis",
-            name_short: "analysis",
+            name: "analysis",
             iconClass: "fas fa-chart-pie",
           },
           {
-            name: "attach_link__dataset",
-            name_short: "dataset",
+            name: "dataset",
             iconClass: "fas fa-server",
           },
           {
-            name: "attach_link__doi",
-            name_short: "doi",
+            name: "doi",
             iconClass: "fas fa-database",
           },
           {
-            name: "attach_link__locality",
-            name_short: "locality",
+            name: "locality",
             iconClass: "fas fa-map-marker-alt",
           },
           {
-            name: "attach_link__drillcore",
-            name_short: "drillcore",
+            name: "drillcore",
             iconClass: "fas fa-tools",
           },
           {
-            name: "attach_link__drillcore_box",
-            name_short: "drillcore_box",
+            name: "drillcore_box",
             iconClass: "fas fa-boxes",
           },
           {
-            name: "attach_link__preparation",
-            name_short: "preparation",
+            name: "preparation",
             iconClass: "fas fa-prescription-bottle",
           },
           {
-            name: "attach_link__reference",
-            name_short: "reference",
+            name: "reference",
             iconClass: "fas fa-book",
           },
           {
-            name: "attach_link__storage",
-            name_short: "storage",
+            name: "storage",
             iconClass: "fas fa-archive",
           },
           {
-            name: "attach_link__project",
-            name_short: "project",
+            name: "project",
             iconClass: "fas fa-project-diagram",
           },
           {
-            name: "attach_link__site",
-            name_short: "site",
+            name: "site",
             iconClass: "fas fa-map-pin",
           },
           {
-            name: "attach_link__locality_description",
-            name_short: "locality_description",
+            name: "locality_description",
             iconClass: "fas fa-align-left",
           },
           {
-            name: "attach_link__taxon",
-            name_short: "taxon",
+            name: "taxon",
             iconClass: "fas fa-pastafarianism",
           },
         ],
@@ -4355,6 +4084,11 @@ export default {
           "storage",
           "type",
         ],
+        listOfAutocompleteTables: [
+          "list_licence",
+          "list_image_type",
+          "list_attachment_type",
+        ],
         autocomplete: {
           loaders: {
             agent: false,
@@ -4368,23 +4102,20 @@ export default {
             keyword: false,
             specimen: false,
             type: false,
-            attach_link__collection: false,
-            attach_link__specimen: false,
-            attach_link__sample: false,
-            attach_link__sample_series: false,
-            attach_link__analysis: false,
-            attach_link__dataset: false,
-            attach_link__doi: false,
-            attach_link__locality: false,
-            attach_link__drillcore: false,
-            attach_link__drillcore_box: false,
-            attach_link__preparation: false,
-            attach_link__reference: false,
-            attach_link__storage: false,
-            attach_link__project: false,
-            attach_link__site: false,
-            attach_link__locality_description: false,
-            attach_link__taxon: false,
+            collection: false,
+            sample: false,
+            sample_series: false,
+            analysis: false,
+            dataset: false,
+            doi: false,
+            drillcore: false,
+            drillcore_box: false,
+            preparation: false,
+            storage: false,
+            project: false,
+            site: false,
+            locality_description: false,
+            taxon: false,
           },
           agent: [],
           imageset: [],
@@ -4397,23 +4128,20 @@ export default {
           keyword: [],
           specimen: [],
           type: [],
-          attach_link__collection: [],
-          attach_link__specimen: [],
-          attach_link__sample: [],
-          attach_link__sample_series: [],
-          attach_link__analysis: [],
-          attach_link__dataset: [],
-          attach_link__doi: [],
-          attach_link__locality: [],
-          attach_link__drillcore: [],
-          attach_link__drillcore_box: [],
-          attach_link__preparation: [],
-          attach_link__reference: [],
-          attach_link__storage: [],
-          attach_link__project: [],
-          attach_link__site: [],
-          attach_link__locality_description: [],
-          attach_link__taxon: [],
+          collection: [],
+          sample: [],
+          sample_series: [],
+          analysis: [],
+          dataset: [],
+          doi: [],
+          drillcore: [],
+          drillcore_box: [],
+          preparation: [],
+          storage: [],
+          project: [],
+          site: [],
+          locality_description: [],
+          taxon: [],
         },
         requiredFields: {
           photo_archive: ["imageset"],
@@ -4454,321 +4182,262 @@ export default {
       this.loadFullInfo();
     },
 
-    loadFullInfo() {
-      this.loadAutocompleteFields();
+    async loadFullInfo() {
+      this.loadAutocompleteFields(this.listOfAutocompleteTables);
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
 
-        // fetchAttachment(this.$route.params.id).then(
-        fetchAttachment(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
+        const res = await this.$api.rw.getDetail(
+          "attachment",
+          this.$route.params.id,
+          { nest: 1 }
+        );
 
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "attachment", this.handleResponse(response)[0]);
-            // this.attachment = this.handleResponse(response)[0];
-            this.rawAttachment = cloneDeep(this.attachment);
-            this.fillAutocompleteFields(this.attachment);
+        if (res?.id) {
+          this.$emit("object-exists", true);
+          this.$set(this, "attachment", res);
+          this.rawAttachment = { ...this.attachment };
 
-            this.removeUnnecessaryFields(this.attachment, this.copyFields);
-            this.$emit("data-loaded", this.attachment);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
+          this.fillAutocompleteFields(this.attachment);
+          this.$emit("data-loaded", this.attachment);
 
-        this.loadAutocompleteFields(false, true);
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+          this.loadRelatedData(
+            this.relatedTabs.map((tab) => tab.name),
+            "attachment",
+            res.id
+          );
+        } else this.$emit("object-exists", false);
+
+        this.setLoadingState(false);
       }
     },
 
-    loadAutocompleteFields(
-      regularAutocompleteFields = true,
-      relatedDataAutocompleteFields = false
-    ) {
-      if (regularAutocompleteFields) {
-        fetchListLicences().then(
-          (response) =>
-            (this.autocomplete.licence = this.handleResponse(response))
-        );
-        fetchListImageType().then(
-          (response) =>
-            (this.autocomplete.image_type = this.handleResponse(response))
-        );
-        fetchListAttachmentType().then(
-          (response) => (this.autocomplete.type = this.handleResponse(response))
-        );
-      }
+    // Todo: This is currently deactivated, maybe should call it in related data components
+    loadRelatedDataAutocompleteFields() {
+      fetchAttachmentKeyword(this.$route.params.id).then((response) => {
+        let referenceKeyword = this.handleResponse(response);
+        this.relatedData.keyword = referenceKeyword.map((entity) => {
+          return {
+            keyword: entity.keyword__keyword,
+            id: entity.keyword,
+          };
+        });
+        this.autocomplete.keyword = this.relatedData.keyword;
+      });
 
-      if (relatedDataAutocompleteFields) {
-        fetchAttachmentKeyword(this.$route.params.id).then((response) => {
-          let referenceKeyword = this.handleResponse(response);
-          this.relatedData.keyword = referenceKeyword.map((entity) => {
-            return {
-              keyword: entity.keyword__keyword,
-              id: entity.keyword,
-            };
-          });
-          this.autocomplete.keyword = this.relatedData.keyword;
+      fetchAttachmentLinkCollections(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.collection = collections.map((entity) => {
+          return {
+            id: entity.collection,
+            name: entity.collection__name,
+            name_en: entity.collection__name_en,
+          };
         });
-
-        fetchAttachmentLinkCollections(this.$route.params.id).then(
-          (response) => {
-            let collections = this.handleResponse(response);
-            this.relatedData.attach_link__collection = collections.map(
-              (entity) => {
-                return {
-                  id: entity.collection,
-                  name: entity.collection__name,
-                  name_en: entity.collection__name_en,
-                };
-              }
-            );
-            this.autocomplete.attach_link__collection =
-              this.relatedData.attach_link__collection;
-          }
-        );
-        fetchAttachmentLinkSpecimens(this.$route.params.id).then((response) => {
+        this.autocomplete.collection = this.relatedData.collection;
+      });
+      fetchAttachmentLinkSpecimens(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.specimen = collections.map((entity) => {
+          return {
+            id: entity.specimen,
+            specimen_id: entity.specimen_id,
+            coll__number: entity.specimen__coll__number,
+          };
+        });
+        this.autocomplete.specimen = this.relatedData.specimen;
+      });
+      fetchAttachmentLinkSamples(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.sample = collections.map((entity) => {
+          return {
+            id: entity.sample,
+            number: entity.sample__number,
+          };
+        });
+        this.autocomplete.sample = this.relatedData.sample;
+      });
+      fetchAttachmentLinkSampleSeries(this.$route.params.id).then(
+        (response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__specimen = collections.map((entity) => {
+          this.relatedData.sample_series = collections.map((entity) => {
             return {
-              id: entity.specimen,
-              specimen_id: entity.specimen_id,
-              coll__number: entity.specimen__coll__number,
+              id: entity.sample_series,
+              name: entity.sample_series__name,
             };
           });
-          this.autocomplete.attach_link__specimen =
-            this.relatedData.attach_link__specimen;
+          this.autocomplete.sample_series = this.relatedData.sample_series;
+        }
+      );
+      fetchAttachmentLinkAnalyses(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.analysis = collections.map((entity) => {
+          return {
+            id: entity.analysis,
+            sample__number: entity.analysis__sample__number,
+          };
         });
-        fetchAttachmentLinkSamples(this.$route.params.id).then((response) => {
+        this.autocomplete.analysis = this.relatedData.analysis;
+      });
+      fetchAttachmentLinkDatasets(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.dataset = collections.map((entity) => {
+          return {
+            id: entity.dataset,
+            name: entity.dataset__name,
+            name_en: entity.dataset__name_en,
+          };
+        });
+        this.autocomplete.dataset = this.relatedData.dataset;
+      });
+      fetchAttachmentLinkLocalities(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.locality = collections.map((entity) => {
+          return {
+            id: entity.locality,
+            locality: entity.locality__locality,
+            locality_en: entity.locality__locality_en,
+          };
+        });
+        this.autocomplete.locality = this.relatedData.locality;
+      });
+      fetchAttachmentLinkDrillcores(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.drillcore = collections.map((entity) => {
+          return {
+            id: entity.drillcore,
+            drillcore: entity.drillcore__drillcore,
+            drillcore_en: entity.drillcore__drillcore_en,
+          };
+        });
+        this.autocomplete.drillcore = this.relatedData.drillcore;
+      });
+      fetchAttachmentLinkDrillcoreBoxes(this.$route.params.id).then(
+        (response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__sample = collections.map((entity) => {
+          this.relatedData.drillcore_box = collections.map((entity) => {
             return {
-              id: entity.sample,
-              number: entity.sample__number,
+              id: entity.drillcore_box,
+              drillcore__drillcore: entity.drillcore_box__drillcore__drillcore,
+              drillcore__drillcore_en:
+                entity.drillcore_box__drillcore__drillcore_en,
             };
           });
-          this.autocomplete.attach_link__sample =
-            this.relatedData.attach_link__sample;
-        });
-        fetchAttachmentLinkSampleSeries(this.$route.params.id).then(
-          (response) => {
-            let collections = this.handleResponse(response);
-            this.relatedData.attach_link__sample_series = collections.map(
-              (entity) => {
-                return {
-                  id: entity.sample_series,
-                  name: entity.sample_series__name,
-                };
-              }
-            );
-            this.autocomplete.attach_link__sample_series =
-              this.relatedData.attach_link__sample_series;
-          }
-        );
-        fetchAttachmentLinkAnalyses(this.$route.params.id).then((response) => {
+          this.autocomplete.drillcore_box = this.relatedData.drillcore_box;
+        }
+      );
+      fetchAttachmentLinkPreparations(this.$route.params.id).then(
+        (response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__analysis = collections.map((entity) => {
+          this.relatedData.preparation = collections.map((entity) => {
             return {
-              id: entity.analysis,
-              sample__number: entity.analysis__sample__number,
+              id: entity.preparation,
+              preparation_number: entity.preparation__preparation_number,
             };
           });
-          this.autocomplete.attach_link__analysis =
-            this.relatedData.attach_link__analysis;
+          this.autocomplete.preparation = this.relatedData.preparation;
+        }
+      );
+      fetchAttachmentLinkReferences(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.reference = collections.map((entity) => {
+          return {
+            id: entity.reference,
+            reference: entity.reference__reference,
+          };
         });
-        fetchAttachmentLinkDatasets(this.$route.params.id).then((response) => {
+        this.autocomplete.reference = this.relatedData.reference;
+      });
+      fetchAttachmentLinkDois(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.doi = collections.map((entity) => {
+          return {
+            id: entity.doi,
+            identifier: entity.doi__identifier,
+          };
+        });
+        this.autocomplete.doi = this.relatedData.doi;
+      });
+      fetchAttachmentLinkStorages(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.storage = collections.map((entity) => {
+          return {
+            id: entity.storage,
+            location: entity.storage__location,
+            contents: entity.storage__contents,
+          };
+        });
+        this.autocomplete.storage = this.relatedData.storage;
+      });
+      fetchAttachmentLinkProjects(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.project = collections.map((entity) => {
+          return {
+            id: entity.project,
+            name: entity.project__name,
+            name_en: entity.project__name_en,
+          };
+        });
+        this.autocomplete.project = this.relatedData.project;
+      });
+      fetchAttachmentLinkSites(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.site = collections.map((entity) => {
+          return {
+            id: entity.site,
+            name: entity.site__name,
+            name_en: entity.site__name_en,
+          };
+        });
+        this.autocomplete.site = this.relatedData.site;
+      });
+      fetchAttachmentLinkLocalityDescriptions(this.$route.params.id).then(
+        (response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__dataset = collections.map((entity) => {
+          this.relatedData.locality_description = collections.map((entity) => {
             return {
-              id: entity.dataset,
-              name: entity.dataset__name,
-              name_en: entity.dataset__name_en,
+              id: entity.locality_description,
+              description: entity.locality_description__description,
             };
           });
-          this.autocomplete.attach_link__dataset =
-            this.relatedData.attach_link__dataset;
+          this.autocomplete.locality_description =
+            this.relatedData.locality_description;
+        }
+      );
+      fetchAttachmentLinkTaxa(this.$route.params.id).then((response) => {
+        let collections = this.handleResponse(response);
+        this.relatedData.taxon = collections.map((entity) => {
+          return {
+            id: entity.taxon,
+            taxon: entity.taxon__taxon,
+            author_year: entity.taxon__author_year,
+          };
         });
-        fetchAttachmentLinkLocalities(this.$route.params.id).then(
-          (response) => {
-            let collections = this.handleResponse(response);
-            this.relatedData.attach_link__locality = collections.map(
-              (entity) => {
-                return {
-                  id: entity.locality,
-                  locality: entity.locality__locality,
-                  locality_en: entity.locality__locality_en,
-                };
-              }
-            );
-            this.autocomplete.attach_link__locality =
-              this.relatedData.attach_link__locality;
-          }
-        );
-        fetchAttachmentLinkDrillcores(this.$route.params.id).then(
-          (response) => {
-            let collections = this.handleResponse(response);
-            this.relatedData.attach_link__drillcore = collections.map(
-              (entity) => {
-                return {
-                  id: entity.drillcore,
-                  drillcore: entity.drillcore__drillcore,
-                  drillcore_en: entity.drillcore__drillcore_en,
-                };
-              }
-            );
-            this.autocomplete.attach_link__drillcore =
-              this.relatedData.attach_link__drillcore;
-          }
-        );
-        fetchAttachmentLinkDrillcoreBoxes(this.$route.params.id).then(
-          (response) => {
-            let collections = this.handleResponse(response);
-            this.relatedData.attach_link__drillcore_box = collections.map(
-              (entity) => {
-                return {
-                  id: entity.drillcore_box,
-                  drillcore__drillcore:
-                    entity.drillcore_box__drillcore__drillcore,
-                  drillcore__drillcore_en:
-                    entity.drillcore_box__drillcore__drillcore_en,
-                };
-              }
-            );
-            this.autocomplete.attach_link__drillcore_box =
-              this.relatedData.attach_link__drillcore_box;
-          }
-        );
-        fetchAttachmentLinkPreparations(this.$route.params.id).then(
-          (response) => {
-            let collections = this.handleResponse(response);
-            this.relatedData.attach_link__preparation = collections.map(
-              (entity) => {
-                return {
-                  id: entity.preparation,
-                  preparation_number: entity.preparation__preparation_number,
-                };
-              }
-            );
-            this.autocomplete.attach_link__preparation =
-              this.relatedData.attach_link__preparation;
-          }
-        );
-        fetchAttachmentLinkReferences(this.$route.params.id).then(
-          (response) => {
-            let collections = this.handleResponse(response);
-            this.relatedData.attach_link__reference = collections.map(
-              (entity) => {
-                return {
-                  id: entity.reference,
-                  reference: entity.reference__reference,
-                };
-              }
-            );
-            this.autocomplete.attach_link__reference =
-              this.relatedData.attach_link__reference;
-          }
-        );
-        fetchAttachmentLinkDois(this.$route.params.id).then((response) => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__doi = collections.map((entity) => {
-            return {
-              id: entity.doi,
-              identifier: entity.doi__identifier,
-            };
-          });
-          this.autocomplete.attach_link__doi =
-            this.relatedData.attach_link__doi;
-        });
-        fetchAttachmentLinkStorages(this.$route.params.id).then((response) => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__storage = collections.map((entity) => {
-            return {
-              id: entity.storage,
-              location: entity.storage__location,
-              contents: entity.storage__contents,
-            };
-          });
-          this.autocomplete.attach_link__storage =
-            this.relatedData.attach_link__storage;
-        });
-        fetchAttachmentLinkProjects(this.$route.params.id).then((response) => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__project = collections.map((entity) => {
-            return {
-              id: entity.project,
-              name: entity.project__name,
-              name_en: entity.project__name_en,
-            };
-          });
-          this.autocomplete.attach_link__project =
-            this.relatedData.attach_link__project;
-        });
-        fetchAttachmentLinkSites(this.$route.params.id).then((response) => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__site = collections.map((entity) => {
-            return {
-              id: entity.site,
-              name: entity.site__name,
-              name_en: entity.site__name_en,
-            };
-          });
-          this.autocomplete.attach_link__site =
-            this.relatedData.attach_link__site;
-        });
-        fetchAttachmentLinkLocalityDescriptions(this.$route.params.id).then(
-          (response) => {
-            let collections = this.handleResponse(response);
-            this.relatedData.attach_link__locality_description =
-              collections.map((entity) => {
-                return {
-                  id: entity.locality_description,
-                  description: entity.locality_description__description,
-                };
-              });
-            this.autocomplete.attach_link__locality_description =
-              this.relatedData.attach_link__locality_description;
-          }
-        );
-        fetchAttachmentLinkTaxa(this.$route.params.id).then((response) => {
-          let collections = this.handleResponse(response);
-          this.relatedData.attach_link__taxon = collections.map((entity) => {
-            return {
-              id: entity.taxon,
-              taxon: entity.taxon__taxon,
-              author_year: entity.taxon__author_year,
-            };
-          });
-          this.autocomplete.attach_link__taxon =
-            this.relatedData.attach_link__taxon;
-        });
-      }
+        this.autocomplete.taxon = this.relatedData.taxon;
+      });
     },
 
     setDefaultRelatedData() {
       return {
         keyword: [],
-        attach_link__collection: [],
-        attach_link__specimen: [],
-        attach_link__sample: [],
-        attach_link__sample_series: [],
-        attach_link__analysis: [],
-        attach_link__dataset: [],
-        attach_link__doi: [],
-        attach_link__locality: [],
-        attach_link__drillcore: [],
-        attach_link__drillcore_box: [],
-        attach_link__preparation: [],
-        attach_link__reference: [],
-        attach_link__storage: [],
-        attach_link__project: [],
-        attach_link__site: [],
-        attach_link__locality_description: [],
-        attach_link__taxon: [],
+        collection: [],
+        specimen: [],
+        sample: [],
+        sample_series: [],
+        analysis: [],
+        dataset: [],
+        doi: [],
+        locality: [],
+        drillcore: [],
+        drillcore_box: [],
+        preparation: [],
+        reference: [],
+        storage: [],
+        project: [],
+        site: [],
+        locality_description: [],
+        taxon: [],
         searchParameters: {
           keyword: {
             page: 1,
@@ -4782,171 +4451,96 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      if (!this.$route.meta.isEdit) {
-        if (this.isPhotoArchive) {
-          this.saveFields({ key: "photoArchive", value: objectToUpload });
-          this.saveFields({
-            key: "photoArchiveKeywords",
-            value: objectToUpload,
-          });
-        } else if (this.isSpecimenImage) {
-          this.saveFields({ key: "specimenImage", value: objectToUpload });
-          this.saveFields({
-            key: "specimenImageKeywords",
-            value: objectToUpload,
-          });
-        } else if (this.isOtherFile) {
-          this.saveFields({ key: "otherFiles", value: objectToUpload });
-          this.saveFields({ key: "otherFilesKeywords", value: objectToUpload });
-        } else if (this.isDigitisedReference)
-          this.saveFields({ key: "digitisedReference", value: objectToUpload });
-      }
-
-      if (this.isNotEmpty(uploadableObject.image_latitude))
-        uploadableObject.image_latitude = parseFloat(
-          uploadableObject.image_latitude
-        ).toFixed(6);
-      else uploadableObject.image_latitude = null;
-      if (this.isNotEmpty(uploadableObject.image_longitude))
-        uploadableObject.image_longitude = parseFloat(
-          uploadableObject.image_longitude
-        ).toFixed(6);
-      else uploadableObject.image_longitude = null;
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      /* Related Data START */
-      uploadableObject.related_data = {};
-
-      if (!this.isDigitisedReference) {
-        if (this.isNotEmpty(this.relatedData.keyword))
-          uploadableObject.related_data.keyword = this.relatedData.keyword.map(
-            (keyword) => {
-              return {
-                id: keyword.id,
-              };
-            }
-          );
-        else uploadableObject.related_data.keyword = null;
-      }
-
-      if (this.isPhotoArchive || this.isOtherFile) {
-        this.relatedTabs.forEach((tab) => {
-          if (
-            this.relatedData[tab.name] &&
-            this.relatedData[tab.name].length > 0
-          ) {
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ].map((entity) => {
-              return {
-                id: entity.id,
-              };
-            });
-          } else uploadableObject.related_data[tab.name] = null;
-        });
-      }
-      /* Related Data END */
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
+    formatDataForUpload(object) {
+      let uploadableObject = { ...object };
+      uploadableObject = this.cleanObject(uploadableObject);
+      return uploadableObject;
     },
 
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.agent_digitised__id)) {
-        this.attachment.agent_digitised = {
-          id: obj.agent_digitised__id,
-          agent: obj.agent_digitised__agent,
-        };
-        this.autocomplete.agent_digitised.push(this.attachment.agent_digitised);
-      }
-      if (this.isNotEmpty(obj.author_id)) {
-        this.attachment.author = {
-          id: obj.author_id,
-          agent: obj.author__agent,
-        };
-        this.autocomplete.agent.push(this.attachment.author);
-      }
-      if (this.isNotEmpty(obj.copyright_agent__id)) {
-        this.attachment.copyright_agent = {
-          id: obj.copyright_agent__id,
-          agent: obj.copyright_agent__agent,
-        };
-        this.autocomplete.copyright_agent.push(this.attachment.copyright_agent);
-      }
-      if (this.isNotEmpty(obj.image_type__id)) {
-        this.attachment.image_type = {
-          id: obj.image_type__id,
-          value: obj.image_type__value,
-          value_en: obj.image_type__value_en,
-        };
-      }
-      if (this.isNotEmpty(obj.imageset__id)) {
-        this.attachment.imageset = {
-          id: obj.imageset__id,
-          imageset_number: obj.imageset__imageset_number,
-        };
-        this.autocomplete.imageset.push(this.attachment.imageset);
-      }
-      if (this.isNotEmpty(obj.licence__id)) {
-        this.attachment.licence = {
-          id: obj.licence__id,
-          licence: obj.licence__licence,
-          licence_en: obj.licence__licence_en,
-        };
-      }
-      if (this.isNotEmpty(obj.locality)) {
-        this.attachment.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.attachment.locality);
-      }
-      if (this.isNotEmpty(obj.specimen__id)) {
-        this.attachment.specimen = {
-          id: obj.specimen__id,
-          specimen_id: obj.specimen_id,
-          coll__number: obj.specimen__coll__number,
-        };
-        this.autocomplete.specimen.push(this.attachment.specimen);
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        this.attachment.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference,
-        };
-        this.autocomplete.reference.push(this.attachment.reference);
-      }
-      if (this.isNotEmpty(obj.type)) {
-        this.attachment.type = {
-          id: obj.type,
-          value: obj.type__value,
-          value_en: obj.type__value_en,
-        };
-      }
-      if (this.isNotEmpty(obj.coll)) {
-        this.attachment.coll = {
-          id: obj.coll,
-          number: obj.coll__number,
-        };
-      }
-    },
+    // formatDataForUpload(objectToUpload) {
+    //   let uploadableObject = cloneDeep(objectToUpload);
+    //
+    //   if (!this.$route.meta.isEdit) {
+    //     if (this.isPhotoArchive) {
+    //       this.saveFields({ key: "photoArchive", value: objectToUpload });
+    //       this.saveFields({
+    //         key: "photoArchiveKeywords",
+    //         value: objectToUpload,
+    //       });
+    //     } else if (this.isSpecimenImage) {
+    //       this.saveFields({ key: "specimenImage", value: objectToUpload });
+    //       this.saveFields({
+    //         key: "specimenImageKeywords",
+    //         value: objectToUpload,
+    //       });
+    //     } else if (this.isOtherFile) {
+    //       this.saveFields({ key: "otherFiles", value: objectToUpload });
+    //       this.saveFields({ key: "otherFilesKeywords", value: objectToUpload });
+    //     } else if (this.isDigitisedReference)
+    //       this.saveFields({ key: "digitisedReference", value: objectToUpload });
+    //   }
+    //
+    //   if (this.isNotEmpty(uploadableObject.image_latitude))
+    //     uploadableObject.image_latitude = parseFloat(
+    //       uploadableObject.image_latitude
+    //     ).toFixed(6);
+    //   else uploadableObject.image_latitude = null;
+    //   if (this.isNotEmpty(uploadableObject.image_longitude))
+    //     uploadableObject.image_longitude = parseFloat(
+    //       uploadableObject.image_longitude
+    //     ).toFixed(6);
+    //   else uploadableObject.image_longitude = null;
+    //
+    //   Object.keys(uploadableObject).forEach((key) => {
+    //     if (
+    //       typeof uploadableObject[key] === "object" &&
+    //       uploadableObject[key] !== null
+    //     ) {
+    //       uploadableObject[key] = uploadableObject[key].id
+    //         ? uploadableObject[key].id
+    //         : null;
+    //     } else if (typeof uploadableObject[key] === "undefined") {
+    //       uploadableObject[key] = null;
+    //     }
+    //   });
+    //
+    //   /* Related Data START */
+    //   uploadableObject.related_data = {};
+    //
+    //   if (!this.isDigitisedReference) {
+    //     if (this.isNotEmpty(this.relatedData.keyword))
+    //       uploadableObject.related_data.keyword = this.relatedData.keyword.map(
+    //         (keyword) => {
+    //           return {
+    //             id: keyword.id,
+    //           };
+    //         }
+    //       );
+    //     else uploadableObject.related_data.keyword = null;
+    //   }
+    //
+    //   if (this.isPhotoArchive || this.isOtherFile) {
+    //     this.relatedTabs.forEach((tab) => {
+    //       if (
+    //         this.relatedData[tab.name] &&
+    //         this.relatedData[tab.name].length > 0
+    //       ) {
+    //         uploadableObject.related_data[tab.name] = this.relatedData[
+    //           tab.name
+    //         ].map((entity) => {
+    //           return {
+    //             id: entity.id,
+    //           };
+    //         });
+    //       } else uploadableObject.related_data[tab.name] = null;
+    //     });
+    //   }
+    //   /* Related Data END */
+    //
+    //   console.log("This object is sent in string format:");
+    //   console.log(uploadableObject);
+    //   return JSON.stringify(uploadableObject);
+    // },
 
     /* FileInput Events START */
     addFiles(files) {
