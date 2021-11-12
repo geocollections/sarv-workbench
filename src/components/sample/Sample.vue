@@ -1326,7 +1326,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         this.$emit("set-object", "sample");
 
         fetchSample(this.$route.params.id).then((response) => {

@@ -66,14 +66,6 @@ const actions = {
     commit("SET_LOADING_STATE", boolVal);
   },
 
-  setLoadingType({ commit }, type) {
-    commit("SET_LOADING_TYPE", type);
-  },
-
-  setLoadingPercent({ commit }, percent) {
-    commit("SET_LOADING_PERCENT", percent);
-  },
-
   FETCH_PROJECTS({ commit, state }) {
     return fetchProjects(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)

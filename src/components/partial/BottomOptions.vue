@@ -232,8 +232,7 @@ export default {
     async handleClick(action) {
       await this.$parent.$emit(
         "button-clicked",
-        action,
-        this.$route.meta.object
+        action
       );
     },
 

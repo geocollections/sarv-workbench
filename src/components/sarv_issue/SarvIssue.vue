@@ -236,7 +236,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         fetchSarvIssue(this.$route.params.id, this.getUserId).then(
           (response) => {
             let handledResponse = this.handleResponse(response);

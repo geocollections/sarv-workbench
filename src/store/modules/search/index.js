@@ -4,8 +4,6 @@ import getters from "./getters";
 
 const state = {
   loadingState: false,
-  loadingType: "fetch",
-  loadingPercent: 0,
   sidebarList: [],
   activeObject: null,
   sidebarUserAction: null,

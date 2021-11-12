@@ -112,14 +112,14 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", ["setLoadingState", "setLoadingType"]),
+    ...mapActions("search", ["setLoadingState"]),
 
     async searchCatalogue(activeItem) {
       if (activeItem) this.activeCatalogue = activeItem;
 
       if (this.response[this.activeCatalogue.title].count === 0) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
 
         const responseFromApi = await fetchStratigraphyCatalogue(
           this.activeCatalogue

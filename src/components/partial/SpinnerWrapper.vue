@@ -4,7 +4,7 @@
     v-bind="$attrs"
     class="loading-overlay"
     size="massive"
-    :message="spinnerMessage"
+    :message="$t('common.loading')"
   ></spinner>
 </template>
 
@@ -18,15 +18,7 @@ export default {
     Spinner,
   },
   computed: {
-    ...mapState("search", ["loadingState", "loadingType", "loadingPercent"]),
-
-    spinnerMessage() {
-      if (this.loadingType === "edit")
-        return `${this.$t("common.loadingEdit")} ${this.loadingPercent} %`;
-      else if (this.loadingType === "add")
-        return `${this.$t("common.loadingAdd")} ${this.loadingPercent} %`;
-      else return `${this.$t("common.loading")}`;
-    },
+    ...mapState("search", ["loadingState"]),
   },
 };
 </script>

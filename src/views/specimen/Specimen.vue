@@ -523,6 +523,7 @@
 
     <!-- RELATED DATA TABS -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -748,7 +749,6 @@
 </template>
 
 <script>
-import { cloneDeep, isPlainObject } from "lodash";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
@@ -1130,41 +1130,9 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0) {
-            uploadableObject.related_data[tab.name] =
-              this.relatedData[tab.name].results;
-
-            uploadableObject.related_data[tab.name].forEach((item) => {
-              Object.keys(item).forEach((key) => {
-                if (typeof item[key] === "object" && item[key] !== null) {
-                  item[key] = item[key].id ? item[key].id : null;
-                }
-              });
-            });
-          }
-        });
-      } else {
-        if (this.relatedData.attachment.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
+    formatDataForUpload(object) {
+      let uploadableObject = { ...object };
       uploadableObject = this.cleanObject(uploadableObject);
-      console.log(uploadableObject);
       return uploadableObject;
     },
 

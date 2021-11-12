@@ -31,7 +31,7 @@ const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
   reducer: (state) => ({
     ...state,
-    search: { ...state.search, loadingState: false, loadingPercent: 0 },
+    search: { ...state.search, loadingState: false },
     settings: { ...state.settings, showGlobalNotification: true },
   }),
 });

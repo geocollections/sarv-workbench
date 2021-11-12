@@ -4459,7 +4459,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         // fetchAttachment(this.$route.params.id).then(
         fetchAttachment(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);

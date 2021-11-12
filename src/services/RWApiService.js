@@ -96,6 +96,17 @@ class RWApiService extends ApiService {
     }
   }
 
+  async rotateImages(data) {
+    const url = `${this.baseURL}/image_processor/rotate/`;
+    try {
+      const res = await this.service.post(url, data);
+      return res.data;
+    } catch (err) {
+      this.toastError(err, url);
+      return this.handleError(err, url);
+    }
+  }
+
   // Works similarly to put + seems our backend (drf) doesn't have any differences between put and patch
   static async patch(table, id) {
     // Todo

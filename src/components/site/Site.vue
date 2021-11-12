@@ -6,7 +6,7 @@
         <v-btn
           :color="bodyActiveColor"
           dark
-          @click="$parent.$emit('button-clicked', 'COPY_TO_LOCALITY', 'site')"
+          @click="$parent.$emit('button-clicked', 'COPY_TO_LOCALITY')"
         >
           <v-icon left small>fas fa-map-marked-alt</v-icon>
           {{ $t("site.copyToLocality") }}
@@ -1437,11 +1437,11 @@ export default {
     handleUserChoiceFromModal(choice) {
       let vm = this;
       if (choice === "SAVE_AND_LEAVE") {
-        this.add(false, "site", true).then(() => {
+        this.save("site", true).then(() => {
           vm.$root.$emit("close-new-site-modal");
         });
       } else if (choice === "SAVE") {
-        this.add(true, "site");
+        this.save("site");
       }
     },
 

@@ -39,14 +39,6 @@ const mutations = {
     state.loadingState = payload;
   },
 
-  SET_LOADING_TYPE(state, payload) {
-    state.loadingType = payload;
-  },
-
-  SET_LOADING_PERCENT(state, payload) {
-    state.loadingPercent = payload;
-  },
-
   SET_SIDEBAR_LIST(state, payload) {
     if (payload?.response) {
       // Todo: New implementation of module data in right drawer (now fetching from list module core)

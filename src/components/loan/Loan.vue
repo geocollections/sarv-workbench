@@ -609,7 +609,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         fetchLoan(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
@@ -756,7 +756,6 @@ export default {
     async fillUsingSelectionSeries() {
       if (this.selection_series?.id) {
         this.setLoadingState(true);
-        this.setLoadingType("add");
         await this.fillLists("specimen");
         await this.fillLists("sample");
       }

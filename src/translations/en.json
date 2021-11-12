@@ -50,7 +50,7 @@
     "number": "Number",
     "loadingEdit": "Please wait! Changing data...",
     "loadingAdd": "Please wait! Adding data...",
-    "loading": "Please wait! Fetching data...",
+    "loading": "Loading... Please wait!",
     "print": "Print",
     "small": "Small",
     "medium": "Medium",

@@ -156,7 +156,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", ["setLoadingState", "setLoadingType"]),
+    ...mapActions("search", ["setLoadingState"]),
 
     addFiles(files) {
       this.file = files;
@@ -174,7 +174,6 @@ export default {
 
     async importFile() {
       this.setLoadingState(true);
-      this.setLoadingType("add");
 
       let fileUploadResponse = await this.uploadFile();
 

@@ -181,7 +181,7 @@ export default {
       if (dialogResponse === "close") next();
       else if (dialogResponse === "continue") next(false);
       else if (dialogResponse === "save") {
-        await this.$emit("button-clicked", "SAVE", this.$route.meta.object);
+        await this.$emit("button-clicked", "SAVE");
         next();
       } else next();
     } else next();
@@ -196,8 +196,7 @@ export default {
       else if (dialogResponse === "save") {
         await this.$emit(
           "button-clicked",
-          "SAVE_AND_LEAVE",
-          this.$route.meta.object
+          "SAVE_AND_LEAVE"
         );
         next();
       } else next();

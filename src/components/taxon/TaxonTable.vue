@@ -67,7 +67,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getFossilsUrl(item.id)"
+        :href="`https://fossiilid.info/${item.id}`"
         :title="$t('editTaxon.viewMessage')"
         :color="bodyActiveColor"
         target="FossilsWindow"
@@ -113,11 +113,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-  },
-  methods: {
-    getFossilsUrl(id) {
-      return `https://fossiilid.info/${id}`;
     },
   },
 };

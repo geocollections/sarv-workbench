@@ -598,7 +598,7 @@ export default {
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         this.$emit("set-object", "preparation");
         fetchPreparation(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);

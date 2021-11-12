@@ -476,7 +476,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         fetchAgent(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 

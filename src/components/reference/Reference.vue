@@ -248,8 +248,8 @@
                 <div class="pa-1" v-if="reference.doi">
                   <v-btn
                     icon
-                    :href="getDoiUrl(reference.doi)"
-                    :title="getDoiUrl(reference.doi)"
+                    :href="`https://doi.org/${reference.doi}`"
+                    :title="`https://doi.org/${reference.doi}`"
                     target="DoiWindow"
                     :color="bodyActiveColor"
                   >
@@ -1201,7 +1201,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         fetchReference(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
@@ -1518,7 +1518,7 @@ export default {
 
     checkDoi() {
       this.setLoadingState(true);
-      this.setLoadingType("fetch");
+
       fetchDoiCheck(this.reference.doi).then(
         (response) => {
           this.setLoadingState(false);
