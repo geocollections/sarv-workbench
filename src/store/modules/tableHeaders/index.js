@@ -2,6 +2,8 @@ import getters from "@/store/modules/tableHeaders/getters";
 import actions from "@/store/modules/tableHeaders/actions";
 import mutations from "@/store/modules/tableHeaders/mutations";
 
+// Todo: Change __ to . as vuetify support object notation in table headers (agent.id, specimen.specimen_full_name etc.)
+
 const state = {
   accession: [
     {
@@ -15,12 +17,12 @@ const state = {
       show: true,
     },
     {
-      value: "agent_andis__agent",
+      value: "agent_andis.agent",
       text: "accession.agent_andis__agent",
       show: true,
     },
     {
-      value: "agent_vottis__agent",
+      value: "agent_vottis.agent",
       text: "accession.agent_vottis__agent",
       show: true,
     },
@@ -45,22 +47,7 @@ const state = {
       show: false,
     },
     {
-      value: "agent_andis__id",
-      text: "accession.agent_andis__id",
-      show: false,
-    },
-    {
-      value: "agent_vottis__id",
-      text: "accession.agent_vottis__id",
-      show: false,
-    },
-    {
-      value: "agent_kinnitas__id",
-      text: "accession.agent_kinnitas__id",
-      show: false,
-    },
-    {
-      value: "agent_kinnitas__agent",
+      value: "agent_kinnitas.agent",
       text: "accession.agent_kinnitas__agent",
       show: false,
     },
@@ -90,12 +77,7 @@ const state = {
       show: false,
     },
     {
-      value: "database__id",
-      text: "accession.database__id",
-      show: false,
-    },
-    {
-      value: "database__acronym",
+      value: "database.acronym",
       text: "accession.database__acronym",
       show: false,
     },
@@ -132,17 +114,12 @@ const state = {
       show: true,
     },
     {
-      value: "type__id",
-      text: "agent.type__id",
-      show: false,
-    },
-    {
-      value: "type__value",
+      value: "type.value",
       text: "agent.type__value",
       show: false,
     },
     {
-      value: "type__value_en",
+      value: "type.value_en",
       text: "agent.type__value_en",
       show: false,
     },
@@ -167,12 +144,7 @@ const state = {
       show: false,
     },
     {
-      value: "institution__id",
-      text: "agent.institution__id",
-      show: false,
-    },
-    {
-      value: "institution__agent",
+      value: "institution.agent",
       text: "agent.institution__agent",
       show: false,
     },
@@ -197,17 +169,12 @@ const state = {
       show: false,
     },
     {
-      value: "country__id",
-      text: "agent.country__id",
-      show: false,
-    },
-    {
-      value: "country__value",
+      value: "country.value",
       text: "agent.country__value",
       show: false,
     },
     {
-      value: "country__value_en",
+      value: "country.value_en",
       text: "agent.country__value_en",
       show: false,
     },
@@ -284,17 +251,17 @@ const state = {
       show: true,
     },
     {
-      value: "sample__number",
+      value: "sample.number",
       text: "analysis.sample__number",
       show: true,
     },
     {
-      value: "sample__depth",
+      value: "sample.depth",
       text: "analysis.sample__depth",
       show: true,
     },
     {
-      value: "analysis_method__analysis_method",
+      value: "analysis_method.analysis_method",
       text: "analysis.analysis_method__analysis_method",
       show: true,
     },
@@ -320,67 +287,42 @@ const state = {
       show: false,
     },
     {
-      value: "sample__id",
+      value: "sample.id",
       text: "analysis.sample__id",
       show: false,
     },
     {
-      value: "sample__locality__id",
-      text: "analysis.sample__locality__id",
-      show: false,
-    },
-    {
-      value: "sample__locality__locality",
+      value: "sample.locality.locality",
       text: "analysis.sample__locality__locality",
       show: false,
     },
     {
-      value: "sample__locality__locality_en",
+      value: "sample.locality.locality_en",
       text: "analysis.sample__locality__locality_en",
       show: false,
     },
     {
-      value: "specimen__id",
-      text: "analysis.specimen__id",
-      show: false,
-    },
-    {
-      value: "specimen__specimen_id",
+      value: "specimen.specimen_id",
       text: "analysis.specimen__specimen_id",
       show: false,
     },
     {
-      value: "dataset__id",
-      text: "analysis.dataset__id",
-      show: false,
-    },
-    {
-      value: "dataset__name",
+      value: "dataset.name",
       text: "analysis.dataset__name",
       show: false,
     },
     {
-      value: "dataset__name_en",
+      value: "dataset.name_en",
       text: "analysis.dataset__name_en",
       show: false,
     },
     {
-      value: "reference__id",
-      text: "analysis.reference__id",
-      show: false,
-    },
-    {
-      value: "reference__reference",
+      value: "reference.reference",
       text: "analysis.reference__reference",
       show: false,
     },
     {
-      value: "analysis_method__id",
-      text: "analysis.analysis_method__id",
-      show: false,
-    },
-    {
-      value: "analysis_method__method_en",
+      value: "analysis_method.method_en",
       text: "analysis.analysis_method__method_en",
       show: false,
     },
@@ -410,17 +352,12 @@ const state = {
       show: false,
     },
     {
-      value: "lab__id",
-      text: "analysis.lab__id",
-      show: false,
-    },
-    {
-      value: "lab__lab",
+      value: "lab.lab",
       text: "analysis.lab__lab",
       show: false,
     },
     {
-      value: "lab__lab_en",
+      value: "lab.lab_en",
       text: "analysis.lab__lab_en",
       show: false,
     },
@@ -435,17 +372,12 @@ const state = {
       show: false,
     },
     {
-      value: "instrument__id",
-      text: "analysis.instrument__id",
-      show: false,
-    },
-    {
-      value: "instrument__instrument",
+      value: "instrument.instrument",
       text: "analysis.instrument__instrument",
       show: false,
     },
     {
-      value: "instrument__instrument_en",
+      value: "instrument.instrument_en",
       text: "analysis.instrument__instrument_en",
       show: false,
     },
@@ -455,12 +387,7 @@ const state = {
       show: false,
     },
     {
-      value: "agent__id",
-      text: "analysis.agent__id",
-      show: false,
-    },
-    {
-      value: "agent__agent",
+      value: "agent.agent",
       text: "analysis.agent__agent",
       show: false,
     },
@@ -470,12 +397,7 @@ const state = {
       show: false,
     },
     {
-      value: "owner__id",
-      text: "analysis.owner__id",
-      show: false,
-    },
-    {
-      value: "owner__agent",
+      value: "owner.agent",
       text: "analysis.owner__agent",
       show: false,
     },
@@ -490,12 +412,7 @@ const state = {
       show: false,
     },
     {
-      value: "storage__id",
-      text: "analysis.storage__id",
-      show: false,
-    },
-    {
-      value: "storage__location",
+      value: "storage.location",
       text: "analysis.storage__location",
       show: false,
     },
@@ -525,12 +442,7 @@ const state = {
       show: false,
     },
     {
-      value: "database__id",
-      text: "analysis.database__id",
-      show: false,
-    },
-    {
-      value: "database__acronym",
+      value: "database.acronym",
       text: "analysis.database__acronym",
       show: false,
     },
@@ -788,7 +700,7 @@ const state = {
       show: true,
     },
     {
-      value: "attachment_format__value",
+      value: "attachment_format.value",
       text: "attachment.attachment_format__value",
       show: true,
     },
@@ -798,7 +710,7 @@ const state = {
       show: true,
     },
     {
-      value: "author__agent",
+      value: "author.agent",
       text: "attachment.author__agent",
       show: true,
     },
@@ -808,7 +720,7 @@ const state = {
       show: true,
     },
     {
-      value: "reference__reference",
+      value: "reference.reference",
       text: "attachment.reference__reference",
       show: true,
     },
@@ -839,27 +751,27 @@ const state = {
       show: false,
     },
     {
-      value: "type__id",
+      value: "type.id",
       text: "attachment.type__id",
       show: false,
     },
     {
-      value: "type__value",
+      value: "type.value",
       text: "attachment.type__value",
       show: false,
     },
     {
-      value: "type__value_en",
+      value: "type.value_en",
       text: "attachment.type__value_en",
       show: false,
     },
     {
-      value: "attachment_format__id",
+      value: "attachment_format.id",
       text: "attachment.attachment_format__id",
       show: false,
     },
     {
-      value: "author__id",
+      value: "author.id",
       text: "attachment.author__id",
       show: false,
     },
@@ -874,12 +786,12 @@ const state = {
       show: false,
     },
     {
-      value: "device__id",
+      value: "device_.id",
       text: "attachment.device__id",
       show: false,
     },
     {
-      value: "device__name",
+      value: "device.name",
       text: "attachment.device__name",
       show: false,
     },
@@ -899,47 +811,47 @@ const state = {
       show: false,
     },
     {
-      value: "agent_digitised__id",
+      value: "agent_digitised.id",
       text: "attachment.agent_digitised__id",
       show: false,
     },
     {
-      value: "agent_digitised__agent",
+      value: "agent_digitised.agent",
       text: "attachment.agent_digitised__agent",
       show: false,
     },
     {
-      value: "device_digitised__id",
+      value: "device_digitised.id",
       text: "attachment.device_digitised__id",
       show: false,
     },
     {
-      value: "device_digitised__name",
+      value: "device_digitised.name",
       text: "attachment.device_digitised__name",
       show: false,
     },
     {
-      value: "copyright_agent__id",
+      value: "copyright_agent.id",
       text: "attachment.copyright_agent__id",
       show: false,
     },
     {
-      value: "copyright_agent__agent",
+      value: "copyright_agent.agent",
       text: "attachment.copyright_agent__agent",
       show: false,
     },
     {
-      value: "licence__id",
+      value: "licence.id",
       text: "attachment.licence__id",
       show: false,
     },
     {
-      value: "licence__licence",
+      value: "licence.licence",
       text: "attachment.licence__licence",
       show: false,
     },
     {
-      value: "licence__licence_en",
+      value: "licence.licence_en",
       text: "attachment.licence__licence_en",
       show: false,
     },

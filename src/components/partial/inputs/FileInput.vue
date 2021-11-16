@@ -434,9 +434,11 @@ export default {
   methods: {
     dropFile(event) {
       if (!this.isDisabled) {
-        if (event.dataTransfer && event.dataTransfer.files) {
+        if (event?.dataTransfer?.files?.length > 0) {
           let listOfFiles = [];
-          event.dataTransfer.files.forEach((file) => listOfFiles.push(file));
+          Object.values(event.dataTransfer.files).forEach((file) =>
+            listOfFiles.push(file)
+          );
 
           if (!this.acceptMultiple && listOfFiles.length > 1) {
             listOfFiles.splice(1);

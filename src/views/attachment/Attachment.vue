@@ -3620,7 +3620,6 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
 import {
-  fetchAttachment,
   fetchAttachmentKeyword,
   fetchAttachmentLinkAnalyses,
   fetchAttachmentLinkCollections,
@@ -3639,10 +3638,7 @@ import {
   fetchAttachmentLinkSpecimens,
   fetchAttachmentLinkStorages,
   fetchAttachmentLinkTaxa,
-  fetchListAttachmentType,
-  fetchListImageType,
-  fetchListLicences,
-} from "../../assets/js/api/apiCalls";
+} from "@/assets/js/api/apiCalls";
 import AttachmentWrapper from "../../components/attachment/AttachmentWrapper";
 import MapComponent from "../../components/partial/MapComponent";
 import FileInformation from "../../components/partial/FileInformation";
@@ -4451,97 +4447,6 @@ export default {
       };
     },
 
-    formatDataForUpload(object) {
-      let uploadableObject = { ...object };
-      uploadableObject = this.cleanObject(uploadableObject);
-      return uploadableObject;
-    },
-
-    // formatDataForUpload(objectToUpload) {
-    //   let uploadableObject = cloneDeep(objectToUpload);
-    //
-    //   if (!this.$route.meta.isEdit) {
-    //     if (this.isPhotoArchive) {
-    //       this.saveFields({ key: "photoArchive", value: objectToUpload });
-    //       this.saveFields({
-    //         key: "photoArchiveKeywords",
-    //         value: objectToUpload,
-    //       });
-    //     } else if (this.isSpecimenImage) {
-    //       this.saveFields({ key: "specimenImage", value: objectToUpload });
-    //       this.saveFields({
-    //         key: "specimenImageKeywords",
-    //         value: objectToUpload,
-    //       });
-    //     } else if (this.isOtherFile) {
-    //       this.saveFields({ key: "otherFiles", value: objectToUpload });
-    //       this.saveFields({ key: "otherFilesKeywords", value: objectToUpload });
-    //     } else if (this.isDigitisedReference)
-    //       this.saveFields({ key: "digitisedReference", value: objectToUpload });
-    //   }
-    //
-    //   if (this.isNotEmpty(uploadableObject.image_latitude))
-    //     uploadableObject.image_latitude = parseFloat(
-    //       uploadableObject.image_latitude
-    //     ).toFixed(6);
-    //   else uploadableObject.image_latitude = null;
-    //   if (this.isNotEmpty(uploadableObject.image_longitude))
-    //     uploadableObject.image_longitude = parseFloat(
-    //       uploadableObject.image_longitude
-    //     ).toFixed(6);
-    //   else uploadableObject.image_longitude = null;
-    //
-    //   Object.keys(uploadableObject).forEach((key) => {
-    //     if (
-    //       typeof uploadableObject[key] === "object" &&
-    //       uploadableObject[key] !== null
-    //     ) {
-    //       uploadableObject[key] = uploadableObject[key].id
-    //         ? uploadableObject[key].id
-    //         : null;
-    //     } else if (typeof uploadableObject[key] === "undefined") {
-    //       uploadableObject[key] = null;
-    //     }
-    //   });
-    //
-    //   /* Related Data START */
-    //   uploadableObject.related_data = {};
-    //
-    //   if (!this.isDigitisedReference) {
-    //     if (this.isNotEmpty(this.relatedData.keyword))
-    //       uploadableObject.related_data.keyword = this.relatedData.keyword.map(
-    //         (keyword) => {
-    //           return {
-    //             id: keyword.id,
-    //           };
-    //         }
-    //       );
-    //     else uploadableObject.related_data.keyword = null;
-    //   }
-    //
-    //   if (this.isPhotoArchive || this.isOtherFile) {
-    //     this.relatedTabs.forEach((tab) => {
-    //       if (
-    //         this.relatedData[tab.name] &&
-    //         this.relatedData[tab.name].length > 0
-    //       ) {
-    //         uploadableObject.related_data[tab.name] = this.relatedData[
-    //           tab.name
-    //         ].map((entity) => {
-    //           return {
-    //             id: entity.id,
-    //           };
-    //         });
-    //       } else uploadableObject.related_data[tab.name] = null;
-    //     });
-    //   }
-    //   /* Related Data END */
-    //
-    //   console.log("This object is sent in string format:");
-    //   console.log(uploadableObject);
-    //   return JSON.stringify(uploadableObject);
-    // },
-
     /* FileInput Events START */
     addFiles(files) {
       this.files = files;
@@ -4740,59 +4645,62 @@ export default {
     },
 
     customLabelForRelatedData(option) {
-      switch (this.selectedRelatedTable) {
-        case "collection":
-        case "dataset":
-        case "project":
-        case "site":
-          if (this.$i18n.locale === "ee")
-            return `${option.id} - (${option.name})`;
-          return `${option.id} - (${option.name_en})`;
-        case "specimen":
-          if (
-            typeof option.coll__number !== "undefined" &&
-            option.coll__number !== null
-          ) {
-            return `${option.coll__number.split(" ")[0]} ${
-              option.specimen_id
-            } (${option.id})`;
-          } else return `${option.specimen_id} (${option.id})`;
-        case "sample":
-          return `${option.id} - (${option.number})`;
-        case "sample_series":
-          return `${option.id} - (${option.name})`;
-        case "analysis":
-          if (option.sample__number)
-            return `${option.id} - (${option.sample__number})`;
-          else return `${option.id}`;
-        case "doi":
-          return `${option.id} - (${option.identifier})`;
-        case "locality":
-          if (this.$i18n.locale === "ee")
-            return `${option.id} - (${option.locality})`;
-          return `${option.id} - (${option.locality_en})`;
-        case "drillcore":
-          if (this.$i18n.locale === "ee")
-            return `${option.id} - (${option.drillcore})`;
-          return `${option.id} - (${option.drillcore_en})`;
-        case "drillcore_box":
-          if (this.$i18n.locale === "ee")
-            return `${option.id} - (${option.drillcore__drillcore} - ${option.number})`;
-          return `${option.id} - (${option.drillcore__drillcore_en} - ${option.number})`;
-        case "preparation":
-          return `${option.id} - (${option.preparation_number})`;
-        case "reference":
-          return `${option.id} - (${option.reference})`;
-        case "taxon":
-          return `${option.id} - (${option.taxon})`;
-        case "storage":
-          if (option.contents === null)
-            return `${option.id} - (${option.location})`;
-          else
-            return `${option.id} - (${option.location} - ${option.contents})`;
-        default:
-          return `${option.id}`;
-      }
+      console.log(option)
+      return option?.id
+      // Todo: Review labels
+      // switch (this.selectedRelatedTable) {
+      //   case "collection":
+      //   case "dataset":
+      //   case "project":
+      //   case "site":
+      //     if (this.$i18n.locale === "ee")
+      //       return `${option.id} - (${option.name})`;
+      //     return `${option.id} - (${option.name_en})`;
+      //   case "specimen":
+      //     if (
+      //       typeof option.coll__number !== "undefined" &&
+      //       option.coll__number !== null
+      //     ) {
+      //       return `${option.coll__number.split(" ")[0]} ${
+      //         option.specimen_id
+      //       } (${option.id})`;
+      //     } else return `${option.specimen_id} (${option.id})`;
+      //   case "sample":
+      //     return `${option.id} - (${option.number})`;
+      //   case "sample_series":
+      //     return `${option.id} - (${option.name})`;
+      //   case "analysis":
+      //     if (option.sample__number)
+      //       return `${option.id} - (${option.sample__number})`;
+      //     else return `${option.id}`;
+      //   case "doi":
+      //     return `${option.id} - (${option.identifier})`;
+      //   case "locality":
+      //     if (this.$i18n.locale === "ee")
+      //       return `${option.id} - (${option.locality})`;
+      //     return `${option.id} - (${option.locality_en})`;
+      //   case "drillcore":
+      //     if (this.$i18n.locale === "ee")
+      //       return `${option.id} - (${option.drillcore})`;
+      //     return `${option.id} - (${option.drillcore_en})`;
+      //   case "drillcore_box":
+      //     if (this.$i18n.locale === "ee")
+      //       return `${option.id} - (${option.drillcore__drillcore} - ${option.number})`;
+      //     return `${option.id} - (${option.drillcore__drillcore_en} - ${option.number})`;
+      //   case "preparation":
+      //     return `${option.id} - (${option.preparation_number})`;
+      //   case "reference":
+      //     return `${option.id} - (${option.reference})`;
+      //   case "taxon":
+      //     return `${option.id} - (${option.taxon})`;
+      //   case "storage":
+      //     if (option.contents === null)
+      //       return `${option.id} - (${option.location})`;
+      //     else
+      //       return `${option.id} - (${option.location} - ${option.contents})`;
+      //   default:
+      //     return `${option.id}`;
+      // }
     },
 
     setDefaultAttachmentFields() {

@@ -224,11 +224,11 @@ export default {
 
     async logout() {
       const response = await this.$api.auth.logout();
-      this.removeAuthUser();
       await this.$router.push({
         name: "login",
         params: { dontShowSessionExpired: true },
       });
+      this.removeAuthUser();
       this.toastSuccess({ text: response.detail });
     },
   },

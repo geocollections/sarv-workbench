@@ -34,7 +34,7 @@
           style="max-width: 200px; max-height: 200px"
         >
           <v-img
-            v-if="isAttachmentImage(item.attachment_format__value)"
+            v-if="isAttachmentImage(item.attachment_format.value)"
             :src="getFileUrl(item.uuid_filename, 'small')"
             :lazy-src="getFileUrl(item.uuid_filename, 'small')"
             class="grey lighten-2 attachment-table-image-preview my-1"
@@ -73,8 +73,8 @@
       </router-link>
     </template>
 
-    <template v-slot:item.author__agent="{ item }">
-      <span v-if="item.author__agent">{{ item.author__agent }}</span>
+    <template v-slot:item.author="{ item }">
+      <span v-if="item.author">{{ item.author.agent }}</span>
       <span v-else>{{ item.author_free }}</span>
     </template>
 
@@ -85,23 +85,25 @@
 
     <template v-slot:item.specimen="{ item }">
       <router-link
-        :to="{ path: '/specimen/' + item.specimen }"
+        v-if="item.specimen"
+        :to="{ path: '/specimen/' + item.specimen.id }"
         :title="$t('editSpecimen.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        {{ item.specimen }}
+        {{ item.specimen.specimen_full_name }}
       </router-link>
     </template>
 
-    <template v-slot:item.reference__reference="{ item }">
+    <template v-slot:item.reference="{ item }">
       <router-link
-        :to="{ path: '/reference/' + item.reference }"
+        v-if="item.reference"
+        :to="{ path: '/reference/' + item.reference.id }"
         :title="$t('editReference.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </router-link>
     </template>
 

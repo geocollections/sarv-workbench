@@ -47,14 +47,20 @@ const detailViewUtilsMixin = {
       );
     },
 
-    cleanObject(obj) {
-      for (let i in obj) {
-        if (typeof obj[i] === "object") obj[i] = obj[i]?.id;
-        if (obj[i] === null || obj[i] === undefined) delete obj[i];
-      }
-      return obj;
+    formatDataForUpload(object) {
+      let uploadableObject = { ...object };
+      uploadableObject = cleanObject(uploadableObject);
+      return uploadableObject;
     },
   },
 };
+
+function cleanObject(obj) {
+  for (let i in obj) {
+    if (typeof obj[i] === "object") obj[i] = obj[i]?.id;
+    if (obj[i] === null || obj[i] === undefined) delete obj[i];
+  }
+  return obj;
+}
 
 export default detailViewUtilsMixin;

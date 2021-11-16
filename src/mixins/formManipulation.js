@@ -599,7 +599,7 @@ const formManipulation = {
         const res = await this.$api.rw.rotateImages(formData);
         console.log(res);
 
-        if (res) {
+        if (typeof res !== "string") {
           this.filePreviewKey = Date.now();
           this.imageRotationDegrees = 0;
           this.toastSuccess({ text: this.$t("attachment.imageRotated") });
