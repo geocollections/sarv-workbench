@@ -44,10 +44,6 @@ const tableHeaderMixin = {
       "resetDynamicSearchField",
     ]),
 
-    async $_tableHeaderMixin_getDynamicFields(table = this.$route.meta.object) {
-      await this.getDynamicFields(table);
-    },
-
     $_tableHeaderMixin_updateTableHeaders(payload) {
       this.updateTableHeaders(payload);
     },

@@ -353,10 +353,10 @@ import {
   fetchListCountry,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import DateWrapper from "../partial/inputs/DateWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import DateWrapper from "../../components/partial/inputs/DateWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
 import { mapState } from "vuex";
 
 export default {

@@ -2616,10 +2616,7 @@ export function fetchAgent(id) {
 }
 
 export function fetchAgents(data, dynamicSearch) {
-  const fields =
-    "agent,type,type__value,type__value_en,forename,middlename,surename,title,profession,profession_en,institution,institution__agent,institution_name,institution_name_en,address,address1,address2,country,country__value,country__value_en,country_txt,phone,email,http,old_name,new_name,date_born,date_deceased,orcid,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
     searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
@@ -2647,15 +2644,8 @@ export function fetchAgents(data, dynamicSearch) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
-  if (searchFields.length > 0) {
-    return get(
-      `agent/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `agent/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
+  if (searchFields.length > 0) return `?${searchFields}`;
+  else return ``;
 }
 
 export function fetchAgentUsingName(name) {

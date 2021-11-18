@@ -1260,7 +1260,7 @@ const router = new Router({
         },
         {
           path: "/agent",
-          component: () => import("../views/Agents.vue"),
+          component: () => import("../views/agent/Agents.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1286,7 +1286,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/agent/Agent.vue"),
+              component: () => import("../views/agent/Agent.vue"),
               meta: {
                 isEdit: true,
                 table: "agent",
@@ -1307,7 +1307,7 @@ const router = new Router({
             {
               path: "",
               name: "Agent add",
-              component: () => import("../components/agent/Agent.vue"),
+              component: () => import("../views/agent/Agent.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAgent",

@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import ListModuleCore from "../components/ListModuleCore";
+import ListModuleCore from "../../components/ListModuleCore";
 import { fetchAgents } from "@/assets/js/api/apiCalls";
-import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import searchParametersMixin from "../mixins/searchParametersMixin";
+import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
+import searchParametersMixin from "../../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
@@ -58,9 +58,19 @@ export default {
 
   methods: {
     apiCall() {
-      return fetchAgents(
+      const legacyQueryString = fetchAgents(
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
+      );
+      return this.$api.rw.getLegacy(
+        "agent",
+        {
+          defaultParams: {
+            nest: 1,
+          },
+        },
+        legacyQueryString,
+        this.searchParameters
       );
     },
   },
