@@ -52,7 +52,7 @@
 
           <!-- ROCK_TYPE, ROCK_RANK and MINDAT_ID -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
               <autocomplete-wrapper
                 v-model="rock.rock_type"
                 :color="bodyActiveColor"
@@ -63,7 +63,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
               <autocomplete-wrapper
                 v-model="rock.rock_rank"
                 :color="bodyActiveColor"
@@ -74,12 +74,54 @@
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
               <input-wrapper
                 v-model="rock.mindat_id"
                 :color="bodyActiveColor"
                 :label="$t('rock.mindat') + ' ID'"
                 type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="rock.meteorite_id"
+                :color="bodyActiveColor"
+                :label="$t('rock.meteorite') + ' ID'"
+                type="number"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- ROCK_GROUP, PARENT -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="rock.rock_group"
+                :color="bodyActiveColor"
+                :items="autocomplete.rock"
+                :loading="autocomplete.loaders.rock"
+                :item-text="nameLabel"
+                :label="$t('rock.rock_group')"
+                is-searchable
+                is-link
+                route-object="rock"
+                v-on:search:items="autocompleteRockSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="rock.parent"
+                :color="bodyActiveColor"
+                :items="autocomplete.rock"
+                :loading="autocomplete.loaders.rock"
+                :item-text="nameLabel"
+                :label="$t('rock.parent')"
+                is-searchable
+                is-link
+                route-object="rock"
+                v-on:search:items="autocompleteRockSearch"
               />
             </v-col>
           </v-row>
@@ -107,98 +149,6 @@
                 v-model="rock.link_wikipedia_ru"
                 :color="bodyActiveColor"
                 :label="$t('rock.link_wikipedia') + ' RU'"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- DESCRIPTION, DESCRIPTION_EN and DESCRIPTION_RU -->
-          <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <textarea-wrapper
-                v-model="rock.description"
-                :color="bodyActiveColor"
-                :label="$t('rock.description')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <textarea-wrapper
-                v-model="rock.description_en"
-                :color="bodyActiveColor"
-                :label="$t('rock.description') + ' EN'"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <textarea-wrapper
-                v-model="rock.description_ru"
-                :color="bodyActiveColor"
-                :label="$t('rock.description') + ' RU'"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- DESCRIPTION_IN_ESTONIA, DESCRIPTION_IN_ESTONIA_EN and DESCRIPTION_IN_ESTONIA_RU -->
-          <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <textarea-wrapper
-                v-model="rock.description_in_estonia"
-                :color="bodyActiveColor"
-                :label="$t('rock.description_in_estonia')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <textarea-wrapper
-                v-model="rock.description_in_estonia_en"
-                :color="bodyActiveColor"
-                :label="$t('rock.description_in_estonia') + ' EN'"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <textarea-wrapper
-                v-model="rock.description_in_estonia_ru"
-                :color="bodyActiveColor"
-                :label="$t('rock.description_in_estonia') + ' RU'"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- DESCRIPTION_USAGE, DESCRIPTION_USAGE_EN and DESCRIPTION_USAGE_RU -->
-          <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <textarea-wrapper
-                v-model="rock.description_usage"
-                :color="bodyActiveColor"
-                :label="$t('rock.description_usage')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <textarea-wrapper
-                v-model="rock.description_usage_en"
-                :color="bodyActiveColor"
-                :label="$t('rock.description_usage') + ' EN'"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <textarea-wrapper
-                v-model="rock.description_usage_ru"
-                :color="bodyActiveColor"
-                :label="$t('rock.description_usage') + ' RU'"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- DESCRIPTION_AUTHOR -->
-          <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
-              <input-wrapper
-                v-model="rock.description_author"
-                :color="bodyActiveColor"
-                :label="$t('rock.description_author')"
               />
             </v-col>
           </v-row>
@@ -333,6 +283,129 @@
                 :color="bodyActiveColor"
                 :label="$t('rock.sort')"
                 type="number"
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <v-card
+      class="mt-2"
+      id="block-description"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("common.description") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.description" class="pa-1">
+          <!-- DESCRIPTION, DESCRIPTION_EN and DESCRIPTION_RU -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="rock.description"
+                :color="bodyActiveColor"
+                :label="$t('rock.description')"
+              />
+            </v-col>
+
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="rock.description_en"
+                :color="bodyActiveColor"
+                :label="$t('rock.description') + ' EN'"
+              />
+            </v-col>
+
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="rock.description_ru"
+                :color="bodyActiveColor"
+                :label="$t('rock.description') + ' RU'"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- DESCRIPTION_USAGE, DESCRIPTION_USAGE_EN and DESCRIPTION_USAGE_RU -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="rock.description_usage"
+                :color="bodyActiveColor"
+                :label="$t('rock.description_usage')"
+              />
+            </v-col>
+
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="rock.description_usage_en"
+                :color="bodyActiveColor"
+                :label="$t('rock.description_usage') + ' EN'"
+              />
+            </v-col>
+
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="rock.description_usage_ru"
+                :color="bodyActiveColor"
+                :label="$t('rock.description_usage') + ' RU'"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- DESCRIPTION_IN_ESTONIA, DESCRIPTION_IN_ESTONIA_EN and DESCRIPTION_IN_ESTONIA_RU -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="rock.description_in_estonia"
+                :color="bodyActiveColor"
+                :label="$t('rock.description_in_estonia')"
+              />
+            </v-col>
+
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="rock.description_in_estonia_en"
+                :color="bodyActiveColor"
+                :label="$t('rock.description_in_estonia') + ' EN'"
+              />
+            </v-col>
+
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="rock.description_in_estonia_ru"
+                :color="bodyActiveColor"
+                :label="$t('rock.description_in_estonia') + ' RU'"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- DESCRIPTION_AUTHOR -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="rock.description_author"
+                :color="bodyActiveColor"
+                :label="$t('rock.description_author')"
               />
             </v-col>
           </v-row>
@@ -690,6 +763,7 @@ export default {
           "stratigraphy",
           "lithostratigraphy",
           "mindat_id",
+          "meteorite_id",
           "link_wikipedia",
           "link_wikipedia_en",
           "link_wikipedia_ru",
@@ -699,6 +773,8 @@ export default {
           "remarks",
           "is_private",
           "in_portal",
+          "rock_group",
+          "parent",
         ],
         autocomplete: {
           loaders: {
@@ -718,6 +794,7 @@ export default {
         rock: {},
         block: {
           info: true,
+          description: false,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
