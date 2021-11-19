@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import ListModuleCore from "../components/ListModuleCore";
-import { fetchReferences } from "@/assets/js/api/apiCalls";
+import ListModuleCore from "../../components/ListModuleCore";
+import { fetchAttachments, fetchReferences } from "@/assets/js/api/apiCalls";
 import { mapActions, mapGetters, mapState } from "vuex";
-import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import toastMixin from "../mixins/toastMixin";
-import searchParametersMixin from "../mixins/searchParametersMixin";
+import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
+import toastMixin from "../../mixins/toastMixin";
+import searchParametersMixin from "../../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
@@ -93,9 +93,20 @@ export default {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
     apiCall() {
-      return fetchReferences(
+      const legacyQueryString = fetchReferences(
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
+      );
+
+      return this.$api.rw.getLegacy(
+        "reference",
+        {
+          defaultParams: {
+            nest: 1,
+          },
+        },
+        legacyQueryString,
+        this.searchParameters
       );
     },
   },

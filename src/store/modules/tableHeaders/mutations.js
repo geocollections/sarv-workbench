@@ -1,4 +1,8 @@
+import { updateField } from "vuex-map-fields";
+
 const mutations = {
+  updateField,
+
   UPDATE_TABLE_HEADERS(state, payload) {
     state[payload.table].forEach((item, index) => {
       state[payload.table][index].show = !!payload.event.includes(item.value);
@@ -101,12 +105,16 @@ const mutations = {
   },
 
   UPDATE_DYNAMIC_SEARCH_FIELD(state, payload) {
-    state.searchFields[payload.table] = state.searchFields[payload.table].map(
-      (item) => {
-        if (item.id === payload.id) item[payload.key] = payload.value;
-        return item;
-      }
-    );
+    console.log(payload);
+    state.searchFields[payload.table].byIds[payload.field][payload.key] =
+      payload.value;
+
+    // state.searchFields[payload.table] = state.searchFields[payload.table].map(
+    //   (item) => {
+    //     if (item.id === payload.id) item[payload.key] = payload.value;
+    //     return item;
+    //   }
+    // );
   },
 
   RESET_DYNAMIC_SEARCH_FIELDS(state, payload) {

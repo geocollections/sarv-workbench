@@ -327,16 +327,16 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
+import LibraryReferenceListView from "../../components/library/relatedTables/LibraryReferenceListView";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import LibraryReferenceTable from "./relatedTables/LibraryReferenceTable";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import LibraryReferenceTable from "../../components/library/relatedTables/LibraryReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
-import Editor from "../partial/inputs/Editor";
+import Editor from "../../components/partial/inputs/Editor";
 import Pagination from "@/components/partial/Pagination";
 
 export default {

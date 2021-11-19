@@ -111,8 +111,8 @@ import formManipulation from "../../mixins/formManipulation";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
 import { fetchJournal } from "../../assets/js/api/apiCalls";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
 
 export default {
   name: "Journal",

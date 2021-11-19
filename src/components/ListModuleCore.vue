@@ -176,7 +176,7 @@ export default {
       type: Object,
     },
     dynamicSearchFields: {
-      type: Array,
+      type: Object,
     },
     exportButtons: {
       type: Boolean,

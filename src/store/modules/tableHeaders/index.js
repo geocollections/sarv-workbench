@@ -8505,12 +8505,152 @@ const state = {
         lookUpType: "icontains",
       },
     ],
-    journal: [
+    journal: {
+      byIds: {
+        journal: {
+          title: "journal.journal",
+          value: null,
+          lookUpType: "icontains",
+          fields: ["journal_name", "journal_shor", "journal_original"],
+          type: "multi",
+        },
+        publisher: {
+          title: "journal.publisher",
+          value: null,
+          lookUpType: "icontains",
+          fields: ["publisher", "publisher_place"],
+          type: "multi",
+        },
+        remarks: {
+          title: "journal.remarks",
+          value: null,
+          lookUpType: "icontains",
+          fields: ["remarks"],
+          type: "text",
+        },
+        journal_name: {
+          title: "journal.journal_name",
+          value: null,
+          lookUpType: "icontains",
+          fields: ["journal_name"],
+          type: "text",
+        },
+        journal_short: {
+          title: "journal.journal_short",
+          value: null,
+          lookUpType: "icontains",
+        },
+        journal_long: {
+          title: "journal.journal_long",
+          value: null,
+          lookUpType: "icontains",
+        },
+        journal_abbr: {
+          title: "journal.journal_abbr",
+          value: null,
+          lookUpType: "icontains",
+        },
+        journal_original: {
+          title: "journal.journal_original",
+          value: null,
+          lookUpType: "icontains",
+        },
+        issn: {
+          title: "journal.issn",
+          value: null,
+          lookUpType: "icontains",
+        },
+        publisher_place: {
+          title: "journal.publisher_place",
+          value: null,
+          lookUpType: "icontains",
+        },
+        http: {
+          title: "journal.http",
+          value: null,
+          lookUpType: "icontains",
+        },
+        former_journal__id: {
+          title: "journal.former_journal__id",
+          value: null,
+          lookUpType: "icontains",
+        },
+        following_journal__id: {
+          title: "journal.following_journal__id",
+          value: null,
+          lookUpType: "icontains",
+        },
+        oldname: {
+          title: "journal.oldname",
+          value: null,
+          lookUpType: "icontains",
+        },
+        newname: {
+          title: "journal.newname",
+          value: null,
+          lookUpType: "icontains",
+        },
+        user_added: {
+          title: "journal.user_added",
+          value: null,
+          lookUpType: "icontains",
+        },
+        date_added: {
+          title: "journal.date_added",
+          value: null,
+          lookUpType: "icontains",
+        },
+        user_changed: {
+          title: "journal.user_changed",
+          value: null,
+          lookUpType: "icontains",
+        },
+        date_changed: {
+          title: "journal.date_changed",
+          value: null,
+          lookUpType: "icontains",
+        },
+        id: {
+          title: "journal.id",
+          value: null,
+          lookUpType: "icontains",
+        },
+      },
+      mainIds: ["journal", "publisher", "remarks"],
+      extraIds: ["journal_name"],
+    },
+    journal_old: [
+      {
+        id: "journal",
+        title: "journal.journal",
+        value: null,
+        lookUpType: "icontains",
+        fields: ["journal_name", "journal_shor", "journal_original"],
+        type: "multi",
+      },
+      {
+        id: "publisher",
+        title: "journal.publisher",
+        value: null,
+        lookUpType: "icontains",
+        fields: ["publisher", "publisher_place"],
+        type: "multi",
+      },
+      {
+        id: "remarks",
+        title: "journal.remarks",
+        value: null,
+        lookUpType: "icontains",
+        fields: ["remarks"],
+        type: "text",
+      },
       {
         id: "journal_name",
         title: "journal.journal_name",
         value: null,
         lookUpType: "icontains",
+        fields: ["journal_name"],
+        type: "text",
       },
       {
         id: "journal_short",

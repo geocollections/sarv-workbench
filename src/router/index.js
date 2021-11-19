@@ -274,7 +274,7 @@ const router = new Router({
         },
         {
           path: "/reference",
-          component: () => import("../views/References.vue"),
+          component: () => import("../views/reference/References.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -302,7 +302,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/reference/Reference.vue"),
+              component: () => import("../views/reference/Reference.vue"),
               meta: {
                 isEdit: true,
                 table: "reference",
@@ -324,7 +324,7 @@ const router = new Router({
             {
               path: "",
               name: "reference add",
-              component: () => import("../components/reference/Reference.vue"),
+              component: () => import("../views/reference/Reference.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addReference",
@@ -402,7 +402,7 @@ const router = new Router({
         },
         {
           path: "/journal",
-          component: () => import("../views/Journals.vue"),
+          component: () => import("../views/journal/Journals.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -428,7 +428,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/journal/Journal.vue"),
+              component: () => import("../views/journal/Journal.vue"),
               meta: {
                 isEdit: true,
                 table: "journal",
@@ -448,7 +448,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/journal/Journal.vue"),
+              component: () => import("../views/journal/Journal.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.journal",
@@ -742,7 +742,7 @@ const router = new Router({
         // },
         {
           path: "/library",
-          component: () => import("../views/Libraries.vue"),
+          component: () => import("../views/library/Libraries.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -768,7 +768,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/library/Library.vue"),
+              component: () => import("../views/library/Library.vue"),
               meta: {
                 isEdit: true,
                 table: "library",
@@ -788,7 +788,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/library/Library.vue"),
+              component: () => import("../views/library/Library.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.library",

@@ -428,19 +428,7 @@ export function fetchReference(id) {
   return get(`reference/?id=${id}&format=json`);
 }
 
-export async function fetchReferences(data, dynamicSearch) {
-  const fields =
-    "reference,author,author_original,year,type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid,attachment__filename";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-  // This (solr search) overrides regular search fields
-  if (data.solrSearch && data.solrSearch.trim().length > 0) {
-    let start = (data.page - 1) * data.paginateBy;
-    return get(
-      `reference/?q=${data.solrSearch}&rows=${data.paginateBy}&start=${start}&format=json`,
-      api.solrUrl
-    );
-  }
-
+export function fetchReferences(data, dynamicSearch) {
   let searchFields = "";
 
   if (data.author !== null && data.author.trim().length > 0) {
@@ -516,20 +504,7 @@ export async function fetchReferences(data, dynamicSearch) {
   }
   searchFields += buildDynamicSearch(dynamicSearch);
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    // Not using 'fields' because of alternative table
-    // return get(`reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-    return get(
-      `reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    // Not using 'fields' because of alternative table
-    // return get(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-    return get(
-      `reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
+  return searchFields.length > 0 ? `?${searchFields}` : "";
 }
 
 function fetchReferenceIDsUsingReferenceKeyword(data) {
@@ -1049,10 +1024,7 @@ export function fetchLibrary(id) {
 }
 
 export function fetchLibraries(data, dynamicSearch) {
-  const fields =
-    "title,title_en,title_short,title_short_en,abstract,abstract_en,author,author__agent,author_txt,year,publisher,doi,keywords,remarks,is_private,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.author_txt !== null && data.author_txt.trim().length > 0) {
     searchFields += `author_txt__${
@@ -1083,16 +1055,7 @@ export function fetchLibraries(data, dynamicSearch) {
   searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `library/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `library/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
+  return searchFields.length > 0 ? `?${searchFields}` : "";
 }
 
 export function fetchLibrariesFromLibraryAgent(data, agent) {
@@ -1759,10 +1722,7 @@ export function fetchJournal(id) {
 }
 
 export function fetchJournals(data, dynamicSearch) {
-  let fields =
-    "journal_name,journal_short,journal_long,journal_abbr,journal_original,issn,publisher,publisher_place,http,former_journal,former_journal__journal_name,following_journal,following_journal__journal_name,oldname,newname,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.journal !== null && data.journal.trim().length > 0) {
     searchFields += `multi_search=value:${
@@ -1789,16 +1749,7 @@ export function fetchJournals(data, dynamicSearch) {
   searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `journal/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `journal/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
+  return searchFields.length > 0 ? `?${searchFields}` : ''
 }
 
 export function fetchJournalForReference(name) {
@@ -4645,8 +4596,7 @@ export function fetchImagesets(data, author, dynamicSearch) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
-  if (searchFields.length > 0)
-    return `?${searchFields}&author=${author}`;
+  if (searchFields.length > 0) return `?${searchFields}&author=${author}`;
   else return `?author=${author}`;
 }
 

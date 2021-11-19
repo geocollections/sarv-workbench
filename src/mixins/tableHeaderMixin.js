@@ -5,6 +5,7 @@ const tableHeaderMixin = {
     $_tableHeaderMixin_tableName() {
       let table = this.$route.meta.object;
 
+      // Component name must follow strict naming convention eg. SpecimenTable, LocalityDescriptionTable
       if (this.$options.name.endsWith("Table")) {
         let splitName = this.$options.name.split(/(?=[A-Z])/);
         splitName.pop();
@@ -12,13 +13,19 @@ const tableHeaderMixin = {
       }
       return table;
     },
-    ...mapState("tableHeaders", {
+    ...mapState({
+      $_tableHeaderMixin_searchFields(state) {
+        console.log(state[this.$_tableHeaderMixin_tableName].searchFields);
+        return state[this.$_tableHeaderMixin_tableName].searchFields;
+      },
+    }),
+    ...mapState('tableHeaders', {
       tableHeaders: function (state) {
         return state[this.$_tableHeaderMixin_tableName];
       },
-      $_tableHeaderMixin_searchFields: function (state) {
-        return state.searchFields[this.$_tableHeaderMixin_tableName];
-      },
+      // $_tableHeaderMixin_searchFields: function (state) {
+      //   return state.searchFields[this.$_tableHeaderMixin_tableName];
+      // },
     }),
 
     $_tableHeaderMixin_allHeaders() {

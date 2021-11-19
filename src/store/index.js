@@ -8,6 +8,7 @@ import settings from "./modules/settings";
 import user from "./modules/user";
 import admin from "./modules/admin";
 import tableHeaders from "./modules/tableHeaders";
+import journal from "./modules/journal";
 
 Vue.use(Vuex);
 
@@ -45,6 +46,7 @@ export default new Vuex.Store({
     user,
     admin,
     tableHeaders,
+    journal,
   },
   plugins: [vuexLocal.plugin],
   strict: process.env.NODE_ENV !== "production",

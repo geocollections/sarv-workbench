@@ -1,6 +1,9 @@
 <template>
-  <v-row class="table-view-search d-print-none mt-0" v-if="filters.length > 0">
-    <v-col>
+  <v-row class="table-view-search d-print-none mt-0">
+
+    <input v-model="journal" />
+
+    <v-col v-if="false">
       <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title class="pb-0">
           <div
@@ -29,11 +32,12 @@
                 class="pa-2"
                 cols="12"
                 :md="colSize"
-                v-for="(field, index) in filters"
+                v-for="(field, index) in searchFields.mainIds"
                 :key="index"
               >
                 <!-- DATEPICKER -->
-                <v-row no-gutters v-if="field.isDate">
+                <!--  TODO  -->
+                <v-row no-gutters v-if="searchFields.byIds[field].isDate">
                   <v-col cols="12">
                     <v-menu
                       v-model="calendarMenus[field.id]"
@@ -71,14 +75,13 @@
                   </v-col>
                 </v-row>
 
+                <!--  TODO: Checkboxes searchFields.byIds[field].isCheckbox  -->
+
                 <!-- REGULAR SEARCH FIELD -->
                 <v-row no-gutters v-else>
                   <v-col cols="3" xl="2" class="px-1">
                     <v-select
-                      :value="
-                        searchParameters[`${field.id}__lookuptype`] ||
-                        'icontains'
-                      "
+                      :value="searchFields.byIds[field].lookUpType"
                       :color="bodyActiveColor"
                       :item-color="bodyActiveColor"
                       disable-lookup
@@ -86,11 +89,12 @@
                       :items="translatedLookUpTypes"
                       :label="$t('main.lookUpType')"
                       @input="
-                        $emit(
-                          'update:searchParameters',
-                          $event,
-                          `${field.id}__lookuptype`
-                        )
+                        $emit('update:searchFields', {
+                          table: $_tableHeaderMixin_tableName,
+                          field,
+                          key: 'lookUpType',
+                          value: $event,
+                        })
                       "
                     >
                       <template v-slot:selection="{ item }">
@@ -98,27 +102,23 @@
                           {{ item.symbol }}
                         </div>
                       </template>
-
-                      <!--                        <template v-slot:item="{item}">-->
-                      <!--                          <div class="v-list-item__content">-->
-                      <!--                            <div class="v-list-item__title">-->
-                      <!--                              <b>{{ item.text.split(" ")[0] }}</b>-->
-                      <!--                              {{ item.text.split(" ")[1] }}-->
-                      <!--                            </div>-->
-                      <!--                          </div>-->
-                      <!--                        </template>-->
                     </v-select>
                   </v-col>
 
                   <v-col cols="9" xl="10" class="px-1">
                     <v-text-field
-                      :value="searchParameters[field.id]"
-                      :label="$t(field.title)"
+                      :value="searchFields.byIds[field].value"
+                      :label="$t(searchFields.byIds[field].title)"
                       :color="bodyActiveColor"
                       hide-details
                       :class="bodyActiveColor + '--text'"
                       @input="
-                        $emit('update:searchParameters', $event, field.id)
+                        $emit('update:searchFields', {
+                          table: $_tableHeaderMixin_tableName,
+                          field,
+                          key: 'value',
+                          value: $event,
+                        })
                       "
                     ></v-text-field>
                   </v-col>
@@ -315,14 +315,14 @@
             </v-row>
 
             <!-- DYNAMIC SEARCH -->
-            <DynamicSearch
+            <dynamic-search
               class="mt-4 mb-2"
               :body-color="bodyColor"
               :body-active-color="bodyActiveColor"
               :look-up-types="translatedLookUpTypes"
-              :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+              :search-fields="searchFields"
               :col-size="3"
-              @update:dynamicSearchFields="updateDynamicSearchFieldsDebounced"
+              @update:searchFields="$emit('update:searchFields', $event)"
             />
 
             <!-- DYNAMIC FIELDS -->
@@ -373,11 +373,12 @@ import { mapState } from "vuex";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 import DynamicSearch from "@/components/partial/table_view/DynamicSearch";
 import { debounce } from "lodash";
+import tableSearchMixin from "@/mixins/tableSearchMixin";
 
 export default {
   name: "TableViewSearch",
   components: { DynamicSearch },
-  mixins: [tableHeaderMixin],
+  mixins: [tableHeaderMixin, tableSearchMixin],
   props: {
     showSearch: {
       type: Boolean,
@@ -424,7 +425,7 @@ export default {
     resetSearch() {
       this.$emit("reset:searchParameters");
       this.$_tableHeaderMixin_setDefaultTableHeaders();
-      this.$_tableHeaderMixin_resetDynamicSearchFields();
+      // this.$_tableHeaderMixin_resetDynamicSearchFields();
     },
 
     updateDynamicSearchFieldsDebounced: debounce(function (payload) {

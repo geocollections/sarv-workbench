@@ -1,13 +1,12 @@
 <template>
-  <div class="journals">
-    <table-view-title title="header.journals" buttonPath="/journal/add" />
+  <div class="libraries">
+    <table-view-title title="header.libraries" buttonPath="/library/add" />
 
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
       :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
-      :col-size="4"
       v-on:update:searchParameters="updateSearchParamsByField"
       v-on:reset:searchParameters="resetSearchParams"
     />
@@ -23,21 +22,21 @@
 </template>
 
 <script>
-import ListModuleCore from "../components/ListModuleCore";
-import { fetchJournals } from "@/assets/js/api/apiCalls";
-import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import searchParametersMixin from "../mixins/searchParametersMixin";
+import ListModuleCore from "../../components/ListModuleCore";
+import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
+import searchParametersMixin from "../../mixins/searchParametersMixin";
+import { fetchAttachments, fetchLibraries } from "@/assets/js/api/apiCalls";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
-  name: "Journals",
-
   components: {
     ListModuleCore,
     TableViewTitle,
     TableViewSearch,
   },
+
+  name: "Libraries",
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
@@ -49,17 +48,28 @@ export default {
 
   async created() {
     this.setActiveSearchParametersFilters([
-      { id: "journal", title: "journal.journalFilter", type: "text" },
-      { id: "publisher", title: "journal.publisherFilter", type: "text" },
-      { id: "remarks", title: "journal.remarksFilter", type: "text" },
+      { id: "author_txt", title: "library.author_txt", type: "text" },
+      { id: "year", title: "common.year", type: "number" },
+      { id: "title", title: "library.title", type: "text" },
+      { id: "reference", title: "common.reference", type: "text" },
     ]);
   },
 
   methods: {
     apiCall() {
-      return fetchJournals(
+      const legacyQueryString = fetchLibraries(
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
+      );
+      return this.$api.rw.getLegacy(
+        "library",
+        {
+          defaultParams: {
+            nest: 1,
+          },
+        },
+        legacyQueryString,
+        this.searchParameters
       );
     },
   },
