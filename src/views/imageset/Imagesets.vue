@@ -22,12 +22,12 @@
 </template>
 
 <script>
-import ListModuleCore from "../components/ListModuleCore";
-import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import searchParametersMixin from "../mixins/searchParametersMixin";
+import ListModuleCore from "../../components/ListModuleCore";
+import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
+import searchParametersMixin from "../../mixins/searchParametersMixin";
 import { mapGetters } from "vuex";
-import { fetchImagesets } from "@/assets/js/api/apiCalls";
+import { fetchAttachments, fetchImagesets } from "@/assets/js/api/apiCalls";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
@@ -60,10 +60,20 @@ export default {
 
   methods: {
     apiCall() {
-      return fetchImagesets(
+      const legacyQueryString = fetchImagesets(
         this.searchParameters,
         this.getCurrentAgent.id,
         this.$_tableHeaderMixin_searchFields
+      );
+      return this.$api.rw.getLegacy(
+        "imageset",
+        {
+          defaultParams: {
+            nest: 1,
+          },
+        },
+        legacyQueryString,
+        this.searchParameters
       );
     },
   },

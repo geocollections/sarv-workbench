@@ -28,7 +28,7 @@
 
 <script>
 import ListModuleCore from "../../components/ListModuleCore";
-import { fetchAttachments, fetchSpecimenImages } from "@/assets/js/api/apiCalls";
+import { fetchAttachments } from "@/assets/js/api/apiCalls";
 import { mapActions, mapState } from "vuex";
 import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
@@ -82,7 +82,6 @@ export default {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
     apiCall() {
-      console.log(this.searchParameters)
       const legacyQueryString = fetchAttachments(
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields

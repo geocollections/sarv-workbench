@@ -125,9 +125,9 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import { fetchIsImagesetNumberInImageset } from "@/assets/js/api/apiCalls";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
 import { fetchImageset } from "@/assets/js/api/apiCalls";
 
 export default {

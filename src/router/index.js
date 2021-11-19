@@ -342,7 +342,7 @@ const router = new Router({
         },
         {
           path: "/imageset",
-          component: () => import("../views/Imagesets.vue"),
+          component: () => import("../views/imageset/Imagesets.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -369,7 +369,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/imageset/Imageset.vue"),
+              component: () => import("../views/imageset/Imageset.vue"),
               meta: {
                 isEdit: true,
                 table: "imageset",
@@ -389,7 +389,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/imageset/Imageset.vue"),
+              component: () => import("../views/imageset/Imageset.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addImageset",
