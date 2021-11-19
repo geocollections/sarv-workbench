@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -181,6 +181,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -189,16 +195,19 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "RockClassificationTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -265,24 +274,13 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return typeof this.item.rock !== "undefined" && this.item.rock !== null;
     },
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         rock: null,
         rock_classification: null,
@@ -312,9 +310,7 @@ export default {
       this.cancel();
     },
 
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) {
         this.item.id = item.id;
         this.item.parent = this.$route.params.id;
@@ -355,24 +351,6 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "rock_tree",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     },
   },
 };
