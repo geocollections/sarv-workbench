@@ -1,22 +1,16 @@
 <template>
   <v-row class="table-view-search d-print-none mt-0">
-
-    <input v-model="journal" />
-
-    <v-col v-if="false">
+    <v-col>
       <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title class="pb-0">
-          <div
-            class="card-title--clickable"
-            @click="$emit('update:showSearch', !showSearch)"
-          >
+          <div class="card-title--clickable" @click="showSearch = !showSearch">
             <span>{{ $t("edit.search") }}</span>
             <v-icon right :color="bodyActiveColor">fas fa-search</v-icon>
           </div>
           <v-spacer></v-spacer>
           <v-btn
             icon
-            @click="$emit('update:showSearch', !showSearch)"
+            @click="showSearch = !showSearch"
             :color="bodyActiveColor"
           >
             <v-icon>{{
@@ -32,12 +26,15 @@
                 class="pa-2"
                 cols="12"
                 :md="colSize"
-                v-for="(field, index) in searchFields.mainIds"
+                v-for="(field, index) in $_tableViewMixin_searchFields.mainIds"
                 :key="index"
               >
                 <!-- DATEPICKER -->
                 <!--  TODO  -->
-                <v-row no-gutters v-if="searchFields.byIds[field].isDate">
+                <v-row
+                  no-gutters
+                  v-if="$_tableViewMixin_searchFields.byIds[field].isDate"
+                >
                   <v-col cols="12">
                     <v-menu
                       v-model="calendarMenus[field.id]"
@@ -81,7 +78,9 @@
                 <v-row no-gutters v-else>
                   <v-col cols="3" xl="2" class="px-1">
                     <v-select
-                      :value="searchFields.byIds[field].lookUpType"
+                      :value="
+                        $_tableViewMixin_searchFields.byIds[field].lookUpType
+                      "
                       :color="bodyActiveColor"
                       :item-color="bodyActiveColor"
                       disable-lookup
@@ -89,8 +88,7 @@
                       :items="translatedLookUpTypes"
                       :label="$t('main.lookUpType')"
                       @input="
-                        $emit('update:searchFields', {
-                          table: $_tableHeaderMixin_tableName,
+                        updateSearchFieldsDebounced({
                           field,
                           key: 'lookUpType',
                           value: $event,
@@ -107,14 +105,15 @@
 
                   <v-col cols="9" xl="10" class="px-1">
                     <v-text-field
-                      :value="searchFields.byIds[field].value"
-                      :label="$t(searchFields.byIds[field].title)"
+                      :value="$_tableViewMixin_searchFields.byIds[field].value"
+                      :label="
+                        $t($_tableViewMixin_searchFields.byIds[field].title)
+                      "
                       :color="bodyActiveColor"
                       hide-details
                       :class="bodyActiveColor + '--text'"
                       @input="
-                        $emit('update:searchFields', {
-                          table: $_tableHeaderMixin_tableName,
+                        updateSearchFieldsDebounced({
                           field,
                           key: 'value',
                           value: $event,
@@ -320,16 +319,16 @@
               :body-color="bodyColor"
               :body-active-color="bodyActiveColor"
               :look-up-types="translatedLookUpTypes"
-              :search-fields="searchFields"
+              :search-fields="$_tableViewMixin_searchFields"
               :col-size="3"
-              @update:searchFields="$emit('update:searchFields', $event)"
+              @update:searchFields="updateSearchFieldsDebounced($event)"
             />
 
-            <!-- DYNAMIC FIELDS -->
+            <!-- TABLE HEADERS SELECT BOX -->
             <v-row no-gutters class="mt-6 mb-4">
               <v-col cols="12">
                 <v-select
-                  :items="$_tableHeaderMixin_allHeaders"
+                  :items="$_tableHeaderMixin_translatedHeaders"
                   :value="$_tableHeaderMixin_shownHeaders"
                   chips
                   small-chips
@@ -340,9 +339,8 @@
                   clearable
                   clear-icon="fas fa-times"
                   @change="
-                    $_tableHeaderMixin_updateTableHeaders({
-                      event: $event,
-                      table: $route.meta.object,
+                    $_tableViewMixin_updateHeaders({
+                      value: $event,
                     })
                   "
                   class="chips-select"
@@ -355,8 +353,13 @@
             <!-- RESET SEARCH PREFERENCES -->
             <v-row no-gutters>
               <v-col cols="12">
-                <v-btn @click="resetSearch" :color="bodyActiveColor" dark>
+                <v-btn
+                  @click="$_tableViewMixin_resetState"
+                  :color="bodyActiveColor"
+                  dark
+                >
                   <v-icon left>fas fa-filter</v-icon>
+                  <!-- TODO: Rename to tühjenda/clear -->
                   {{ $t("buttons.resetSearch") }}
                 </v-btn>
               </v-col>
@@ -370,29 +373,15 @@
 
 <script>
 import { mapState } from "vuex";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 import DynamicSearch from "@/components/partial/table_view/DynamicSearch";
 import { debounce } from "lodash";
-import tableSearchMixin from "@/mixins/tableSearchMixin";
 
 export default {
   name: "TableViewSearch",
   components: { DynamicSearch },
-  mixins: [tableHeaderMixin, tableSearchMixin],
+  mixins: [tableViewMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      required: true,
-    },
-    filters: {
-      type: Array,
-      default: function () {
-        return [];
-      },
-    },
-    searchParameters: {
-      type: Object,
-    },
     colSize: {
       type: Number,
       default: 6,
@@ -415,6 +404,7 @@ export default {
     date_start: false,
     date_end: false,
     calendarMenus: ["date_start", "date_end"],
+    showSearch: true,
   }),
   methods: {
     updateDate(event, fieldId, index) {
@@ -422,16 +412,9 @@ export default {
       this.calendarMenus[fieldId] = false;
     },
 
-    resetSearch() {
-      this.$emit("reset:searchParameters");
-      this.$_tableHeaderMixin_setDefaultTableHeaders();
-      // this.$_tableHeaderMixin_resetDynamicSearchFields();
-    },
-
-    updateDynamicSearchFieldsDebounced: debounce(function (payload) {
-      this.$_tableHeaderMixin_updateDynamicSearchField(payload);
-      // }, 400) TODO: For Testing Purposes
-    }, 0),
+    updateSearchFieldsDebounced: debounce(function (payload) {
+      this.$_tableViewMixin_updateSearchFields(payload);
+    }, 400),
   },
 };
 </script>

@@ -17,7 +17,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :dynamic-search-fields="$_tableViewMixin_searchFields"
       :api-call="apiCall"
       :use-image-view="true"
       :use-list-view="true"
@@ -37,13 +37,13 @@ import {
 } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapState } from "vuex";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 export default {
   name: "DrillcoreBoxes",
 
   components: { ListModuleCore, TableViewTitle, TableViewSearch },
 
-  mixins: [searchParametersMixin, tableHeaderMixin],
+  mixins: [searchParametersMixin, tableViewMixin],
 
   data() {
     return {
@@ -67,11 +67,11 @@ export default {
         this.drillcore_boxViewType === "list"
         ? fetchDrillcoreBoxImages(
             this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
+            this.$_tableViewMixin_searchFields
           )
         : fetchDrillcoreBoxes(
             this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
+            this.$_tableViewMixin_searchFields
           );
     },
     //test

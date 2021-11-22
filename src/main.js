@@ -4,7 +4,7 @@ import router from "./router";
 import VueIziToast from "vue-izitoast"; // Pop-up messages
 import VueI18n from "vue-i18n"; // Translations
 import VueCookies from "vue-cookies";
-import store from "./store";
+import store from "./store/store";
 import vuetify from "./plugins/vuetify";
 import constants from "@/plugins/constants";
 import api from "@/plugins/api";

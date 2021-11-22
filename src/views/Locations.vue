@@ -15,7 +15,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :dynamic-search-fields="$_tableViewMixin_searchFields"
       :api-call="apiCall"
       :use-list-view="true"
       :use-image-view="true"
@@ -32,7 +32,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import { fetchLocations, fetchLocationImages } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapGetters, mapState } from "vuex";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   name: "Locations",
@@ -43,7 +43,7 @@ export default {
     TableViewTitle,
   },
 
-  mixins: [searchParametersMixin, tableHeaderMixin],
+  mixins: [searchParametersMixin, tableViewMixin],
 
   data() {
     return {
@@ -73,11 +73,11 @@ export default {
       return this.locationViewType === "image"
         ? fetchLocationImages(
             this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
+            this.$_tableViewMixin_searchFields
           )
         : fetchLocations(
             this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
+            this.$_tableViewMixin_searchFields
           );
     },
     searchLocationImages(searchImages) {

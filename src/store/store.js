@@ -1,6 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
+import { createStore } from "vuex-extensions";
+import actions from "@/store/actions";
+import getters from "@/store/getters";
+import state from "@/store/state";
+import mutations from "@/store/mutations";
 import detail from "./modules/detail";
 import map from "./modules/map";
 import search from "./modules/search";
@@ -9,6 +14,7 @@ import user from "./modules/user";
 import admin from "./modules/admin";
 import tableHeaders from "./modules/tableHeaders";
 import journal from "./modules/journal";
+import keyword from "./modules/keyword";
 
 Vue.use(Vuex);
 
@@ -37,7 +43,7 @@ const vuexLocal = new VuexPersistence({
   }),
 });
 
-export default new Vuex.Store({
+export default createStore(Vuex.Store, {
   modules: {
     detail,
     map,
@@ -47,7 +53,12 @@ export default new Vuex.Store({
     admin,
     tableHeaders,
     journal,
+    keyword,
   },
+  actions,
+  state,
+  getters,
+  mutations,
   plugins: [vuexLocal.plugin],
   strict: process.env.NODE_ENV !== "production",
 });

@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Login from "../views/Login.vue";
 import Dashboard from "../views/Dashboard.vue";
-import store from "../store";
+import store from "@/store/store";
 import api from "@/plugins/api";
 Vue.use(Router);
 Vue.use(api);
@@ -1005,7 +1005,7 @@ const router = new Router({
         },
         {
           path: "/keyword",
-          component: () => import("../views/Keywords.vue"),
+          component: () => import("../views/keyword/Keywords.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1031,7 +1031,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/keyword/Keyword.vue"),
+              component: () => import("../views/keyword/Keyword.vue"),
               meta: {
                 isEdit: true,
                 table: "keyword",
@@ -1052,7 +1052,7 @@ const router = new Router({
             {
               path: "",
               name: "Keyword add",
-              component: () => import("../components/keyword/Keyword.vue"),
+              component: () => import("../views/keyword/Keyword.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addKeyword",

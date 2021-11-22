@@ -8,7 +8,7 @@
     <v-col class="text-right" align-self="center">
       <v-btn
         :class="{ 'mt-2': showImportButton }"
-        :to="{ path: buttonPath }"
+        :to="{ path: `${this.$route.meta.object}/add` }"
         :color="bodyActiveColor"
         :dark="bodyActiveColorDark"
       >
@@ -35,10 +35,6 @@ export default {
   name: "TableViewTitle",
   props: {
     title: {
-      type: String,
-      required: true,
-    },
-    buttonPath: {
       type: String,
       required: true,
     },

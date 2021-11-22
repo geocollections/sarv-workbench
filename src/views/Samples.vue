@@ -21,7 +21,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :dynamic-search-fields="$_tableViewMixin_searchFields"
       :api-call="apiCall"
       :use-list-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
@@ -36,7 +36,7 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   components: {
@@ -47,7 +47,7 @@ export default {
 
   name: "Samples",
 
-  mixins: [searchParametersMixin, tableHeaderMixin],
+  mixins: [searchParametersMixin, tableViewMixin],
 
   data() {
     return {
@@ -93,7 +93,7 @@ export default {
     apiCall() {
       return fetchSamples(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableViewMixin_searchFields
       );
     },
   },

@@ -20,7 +20,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :dynamic-search-fields="$_tableViewMixin_searchFields"
       :api-call="apiCall"
       :use-list-view="true"
       :use-image-view="true"
@@ -37,7 +37,7 @@ import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
 import { fetchSpecimenImages, fetchSpecimens } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../../mixins/searchParametersMixin";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   components: {
@@ -48,7 +48,7 @@ export default {
 
   name: "Specimens",
 
-  mixins: [searchParametersMixin, tableHeaderMixin],
+  mixins: [searchParametersMixin, tableViewMixin],
 
   data() {
     return {
@@ -107,7 +107,7 @@ export default {
       if (this.specimenViewType === "image") {
         const legacyQueryString = fetchSpecimenImages(
           this.searchParameters,
-          this.$_tableHeaderMixin_searchFields
+          this.$_tableViewMixin_searchFields
         );
         return this.$api.rw.getLegacy(
           "attachment",
@@ -122,7 +122,7 @@ export default {
       } else {
         const legacyQueryString = fetchSpecimens(
           this.searchParameters,
-          this.$_tableHeaderMixin_searchFields
+          this.$_tableViewMixin_searchFields
         );
         return this.$api.rw.getLegacy(
           "specimen",

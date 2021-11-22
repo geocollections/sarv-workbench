@@ -18,7 +18,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :dynamic-search-fields="$_tableViewMixin_searchFields"
       :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -32,7 +32,7 @@ import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchTaxonPages } from "@/assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions } from "vuex";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 export default {
   name: "TaxonPages",
 
@@ -42,7 +42,7 @@ export default {
     TableViewSearch,
   },
 
-  mixins: [searchParametersMixin, tableHeaderMixin],
+  mixins: [searchParametersMixin, tableViewMixin],
 
   data() {
     return {
@@ -63,7 +63,7 @@ export default {
     apiCall() {
       return fetchTaxonPages(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableViewMixin_searchFields
       );
     },
   },

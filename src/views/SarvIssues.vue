@@ -15,7 +15,7 @@
     <list-module-core
       module="sarv_issue"
       :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :dynamic-search-fields="$_tableViewMixin_searchFields"
       :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -29,13 +29,13 @@ import ListModuleCore from "../components/ListModuleCore";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 import { mapActions, mapGetters } from "vuex";
 import { fetchSarvIssues } from "@/assets/js/api/apiCalls";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 export default {
   name: "SarvIssues",
 
   components: { ListModuleCore, TableViewSearch, TableViewTitle },
 
-  mixins: [searchParametersMixin, tableHeaderMixin],
+  mixins: [searchParametersMixin, tableViewMixin],
 
   data() {
     return {
@@ -65,7 +65,7 @@ export default {
       return fetchSarvIssues(
         this.searchParameters,
         this.getUserId,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableViewMixin_searchFields
       );
     },
   },

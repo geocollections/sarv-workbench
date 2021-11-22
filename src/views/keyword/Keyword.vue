@@ -238,13 +238,13 @@ import {
   fetchKeywordRelationReverse,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import Editor from "../partial/inputs/Editor";
-import KeywordRelationTable from "./relatedTables/KeywordRelationTable";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import Editor from "../../components/partial/inputs/Editor";
+import KeywordRelationTable from "../../components/keyword/relatedTables/KeywordRelationTable";
 import requestsMixin from "../../mixins/requestsMixin";
-import KeywordRelationReverseTable from "./relatedTables/KeywordRelationReverseTable";
+import KeywordRelationReverseTable from "../../components/keyword/relatedTables/KeywordRelationReverseTable";
 import { mapActions, mapState } from "vuex";
 import Pagination from "@/components/partial/Pagination";
 

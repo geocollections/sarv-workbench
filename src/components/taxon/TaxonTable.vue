@@ -81,11 +81,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   name: "TaxonTable",
-  mixins: [activeListMixin, tableHeaderMixin],
+  mixins: [activeListMixin, tableViewMixin],
   props: {
     response: {
       type: Object,

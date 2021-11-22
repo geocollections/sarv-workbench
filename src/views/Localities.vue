@@ -15,7 +15,7 @@
     <list-module-core
       module="locality"
       :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :dynamic-search-fields="$_tableViewMixin_searchFields"
       :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -29,7 +29,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { mapActions, mapState } from "vuex";
 import searchParametersMixin from "../mixins/searchParametersMixin";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   components: {
@@ -40,7 +40,7 @@ export default {
 
   name: "Localities",
 
-  mixins: [searchParametersMixin, tableHeaderMixin],
+  mixins: [searchParametersMixin, tableViewMixin],
 
   data() {
     return {
@@ -79,7 +79,7 @@ export default {
     apiCall() {
       return fetchLocalities(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableViewMixin_searchFields
       );
     },
   },

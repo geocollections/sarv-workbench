@@ -61,11 +61,11 @@
 
 <script>
 import moment from "moment";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   name: "ProjectTable",
-  mixins: [tableHeaderMixin],
+  mixins: [tableViewMixin],
   props: {
     response: {
       type: Object,

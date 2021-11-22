@@ -23,10 +23,11 @@ class RWApiService extends ApiService {
     }
   }
 
-  async get(table, { defaultParams, options } = {}) {
+  async get(table, { defaultParams, options, searchFields } = {}) {
     const url = `${this.baseURL}/${table}/`;
     const params = {
       ...defaultParams,
+      ...this.buildSearchFields(searchFields),
       ...this.getSortByParams(options),
       ...this.getPaginationParams(options),
     };

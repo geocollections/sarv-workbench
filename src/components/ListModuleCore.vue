@@ -21,7 +21,8 @@
       <div v-if="useListView || useImageView" class="mb-2">
         <v-radio-group
           class="radio-buttons mt-0"
-          v-model="currentViewType"
+          :value="$_tableViewMixin_viewType"
+          @change="$_tableViewMixin_updateViewType({ value: $event })"
           row
           hide-details
         >
@@ -59,12 +60,14 @@
       class="pb-2"
       :body-active-color="bodyActiveColor"
       :count="response.count"
-      :paginate-by="searchParameters.paginateBy"
+      :paginate-by="$_tableViewMixin_options.paginateBy"
       :options="paginateByOptionsTranslated"
-      :page="searchParameters.page"
-      v-on:update:page="$emit('update:searchParameters', $event, 'page')"
+      :page="$_tableViewMixin_options.page"
+      v-on:update:page="
+        $_tableViewMixin_updateOptions({ value: $event, key: 'page' })
+      "
       v-on:update:paginateBy="
-        $emit('update:searchParameters', $event, 'paginateBy')
+        $_tableViewMixin_updateOptions({ value: $event, key: 'paginateBy' })
       "
     />
 
@@ -94,7 +97,7 @@
 
       <!-- LIST VIEW -->
       <list-view
-        v-if="isCurrentViewTypeList && response.count > 0"
+        v-if="isListView && response.count > 0"
         :module="module"
         :data="response.results"
         :body-color="bodyColor"
@@ -103,7 +106,7 @@
 
       <!-- IMAGE VIEW -->
       <image-view
-        v-if="isCurrentViewTypeImage && response.count > 0"
+        v-if="isImageView && response.count > 0"
         :module="module"
         :data="response.results"
         :body-color="bodyColor"
@@ -114,8 +117,8 @@
         ref="table"
         :response="response"
         :filter="filterTable"
-        :search-parameters="searchParameters"
-        v-if="isCurrentViewTypeTable && response.count > 0"
+        :search-parameters="$_tableViewMixin_options"
+        v-if="isTableView && response.count > 0"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:toggle-reference-in-active-library="toggleReferenceInActiveLibrary"
         v-on:toggle-item-in-selection-series="toggleItemInSelectionSeries"
@@ -123,7 +126,10 @@
         :body-color="bodyColor"
         :body-active-color="bodyActiveColor"
         v-on:update:sorting="
-          $emit('update:searchParameters', $event.value, $event.key)
+          $_tableViewMixin_updateOptions({
+            value: $event.value,
+            key: $event.key,
+          })
         "
       />
     </v-card>
@@ -132,12 +138,14 @@
       class="pt-2 pt-md-0 pb-0 pb-md-5"
       :body-active-color="bodyActiveColor"
       :count="response.count"
-      :paginate-by="searchParameters.paginateBy"
+      :paginate-by="$_tableViewMixin_options.paginateBy"
       :options="paginateByOptionsTranslated"
-      :page="searchParameters.page"
-      v-on:update:page="$emit('update:searchParameters', $event, 'page')"
+      :page="$_tableViewMixin_options.page"
+      v-on:update:page="
+        $_tableViewMixin_updateOptions({ value: $event, key: 'page' })
+      "
       v-on:update:paginateBy="
-        $emit('update:searchParameters', $event, 'paginateBy')
+        $_tableViewMixin_updateOptions({ value: $event, key: 'paginateBy' })
       "
     />
   </div>
@@ -154,6 +162,7 @@ import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
 import Pagination from "@/components/partial/Pagination";
 import { fetchChangeRecordState } from "@/assets/js/api/apiCalls";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   components: {
@@ -172,12 +181,6 @@ export default {
       type: String,
       default: null,
     },
-    searchParameters: {
-      type: Object,
-    },
-    dynamicSearchFields: {
-      type: Object,
-    },
     exportButtons: {
       type: Boolean,
       default: true,
@@ -191,19 +194,10 @@ export default {
       default: false,
     },
   },
-  mixins: [toastMixin, activeListMixin],
+  mixins: [toastMixin, activeListMixin, tableViewMixin],
   name: "ListModuleCore",
   data() {
     return {
-      paginateByOptions: [
-        { text: "main.pagination", value: 10 },
-        { text: "main.pagination", value: 25 },
-        { text: "main.pagination", value: 50 },
-        { text: "main.pagination", value: 100 },
-        { text: "main.pagination", value: 250 },
-        { text: "main.pagination", value: 500 },
-        { text: "main.pagination", value: 1000 },
-      ],
       filterTable: "",
       noResults: null,
       isLoading: false,
@@ -215,29 +209,8 @@ export default {
   },
 
   computed: {
+    ...mapState("search", ["paginateByOptions"]),
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
-
-    currentViewType: {
-      get() {
-        return this.$store.state.search[`${this.module}ViewType`];
-      },
-
-      set(value) {
-        this.updateViewType({ module: this.module, type: value });
-      },
-    },
-
-    isCurrentViewTypeTable() {
-      return this.currentViewType === "table";
-    },
-
-    isCurrentViewTypeImage() {
-      return this.currentViewType === "image";
-    },
-
-    isCurrentViewTypeList() {
-      return this.currentViewType === "list";
-    },
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map((item) => {
@@ -247,16 +220,28 @@ export default {
         };
       });
     },
+
+    isTableView() {
+      return this.$_tableViewMixin_viewType === "table";
+    },
+
+    isImageView() {
+      return this.$_tableViewMixin_viewType === "image";
+    },
+
+    isListView() {
+      return this.$_tableViewMixin_viewType === "list";
+    },
   },
   watch: {
-    searchParameters: {
+    $_tableViewMixin_options: {
       handler() {
         this.search();
       },
       immediate: true,
       deep: true,
     },
-    dynamicSearchFields: {
+    $_tableViewMixin_searchFields: {
       handler() {
         this.search();
       },
@@ -284,7 +269,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", ["updateViewType", "setSidebarList"]),
+    ...mapActions("search", ["setSidebarList"]),
 
     search: debounce(async function () {
       this.isLoading = true;
@@ -311,8 +296,8 @@ export default {
         this.setSidebarList({
           module: this.module,
           response,
-          page: this.searchParameters.page,
-          paginateBy: this.searchParameters.paginateBy,
+          page: this.$_tableViewMixin_options.page,
+          paginateBy: this.$_tableViewMixin_options.paginateBy,
         });
       }
     }, 500),

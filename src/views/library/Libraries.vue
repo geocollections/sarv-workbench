@@ -14,7 +14,7 @@
     <list-module-core
       :module="$route.meta.object"
       :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+      :dynamic-search-fields="$_tableViewMixin_searchFields"
       :api-call="apiCall"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -27,7 +27,7 @@ import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../../mixins/searchParametersMixin";
 import { fetchAttachments, fetchLibraries } from "@/assets/js/api/apiCalls";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   components: {
@@ -38,7 +38,7 @@ export default {
 
   name: "Libraries",
 
-  mixins: [searchParametersMixin, tableHeaderMixin],
+  mixins: [searchParametersMixin, tableViewMixin],
 
   data() {
     return {
@@ -59,7 +59,7 @@ export default {
     apiCall() {
       const legacyQueryString = fetchLibraries(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableViewMixin_searchFields
       );
       return this.$api.rw.getLegacy(
         "library",

@@ -31,6 +31,40 @@ class ApiService {
     return null;
   };
 
+  buildSearchFields = (searchFields) => {
+    if (searchFields?.byIds) {
+      console.log(Object.keys(searchFields.byIds));
+      const query = Object.keys(searchFields.byIds).reduce((prev, curr) => {
+        let value = searchFields.byIds[curr].value;
+        if (value) {
+          value = encodeURIComponent(value);
+
+          const lookUpType =
+            searchFields.byIds[curr]?.lookUpType ?? "icontains";
+          const type = searchFields.byIds[curr]?.type ?? "text";
+          const fields = searchFields.byIds[curr]?.fields ?? [curr];
+
+          if (type === "text")
+            fields.forEach(
+              (field) => (prev[`${field}__${lookUpType}`] = value)
+            );
+          if (type === "multi") {
+            const or_search = fields.map(
+              (field) => `${field}__${lookUpType}:${value}`
+            );
+            prev["or_search"] = or_search.join(" OR ");
+          }
+        }
+        return prev;
+      }, {});
+
+      console.log(query);
+
+      return query;
+    }
+    return null;
+  };
+
   handleError(error, url) {
     const status = error.response.status;
     const detail = error?.response?.data?.detail ?? "";
