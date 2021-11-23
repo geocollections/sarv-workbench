@@ -12,8 +12,6 @@
 import ListModuleCore from "../../components/ListModuleCore";
 import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
-import { fetchSiteGroundwaters } from "@/assets/js/api/apiCalls";
-import searchParametersMixin from "../../mixins/searchParametersMixin";
 import tableViewMixin from "@/mixins/tableViewMixin";
 export default {
   name: "SiteGroundwaters",

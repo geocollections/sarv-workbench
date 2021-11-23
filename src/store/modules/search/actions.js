@@ -5,28 +5,20 @@ import {
   fetchActiveSelectionSeriesList,
   fetchAgents,
   fetchAnalyses,
-  fetchAreas,
   fetchAttachments,
   fetchCollections,
   fetchDatasets,
   fetchDeaccessions,
   fetchDois,
-  fetchDrillcoreBoxes,
-  fetchDrillcores,
-  fetchJournals,
-  fetchKeywords,
   fetchLoans,
-  fetchLocalities,
   fetchLocations,
   fetchPreparations,
-  fetchProjects,
   fetchReferences,
   fetchRocks,
   fetchSamples,
   fetchSampleSeries,
   fetchSarvIssues,
   fetchSelectionSeries,
-  fetchSites,
   fetchSpecimens,
   fetchStratigraphies,
   fetchTaxa,
@@ -36,8 +28,6 @@ import {
   fetchAnalysisMethods,
   fetchAnalysisParameters,
   fetchTaxonPages,
-  fetchLibraries,
-  fetchAllFields,
   fetchImagesets,
 } from "@/assets/js/api/apiCalls";
 
@@ -66,18 +56,6 @@ const actions = {
     commit("SET_LOADING_STATE", boolVal);
   },
 
-  FETCH_PROJECTS({ commit, state }) {
-    return fetchProjects(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  FETCH_SITES({ commit, state }) {
-    return fetchSites(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
   FETCH_ATTACHMENTS({ commit, state }) {
     return fetchAttachments(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
@@ -90,23 +68,11 @@ const actions = {
     );
   },
 
-  FETCH_LIBRARIES({ commit, state }) {
-    return fetchLibraries(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
   FETCH_IMAGESETS({ commit, state, rootGetters }) {
     return fetchImagesets(
       state.activeSearchParams.search,
       rootGetters["user/getCurrentAgent"].id
     ).then((resp) => commit("SET_SIDEBAR_LIST", resp));
-  },
-
-  FETCH_LOCALITIES({ commit, state }) {
-    return fetchLocalities(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
   },
 
   FETCH_ANALYSIS_PARAMETERS({ commit, state }) {
@@ -145,18 +111,6 @@ const actions = {
     );
   },
 
-  FETCH_KEYWORDS({ commit, state }) {
-    return fetchKeywords(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  FETCH_JOURNALS({ commit, state }) {
-    return fetchJournals(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
   FETCH_COLLECTIONS({ commit, state }) {
     return fetchCollections(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
@@ -189,12 +143,6 @@ const actions = {
     });
   },
 
-  FETCH_DRILLCORES({ commit, state }) {
-    return fetchDrillcores(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
   FETCH_DATASETS({ commit, state }) {
     return fetchDatasets(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
@@ -203,18 +151,6 @@ const actions = {
 
   FETCH_STRATIGRAPHY({ commit, state }) {
     return fetchStratigraphies(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_AREAS({ commit, state }) {
-    return fetchAreas(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_DRILLCORE_BOXES({ commit, state }) {
-    return fetchDrillcoreBoxes(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },

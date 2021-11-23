@@ -17,12 +17,6 @@
 import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
 import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import ListModuleCore from "../../components/ListModuleCore";
-import {
-  fetchDrillcoreBoxes,
-  fetchDrillcoreBoxImages,
-} from "../../assets/js/api/apiCalls";
-import searchParametersMixin from "../../mixins/searchParametersMixin";
-import { mapState } from "vuex";
 import tableViewMixin from "@/mixins/tableViewMixin";
 export default {
   name: "DrillcoreBoxes",
