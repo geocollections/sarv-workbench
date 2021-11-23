@@ -343,8 +343,8 @@
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import cloneDeep from "lodash/cloneDeep";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
 import {
   fetchArea,
   fetchAreaLocalityReferences,
@@ -352,14 +352,14 @@ import {
   fetchListAreaTypes,
   fetchListMaakond,
 } from "../../assets/js/api/apiCalls";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import Editor from "../partial/inputs/Editor";
-import MapComponent from "../partial/MapComponent";
-import ExportButtons from "../partial/export/ExportButtons";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import Editor from "../../components/partial/inputs/Editor";
+import MapComponent from "../../components/partial/MapComponent";
+import ExportButtons from "../../components/partial/export/ExportButtons";
 import debounce from "lodash/debounce";
 import { mapActions, mapState } from "vuex";
-import SiteTable from "../site/SiteTable";
-import AreaLocalityReferenceTable from "./relatedTables/AreaLocalityReferenceTable";
+import SiteTable from "../../components/site/SiteTable";
+import AreaLocalityReferenceTable from "../../components/area/relatedTables/AreaLocalityReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import Pagination from "@/components/partial/Pagination";
 export default {

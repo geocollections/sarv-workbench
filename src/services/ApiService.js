@@ -37,8 +37,6 @@ class ApiService {
       const query = Object.keys(searchFields.byIds).reduce((prev, curr) => {
         let value = searchFields.byIds[curr].value;
         if (value) {
-          value = encodeURIComponent(value);
-
           const lookUpType =
             searchFields.byIds[curr]?.lookUpType ?? "icontains";
           const type = searchFields.byIds[curr]?.type ?? "text";

@@ -1581,7 +1581,7 @@ const router = new Router({
         },
         {
           path: "/area",
-          component: () => import("../views/Areas.vue"),
+          component: () => import("../views/area/Areas.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1607,7 +1607,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/area/Area.vue"),
+              component: () => import("../views/area/Area.vue"),
               meta: {
                 isEdit: true,
                 table: "area",
@@ -1628,7 +1628,7 @@ const router = new Router({
             {
               path: "",
               name: "Area add",
-              component: () => import("../components/area/Area.vue"),
+              component: () => import("../views/area/Area.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.area",

@@ -21,6 +21,7 @@ import drillcore from "./modules/drillcore";
 import drillcore_box from "./modules/drillcore_box";
 import site from "./modules/site";
 import site_groundwater from "./modules/site_groundwater";
+import area from "./modules/area";
 
 Vue.use(Vuex);
 
@@ -66,6 +67,7 @@ export default createStore(Vuex.Store, {
     drillcore_box,
     site,
     site_groundwater,
+    area,
   },
   actions,
   state,
