@@ -20,12 +20,12 @@
   >
     <template v-slot:item.id="{ item }">
       <router-link
-        :to="{ path: '/site/' + item.site }"
+        :to="{ path: '/site/' + item.site.id }"
         :title="$t('editSite.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        {{ item.site }}
+        {{ item.site.id }}
       </router-link>
     </template>
 

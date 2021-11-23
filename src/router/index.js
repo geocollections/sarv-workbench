@@ -2543,7 +2543,7 @@ const router = new Router({
         },
         {
           path: "/site_groundwater",
-          component: () => import("../views/SiteGroundwaters.vue"),
+          component: () => import("../views/site_groundwater/SiteGroundwaters.vue"),
           meta: {
             requiresAuth: true,
           },

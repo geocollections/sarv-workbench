@@ -20,6 +20,7 @@ import locality from "./modules/locality";
 import drillcore from "./modules/drillcore";
 import drillcore_box from "./modules/drillcore_box";
 import site from "./modules/site";
+import site_groundwater from "./modules/site_groundwater";
 
 Vue.use(Vuex);
 
@@ -64,6 +65,7 @@ export default createStore(Vuex.Store, {
     drillcore,
     drillcore_box,
     site,
+    site_groundwater,
   },
   actions,
   state,

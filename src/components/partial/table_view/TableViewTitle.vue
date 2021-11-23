@@ -8,7 +8,9 @@
     <v-col class="text-right" align-self="center">
       <v-btn
         :class="{ 'mt-2': showImportButton }"
-        :to="{ path: `${this.$route.meta.object}/add` }"
+        :to="{
+          path: buttonPath ? buttonPath : `${this.$route.meta.object}/add`,
+        }"
         :color="bodyActiveColor"
         :dark="bodyActiveColorDark"
       >
@@ -42,6 +44,11 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+    buttonPath: {
+      type: String,
+      required: false,
+      default: "",
     },
   },
   computed: {
