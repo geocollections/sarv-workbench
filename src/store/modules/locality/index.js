@@ -207,13 +207,13 @@ const getDefaultState = () => {
           lookUpType: "icontains",
         },
         selection_id: {
-          title: "locality.id",
+          title: "specimen.selectionId",
           value: null,
           lookUpType: "icontains",
           fields: ["selection__selection"],
         },
         selection: {
-          title: "locality.id",
+          title: "specimen.selection",
           value: null,
           lookUpType: "icontains",
           fields: ["selection__selection__name"],
