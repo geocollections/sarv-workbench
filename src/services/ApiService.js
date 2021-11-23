@@ -48,11 +48,18 @@ class ApiService {
             fields.forEach(
               (field) => (prev[`${field}__${lookUpType}`] = value)
             );
-          if (type === "multi") {
+          else if (type === "multi") {
             const or_search = fields.map(
               (field) => `${field}__${lookUpType}:${value}`
             );
             prev["or_search"] = or_search.join(" OR ");
+          } else if (type === "datetime") {
+            fields.forEach(
+              (field) =>
+                (prev[`${field}__${lookUpType}`] = `${value} ${
+                  lookUpType === "lt" ? "23:59" : "00:00"
+                }`)
+            );
           }
         }
         return prev;

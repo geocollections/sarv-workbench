@@ -671,7 +671,7 @@ const router = new Router({
         },
         {
           path: "/site",
-          component: () => import("../views/Sites.vue"),
+          component: () => import("../views/site/Sites.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -698,7 +698,7 @@ const router = new Router({
             {
               path: "",
               name: "Site edit",
-              component: () => import("../components/site/Site.vue"),
+              component: () => import("../views/site/Site.vue"),
               meta: {
                 isEdit: true,
                 table: "site",
@@ -720,7 +720,7 @@ const router = new Router({
             {
               path: "",
               name: "Site add",
-              component: () => import("../components/site/Site.vue"),
+              component: () => import("../views/site/Site.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addSite",

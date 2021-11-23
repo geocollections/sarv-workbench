@@ -37,7 +37,7 @@
                 >
                   <v-col cols="12">
                     <v-menu
-                      v-model="calendarMenus[field.id]"
+                      v-model="calendarMenus[field]"
                       :close-on-content-click="false"
                       :nudge-right="40"
                       transition="scale-transition"
@@ -47,13 +47,21 @@
                       <template v-slot:activator="{ on }">
                         <v-text-field
                           hide-details
-                          :value="searchParameters[field.id]"
-                          :label="$t(field.title)"
+                          :value="
+                            $_tableViewMixin_searchFields.byIds[field].value
+                          "
+                          :label="
+                            $t($_tableViewMixin_searchFields.byIds[field].title)
+                          "
                           prepend-inner-icon="far fa-calendar-alt"
                           :color="bodyActiveColor"
                           clearable
                           @click:clear="
-                            $emit('update:searchParameters', null, field.id)
+                            updateSearchFieldsDebounced({
+                              field,
+                              key: 'value',
+                              value: null,
+                            })
                           "
                           clear-icon="fas fa-times"
                           readonly
@@ -62,11 +70,20 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                        :value="searchParameters[field.id]"
-                        @input="updateDate($event, field.id)"
+                        :value="
+                          $_tableViewMixin_searchFields.byIds[field].value
+                        "
+                        @input="
+                          updateSearchFieldsDebounced({
+                            field,
+                            key: 'value',
+                            value: $event,
+                          })
+                        "
                         :color="bodyActiveColor"
                         :header-color="`${bodyActiveColor} darken-3`"
                         scrollable
+                        show-adjacent-months
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -401,17 +418,10 @@ export default {
     },
   },
   data: () => ({
-    date_start: false,
-    date_end: false,
     calendarMenus: ["date_start", "date_end"],
     showSearch: true,
   }),
   methods: {
-    updateDate(event, fieldId, index) {
-      this.$emit("update:searchParameters", event, fieldId);
-      this.calendarMenus[fieldId] = false;
-    },
-
     updateSearchFieldsDebounced: debounce(function (payload) {
       this.$_tableViewMixin_updateSearchFields(payload);
     }, 400),
