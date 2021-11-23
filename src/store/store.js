@@ -17,6 +17,8 @@ import journal from "./modules/journal";
 import keyword from "./modules/keyword";
 import project from "./modules/project";
 import locality from "./modules/locality";
+import drillcore from "./modules/drillcore";
+import drillcore_box from "./modules/drillcore_box";
 
 Vue.use(Vuex);
 
@@ -58,6 +60,8 @@ export default createStore(Vuex.Store, {
     keyword,
     project,
     locality,
+    drillcore,
+    drillcore_box,
   },
   actions,
   state,

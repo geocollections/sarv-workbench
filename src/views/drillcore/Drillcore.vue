@@ -366,13 +366,13 @@ import {
   fetchRelatedDrillcoreBoxes,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileInput from "../partial/inputs/FileInput";
-import DrillcoreBoxTable from "./relatedTables/DrillcoreBoxTable";
-import DrillcoreStudyTable from "./relatedTables/DrillcoreStudyTable";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import FileInput from "../../components/partial/inputs/FileInput";
+import DrillcoreBoxTable from "../../components/drillcore/relatedTables/DrillcoreBoxTable";
+import DrillcoreStudyTable from "../../components/drillcore/relatedTables/DrillcoreStudyTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import { mapActions, mapState } from "vuex";
 import { fetchRelatedDrillcoreBoxImages } from "@/assets/js/api/apiCalls";

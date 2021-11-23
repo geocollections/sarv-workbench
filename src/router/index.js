@@ -1320,7 +1320,7 @@ const router = new Router({
         },
         {
           path: "/drillcore",
-          component: () => import("../views/Drillcores.vue"),
+          component: () => import("../views/drillcore/Drillcores.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1347,7 +1347,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/drillcore/Drillcore.vue"),
+              component: () => import("../views/drillcore/Drillcore.vue"),
               meta: {
                 isEdit: true,
                 table: "drillcore",
@@ -1368,7 +1368,7 @@ const router = new Router({
             {
               path: "",
               name: "Drillcore add",
-              component: () => import("../components/drillcore/Drillcore.vue"),
+              component: () => import("../views/drillcore/Drillcore.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addDrillcore",
@@ -1650,7 +1650,7 @@ const router = new Router({
         // },
         {
           path: "/drillcore_box",
-          component: () => import("../views/DrillcoreBoxes.vue"),
+          component: () => import("../views/drillcore_box/DrillcoreBoxes.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1678,7 +1678,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/drillcore_box/DrillcoreBox.vue"),
+                import("../views/drillcore_box/DrillcoreBox.vue"),
               meta: {
                 isEdit: true,
                 table: "drillcore_box",
@@ -1700,7 +1700,7 @@ const router = new Router({
               path: "",
               name: "Drillcore box add",
               component: () =>
-                import("../components/drillcore_box/DrillcoreBox.vue"),
+                import("../views/drillcore_box/DrillcoreBox.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.drillcoreBox",

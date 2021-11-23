@@ -247,6 +247,9 @@ export default {
       },
       deep: true,
     },
+    $_tableViewMixin_viewType(newVal, oldVal) {
+      this.search();
+    },
     currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
       if (

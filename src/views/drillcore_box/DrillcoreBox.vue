@@ -285,16 +285,16 @@
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import cloneDeep from "lodash/cloneDeep";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
 import {
   fetchDrillcoreBox,
   fetchDrillcoreBoxAttachments,
 } from "@/assets/js/api/apiCalls";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
-import FileInput from "../partial/inputs/FileInput";
-import DrillcoreBoxAttachmentTable from "./related_tables/DrillcoreBoxAttachmentTable";
+import FileInput from "../../components/partial/inputs/FileInput";
+import DrillcoreBoxAttachmentTable from "../../components/drillcore_box/related_tables/DrillcoreBoxAttachmentTable";
 import { mapActions, mapState } from "vuex";
 import Pagination from "@/components/partial/Pagination";
 
