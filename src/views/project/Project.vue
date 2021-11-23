@@ -514,18 +514,18 @@ import {
   fetchLinkedSite,
 } from "../../assets/js/api/apiCalls";
 
-import MapComponent from "../partial/MapComponent";
+import MapComponent from "../../components/partial/MapComponent";
 
 import { mapActions, mapState } from "vuex";
-import ExportButtons from "../partial/export/ExportButtons";
-import SiteTable from "../site/SiteTable";
+import ExportButtons from "../../components/partial/export/ExportButtons";
+import SiteTable from "../../components/site/SiteTable";
 import debounce from "lodash/debounce";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import DateWrapper from "../partial/inputs/DateWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileInput from "../partial/inputs/FileInput";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import DateWrapper from "../../components/partial/inputs/DateWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import FileInput from "../../components/partial/inputs/FileInput";
 
 export default {
   name: "Project",

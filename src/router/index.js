@@ -592,7 +592,7 @@ const router = new Router({
         },
         {
           path: "/project",
-          component: () => import("../views/Projects.vue"),
+          component: () => import("../views/project/Projects.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -617,7 +617,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/project/Project.vue"),
+              component: () => import("../views/project/Project.vue"),
 
               children: [
                 {
@@ -649,7 +649,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/project/Project.vue"),
+              component: () => import("../views/project/Project.vue"),
 
               children: [
                 {

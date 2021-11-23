@@ -15,6 +15,7 @@ import admin from "./modules/admin";
 import tableHeaders from "./modules/tableHeaders";
 import journal from "./modules/journal";
 import keyword from "./modules/keyword";
+import project from "./modules/project";
 
 Vue.use(Vuex);
 
@@ -54,6 +55,7 @@ export default createStore(Vuex.Store, {
     tableHeaders,
     journal,
     keyword,
+    project,
   },
   actions,
   state,
