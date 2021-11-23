@@ -619,19 +619,19 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import MapComponent from "../partial/MapComponent";
+import MapComponent from "../../components/partial/MapComponent";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import FileInput from "../partial/inputs/FileInput";
-import LocalityReferenceTable from "./relatedTables/LocalityReferenceTable";
-import LocalitySynonymTable from "./relatedTables/LocalitySynonymTable";
-import LocalityStratigraphyTable from "./relatedTables/LocalityStratigraphyTable";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import FileInput from "../../components/partial/inputs/FileInput";
+import LocalityReferenceTable from "../../components/locality/relatedTables/LocalityReferenceTable";
+import LocalitySynonymTable from "../../components/locality/relatedTables/LocalitySynonymTable";
+import LocalityStratigraphyTable from "../../components/locality/relatedTables/LocalityStratigraphyTable";
 import requestsMixin from "../../mixins/requestsMixin";
-import LocalityDescriptionTable from "./relatedTables/LocalityDescriptionTable";
+import LocalityDescriptionTable from "../../components/locality/relatedTables/LocalityDescriptionTable";
 import Pagination from "@/components/partial/Pagination";
 
 export default {

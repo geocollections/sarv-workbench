@@ -16,6 +16,7 @@ import tableHeaders from "./modules/tableHeaders";
 import journal from "./modules/journal";
 import keyword from "./modules/keyword";
 import project from "./modules/project";
+import locality from "./modules/locality";
 
 Vue.use(Vuex);
 
@@ -56,6 +57,7 @@ export default createStore(Vuex.Store, {
     journal,
     keyword,
     project,
+    locality,
   },
   actions,
   state,

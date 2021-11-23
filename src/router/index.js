@@ -461,7 +461,7 @@ const router = new Router({
         },
         {
           path: "/locality",
-          component: () => import("../views/Localities.vue"),
+          component: () => import("../views/locality/Localities.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -488,7 +488,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/locality/Locality.vue"),
+              component: () => import("../views/locality/Locality.vue"),
               meta: {
                 isEdit: true,
                 table: "locality",
@@ -508,7 +508,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/locality/Locality.vue"),
+              component: () => import("../views/locality/Locality.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addLocality",
