@@ -1,14 +1,11 @@
 <template>
-  <div class="samples">
-    <table-view-title title="header.samples" show-import-button />
+  <div class="analyses">
+    <table-view-title title="header.analyses" show-import-button />
 
     <table-view-search :col-size="4" />
 
-    <list-module-core
-      :module="$route.meta.object"
-      :api-call="apiCall"
-      :use-list-view="true"
-    />
+    <!-- SEARCH FIELDS END -->
+    <list-module-core :module="$route.meta.object" :api-call="apiCall" />
   </div>
 </template>
 
@@ -25,13 +22,13 @@ export default {
     TableViewTitle,
   },
 
-  name: "Samples",
+  name: "Analyses",
 
   mixins: [tableViewMixin],
 
   methods: {
     apiCall() {
-      return this.$api.rw.get("sample", {
+      return this.$api.rw.get("analysis", {
         defaultParams: {
           nest: 1,
         },

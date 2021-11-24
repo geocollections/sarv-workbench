@@ -12,9 +12,7 @@
 import ListModuleCore from "../../components/ListModuleCore";
 import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
-import searchParametersMixin from "../../mixins/searchParametersMixin";
 import { mapGetters } from "vuex";
-import { fetchAttachments, fetchImagesets } from "@/assets/js/api/apiCalls";
 import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {

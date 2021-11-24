@@ -615,111 +615,6 @@ export function fetchAnalysisMethod() {
   return get(`analysis_method/?order_by=analysis_method&format=json`);
 }
 
-export function fetchSamples(data, dynamicSearch) {
-  const fields =
-    "number,number_additional,number_field,igsn,series,series__name,parent_sample,parent_sample__number,parent_specimen,parent_specimen__specimen_id,sample_purpose,sample_purpose__value,sample_purpose__value_en,sample_type,locality,locality__locality,locality__locality_en,site,site__name,site__name_en,locality_free,soil_site,soil_site__site,soil_site__site_en,latitude1,longitude1,x1,y1,epsg,coordinate_accuracy,depth,depth_interval,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,stratigraphy_bed,soil_horizon,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,classification_rock,classification_rock__name,classification_rock__name_en,rock,rock_en,fossils,palaeontology,analysis,mass,location,location_additional,storage,storage__location,storage_additional,storage_additional__location,remarks,user_added,date_added,user_changed,date_changed,owner,owner__agent,is_private,database__acronym,id,number";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.number !== null && data.number.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.number
-    };fields:number,number_additional,number_field;lookuptype:${
-      data.number__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.locality
-    };fields:locality__locality_en,locality__locality,locality_free,site__name,site__name_en,site__id;lookuptype:${
-      data.locality__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.depth !== null && data.depth.trim().length > 0) {
-    //searchFields += '&depth__exact='+data.depth
-    searchFields += `&multi_search=value:${
-      data.depth
-    };fields:depth,depth_interval;lookuptype:${
-      data.depth__lookuptype || "icontains"
-    }`;
-  }
-  if (data.stratigraphy !== null && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.stratigraphy
-    };fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:${
-      data.stratigraphy__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.agent !== null && data.agent.trim().length > 0) {
-    searchFields += `&agent_collected__agent__${
-      data.agent__lookuptype || "icontains"
-    }=${data.agent}`;
-  }
-
-  if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&storage__location__${
-      data.storage__lookuptype || "icontains"
-    }=${data.storage}`;
-  }
-
-  if (data.site !== null && data.site.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.site
-    };fields:site__id,site__name,site__project__id,site__project__name;lookuptype:${
-      data.site__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-
-  if (data.loan && data.loan.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.loan
-    };fields:loansample__loan__id,loansample__loan__loan_number;lookuptype:${
-      data.loan__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.series && data.series.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.series
-    };fields:series__id,series__name;lookuptype:${
-      data.series__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchSampleAnalysis(id, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -1184,75 +1079,6 @@ export function fetchLabs() {
 
 export function fetchInstruments() {
   return get(`lab_instrument/?format=json`);
-}
-
-export function fetchAnalyses(data, dynamicSearch) {
-  const fields =
-    "material,sample,sample__number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__depth,specimen,specimen__specimen_id,dataset,dataset__name,dataset__name_en,reference,reference__reference,analysis_method,analysis_method__analysis_method,analysis_method__method_en,method_details,method_details_en,mass,date,date_end,date_free,lab,lab__lab,lab__lab_en,lab_txt,lab_sample_number,lab_analysis_number,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,agent,agent__agent,agent_txt,owner,owner__agent,is_private,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.analysis_method !== null && data.analysis_method.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.analysis_method
-    };fields:analysis_method__analysis_method,analysis_method__method_en;lookuptype:${
-      data.analysis_method__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.agentAndLab !== null && data.agentAndLab.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.agentAndLab
-    };fields:agent__agent,lab_txt;lookuptype:${
-      data.agentAndLab__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-
-  if (data.sample && data.sample.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.sample
-    };fields:sample__id,sample__number,sample__number_additional;lookuptype:${
-      data.sample__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.datasetId && data.datasetId.trim().length > 0) {
-    searchFields += `&dataset__id__${
-      data.datasetId__lookuptype || "icontains"
-    }=${data.datasetId}`;
-  }
-
-  // if (typeof agent !== "undefined" && agent !== null) {
-  //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
-  // }
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-  if (searchFields.length > 0) {
-    return get(
-      `analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `analysis/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchAnalysisAttachment(id, searchParameters) {
@@ -2386,33 +2212,6 @@ export function fetchDrillcoreBoxAttachments(drillcoreBoxId, searchParameters) {
 
 export function fetchPreparation(id) {
   return get(`preparation/?id=${id}&format=json`);
-}
-
-export function fetchPreparations(data, dynamicSearch) {
-  const fields =
-    "preparation_number,sample,sample__number,analysis,sample_number,taxon,taxon__taxon,agent,agent__agent,agent_txt,date_prepared,date_prepared_txt,identification_agent,identification_agent__agent,identification_date,identification_remarks,location,storage,storage__location,owner,owner__agent,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.preparation_number && data.preparation_number.trim().length > 0) {
-    searchFields += `preparation_number__${
-      data.preparation_number__lookuptype || "icontains"
-    }=${data.preparation_number}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `preparation/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `preparation/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchLinkedTaxa(data, prepId) {
@@ -3639,47 +3438,6 @@ export function fetchCurrentlyActiveUsers() {
 
 export function fetchSampleSeriesDetail(id) {
   return get(`sample_series/?id=${id}&format=json`);
-}
-
-export function fetchSampleSeries(data, dynamicSearch) {
-  const fields =
-    "name,sampling_purpose,sample_count,sample_numbers,number_prefix,number_start,locality,locality__locality,locality__locality_en,locality_free,zero_level,depth_top,depth_base,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,agent_collected,agent_collected__agent,date_collected,date_collected_free,location,remarks,owner,owner__agent,public,is_private,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&name__${data.name__lookuptype || "icontains"}=${
-      data.name
-    }`;
-  }
-  if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.locality
-    };fields:locality_free,locality__locality,locality__locality_en;lookuptype:${
-      data.locality__lookuptype || "icontains"
-    }`;
-  }
-  if (data.agent_collected && data.agent_collected.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.agent_collected
-    };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:${
-      data.agent_collected__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `sample_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `sample_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchSampleSeriesSamples(id, searchParameters) {

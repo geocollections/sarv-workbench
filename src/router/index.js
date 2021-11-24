@@ -874,7 +874,7 @@ const router = new Router({
         },
         {
           path: "/analysis",
-          component: () => import("../views/Analyses.vue"),
+          component: () => import("../views/analysis/Analyses.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1383,7 +1383,7 @@ const router = new Router({
         },
         {
           path: "/preparation",
-          component: () => import("../views/Preparations.vue"),
+          component: () => import("../views/preparation/Preparations.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2273,7 +2273,7 @@ const router = new Router({
         },
         {
           path: "/sample_series",
-          component: () => import("../views/SampleSeries.vue"),
+          component: () => import("../views/sample_series/SampleSeries.vue"),
           meta: {
             requiresAuth: true,
           },

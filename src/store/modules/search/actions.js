@@ -4,18 +4,13 @@ import {
   fetchActiveSarvIssues,
   fetchActiveSelectionSeriesList,
   fetchAgents,
-  fetchAnalyses,
-  fetchAttachments,
   fetchCollections,
   fetchDatasets,
   fetchDeaccessions,
   fetchDois,
   fetchLoans,
   fetchLocations,
-  fetchPreparations,
   fetchRocks,
-  fetchSamples,
-  fetchSampleSeries,
   fetchSarvIssues,
   fetchSelectionSeries,
   fetchSpecimens,
@@ -27,7 +22,6 @@ import {
   fetchAnalysisMethods,
   fetchAnalysisParameters,
   fetchTaxonPages,
-  fetchImagesets,
 } from "@/assets/js/api/apiCalls";
 
 const actions = {
@@ -55,19 +49,6 @@ const actions = {
     commit("SET_LOADING_STATE", boolVal);
   },
 
-  FETCH_ATTACHMENTS({ commit, state }) {
-    return fetchAttachments(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  FETCH_IMAGESETS({ commit, state, rootGetters }) {
-    return fetchImagesets(
-      state.activeSearchParams.search,
-      rootGetters["user/getCurrentAgent"].id
-    ).then((resp) => commit("SET_SIDEBAR_LIST", resp));
-  },
-
   FETCH_ANALYSIS_PARAMETERS({ commit, state }) {
     return fetchAnalysisParameters(state.activeSearchParams.search).then(
       (resp) => commit("SET_SIDEBAR_LIST", resp)
@@ -76,18 +57,6 @@ const actions = {
 
   FETCH_ANALYSIS_METHODS({ commit, state }) {
     return fetchAnalysisMethods(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  FETCH_SAMPLES({ commit, state }) {
-    return fetchSamples(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  FETCH_ANALYSES({ commit, state }) {
-    return fetchAnalyses(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },
@@ -126,12 +95,6 @@ const actions = {
 
   FETCH_AGENTS({ commit, state }) {
     return fetchAgents(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_PREPARATIONS({ commit, state }) {
-    return fetchPreparations(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },
@@ -198,12 +161,6 @@ const actions = {
 
   FETCH_WEB_NEWS({ commit, state }) {
     return fetchWebNews(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_SAMPLE_SERIES({ commit, state }) {
-    return fetchSampleSeries(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },

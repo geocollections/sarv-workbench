@@ -1,13 +1,17 @@
 <template>
-  <div class="samples">
-    <table-view-title title="header.samples" show-import-button />
+  <div class="preparations">
+    <table-view-title
+      title="header.preparations"
+    />
 
-    <table-view-search :col-size="4" />
+    <table-view-search
+      :col-size="12"
+    />
 
+    <!-- SEARCH FIELDS END -->
     <list-module-core
       :module="$route.meta.object"
       :api-call="apiCall"
-      :use-list-view="true"
     />
   </div>
 </template>
@@ -21,17 +25,17 @@ import tableViewMixin from "@/mixins/tableViewMixin";
 export default {
   components: {
     ListModuleCore,
-    TableViewSearch,
     TableViewTitle,
+    TableViewSearch,
   },
 
-  name: "Samples",
+  name: "Preparations",
 
   mixins: [tableViewMixin],
 
   methods: {
     apiCall() {
-      return this.$api.rw.get("sample", {
+      return this.$api.rw.get("preparation", {
         defaultParams: {
           nest: 1,
         },
