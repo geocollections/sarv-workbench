@@ -23,6 +23,7 @@ import site from "./modules/site";
 import site_groundwater from "./modules/site_groundwater";
 import area from "./modules/area";
 import library from "./modules/library";
+import reference from "./modules/reference";
 
 Vue.use(Vuex);
 
@@ -70,6 +71,7 @@ export default createStore(Vuex.Store, {
     site_groundwater,
     area,
     library,
+    reference,
   },
   actions,
   state,

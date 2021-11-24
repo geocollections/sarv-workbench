@@ -78,7 +78,7 @@ const getDefaultState = () => {
           title: "library.title",
           value: null,
           fields: ["title", "title_en"],
-          type: "multi"
+          type: "multi",
         },
         title_en: {
           lookUpType: "icontains",
@@ -137,7 +137,7 @@ const getDefaultState = () => {
         "user_added",
         "user_changed",
         "year",
-        "reference"
+        "reference",
       ],
     },
     headers: [

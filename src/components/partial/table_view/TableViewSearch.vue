@@ -30,7 +30,6 @@
                 :key="index"
               >
                 <!-- DATEPICKER -->
-                <!--  TODO  -->
                 <v-row
                   no-gutters
                   v-if="$_tableViewMixin_searchFields.byIds[field].isDate"
@@ -89,7 +88,34 @@
                   </v-col>
                 </v-row>
 
-                <!--  TODO: Checkboxes searchFields.byIds[field].isCheckbox  -->
+                <!-- CHECKBOX -->
+                <v-row
+                  no-gutters
+                  v-else-if="
+                    $_tableViewMixin_searchFields.byIds[field].isCheckbox
+                  "
+                >
+                  <v-col cols="12">
+                    <v-checkbox
+                      :input-value="
+                        $_tableViewMixin_searchFields.byIds[field].value
+                      "
+                      :label="
+                        $t($_tableViewMixin_searchFields.byIds[field].title)
+                      "
+                      class="mt-0 pr-6"
+                      :color="bodyActiveColor"
+                      hide-details
+                      @change="
+                        updateSearchFieldsDebounced({
+                          field,
+                          key: 'value',
+                          value: $event,
+                        })
+                      "
+                    />
+                  </v-col>
+                </v-row>
 
                 <!-- REGULAR SEARCH FIELD -->
                 <v-row no-gutters v-else>
@@ -210,46 +236,6 @@
                       )
                     "
                   />
-                </v-row>
-              </v-col>
-            </v-row>
-
-            <!-- REFERENCE CHECKBOXES -->
-            <v-row
-              no-gutters
-              class="checkboxes"
-              v-if="$route.meta.object === 'reference'"
-            >
-              <v-col cols="12">
-                <v-row no-gutters>
-                  <v-checkbox
-                    :input-value="searchParameters.isEstonianReference"
-                    :label="$t('reference.is_estonian_reference')"
-                    class="mt-0 pr-6"
-                    :color="bodyActiveColor"
-                    hide-details
-                    @change="
-                      $emit(
-                        'update:searchParameters',
-                        $event,
-                        'isEstonianReference'
-                      )
-                    "
-                  ></v-checkbox>
-                  <v-checkbox
-                    :input-value="searchParameters.isEstonianAuthor"
-                    :label="$t('reference.is_estonian_author')"
-                    class="mt-0"
-                    :color="bodyActiveColor"
-                    hide-details
-                    @change="
-                      $emit(
-                        'update:searchParameters',
-                        $event,
-                        'isEstonianAuthor'
-                      )
-                    "
-                  ></v-checkbox>
                 </v-row>
               </v-col>
             </v-row>

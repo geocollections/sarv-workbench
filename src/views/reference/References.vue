@@ -1,24 +1,13 @@
 <template>
   <div class="references">
-    <table-view-title title="header.references" buttonPath="/reference/add" />
+    <table-view-title title="header.references" />
 
-    <table-view-search
-      :show-search="block.search"
-      v-on:update:showSearch="block.search = $event"
-      :filters="activeSearchParametersFilters"
-      :search-parameters="searchParameters"
-      :col-size="4"
-      v-on:update:searchParameters="updateSearchParamsByField"
-      v-on:reset:searchParameters="resetSearchParams"
-    />
+    <table-view-search :col-size="4" />
 
     <list-module-core
       :module="$route.meta.object"
-      :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableViewMixin_searchFields"
       :api-call="apiCall"
       :use-list-view="true"
-      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -42,72 +31,58 @@ export default {
 
   name: "References",
 
-  mixins: [toastMixin, searchParametersMixin, tableViewMixin],
+  mixins: [tableViewMixin],
 
-  data() {
-    return {
-      block: { search: true },
-    };
-  },
+  // computed: {
+  //   ...mapState("search", ["librarySearchParameters"]),
+  //
+  //   ...mapGetters("user", ["getCurrentAgent"]),
+  // },
 
-  computed: {
-    ...mapState("search", ["librarySearchParameters"]),
-
-    ...mapGetters("user", ["getCurrentAgent"]),
-  },
-
-  async created() {
-    // Used by sidebar
-    this.setActiveSearchParameters({
-      search: this.librarySearchParameters,
-      request: "FETCH_LIBRARIES",
-      title: "header.libraries",
-      object: "library",
-      field: "title_en",
-      agent: this.getCurrentAgent,
-    });
-
-    this.setActiveSearchParametersFilters([
-      { id: "author", title: "reference.author", type: "text" },
-      { id: "year", title: "common.year", type: "number" },
-      { id: "title", title: "reference.title", type: "text" },
-      { id: "bookJournal", title: "reference.bookJournal", type: "text" },
-      {
-        id: "abstractRemarks",
-        title: "reference.abstractRemarks",
-        type: "text",
-      },
-      { id: "keywords", title: "reference.keywordsSearch", type: "text" },
-      { id: "id", title: "common.id", type: "number" },
-      {
-        id: "libraryAuthorIdTitle",
-        title: "reference.libraryAuthorIdTitle",
-        type: "text",
-      },
-      // {id: "solrSearch", title: "reference.solrSearch", type: "text"},
-      { id: "userAdded", title: "reference.userAdded", type: "text" },
-    ]);
-  },
+  // async created() {
+  //   // Used by sidebar
+  //   this.setActiveSearchParameters({
+  //     search: this.librarySearchParameters,
+  //     request: "FETCH_LIBRARIES",
+  //     title: "header.libraries",
+  //     object: "library",
+  //     field: "title_en",
+  //     agent: this.getCurrentAgent,
+  //   });
+  //
+  //   this.setActiveSearchParametersFilters([
+  //     { id: "author", title: "reference.author", type: "text" },
+  //     { id: "year", title: "common.year", type: "number" },
+  //     { id: "title", title: "reference.title", type: "text" },
+  //     { id: "bookJournal", title: "reference.bookJournal", type: "text" },
+  //     {
+  //       id: "abstractRemarks",
+  //       title: "reference.abstractRemarks",
+  //       type: "text",
+  //     },
+  //     { id: "keywords", title: "reference.keywordsSearch", type: "text" },
+  //     { id: "id", title: "common.id", type: "number" },
+  //     {
+  //       id: "libraryAuthorIdTitle",
+  //       title: "reference.libraryAuthorIdTitle",
+  //       type: "text",
+  //     },
+  //     // {id: "solrSearch", title: "reference.solrSearch", type: "text"},
+  //     { id: "userAdded", title: "reference.userAdded", type: "text" },
+  //   ]);
+  // },
 
   methods: {
-    ...mapActions("search", ["setActiveSearchParameters"]),
+    // ...mapActions("search", ["setActiveSearchParameters"]),
 
     apiCall() {
-      const legacyQueryString = fetchReferences(
-        this.searchParameters,
-        this.$_tableViewMixin_searchFields
-      );
-
-      return this.$api.rw.getLegacy(
-        "reference",
-        {
-          defaultParams: {
-            nest: 1,
-          },
+      return this.$api.rw.get("reference", {
+        defaultParams: {
+          nest: 1,
         },
-        legacyQueryString,
-        this.searchParameters
-      );
+        options: this.$_tableViewMixin_options,
+        searchFields: this.$_tableViewMixin_searchFields,
+      });
     },
   },
 };
