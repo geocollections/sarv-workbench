@@ -13,7 +13,6 @@ import {
   fetchLoans,
   fetchLocations,
   fetchPreparations,
-  fetchReferences,
   fetchRocks,
   fetchSamples,
   fetchSampleSeries,
@@ -58,12 +57,6 @@ const actions = {
 
   FETCH_ATTACHMENTS({ commit, state }) {
     return fetchAttachments(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  FETCH_REFERENCES({ commit, state }) {
-    return fetchReferences(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
   },

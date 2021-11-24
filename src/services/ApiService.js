@@ -58,6 +58,13 @@ class ApiService {
                   lookUpType === "lt" ? "23:59" : "00:00"
                 }`)
             );
+          } else if (type === "multi_checkbox") {
+            fields.forEach(
+              (field) =>
+                (prev[`${field}__${lookUpType}`] = `${
+                  value.length > 0 ? value : 0
+                }`)
+            );
           }
         }
         return prev;

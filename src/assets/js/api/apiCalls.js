@@ -428,85 +428,6 @@ export function fetchReference(id) {
   return get(`reference/?id=${id}&format=json`);
 }
 
-export function fetchReferences(data, dynamicSearch) {
-  let searchFields = "";
-
-  if (data.author !== null && data.author.trim().length > 0) {
-    searchFields += `author__${data.author__lookuptype || "icontains"}=${
-      data.author
-    }`;
-  }
-  if (data.year !== null && data.year.trim().length > 0) {
-    searchFields += `&year__${data.year__lookuptype || "icontains"}=${
-      data.year
-    }`;
-  }
-  if (data.title !== null && data.title.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.title +
-      ";fields:title,title_original;lookuptype:" +
-      `${data.title__lookuptype || "icontains"}`;
-  }
-  if (data.bookJournal !== null && data.bookJournal.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.bookJournal +
-      ";fields:book,book_editor,journal__journal_name;lookuptype:" +
-      `${data.bookJournal__lookuptype || "icontains"}`;
-  }
-  if (data.abstractRemarks && data.abstractRemarks.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.abstractRemarks +
-      ";fields:abstract,remarks;lookuptype:" +
-      `${data.abstractRemarks__lookuptype || "icontains"}`;
-  }
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-  if (
-    data.libraryAuthorIdTitle &&
-    data.libraryAuthorIdTitle.trim().length > 0
-  ) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.libraryAuthorIdTitle +
-      ";fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt,libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:" +
-      `${data.libraryAuthorIdTitle__lookuptype || "icontains"}&distinct=true`;
-  }
-  if (data.userAdded && data.userAdded.trim().length > 0) {
-    searchFields += `&user_added__${
-      data.userAdded__lookuptype || "icontains"
-    }=${data.userAdded}`;
-  }
-  if (data.keywords !== null && data.keywords.trim().length > 0) {
-    searchFields += `&referencekeywords__keyword__keyword__${
-      data.keywords__lookuptype || "icontains"
-    }=${data.keywords}`;
-  }
-  if (data.isEstonianReference) {
-    searchFields += `&is_estonian_reference=${data.isEstonianReference}`;
-  }
-  if (data.isEstonianAuthor) {
-    searchFields += `&is_estonian_author=${data.isEstonianAuthor}`;
-  }
-  searchFields += buildDynamicSearch(dynamicSearch);
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-  return searchFields.length > 0 ? `?${searchFields}` : "";
-}
-
 function fetchReferenceIDsUsingReferenceKeyword(data) {
   let searchFields = "";
 
@@ -3997,29 +3918,6 @@ export function fetchAnalysisMethodDetail(id) {
 
 export function fetchImageset(id) {
   return get(`imageset/?id=${id}&format=json`);
-}
-
-export function fetchImagesets(data, author, dynamicSearch) {
-  let searchFields = "";
-
-  if (data.number && data.number.trim().length > 0) {
-    searchFields += `&imageset_number__${
-      data.number__lookuptype || "icontains"
-    }=${data.number}`;
-  }
-
-  if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__${
-      data.description__lookuptype || "icontains"
-    }=${data.description}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) return `?${searchFields}&author=${author}`;
-  else return `?author=${author}`;
 }
 
 /**********************

@@ -24,6 +24,8 @@ import site_groundwater from "./modules/site_groundwater";
 import area from "./modules/area";
 import library from "./modules/library";
 import reference from "./modules/reference";
+import imageset from "./modules/imageset";
+import attachment from "./modules/attachment";
 
 Vue.use(Vuex);
 
@@ -72,6 +74,8 @@ export default createStore(Vuex.Store, {
     area,
     library,
     reference,
+    imageset,
+    attachment,
   },
   actions,
   state,

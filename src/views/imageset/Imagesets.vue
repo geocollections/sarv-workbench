@@ -1,23 +1,10 @@
 <template>
   <div class="imagesets">
-    <table-view-title title="header.imagesets" buttonPath="/imageset/add" />
+    <table-view-title title="header.imagesets" />
 
-    <table-view-search
-      :show-search="block.search"
-      v-on:update:showSearch="block.search = $event"
-      :filters="activeSearchParametersFilters"
-      :search-parameters="searchParameters"
-      v-on:update:searchParameters="updateSearchParamsByField"
-      v-on:reset:searchParameters="resetSearchParams"
-    />
+    <table-view-search />
 
-    <list-module-core
-      :module="$route.meta.object"
-      :searchParameters="searchParameters"
-      :dynamic-search-fields="$_tableViewMixin_searchFields"
-      :api-call="apiCall"
-      v-on:update:searchParameters="updateSearchParamsByField"
-    />
+    <list-module-core :module="$route.meta.object" :api-call="apiCall" />
   </div>
 </template>
 
@@ -39,20 +26,7 @@ export default {
     TableViewTitle,
   },
 
-  mixins: [searchParametersMixin, tableViewMixin],
-
-  data() {
-    return {
-      block: { search: true },
-    };
-  },
-
-  async created() {
-    this.setActiveSearchParametersFilters([
-      { id: "number", title: "imageset.imagesetNumber", type: "text" },
-      { id: "description", title: "imageset.description", type: "text" },
-    ]);
-  },
+  mixins: [tableViewMixin],
 
   computed: {
     ...mapGetters("user", ["getCurrentAgent"]),
@@ -60,21 +34,14 @@ export default {
 
   methods: {
     apiCall() {
-      const legacyQueryString = fetchImagesets(
-        this.searchParameters,
-        this.getCurrentAgent.id,
-        this.$_tableViewMixin_searchFields
-      );
-      return this.$api.rw.getLegacy(
-        "imageset",
-        {
-          defaultParams: {
-            nest: 1,
-          },
+      return this.$api.rw.get("imageset", {
+        defaultParams: {
+          nest: 1,
+          author: this.getCurrentAgent.id,
         },
-        legacyQueryString,
-        this.searchParameters
-      );
+        options: this.$_tableViewMixin_options,
+        searchFields: this.$_tableViewMixin_searchFields,
+      });
     },
   },
 };

@@ -16,7 +16,6 @@ const state = {
   activeSearchParams: null,
   activeSearchParametersFilters: [],
   tableHeaders: {
-    attachment: [],
     doi: [],
     project: [],
     area: [],
@@ -38,23 +37,6 @@ const state = {
     drillcore_box: [],
     dataset: [],
   },
-  attachmentSearchParameters: {
-    id: null,
-    image_number: null,
-    filename: null,
-    specimen: null,
-    imageInfo: null,
-    locality: null,
-    selection: null,
-    keyword: null,
-    author: null,
-    specimen_image_attachment: ["2", "1", "3", "4"],
-    page: 1,
-    paginateBy: 50,
-    sortBy: ["id"],
-    sortDesc: [true],
-  },
-  attachmentViewType: "table",
   selection_seriesSearchParameters: {
     id: null,
     name: null,
@@ -363,15 +345,6 @@ const state = {
     sortDesc: [true],
   },
   analysis_methodViewType: "table",
-  imagesetSearchParameters: {
-    number: null,
-    description: null,
-    page: 1,
-    paginateBy: 50,
-    sortBy: ["id"],
-    sortDesc: [true],
-  },
-  imagesetViewType: "table",
   activeSarvIssues: null,
   lookUpTypes: [
     //exact, iexact, in, range, contains, icontains, startswith, istartswith, endswith, iendswith, gt, lt, gte, lte, isnull, hierarchy

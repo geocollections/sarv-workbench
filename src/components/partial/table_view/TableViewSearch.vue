@@ -177,63 +177,79 @@
               <v-col cols="12">
                 <v-row no-gutters>
                   <v-checkbox
-                    :input-value="searchParameters.specimen_image_attachment"
+                    :input-value="
+                      $_tableViewMixin_searchFields.byIds[
+                        'specimen_image_attachment'
+                      ].value
+                    "
                     :label="$t('attachment.photoArchive')"
                     value="2"
                     class="mt-0 pr-6"
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      $emit(
-                        'update:searchParameters',
-                        $event,
-                        'specimen_image_attachment'
-                      )
+                      updateSearchFieldsDebounced({
+                        field: 'specimen_image_attachment',
+                        key: 'value',
+                        value: $event,
+                      })
                     "
                   />
                   <v-checkbox
-                    :input-value="searchParameters.specimen_image_attachment"
+                    :input-value="
+                      $_tableViewMixin_searchFields.byIds[
+                        'specimen_image_attachment'
+                      ].value
+                    "
                     :label="$t('attachment.specimenImage')"
                     value="1"
                     class="mt-0 pr-6"
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      $emit(
-                        'update:searchParameters',
-                        $event,
-                        'specimen_image_attachment'
-                      )
+                      updateSearchFieldsDebounced({
+                        field: 'specimen_image_attachment',
+                        key: 'value',
+                        value: $event,
+                      })
                     "
                   />
                   <v-checkbox
-                    :input-value="searchParameters.specimen_image_attachment"
+                    :input-value="
+                      $_tableViewMixin_searchFields.byIds[
+                        'specimen_image_attachment'
+                      ].value
+                    "
                     :label="$t('attachment.otherFiles')"
                     value="3"
                     class="mt-0 pr-6"
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      $emit(
-                        'update:searchParameters',
-                        $event,
-                        'specimen_image_attachment'
-                      )
+                      updateSearchFieldsDebounced({
+                        field: 'specimen_image_attachment',
+                        key: 'value',
+                        value: $event,
+                      })
                     "
                   />
                   <v-checkbox
-                    :input-value="searchParameters.specimen_image_attachment"
+                    :input-value="
+                      $_tableViewMixin_searchFields.byIds[
+                        'specimen_image_attachment'
+                      ].value
+                    "
                     :label="$t('attachment.digitisedReference')"
                     value="4"
                     class="mt-0"
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      $emit(
-                        'update:searchParameters',
-                        $event,
-                        'specimen_image_attachment'
-                      )
+                      updateSearchFieldsDebounced({
+                        field: 'specimen_image_attachment',
+                        key: 'value',
+                        value: $event,
+                      })
                     "
                   />
                 </v-row>
