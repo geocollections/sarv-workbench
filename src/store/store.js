@@ -26,6 +26,7 @@ import library from "./modules/library";
 import reference from "./modules/reference";
 import imageset from "./modules/imageset";
 import attachment from "./modules/attachment";
+import sample from "./modules/sample";
 
 Vue.use(Vuex);
 
@@ -76,6 +77,7 @@ export default createStore(Vuex.Store, {
     reference,
     imageset,
     attachment,
+    sample,
   },
   actions,
   state,

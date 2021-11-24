@@ -521,7 +521,7 @@ const router = new Router({
         },
         {
           path: "/sample",
-          component: () => import("../views/Samples.vue"),
+          component: () => import("../views/sample/Samples.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -549,7 +549,7 @@ const router = new Router({
             {
               path: "",
               name: "Sample edit",
-              component: () => import("../components/sample/Sample.vue"),
+              component: () => import("../views/sample/Sample.vue"),
               meta: {
                 isEdit: true,
                 table: "sample",
@@ -570,7 +570,7 @@ const router = new Router({
             {
               path: "",
               name: "Sample add",
-              component: () => import("../components/sample/Sample.vue"),
+              component: () => import("../views/sample/Sample.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addSample",
