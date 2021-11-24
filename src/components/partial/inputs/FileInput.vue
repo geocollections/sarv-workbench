@@ -436,7 +436,8 @@ export default {
       if (!this.isDisabled) {
         if (event.dataTransfer && event.dataTransfer.files) {
           let listOfFiles = [];
-          event.dataTransfer.files.forEach((file) => listOfFiles.push(file));
+          const filesArr = Array.from(event.dataTransfer.files);
+          filesArr.forEach((file) => listOfFiles.push(file));
 
           if (!this.acceptMultiple && listOfFiles.length > 1) {
             listOfFiles.splice(1);
