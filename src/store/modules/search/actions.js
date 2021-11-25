@@ -5,9 +5,7 @@ import {
   fetchActiveSelectionSeriesList,
   fetchAgents,
   fetchCollections,
-  fetchDatasets,
   fetchDeaccessions,
-  fetchDois,
   fetchLoans,
   fetchLocations,
   fetchRocks,
@@ -19,8 +17,6 @@ import {
   fetchVisits,
   fetchWebNews,
   fetchWebPages,
-  fetchAnalysisMethods,
-  fetchAnalysisParameters,
   fetchTaxonPages,
 } from "@/assets/js/api/apiCalls";
 
@@ -47,24 +43,6 @@ const actions = {
 
   setLoadingState({ commit }, boolVal) {
     commit("SET_LOADING_STATE", boolVal);
-  },
-
-  FETCH_ANALYSIS_PARAMETERS({ commit, state }) {
-    return fetchAnalysisParameters(state.activeSearchParams.search).then(
-      (resp) => commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  FETCH_ANALYSIS_METHODS({ commit, state }) {
-    return fetchAnalysisMethods(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  FETCH_DOIS({ commit, state }) {
-    return fetchDois(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
   },
 
   FETCH_SPECIMENS({ commit, state }) {
@@ -95,12 +73,6 @@ const actions = {
 
   FETCH_AGENTS({ commit, state }) {
     return fetchAgents(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_DATASETS({ commit, state }) {
-    return fetchDatasets(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },

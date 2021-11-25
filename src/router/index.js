@@ -801,7 +801,7 @@ const router = new Router({
         },
         {
           path: "/doi",
-          component: () => import("../views/Dois.vue"),
+          component: () => import("../views/doi/Dois.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1448,7 +1448,7 @@ const router = new Router({
         },
         {
           path: "/dataset",
-          component: () => import("../views/Datasets.vue"),
+          component: () => import("../views/dataset/Datasets.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2401,7 +2401,7 @@ const router = new Router({
         },
         {
           path: "/analysis_parameter",
-          component: () => import("../views/AnalysisParameters.vue"),
+          component: () => import("../views/analysis_parameter/AnalysisParameters.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2475,7 +2475,7 @@ const router = new Router({
         },
         {
           path: "/analysis_method",
-          component: () => import("../views/AnalysisMethods.vue"),
+          component: () => import("../views/analysis_method/AnalysisMethods.vue"),
           meta: {
             requiresAuth: true,
           },

@@ -736,55 +736,6 @@ export function fetchMultiAddReferencesToLibrary(data) {
 /*****************
  *** DOI START ***
  *****************/
-
-export function fetchDois(data, dynamicSearch) {
-  const fields =
-    "identifier,creators,title,title_alternative,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,publisher,publication_year,subjects,reference,reference__reference,dataset,dataset__name,dataset__name_en,language,language__value,language__value_en,resource_type,resource_type__value,resource,version,sizes,formats,abstract,methods,date_txt,is_private,owner,owner__agent,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,egf,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,datacite_created,datacite_updated,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.identifier !== null && data.identifier.trim().length > 0) {
-    searchFields += `&identifier__${
-      data.identifier__lookuptype || "icontains"
-    }=${data.identifier}`;
-  }
-
-  if (data.creators !== null && data.creators.trim().length > 0) {
-    searchFields += `&creators__${data.creators__lookuptype || "icontains"}=${
-      data.creators
-    }`;
-  }
-
-  if (
-    data.publication_year !== null &&
-    data.publication_year.trim().length > 0
-  ) {
-    searchFields += `&publication_year__${
-      data.publication_year__lookuptype || "icontains"
-    }=${data.publication_year}`;
-  }
-
-  if (data.title !== null && data.title.trim().length > 0) {
-    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
-      data.title
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `doi/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchDoi(id) {
   return get(`doi/?id=${id}&format=json`);
 }
@@ -2269,55 +2220,6 @@ export function fetchDataset(id) {
   return get(`dataset/?id=${id}&format=json`);
 }
 
-export function fetchDatasets(data, dynamicSearch) {
-  const fields =
-    "title,creators,publication_year,resource,name,name_en,description,description_en,dataset_html,date,date_txt,is_private,owner,owner__agent,owner_txt,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.name
-    };fields:title,title_translated,title_alternative;lookuptype:${
-      data.name__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.owner && data.owner.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.owner
-    };fields:owner__id,owner__agent,owner__forename,owner__surename,owner_txt;lookuptype:${
-      data.owner__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.date && data.date.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.date
-    };fields:date,date_txt;lookuptype:${data.date__lookuptype || "icontains"}`;
-  }
-
-  if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `dataset/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `dataset/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchDatasetAuthors(datasetId, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -3467,50 +3369,6 @@ export function fetchSampleSeriesAttachments(id, searchParameters) {
 /***********************************
  ***  ANALYSIS_PARAMETERS START  ***
  **********************************/
-
-export function fetchAnalysisParameters(data, dynamicSearch) {
-  const fields =
-    "parameter,parameter_name,parameter_name_en,parameter_html,synonyms,parent_parameter,parent_parameter__parameter,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.parameter_name && data.parameter_name.trim().length > 0) {
-    searchFields += `&parameter_name__${
-      data.parameter_name__lookuptype || "icontains"
-    }=${data.parameter_name}`;
-  }
-
-  if (data.parameter_name_en && data.parameter_name_en.trim().length > 0) {
-    searchFields += `&parameter_name_en__${
-      data.parameter_name__lookuptype || "icontains"
-    }=${data.parameter_name_en}`;
-  }
-
-  if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `analysis_parameter/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `analysis_parameter/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchAnalysisParameter(id) {
   return get(`analysis_parameter/?id=${id}&format=json`);
 }
@@ -3522,62 +3380,6 @@ export function fetchAnalysisParameter(id) {
 /********************************
  ***  ANALYSIS_METHODS START  ***
  *******************************/
-
-export function fetchAnalysisMethods(data, dynamicSearch) {
-  const fields =
-    "analysis_method,method_en,parent_method,parent_method__analysis_method,parent_method__method_en,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.analysis_method && data.analysis_method.trim().length > 0) {
-    // searchFields += `&analysis_method__${data.analysis_method__lookuptype ||
-    //   "icontains"}=${data.analysis_method}`;
-    searchFields += `&multi_search=value:${
-      data.analysis_method
-    };fields:analysis_method,method_en;lookuptype:${
-      data.analysis_method__lookuptype || "icontains"
-    }`;
-    // searchFields +=
-    //     "&multi_search=value:" +
-    //     data.analysis_method +
-    //     ";fields:,uuid_filename;lookuptype:" +
-    //     `${data.filename__lookuptype || "icontains"}`;
-  }
-
-  if (
-    data.parent_method__analysis_method &&
-    data.parent_method__analysis_method.trim().length > 0
-  ) {
-    searchFields += `&parent_method__analysis_method__${
-      data.parent_method__analysis_method__lookuptype || "icontains"
-    }=${data.parent_method__analysis_method}`;
-  }
-
-  if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `analysis_method/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `analysis_method/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchAnalysisMethodDetail(id) {
   return get(`analysis_method/?id=${id}&format=json`);
 }

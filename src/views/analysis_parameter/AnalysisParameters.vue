@@ -1,38 +1,33 @@
 <template>
-  <div class="specimens">
-    <table-view-title title="header.specimens" />
+  <div class="analysis_parameter">
+    <table-view-title title="header.analysis_parameter" />
 
-    <table-view-search :col-size="4" />
+    <table-view-search />
 
-    <list-module-core
-      :module="$route.meta.object"
-      :api-call="apiCall"
-      :use-list-view="true"
-      :use-image-view="true"
-    />
+    <list-module-core :module="$route.meta.object" :api-call="apiCall" />
   </div>
 </template>
 
 <script>
 import ListModuleCore from "../../components/ListModuleCore";
-import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
+import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
+  name: "AnalysisParameters",
+
   components: {
     ListModuleCore,
     TableViewSearch,
     TableViewTitle,
   },
 
-  name: "Specimens",
-
   mixins: [tableViewMixin],
 
   methods: {
     apiCall() {
-      return this.$api.rw.get("specimen", {
+      return this.$api.rw.get("analysis_parameter", {
         defaultParams: {
           nest: 1,
         },

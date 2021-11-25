@@ -1,15 +1,10 @@
 <template>
-  <div class="specimens">
-    <table-view-title title="header.specimens" />
+  <div class="dois">
+    <table-view-title title="header.dois" />
 
-    <table-view-search :col-size="4" />
+    <table-view-search />
 
-    <list-module-core
-      :module="$route.meta.object"
-      :api-call="apiCall"
-      :use-list-view="true"
-      :use-image-view="true"
-    />
+    <list-module-core :module="$route.meta.object" :api-call="apiCall" />
   </div>
 </template>
 
@@ -26,13 +21,13 @@ export default {
     TableViewTitle,
   },
 
-  name: "Specimens",
+  name: "Dois",
 
   mixins: [tableViewMixin],
 
   methods: {
     apiCall() {
-      return this.$api.rw.get("specimen", {
+      return this.$api.rw.get("doi", {
         defaultParams: {
           nest: 1,
         },

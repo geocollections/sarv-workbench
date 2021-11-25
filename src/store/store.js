@@ -30,6 +30,11 @@ import sample from "./modules/sample";
 import sample_series from "./modules/sample_series";
 import preparation from "./modules/preparation";
 import analysis from "./modules/analysis";
+import analysis_parameter from "./modules/analysis_parameter";
+import analysis_method from "./modules/analysis_method";
+import dataset from "./modules/dataset";
+import doi from "./modules/doi";
+import specimen from "./modules/specimen";
 
 Vue.use(Vuex);
 
@@ -84,6 +89,11 @@ export default createStore(Vuex.Store, {
     sample_series,
     preparation,
     analysis,
+    analysis_parameter,
+    analysis_method,
+    dataset,
+    doi,
+    specimen,
   },
   actions,
   state,
