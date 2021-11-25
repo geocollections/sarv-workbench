@@ -320,18 +320,6 @@ export function fetchAttachmentLinkTaxa(id) {
   );
 }
 
-export function fetchRecentImages(currentUserId) {
-  return get(
-    `attachment/?author=${currentUserId}&image_latitude!=null&order_by=-id&paginate_by=30&fields=image_latitude,image_longitude,id,image_place`
-  );
-}
-
-export function fetchRecentFiles(currentUserId, paginateBy) {
-  return get(
-    `attachment/?author=${currentUserId}&order_by=-id&paginate_by=${paginateBy}`
-  );
-}
-
 /*************************
  ***  ATTACHMENTS END  ***
  *************************/
@@ -671,12 +659,6 @@ export function fetchLatestSampleInSite(siteId) {
   );
 }
 
-export function fetchRecentSamples(currentUserId) {
-  return get(
-    `sample/?agent_collected=${currentUserId}&locality__id!=null&order_by=-id&paginate_by=30&fields=locality__locality,locality__latitude,locality__longitude,locality__id`
-  );
-}
-
 /************************
  ***  SAMPLES END  ***
  ************************/
@@ -979,12 +961,6 @@ export function fetchLinkedSamples(data, siteID) {
 export function fetchLastSiteName(projectId) {
   return get(
     `site/?project=${projectId}&fields=name&order_by=-id&paginate_by=1&format=json`
-  );
-}
-
-export function fetchRecentSites(currentUserId) {
-  return get(
-    `site/?project__projectagent__agent=${currentUserId}&order_by=-id&paginate_by=30&fields=name,latitude,longitude,id`
   );
 }
 
@@ -1471,12 +1447,6 @@ export function fetchListIdentificationType() {
 
 export function fetchListUnit() {
   return get(`list_unit/?format=json`);
-}
-
-export function fetchRecentSpecimens(currentUserId) {
-  return get(
-    `specimen/?agent_collected=${currentUserId}&locality__id!=null&order_by=-id&paginate_by=30&fields=locality__locality,locality__latitude,locality__longitude,locality__id`
-  );
 }
 
 export function fetchMultiChangeSpecimen(data) {
