@@ -1715,7 +1715,7 @@ const router = new Router({
         },
         {
           path: "/location",
-          component: () => import("../views/Locations.vue"),
+          component: () => import("../views/location/Locations.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1836,7 +1836,7 @@ const router = new Router({
         },
         {
           path: "/deaccession",
-          component: () => import("../views/Deaccessions.vue"),
+          component: () => import("../views/deaccession/Deaccessions.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1901,7 +1901,7 @@ const router = new Router({
         },
         {
           path: "/accession",
-          component: () => import("../views/Accessions.vue"),
+          component: () => import("../views/accession/Accessions.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1964,7 +1964,7 @@ const router = new Router({
         },
         {
           path: "/visit",
-          component: () => import("../views/Visits.vue"),
+          component: () => import("../views/visit/Visits.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2024,7 +2024,7 @@ const router = new Router({
         },
         {
           path: "/loan",
-          component: () => import("../views/Loans.vue"),
+          component: () => import("../views/loan/Loans.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2084,7 +2084,7 @@ const router = new Router({
         },
         {
           path: "/web_news",
-          component: () => import("../views/WebNews.vue"),
+          component: () => import("../views/web_news/WebNews.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2145,7 +2145,7 @@ const router = new Router({
         },
         {
           path: "/web_pages",
-          component: () => import("../views/WebPages.vue"),
+          component: () => import("../views/web_pages/WebPages.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2208,7 +2208,7 @@ const router = new Router({
         },
         {
           path: "/taxon_page",
-          component: () => import("../views/TaxonPages.vue"),
+          component: () => import("../views/taxon_page/TaxonPages.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2338,7 +2338,7 @@ const router = new Router({
         },
         {
           path: "/sarv_issue",
-          component: () => import("../views/SarvIssues.vue"),
+          component: () => import("../views/sarv_issue/SarvIssues.vue"),
           meta: {
             requiresAuth: true,
           },

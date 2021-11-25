@@ -2183,67 +2183,6 @@ export function fetchLocation(id) {
   return get(`location/?id=${id}&format=json`);
 }
 
-export function fetchLocations(data, dynamicSearch) {
-  let fields =
-    "location,parent_location,parent_location__location,location_location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,number_items_registered,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.location && data.location.trim().length > 0) {
-    searchFields += `&location__${data.location__lookuptype || "icontains"}=${
-      data.location
-    }`;
-  }
-  if (data.location_location && data.location_location.trim().length > 0) {
-    searchFields += `&location_location__${
-      data.location_location__lookuptype || "icontains"
-    }=${data.location_location}`;
-  }
-  if (data.stratigraphy_free && data.stratigraphy_free.trim().length > 0) {
-    searchFields += `&stratigraphy_free__${
-      data.stratigraphy_free__lookuptype || "icontains"
-    }=${data.stratigraphy_free}`;
-  }
-  if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.agent
-    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${
-      data.agent__lookuptype || "icontains"
-    }`;
-  }
-  // if (data.user_added && data.user_added.trim().length > 0) {
-  //   searchFields += `&user_added__${data.user_added__lookuptype ||
-  //     "icontains"}=${data.user_added}`;
-  // }
-  // if (data.date_added && data.date_added.trim().length > 0) {
-  //   searchFields += `&date_added__${data.date_added__lookuptype ||
-  //     "icontains"}=${data.date_added}`;
-  // }
-  if (data.contents && data.contents.trim().length > 0) {
-    searchFields += `&contents__${data.contents__lookuptype || "icontains"}=${
-      data.contents
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `location/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `location/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchLocationImages(data, dynamicSearch) {
   let fields =
     "attachment__uuid_filename,storage__location,storage__parent_location,storage__parent_location__location,storage__location_location,storage__contents,storage__agent,storage__agent__agent,storage__date_collected_free,storage__stratigraphy_free,storage__number_items,storage__number_items_registered,storage__remarks,storage__database,storage__database__acronym,storage__user_added,storage__date_added,storage__user_changed,storage__date_changed,storage__id";
@@ -2473,56 +2412,6 @@ export function fetchListRockPropertyType() {
 export function fetchVisit(id) {
   return get(`visit/?id=${id}&format=json`);
 }
-
-export function fetchVisits(data, dynamicSearch) {
-  let fields =
-    "visitor,visitor__agent,visitor_free,visitor_institution,visitor_institution__agent,visitor_country,visitor_country__value,visitor_country__value_en,host,host__agent,date_arrived,date_left,purpose,collections_studied,items_studied,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.visitor && data.visitor.trim().length > 0) {
-    searchFields += `&visitor__agent__${
-      data.visitor__lookuptype || "icontains"
-    }=${data.visitor}`;
-  }
-
-  if (data.date_arrived !== null) {
-    let date = data.date_arrived;
-
-    if (typeof date === "string") date = date.split("T")[0];
-    else {
-      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
-      date = date.toISOString().split("T")[0];
-    }
-    searchFields += `&date_arrived__gte=${date}`;
-  }
-
-  if (data.date_left !== null) {
-    let date = data.date_left;
-
-    if (typeof date === "string") date = date.split("T")[0];
-    else {
-      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
-      date = date.toISOString().split("T")[0];
-    }
-    searchFields += `&date_left__gte=${date}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `visit/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `visit/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /*******************
  ***  VISIT END  ***
  *******************/
@@ -2533,71 +2422,6 @@ export function fetchVisits(data, dynamicSearch) {
 
 export function fetchLoan(id) {
   return get(`loan/?id=${id}&format=json`);
-}
-
-export function fetchLoans(data, dynamicSearch) {
-  let fields =
-    "loan_number,date_start,date_end,type,type__value,type__value_en,project,borrower,borrower__agent,borrower_institution,borrower_institution__agent,loaner,loaner__agent,date_signed,delivery_method,delivery_method__value,delivery_method__value_en,deliverer,deliverer__agent,delivery_remarks,returned,date_returned,special,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.loan_number && data.loan_number.trim().length > 0) {
-    searchFields += `&loan_number__${
-      data.loan_number__lookuptype || "icontains"
-    }=${data.loan_number}`;
-  }
-
-  if (data.project && data.project.trim().length > 0) {
-    searchFields += `&project__${data.project__lookuptype || "icontains"}=${
-      data.project
-    }`;
-  }
-
-  if (data.borrower && data.borrower.trim().length > 0) {
-    searchFields += `&borrower__agent__${
-      data.borrower__lookuptype || "icontains"
-    }=${data.borrower}`;
-  }
-
-  if (data.date_start !== null) {
-    let date = data.date_start;
-
-    if (typeof date === "string") date = date.split("T")[0];
-    else {
-      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
-      date = date.toISOString().split("T")[0];
-    }
-    searchFields += `&date_start__gte=${date}`;
-  }
-
-  if (data.date_end !== null) {
-    let date = data.date_end;
-
-    if (typeof date === "string") date = date.split("T")[0];
-    else {
-      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
-      date = date.toISOString().split("T")[0];
-    }
-    searchFields += `&date_end__gte=${date}`;
-  }
-
-  if (data.isActive) {
-    searchFields += `&returned=${!data.isActive}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `loan/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `loan/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchListLoanType() {
@@ -2659,39 +2483,6 @@ export function fetchMultiAddLoanLists(table, data) {
 export function fetchAccessionDetail(id) {
   return get(`accession/?id=${id}&format=json`);
 }
-
-export function fetchAccessions(data, dynamicSearch) {
-  let fields =
-    "number,date_signed,date_confirmed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.number && data.number.trim().length > 0) {
-    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
-      data.number
-    }`;
-  }
-  if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__${
-      data.description__lookuptype || "icontains"
-    }=${data.description}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `accession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `accession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /***********************
  ***  ACCESSION END  ***
  ***********************/
@@ -2703,39 +2494,6 @@ export function fetchAccessions(data, dynamicSearch) {
 export function fetchDeaccessionDetail(id) {
   return get(`deaccession/?id=${id}&format=json`);
 }
-
-export function fetchDeaccessions(data, dynamicSearch) {
-  let fields =
-    "number,date_signed,date_confirmed,agent_kandis__agent,agent_kandis,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.number && data.number.trim().length > 0) {
-    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
-      data.number
-    }`;
-  }
-  if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__${
-      data.description__lookuptype || "icontains"
-    }=${data.description}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `deaccession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `deaccession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /*************************
  ***  DEACCESSION END  ***
  *************************/
@@ -2747,38 +2505,6 @@ export function fetchDeaccessions(data, dynamicSearch) {
 export function fetchWebNewsDetail(id) {
   return get(`web_news/?id=${id}&format=json`);
 }
-
-export function fetchWebNews(data, dynamicSearch) {
-  const fields =
-    "title_et,title_en,text_en,text_et,is_private,user_added,date_added,user_changed,date_changed,date_expires,timestamp,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.title && data.title.trim().length > 0) {
-    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
-      data.title
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `web_news/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `web_news/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /**********************
  ***  WEB_NEWS END  ***
  **********************/
@@ -2790,38 +2516,6 @@ export function fetchWebNews(data, dynamicSearch) {
 export function fetchWebPagesDetail(id) {
   return get(`web_pages/?id=${id}&format=json`);
 }
-
-export function fetchWebPages(data, dynamicSearch) {
-  const fields =
-    "title_et,menu_title_et,content_et,link_et,title_en,menu_title_en,content_en,link_en,public,menu,menu_bold,menu_color,menu_fold,sort,parent,site,is_private,user,date_inserted,date_expires,timestamp,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.title && data.title.trim().length > 0) {
-    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
-      data.title
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `web_pages/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `web_pages/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /***********************
  ***  WEB_PAGES END  ***
  ***********************/
@@ -2833,51 +2527,6 @@ export function fetchWebPages(data, dynamicSearch) {
 export function fetchTaxonPagesDetail(id) {
   return get(`taxon_page/?id=${id}&format=json`);
 }
-
-export function fetchTaxonPages(data, dynamicSearch) {
-  const fields =
-    "taxon,taxon__taxon,language,on_frontpage,frontpage,frontpage_order,frontpage_title,title,content,author,author__agent,author_txt,date_txt,is_private,link_wikipedia,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.language && data.language.trim().length > 0) {
-    searchFields += `&language__${data.language__lookuptype || "icontains"}=${
-      data.language
-    }`;
-  }
-
-  if (data.title && data.title.trim().length > 0) {
-    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
-      data.title
-    }`;
-  }
-  if (data.taxon && data.taxon.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.taxon
-    };fields:taxon__id,taxon__taxon;lookuptype:${
-      data.taxon__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.on_frontpage) {
-    searchFields += `&on_frontpage=${data.on_frontpage}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `taxon_page/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `taxon_page/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /*************************
  ***  TAXON_PAGES END  ***
  *************************/

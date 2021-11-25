@@ -1,17 +1,9 @@
 import {
-  fetchAccessions,
   fetchActiveLibraryList,
   fetchActiveSarvIssues,
   fetchActiveSelectionSeriesList,
-  fetchDeaccessions,
-  fetchLoans,
-  fetchLocations,
   fetchSarvIssues,
   fetchSpecimens,
-  fetchVisits,
-  fetchWebNews,
-  fetchWebPages,
-  fetchTaxonPages,
 } from "@/assets/js/api/apiCalls";
 
 const actions = {
@@ -43,54 +35,6 @@ const actions = {
     return fetchSpecimens(state.activeSearchParams.search).then((resp) =>
       commit("SET_SIDEBAR_LIST", resp)
     );
-  },
-
-  FETCH_LOCATIONS({ commit, state }) {
-    return fetchLocations(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_DEACCESSIONS({ commit, state }) {
-    return fetchDeaccessions(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_ACCESSIONS({ commit, state }) {
-    return fetchAccessions(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_VISITS({ commit, state }) {
-    return fetchVisits(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_LOANS({ commit, state }) {
-    return fetchLoans(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_WEB_PAGES({ commit, state }) {
-    return fetchWebPages(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_TAXON_PAGES({ commit, state }) {
-    return fetchTaxonPages(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_WEB_NEWS({ commit, state }) {
-    return fetchWebNews(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
   },
 
   FETCH_SARV_ISSUES({ commit, state, rootGetters }) {

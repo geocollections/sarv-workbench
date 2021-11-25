@@ -256,50 +256,6 @@
               </v-col>
             </v-row>
 
-            <!-- TAXON_PAGE CHECKBOXES -->
-            <v-row
-              no-gutters
-              class="checkboxes"
-              v-if="$route.meta.object === 'taxon_pages'"
-            >
-              <v-col cols="12">
-                <v-row no-gutters>
-                  <v-checkbox
-                    :input-value="searchParameters.on_frontpage"
-                    :label="$t('taxon_page.on_frontpage')"
-                    class="mt-0 pr-6"
-                    :color="bodyActiveColor"
-                    hide-details
-                    @change="
-                      $emit('update:searchParameters', $event, 'on_frontpage')
-                    "
-                  ></v-checkbox>
-                </v-row>
-              </v-col>
-            </v-row>
-
-            <!-- LOAN CHECKBOXES -->
-            <v-row
-              no-gutters
-              class="checkboxes"
-              v-if="$route.meta.object === 'loan'"
-            >
-              <v-col cols="12">
-                <v-row no-gutters>
-                  <v-checkbox
-                    :input-value="searchParameters.isActive"
-                    :label="$t('loan.isActive')"
-                    class="mt-0 pr-6"
-                    :color="bodyActiveColor"
-                    hide-details
-                    @change="
-                      $emit('update:searchParameters', $event, 'isActive')
-                    "
-                  ></v-checkbox>
-                </v-row>
-              </v-col>
-            </v-row>
-
             <!-- DYNAMIC SEARCH -->
             <dynamic-search
               class="mt-4 mb-2"

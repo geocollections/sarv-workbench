@@ -12,7 +12,6 @@ import search from "./modules/search";
 import settings from "./modules/settings";
 import user from "./modules/user";
 import admin from "./modules/admin";
-import tableHeaders from "./modules/tableHeaders";
 import journal from "./modules/journal";
 import keyword from "./modules/keyword";
 import project from "./modules/project";
@@ -41,6 +40,15 @@ import rock from "./modules/rock";
 import stratigraphy from "./modules/stratigraphy";
 import selection_series from "./modules/selection_series";
 import agent from "./modules/agent";
+import location from "./modules/location";
+import visit from "./modules/visit";
+import loan from "./modules/loan";
+import accession from "./modules/accession";
+import deaccession from "./modules/deaccession";
+import web_news from "./modules/web_news";
+import web_pages from "./modules/web_pages";
+import taxon_page from "./modules/taxon_page";
+import sarv_issue from "./modules/sarv_issue";
 
 Vue.use(Vuex);
 
@@ -77,7 +85,6 @@ export default createStore(Vuex.Store, {
     settings,
     user,
     admin,
-    tableHeaders,
     journal,
     keyword,
     project,
@@ -106,6 +113,15 @@ export default createStore(Vuex.Store, {
     stratigraphy,
     selection_series,
     agent,
+    location,
+    visit,
+    loan,
+    accession,
+    deaccession,
+    web_news,
+    web_pages,
+    taxon_page,
+    sarv_issue,
   },
   actions,
   state,
