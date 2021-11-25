@@ -1490,78 +1490,6 @@ export function fetchMultiChangeSpecimen(data) {
 /************************
  *** COLLECTION START ***
  ************************/
-
-export function fetchCollections(data, dynamicSearch) {
-  const fields =
-    "id,number,collection_id,name,name_long,name_en,name_long_en,type,type__value,type__value_en,classification,classification__class_field,agent,agent__agent,locality,locality__locality,locality__locality_en,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,number_objects,number_types,reference,reference__reference,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.number && data.number.trim().length > 0) {
-    searchFields += `&collection_id__${
-      data.number__lookuptype || "icontains"
-    }=${data.number}`;
-  }
-
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.name
-    };fields:name,name_en,name_long,name_long_en;lookuptype:${
-      data.name__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.agent
-    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${
-      data.agent__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.locality
-    };fields:locality__id,locality__locality,locality__locality_en;lookuptype:${
-      data.locality__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.reference && data.reference.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.reference
-    };fields:reference__id,reference__reference;lookuptype:${
-      data.reference__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.classification && data.classification.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.classification
-    };fields:classification__id,classification__class_field,classification__class_en,classification__class_lat,classification__class_synonym,classification__class_en_synonym;lookuptype:${
-      data.classification__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `collection/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchCollection(id) {
   return get(`collection/?id=${id}&format=json`);
 }
@@ -1577,74 +1505,6 @@ export function fetchListCollectionType() {
 /*******************
  *** TAXON START ***
  *******************/
-
-export function fetchTaxa(data, dynamicSearch) {
-  const fields =
-    "taxon,author_year,taxon_epithet,taxon_full_name,taxon_original_name,reference,reference__reference,parent,parent__taxon,fossil_group,fossil_group__taxon,synonym_of,synonym_of_reference_id,hierarchy_string,rank,rank__rank,rank_original,rank_original__rank,type_taxon,type_taxon__taxon,type_taxon_txt,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,in_estonia,in_baltoscandia,is_fossil,is_private,is_valid,is_fossil_group,sort,taxon_id_pbdb,taxon_id_plutof,taxon_id_tol,taxon_id_eol,taxon_id_nrm,remarks,owner,is_authorized,user_authorized,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.taxon && data.taxon.trim().length > 0) {
-    searchFields += `&taxon__${data.taxon__lookuptype || "icontains"}=${
-      data.taxon
-    }`;
-  }
-
-  if (data.author_year && data.author_year.trim().length > 0) {
-    searchFields += `&author_year__${
-      data.author_year__lookuptype || "icontains"
-    }=${data.author_year}`;
-  }
-
-  if (data.parent__taxon && data.parent__taxon.trim().length > 0) {
-    searchFields += `&parent__taxon__${
-      data.parent__taxon__lookuptype || "icontains"
-    }=${data.parent__taxon}`;
-  }
-
-  if (data.taxon_epithet && data.taxon_epithet.trim().length > 0) {
-    searchFields += `&taxon_epithet__${
-      data.taxon_epithet__lookuptype || "icontains"
-    }=${data.taxon_epithet}`;
-  }
-
-  if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__${
-      data.user_added__lookuptype || "icontains"
-    }=${data.user_added}`;
-  }
-
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `taxon/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchTaxon(id) {
   return get(`taxon/?id=${id}&format=json`);
 }
@@ -1825,39 +1685,6 @@ export function fetchAgent(id) {
   return get(`agent/?id=${id}&fields=${fields}&format=json`);
 }
 
-export function fetchAgents(data, dynamicSearch) {
-  let searchFields = "";
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&agent__${data.agent__lookuptype || "icontains"}=${
-      data.agent
-    }`;
-  }
-
-  if (data.forename && data.forename.trim().length > 0) {
-    searchFields += `&forename__${data.forename__lookuptype || "icontains"}=${
-      data.forename
-    }`;
-  }
-
-  if (data.surename && data.surename.trim().length > 0) {
-    searchFields += `&surename__${data.surename__lookuptype || "icontains"}=${
-      data.surename
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) return `?${searchFields}`;
-  else return ``;
-}
-
 export function fetchAgentUsingName(name) {
   return get(
     `agent/?multi_search=value:${name};fields:id,agent,forename,surename;lookuptype:icontains&page=1&paginate_by=1&fields=id,agent,institution__institution_name_en,orcid`
@@ -1875,47 +1702,6 @@ export function fetchListAgentType() {
 /******************************
  *** SELECTION SERIES START ***
  ******************************/
-
-export function fetchSelectionSeries(data, dynamicSearch) {
-  let fields =
-    "name,tablename,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&name__${data.name__lookuptype || "icontains"}=${
-      data.name
-    }`;
-  }
-  if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-  if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__${
-      data.user_added__lookuptype || "icontains"
-    }=${data.user_added}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `selection_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `selection_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchSelectionSerie(id) {
   return get(`selection_series/?id=${id}&format=json`);
 }
@@ -2272,87 +2058,6 @@ export function fetchStratigraphy(id) {
   return get(`stratigraphy/?id=${id}&format=json`);
 }
 
-export function fetchStratigraphies(data, dynamicSearch) {
-  const fields =
-    "stratigraphy,stratigraphy_en,stratigraphy_original,author_free,year,etymon,etymon_en,original_locality,original_rank,index_main,index_main_html,index_additional,index_additional_html,index_old,color_code_cgmw,color_code_additional,hierarchy_string,parent,parent__stratigraphy,parent__stratigraphy_en,type,type__value,type__value_en,rank,rank__value,rank__value_en,scope,scope__value,scope__value_en,status,status__value,status__value_en,region,region_en,lithology,lithology_en,max_thickness,description,description_en,definition,definition_en,age_base,age_top,age_precision,age_reference,age_reference__reference,age_chronostratigraphy,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,sort_within_parent,approved_ics,approved_esk,maaamet_kood,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.stratigraphy
-    };fields:stratigraphy,stratigraphy_en;lookuptype:${
-      data.stratigraphy__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.type && data.type.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.type
-    };fields:type__value,type__value_en;lookuptype:${
-      data.type__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.rank && data.rank.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.rank
-    };fields:rank__value,rank__value_en;lookuptype:${
-      data.rank__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.scope && data.scope.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.scope
-    };fields:scope__value,scope__value_en;lookuptype:${
-      data.scope__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.parent && data.parent.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.parent
-    };fields:parent__id,parent__stratigraphy,parent__stratigraphy_en;lookuptype:${
-      data.parent__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.indexes && data.indexes.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.indexes
-    };fields:index_main,index_additional,index_old;lookuptype:${
-      data.indexes__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.author && data.author.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.author
-    };fields:author_free,user_added;lookuptype:${
-      data.author__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `stratigraphy/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `stratigraphy/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchListStratigraphyType() {
   return get(`list_stratigraphy_type/?format=json`);
 }
@@ -2646,70 +2351,6 @@ export function fetchRock(id) {
   return get(`rock/?id=${id}&format=json`);
 }
 
-export function fetchRocks(data, dynamicSearch) {
-  let fields =
-    "name,name_en,name_ru,rock_type,rock_type__name,rock_type__name_en,rock_rank,rock_rank__name,rock_rank__name_en,parent,parent__name,parent__name_en,synonym_of,synonym_of__name,synonym_of__name_en,sort,description,description_en,description_ru,description_in_estonia,description_in_estonia_en,description_in_estonia_ru,description_usage,description_usage_en,description_usage_ru,description_author,in_estonia,is_resource,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,mindat_id,link_wikipedia,link_wikipedia_en,link_wikipedia_ru,ima_status,formula,formula_html,remarks,is_private,in_portal,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&name__${data.name__lookuptype || "icontains"}=${
-      data.name
-    }`;
-  }
-  if (data.name_en && data.name_en.trim().length > 0) {
-    searchFields += `&name_en__${data.name_en__lookuptype || "icontains"}=${
-      data.name_en
-    }`;
-  }
-  if (data.formula && data.formula.trim().length > 0) {
-    searchFields += `&formula__${data.formula__lookuptype || "icontains"}=${
-      data.formula
-    }`;
-  }
-  if (data.rock_type && data.rock_type.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.rock_type
-    };fields:rock_type__name,rock_type__name_en;lookuptype:${
-      data.rock_type__lookuptype || "icontains"
-    }`;
-  }
-  if (data.rock_rank && data.rock_rank.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.rock_rank
-    };fields:rock_rank__name,rock_rank__name_en;lookuptype:${
-      data.rock_rank__lookuptype || "icontains"
-    }`;
-  }
-  if (data.user_changed && data.user_changed.trim().length > 0) {
-    searchFields += `&user_changed__${
-      data.user_changed__lookuptype || "icontains"
-    }=${data.user_changed}`;
-  }
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-  if (data.in_portal) {
-    searchFields += `&in_portal=${data.in_portal}`;
-  }
-  if (data.in_estonia) {
-    searchFields += `&in_estonia=${data.in_estonia}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `rock/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `rock/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
 
 export function fetchListRockType() {
   return get(`rock_type/?format=json`);

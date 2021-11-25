@@ -35,6 +35,12 @@ import analysis_method from "./modules/analysis_method";
 import dataset from "./modules/dataset";
 import doi from "./modules/doi";
 import specimen from "./modules/specimen";
+import collection from "./modules/collection";
+import taxon from "./modules/taxon";
+import rock from "./modules/rock";
+import stratigraphy from "./modules/stratigraphy";
+import selection_series from "./modules/selection_series";
+import agent from "./modules/agent";
 
 Vue.use(Vuex);
 
@@ -94,6 +100,12 @@ export default createStore(Vuex.Store, {
     dataset,
     doi,
     specimen,
+    collection,
+    taxon,
+    rock,
+    stratigraphy,
+    selection_series,
+    agent,
   },
   actions,
   state,

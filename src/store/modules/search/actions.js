@@ -3,17 +3,11 @@ import {
   fetchActiveLibraryList,
   fetchActiveSarvIssues,
   fetchActiveSelectionSeriesList,
-  fetchAgents,
-  fetchCollections,
   fetchDeaccessions,
   fetchLoans,
   fetchLocations,
-  fetchRocks,
   fetchSarvIssues,
-  fetchSelectionSeries,
   fetchSpecimens,
-  fetchStratigraphies,
-  fetchTaxa,
   fetchVisits,
   fetchWebNews,
   fetchWebPages,
@@ -51,46 +45,8 @@ const actions = {
     );
   },
 
-  FETCH_COLLECTIONS({ commit, state }) {
-    return fetchCollections(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_TAXA({ commit, state }) {
-    return fetchTaxa(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_SELECTION_SERIES({ commit, state }) {
-    return fetchSelectionSeries(state.activeSearchParams.search).then(
-      (resp) => {
-        commit("SET_SIDEBAR_LIST", resp);
-      }
-    );
-  },
-
-  FETCH_AGENTS({ commit, state }) {
-    return fetchAgents(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_STRATIGRAPHY({ commit, state }) {
-    return fetchStratigraphies(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
   FETCH_LOCATIONS({ commit, state }) {
     return fetchLocations(state.activeSearchParams.search).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_ROCKS({ commit, state }) {
-    return fetchRocks(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },

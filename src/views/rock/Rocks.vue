@@ -1,35 +1,33 @@
 <template>
-  <div class="agents">
-    <table-view-title title="header.agents" />
+  <div class="rocks">
+    <table-view-title title="header.rocks" />
 
-    <table-view-search />
+    <table-view-search :col-size="4" />
 
-    <!-- SEARCH FIELDS END -->
     <list-module-core :module="$route.meta.object" :api-call="apiCall" />
   </div>
 </template>
 
 <script>
 import ListModuleCore from "../../components/ListModuleCore";
-import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../../components/partial/table_view/TableViewSearch";
-import searchParametersMixin from "../../mixins/searchParametersMixin";
+import TableViewTitle from "../../components/partial/table_view/TableViewTitle";
 import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
+  name: "Rocks",
+
   components: {
     ListModuleCore,
-    TableViewTitle,
     TableViewSearch,
+    TableViewTitle,
   },
-
-  name: "Agents",
 
   mixins: [tableViewMixin],
 
   methods: {
     apiCall() {
-      return this.$api.rw.get("agent", {
+      return this.$api.rw.get("rock", {
         defaultParams: {
           nest: 1,
         },

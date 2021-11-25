@@ -278,38 +278,6 @@
               </v-col>
             </v-row>
 
-            <!-- ROCK CHECKBOXES -->
-            <v-row
-              no-gutters
-              class="checkboxes"
-              v-if="$route.meta.object === 'rock'"
-            >
-              <v-col cols="12">
-                <v-row no-gutters>
-                  <v-checkbox
-                    :input-value="searchParameters.in_portal"
-                    :label="$t('rock.in_portal')"
-                    class="mt-0 pr-6"
-                    :color="bodyActiveColor"
-                    hide-details
-                    @change="
-                      $emit('update:searchParameters', $event, 'in_portal')
-                    "
-                  ></v-checkbox>
-                  <v-checkbox
-                    :input-value="searchParameters.in_estonia"
-                    :label="$t('rock.in_estonia')"
-                    class="mt-0"
-                    :color="bodyActiveColor"
-                    hide-details
-                    @change="
-                      $emit('update:searchParameters', $event, 'in_estonia')
-                    "
-                  ></v-checkbox>
-                </v-row>
-              </v-col>
-            </v-row>
-
             <!-- LOAN CHECKBOXES -->
             <v-row
               no-gutters

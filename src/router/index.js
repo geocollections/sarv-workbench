@@ -1065,7 +1065,7 @@ const router = new Router({
         },
         {
           path: "/collection",
-          component: () => import("../views/Collections.vue"),
+          component: () => import("../views/collection/Collections.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1130,7 +1130,7 @@ const router = new Router({
         },
         {
           path: "/taxon",
-          component: () => import("../views/Taxa.vue"),
+          component: () => import("../views/taxon/Taxa.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1190,7 +1190,7 @@ const router = new Router({
         },
         {
           path: "/selection_series",
-          component: () => import("../views/SelectionSeries.vue"),
+          component: () => import("../views/selection_series/SelectionSeries.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1508,7 +1508,7 @@ const router = new Router({
         },
         {
           path: "/stratigraphy",
-          component: () => import("../views/Stratigraphies.vue"),
+          component: () => import("../views/stratigraphy/Stratigraphies.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1574,7 +1574,7 @@ const router = new Router({
         {
           path: "/stratigraphy_catalogue",
           component: () =>
-            import("../components/stratigraphy/StratigraphyCatalogue.vue"),
+            import("../views/stratigraphy/StratigraphyCatalogue.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1776,7 +1776,7 @@ const router = new Router({
         },
         {
           path: "/rock",
-          component: () => import("../views/Rocks.vue"),
+          component: () => import("../views/rock/Rocks.vue"),
           meta: {
             requiresAuth: true,
           },
