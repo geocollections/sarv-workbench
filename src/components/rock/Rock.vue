@@ -741,7 +741,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         fetchRock(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 

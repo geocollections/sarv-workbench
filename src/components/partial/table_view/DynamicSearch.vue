@@ -3,39 +3,36 @@
     <v-col cols="12">
       <v-card :color="bodyColor.split('n-')[0] + 'n-4'" elevation="2">
         <v-card-title class="pb-0 pt-2">
-          <div
-            class="card-title--clickable"
-            @click="showDynamicSearch = !showDynamicSearch"
-          >
+          <div class="card-title--clickable" @click="showSearch = !showSearch">
             <span>{{ $t("edit.dynamicSearch") }}</span>
             <v-icon right :color="bodyActiveColor">fas fa-search-plus</v-icon>
           </div>
           <v-spacer></v-spacer>
           <v-btn
             icon
-            @click="showDynamicSearch = !showDynamicSearch"
+            @click="showSearch = !showSearch"
             :color="bodyActiveColor"
           >
             <v-icon>{{
-              showDynamicSearch ? "fas fa-angle-up" : "fas fa-angle-down"
+              showSearch ? "fas fa-angle-up" : "fas fa-angle-down"
             }}</v-icon>
           </v-btn>
         </v-card-title>
 
         <v-card-text class="pt-0 pb-2">
-          <div v-show="showDynamicSearch">
+          <div v-show="showSearch">
             <v-row no-gutters>
               <v-col
                 class="pa-2"
                 cols="12"
                 :md="colSize"
-                v-for="(item, index) in dynamicSearchFields"
+                v-for="(field, index) in searchFields.extraIds"
                 :key="index"
               >
                 <v-row no-gutters>
                   <v-col cols="3" xl="2" class="px-1">
                     <v-select
-                      :value="item.lookUpType || 'icontains'"
+                      :value="searchFields.byIds[field].lookUpType"
                       :color="bodyActiveColor"
                       :item-color="bodyActiveColor"
                       disable-lookup
@@ -43,8 +40,8 @@
                       :items="lookUpTypes"
                       :label="$t('main.lookUpType')"
                       @input="
-                        $emit('update:dynamicSearchFields', {
-                          id: item.id,
+                        $emit('update:searchFields', {
+                          field,
                           key: 'lookUpType',
                           value: $event,
                           table: $route.meta.object,
@@ -61,14 +58,14 @@
 
                   <v-col cols="9" xl="10" class="px-1">
                     <v-text-field
-                      :value="item.value"
-                      :label="$t(item.title)"
+                      :value="searchFields.byIds[field].value"
+                      :label="$t(searchFields.byIds[field].title)"
                       :color="bodyActiveColor"
                       hide-details
                       :class="bodyActiveColor + '--text'"
                       @input="
-                        $emit('update:dynamicSearchFields', {
-                          id: item.id,
+                        $emit('update:searchFields', {
+                          field,
                           key: 'value',
                           value: $event,
                           table: $route.meta.object,
@@ -104,9 +101,10 @@ export default {
       type: Array,
       required: true,
     },
-    dynamicSearchFields: {
-      type: Array,
+    searchFields: {
+      type: Object,
       required: true,
+      default: () => {},
     },
     colSize: {
       type: Number,
@@ -114,14 +112,16 @@ export default {
     },
   },
   data: () => ({
-    showDynamicSearch: false,
+    showSearch: false,
   }),
   mounted() {
-    this.showDynamicSearch = this.isOpenAtStart();
+    this.showSearch = this.isOpenAtStart();
   },
   methods: {
     isOpenAtStart() {
-      return this.dynamicSearchFields.filter((item) => item.value).length > 0;
+      return this.searchFields.extraIds.some(
+        (field) => this.searchFields.byIds[field]?.value?.length > 0
+      );
     },
   },
 };

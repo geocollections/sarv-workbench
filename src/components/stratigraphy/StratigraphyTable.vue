@@ -70,11 +70,11 @@
 </template>
 
 <script>
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   name: "StratigraphyTable",
-  mixins: [tableHeaderMixin],
+  mixins: [tableViewMixin],
   props: {
     response: {
       type: Object,

@@ -1,5 +1,3 @@
-import Vue from "vue";
-
 const mutations = {
   UPDATE_VIEW_TYPE(state, payload) {
     state[`${payload.module}ViewType`] = payload.type;
@@ -10,12 +8,10 @@ const mutations = {
   },
 
   UPDATE_SEARCH_PARAMETERS_BY_FIELD(state, payload) {
-    Vue.set(
-      state[`${payload.module}SearchParameters`],
-      payload.field,
-      payload.value
-    );
-    // state[`${payload.module}SearchParameters`][payload.field] = payload.value;
+    state[`${payload.module}SearchParameters`] = {
+      ...state[`${payload.module}SearchParameters`],
+      [payload.field]: payload.value,
+    };
   },
 
   RESET_SEARCH_PARAMETERS(state, payload) {
@@ -43,26 +39,36 @@ const mutations = {
     state.loadingState = payload;
   },
 
-  SET_LOADING_TYPE(state, payload) {
-    state.loadingType = payload;
-  },
-
-  SET_LOADING_PERCENT(state, payload) {
-    state.loadingPercent = payload;
-  },
-
   SET_SIDEBAR_LIST(state, payload) {
-    state.sidebarList = {
-      results: payload?.data?.results,
-      page: payload?.data?.page,
-      totalPages: payload?.data?.page
-        ? payload.data.page.split(" of ")[1]
-        : null,
-    };
+    if (payload?.response) {
+      // Todo: New implementation of module data in right drawer (now fetching from list module core)
+      const count = payload?.response?.count;
+      let totalPages = null;
+      if (payload?.paginateBy && count) totalPages = count / totalPages;
+      state.sidebarList = {
+        ...state.sidebarList,
+        [payload.module]: {
+          results: payload?.response?.results,
+          count: payload?.response?.count,
+          page: payload?.page ?? 1,
+          totalPages: payload?.paginateBy,
+        },
+      };
+      console.log(state.sidebarList);
+    } else {
+      // Todo: Old now, should be removed after apiCall changed and stroage saved from listModuleCore
+      state.sidebarList = {
+        results: payload?.data?.results,
+        page: payload?.data?.page,
+        totalPages: payload?.data?.page
+          ? payload.data.page.split(" of ")[1]
+          : null,
+      };
+    }
   },
 
   SET_ACTIVE_SARV_ISSUES(state, payload) {
-    state.activeSarvIssues = payload.data;
+    state.activeSarvIssues = payload;
   },
 
   SET_ACTIVE_SEARCH_PARAMETERS(state, payload) {
@@ -98,7 +104,10 @@ const mutations = {
   },
 
   UPDATE_ACTIVE_TAB(state, payload) {
-    Vue.set(state.activeRelatedDataTab, payload.object, payload.tab);
+    state.activeRelatedDataTab = {
+      ...state.activeRelatedDataTab,
+      [payload.object]: payload.tab,
+    };
   },
 
   UPDATE_IS_SAMPLE_SIMPLE_VIEW(state, payload) {

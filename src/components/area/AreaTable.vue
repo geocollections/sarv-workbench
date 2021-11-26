@@ -55,11 +55,11 @@
 </template>
 
 <script>
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   name: "AreaTable",
-  mixins: [tableHeaderMixin],
+  mixins: [tableViewMixin],
   props: {
     response: {
       type: Object,

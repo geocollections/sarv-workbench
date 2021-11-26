@@ -60,7 +60,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.taxon__is_private"
-        :href="getFossilsUrl(item.taxon)"
+        :href="`https://fossiilid.info/${item.taxon}`"
         :title="$t('editTaxon.viewMessage')"
         :color="bodyActiveColor"
         target="FossilsWindow"
@@ -128,11 +128,6 @@ export default {
           text: this.$t(header.text),
         };
       });
-    },
-  },
-  methods: {
-    getFossilsUrl(id) {
-      return `https://fossiilid.info/${id}`;
     },
   },
 };

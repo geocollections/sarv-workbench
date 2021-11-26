@@ -274,7 +274,7 @@ export default {
     },
 
     getAttachmentIcon(attachment) {
-      if (attachment.attachment_format__value) {
+      if (attachment?.attachment_format__value) {
         let fileType = attachment.attachment_format__value;
         if (fileType.includes("application")) {
           if (fileType.includes("docx")) return "fa-file-word";
@@ -288,7 +288,7 @@ export default {
         else if (fileType.includes("text")) return "fa-file-alt";
         else if (fileType.includes("video")) return "fa-file-video";
         else return "fa-file";
-      } else {
+      } else if (attachment?.uuid_filename) {
         let fileType = attachment.uuid_filename.split(".")[1];
         // As of 18.09.2019 total of 1508 attachments are without attachment_format__value
         if (fileType.includes("jpg") || fileType.includes("png"))
@@ -305,16 +305,17 @@ export default {
         // 1 webm
         else return "fa-file"; // 4 hz1
       }
+      return "fa-file";
     },
 
     isImageFile(image) {
-      if (image.attachment_format__value) {
+      if (image?.attachment_format__value) {
         return !!image.attachment_format__value.includes("image");
-      } else {
+      } else if (image?.uuid_filename) {
         let fileType = image.uuid_filename.split(".")[1];
         // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
         return !!(fileType.includes("jpg") || fileType.includes("png"));
-      }
+      } else return false;
     },
 
     openInNewTab(object, id) {

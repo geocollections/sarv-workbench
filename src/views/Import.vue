@@ -136,7 +136,7 @@ export default {
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
     ...mapState("search", ["loadingState"]),
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentAgent"]),
 
     isFileAdded() {
       return this?.file?.length === 1;
@@ -156,7 +156,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", ["setLoadingState", "setLoadingType"]),
+    ...mapActions("search", ["setLoadingState"]),
 
     addFiles(files) {
       this.file = files;
@@ -174,7 +174,6 @@ export default {
 
     async importFile() {
       this.setLoadingState(true);
-      this.setLoadingType("add");
 
       let fileUploadResponse = await this.uploadFile();
 
@@ -217,7 +216,7 @@ export default {
       }
 
       try {
-        return await postRequest("", formData, this.importUrl, true);
+        return await postRequest("", formData, this.importUrl);
       } catch (err) {
         console.log(err);
         return false;
@@ -225,7 +224,7 @@ export default {
     },
 
     async uploadImportedFileAsNewAttachment() {
-      console.log(this.getCurrentUser.id);
+      console.log(this.getCurrentAgent.id);
       let data = {
         description: `See fail loodi kasutades faili importi. Failinimi: ${
           this?.file?.[0]?.name
@@ -234,14 +233,14 @@ export default {
           this?.file?.[0]?.name
         }, Date: ${new Date().toISOString().split("T")[0]}`,
         is_private: true,
-        author: this?.getCurrentUser?.id,
+        author: this?.getCurrentAgent?.id,
       };
 
       let formData = new FormData();
       formData.append("data", JSON.stringify(data));
       formData.append("file0", this.file[0]);
 
-      await postRequest("add/attachment/", formData, "", true).then(
+      await postRequest("add/attachment/", formData).then(
         (response) => {
           if (response && response.status === 200) {
             this.toastSuccess({

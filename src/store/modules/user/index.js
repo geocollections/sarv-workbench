@@ -1,8 +1,5 @@
-import { fetchLastLoggedInDate } from "../../../assets/js/api/apiCalls";
-
 const state = {
   authUser: null,
-  lastLogin: null,
 };
 
 const getters = {
@@ -14,13 +11,13 @@ const getters = {
     return state.authUser?.database_id;
   },
 
-  getCurrentUser: (state) => {
+  getCurrentAgent: (state) => {
     return {
       id: state.authUser?.agent_id,
       agent: state.authUser?.agent,
-      forename: state.authUser?.name,
-      surename: state.authUser?.surname,
-      user: state.authUser?.user,
+      forename: state.authUser?.first_name,
+      surename: state.authUser?.last_name,
+      user: state.authUser?.username,
     };
   },
 
@@ -29,21 +26,23 @@ const getters = {
   },
 
   isUserAllowedTo: (state, getters) => (action, table) => {
-    if (getters.getPermissions && getters.getPermissions[table]) {
-      return getters.getPermissions[table].includes(action);
-    } else return false;
+    if (getters.isUserSuperuser) return true;
+    else
+      return getters.getPermissions.some(
+        (perm) => perm.codename === `${action}_${table}`
+      );
   },
 
   isUserSuperuser: (state) => {
     return state.authUser?.is_superuser;
   },
 
-  isUserStaff: (staff) => {
+  isUserStaff: (state) => {
     return state.authUser?.is_staff;
   },
 
   getLastLoginDate: (state) => {
-    return state.lastLogin?.session_start;
+    return state.authUser?.last_login;
   },
 };
 
@@ -55,23 +54,11 @@ const actions = {
   removeAuthUser({ commit }) {
     commit("SET_AUTH_USER", null);
   },
-
-  fetchLastLoggedInDate({ commit, rootGetters }) {
-    return fetchLastLoggedInDate(rootGetters["user/getUserId"]).then((resp) => {
-      commit("SET_LAST_LOGIN", resp);
-    });
-  },
 };
 
 const mutations = {
   SET_AUTH_USER(state, payload) {
     state.authUser = payload;
-  },
-
-  SET_LAST_LOGIN(state, payload) {
-    if (payload?.data?.results && payload?.data?.results.length === 1) {
-      state.lastLogin = payload.data.results[0];
-    }
   },
 };
 

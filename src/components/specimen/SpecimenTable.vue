@@ -72,9 +72,9 @@
       </div>
     </template>
 
-    <template v-slot:item.locality__locality="{ item }">
+    <template v-slot:item.locality="{ item }">
       <router-link
-        :to="{ path: '/locality/' + item.locality }"
+        :to="{ path: '/locality/' + item.locality.id }"
         :title="$t('editLocality.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
@@ -82,8 +82,8 @@
       >
         <span
           v-translate="{
-            et: item.locality__locality,
-            en: item.locality__locality_en,
+            et: item.locality.locality,
+            en: item.locality.locality_en,
           }"
         />
       </router-link>
@@ -96,27 +96,27 @@
       <span v-else>{{ item.depth }}</span>
     </template>
 
-    <template v-slot:item.stratigraphy__stratigraphy="{ item }">
+    <template v-slot:item.stratigraphy="{ item }">
       <div>
         <span
           v-translate="{
-            et: item.stratigraphy__stratigraphy,
-            en: item.stratigraphy__stratigraphy_en,
+            et: item.stratigraphy.stratigraphy,
+            en: item.stratigraphy.stratigraphy_en,
           }"
         />
         <span v-if="item.stratigraphy && item.lithostratigraphy"> | </span>
         <span
           v-translate="{
-            et: item.lithostratigraphy__stratigraphy,
-            en: item.lithostratigraphy__stratigraphy_en,
+            et: item.lithostratigraphy.stratigraphy,
+            en: item.lithostratigraphy.stratigraphy_en,
           }"
         />
       </div>
     </template>
 
-    <template v-slot:item.storage__location="{ item }">
+    <template v-slot:item.storage="{ item }">
       <router-link
-        :to="{ path: '/location/' + item.storage }"
+        :to="{ path: '/location/' + item.storage.id }"
         :title="$t('editLocation.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
@@ -124,8 +124,8 @@
       >
         <span
           v-translate="{
-            et: item.storage__location,
-            en: item.storage__location,
+            et: item.storage.location,
+            en: item.storage.location,
           }"
         />
       </router-link>
@@ -147,17 +147,12 @@
 </template>
 
 <script>
-import {
-  fetchSpecimenIdentificationGeologiesList,
-  fetchSpecimenIdentificationsList,
-} from "../../assets/js/api/apiCalls";
-import { mapState } from "vuex";
 import activeListMixin from "../../mixins/activeListMixin";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   name: "SpecimenTable",
-  mixins: [activeListMixin, tableHeaderMixin],
+  mixins: [activeListMixin, tableViewMixin],
   props: {
     response: {
       type: Object,
@@ -215,65 +210,80 @@ export default {
       if (listOfSpecimens && listOfSpecimens.length > 0) {
         let listOfIds = listOfSpecimens.map((specimen) => specimen.id);
 
-        const taxonResponse = await fetchSpecimenIdentificationsList(listOfIds);
-        const rockResponse = await fetchSpecimenIdentificationGeologiesList(
-          listOfIds
+        const taxonResponse = await this.$api.rw.get(
+          "specimen_identification",
+          {
+            defaultParams: {
+              specimen__in: listOfIds.toString(),
+              current: true,
+            },
+            options: {
+              sortBy: ["name"],
+              sortDesc: [false],
+            },
+          }
         );
-
-        if (taxonResponse.status === 200 && rockResponse.status === 200) {
-          let taxonList = [];
-          let rockList = [];
-
-          if (taxonResponse.data.count > 0) {
-            taxonList = taxonResponse.data.results.map((entity) => {
-              return {
-                id: entity.specimen_id,
-                name: entity.taxon__taxon ? entity.taxon__taxon : entity.name,
-                name_en: entity.taxon__taxon
-                  ? entity.taxon__taxon
-                  : entity.name,
-                taxonId: entity.taxon,
-              };
-            });
+        const rockResponse = await this.$api.rw.get(
+          "specimen_identification_geology",
+          {
+            defaultParams: {
+              specimen__in: listOfIds.toString(),
+              current: true,
+            },
+            options: {
+              sortBy: ["name"],
+              sortDesc: [false],
+            },
           }
+        );
+        console.log(taxonResponse);
+        console.log(rockResponse);
 
-          if (rockResponse.data.count > 0) {
-            rockList = rockResponse.data.results.map((entity) => {
-              let name = "";
-              let name_en = "";
+        if (taxonResponse?.count > 0 && rockResponse?.count > 0) {
+          const taxonList = taxonResponse.results.map((entity) => {
+            return {
+              id: entity.specimen,
+              name: entity?.taxon?.taxon ?? entity?.name,
+              name_en: entity?.taxon?.taxon ?? entity?.name,
+              taxonId: entity?.taxon?.id,
+            };
+          });
 
-              if (entity.rock__name && !entity.name) name = entity.rock__name;
-              else if (
-                entity.rock__name &&
-                entity.name &&
-                entity.rock__name !== entity.name
-              )
-                name = entity.name + " | " + entity.rock__name;
-              else name = entity.name;
+          const rockList = rockResponse.results.map((entity) => {
+            let name = "";
+            let name_en = "";
 
-              if (entity.rock__name_en && !entity.name_en)
-                name_en = entity.rock__name_en;
-              else if (
-                entity.rock__name_en &&
-                entity.name_en &&
-                entity.rock__name_en !== entity.name_en
-              )
-                name_en = entity.name_en + " | " + entity.rock__name_en;
-              else name_en = entity.name_en;
+            if (entity?.rock?.name && !entity?.name) name = entity.rock.name;
+            else if (
+              entity?.rock?.name &&
+              entity?.name &&
+              entity?.rock?.name !== entity?.name
+            )
+              name = entity.name + " | " + entity.rock.name;
+            else name = entity?.name;
 
-              if (entity.rock__formula_html) {
-                name += " | " + entity.rock__formula_html;
-                name_en += " | " + entity.rock__formula_html;
-              }
+            if (entity?.rock?.name_en && !entity?.name_en)
+              name_en = entity.rock.name_en;
+            else if (
+              entity?.rock?.name_en &&
+              entity?.name_en &&
+              entity?.rock?.name_en !== entity?.name_en
+            )
+              name_en = entity.name_en + " | " + entity.rock.name_en;
+            else name_en = entity?.name_en;
 
-              return {
-                id: entity.specimen_id,
-                name: name,
-                name_en: name_en,
-                rockId: entity.rock,
-              };
-            });
-          }
+            if (entity?.rock?.formula_html) {
+              name += " | " + entity?.rock?.formula_html;
+              name_en += " | " + entity?.rock?.formula_html;
+            }
+
+            return {
+              id: entity.specimen,
+              name: name,
+              name_en: name_en,
+              rockId: entity?.rock?.id,
+            };
+          });
 
           if (taxonList.length > 0 && rockList.length > 0) {
             rockList.forEach((rock) => {
@@ -289,7 +299,6 @@ export default {
                 ? this.names.push(secondItem)
                 : this.names.push(taxonItem);
             });
-            // console.log(this.names);
           } else if (taxonList.length > 0) this.names = taxonList;
           else if (rockList.length > 0) this.names = rockList;
         }

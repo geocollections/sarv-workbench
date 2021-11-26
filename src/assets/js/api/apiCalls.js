@@ -1,11 +1,12 @@
 import Vue from "vue";
 import qs from "qs";
-import router from "../../../router";
+import VueIzitoast from "vue-izitoast";
 
 const axios = require("axios");
 
 const api = {
-  url: "https://rwapi.geocollections.info/",
+  // url: "https://rwapi.geocollections.info/",
+  url: "http://localhost:7000/api/",
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",
@@ -14,25 +15,80 @@ const api = {
 const attachmentFields =
   "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number";
 
-// Add a request interceptor
-axios.interceptors.request.use(function (config) {
-  if (config.url.includes("rwapi") && !config.url.includes("/egf/")) {
-    let csrftoken = Vue.$cookies.get("csrftoken");
-    config.withCredentials = true;
-    config.headers["X-CSRFTOKEN"] = csrftoken;
-  }
+// // Add a request interceptor
+// axios.interceptors.request.use(function (config) {
+//   if (config.url.includes("rwapi") && !config.url.includes("/egf/")) {
+//     let csrftoken = Vue.$cookies.get("csrftoken");
+//     config.withCredentials = true;
+//     config.headers["X-CSRFTOKEN"] = csrftoken;
+//   }
+//
+//   return config;
+// });
+//
+// // Add a response interceptor
+// axios.interceptors.response.use(function (response) {
+//   if (response.status === 200 && response.config.url.includes("rwapi")) {
+//     // Showing Missing permissions message
+//     if (response.data.error_permissions) {
+//       Vue.prototype.toast.error(
+//         response.data.error_permissions,
+//         "Missing permissions",
+//         {
+//           position: "topCenter",
+//           timeout: 5000,
+//           closeOnEscape: true,
+//           pauseOnHover: false,
+//           displayMode: "replace",
+//         }
+//       );
+//     }
+//
+//     // Destroying session and redirecting to login view
+//     if (response.data.error_not_logged_in) {
+//       Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
+//       Vue.$cookies.remove("csrftoken", null, "geocollections.info");
+//       Vue.prototype.toast.error("Please log back in", "Session expired", {
+//         position: "topCenter",
+//         timeout: 5000,
+//         closeOnEscape: true,
+//         pauseOnHover: false,
+//         displayMode: "replace",
+//       });
+//       router.push({ path: "/" });
+//     }
+//
+//     // Showing link error message
+//     if (response.data.link_error) {
+//       Vue.prototype.toast.error(response.data.link_error, "Error", {
+//         position: "topCenter",
+//         timeout: 99999999999,
+//         pauseOnHover: false,
+//         displayMode: "replace",
+//       });
+//     }
+//   }
+//
+//   return response;
+// });
 
-  return config;
-});
+async function get(child = "", customUrl) {
+  let url = api.url + child;
+  if (customUrl) url = customUrl + child;
+  const service = axios.create({
+    withCredentials: true,
+    xsrfCookieName: "csrftoken",
+    xsrfHeaderName: "X-CSRFToken",
+  });
 
-// Add a response interceptor
-axios.interceptors.response.use(function (response) {
-  if (response.status === 200 && response.config.url.includes("rwapi")) {
-    // Showing Missing permissions message
-    if (response.data.error_permissions) {
+  try {
+    return await service.get(url);
+  } catch (err) {
+    if (err.response.status === 403) {
+      const table = child.includes("/") ? child.split("/")[0] : child;
       Vue.prototype.toast.error(
-        response.data.error_permissions,
-        "Missing permissions",
+        `Table: <b>${table}</b>. You do not have permission to perform this action.`,
+        "Forbidden",
         {
           position: "topCenter",
           timeout: 5000,
@@ -41,78 +97,65 @@ axios.interceptors.response.use(function (response) {
           displayMode: "replace",
         }
       );
-    }
-
-    // Destroying session and redirecting to login view
-    if (response.data.error_not_logged_in) {
-      Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
-      Vue.$cookies.remove("csrftoken", null, "geocollections.info");
-      Vue.prototype.toast.error("Please log back in", "Session expired", {
+    } else {
+      Vue.prototype.toast.error(JSON.stringify(err?.response?.data), {
         position: "topCenter",
         timeout: 5000,
         closeOnEscape: true,
         pauseOnHover: false,
         displayMode: "replace",
       });
-      router.push({ path: "/" });
     }
+    return err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`;
+  }
+}
 
-    // Showing link error message
-    if (response.data.link_error) {
-      Vue.prototype.toast.error(response.data.link_error, "Error", {
+async function post(child, data, customUrl, method) {
+  let url = api.url + child + "dsfs";
+  if (customUrl && customUrl.length > 0) url = customUrl + child + "/";
+  const service = axios.create({
+    method,
+    withCredentials: true,
+    xsrfCookieName: "csrftoken",
+    xsrfHeaderName: "X-CSRFToken",
+  });
+
+  try {
+    const res = await service({ url, data });
+    Vue.prototype.toast.success(
+      method === "post" ? "Record added" : "Record changed",
+      "OK",
+      {
         position: "topCenter",
-        timeout: 99999999999,
+        timeout: 5000,
+        pauseOnHover: false,
+      }
+    );
+    return res?.data;
+  } catch (err) {
+    if (err?.response?.status === 403) {
+      const table = child.includes("/") ? child.split("/")[0] : child;
+      Vue.prototype.toast.error(
+        `Table: <b>${table}</b>. You do not have permission to perform this action.`,
+        "Forbidden",
+        {
+          position: "topCenter",
+          timeout: 5000,
+          closeOnEscape: true,
+          pauseOnHover: false,
+          displayMode: "replace",
+        }
+      );
+    } else {
+      Vue.prototype.toast.error(JSON.stringify(err?.response?.data), {
+        position: "topCenter",
+        timeout: 5000,
+        closeOnEscape: true,
         pauseOnHover: false,
         displayMode: "replace",
       });
     }
-  }
-
-  return response;
-});
-
-async function get(child = "", customUrl) {
-  let url = api.url + child;
-  if (customUrl) url = customUrl + child;
-
-  try {
-    return await axios.get(url);
-  } catch (error) {
-    return error.request();
-  }
-}
-
-async function post(
-  child,
-  data,
-  customUrl = "",
-  returnErrorResponse = false,
-  config = {}
-) {
-  let url = api.url + child;
-  if (customUrl && customUrl.length > 0) url = customUrl + child + "/";
-  let useLoginOptions = false;
-  let loginOptions;
-
-  if (child.includes("login")) {
-    useLoginOptions = true;
-    loginOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      data: qs.stringify(data),
-      url,
-    };
-  }
-
-  try {
-    if (useLoginOptions) return await axios(loginOptions);
-    else return await axios.post(url, data, config);
-  } catch (error) {
-    // console.log(error.response);
-    if (returnErrorResponse) return error.response;
-    else return error.request();
+    return err?.response?.data ?? `URL: '${url}' MESSAGE: ${err.message}`;
   }
 }
 
@@ -152,114 +195,13 @@ export function fetchIsLoggedIn() {
  ***  LOGIN END  ***
  *******************/
 
-export function postRequest(
-  url,
-  data,
-  customUrl = "",
-  returnErrorResponse = false,
-  config = {}
-) {
-  return post(url, data, customUrl, returnErrorResponse, config);
+export function postRequest(url, data, customUrl = "", method = "post") {
+  return post(url, data, customUrl, method);
 }
 
 /*************************
  *** ATTACHMENTS START ***
  *************************/
-
-export function fetchAttachments(data, dynamicSearch) {
-  let fields =
-    "original_filename,filename,specimen_image_attachment,type,type__value,type__value_en,attachment_format,attachment_format__value,author,author__agent,author_free,date_created,date_created_free,device,device__name,device_txt,date_digitised,date_digitised_free,agent_digitised,agent_digitised__agent,device_digitised,device_digitised__name,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,description,description_en,size_mb,remarks,tags,stars,is_private,is_preferred,is_locked,boolean1,specimen,specimen__specimen_id,locality,locality__locality,locality__locality_en,drillcore,drillcore__drillcore,drillcore__drillcore_en,drillcore_box,drillcore_box__number,reference,reference__reference,drillcore_image_id,image_id,imageset,imageset__imageset_number,specimen_image_id,image_number,image_type,image_type__value,image_type__value_en,image_width,image_height,image_category,image_category__value,image_category__value_en,image_object,image_place,image_people,image_latitude,image_longitude,image_altitude,image_scalebar,image_description,image_description_en,storage,user_added,date_added,user_changed,date_changed,database,database__acronym,uuid_filename,id,upload,uuid";
-
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-  if (data.image_number !== null && data.image_number.trim().length > 0) {
-    searchFields += `image_number__${
-      data.image_number__lookuptype || "icontains"
-    }=${data.image_number}`;
-  }
-  if (data.filename !== null && data.filename.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.filename +
-      ";fields:original_filename,uuid_filename;lookuptype:" +
-      `${data.filename__lookuptype || "icontains"}`;
-  }
-  if (data.specimen !== null && data.specimen.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.specimen +
-      ";fields:specimen__id,specimen__specimen_id;lookuptype:" +
-      `${data.specimen__lookuptype || "icontains"}`;
-  }
-  if (data.imageInfo !== null && data.imageInfo.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.imageInfo +
-      ";fields:description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:" +
-      `${data.imageInfo__lookuptype || "icontains"}`;
-  }
-  if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.locality +
-      ";fields:locality__locality,locality__locality_en;lookuptype:" +
-      `${data.locality__lookuptype || "icontains"}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.selection +
-      ";fields:selection__selection__name,selection__selection__id;lookuptype:" +
-      `${data.selection__lookuptype || "icontains"}`;
-  }
-
-  if (data.author && data.author.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.author +
-      ";fields:author__agent,author__forename,author__surename,author_free,user_added;lookuptype:" +
-      `${data.author__lookuptype || "icontains"}`;
-  }
-
-  if (
-    data.specimen_image_attachment.length > 0 &&
-    data.specimen_image_attachment.length <= 3
-  ) {
-    searchFields +=
-      "&specimen_image_attachment__in=" + data.specimen_image_attachment;
-  }
-  // If all checkboxes are unchecked then there won't be any results, that's why zero is added.
-  if (data.specimen_image_attachment.length === 0) {
-    searchFields += "&specimen_image_attachment=0";
-  }
-  if (data.keyword !== null && data.keyword.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.keyword +
-      ";fields:attachmentkeyword__keyword__keyword,description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:" +
-      `${data.keyword__lookuptype || "icontains"}&distinct=true`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchAttachment(id) {
   return get(`attachment/?id=${id}&format=json`);
 }
@@ -378,18 +320,6 @@ export function fetchAttachmentLinkTaxa(id) {
   );
 }
 
-export function fetchRecentImages(currentUserId) {
-  return get(
-    `attachment/?author_id=${currentUserId}&image_latitude!=null&order_by=-id&paginate_by=30&fields=image_latitude,image_longitude,id,image_place`
-  );
-}
-
-export function fetchRecentFiles(currentUserId, paginateBy) {
-  return get(
-    `attachment/?author_id=${currentUserId}&order_by=-id&paginate_by=${paginateBy}`
-  );
-}
-
 /*************************
  ***  ATTACHMENTS END  ***
  *************************/
@@ -400,110 +330,6 @@ export function fetchRecentFiles(currentUserId, paginateBy) {
 
 export function fetchReference(id) {
   return get(`reference/?id=${id}&format=json`);
-}
-
-export async function fetchReferences(data, dynamicSearch) {
-  const fields =
-    "reference,author,author_original,year,type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid,attachment__filename";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-  // This (solr search) overrides regular search fields
-  if (data.solrSearch && data.solrSearch.trim().length > 0) {
-    let start = (data.page - 1) * data.paginateBy;
-    return get(
-      `reference/?q=${data.solrSearch}&rows=${data.paginateBy}&start=${start}&format=json`,
-      api.solrUrl
-    );
-  }
-
-  let searchFields = "";
-
-  if (data.author !== null && data.author.trim().length > 0) {
-    searchFields += `author__${data.author__lookuptype || "icontains"}=${
-      data.author
-    }`;
-  }
-  if (data.year !== null && data.year.trim().length > 0) {
-    searchFields += `&year__${data.year__lookuptype || "icontains"}=${
-      data.year
-    }`;
-  }
-  if (data.title !== null && data.title.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.title +
-      ";fields:title,title_original;lookuptype:" +
-      `${data.title__lookuptype || "icontains"}`;
-  }
-  if (data.bookJournal !== null && data.bookJournal.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.bookJournal +
-      ";fields:book,book_editor,journal__journal_name;lookuptype:" +
-      `${data.bookJournal__lookuptype || "icontains"}`;
-  }
-  if (data.abstractRemarks && data.abstractRemarks.trim().length > 0) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.abstractRemarks +
-      ";fields:abstract,remarks;lookuptype:" +
-      `${data.abstractRemarks__lookuptype || "icontains"}`;
-  }
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-  if (
-    data.libraryAuthorIdTitle &&
-    data.libraryAuthorIdTitle.trim().length > 0
-  ) {
-    searchFields +=
-      "&multi_search=value:" +
-      data.libraryAuthorIdTitle +
-      ";fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt,libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:" +
-      `${data.libraryAuthorIdTitle__lookuptype || "icontains"}&distinct=true`;
-  }
-  if (data.userAdded && data.userAdded.trim().length > 0) {
-    searchFields += `&user_added__${
-      data.userAdded__lookuptype || "icontains"
-    }=${data.userAdded}`;
-  }
-  if (data.keywords !== null && data.keywords.trim().length > 0) {
-    searchFields += `&referencekeywords__keyword__keyword__${
-      data.keywords__lookuptype || "icontains"
-    }=${data.keywords}`;
-  }
-  if (data.isEstonianReference) {
-    searchFields += `&is_estonian_reference=${data.isEstonianReference}`;
-  }
-  if (data.isEstonianAuthor) {
-    searchFields += `&is_estonian_author=${data.isEstonianAuthor}`;
-  }
-  searchFields += buildDynamicSearch(dynamicSearch);
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    // Not using 'fields' because of alternative table
-    // return get(`reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-    return get(
-      `reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    // Not using 'fields' because of alternative table
-    // return get(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-    return get(
-      `reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 function fetchReferenceIDsUsingReferenceKeyword(data) {
@@ -668,72 +494,6 @@ export function fetchLatestLogs(data) {
 /**********************
  *** LOCALITY START ***
  **********************/
-
-export function fetchLocalities(data, dynamicSearch) {
-  const fields =
-    "locality,locality_en,number,code,type,type__value,type__value_en,parent,parent__locality,parent__locality_en,latitude,longitude,elevation,coord_det_precision,coord_det_precision__value,coord_det_precision__value_en,coord_det_method,coord_det_method__value,coord_det_method__value_en,coord_det_agent,coord_det_agent__agent,coord_system,epsg,coordx,coordy,extent,extent__value,extent__value_en,country,country__value,country__value_en,maakond,maakond__maakond,maakond__maakond_en,vald,vald__vald,vald__vald_en,asustusyksus,asustusyksus__asustusyksus,asustusyksus__asustusyksus_en,remarks_location,depth,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,eelis,maaamet_pa_id,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.locality
-    };fields:locality_en,locality;lookuptype:${
-      data.locality__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.number !== null && data.number.trim().length > 0) {
-    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
-      data.number
-    }`;
-  }
-
-  if (data.country !== null && data.country.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.country
-    };fields:country__value_en,country__value;lookuptype:${
-      data.country__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.agent !== null && data.agent.trim().length > 0) {
-    searchFields += `&user_added__${data.agent__lookuptype || "icontains"}=${
-      data.agent
-    }`;
-  }
-
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `locality/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `locality/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchListLocalityTypes() {
   return get(`list_locality_type/?format=json`);
 }
@@ -843,111 +603,6 @@ export function fetchAnalysisMethod() {
   return get(`analysis_method/?order_by=analysis_method&format=json`);
 }
 
-export function fetchSamples(data, dynamicSearch) {
-  const fields =
-    "number,number_additional,number_field,igsn,series,series__name,parent_sample,parent_sample__number,parent_specimen,parent_specimen__specimen_id,sample_purpose,sample_purpose__value,sample_purpose__value_en,sample_type,locality,locality__locality,locality__locality_en,site,site__name,site__name_en,locality_free,soil_site,soil_site__site,soil_site__site_en,latitude1,longitude1,x1,y1,epsg,coordinate_accuracy,depth,depth_interval,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,stratigraphy_bed,soil_horizon,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,classification_rock,classification_rock__name,classification_rock__name_en,rock,rock_en,fossils,palaeontology,analysis,mass,location,location_additional,storage,storage__location,storage_additional,storage_additional__location,remarks,user_added,date_added,user_changed,date_changed,owner,owner__agent,is_private,database__acronym,id,number";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.number !== null && data.number.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.number
-    };fields:number,number_additional,number_field;lookuptype:${
-      data.number__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.locality
-    };fields:locality__locality_en,locality__locality,locality_free,site__name,site__name_en,site__id;lookuptype:${
-      data.locality__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.depth !== null && data.depth.trim().length > 0) {
-    //searchFields += '&depth__exact='+data.depth
-    searchFields += `&multi_search=value:${
-      data.depth
-    };fields:depth,depth_interval;lookuptype:${
-      data.depth__lookuptype || "icontains"
-    }`;
-  }
-  if (data.stratigraphy !== null && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.stratigraphy
-    };fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:${
-      data.stratigraphy__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.agent !== null && data.agent.trim().length > 0) {
-    searchFields += `&agent_collected__agent__${
-      data.agent__lookuptype || "icontains"
-    }=${data.agent}`;
-  }
-
-  if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&storage__location__${
-      data.storage__lookuptype || "icontains"
-    }=${data.storage}`;
-  }
-
-  if (data.site !== null && data.site.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.site
-    };fields:site__id,site__name,site__project__id,site__project__name;lookuptype:${
-      data.site__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-
-  if (data.loan && data.loan.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.loan
-    };fields:loansample__loan__id,loansample__loan__loan_number;lookuptype:${
-      data.loan__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.series && data.series.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.series
-    };fields:series__id,series__name;lookuptype:${
-      data.series__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchSampleAnalysis(id, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -1004,12 +659,6 @@ export function fetchLatestSampleInSite(siteId) {
   );
 }
 
-export function fetchRecentSamples(currentUserId) {
-  return get(
-    `sample/?agent_collected__id=${currentUserId}&locality__id!=null&order_by=-id&paginate_by=30&fields=locality__locality,locality__latitude,locality__longitude,locality__id`
-  );
-}
-
 /************************
  ***  SAMPLES END  ***
  ************************/
@@ -1020,115 +669,6 @@ export function fetchRecentSamples(currentUserId) {
 
 export function fetchLibrary(id) {
   return get(`library/?id=${id}&format=json`);
-}
-
-export function fetchLibraries(data, dynamicSearch) {
-  const fields =
-    "title,title_en,title_short,title_short_en,abstract,abstract_en,author,author__agent,author_txt,year,publisher,doi,keywords,remarks,is_private,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.author_txt !== null && data.author_txt.trim().length > 0) {
-    searchFields += `author_txt__${
-      data.author_txt__lookuptype || "icontains"
-    }=${data.author_txt}`;
-  }
-
-  if (data.year !== null && data.year.trim().length > 0) {
-    searchFields += `&year__${data.year__lookuptype || "icontains"}=${
-      data.year
-    }`;
-  }
-
-  if (data.title !== null && data.title.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.title
-    };fields:title,title_en;lookuptype:${
-      data.title__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.reference !== null && data.reference.trim().length > 0) {
-    searchFields += `&libraryreference_library__reference__reference__${
-      data.reference__lookuptype || "icontains"
-    }=${data.reference}&distinct=true`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `library/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `library/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
-export function fetchLibrariesFromLibraryAgent(data, agent) {
-  const fields =
-    "id,library,library__author_txt,library__title,library__title_en,agent,agent__agent,agent__surename,agent__forename,library__is_private";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  // Using typeof check because for active libraries (reference view uses active libraries but search data will be related to referneces)
-  if (
-    typeof data.author_txt !== "undefined" &&
-    data.author_txt !== null &&
-    data.author_txt.trim().length > 0
-  ) {
-    searchFields += `&library__author_txt__${
-      data.author_txt__lookuptype || "icontains"
-    }=${data.author_txt}`;
-  }
-
-  if (
-    typeof data.year !== "undefined" &&
-    data.year !== null &&
-    data.year.trim().length > 0
-  ) {
-    searchFields += `&library__year__${data.year__lookuptype || "icontains"}=${
-      data.year
-    }`;
-  }
-
-  if (
-    typeof data.title !== "undefined" &&
-    data.title !== null &&
-    data.title.trim().length > 0
-  ) {
-    searchFields += `&multi_search=value:${
-      data.title
-    };fields:library__title,library__title_en;lookuptype:${
-      data.title__lookuptype || "icontains"
-    }`;
-  }
-
-  if (
-    typeof data.reference !== "undefined" &&
-    data.reference !== null &&
-    data.reference.trim().length > 0
-  ) {
-    searchFields += `&library__libraryreference_library__reference__reference__${
-      data.reference__lookuptype || "icontains"
-    }=${data.reference}&distinct=true`;
-  }
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `library_agent/?agent=${agent.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `library_agent/?agent=${agent.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchLibraryReference(id, searchParameters) {
@@ -1178,55 +718,6 @@ export function fetchMultiAddReferencesToLibrary(data) {
 /*****************
  *** DOI START ***
  *****************/
-
-export function fetchDois(data, dynamicSearch) {
-  const fields =
-    "identifier,creators,title,title_alternative,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,publisher,publication_year,subjects,reference,reference__reference,dataset,dataset__name,dataset__name_en,language,language__value,language__value_en,resource_type,resource_type__value,resource,version,sizes,formats,abstract,methods,date_txt,is_private,owner,owner__agent,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,egf,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,datacite_created,datacite_updated,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.identifier !== null && data.identifier.trim().length > 0) {
-    searchFields += `&identifier__${
-      data.identifier__lookuptype || "icontains"
-    }=${data.identifier}`;
-  }
-
-  if (data.creators !== null && data.creators.trim().length > 0) {
-    searchFields += `&creators__${data.creators__lookuptype || "icontains"}=${
-      data.creators
-    }`;
-  }
-
-  if (
-    data.publication_year !== null &&
-    data.publication_year.trim().length > 0
-  ) {
-    searchFields += `&publication_year__${
-      data.publication_year__lookuptype || "icontains"
-    }=${data.publication_year}`;
-  }
-
-  if (data.title !== null && data.title.trim().length > 0) {
-    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
-      data.title
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `doi/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchDoi(id) {
   return get(`doi/?id=${id}&format=json`);
 }
@@ -1399,36 +890,6 @@ export function fetchProjectType() {
   return get(`project_type/?order_by=name&format=json`);
 }
 
-export function fetchProjects(data, dynamicSearch) {
-  const fields =
-    "name,name_en,number,project_type,project_type__name,project_type__name_en,parent_project,parent_project__name,parent_project__name_en,date_start,date_end,date_free,description,remarks,owner,owner__agent,is_private,user_added,date_added,user_changed,date_changed,id,timestamp";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.name !== null && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.name
-    };fields:name,name_en;lookuptype:${data.name__lookuptype || "icontains"}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-  if (searchFields.length > 0) {
-    return get(
-      `project/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `project/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchActiveProjects(projectIds) {
   return get(
     `project/?id__in=${projectIds}&fields=id,name,name_en&format=json`
@@ -1442,84 +903,6 @@ export function fetchActiveProjects(projectIds) {
 /******************
  *** SITE START ***
  ******************/
-
-export function fetchSites(data, dynamicSearch) {
-  let fields =
-    "project,project__name,project__name_en,locality,locality__locality,locality__locality,area,area__name,area__name_en,site_type,site_type__value,site_type__value,name,name_en,number,latitude,longitude,location_accuracy,elevation,elevation_accuracy,coord_det_precision,coord_det_precision__value,coord_det_precision__value_en,coord_det_method,coord_det_method__value,coord_det_method__value_en,coord_det_agent,coord_det_agent__agent,epsg,coordx,coordy,extent,depth,date_start,date_end,date_free,remarks_location,description,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.name !== null && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.name
-    };fields:name,name_en;lookuptype:${data.name__lookuptype || "icontains"}`;
-  }
-
-  if (data.number !== null && data.number.trim().length > 0) {
-    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
-      data.number
-    }`;
-  }
-
-  if (data.project !== null && data.project.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.project
-    };fields:project__name,project__name_en;lookuptype:${
-      data.project__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.date_start !== null) {
-    let dateStart = data.date_start;
-
-    if (typeof dateStart === "string") dateStart = dateStart.split("T")[0];
-    else {
-      dateStart.setHours(0, -dateStart.getTimezoneOffset(), 0, 0);
-      dateStart = dateStart.toISOString().split("T")[0];
-    }
-    searchFields += `&date_start__gte=${dateStart}`;
-  }
-
-  if (data.date_end !== null) {
-    let dateEnd = data.date_end;
-    if (typeof dateEnd === "string") dateEnd = dateEnd.split("T")[0];
-    else {
-      dateEnd.setHours(0, -dateEnd.getTimezoneOffset(), 0, 0);
-      dateEnd = dateEnd.toISOString().split("T")[0];
-    }
-
-    searchFields += `&date_end__lte=${dateEnd}`;
-  }
-
-  // if (data.date_start !== null && data.date_start.trim().length > 0) {
-  //   searchFields += `&date_start__gt=${data.date_start}`
-  // }
-
-  if (data.coords_not_null === true) {
-    searchFields += `&latitude__isnull=False&longitude__isnull=False`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    // return data.coords_not_null === true ? get(`site/?${searchFields}&order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
-    return get(
-      `site/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    // return data.coords_not_null === true ? get(`site/?order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
-
-    return get(
-      `site/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
 
 export function fetchSite(id) {
   return get(`site/?id=${id}&format=json`);
@@ -1581,12 +964,6 @@ export function fetchLastSiteName(projectId) {
   );
 }
 
-export function fetchRecentSites(currentUserId) {
-  return get(
-    `site/?project__projectagent__agent=${currentUserId}&order_by=-id&paginate_by=30&fields=name,latitude,longitude,id`
-  );
-}
-
 export function fetchSiteLocalityDescriptions(id, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -1631,75 +1008,6 @@ export function fetchInstruments() {
   return get(`lab_instrument/?format=json`);
 }
 
-export function fetchAnalyses(data, dynamicSearch) {
-  const fields =
-    "material,sample,sample__number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__depth,specimen,specimen__specimen_id,dataset,dataset__name,dataset__name_en,reference,reference__reference,analysis_method,analysis_method__analysis_method,analysis_method__method_en,method_details,method_details_en,mass,date,date_end,date_free,lab,lab__lab,lab__lab_en,lab_txt,lab_sample_number,lab_analysis_number,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,agent,agent__agent,agent_txt,owner,owner__agent,is_private,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.analysis_method !== null && data.analysis_method.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.analysis_method
-    };fields:analysis_method__analysis_method,analysis_method__method_en;lookuptype:${
-      data.analysis_method__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.agentAndLab !== null && data.agentAndLab.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.agentAndLab
-    };fields:agent__agent,lab_txt;lookuptype:${
-      data.agentAndLab__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-
-  if (data.sample && data.sample.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.sample
-    };fields:sample__id,sample__number,sample__number_additional;lookuptype:${
-      data.sample__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.datasetId && data.datasetId.trim().length > 0) {
-    searchFields += `&dataset__id__${
-      data.datasetId__lookuptype || "icontains"
-    }=${data.datasetId}`;
-  }
-
-  // if (typeof agent !== "undefined" && agent !== null) {
-  //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
-  // }
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-  if (searchFields.length > 0) {
-    return get(
-      `analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `analysis/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchAnalysisAttachment(id, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -1730,49 +1038,6 @@ export function fetchAnalysisResults(id, searchParameters) {
 
 export function fetchJournal(id) {
   return get(`journal/?id=${id}&format=json`);
-}
-
-export function fetchJournals(data, dynamicSearch) {
-  let fields =
-    "journal_name,journal_short,journal_long,journal_abbr,journal_original,issn,publisher,publisher_place,http,former_journal,former_journal__journal_name,following_journal,following_journal__journal_name,oldname,newname,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.journal !== null && data.journal.trim().length > 0) {
-    searchFields += `multi_search=value:${
-      data.journal
-    };fields:journal_name,journal_short,journal_original;lookuptype:${
-      data.journal__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.publisher !== null && data.publisher.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.publisher
-    };fields:publisher,publisher_place;lookuptype:${
-      data.publisher__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.remarks !== null && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `journal/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `journal/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchJournalForReference(name) {
@@ -1924,22 +1189,22 @@ export function fetchSpecimens(data, dynamicSearch) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
-  if (searchFields.length > 0) {
-    return get(
-      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
+  if (searchFields.length > 0) return `?${searchFields}`;
+  else return "";
+  //
+  // if (searchFields.length > 0) {
+  //   return get(
+  //     `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  //   );
+  // } else {
+  //   return get(
+  //     `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  //   );
+  // }
 }
 
 export function fetchSpecimenImages(data, dynamicSearch) {
-  const fields =
-    "id,specimen_id,size_mb,original_filename,uuid_filename,user_added,date_added,specimen__specimen_id,specimen__collection,specimen__coll,specimen__coll__number,specimen__specimen_nr,specimen__number_field,specimen__type,specimen__type__value,specimen__type__value_en,specimen__subtype_id,specimen__subtype_id__value,specimen__subtype_id__value_en,specimen__fossil,specimen__fossil__value,specimen__fossil__value_en,specimen__kind,specimen__kind,specimen__kind,specimen__classification,specimen__classification__class_field,specimen__part,specimen__number_pieces,specimen__locality,specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free,specimen__locality_free_en,specimen__locality_is_private,specimen__depth,specimen__depth_interval,specimen__sample_number,specimen__sample,specimen__sample__number,specimen__parent,specimen__parent__specimen_id,specimen__remarks_collecting,specimen__stratigraphy,specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__agent_collected,specimen__agent_collected__agent,specimen__agent_collected_free,specimen__date_collected,specimen__date_collected_free,specimen__remarks,specimen__remarks_internal,specimen__tags,specimen__presence,specimen__presence__value,specimen__presence__value_en,specimen__storage,specimen__storage__location,specimen__location,specimen__status,specimen__status__value,specimen__status__value_en,specimen__original_status,specimen__original_status__value,specimen__original_status__value_en,specimen__is_private,specimen__accession,specimen__accession__number,specimen__deaccession,specimen__deaccession__number,specimen__user_added,specimen__date_added,specimen__user_changed,specimen__date_changed,specimen__database,specimen__database__acronym,specimen__id";
   let searchFields = "";
-  let orderBy = "";
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
     searchFields += `multi_search=value:${
@@ -2029,18 +1294,9 @@ export function fetchSpecimenImages(data, dynamicSearch) {
   searchFields += buildDynamicSearch(dynamicSearch, "specimen__");
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (searchFields.length > 0) {
-    return get(
-      `attachment/?${searchFields}&specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `attachment/?specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
+  if (searchFields.length > 0)
+    return `?${searchFields}&specimen_image_attachment=1`;
+  else return `?specimen_image_attachment=1`;
 }
 
 export function fetchDirectSpecimenImages(specimenId) {
@@ -2193,12 +1449,6 @@ export function fetchListUnit() {
   return get(`list_unit/?format=json`);
 }
 
-export function fetchRecentSpecimens(currentUserId) {
-  return get(
-    `specimen/?agent_collected__id=${currentUserId}&locality__id!=null&order_by=-id&paginate_by=30&fields=locality__locality,locality__latitude,locality__longitude,locality__id`
-  );
-}
-
 export function fetchMultiChangeSpecimen(data) {
   return post(`change_multi/specimen/`, data);
 }
@@ -2210,78 +1460,6 @@ export function fetchMultiChangeSpecimen(data) {
 /************************
  *** COLLECTION START ***
  ************************/
-
-export function fetchCollections(data, dynamicSearch) {
-  const fields =
-    "id,number,collection_id,name,name_long,name_en,name_long_en,type,type__value,type__value_en,classification,classification__class_field,agent,agent__agent,locality,locality__locality,locality__locality_en,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,number_objects,number_types,reference,reference__reference,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.number && data.number.trim().length > 0) {
-    searchFields += `&collection_id__${
-      data.number__lookuptype || "icontains"
-    }=${data.number}`;
-  }
-
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.name
-    };fields:name,name_en,name_long,name_long_en;lookuptype:${
-      data.name__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.agent
-    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${
-      data.agent__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.locality
-    };fields:locality__id,locality__locality,locality__locality_en;lookuptype:${
-      data.locality__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.reference && data.reference.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.reference
-    };fields:reference__id,reference__reference;lookuptype:${
-      data.reference__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.classification && data.classification.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.classification
-    };fields:classification__id,classification__class_field,classification__class_en,classification__class_lat,classification__class_synonym,classification__class_en_synonym;lookuptype:${
-      data.classification__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `collection/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchCollection(id) {
   return get(`collection/?id=${id}&format=json`);
 }
@@ -2297,74 +1475,6 @@ export function fetchListCollectionType() {
 /*******************
  *** TAXON START ***
  *******************/
-
-export function fetchTaxa(data, dynamicSearch) {
-  const fields =
-    "taxon,author_year,taxon_epithet,taxon_full_name,taxon_original_name,reference,reference__reference,parent,parent__taxon,fossil_group,fossil_group__taxon,synonym_of,synonym_of_reference_id,hierarchy_string,rank,rank__rank,rank_original,rank_original__rank,type_taxon,type_taxon__taxon,type_taxon_txt,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,in_estonia,in_baltoscandia,is_fossil,is_private,is_valid,is_fossil_group,sort,taxon_id_pbdb,taxon_id_plutof,taxon_id_tol,taxon_id_eol,taxon_id_nrm,remarks,owner,is_authorized,user_authorized,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.taxon && data.taxon.trim().length > 0) {
-    searchFields += `&taxon__${data.taxon__lookuptype || "icontains"}=${
-      data.taxon
-    }`;
-  }
-
-  if (data.author_year && data.author_year.trim().length > 0) {
-    searchFields += `&author_year__${
-      data.author_year__lookuptype || "icontains"
-    }=${data.author_year}`;
-  }
-
-  if (data.parent__taxon && data.parent__taxon.trim().length > 0) {
-    searchFields += `&parent__taxon__${
-      data.parent__taxon__lookuptype || "icontains"
-    }=${data.parent__taxon}`;
-  }
-
-  if (data.taxon_epithet && data.taxon_epithet.trim().length > 0) {
-    searchFields += `&taxon_epithet__${
-      data.taxon_epithet__lookuptype || "icontains"
-    }=${data.taxon_epithet}`;
-  }
-
-  if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__${
-      data.user_added__lookuptype || "icontains"
-    }=${data.user_added}`;
-  }
-
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `taxon/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchTaxon(id) {
   return get(`taxon/?id=${id}&format=json`);
 }
@@ -2498,59 +1608,6 @@ export function fetchKeyword(id) {
   return get(`keyword/?id=${id}&format=json`);
 }
 
-export function fetchKeywords(data, listOfIDs, dynamicSearch) {
-  let fields =
-    "keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,is_primary,is_preferred,is_private,description,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (listOfIDs && listOfIDs.length > 0) {
-    searchFields += `id__in=${listOfIDs}`;
-  }
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-  if (data.term && data.term.trim().length > 0) {
-    searchFields += `&keyword__${data.term__lookuptype || "icontains"}=${
-      data.term
-    }`;
-  }
-  if (data.language && data.language.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.language
-    };fields:language__value,language__value_en;lookuptype:${
-      data.language__lookuptype || "icontains"
-    }`;
-  }
-  if (data.keyword_category && data.keyword_category.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.keyword_category
-    };fields:keyword_category__name,keyword_category__name_en;lookuptype:${
-      data.keyword_category__lookuptype || "icontains"
-    }`;
-  }
-  if (data.related_keyword && data.related_keyword.trim().length > 0) {
-    searchFields += `&related_keyword__keyword__icontains=${data.related_keyword}`;
-  }
-  if (data.is_primary) {
-    searchFields += `&is_primary=${data.is_primary}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `keyword/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `keyword/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchReferenceKeywordIDs(referenceID) {
   return get(
     `reference_keyword/?reference=${referenceID}&fields=keyword&format=json`
@@ -2598,49 +1655,6 @@ export function fetchAgent(id) {
   return get(`agent/?id=${id}&fields=${fields}&format=json`);
 }
 
-export function fetchAgents(data, dynamicSearch) {
-  const fields =
-    "agent,type,type__value,type__value_en,forename,middlename,surename,title,profession,profession_en,institution,institution__agent,institution_name,institution_name_en,address,address1,address2,country,country__value,country__value_en,country_txt,phone,email,http,old_name,new_name,date_born,date_deceased,orcid,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&agent__${data.agent__lookuptype || "icontains"}=${
-      data.agent
-    }`;
-  }
-
-  if (data.forename && data.forename.trim().length > 0) {
-    searchFields += `&forename__${data.forename__lookuptype || "icontains"}=${
-      data.forename
-    }`;
-  }
-
-  if (data.surename && data.surename.trim().length > 0) {
-    searchFields += `&surename__${data.surename__lookuptype || "icontains"}=${
-      data.surename
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `agent/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `agent/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchAgentUsingName(name) {
   return get(
     `agent/?multi_search=value:${name};fields:id,agent,forename,surename;lookuptype:icontains&page=1&paginate_by=1&fields=id,agent,institution__institution_name_en,orcid`
@@ -2658,47 +1672,6 @@ export function fetchListAgentType() {
 /******************************
  *** SELECTION SERIES START ***
  ******************************/
-
-export function fetchSelectionSeries(data, dynamicSearch) {
-  let fields =
-    "name,tablename,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&name__${data.name__lookuptype || "icontains"}=${
-      data.name
-    }`;
-  }
-  if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-  if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__${
-      data.user_added__lookuptype || "icontains"
-    }=${data.user_added}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `selection_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `selection_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchSelectionSerie(id) {
   return get(`selection_series/?id=${id}&format=json`);
 }
@@ -2825,61 +1798,6 @@ export function fetchDrillcore(id) {
   return get(`drillcore/?id=${id}&format=json`);
 }
 
-export function fetchDrillcores(data, dynamicSearch) {
-  const fields =
-    "drillcore,drillcore_en,locality,locality__locality,locality__locality_en,year,agent,agent__agent,depository,depository__value,depository__value_en,location,storage,storage__location,boxes,box_numbers,number_meters,direction_lr,depth,igsn,remarks,database,database__acronym,uid,gid,is_private,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.drillcore && data.drillcore.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.drillcore
-    };fields:drillcore,drillcore_en,locality__locality,locality__locality_en;lookuptype:${
-      data.drillcore__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.boxes && data.boxes.trim().length > 0) {
-    searchFields += `&boxes__${data.boxes__lookuptype || "icontains"}=${
-      data.boxes
-    }`;
-  }
-
-  if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.locality
-    };fields:depth,locality__depth;lookuptype:${
-      data.locality__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.storage
-    };fields:storage__location,depository__value;lookuptype:${
-      data.storage__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `drillcore/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `drillcore/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchListDrillcoreStorage() {
   return get(`list_drillcore_storage/?format=json`);
 }
@@ -2934,41 +1852,6 @@ export function fetchDrillcoreAttachments(drillcoreId, searchParameters) {
 
 export function fetchDrillcoreBox(id) {
   return get(`drillcore_box/?id=${id}&format=json`);
-}
-
-export function fetchDrillcoreBoxes(data, dynamicSearch) {
-  const fields =
-    "drillcore,drillcore__drillcore,drillcore__drillcore_en,number,number_meters,diameter,depth_start,depth_end,depth_other,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,stratigraphy_free,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `storage__location__${
-      data.storage__lookuptype || "icontains"
-    }=${data.storage}`;
-  }
-
-  if (data.drillcore && data.drillcore.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.drillcore
-    };fields:drillcore__drillcore,drillcore__drillcore_en;lookuptype:${
-      data.drillcore__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `drillcore_box/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `drillcore_box/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchDrillcoreBoxImages(data, dynamicSearch) {
@@ -3038,33 +1921,6 @@ export function fetchPreparation(id) {
   return get(`preparation/?id=${id}&format=json`);
 }
 
-export function fetchPreparations(data, dynamicSearch) {
-  const fields =
-    "preparation_number,sample,sample__number,analysis,sample_number,taxon,taxon__taxon,agent,agent__agent,agent_txt,date_prepared,date_prepared_txt,identification_agent,identification_agent__agent,identification_date,identification_remarks,location,storage,storage__location,owner,owner__agent,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.preparation_number && data.preparation_number.trim().length > 0) {
-    searchFields += `preparation_number__${
-      data.preparation_number__lookuptype || "icontains"
-    }=${data.preparation_number}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `preparation/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `preparation/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchLinkedTaxa(data, prepId) {
   const fields =
     "id,taxon,taxon__taxon,taxon__author_year,taxon__taxon_epithet,taxon__parent_id,taxon__parent__taxon,taxon__fossil_group__taxon,taxon__reference";
@@ -3120,55 +1976,6 @@ export function fetchDataset(id) {
   return get(`dataset/?id=${id}&format=json`);
 }
 
-export function fetchDatasets(data, dynamicSearch) {
-  const fields =
-    "title,creators,publication_year,resource,name,name_en,description,description_en,dataset_html,date,date_txt,is_private,owner,owner__agent,owner_txt,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.name
-    };fields:title,title_translated,title_alternative;lookuptype:${
-      data.name__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.owner && data.owner.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.owner
-    };fields:owner__id,owner__agent,owner__forename,owner__surename,owner_txt;lookuptype:${
-      data.owner__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.date && data.date.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.date
-    };fields:date,date_txt;lookuptype:${data.date__lookuptype || "icontains"}`;
-  }
-
-  if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `dataset/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `dataset/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchDatasetAuthors(datasetId, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -3219,87 +2026,6 @@ export function fetchDatasetGeolocation(id, searchParameters) {
 
 export function fetchStratigraphy(id) {
   return get(`stratigraphy/?id=${id}&format=json`);
-}
-
-export function fetchStratigraphies(data, dynamicSearch) {
-  const fields =
-    "stratigraphy,stratigraphy_en,stratigraphy_original,author_free,year,etymon,etymon_en,original_locality,original_rank,index_main,index_main_html,index_additional,index_additional_html,index_old,color_code_cgmw,color_code_additional,hierarchy_string,parent,parent__stratigraphy,parent__stratigraphy_en,type,type__value,type__value_en,rank,rank__value,rank__value_en,scope,scope__value,scope__value_en,status,status__value,status__value_en,region,region_en,lithology,lithology_en,max_thickness,description,description_en,definition,definition_en,age_base,age_top,age_precision,age_reference,age_reference__reference,age_chronostratigraphy,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,sort_within_parent,approved_ics,approved_esk,maaamet_kood,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.stratigraphy
-    };fields:stratigraphy,stratigraphy_en;lookuptype:${
-      data.stratigraphy__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.type && data.type.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.type
-    };fields:type__value,type__value_en;lookuptype:${
-      data.type__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.rank && data.rank.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.rank
-    };fields:rank__value,rank__value_en;lookuptype:${
-      data.rank__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.scope && data.scope.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.scope
-    };fields:scope__value,scope__value_en;lookuptype:${
-      data.scope__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.parent && data.parent.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.parent
-    };fields:parent__id,parent__stratigraphy,parent__stratigraphy_en;lookuptype:${
-      data.parent__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.indexes && data.indexes.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.indexes
-    };fields:index_main,index_additional,index_old;lookuptype:${
-      data.indexes__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.author && data.author.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.author
-    };fields:author_free,user_added;lookuptype:${
-      data.author__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `stratigraphy/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `stratigraphy/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchListStratigraphyType() {
@@ -3388,55 +2114,6 @@ export function fetchArea(id) {
   return get(`area/?id=${id}&format=json`);
 }
 
-export function fetchAreas(data, dynamicSearch) {
-  const fields =
-    "name,name_en,area_type,area_type__name,area_type__name_en,maardla,eelis,egf,area_ha,deposit_area_ha,maakond,maakond__maakond,maakond__maakond_en,description,description_en,remarks,text1,polygon,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.name
-    };fields:name,name_en;lookuptype:${data.name__lookuptype || "icontains"}`;
-  }
-
-  if (data.type && data.type.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.type
-    };fields:area_type__name,area_type__name_en;lookuptype:${
-      data.type__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.area_ha && data.area_ha.trim().length > 0) {
-    searchFields += `&area_ha__${data.area_ha__lookuptype || "icontains"}=${
-      data.area_ha
-    }`;
-  }
-
-  if (data.maakond && data.maakond.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.maakond
-    };fields:maakond__maakond,maakond__maakond_en;lookuptype:${
-      data.maakond__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `area/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `area/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchListAreaTypes() {
   return get(`area_type`);
 }
@@ -3474,67 +2151,6 @@ export function fetchAreaLocalityReferences(id, searchParameters) {
  **********************/
 export function fetchLocation(id) {
   return get(`location/?id=${id}&format=json`);
-}
-
-export function fetchLocations(data, dynamicSearch) {
-  let fields =
-    "location,parent_location,parent_location__location,location_location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,number_items_registered,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.location && data.location.trim().length > 0) {
-    searchFields += `&location__${data.location__lookuptype || "icontains"}=${
-      data.location
-    }`;
-  }
-  if (data.location_location && data.location_location.trim().length > 0) {
-    searchFields += `&location_location__${
-      data.location_location__lookuptype || "icontains"
-    }=${data.location_location}`;
-  }
-  if (data.stratigraphy_free && data.stratigraphy_free.trim().length > 0) {
-    searchFields += `&stratigraphy_free__${
-      data.stratigraphy_free__lookuptype || "icontains"
-    }=${data.stratigraphy_free}`;
-  }
-  if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.agent
-    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${
-      data.agent__lookuptype || "icontains"
-    }`;
-  }
-  // if (data.user_added && data.user_added.trim().length > 0) {
-  //   searchFields += `&user_added__${data.user_added__lookuptype ||
-  //     "icontains"}=${data.user_added}`;
-  // }
-  // if (data.date_added && data.date_added.trim().length > 0) {
-  //   searchFields += `&date_added__${data.date_added__lookuptype ||
-  //     "icontains"}=${data.date_added}`;
-  // }
-  if (data.contents && data.contents.trim().length > 0) {
-    searchFields += `&contents__${data.contents__lookuptype || "icontains"}=${
-      data.contents
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `location/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `location/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchLocationImages(data, dynamicSearch) {
@@ -3644,70 +2260,6 @@ export function fetchRock(id) {
   return get(`rock/?id=${id}&format=json`);
 }
 
-export function fetchRocks(data, dynamicSearch) {
-  let fields =
-    "name,name_en,name_ru,rock_type,rock_type__name,rock_type__name_en,rock_rank,rock_rank__name,rock_rank__name_en,parent,parent__name,parent__name_en,synonym_of,synonym_of__name,synonym_of__name_en,sort,description,description_en,description_ru,description_in_estonia,description_in_estonia_en,description_in_estonia_ru,description_usage,description_usage_en,description_usage_ru,description_author,in_estonia,is_resource,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,mindat_id,link_wikipedia,link_wikipedia_en,link_wikipedia_ru,ima_status,formula,formula_html,remarks,is_private,in_portal,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&name__${data.name__lookuptype || "icontains"}=${
-      data.name
-    }`;
-  }
-  if (data.name_en && data.name_en.trim().length > 0) {
-    searchFields += `&name_en__${data.name_en__lookuptype || "icontains"}=${
-      data.name_en
-    }`;
-  }
-  if (data.formula && data.formula.trim().length > 0) {
-    searchFields += `&formula__${data.formula__lookuptype || "icontains"}=${
-      data.formula
-    }`;
-  }
-  if (data.rock_type && data.rock_type.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.rock_type
-    };fields:rock_type__name,rock_type__name_en;lookuptype:${
-      data.rock_type__lookuptype || "icontains"
-    }`;
-  }
-  if (data.rock_rank && data.rock_rank.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.rock_rank
-    };fields:rock_rank__name,rock_rank__name_en;lookuptype:${
-      data.rock_rank__lookuptype || "icontains"
-    }`;
-  }
-  if (data.user_changed && data.user_changed.trim().length > 0) {
-    searchFields += `&user_changed__${
-      data.user_changed__lookuptype || "icontains"
-    }=${data.user_changed}`;
-  }
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-  if (data.in_portal) {
-    searchFields += `&in_portal=${data.in_portal}`;
-  }
-  if (data.in_estonia) {
-    searchFields += `&in_estonia=${data.in_estonia}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `rock/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `rock/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
 
 export function fetchListRockType() {
   return get(`rock_type/?format=json`);
@@ -3830,56 +2382,6 @@ export function fetchListRockPropertyType() {
 export function fetchVisit(id) {
   return get(`visit/?id=${id}&format=json`);
 }
-
-export function fetchVisits(data, dynamicSearch) {
-  let fields =
-    "visitor,visitor__agent,visitor_free,visitor_institution,visitor_institution__agent,visitor_country,visitor_country__value,visitor_country__value_en,host,host__agent,date_arrived,date_left,purpose,collections_studied,items_studied,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.visitor && data.visitor.trim().length > 0) {
-    searchFields += `&visitor__agent__${
-      data.visitor__lookuptype || "icontains"
-    }=${data.visitor}`;
-  }
-
-  if (data.date_arrived !== null) {
-    let date = data.date_arrived;
-
-    if (typeof date === "string") date = date.split("T")[0];
-    else {
-      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
-      date = date.toISOString().split("T")[0];
-    }
-    searchFields += `&date_arrived__gte=${date}`;
-  }
-
-  if (data.date_left !== null) {
-    let date = data.date_left;
-
-    if (typeof date === "string") date = date.split("T")[0];
-    else {
-      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
-      date = date.toISOString().split("T")[0];
-    }
-    searchFields += `&date_left__gte=${date}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `visit/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `visit/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /*******************
  ***  VISIT END  ***
  *******************/
@@ -3890,71 +2392,6 @@ export function fetchVisits(data, dynamicSearch) {
 
 export function fetchLoan(id) {
   return get(`loan/?id=${id}&format=json`);
-}
-
-export function fetchLoans(data, dynamicSearch) {
-  let fields =
-    "loan_number,date_start,date_end,type,type__value,type__value_en,project,borrower,borrower__agent,borrower_institution,borrower_institution__agent,loaner,loaner__agent,date_signed,delivery_method,delivery_method__value,delivery_method__value_en,deliverer,deliverer__agent,delivery_remarks,returned,date_returned,special,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.loan_number && data.loan_number.trim().length > 0) {
-    searchFields += `&loan_number__${
-      data.loan_number__lookuptype || "icontains"
-    }=${data.loan_number}`;
-  }
-
-  if (data.project && data.project.trim().length > 0) {
-    searchFields += `&project__${data.project__lookuptype || "icontains"}=${
-      data.project
-    }`;
-  }
-
-  if (data.borrower && data.borrower.trim().length > 0) {
-    searchFields += `&borrower__agent__${
-      data.borrower__lookuptype || "icontains"
-    }=${data.borrower}`;
-  }
-
-  if (data.date_start !== null) {
-    let date = data.date_start;
-
-    if (typeof date === "string") date = date.split("T")[0];
-    else {
-      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
-      date = date.toISOString().split("T")[0];
-    }
-    searchFields += `&date_start__gte=${date}`;
-  }
-
-  if (data.date_end !== null) {
-    let date = data.date_end;
-
-    if (typeof date === "string") date = date.split("T")[0];
-    else {
-      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
-      date = date.toISOString().split("T")[0];
-    }
-    searchFields += `&date_end__gte=${date}`;
-  }
-
-  if (data.isActive) {
-    searchFields += `&returned=${!data.isActive}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `loan/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `loan/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 export function fetchListLoanType() {
@@ -4016,39 +2453,6 @@ export function fetchMultiAddLoanLists(table, data) {
 export function fetchAccessionDetail(id) {
   return get(`accession/?id=${id}&format=json`);
 }
-
-export function fetchAccessions(data, dynamicSearch) {
-  let fields =
-    "number,date_signed,date_confirmed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.number && data.number.trim().length > 0) {
-    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
-      data.number
-    }`;
-  }
-  if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__${
-      data.description__lookuptype || "icontains"
-    }=${data.description}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `accession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `accession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /***********************
  ***  ACCESSION END  ***
  ***********************/
@@ -4060,39 +2464,6 @@ export function fetchAccessions(data, dynamicSearch) {
 export function fetchDeaccessionDetail(id) {
   return get(`deaccession/?id=${id}&format=json`);
 }
-
-export function fetchDeaccessions(data, dynamicSearch) {
-  let fields =
-    "number,date_signed,date_confirmed,agent_kandis__agent,agent_kandis,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.number && data.number.trim().length > 0) {
-    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
-      data.number
-    }`;
-  }
-  if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__${
-      data.description__lookuptype || "icontains"
-    }=${data.description}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `deaccession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `deaccession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /*************************
  ***  DEACCESSION END  ***
  *************************/
@@ -4104,38 +2475,6 @@ export function fetchDeaccessions(data, dynamicSearch) {
 export function fetchWebNewsDetail(id) {
   return get(`web_news/?id=${id}&format=json`);
 }
-
-export function fetchWebNews(data, dynamicSearch) {
-  const fields =
-    "title_et,title_en,text_en,text_et,is_private,user_added,date_added,user_changed,date_changed,date_expires,timestamp,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.title && data.title.trim().length > 0) {
-    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
-      data.title
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `web_news/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `web_news/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /**********************
  ***  WEB_NEWS END  ***
  **********************/
@@ -4147,38 +2486,6 @@ export function fetchWebNews(data, dynamicSearch) {
 export function fetchWebPagesDetail(id) {
   return get(`web_pages/?id=${id}&format=json`);
 }
-
-export function fetchWebPages(data, dynamicSearch) {
-  const fields =
-    "title_et,menu_title_et,content_et,link_et,title_en,menu_title_en,content_en,link_en,public,menu,menu_bold,menu_color,menu_fold,sort,parent,site,is_private,user,date_inserted,date_expires,timestamp,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.title && data.title.trim().length > 0) {
-    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
-      data.title
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `web_pages/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `web_pages/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /***********************
  ***  WEB_PAGES END  ***
  ***********************/
@@ -4190,51 +2497,6 @@ export function fetchWebPages(data, dynamicSearch) {
 export function fetchTaxonPagesDetail(id) {
   return get(`taxon_page/?id=${id}&format=json`);
 }
-
-export function fetchTaxonPages(data, dynamicSearch) {
-  const fields =
-    "taxon,taxon__taxon,language,on_frontpage,frontpage,frontpage_order,frontpage_title,title,content,author,author__agent,author_txt,date_txt,is_private,link_wikipedia,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.language && data.language.trim().length > 0) {
-    searchFields += `&language__${data.language__lookuptype || "icontains"}=${
-      data.language
-    }`;
-  }
-
-  if (data.title && data.title.trim().length > 0) {
-    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
-      data.title
-    }`;
-  }
-  if (data.taxon && data.taxon.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.taxon
-    };fields:taxon__id,taxon__taxon;lookuptype:${
-      data.taxon__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.on_frontpage) {
-    searchFields += `&on_frontpage=${data.on_frontpage}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `taxon_page/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `taxon_page/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 /*************************
  ***  TAXON_PAGES END  ***
  *************************/
@@ -4249,90 +2511,6 @@ export function fetchSiteGroundwater(id) {
 
 export function fetchSiteGroundwaterUsingSite(siteId) {
   return get(`site_groundwater/?site=${siteId}&format=json`);
-}
-
-export function fetchSiteGroundwaters(data, dynamicSearch) {
-  const fields =
-    "site,aquifer_system,aquifer,well_depth,type_txt,filter_type,filter_top_z,filter_bottom_z,filter_midpoint_z,filter_top,filter_bottom,filter_midpoint,kataster_id,keskkonnaregister_id,url_veka,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.site && data.site.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.site
-    };fields:site__name,site__name_en;lookuptype:${
-      data.site__lookuptype || "icontains"
-    }`;
-  }
-  if (data.type_txt && data.type_txt.trim().length > 0) {
-    searchFields += `&type_txt__${data.type_txt__lookuptype || "icontains"}=${
-      data.type_txt
-    }`;
-  }
-  if (data.aquifer_system && data.aquifer_system.trim().length > 0) {
-    searchFields += `&aquifer_system__${
-      data.aquifer_system__lookuptype || "icontains"
-    }=${data.aquifer_system}`;
-  }
-  if (data.aquifer && data.aquifer.trim().length > 0) {
-    searchFields += `&aquifer__${data.aquifer__lookuptype || "icontains"}=${
-      data.aquifer
-    }`;
-  }
-  if (data.well_depth && data.well_depth.trim().length > 0) {
-    searchFields += `&well_depth__${
-      data.well_depth__lookuptype || "icontains"
-    }=${data.well_depth}`;
-  }
-  if (data.filter_type && data.filter_type.trim().length > 0) {
-    searchFields += `&filter_type__${
-      data.filter_type__lookuptype || "icontains"
-    }=${data.filter_type}`;
-  }
-  if (data.filter_top && data.filter_top.trim().length > 0) {
-    searchFields += `&filter_top__${
-      data.filter_top__lookuptype || "icontains"
-    }=${data.filter_top}`;
-  }
-  if (data.filter_top_z && data.filter_top_z.trim().length > 0) {
-    searchFields += `&filter_top_z__${
-      data.filter_top_z__lookuptype || "icontains"
-    }=${data.filter_top_z}`;
-  }
-  if (data.filter_bottom && data.filter_bottom.trim().length > 0) {
-    searchFields += `&filter_bottom__${
-      data.filter_bottom__lookuptype || "icontains"
-    }=${data.filter_bottom}`;
-  }
-  if (data.filter_bottom_z && data.filter_bottom_z.trim().length > 0) {
-    searchFields += `&filter_bottom_z__${
-      data.filter_bottom_z__lookuptype || "icontains"
-    }=${data.filter_bottom_z}`;
-  }
-  if (data.url_veka && data.url_veka.trim().length > 0) {
-    searchFields += `&url_veka__${data.url_veka__lookuptype || "icontains"}=${
-      data.url_veka
-    }`;
-  }
-  if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `site_groundwater/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `site_groundwater/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 /******************************
@@ -4424,47 +2602,6 @@ export function fetchSampleSeriesDetail(id) {
   return get(`sample_series/?id=${id}&format=json`);
 }
 
-export function fetchSampleSeries(data, dynamicSearch) {
-  const fields =
-    "name,sampling_purpose,sample_count,sample_numbers,number_prefix,number_start,locality,locality__locality,locality__locality_en,locality_free,zero_level,depth_top,depth_base,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,agent_collected,agent_collected__agent,date_collected,date_collected_free,location,remarks,owner,owner__agent,public,is_private,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.name && data.name.trim().length > 0) {
-    searchFields += `&name__${data.name__lookuptype || "icontains"}=${
-      data.name
-    }`;
-  }
-  if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.locality
-    };fields:locality_free,locality__locality,locality__locality_en;lookuptype:${
-      data.locality__lookuptype || "icontains"
-    }`;
-  }
-  if (data.agent_collected && data.agent_collected.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.agent_collected
-    };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:${
-      data.agent_collected__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `sample_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `sample_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchSampleSeriesSamples(id, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -4492,50 +2629,6 @@ export function fetchSampleSeriesAttachments(id, searchParameters) {
 /***********************************
  ***  ANALYSIS_PARAMETERS START  ***
  **********************************/
-
-export function fetchAnalysisParameters(data, dynamicSearch) {
-  const fields =
-    "parameter,parameter_name,parameter_name_en,parameter_html,synonyms,parent_parameter,parent_parameter__parameter,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.parameter_name && data.parameter_name.trim().length > 0) {
-    searchFields += `&parameter_name__${
-      data.parameter_name__lookuptype || "icontains"
-    }=${data.parameter_name}`;
-  }
-
-  if (data.parameter_name_en && data.parameter_name_en.trim().length > 0) {
-    searchFields += `&parameter_name_en__${
-      data.parameter_name__lookuptype || "icontains"
-    }=${data.parameter_name_en}`;
-  }
-
-  if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `analysis_parameter/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `analysis_parameter/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchAnalysisParameter(id) {
   return get(`analysis_parameter/?id=${id}&format=json`);
 }
@@ -4547,62 +2640,6 @@ export function fetchAnalysisParameter(id) {
 /********************************
  ***  ANALYSIS_METHODS START  ***
  *******************************/
-
-export function fetchAnalysisMethods(data, dynamicSearch) {
-  const fields =
-    "analysis_method,method_en,parent_method,parent_method__analysis_method,parent_method__method_en,remarks,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
-  }
-
-  if (data.analysis_method && data.analysis_method.trim().length > 0) {
-    // searchFields += `&analysis_method__${data.analysis_method__lookuptype ||
-    //   "icontains"}=${data.analysis_method}`;
-    searchFields += `&multi_search=value:${
-      data.analysis_method
-    };fields:analysis_method,method_en;lookuptype:${
-      data.analysis_method__lookuptype || "icontains"
-    }`;
-    // searchFields +=
-    //     "&multi_search=value:" +
-    //     data.analysis_method +
-    //     ";fields:,uuid_filename;lookuptype:" +
-    //     `${data.filename__lookuptype || "icontains"}`;
-  }
-
-  if (
-    data.parent_method__analysis_method &&
-    data.parent_method__analysis_method.trim().length > 0
-  ) {
-    searchFields += `&parent_method__analysis_method__${
-      data.parent_method__analysis_method__lookuptype || "icontains"
-    }=${data.parent_method__analysis_method}`;
-  }
-
-  if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
-      data.remarks
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `analysis_method/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `analysis_method/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
 export function fetchAnalysisMethodDetail(id) {
   return get(`analysis_method/?id=${id}&format=json`);
 }
@@ -4617,39 +2654,6 @@ export function fetchAnalysisMethodDetail(id) {
 
 export function fetchImageset(id) {
   return get(`imageset/?id=${id}&format=json`);
-}
-
-export function fetchImagesets(data, author, dynamicSearch) {
-  const fields =
-    "imageset_number,imageset_series,author,author__agent,author_free,date_start,date_end,date_free,device,device__name,object,place,keywords,description,date_digitised,date_digitised_free,device_digitised,device_digitised__name,agent_digitised,agent_digitised__agent,is_private,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.number && data.number.trim().length > 0) {
-    searchFields += `&imageset_number__${
-      data.number__lookuptype || "icontains"
-    }=${data.number}`;
-  }
-
-  if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__${
-      data.description__lookuptype || "icontains"
-    }=${data.description}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `imageset/?${searchFields}&author=${author}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `imageset/?page=${data.page}&author=${author}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
 }
 
 /**********************

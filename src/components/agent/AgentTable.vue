@@ -38,18 +38,20 @@
 
     <template v-slot:item.institution="{ item }">
       <div
+        v-if="item.institution"
         v-translate="{
-          et: item.institution__institution_name,
-          en: item.institution__institution_name_en,
+          et: item.institution.institution_name,
+          en: item.institution.institution_name_en,
         }"
       ></div>
     </template>
 
     <template v-slot:item.type="{ item }">
       <div
+        v-if="item.type"
         v-translate="{
-          et: item.type__value,
-          en: item.type__value_en,
+          et: item.type.value,
+          en: item.type.value_en,
         }"
       ></div>
     </template>
@@ -57,11 +59,11 @@
 </template>
 
 <script>
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   name: "AgentTable",
-  mixins: [tableHeaderMixin],
+  mixins: [tableViewMixin],
   props: {
     response: {
       type: Object,

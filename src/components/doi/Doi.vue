@@ -1165,7 +1165,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         this.$emit("set-object", "doi");
 
         fetchDoi(this.$route.params.id).then((response) => {
@@ -1706,7 +1706,7 @@ export default {
           )
         ) {
           this.setLoadingState(true);
-          this.setLoadingType("fetch");
+
 
           fetchRegisterMetadataToDataCite(this.$route.params.id).then(
             (response) => {
@@ -1727,7 +1727,7 @@ export default {
                     this.showMetadataButton = false;
                     this.showMetadataUpdateMessage = false;
                     this.setLoadingState(false);
-                    this.add(true, "doi");
+                    this.save("doi");
                     this.checkDoiUrl();
                   } else {
                     this.toastError({
@@ -1753,7 +1753,7 @@ export default {
           )
         ) {
           this.setLoadingState(true);
-          this.setLoadingType("fetch");
+
 
           fetchRegisterDoiUrlToDataCite(this.$route.params.id).then(
             (response) => {

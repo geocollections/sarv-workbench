@@ -59,7 +59,7 @@
       :body-active-color="bodyActiveColor"
       :is-body-active-color-dark="bodyActiveColorDark"
       v-on:data-loaded="setData"
-      v-on:object-exists="toggleObjectState"
+      v-on:object-exists="objectExists = $event"
     />
 
     <!-- PERMISSIONS -->
@@ -112,7 +112,6 @@ import ObjectDoesNotExist from "../components/partial/errors/ObjectDoesNotExist"
 import { mapActions, mapState } from "vuex";
 import ObjectPermissions from "../components/partial/ObjectPermissions";
 import SpinnerWrapper from "../components/partial/SpinnerWrapper";
-import { cloneDeep } from "lodash";
 import ConfirmationDialog from "../components/partial/ConfirmationDialog";
 
 export default {
@@ -182,7 +181,7 @@ export default {
       if (dialogResponse === "close") next();
       else if (dialogResponse === "continue") next(false);
       else if (dialogResponse === "save") {
-        await this.$emit("button-clicked", "SAVE", this.$route.meta.object);
+        await this.$emit("button-clicked", "SAVE");
         next();
       } else next();
     } else next();
@@ -197,8 +196,7 @@ export default {
       else if (dialogResponse === "save") {
         await this.$emit(
           "button-clicked",
-          "SAVE_AND_LEAVE",
-          this.$route.meta.object
+          "SAVE_AND_LEAVE"
         );
         next();
       } else next();
@@ -232,20 +230,16 @@ export default {
       this.resolve(action);
     },
 
-    setData(data) {
-      this.data = data;
+    setData(objectData) {
+      this.data = objectData;
       if (this.data === null || this.data?.id !== this.initialData?.id)
-        this.initialData = cloneDeep(data);
+        this.initialData = { ...this.data };
       this.forceRerender();
     },
 
     forceRerender() {
       this.logComponentKey += 1;
       this.permissionsComponentKey += 2;
-    },
-
-    toggleObjectState(state) {
-      this.objectExists = state;
     },
   },
 };

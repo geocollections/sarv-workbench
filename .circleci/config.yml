@@ -20,134 +20,19 @@ executors:
 
 jobs:
 
-  # NEW (cloud)
-
-  build_docker_image:
-    executor: docker-publisher
-    steps:
-      - checkout
-      - setup_remote_docker
-      - when:
-          condition:
-            equal: [ "production", << pipeline.git.branch >> ]
-          steps:
-            - run:
-                name: Build Docker image
-                command: |
-                  docker build -t $IMAGE_NAME:<< pipeline.parameters.package-version >> -t $IMAGE_NAME:latest .
-            - run:
-                name: Archive Docker image
-                command: docker save -o image.tar $IMAGE_NAME
-      - when:
-          condition:
-            equal: [ "development", << pipeline.git.branch >> ]
-          steps:
-            - run:
-                name: Build Docker dev image
-                command: |
-                  docker build -t $IMAGE_NAME_DEV:<< pipeline.parameters.package-version >> -t $IMAGE_NAME_DEV:latest .
-            - run:
-                name: Archive Docker dev image
-                command: docker save -o image.tar $IMAGE_NAME_DEV
-      - when:
-          condition:
-            equal: [ "sarv", << pipeline.git.branch >> ]
-          steps:
-            - run:
-                name: Build Docker sarv-wb image
-                command: |
-                  docker build -t $IMAGE_NAME_SARV_WB:<< pipeline.parameters.package-version >> -t $IMAGE_NAME_SARV_WB:latest .
-            - run:
-                name: Archive Docker sarv-wb image
-                command: docker save -o image.tar $IMAGE_NAME_SARV_WB
-      - when:
-          condition:
-            equal: [ "sarv-dev", << pipeline.git.branch >> ]
-          steps:
-            - run:
-                name: Build Docker sarv-wb-dev image
-                command: |
-                  docker build -t $IMAGE_NAME_SARV_WB_DEV:<< pipeline.parameters.package-version >> -t $IMAGE_NAME_SARV_WB_DEV:latest .
-            - run:
-                name: Archive Docker sarv-wb-dev image
-                command: docker save -o image.tar $IMAGE_NAME_SARV_WB_DEV
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./image.tar
-
-  publish_docker_image:
-    executor: docker-publisher
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - setup_remote_docker
-      - run:
-          name: Load archive Docker image
-          command: docker load -i /tmp/workspace/image.tar
-      - when:
-          condition:
-            equal: [ "production", << pipeline.git.branch >> ]
-          steps:
-            - run:
-                name: Publish Docker image to Docker Hub
-                command: |
-                  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                  docker push $IMAGE_NAME
-      - when:
-          condition:
-            equal: [ "development", << pipeline.git.branch >> ]
-          steps:
-            - run:
-                name: Publish Docker dev image to Docker Hub
-                command: |
-                  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                  docker push $IMAGE_NAME_DEV
-      - when:
-          condition:
-            equal: [ "sarv", << pipeline.git.branch >> ]
-          steps:
-            - run:
-                name: Publish Docker sarv-wb image to Docker Hub
-                command: |
-                  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                  docker push $IMAGE_NAME_SARV_WB
-      - when:
-          condition:
-            equal: [ "sarv-dev", << pipeline.git.branch >> ]
-          steps:
-            - run:
-                name: Publish Docker sarv-wb-dev image to Docker Hub
-                command: |
-                  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                  docker push $IMAGE_NAME_SARV_WB_DEV
-
-  run_docker_image:
+  # NEW (cloud only script)
+  run_script_sarv_wb:
     executor: docker-publisher
     steps:
       - run:
-          name: Run Docker image
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/sarv-edit/script && . run_docker_image.sh"
-
-  run_docker_image_dev:
-    executor: docker-publisher
-    steps:
-      - run:
-          name: Run Docker image
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/sarv-edit-dev/script && . run_docker_image.sh"
-
-  run_docker_image_sarv_wb:
-    executor: docker-publisher
-    steps:
-      - run:
-          name: Run Docker image
+          name: Run script sarv-wb
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/sarv-wb/script && . run_docker_image.sh"
 
-  run_docker_image_sarv_wb_dev:
+  run_script_sarv_wb_dev:
     executor: docker-publisher
     steps:
       - run:
-          name: Run Docker image
+          name: Run script sarb-wb-dev
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/sarv-wb-dev/script && . run_docker_image.sh"
 
 
@@ -258,35 +143,13 @@ jobs:
 workflows:
   build:
     jobs:
-      # NEW (cloud)
-      - build_docker_image:
-          filters:
-            branches:
-              only: [development, production, sarv, sarv-dev]
-      - publish_docker_image:
-          requires:
-            - build_docker_image
-      - run_docker_image:
-          requires:
-            - publish_docker_image
-          filters:
-            branches:
-              only: production
-      - run_docker_image_dev:
-          requires:
-            - publish_docker_image
-          filters:
-            branches:
-              only: development
-      - run_docker_image_sarv_wb:
-          requires:
-            - publish_docker_image
+
+      # NEW (cloud only script)
+      - run_script_sarv_wb:
           filters:
             branches:
               only: sarv
-      - run_docker_image_sarv_wb_dev:
-          requires:
-            - publish_docker_image
+      - run_script_sarv_wb_dev:
           filters:
             branches:
               only: sarv-dev

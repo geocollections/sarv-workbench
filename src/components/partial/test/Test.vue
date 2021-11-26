@@ -131,8 +131,7 @@ export default {
           let response = await postRequest(
             this.test.table,
             formData,
-            this.test.url,
-            true
+            this.test.url
           );
           this.requestResponse = response;
         } catch (err) {

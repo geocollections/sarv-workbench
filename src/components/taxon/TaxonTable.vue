@@ -67,7 +67,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getFossilsUrl(item.id)"
+        :href="`https://fossiilid.info/${item.id}`"
         :title="$t('editTaxon.viewMessage')"
         :color="bodyActiveColor"
         target="FossilsWindow"
@@ -81,11 +81,11 @@
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   name: "TaxonTable",
-  mixins: [activeListMixin, tableHeaderMixin],
+  mixins: [activeListMixin, tableViewMixin],
   props: {
     response: {
       type: Object,
@@ -113,11 +113,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-  },
-  methods: {
-    getFossilsUrl(id) {
-      return `https://fossiilid.info/${id}`;
     },
   },
 };

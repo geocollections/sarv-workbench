@@ -193,7 +193,7 @@ export default {
   computed: {
     ...mapState("search", ["sarv_issueSearchParameters"]),
 
-    ...mapGetters("user", ["getCurrentUser", "getUserId"]),
+    ...mapGetters("user", ["getCurrentAgent", "getUserId"]),
 
     canUserWriteAResponse() {
       if (this.$route.meta.isEdit && this.sarv_issue) {
@@ -236,7 +236,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         fetchSarvIssue(this.$route.params.id, this.getUserId).then(
           (response) => {
             let handledResponse = this.handleResponse(response);

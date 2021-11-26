@@ -45,12 +45,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions("search", ["setLoadingState", "setLoadingType"]),
+    ...mapActions("search", ["setLoadingState"]),
 
     addNewDoi() {
       if (confirm(this.$t(this.object + ".doiConfirmation"))) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
 
         let doi = this.buildDoiObject(this.object);
         if (typeof doi !== "undefined") {

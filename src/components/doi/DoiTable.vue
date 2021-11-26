@@ -36,7 +36,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getSarvDoiUrl(item.identifier)"
+        :href="`https://doi.geocollections.info/${item.identifier}`"
         :title="$t('editDoi.viewMessage')"
         :color="bodyActiveColor"
         target="DoiWindow"
@@ -50,11 +50,11 @@
 
 <script>
 import moment from "moment";
-import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   name: "DoiTable",
-  mixins: [tableHeaderMixin],
+  mixins: [tableViewMixin],
   props: {
     response: {
       type: Object,
@@ -82,12 +82,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-  },
-  methods: {
-    getSarvDoiUrl(doiIdentifier) {
-      if (doiIdentifier)
-        return "https://doi.geocollections.info/" + doiIdentifier;
     },
   },
 };

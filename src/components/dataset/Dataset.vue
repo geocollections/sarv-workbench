@@ -739,7 +739,7 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         this.$emit("set-object", "dataset");
         fetchDataset(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);

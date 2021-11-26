@@ -211,7 +211,7 @@ export default {
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
-        this.setLoadingType("fetch");
+
         fetchAnalysisMethodDetail(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 

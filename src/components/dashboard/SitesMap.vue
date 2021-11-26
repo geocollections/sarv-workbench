@@ -8,12 +8,6 @@
 import * as L from "leaflet";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
-import {
-  fetchRecentImages,
-  fetchRecentSamples,
-  fetchRecentSites,
-  fetchRecentSpecimens,
-} from "../../assets/js/api/apiCalls";
 import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
@@ -32,10 +26,10 @@ export default {
     specimens: [],
     images: [],
     response: {
-      recentSites: null,
-      recentSamples: null,
-      recentSpecimens: null,
-      recentImages: null,
+      site: null,
+      sample: null,
+      specimen: null,
+      attachment: null,
     },
     sitesIcon: new L.DivIcon({
       html: "<i class='far fa-circle' style='color: #FF3D00; background-color: #FFAB91; border-radius: 100%;' />",
@@ -151,24 +145,19 @@ export default {
 
   computed: {
     ...mapState("map", ["defaultLayer"]),
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentAgent"]),
   },
 
-  created() {
-    if (this.getCurrentUser && this.getCurrentUser.id)
-      this.fetchRecentData(this.getCurrentUser.id);
+  async mounted() {
+    if (this.getCurrentAgent && this.getCurrentAgent.id)
+      await this.fetchRecentData(this.getCurrentAgent.id);
+    this.initMap(this.response);
   },
 
   watch: {
     response: {
       handler(newVal) {
-        if (
-          newVal &&
-          Object.entries(newVal).length > 0 &&
-          newVal.constructor === Object
-        ) {
-          this.initMap(newVal);
-        }
+        if (this.map) this.setMarkers(newVal);
       },
       deep: true,
     },
@@ -176,13 +165,16 @@ export default {
     showMap(newVal) {
       if (newVal && this.map) {
         this.map.invalidateSize();
-        let bounds = new L.featureGroup([
+        let listOfDifferentItems = [
           ...this.sites,
           ...this.samples,
           ...this.specimens,
           ...this.images,
-        ]).getBounds();
-        this.map.fitBounds(bounds, { maxZoom: 10 });
+        ];
+        if (listOfDifferentItems.length > 0) {
+          let bounds = new L.featureGroup(listOfDifferentItems).getBounds();
+          this.map.fitBounds(bounds, { maxZoom: 10 });
+        }
       }
     },
   },
@@ -191,29 +183,64 @@ export default {
     ...mapActions("map", ["updateDefaultLayer"]),
 
     async fetchRecentData(userId) {
-      const recentSites = await fetchRecentSites(userId);
-      const recentSamples = await fetchRecentSamples(userId);
-      const recentSpecimens = await fetchRecentSpecimens(userId);
-      const recentImages = await fetchRecentImages(userId);
-
-      this.response = {
-        recentSites: this.returnResponseResults(recentSites),
-        recentSamples: this.returnResponseResults(recentSamples),
-        recentSpecimens: this.returnResponseResults(recentSpecimens),
-        recentImages: this.returnResponseResults(recentImages),
+      const tables = [
+        {
+          table: "site",
+          defaultParams: {
+            project__project_agent__agent: userId,
+            latitude__isnull: false,
+            longitude__isnull: false,
+            fields: "name,latitude,longitude,id",
+          },
+        },
+        {
+          table: "sample",
+          defaultParams: {
+            agent_collected: userId,
+            locality__isnull: false,
+            locality__latitude__isnull: false,
+            locality__longitude__isnull: false,
+            nest: 1,
+            fields: "locality",
+          },
+        },
+        {
+          table: "specimen",
+          defaultParams: {
+            agent_collected: userId,
+            locality__isnull: false,
+            locality__latitude__isnull: false,
+            locality__longitude__isnull: false,
+            nest: 1,
+            fields: "locality",
+          },
+        },
+        {
+          table: "attachment",
+          defaultParams: {
+            author: userId,
+            image_latitude__isnull: false,
+            image_longitude__isnull: false,
+            nest: 1,
+            fields: "image_latitude,image_longitude,id,image_place",
+          },
+        },
+      ];
+      const options = {
+        page: 1,
+        paginateBy: 30,
+        sortBy: ["id"],
+        sortDesc: [true],
       };
-    },
 
-    returnResponseResults(apiResponse) {
-      if (apiResponse && apiResponse.status === 200) {
-        if (
-          apiResponse.data &&
-          apiResponse.data.count &&
-          apiResponse.data.count > 0
-        ) {
-          return apiResponse.data.results;
-        } else return null;
-      } else return null;
+      await Promise.all(
+        tables.map((item) =>
+          this.$api.rw
+            .get(item.table, { defaultParams: item.defaultParams, options })
+            .then((res) => (this.response[item.table] = res?.results ?? []))
+            .catch((err) => (this.response[item.table] = []))
+        )
+      );
     },
 
     initMap(recentData) {
@@ -276,8 +303,8 @@ export default {
       this.images = [];
 
       // SITES
-      if (recentData.recentSites) {
-        recentData.recentSites.forEach((site) => {
+      if (recentData.site?.length > 0) {
+        recentData.site.forEach((site) => {
           let marker = L.marker(
             {
               lat: parseFloat(site.latitude),
@@ -302,23 +329,22 @@ export default {
       }
 
       // SAMPLES
-      if (recentData.recentSamples) {
-        recentData.recentSamples.forEach((sample) => {
+      if (recentData.sample?.length > 0) {
+        recentData.sample.forEach((sample) => {
           let marker = L.marker(
             {
-              lat: parseFloat(sample.locality__latitude),
-              lng: parseFloat(sample.locality__longitude),
+              lat: parseFloat(sample.locality.latitude),
+              lng: parseFloat(sample.locality.longitude),
             },
             { icon: this.samplesIcon }
           ).addTo(this.map);
-          if (sample.locality__id)
-            marker.on("click", () => {
-              let routeData = this.$router.resolve({
-                path: "/locality/" + sample.locality__id,
-              });
-              window.open(routeData.href, "LocalityWindow");
+          marker.on("click", () => {
+            let routeData = this.$router.resolve({
+              path: "/locality/" + sample.locality.id,
             });
-          marker.bindTooltip(sample.locality__locality, {
+            window.open(routeData.href, "LocalityWindow");
+          });
+          marker.bindTooltip(sample.locality.locality, {
             permanent: false,
             direction: "right",
             offset: [7, 0],
@@ -328,23 +354,22 @@ export default {
       }
 
       // SPECIMENS
-      if (recentData.recentSpecimens) {
-        recentData.recentSpecimens.forEach((specimen) => {
+      if (recentData.specimen?.length > 0) {
+        recentData.specimen.forEach((specimen) => {
           let marker = L.marker(
             {
-              lat: parseFloat(specimen.locality__latitude),
-              lng: parseFloat(specimen.locality__longitude),
+              lat: parseFloat(specimen.locality.latitude),
+              lng: parseFloat(specimen.locality.longitude),
             },
             { icon: this.specimensIcon }
           ).addTo(this.map);
-          if (specimen.locality__id)
-            marker.on("click", () => {
-              let routeData = this.$router.resolve({
-                path: "/locality/" + specimen.locality__id,
-              });
-              window.open(routeData.href, "LocalityWindow");
+          marker.on("click", () => {
+            let routeData = this.$router.resolve({
+              path: "/locality/" + specimen.locality.id,
             });
-          marker.bindTooltip(specimen.locality__locality, {
+            window.open(routeData.href, "LocalityWindow");
+          });
+          marker.bindTooltip(specimen.locality.locality, {
             permanent: false,
             direction: "right",
             offset: [7, 0],
@@ -354,8 +379,8 @@ export default {
       }
 
       // IMAGES
-      if (recentData.recentImages) {
-        recentData.recentImages.forEach((image) => {
+      if (recentData.attachment?.length > 0) {
+        recentData.attachment.forEach((image) => {
           let marker = L.marker(
             {
               lat: parseFloat(image.image_latitude),
@@ -363,13 +388,12 @@ export default {
             },
             { icon: this.imagesIcon }
           ).addTo(this.map);
-          if (image.id)
-            marker.on("click", () => {
-              let routeData = this.$router.resolve({
-                path: "/attachment/" + image.id,
-              });
-              window.open(routeData.href, "ImageWindow");
+          marker.on("click", () => {
+            let routeData = this.$router.resolve({
+              path: "/attachment/" + image.id,
             });
+            window.open(routeData.href, "ImageWindow");
+          });
           marker.bindTooltip(image.image_place, {
             permanent: false,
             direction: "right",
@@ -385,6 +409,7 @@ export default {
         ...this.specimens,
         ...this.images,
       ];
+      console.log(listOfDifferentItems);
       if (listOfDifferentItems.length > 0) {
         let bounds = new L.featureGroup(listOfDifferentItems).getBounds();
         this.map.fitBounds(bounds, { maxZoom: 10 });
