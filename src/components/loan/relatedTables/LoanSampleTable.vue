@@ -140,39 +140,39 @@ export default {
   components: {
     RelatedDataDeleteDialog,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -183,19 +183,19 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     item: {
       sample: null,
-      remarks: ""
+      remarks: "",
     },
     autocomplete: {
       sample: [],
       loaders: {
-        sample: false
-      }
-    }
+        sample: false,
+      },
+    },
   }),
 
   computed: {
@@ -203,14 +203,14 @@ export default {
       return (
         typeof this.item.sample !== "undefined" && this.item.sample !== null
       );
-    }
+    },
   },
 
   methods: {
     resetItem() {
       this.item = {
         sample: null,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -220,7 +220,7 @@ export default {
       if (typeof item.sample !== "object" && item.sample !== null) {
         this.item.sample = {
           id: item.sample,
-          number: item.sample__number
+          number: item.sample__number,
         };
         this.autocomplete.sample.push(this.item.sample);
       } else {
@@ -228,8 +228,8 @@ export default {
         this.autocomplete.sample.push(this.item.sample);
       }
       this.item.remarks = item.remarks;
-    }
-  }
+    },
+  },
 };
 </script>
 

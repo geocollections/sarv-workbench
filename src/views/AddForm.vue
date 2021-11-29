@@ -60,9 +60,9 @@ export default {
       "bodyActiveColor",
       "bodyActiveColorDark",
       "navbarDark",
-      "navbarColor"
-    ])
-  }
+      "navbarColor",
+    ]),
+  },
 };
 </script>
 

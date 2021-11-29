@@ -12,7 +12,7 @@
           style="float: left; font-size: 84%"
           v-translate="{
             et: entity.database__name,
-            en: entity.database__name_en
+            en: entity.database__name_en,
           }"
         ></div>
 
@@ -23,24 +23,24 @@
 
       <div
         class="label2_row_name"
-        style="font-weight: bold;text-align: right; line-height: 1.1;"
+        style="font-weight: bold; text-align: right; line-height: 1.1"
       >
         <span
           :style="{
             'font-size': getFontSizeUsingLength(
-              names.find(item => item.id === entity.id)
-            )
+              names.find((item) => item.id === entity.id)
+            ),
           }"
           v-if="
             names &&
-              names.length > 0 &&
-              names.find(item => item.id === entity.id)
+            names.length > 0 &&
+            names.find((item) => item.id === entity.id)
           "
         >
           <span
             v-translate="{
-              et: names.find(item => item.id === entity.id).name,
-              en: names.find(item => item.id === entity.id).name_en
+              et: names.find((item) => item.id === entity.id).name,
+              en: names.find((item) => item.id === entity.id).name_en,
             }"
           ></span>
         </span>
@@ -51,19 +51,19 @@
           <b>Loc. </b>
           <span
             v-if="entity.locality__locality || entity.locality__locality_en"
-            style="font-size: 1.1em;"
+            style="font-size: 1.1em"
             v-translate="{
               et: entity.locality__locality,
-              en: entity.locality__locality_en
+              en: entity.locality__locality_en,
             }"
           ></span>
-          <span v-else style="font-size: 1.1em;">{{
+          <span v-else style="font-size: 1.1em">{{
             entity.locality_free
           }}</span>
         </div>
 
         <div>
-          <span style="font-size: 1.1em; font-weight: normal;">
+          <span style="font-size: 1.1em; font-weight: normal">
             <span v-if="entity.depth && entity.depth_interval"
               >{{ entity.depth }} - {{ entity.depth_interval }} m</span
             >
@@ -77,34 +77,34 @@
         <span
           v-if="
             entity.stratigraphy__stratigraphy ||
-              entity.stratigraphy__stratigraphy_en
+            entity.stratigraphy__stratigraphy_en
           "
-          style="font-size: 1.1em;"
+          style="font-size: 1.1em"
           v-translate="{
             et: entity.stratigraphy__stratigraphy,
-            en: entity.stratigraphy__stratigraphy_en
+            en: entity.stratigraphy__stratigraphy_en,
           }"
         ></span>
         <span
           v-else-if="
             entity.lithostratigraphy__stratigraphy ||
-              entity.lithostratigraphy__stratigraphy_en
+            entity.lithostratigraphy__stratigraphy_en
           "
-          style="font-size: 1.1em;"
+          style="font-size: 1.1em"
           v-translate="{
             et: entity.lithostratigraphy__stratigraphy,
-            en: entity.lithostratigraphy__stratigraphy_en
+            en: entity.lithostratigraphy__stratigraphy_en,
           }"
         ></span>
-        <span v-else style="font-size: 1.1em;">{{
+        <span v-else style="font-size: 1.1em">{{
           entity.stratigraphy_free
         }}</span>
       </div>
 
-      <div class="label2_row3" style="margin-right: 13mm;">
-        <div style="float: left;">
+      <div class="label2_row3" style="margin-right: 13mm">
+        <div style="float: left">
           <b>Coll. </b>
-          <span style="font-size: 1em;">{{
+          <span style="font-size: 1em">{{
             entity.agent_collected__agent
           }}</span>
         </div>
@@ -115,7 +115,15 @@
 
         <div
           class="small-image"
-          style="background-color: #fff; border-top: solid 0.25pt #000; border-left: solid 0.25pt #000; position:absolute; bottom: 0mm; right:0mm; padding: 0.5mm;"
+          style="
+            background-color: #fff;
+            border-top: solid 0.25pt #000;
+            border-left: solid 0.25pt #000;
+            position: absolute;
+            bottom: 0mm;
+            right: 0mm;
+            padding: 0.5mm;
+          "
         >
           <vue-q-r-code-component
             :text="'http://geocollections.info/specimen/' + entity.id"
@@ -131,34 +139,34 @@
 import VueQRCodeComponent from "vue-qrcode-component";
 import {
   fetchSpecimenIdentificationGeologiesList,
-  fetchSpecimenIdentificationsList
+  fetchSpecimenIdentificationsList,
 } from "../../assets/js/api/apiCalls";
 
 export default {
   name: "SpecimenListView",
   props: {
     data: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   components: {
-    VueQRCodeComponent
+    VueQRCodeComponent,
   },
   data: () => ({
-    names: []
+    names: [],
   }),
   watch: {
     data: {
       handler(newVal) {
         this.getNames(newVal);
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     async getNames(listOfSpecimens) {
       if (listOfSpecimens && listOfSpecimens.length > 0) {
-        let listOfIds = listOfSpecimens.map(specimen => specimen.id);
+        let listOfIds = listOfSpecimens.map((specimen) => specimen.id);
 
         const taxonResponse = await fetchSpecimenIdentificationsList(listOfIds);
         const rockResponse = await fetchSpecimenIdentificationGeologiesList(
@@ -170,20 +178,20 @@ export default {
           let rockList = [];
 
           if (taxonResponse.data.count > 0) {
-            taxonList = taxonResponse.data.results.map(entity => {
+            taxonList = taxonResponse.data.results.map((entity) => {
               return {
                 id: entity.specimen_id,
                 name: entity.taxon__taxon ? entity.taxon__taxon : entity.name,
                 name_en: entity.taxon__taxon
                   ? entity.taxon__taxon
                   : entity.name,
-                taxonId: entity.taxon_id
+                taxonId: entity.taxon_id,
               };
             });
           }
 
           if (rockResponse.data.count > 0) {
-            rockList = rockResponse.data.results.map(entity => {
+            rockList = rockResponse.data.results.map((entity) => {
               let name = "";
               let name_en = "";
 
@@ -215,20 +223,20 @@ export default {
                 id: entity.specimen_id,
                 name: name,
                 name_en: name_en,
-                rockId: entity.rock_id
+                rockId: entity.rock_id,
               };
             });
           }
 
           if (taxonList.length > 0 && rockList.length > 0) {
-            rockList.forEach(rock => {
-              let item = taxonList.find(taxon => rock.id === taxon.id);
+            rockList.forEach((rock) => {
+              let item = taxonList.find((taxon) => rock.id === taxon.id);
               item ? this.names.push(item) : this.names.push(rock);
             });
 
-            taxonList.forEach(taxonItem => {
+            taxonList.forEach((taxonItem) => {
               let secondItem = rockList.find(
-                rockItem => taxonItem.id === rockItem.id
+                (rockItem) => taxonItem.id === rockItem.id
               );
               secondItem
                 ? this.names.push(secondItem)
@@ -259,8 +267,8 @@ export default {
           else return "1.4em";
         }
       } else return "1em";
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -299,7 +307,7 @@ export default {
   padding-right: 1mm;
   border-bottom: solid 0.5pt #000;
   margin-bottom: 0.5mm;
-  font-size: 8pt;
+  font-size: 10pt;
   font-weight: bold;
 }
 

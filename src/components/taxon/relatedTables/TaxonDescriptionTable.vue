@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -108,14 +108,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.language__value,
-              en: item.language__value_en
+              en: item.language__value_en,
             }"
           />
           <span
             v-else-if="item.language"
             v-translate="{
               et: item.language.value,
-              en: item.language.value_en
+              en: item.language.value_en,
             }"
           />
         </div>
@@ -123,7 +123,7 @@
           v-else
           v-translate="{
             et: item.language__value,
-            en: item.language__value_en
+            en: item.language__value_en,
           }"
         ></div>
       </template>
@@ -236,61 +236,69 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
+import { fetchListLanguages } from "@/assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import Editor from "@/components/partial/inputs/Editor";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 
 export default {
   name: "TaxonDescriptionTable",
 
   components: {
+    RelatedDataDeleteDialog,
     Editor,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -306,19 +314,17 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
-    dialog: false,
     item: {
       reference: null,
       agent: null,
       date_free: "",
       language: null,
       description: "",
-      remarks: ""
+      remarks: "",
     },
-    isNewItem: true,
     autocomplete: {
       reference: [],
       agent: [],
@@ -326,76 +332,42 @@ export default {
       loaders: {
         reference: false,
         agent: false,
-        language: false
-      }
-    }
+        language: false,
+      },
+    },
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return this.item.description !== null && this.item.description.length > 0;
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         reference: null,
         agent: null,
         date_free: "",
         language: null,
         description: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "taxon_description",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "taxon_description",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
-          reference: item.reference__reference
+          reference: item.reference__reference,
         };
         this.autocomplete.reference.push(this.item.reference);
       } else if (item.reference !== null) {
@@ -406,7 +378,7 @@ export default {
       if (typeof item.agent !== "object" && item.agent !== null) {
         this.item.agent = {
           id: item.agent,
-          agent: item.agent__agent
+          agent: item.agent__agent,
         };
         this.autocomplete.agent.push(this.item.agent);
       } else if (item.agent !== null) {
@@ -418,7 +390,7 @@ export default {
         this.item.language = {
           id: item.language,
           value: item.language__value,
-          value_en: item.language__value_en
+          value_en: item.language__value_en,
         };
       } else this.item.language = item.language;
 
@@ -426,22 +398,12 @@ export default {
       this.item.date_free = item.date_free;
       this.item.description = item.description;
       this.item.remarks = item.remarks;
-
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "taxon_description",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.language.length <= 1) {
         this.autocomplete.loaders.language = true;
-        fetchListLanguages().then(response => {
+        fetchListLanguages().then((response) => {
           if (response.status === 200) {
             this.autocomplete.language =
               response.data.count > 0 ? response.data.results : [];
@@ -450,17 +412,7 @@ export default {
         this.autocomplete.loaders.language = false;
       }
     },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    }
-  }
+  },
 };
 </script>
 

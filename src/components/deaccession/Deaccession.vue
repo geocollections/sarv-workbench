@@ -153,25 +153,25 @@ export default {
     DateWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin],
@@ -188,7 +188,7 @@ export default {
         request: "FETCH_DEACCESSIONS",
         title: "header.deaccessions",
         object: "deaccession",
-        field: "number"
+        field: "number",
       });
     }
 
@@ -197,15 +197,15 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
-    ...mapState("search", ["deaccessionSearchParameters"])
+    ...mapState("search", ["deaccessionSearchParameters"]),
   },
 
   methods: {
@@ -220,19 +220,19 @@ export default {
           "agent_kinnitas",
           "number_items",
           "description",
-          "remarks"
+          "remarks",
         ],
         autocomplete: {
           loaders: {
-            agent: false
+            agent: false,
           },
-          agent: []
+          agent: [],
         },
         deaccession: {},
         requiredFields: ["number"],
         block: {
-          info: true
-        }
+          info: true,
+        },
       };
     },
 
@@ -245,7 +245,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchDeaccessionDetail(this.$route.params.id).then(response => {
+        fetchDeaccessionDetail(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -268,7 +268,7 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -290,19 +290,19 @@ export default {
       if (this.isNotEmpty(obj.agent_kandis)) {
         this.deaccession.agent_kandis = {
           id: obj.agent_kandis,
-          agent: obj.agent_kandis__agent
+          agent: obj.agent_kandis__agent,
         };
         this.autocomplete.agent.push(this.deaccession.agent_kandis);
       }
       if (this.isNotEmpty(obj.agent_kinnitas)) {
         this.deaccession.agent_kinnitas = {
           id: obj.agent_kinnitas,
-          agent: obj.agent_kinnitas__agent
+          agent: obj.agent_kinnitas__agent,
         };
         this.autocomplete.agent.push(this.deaccession.agent_kinnitas);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

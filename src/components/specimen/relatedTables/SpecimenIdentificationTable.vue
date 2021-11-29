@@ -105,14 +105,14 @@
           v-if="$route.meta.isEdit"
           v-translate="{
             et: item.identification_type__value,
-            en: item.identification_type__value_en
+            en: item.identification_type__value_en,
           }"
         />
         <span
           v-else-if="item.identification_type"
           v-translate="{
             et: item.identification_type.value,
-            en: item.identification_type.value_en
+            en: item.identification_type.value_en,
           }"
         />
       </template>
@@ -292,44 +292,44 @@ export default {
     DateWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isAddNewAvailable: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -340,19 +340,19 @@ export default {
       { text: "common.reference", value: "reference" },
       {
         text: "common.date",
-        value: "date_identified"
+        value: "date_identified",
       },
       { text: "common.type", value: "identification_type" },
       {
         text: "specimen_identification.current",
-        value: "current"
+        value: "current",
       },
       {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     item: {
       taxon: null,
@@ -361,7 +361,7 @@ export default {
       reference: null,
       date_identified: null,
       identification_type: null,
-      current: true
+      current: true,
     },
     autocomplete: {
       taxon: [],
@@ -372,21 +372,21 @@ export default {
         taxon: false,
         agent: false,
         reference: false,
-        identification_type: false
-      }
-    }
+        identification_type: false,
+      },
+    },
   }),
 
   computed: {
     isItemValid() {
       return typeof this.item.taxon === "object" && this.item.taxon !== null;
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -398,7 +398,7 @@ export default {
         reference: null,
         date_identified: null,
         identification_type: null,
-        current: true
+        current: true,
       };
     },
 
@@ -408,7 +408,7 @@ export default {
       if (typeof item.taxon !== "object" && item.taxon !== null) {
         this.item.taxon = {
           id: item.taxon,
-          taxon: item.taxon__taxon
+          taxon: item.taxon__taxon,
         };
         this.autocomplete.taxon.push(this.item.taxon);
       } else if (item.taxon !== null) {
@@ -419,7 +419,7 @@ export default {
       if (typeof item.agent !== "object" && item.agent !== null) {
         this.item.agent = {
           id: item.agent,
-          agent: item.agent__agent
+          agent: item.agent__agent,
         };
         this.autocomplete.agent.push(this.item.agent);
       } else if (item.agent !== null) {
@@ -434,14 +434,14 @@ export default {
         this.item.identification_type = {
           id: item.identification_type,
           value: item.identification_type__value,
-          value_en: item.identification_type__value_en
+          value_en: item.identification_type__value_en,
         };
       }
 
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
-          reference: item.reference__reference
+          reference: item.reference__reference,
         };
         this.autocomplete.reference.push(this.item.reference);
       } else if (item.reference !== null) {
@@ -457,7 +457,7 @@ export default {
     fillListAutocompletes() {
       if (this.autocomplete.identification_type.length <= 1) {
         this.autocomplete.loaders.identification_type = true;
-        fetchListIdentificationType().then(response => {
+        fetchListIdentificationType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.identification_type =
               response.data.count > 0 ? response.data.results : [];
@@ -465,8 +465,8 @@ export default {
         });
         this.autocomplete.loaders.identification_type = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

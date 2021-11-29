@@ -37,14 +37,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -52,7 +52,7 @@ export default {
     await this.$_tableHeaderMixin_getDynamicFields();
     this.setActiveSearchParametersFilters([
       { id: "number", title: "common.number", type: "text" },
-      { id: "description", title: "common.description", type: "text" }
+      { id: "description", title: "common.description", type: "text" },
     ]);
   },
 
@@ -62,8 +62,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

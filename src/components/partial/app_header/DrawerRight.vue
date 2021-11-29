@@ -214,11 +214,11 @@
         append-icon="fas fa-angle-down"
         v-if="
           $route.meta.isEdit &&
-            activeSearchParams &&
-            activeSearchParams.title &&
-            sidebarList &&
-            sidebarList.results &&
-            sidebarList.results.length > 0
+          activeSearchParams &&
+          activeSearchParams.title &&
+          sidebarList &&
+          sidebarList.results &&
+          sidebarList.results.length > 0
         "
       >
         <template v-slot:activator>
@@ -257,7 +257,7 @@
               @click="nextPage"
               v-if="
                 activeSearchParams.search &&
-                  activeSearchParams.search.page < sidebarList.totalPages
+                activeSearchParams.search.page < sidebarList.totalPages
               "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
@@ -270,7 +270,7 @@
           v-for="entity in sidebarList.results"
           :key="entity.id"
           :to="{
-            path: `/${$route.meta.table}/${entity.id}`
+            path: `/${$route.meta.table}/${entity.id}`,
           }"
           :color="drawerActiveColor"
           :title="entity[activeSearchParams.field]"
@@ -297,8 +297,8 @@
               @click="previousPage"
               v-if="
                 sidebarList.totalPages &&
-                  activeSearchParams.search &&
-                  activeSearchParams.search.page > 1
+                activeSearchParams.search &&
+                activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -316,8 +316,8 @@
               @click="nextPage"
               v-if="
                 sidebarList.totalPages &&
-                  activeSearchParams.search &&
-                  activeSearchParams.search.page < sidebarList.totalPages
+                activeSearchParams.search &&
+                activeSearchParams.search.page < sidebarList.totalPages
               "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
@@ -331,7 +331,7 @@
         v-if="$route.meta.isEdit && $route.meta.table === 'site'"
         :to="{
           name: 'Sample add',
-          query: { site: JSON.stringify(this.activeSite) }
+          query: { site: JSON.stringify(this.activeSite) },
         }"
         dense
       >
@@ -384,7 +384,7 @@
               @click="nextPage"
               v-if="
                 activeSearchParams.search &&
-                  activeSearchParams.search.page < sidebarList.totalPages
+                activeSearchParams.search.page < sidebarList.totalPages
               "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
@@ -406,7 +406,7 @@
           @click="toggleActive(entity, 'setActiveLibrary')"
           :class="{
             'v-list-item--active':
-              activeLibrary && activeLibrary.id === entity.id
+              activeLibrary && activeLibrary.id === entity.id,
           }"
         >
           <v-list-item-content>
@@ -446,7 +446,7 @@
               @click="nextPage"
               v-if="
                 activeSearchParams.search &&
-                  activeSearchParams.search.page < sidebarList.totalPages
+                activeSearchParams.search.page < sidebarList.totalPages
               "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
@@ -498,7 +498,7 @@
               @click="nextPage"
               v-if="
                 activeSearchParams.search &&
-                  activeSearchParams.search.page < sidebarList.totalPages
+                activeSearchParams.search.page < sidebarList.totalPages
               "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
@@ -520,7 +520,7 @@
           @click="toggleActive(entity, 'setActiveSelectionSeries')"
           :class="{
             'v-list-item--active':
-              activeSelectionSeries && activeSelectionSeries.id === entity.id
+              activeSelectionSeries && activeSelectionSeries.id === entity.id,
           }"
         >
           <v-list-item-content>
@@ -563,7 +563,7 @@
               @click="nextPage"
               v-if="
                 activeSearchParams.search &&
-                  activeSearchParams.search.page < sidebarList.totalPages
+                activeSearchParams.search.page < sidebarList.totalPages
               "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
@@ -579,8 +579,8 @@
         append-icon="fas fa-angle-down"
         v-if="
           recentUrls.length > 0 &&
-            ($route.meta.object === 'dashboard' ||
-              $route.meta.object === 'settings')
+          ($route.meta.object === 'dashboard' ||
+            $route.meta.object === 'settings')
         "
       >
         <template v-slot:activator>
@@ -620,23 +620,23 @@ export default {
 
   props: {
     drawerState: {
-      required: true
+      required: true,
     },
     isDrawerDark: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     drawerColor: {
       type: String,
       required: false,
-      default: "white"
+      default: "white",
     },
     drawerActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [searchParametersMixin, toastMixin],
@@ -644,7 +644,7 @@ export default {
   data: () => ({
     date_start: false,
     date_end: false,
-    calendarMenus: ["date_start", "date_end"]
+    calendarMenus: ["date_start", "date_end"],
   }),
 
   computed: {
@@ -654,15 +654,15 @@ export default {
       "sidebarList",
       "activeLibrary",
       "activeSite",
-      "activeSelectionSeries"
+      "activeSelectionSeries",
     ]),
 
     ...mapState("settings", ["recentUrls"]),
 
     ...mapState("search", {
-      searchParameters: function(state) {
+      searchParameters: function (state) {
         return state[`${this.$route.meta.object}SearchParameters`];
-      }
+      },
     }),
 
     reversedRecentUrls() {
@@ -688,7 +688,7 @@ export default {
         this.$route.meta.object === "reference" &&
         this?.activeSearchParams?.search
       );
-    }
+    },
   },
 
   watch: {
@@ -698,7 +698,7 @@ export default {
           this.$store.dispatch(`search/${newVal}`);
         }
       },
-      immediate: true
+      immediate: true,
     },
     "activeSearchParams.search": {
       handler(newVal) {
@@ -711,15 +711,15 @@ export default {
         }
       },
       deep: true,
-      immediate: true
+      immediate: true,
     },
 
     searchParameters: {
       handler() {
         this.resetActiveObject();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -730,7 +730,7 @@ export default {
       "getActiveSelectionSeriesList",
       "getActiveLibraryList",
       "resetActiveSelectionSeriesList",
-      "resetActiveLibraryList"
+      "resetActiveLibraryList",
     ]),
 
     resetActiveObject() {
@@ -783,16 +783,16 @@ export default {
           this.getActiveLibraryList({ libraryId: entity.id });
           this.toastInfo({
             text: `Library ${entity.id} is active!`,
-            timeout: 1000
+            timeout: 1000,
           });
         } else if (activeObject === "setActiveSelectionSeries") {
           this.getActiveSelectionSeriesList({
             routeObject: this.$route.meta.object,
-            selectionSeriesId: entity.id
+            selectionSeriesId: entity.id,
           });
           this.toastInfo({
             text: `Selection series ${entity.id} is active!`,
-            timeout: 1000
+            timeout: 1000,
           });
         } else this.toastInfo({ text: "Object is active!", timeout: 1000 });
       } else {
@@ -801,13 +801,13 @@ export default {
           this.resetActiveLibraryList();
           this.toastInfo({
             text: `Library ${entity.id} is inactive!`,
-            timeout: 1000
+            timeout: 1000,
           });
         } else if (activeObject === "setActiveSelectionSeries") {
           this.resetActiveSelectionSeriesList();
           this.toastInfo({
             text: `Selection series ${entity.id} is inactive!`,
-            timeout: 1000
+            timeout: 1000,
           });
         } else this.toastInfo({ text: "Object is inactive!", timeout: 1000 });
       }
@@ -815,8 +815,8 @@ export default {
 
     searchRecords() {
       this.$router.push({ path: "/" + this.$route.meta.object });
-    }
-  }
+    },
+  },
 };
 </script>
 

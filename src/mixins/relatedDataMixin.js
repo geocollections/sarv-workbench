@@ -5,7 +5,7 @@ const relatedDataMixin = {
     dialog: false,
     deleteDialog: false,
     emitDeleteData: null,
-    isNewItem: true
+    isNewItem: true,
   }),
 
   computed: {
@@ -19,13 +19,13 @@ const relatedDataMixin = {
     },
 
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -41,13 +41,13 @@ const relatedDataMixin = {
         this.$emit("related:add", {
           table: this.tableName,
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: this.tableName,
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -74,7 +74,7 @@ const relatedDataMixin = {
       this.emitDeleteData = {
         table: this.tableName,
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       };
     },
 
@@ -94,7 +94,7 @@ const relatedDataMixin = {
      ***************/
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -109,8 +109,8 @@ const relatedDataMixin = {
           this.item[fieldToBeUpdated] = date;
         }
       }
-    }
-  }
+    },
+  },
 };
 
 export default relatedDataMixin;

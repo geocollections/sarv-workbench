@@ -28,8 +28,8 @@ export default {
   name: "TextareaWrapper",
   inheritAttrs: false,
   props: {
-    useState: Boolean
-  }
+    useState: Boolean,
+  },
 };
 </script>
 

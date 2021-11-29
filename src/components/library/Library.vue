@@ -322,7 +322,7 @@
 import {
   fetchLibrary,
   fetchLibraryReference,
-  fetchLibraryAgent
+  fetchLibraryAgent,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
@@ -349,30 +349,30 @@ export default {
     AutocompleteWrapper,
     TextareaWrapper,
     InputWrapper,
-    LibraryReferenceListView
+    LibraryReferenceListView,
   },
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   mixins: [
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
   ],
 
   data() {
@@ -387,7 +387,7 @@ export default {
         request: "FETCH_LIBRARIES",
         title: "header.libraries",
         object: "library",
-        field: "title_en"
+        field: "title_en",
       });
     }
 
@@ -396,26 +396,26 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         if (this.$route.meta.isEdit) {
           this.loadRelatedData(this.activeTab);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("search", ["librarySearchParameters"]),
 
     filteredRelatedTabs() {
-      return this.relatedTabs.filter(tab => {
+      return this.relatedTabs.filter((tab) => {
         if (tab.name === "library_reference_list") {
           if (this.$route.meta.isEdit) return tab;
         } else return tab;
@@ -423,21 +423,21 @@ export default {
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
     },
 
     computedRelatedTabs() {
-      return this.relatedTabs.filter(tab => {
+      return this.relatedTabs.filter((tab) => {
         if (tab.name === "library_reference_list") {
           if (this.$route.meta.isEdit) return tab;
         } else return tab;
       });
-    }
+    },
   },
 
   methods: {
@@ -450,12 +450,12 @@ export default {
         relatedTabs: [
           {
             name: "library_reference",
-            iconClass: "fas fa-book-open"
+            iconClass: "fas fa-book-open",
           },
           {
             name: "library_reference_list",
-            iconClass: "fas fa-list-ol"
-          }
+            iconClass: "fas fa-list-ol",
+          },
         ],
         activeTab: "library_reference",
         relatedData: this.setDefaultRelatedData(),
@@ -470,15 +470,15 @@ export default {
           "keywords",
           "abstract",
           "abstract_en",
-          "is_private"
+          "is_private",
         ],
         autocomplete: {
           loaders: {
             reference: false,
-            library_agent: false
+            library_agent: false,
           },
           reference: [],
-          library_agent: []
+          library_agent: [],
         },
         requiredFields: ["author_txt"],
         library: {},
@@ -490,8 +490,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -504,7 +504,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchLibrary(this.$route.params.id).then(response => {
+        fetchLibrary(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -522,19 +522,19 @@ export default {
 
         this.loadAutocompleteFields();
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
     },
 
     loadAutocompleteFields() {
-      fetchLibraryAgent(this.$route.params.id).then(response => {
+      fetchLibraryAgent(this.$route.params.id).then((response) => {
         let libraryAgent = this.handleResponse(response);
-        this.relatedData.library_agent = libraryAgent.map(entity => {
+        this.relatedData.library_agent = libraryAgent.map((entity) => {
           return {
             agent: entity.agent__agent,
-            id: entity.agent
+            id: entity.agent,
           };
         });
         if (this.isNotEmpty(this.relatedData.library_agent)) {
@@ -547,11 +547,11 @@ export default {
       return {
         library_reference: {
           count: 0,
-          results: []
+          results: [],
         },
         library_reference_list: {
           count: 0,
-          results: []
+          results: [],
         },
         library_agent: [],
         searchParameters: {
@@ -559,24 +559,24 @@ export default {
             page: 1,
             paginateBy: 25,
             sortBy: ["sort"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           library_reference_list: {
             page: 1,
             paginateBy: 1000,
-            orderBy: "-sort,reference__author,-reference__year"
-          }
+            orderBy: "-sort,reference__author,-reference__year",
+          },
         },
         count: {
-          library_agent: 0
-        }
+          library_agent: 0,
+        },
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -596,12 +596,11 @@ export default {
         if (this.isNotEmpty(this.relatedData.library_agent))
           uploadableObject.related_data.agent = this.relatedData.library_agent;
 
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (tab.name !== "library_reference_list") {
             if (this.isNotEmpty(this.relatedData[tab.name].count > 0))
-              uploadableObject.related_data[tab.name] = this.relatedData[
-                tab.name
-              ].results;
+              uploadableObject.related_data[tab.name] =
+                this.relatedData[tab.name].results;
           }
         });
       } else {
@@ -634,13 +633,13 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

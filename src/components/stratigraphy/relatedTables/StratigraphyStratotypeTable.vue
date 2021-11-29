@@ -49,7 +49,7 @@
             <span
               v-translate="{
                 et: item.locality__locality,
-                en: item.locality__locality_en
+                en: item.locality__locality_en,
               }"
             ></span>
           </router-link>
@@ -63,7 +63,7 @@
             <span
               v-translate="{
                 et: item.locality.locality,
-                en: item.locality.locality_en
+                en: item.locality.locality_en,
               }"
             ></span>
           </router-link>
@@ -78,7 +78,7 @@
           <span
             v-translate="{
               et: item.locality__locality,
-              en: item.locality__locality_en
+              en: item.locality__locality_en,
             }"
           ></span>
         </router-link>
@@ -90,14 +90,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.stratotype_type__value,
-              en: item.stratotype_type__value_en
+              en: item.stratotype_type__value_en,
             }"
           />
           <span
             v-else-if="item.stratotype_type"
             v-translate="{
               et: item.stratotype_type.value,
-              en: item.stratotype_type.value_en
+              en: item.stratotype_type.value_en,
             }"
           />
         </div>
@@ -105,7 +105,7 @@
           v-else
           v-translate="{
             et: item.stratotype_type__value,
-            en: item.stratotype_type__value_en
+            en: item.stratotype_type__value_en,
           }"
         ></div>
       </template>
@@ -261,37 +261,37 @@ export default {
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -299,7 +299,7 @@ export default {
       { text: "stratigraphy_stratotype.locality", value: "locality" },
       {
         text: "stratigraphy_stratotype.stratotype_type",
-        value: "stratotype_type"
+        value: "stratotype_type",
       },
       { text: "stratigraphy_stratotype.depth_base", value: "depth_base" },
       { text: "stratigraphy_stratotype.depth_top", value: "depth_top" },
@@ -309,8 +309,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -319,7 +319,7 @@ export default {
       depth_base: null,
       depth_top: null,
       reference: null,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -329,17 +329,17 @@ export default {
       loaders: {
         locality: false,
         stratotype_type: false,
-        reference: false
-      }
-    }
+        reference: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -348,13 +348,13 @@ export default {
       return (
         typeof this.item.locality === "object" && this.item.locality !== null
       );
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -367,7 +367,7 @@ export default {
         depth_base: null,
         depth_top: null,
         reference: null,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -379,13 +379,13 @@ export default {
         this.$emit("related:add", {
           table: "stratigraphy_stratotype",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "stratigraphy_stratotype",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -401,7 +401,7 @@ export default {
         this.item.locality = {
           id: item.locality,
           locality: item.locality__locality,
-          locality_en: item.locality__locality_en
+          locality_en: item.locality__locality_en,
         };
         this.autocomplete.locality.push(this.item.locality);
       } else {
@@ -416,7 +416,7 @@ export default {
         this.item.stratotype_type = {
           id: item.stratotype_type,
           value: item.stratotype_type__value,
-          value_en: item.stratotype_type__value_en
+          value_en: item.stratotype_type__value_en,
         };
       } else this.item.stratotype_type = item.stratotype_type;
 
@@ -426,7 +426,7 @@ export default {
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
-          reference: item.reference__reference
+          reference: item.reference__reference,
         };
         this.autocomplete.reference.push(this.item.reference);
       } else {
@@ -443,14 +443,14 @@ export default {
       this.$emit("related:delete", {
         table: "stratigraphy_stratotype",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.stratotype_type.length <= 1) {
         this.autocomplete.loaders.stratotype_type = true;
-        fetchListStratotypeType().then(response => {
+        fetchListStratotypeType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.stratotype_type =
               response.data.count > 0 ? response.data.results : [];
@@ -461,7 +461,7 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -470,8 +470,8 @@ export default {
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

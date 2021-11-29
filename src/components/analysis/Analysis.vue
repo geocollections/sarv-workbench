@@ -512,7 +512,7 @@ import {
   fetchInstruments,
   fetchAnalysisAttachment,
   fetchAnalysisResults,
-  fetchAnalysisMethod
+  fetchAnalysisMethod,
 } from "../../assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
@@ -535,27 +535,27 @@ export default {
     DateWrapper,
     AutocompleteWrapper,
     InputWrapper,
-    TextareaWrapper
+    TextareaWrapper,
   },
 
   props: {
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
   ],
 
   name: "Analysis",
@@ -572,7 +572,7 @@ export default {
         request: "FETCH_ANALYSES",
         title: "header.analyses",
         object: "analysis",
-        field: "sample__number"
+        field: "sample__number",
       });
     }
 
@@ -589,17 +589,17 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
@@ -613,13 +613,13 @@ export default {
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -629,7 +629,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -639,7 +639,7 @@ export default {
       return {
         relatedTabs: [
           { name: "analysis_results", iconClass: "far fa-chart-bar" },
-          { name: "attachment_link", iconClass: "fas fa-folder-open" }
+          { name: "attachment_link", iconClass: "fas fa-folder-open" },
         ],
         activeTab: "analysis_results",
         relatedData: this.setDefaultRelatedData(),
@@ -669,7 +669,7 @@ export default {
           "storage",
           "location",
           "remarks",
-          "is_private"
+          "is_private",
         ],
         autocomplete: {
           loaders: {
@@ -683,7 +683,7 @@ export default {
             labs: false,
             instruments: false,
             reference: false,
-            attachment: false
+            attachment: false,
           },
           agent: [],
           owner: [],
@@ -695,7 +695,7 @@ export default {
           instruments: [],
           reference: [],
           analysis_methods: [],
-          attachment: []
+          attachment: [],
         },
         requiredFields: ["analysis_method"],
         analysis: {},
@@ -704,7 +704,7 @@ export default {
           info: true,
           labInfo: true,
           otherInfo: false,
-          description: true
+          description: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -713,8 +713,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -729,7 +729,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchAnalysis(this.$route.params.id).then(response => {
+        fetchAnalysis(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -747,7 +747,7 @@ export default {
           }
         });
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -759,14 +759,14 @@ export default {
     loadAutocompleteFields(regularAutocompleteFields = true) {
       if (regularAutocompleteFields) {
         fetchLabs().then(
-          response => (this.autocomplete.labs = this.handleResponse(response))
+          (response) => (this.autocomplete.labs = this.handleResponse(response))
         );
         fetchInstruments().then(
-          response =>
+          (response) =>
             (this.autocomplete.instruments = this.handleResponse(response))
         );
         fetchAnalysisMethod().then(
-          response =>
+          (response) =>
             (this.autocomplete.analysis_methods = this.handleResponse(response))
         );
       }
@@ -776,32 +776,32 @@ export default {
       return {
         attachment_link: {
           count: 0,
-          results: []
+          results: [],
         },
         analysis_results: {
           count: 0,
-          results: []
+          results: [],
         },
         searchParameters: {
           attachment_link: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            orderBy: "id",
           },
           analysis_results: {
             page: 1,
             paginateBy: 10,
             sortBy: ["name"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -819,21 +819,19 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0)
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-                item => {
+              uploadableObject.related_data.attachment =
+                this.relatedData.attachment_link.results.map((item) => {
                   return { id: item.id };
-                }
-              );
+                });
             } else {
-              uploadableObject.related_data[tab.name] = this.relatedData[
-                tab.name
-              ].results;
+              uploadableObject.related_data[tab.name] =
+                this.relatedData[tab.name].results;
 
-              uploadableObject.related_data[tab.name].forEach(item => {
-                Object.keys(item).forEach(key => {
+              uploadableObject.related_data[tab.name].forEach((item) => {
+                Object.keys(item).forEach((key) => {
                   if (typeof item[key] === "object" && item[key] !== null) {
                     item[key] = item[key].id ? item[key].id : null;
                   }
@@ -843,11 +841,10 @@ export default {
         });
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-            item => {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment_link.results.map((item) => {
               return { id: item.id };
-            }
-          );
+            });
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -876,46 +873,46 @@ export default {
       this.analysis.analysis_method = {
         id: obj.analysis_method,
         analysis_method: obj.analysis_method__analysis_method,
-        method_en: obj.analysis_method__method_en
+        method_en: obj.analysis_method__method_en,
       };
       if (this.isNotEmpty(obj.dataset)) {
         this.analysis.dataset = {
           id: obj.dataset,
           name: obj.dataset__name,
-          name_en: obj.dataset__name_en
+          name_en: obj.dataset__name_en,
         };
         this.autocomplete.dataset.push(this.analysis.dataset);
       }
       if (this.isNotEmpty(obj.specimen)) {
         this.analysis.specimen = {
           id: obj.specimen,
-          specimen_id: obj.specimen__specimen_id
+          specimen_id: obj.specimen__specimen_id,
         };
         this.autocomplete.specimen.push(this.analysis.specimen);
       }
       if (this.isNotEmpty(obj.reference)) {
         this.analysis.reference = {
           id: obj.reference,
-          reference: obj.reference__reference
+          reference: obj.reference__reference,
         };
         this.autocomplete.reference.push(this.analysis.reference);
       }
       if (this.isNotEmpty(obj.storage)) {
         this.analysis.storage = {
           location: obj.storage__location,
-          id: obj.storage
+          id: obj.storage,
         };
         this.autocomplete.storage.push(this.analysis.storage);
       }
       this.analysis.lab = {
         id: obj.lab,
         lab: obj.lab__lab,
-        lab_en: obj.lab__lab_en
+        lab_en: obj.lab__lab_en,
       };
       this.analysis.instrument = {
         id: obj.instrument,
         instrument: obj.instrument__instrument,
-        instrument_en: obj.instrument__instrument_en
+        instrument_en: obj.instrument__instrument_en,
       };
     },
 
@@ -935,7 +932,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -949,8 +946,8 @@ export default {
     addExistingFiles(files) {
       // this.relatedData.attachment_link.count = files.length;
       this.relatedData.attachment_link.results = files;
-    }
-  }
+    },
+  },
 };
 </script>
 

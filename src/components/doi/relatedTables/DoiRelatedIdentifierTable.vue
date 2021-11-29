@@ -147,7 +147,7 @@ import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import {
   fetchDoiRelatedIdentifierType,
-  fetchDoiRelationType
+  fetchDoiRelationType,
 } from "../../../assets/js/api/apiCalls";
 
 export default {
@@ -155,44 +155,44 @@ export default {
 
   components: {
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -205,15 +205,15 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
       identifier_type: null,
       relation_type: null,
       value: "",
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -221,17 +221,17 @@ export default {
       relation_type: [],
       loaders: {
         identifier_type: false,
-        relation_type: false
-      }
-    }
+        relation_type: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -243,13 +243,13 @@ export default {
         typeof this.item.relation_type !== "undefined" &&
         this.item.relation_type !== null
       );
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -260,7 +260,7 @@ export default {
         identifier_type: null,
         relation_type: null,
         value: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -272,13 +272,13 @@ export default {
         this.$emit("related:add", {
           table: "doi_related_identifier",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "doi_related_identifier",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -297,7 +297,7 @@ export default {
         this.item.identifier_type = {
           id: item.identifier_type,
           value: item.identifier_type__value,
-          value_en: item.identifier_type__value_en
+          value_en: item.identifier_type__value_en,
         };
       } else this.item.identifier_type = item.identifier_type;
 
@@ -308,7 +308,7 @@ export default {
         this.item.relation_type = {
           id: item.relation_type,
           value: item.relation_type__value,
-          value_en: item.relation_type__value_en
+          value_en: item.relation_type__value_en,
         };
       } else this.item.relation_type = item.relation_type;
 
@@ -322,14 +322,14 @@ export default {
       this.$emit("related:delete", {
         table: "doi_related_identifier",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.identifier_type.length <= 1) {
         this.autocomplete.loaders.identifier_type = true;
-        fetchDoiRelatedIdentifierType().then(response => {
+        fetchDoiRelatedIdentifierType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.identifier_type =
               response.data.count > 0 ? response.data.results : [];
@@ -339,7 +339,7 @@ export default {
       }
       if (this.autocomplete.relation_type.length === 0) {
         this.autocomplete.loaders.relation_type = true;
-        fetchDoiRelationType().then(response => {
+        fetchDoiRelationType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.relation_type =
               response.data.count > 0 ? response.data.results : [];
@@ -350,15 +350,15 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

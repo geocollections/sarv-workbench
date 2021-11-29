@@ -209,8 +209,8 @@ export default {
         accessibility: false,
         shortcuts: false,
         security: false,
-        permissions: true
-      }
+        permissions: true,
+      },
     };
   },
 
@@ -220,10 +220,10 @@ export default {
       "bodyDark",
       "bodyActiveColor",
       "bodyActiveColorDark",
-      "showRecentUrls"
+      "showRecentUrls",
     ]),
-    ...mapGetters("user", ["getPermissions"])
-  }
+    ...mapGetters("user", ["getPermissions"]),
+  },
 };
 </script>
 

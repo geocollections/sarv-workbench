@@ -78,40 +78,40 @@ export default {
   mixins: [tableHeaderMixin],
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   methods: {
     openLoanPrintView(id) {
       let routeData = this.$router.resolve({
-        path: "/loan_print/" + id
+        path: "/loan_print/" + id,
       });
       window.open(routeData.href, "LoanPrintWindow", "width=800,height=750");
-    }
-  }
+    },
+  },
 };
 </script>

@@ -121,7 +121,7 @@ const actions = {
 
   toggleGlobalNotification({ commit }) {
     commit("TOGGLE_GLOBAL_NOTIFICATION");
-  }
+  },
 };
 
 export default actions;

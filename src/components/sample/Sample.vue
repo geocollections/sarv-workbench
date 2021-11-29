@@ -20,7 +20,12 @@
         </div>
 
         <div
-          class="d-flex flex-sm-row flex-wrap flex-column justify-end flex-grow-1"
+          class="
+            d-flex
+            flex-sm-row flex-wrap flex-column
+            justify-end
+            flex-grow-1
+          "
         >
           <v-btn
             class="mr-0 mb-2 mb-sm-0"
@@ -29,7 +34,7 @@
             :color="bodyActiveColor"
             :to="{
               name: 'Analysis add',
-              params: { sample: { id: sample.number, number: sample.number } }
+              params: { sample: { id: sample.number, number: sample.number } },
             }"
           >
             <v-icon left small>fas fa-chart-pie</v-icon>
@@ -1015,7 +1020,7 @@ import {
   fetchSampleAnalysis,
   fetchSamplePreparation,
   fetchTaxonList,
-  fetchLatestSampleInSite
+  fetchLatestSampleInSite,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
@@ -1052,20 +1057,20 @@ export default {
     AutocompleteWrapper,
     InputWrapper,
     CheckboxWrapper,
-    SampleWrapper
+    SampleWrapper,
   },
 
   props: {
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
@@ -1073,7 +1078,7 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     requestsMixin,
-    saveAsNewMixin
+    saveAsNewMixin,
   ],
 
   data() {
@@ -1088,7 +1093,7 @@ export default {
         request: "FETCH_SAMPLES",
         title: "header.samples",
         object: "sample",
-        field: "number"
+        field: "number",
       });
     }
 
@@ -1100,7 +1105,7 @@ export default {
       let storage = JSON.parse(this.$route.query.storage);
       this.sample.storage = {
         id: storage.id,
-        location: storage.location
+        location: storage.location,
       };
       this.autocomplete.storage.push(this.sample.storage);
     }
@@ -1124,17 +1129,17 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         this.loadRelatedData(this.activeTab);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
@@ -1147,7 +1152,7 @@ export default {
 
       set(value) {
         this.updateIsSampleSimpleView(value);
-      }
+      },
     },
 
     activeRelatedDataTab() {
@@ -1158,27 +1163,27 @@ export default {
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
     ...mapActions("search", [
       "updateActiveTab",
       "updateIsSampleSimpleView",
-      "setActiveSample"
+      "setActiveSample",
     ]),
 
     setTab(type) {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -1191,7 +1196,7 @@ export default {
           { name: "preparation", iconClass: "fas fa-vial" },
           { name: "taxon_list", iconClass: "fas fa-list" },
           { name: "attachment_link", iconClass: "fas fa-folder-open" },
-          { name: "sample_reference", iconClass: "fas fa-book" }
+          { name: "sample_reference", iconClass: "fas fa-book" },
         ],
         activeTab: "analysis",
         relatedData: this.setDefaultRelatedData(),
@@ -1230,7 +1235,7 @@ export default {
           "remarks",
           "is_private",
           "site",
-          "project"
+          "project",
         ],
         simplifiedFormCopyFields: [
           "number",
@@ -1246,7 +1251,7 @@ export default {
           "date_collected",
           "owner",
           "remarks",
-          "is_private"
+          "is_private",
         ],
         autocomplete: {
           loaders: {
@@ -1270,7 +1275,7 @@ export default {
             preparation: false,
             site: false,
             project: false,
-            purpose: false
+            purpose: false,
           },
           series: [],
           purpose: [],
@@ -1294,7 +1299,7 @@ export default {
           sampleAnalysis: [],
           samplePreparation: [],
           site: [],
-          project: []
+          project: [],
         },
         requiredFields: [],
         sample: {},
@@ -1306,8 +1311,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -1324,7 +1329,7 @@ export default {
         this.setLoadingType("fetch");
         this.$emit("set-object", "sample");
 
-        fetchSample(this.$route.params.id).then(response => {
+        fetchSample(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -1343,7 +1348,7 @@ export default {
         });
 
         // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           this.loadRelatedData(tab.name);
         });
 
@@ -1358,7 +1363,8 @@ export default {
 
     loadAutocompleteFields() {
       fetchSamplePurpose().then(
-        response => (this.autocomplete.purpose = this.handleResponse(response))
+        (response) =>
+          (this.autocomplete.purpose = this.handleResponse(response))
       );
     },
 
@@ -1374,33 +1380,33 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           attachment_link: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           analysis: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           preparation: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           taxon_list: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
@@ -1422,7 +1428,7 @@ export default {
         );
       else uploadableObject.depth_interval = null;
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -1438,21 +1444,19 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0)
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-                item => {
+              uploadableObject.related_data.attachment =
+                this.relatedData.attachment_link.results.map((item) => {
                   return { id: item.id };
-                }
-              );
+                });
             } else {
-              uploadableObject.related_data[tab.name] = this.relatedData[
-                tab.name
-              ].results;
+              uploadableObject.related_data[tab.name] =
+                this.relatedData[tab.name].results;
 
-              uploadableObject.related_data[tab.name].forEach(item => {
-                Object.keys(item).forEach(key => {
+              uploadableObject.related_data[tab.name].forEach((item) => {
+                Object.keys(item).forEach((key) => {
                   if (typeof item[key] === "object" && item[key] !== null) {
                     item[key] = item[key].id ? item[key].id : null;
                   }
@@ -1462,11 +1466,10 @@ export default {
         });
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
-            item => {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment_link.results.map((item) => {
               return { id: item.id };
-            }
-          );
+            });
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -1487,19 +1490,19 @@ export default {
       this.sample.sample_purpose = {
         value: obj.sample_purpose__value,
         value_en: obj.sample_purpose__value_en,
-        id: obj.sample_purpose__id
+        id: obj.sample_purpose__id,
       };
       if (this.isNotEmpty(obj.parent_sample)) {
         this.sample.parent_sample = {
           number: obj.parent_sample__number,
-          id: obj.parent_sample
+          id: obj.parent_sample,
         };
         this.autocomplete.sample.push(this.sample.parent_sample);
       }
       if (this.isNotEmpty(obj.parent_specimen)) {
         this.sample.parent_specimen = {
           specimen_id: obj.parent_specimen__specimen_id,
-          id: obj.parent_specimen
+          id: obj.parent_specimen,
         };
         this.autocomplete.specimen.push(this.sample.parent_specimen);
       }
@@ -1507,7 +1510,7 @@ export default {
         this.sample.locality = {
           locality: obj.locality__locality,
           locality_en: obj.locality__locality_en,
-          id: obj.locality__id
+          id: obj.locality__id,
         };
         this.autocomplete.locality.push(this.sample.locality);
       }
@@ -1515,7 +1518,7 @@ export default {
         this.sample.stratigraphy = {
           stratigraphy: obj.stratigraphy__stratigraphy,
           stratigraphy_en: obj.stratigraphy__stratigraphy_en,
-          id: obj.stratigraphy__id
+          id: obj.stratigraphy__id,
         };
         this.autocomplete.stratigraphy.push(this.sample.stratigraphy);
       }
@@ -1523,14 +1526,14 @@ export default {
         this.sample.lithostratigraphy = {
           stratigraphy: obj.lithostratigraphy__stratigraphy,
           stratigraphy_en: obj.lithostratigraphy__stratigraphy_en,
-          id: obj.lithostratigraphy_id
+          id: obj.lithostratigraphy_id,
         };
         this.autocomplete.lithostratigraphy.push(this.sample.lithostratigraphy);
       }
       if (this.isNotEmpty(obj.agent_collected__id)) {
         this.sample.agent_collected = {
           agent: obj.agent_collected__agent,
-          id: obj.agent_collected__id
+          id: obj.agent_collected__id,
         };
         this.autocomplete.agent.push(this.sample.agent_collected);
       }
@@ -1538,7 +1541,7 @@ export default {
         this.sample.classification_rock = {
           name: obj.classification_rock__name,
           name_en: obj.classification_rock__name_en,
-          id: obj.classification_rock__id
+          id: obj.classification_rock__id,
         };
         this.autocomplete.rock.push(this.sample.classification_rock);
       }
@@ -1549,14 +1552,14 @@ export default {
       if (this.isNotEmpty(obj.storage)) {
         this.sample.storage = {
           location: obj.storage__location,
-          id: obj.storage
+          id: obj.storage,
         };
         this.autocomplete.storage.push(this.sample.storage);
       }
       if (this.isNotEmpty(obj.storage_additional)) {
         this.sample.storage_additional = {
           location: obj.storage_additional__location,
-          id: obj.storage_additional
+          id: obj.storage_additional,
         };
         this.autocomplete.storage_additional.push(
           this.sample.storage_additional
@@ -1570,7 +1573,7 @@ export default {
         this.sample.project = {
           name: obj.project__name,
           name_en: obj.project__name_en,
-          id: obj.project
+          id: obj.project,
         };
         this.autocomplete.project.push(this.sample.project);
       }
@@ -1606,7 +1609,7 @@ export default {
         );
       }
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].results = this.handleResponse(response);
           this.relatedData[object].count = response.data.count;
         });
@@ -1625,17 +1628,17 @@ export default {
       }
       this.sample.agent_collected = {
         id: this.getCurrentUser.id,
-        agent: this.getCurrentUser.user
+        agent: this.getCurrentUser.user,
       };
       this.autocomplete.agent.push(this.sample.agent_collected);
       this.sample.date_collected = this.getCurrentFormattedDate("YYYY-MM-DD");
       this.sample.owner = {
         id: this.getCurrentUser.id,
-        agent: this.getCurrentUser.user
+        agent: this.getCurrentUser.user,
       };
       this.autocomplete.agent.push(this.sample.owner);
 
-      fetchLatestSampleInSite(site.id).then(response => {
+      fetchLatestSampleInSite(site.id).then((response) => {
         let sample = this.handleResponse(response)[0];
         if (sample) {
           this.sample.number = this.calculateNextName(sample.number);
@@ -1653,8 +1656,8 @@ export default {
     addExistingFiles(files) {
       // this.relatedData.attachment_link.count = files.length;
       this.relatedData.attachment_link.results = files;
-    }
-  }
+    },
+  },
 };
 </script>
 

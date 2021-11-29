@@ -46,7 +46,7 @@
               :id="item.id"
               v-if="
                 item.attachment_format__value &&
-                  !!item.attachment_format__value.includes('image')
+                !!item.attachment_format__value.includes('image')
               "
               :src="getFileUrl(item.uuid_filename, 'small')"
               :lazy-src="getFileUrl(item.uuid_filename, 'small')"
@@ -64,9 +64,9 @@
             <div
               v-else
               class="my-3"
-              style="max-width: 400px; max-height: 400px;"
+              style="max-width: 400px; max-height: 400px"
             >
-              <v-icon style="font-size: 3rem;">far fa-file</v-icon>
+              <v-icon style="font-size: 3rem">far fa-file</v-icon>
             </div>
           </a>
         </div>
@@ -82,7 +82,7 @@
             @change="
               $emit('toggle-preferred-state', {
                 is_preferred: item.is_preferred,
-                id: item.id
+                id: item.id,
               })
             "
             :color="bodyActiveColor"
@@ -103,7 +103,7 @@
             @change="
               $emit('toggle-privacy-state', {
                 is_private: item.is_private,
-                id: item.id
+                id: item.id,
               })
             "
             :color="bodyActiveColor"
@@ -168,42 +168,42 @@ export default {
   name: "DrillcoreBoxAttachmentTable",
 
   components: {
-    CheckboxWrapper
+    CheckboxWrapper,
   },
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -212,33 +212,33 @@ export default {
       {
         text: "drillcore_box.is_preferred",
         value: "is_preferred",
-        align: "center"
+        align: "center",
       },
       { text: "common.is_private", value: "is_private", align: "center" },
       {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
       is_preferred: false,
-      is_private: false
+      is_private: false,
     },
-    widths: {}
+    widths: {},
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
-    }
+    },
   },
 
   watch: {
@@ -248,13 +248,13 @@ export default {
           newVal.length > 0 &&
           Object.keys(this.widths).length !== newVal.length
         ) {
-          newVal.forEach(item =>
+          newVal.forEach((item) =>
             this.getImageWidth(item.uuid_filename, item.id)
           );
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -262,7 +262,7 @@ export default {
       this.dialog = false;
       this.item = {
         is_preferred: false,
-        is_private: false
+        is_private: false,
       };
     },
 
@@ -273,7 +273,7 @@ export default {
       this.$emit("related:edit", {
         table: "attachment",
         item: formattedItem,
-        rawItem: this.item
+        rawItem: this.item,
       });
       this.cancel();
     },
@@ -288,7 +288,7 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -332,11 +332,11 @@ export default {
 
     openAttachment(id) {
       let routeData = this.$router.resolve({
-        path: "/attachment/" + id
+        path: "/attachment/" + id,
       });
       window.open(routeData.href, "_blank", "width=800,height=750");
-    }
-  }
+    },
+  },
 };
 </script>
 

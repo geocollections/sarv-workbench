@@ -3,7 +3,7 @@ import { cloneDeep } from "lodash";
 
 const formSectionsMixin = {
   data: () => ({
-    routeJustUpdated: false
+    routeJustUpdated: false,
   }),
 
   computed: {
@@ -11,7 +11,7 @@ const formSectionsMixin = {
 
     routeObject() {
       return this.$route.meta.object;
-    }
+    },
   },
 
   beforeRouteUpdate(to, from, next) {
@@ -45,17 +45,17 @@ const formSectionsMixin = {
         } else if (newVal) {
           this.updateFormSections({
             key: this.routeObject,
-            value: newVal
+            value: newVal,
           });
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
-    ...mapActions("settings", ["updateFormSections"])
-  }
+    ...mapActions("settings", ["updateFormSections"]),
+  },
 };
 
 export default formSectionsMixin;

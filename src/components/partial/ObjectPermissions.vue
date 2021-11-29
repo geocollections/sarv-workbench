@@ -59,7 +59,7 @@
                     v-on:chip:close="
                       object_permissions.change_group.splice(
                         object_permissions.change_group.findIndex(
-                          item => item.id === $event.id
+                          (item) => item.id === $event.id
                         ),
                         1
                       )
@@ -80,7 +80,7 @@
                     v-on:chip:close="
                       object_permissions.change_user.splice(
                         object_permissions.change_user.findIndex(
-                          item => item.id === $event.id
+                          (item) => item.id === $event.id
                         ),
                         1
                       )
@@ -124,7 +124,7 @@
                     v-on:chip:close="
                       object_permissions.view_group.splice(
                         object_permissions.view_group.findIndex(
-                          item => item.id === $event.id
+                          (item) => item.id === $event.id
                         ),
                         1
                       )
@@ -145,7 +145,7 @@
                     v-on:chip:close="
                       object_permissions.view_user.splice(
                         object_permissions.view_user.findIndex(
-                          item => item.id === $event.id
+                          (item) => item.id === $event.id
                         ),
                         1
                       )
@@ -192,7 +192,7 @@ import {
   fetchObjectPermissions,
   fetchObjectUserPermissions,
   fetchUsers,
-  postRequest
+  postRequest,
 } from "../../assets/js/api/apiCalls";
 import toastMixin from "../../mixins/toastMixin";
 
@@ -203,22 +203,22 @@ export default {
   props: {
     table: {
       type: String,
-      required: true
+      required: true,
     },
     objectData: {
       type: Object,
-      required: true
+      required: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -226,22 +226,22 @@ export default {
     autocomplete: {
       loaders: {
         users: false,
-        groups: false
+        groups: false,
       },
       users: [],
-      groups: []
+      groups: [],
     },
     object_permissions: {
       view_group: [],
       change_group: [],
       view_user: [],
-      change_user: []
-    }
+      change_user: [],
+    },
   }),
 
   watch: {
     objectData: {
-      handler: function(newVal) {
+      handler: function (newVal) {
         if (newVal && newVal.id) {
           if (newVal.id.toString() === this.$route.params.id) {
             this.getObjectPerms();
@@ -249,15 +249,15 @@ export default {
           }
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
     getObjectPerms() {
       if (this.objectData.id && this.table) {
         fetchObjectPermissions(this.objectData.id, this.table).then(
-          response => {
+          (response) => {
             if (response.status === 200) {
               if (
                 typeof response.data.user !== "undefined" &&
@@ -282,7 +282,7 @@ export default {
 
     assignPerms(arrayOfPerms, identifier) {
       if (arrayOfPerms && arrayOfPerms.length > 0) {
-        arrayOfPerms.forEach(perm => {
+        arrayOfPerms.forEach((perm) => {
           let object = {};
 
           if (identifier === "user") {
@@ -316,7 +316,7 @@ export default {
       formData.append("data", JSON.stringify(perms_data));
 
       postRequest(url, formData).then(
-        response => {
+        (response) => {
           if (response.status === 200) {
             if (response.data) {
               if (response.data.error) {
@@ -331,7 +331,7 @@ export default {
             }
           }
         },
-        errResponse => {
+        (errResponse) => {
           console.log("ERROR: " + JSON.stringify(errResponse));
           this.toastError({ text: this.$t("messages.uploadError") });
         }
@@ -343,15 +343,15 @@ export default {
       let table = this.table;
       if (table.includes("_")) table = table.replace("_", "");
 
-      Object.keys(this.object_permissions).forEach(key => {
+      Object.keys(this.object_permissions).forEach((key) => {
         if (this.object_permissions[key].length > 0) {
           let object = key.includes("group") ? "group" : "user";
           let perm = key.includes("view") ? `view_${table}` : `change_${table}`;
 
-          this.object_permissions[key].forEach(entity => {
+          this.object_permissions[key].forEach((entity) => {
             let perm_object = {
               [object]: entity.id,
-              perm: perm
+              perm: perm,
             };
             permission_data.push(perm_object);
           });
@@ -362,11 +362,11 @@ export default {
     },
 
     getAutocompletes() {
-      fetchGroups().then(response => {
+      fetchGroups().then((response) => {
         this.autocomplete.groups = this.handleResponse(response);
       });
 
-      fetchUsers().then(response => {
+      fetchUsers().then((response) => {
         this.autocomplete.users = this.handleResponse(response);
       });
     },
@@ -375,8 +375,8 @@ export default {
       if (response.status === 200) {
         return response.data.count > 0 ? response.data.results : [];
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

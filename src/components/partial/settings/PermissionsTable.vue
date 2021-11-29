@@ -57,18 +57,18 @@ export default {
   props: {
     perms: {
       type: Object,
-      required: true
+      required: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -77,35 +77,35 @@ export default {
       { text: "settings.add_perms", value: "add_perms", align: "center" },
       { text: "settings.change_perms", value: "change_perms", align: "center" },
       { text: "settings.delete_perms", value: "delete_perms", align: "center" },
-      { text: "settings.view_perms", value: "view_perms", align: "center" }
+      { text: "settings.view_perms", value: "view_perms", align: "center" },
     ],
-    search: ""
+    search: "",
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
 
     computedPerms() {
       if (typeof this.perms !== "undefined" && this.perms !== null) {
-        return Object.entries(this.perms).map(perm => {
+        return Object.entries(this.perms).map((perm) => {
           return {
             table: perm[0],
             add_perms: !!perm[1][0],
             change_perms: !!perm[1][1],
             delete_perms: !!perm[1][2],
-            view_perms: !!perm[1][3]
+            view_perms: !!perm[1][3],
           };
         });
       } else return [];
-    }
-  }
+    },
+  },
 };
 </script>
 

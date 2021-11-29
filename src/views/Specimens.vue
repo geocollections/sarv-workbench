@@ -43,7 +43,7 @@ export default {
   components: {
     ListModuleCore,
     TableViewSearch,
-    TableViewTitle
+    TableViewTitle,
   },
 
   name: "Specimens",
@@ -52,15 +52,15 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
   computed: {
     ...mapState("search", [
       "selection_seriesSearchParameters",
-      "specimenViewType"
-    ])
+      "specimenViewType",
+    ]),
   },
 
   async created() {
@@ -71,7 +71,7 @@ export default {
       request: "FETCH_SELECTION_SERIES",
       title: "header.selection_series",
       object: "selection_series",
-      field: "name"
+      field: "name",
     });
 
     this.setActiveSearchParametersFilters([
@@ -85,18 +85,18 @@ export default {
       {
         id: "agent_collected",
         title: "specimen.agent_collected",
-        type: "text"
+        type: "text",
       },
       {
         id: "storage",
         title: "specimen.storage",
-        type: "text"
+        type: "text",
       },
       { id: "selectionId", title: "specimen.selectionId", type: "number" },
       { id: "selection", title: "specimen.selection", type: "text" },
       { id: "loan", title: "specimen.loan", type: "text" },
       { id: "reference", title: "common.reference", type: "text" },
-      { id: "classification", title: "specimen.classification", type: "text" }
+      { id: "classification", title: "specimen.classification", type: "text" },
     ]);
   },
 
@@ -123,8 +123,8 @@ export default {
         this.updateSearchParamsByField(["id"], "sortBy");
         this.updateSearchParamsByField([true], "sortDesc");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -50,7 +50,7 @@
           <span
             v-translate="{
               et: item.analysis__sample__locality__locality,
-              en: item.analysis__sample__locality__locality_en
+              en: item.analysis__sample__locality__locality_en,
             }"
           />
         </router-link>
@@ -65,37 +65,37 @@ export default {
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -103,27 +103,27 @@ export default {
       { text: "preparation.analysis", value: "analysis" },
       {
         text: "analysis.method",
-        value: "analysis__analysis_method__analysis_method"
+        value: "analysis__analysis_method__analysis_method",
       },
       {
         text: "analysis.method_specification",
-        value: "analysis__method_details"
+        value: "analysis__method_details",
       },
       { text: "analysis.sample", value: "sample" },
-      { text: "common.locality", value: "locality" }
-    ]
+      { text: "common.locality", value: "locality" },
+    ],
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

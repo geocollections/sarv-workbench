@@ -77,7 +77,7 @@ const state = {
     taxon_page: [],
     visit: [],
     web_news: [],
-    web_pages: []
+    web_pages: [],
   },
   defaults: {
     accession: [
@@ -87,7 +87,7 @@ const state = {
       "agent_vottis__agent",
       "number_items",
       "description",
-      "id"
+      "id",
     ],
     agent: [
       "id",
@@ -97,7 +97,7 @@ const state = {
       "institution_name",
       "institution",
       "remarks",
-      "type"
+      "type",
     ],
     analysis: [
       "id",
@@ -109,12 +109,12 @@ const state = {
       "date",
       "lab_txt",
       "agent",
-      "link"
+      "link",
     ],
     analysis_method: [
       "id",
       "analysis_method",
-      "parent_method__analysis_method"
+      "parent_method__analysis_method",
     ],
     analysis_parameter: [
       "id",
@@ -122,7 +122,7 @@ const state = {
       "parameter_html",
       "parameter_name",
       "synonyms",
-      "parent_parameter"
+      "parent_parameter",
     ],
     area: [
       "name",
@@ -131,7 +131,7 @@ const state = {
       "eelis",
       "area_ha",
       "deposit_area_ha",
-      "maakond"
+      "maakond",
     ],
     attachment: [
       "uuid_filename",
@@ -144,14 +144,14 @@ const state = {
       "reference__reference",
       "specimen_image_attachment",
       "is_private",
-      "link"
+      "link",
     ],
     collection: [
       "collection_id",
       "name",
       "name_long",
       "database__acronym",
-      "link"
+      "link",
     ],
     dataset: [
       "id",
@@ -160,7 +160,7 @@ const state = {
       "title",
       "resource",
       "database__acronym",
-      "link"
+      "link",
     ],
     deaccession: [
       "number",
@@ -168,7 +168,7 @@ const state = {
       "agent_kandis",
       "number_items",
       "description",
-      "id"
+      "id",
     ],
     doi: [
       "id",
@@ -177,7 +177,7 @@ const state = {
       "title",
       "resource_type__value",
       "datacite_created",
-      "link"
+      "link",
     ],
     drillcore: [
       "id",
@@ -189,7 +189,7 @@ const state = {
       "year",
       "agent__agent",
       "remarks",
-      "link"
+      "link",
     ],
     drillcore_box: [
       "drillcore",
@@ -202,7 +202,7 @@ const state = {
       "stratigraphy_top",
       "stratigraphy_free",
       "remarks",
-      "link"
+      "link",
     ],
     imageset: ["id", "imageset_number", "author", "description", "date_added"],
     journal: [
@@ -211,7 +211,7 @@ const state = {
       "journal_short",
       "journal_original",
       "publisher",
-      "remarks"
+      "remarks",
     ],
     keyword: [
       "id",
@@ -219,7 +219,7 @@ const state = {
       "language__value",
       "keyword_category__name",
       "is_primary",
-      "is_preferred"
+      "is_preferred",
     ],
     library: ["id", "title", "author_txt", "is_private", "link"],
     loan: [
@@ -231,7 +231,7 @@ const state = {
       "date_start",
       "date_end",
       "returned",
-      "database"
+      "database",
     ],
     locality: [
       "id",
@@ -239,14 +239,14 @@ const state = {
       "number",
       "country__value",
       "user_added",
-      "link"
+      "link",
     ],
     location: [
       "id",
       "location",
       "parent_location__location",
       "agent",
-      "contents"
+      "contents",
     ],
     preparation: [
       "id",
@@ -254,7 +254,7 @@ const state = {
       "locality",
       "stratigraphy",
       "agent",
-      "link"
+      "link",
     ],
     project: [
       "id",
@@ -263,7 +263,7 @@ const state = {
       "date_start",
       "date_end",
       "date_free",
-      "owner__agent"
+      "owner__agent",
     ],
     reference: [
       "id",
@@ -278,7 +278,7 @@ const state = {
       "link",
       "doi",
       "attachment__filename",
-      "url"
+      "url",
     ],
     rock: [
       "id",
@@ -290,7 +290,7 @@ const state = {
       "in_estonia",
       "in_portal",
       "link",
-      "mindat_id"
+      "mindat_id",
     ],
     sample: [
       "id",
@@ -301,7 +301,7 @@ const state = {
       "lithostratigraphy__id",
       "agent_collected__agent",
       "storage__location",
-      "link"
+      "link",
     ],
     sample_series: ["id", "name", "locality", "agent_collected"],
     sarv_issue: [
@@ -313,7 +313,7 @@ const state = {
       "title",
       "description",
       "url",
-      "response"
+      "response",
     ],
     selection_series: ["id", "name", "remarks", "user_added"],
     site: ["id", "name", "number", "project", "date_start", "date_end"],
@@ -329,7 +329,7 @@ const state = {
       "filter_top_z",
       "filter_bottom_z",
       "url_veka",
-      "remarks"
+      "remarks",
     ],
     specimen: [
       "id",
@@ -340,7 +340,7 @@ const state = {
       "stratigraphy__stratigraphy",
       "agent_collected__agent",
       "storage__location",
-      "link"
+      "link",
     ],
     stratigraphy: ["id", "stratigraphy", "type", "rank", "scope", "link"],
     taxon: [
@@ -350,7 +350,7 @@ const state = {
       "taxon_epithet",
       "parent__taxon",
       "fossil_group__taxon",
-      "link"
+      "link",
     ],
     taxon_page: ["id", "taxon", "language", "title"],
     visit: [
@@ -359,11 +359,11 @@ const state = {
       "visitor_country",
       "date_arrived",
       "date_left",
-      "host"
+      "host",
     ],
     web_news: ["id", "title", "text", "is_private"],
-    web_pages: ["id", "site", "title", "content", "public"]
-  }
+    web_pages: ["id", "site", "title", "content", "public"],
+  },
 };
 
 export default {
@@ -371,5 +371,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

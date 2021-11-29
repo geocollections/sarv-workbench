@@ -12,12 +12,18 @@
           style="float: left; font-size: 90%"
           v-translate="{
             et: entity.database__name,
-            en: entity.database__name_en
+            en: entity.database__name_en,
           }"
         ></div>
 
         <div
-          style="float: right; text-align: right; padding-right: 1mm; margin-top: -0.5mm; font-size: 1.0em"
+          style="
+            float: right;
+            text-align: right;
+            padding-right: 1mm;
+            margin-top: -0.5mm;
+            font-size: 1em;
+          "
         >
           ID: {{ entity.id }}
         </div>
@@ -25,7 +31,7 @@
 
       <div
         class="label2_row_name"
-        style="font-size: 1.4em; font-weight: bold;text-align: right; "
+        style="font-size: 1.4em; font-weight: bold; text-align: right"
       >
         <span v-if="entity.number">{{ entity.number }}</span>
         <span v-else-if="entity.number_additional">{{
@@ -44,7 +50,7 @@
             :style="{ 'font-size': getFontSizeUsingLength(entity) }"
             v-translate="{
               et: entity.locality__locality,
-              en: entity.locality__locality_en
+              en: entity.locality__locality_en,
             }"
           />
           <span
@@ -56,7 +62,7 @@
             v-if="entity.site__name || entity.site__name_en"
             v-translate="{
               et: entity.site__name,
-              en: entity.site__name_en
+              en: entity.site__name_en,
             }"
           />
         </div>
@@ -67,7 +73,7 @@
           <span
             :style="{
               'font-size': getFontSizeUsingLength(entity),
-              'font-weight': 'normal'
+              'font-weight': 'normal',
             }"
           >
             <span v-if="entity.depth && entity.depth_interval">
@@ -83,38 +89,38 @@
         <span
           v-if="
             entity.stratigraphy__stratigraphy ||
-              entity.stratigraphy__stratigraphy_en
+            entity.stratigraphy__stratigraphy_en
           "
-          style="font-size: 1.1em;"
+          style="font-size: 1.1em"
           v-translate="{
             et: entity.stratigraphy__stratigraphy,
-            en: entity.stratigraphy__stratigraphy_en
+            en: entity.stratigraphy__stratigraphy_en,
           }"
         ></span>
         <span
           v-else-if="
             entity.lithostratigraphy__stratigraphy ||
-              entity.lithostratigraphy__stratigraphy_en
+            entity.lithostratigraphy__stratigraphy_en
           "
-          style="font-size: 1.1em;"
+          style="font-size: 1.1em"
           v-translate="{
             et: entity.lithostratigraphy__stratigraphy,
-            en: entity.lithostratigraphy__stratigraphy_en
+            en: entity.lithostratigraphy__stratigraphy_en,
           }"
         ></span>
-        <span v-else style="font-size: 1.1em;">{{
+        <span v-else style="font-size: 1.1em">{{
           entity.stratigraphy_free
         }}</span>
       </div>
 
-      <div class="label2_row3" style="margin-right: 13mm;">
-        <span style="float: left;">
+      <div class="label2_row3" style="margin-right: 13mm">
+        <span style="float: left">
           <b>Coll. </b>
-          <span style="font-size: 1.1em;">{{
+          <span style="font-size: 1.1em">{{
             entity.agent_collected__agent
           }}</span>
 
-          <span style="float: right;">
+          <span style="float: right">
             <span v-if="entity.date_collected">{{
               entity.date_collected
             }}</span>
@@ -124,7 +130,15 @@
 
         <div
           class="small-image"
-          style="background-color: #fff; border-top: solid 0.25pt #000; border-left: solid 0.25pt #000; position:absolute; bottom: 0mm; right:0mm; padding: 0.5mm;"
+          style="
+            background-color: #fff;
+            border-top: solid 0.25pt #000;
+            border-left: solid 0.25pt #000;
+            position: absolute;
+            bottom: 0mm;
+            right: 0mm;
+            padding: 0.5mm;
+          "
         >
           <vue-q-r-code-component
             :text="'http://geocollections.info/sample/' + entity.id"
@@ -142,11 +156,11 @@ import VueQRCodeComponent from "vue-qrcode-component";
 export default {
   props: {
     data: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   components: {
-    VueQRCodeComponent
+    VueQRCodeComponent,
   },
   name: "SampleListView",
   methods: {
@@ -171,8 +185,8 @@ export default {
           else return "1.1em";
         }
       } else return "1em";
-    }
-  }
+    },
+  },
 };
 </script>
 

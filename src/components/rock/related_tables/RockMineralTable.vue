@@ -50,7 +50,7 @@
             <div
               v-translate="{
                 et: item.mineral__name,
-                en: item.mineral__name_en
+                en: item.mineral__name_en,
               }"
             />
           </router-link>
@@ -64,7 +64,7 @@
             <div
               v-translate="{
                 et: item.mineral.name,
-                en: item.mineral.name_en
+                en: item.mineral.name_en,
               }"
             />
           </router-link>
@@ -79,7 +79,7 @@
           <div
             v-translate="{
               et: item.mineral__name,
-              en: item.mineral__name_en
+              en: item.mineral__name_en,
             }"
           />
         </router-link>
@@ -91,14 +91,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.mineral_type__name,
-              en: item.mineral_type__name_en
+              en: item.mineral_type__name_en,
             }"
           />
           <span
             v-else-if="item.mineral_type"
             v-translate="{
               et: item.mineral_type.name,
-              en: item.mineral_type.name_en
+              en: item.mineral_type.name_en,
             }"
           />
         </div>
@@ -106,7 +106,7 @@
           v-else
           v-translate="{
             et: item.mineral_type__name,
-            en: item.mineral_type__name_en
+            en: item.mineral_type__name_en,
           }"
         ></div>
       </template>
@@ -232,7 +232,7 @@ import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
 import {
   fetchListIdentificationType,
-  fetchListRockMineralType
+  fetchListRockMineralType,
 } from "../../../assets/js/api/apiCalls";
 
 export default {
@@ -242,44 +242,44 @@ export default {
     TextareaWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -295,8 +295,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -306,7 +306,7 @@ export default {
       is_primary: false,
       description: "",
       description_en: "",
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -314,17 +314,17 @@ export default {
       mineral_type: [],
       loaders: {
         rock: false,
-        mineral_type: false
-      }
-    }
+        mineral_type: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -333,13 +333,13 @@ export default {
       return (
         typeof this.item.mineral !== "undefined" && this.item.mineral !== null
       );
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -353,7 +353,7 @@ export default {
         is_primary: false,
         description: "",
         description_en: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -365,13 +365,13 @@ export default {
         this.$emit("related:add", {
           table: "rock_mineral",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "rock_mineral",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -387,7 +387,7 @@ export default {
         this.item.mineral = {
           id: item.mineral,
           name: item.mineral__name,
-          name_en: item.mineral__name_en
+          name_en: item.mineral__name_en,
         };
         this.autocomplete.rock.push(this.item.mineral);
       } else if (item.mineral !== null) {
@@ -399,7 +399,7 @@ export default {
         this.item.mineral_type = {
           id: item.mineral_type,
           name: item.mineral_type__name,
-          name_en: item.mineral_type__name_en
+          name_en: item.mineral_type__name_en,
         };
         this.autocomplete.mineral_type.push(this.item.mineral_type);
       } else if (item.mineral_type !== null) {
@@ -420,14 +420,14 @@ export default {
       this.$emit("related:delete", {
         table: "rock_mineral",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.mineral_type.length <= 1) {
         this.autocomplete.loaders.mineral_type = true;
-        fetchListRockMineralType().then(response => {
+        fetchListRockMineralType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.mineral_type =
               response.data.count > 0 ? response.data.results : [];
@@ -438,15 +438,15 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

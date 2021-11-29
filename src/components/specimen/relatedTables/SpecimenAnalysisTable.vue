@@ -44,14 +44,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.analysis_method__analysis_method,
-              en: item.analysis_method__method_en
+              en: item.analysis_method__method_en,
             }"
           />
           <span
             v-else-if="item.analysis_method"
             v-translate="{
               et: item.analysis_method.analysis_method,
-              en: item.analysis_method.method_en
+              en: item.analysis_method.method_en,
             }"
           />
         </div>
@@ -59,7 +59,7 @@
           v-else
           v-translate="{
             et: item.analysis_method__analysis_method,
-            en: item.analysis_method__method_en
+            en: item.analysis_method__method_en,
           }"
         ></div>
       </template>
@@ -262,44 +262,44 @@ export default {
     CheckboxWrapper,
     DateWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -317,8 +317,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -331,7 +331,7 @@ export default {
       agent: null,
       remarks: "",
       storage: null,
-      is_private: ""
+      is_private: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -341,17 +341,17 @@ export default {
       loaders: {
         analysis_method: false,
         agent: false,
-        storage: false
-      }
-    }
+        storage: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -361,7 +361,7 @@ export default {
         typeof this.item.analysis_method !== "undefined" &&
         this.item.analysis_method !== null
       );
-    }
+    },
   },
 
   methods: {
@@ -378,7 +378,7 @@ export default {
         agent: null,
         remarks: "",
         storage: null,
-        is_private: ""
+        is_private: "",
       };
     },
 
@@ -390,13 +390,13 @@ export default {
         this.$emit("related:add", {
           table: "analysis",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "analysis",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -415,7 +415,7 @@ export default {
         this.item.analysis_method = {
           id: item.analysis_method,
           analysis_method: item.analysis_method__analysis_method,
-          method_en: item.analysis_method__method_en
+          method_en: item.analysis_method__method_en,
         };
         this.autocomplete.analysis_method.push(this.item.analysis_method);
       } else if (item.analysis_method !== null) {
@@ -426,7 +426,7 @@ export default {
       if (typeof item.agent !== "object" && item.agent !== null) {
         this.item.agent = {
           id: item.agent,
-          agent: item.agent__agent
+          agent: item.agent__agent,
         };
         this.autocomplete.agent.push(this.item.agent);
       } else if (item.agent !== null) {
@@ -437,7 +437,7 @@ export default {
       if (typeof item.storage !== "object" && item.storage !== null) {
         this.item.storage = {
           id: item.storage,
-          location: item.storage__location
+          location: item.storage__location,
         };
         this.autocomplete.storage.push(this.item.storage);
       } else if (item.storage !== null) {
@@ -460,12 +460,12 @@ export default {
       this.$emit("related:delete", {
         table: "analysis",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -480,8 +480,8 @@ export default {
           this.item[fieldToBeUpdated] = date;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

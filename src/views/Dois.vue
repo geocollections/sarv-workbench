@@ -34,7 +34,7 @@ export default {
   components: {
     ListModuleCore,
     TableViewSearch,
-    TableViewTitle
+    TableViewTitle,
   },
 
   name: "Dois",
@@ -43,7 +43,7 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -53,7 +53,7 @@ export default {
       { id: "identifier", title: "doi.identifier", type: "text" },
       { id: "creators", title: "doi.creators", type: "text" },
       { id: "publication_year", title: "common.year", type: "number" },
-      { id: "title", title: "doi.title", type: "text" }
+      { id: "title", title: "doi.title", type: "text" },
     ]);
   },
 
@@ -63,8 +63,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

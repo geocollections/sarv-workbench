@@ -2586,6 +2586,8 @@
     "title": "Pealkiri",
     "title_en": "Pealkiri EN",
     "rock": "Kivim",
+    "meteorite": "Meteoriit",
+    "rock_group": "Grupp",
     "relatedTables": {
       "rock_tree": "Klassifikatsioonid",
       "rock_classification": "Alamad",

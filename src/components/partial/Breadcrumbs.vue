@@ -21,27 +21,24 @@ export default {
   props: {
     items: {
       type: Array,
-      required: true
+      required: true,
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     divider: {
       type: String,
       required: false,
-      default: "<"
-    }
+      default: "<",
+    },
   },
   computed: {
     reverseHistory() {
-      return this.items
-        .slice(0)
-        .slice(-10)
-        .reverse();
-    }
-  }
+      return this.items.slice(0).slice(-10).reverse();
+    },
+  },
 };
 </script>
 

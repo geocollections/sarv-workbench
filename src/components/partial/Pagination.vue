@@ -1,7 +1,15 @@
 <template>
   <div
     v-if="count > 0"
-    class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none"
+    class="
+      d-flex
+      flex-column
+      justify-space-around
+      flex-md-row
+      justify-md-space-between
+      mt-3
+      d-print-none
+    "
   >
     <div class="mr-3 mb-md-0 mb-3 align-self-center">
       <v-select
@@ -36,21 +44,21 @@ export default {
   name: "Pagination",
   props: {
     count: {
-      type: Number
+      type: Number,
     },
     paginateBy: {
-      type: Number
+      type: Number,
     },
     bodyActiveColor: {
-      type: String
+      type: String,
     },
     options: {
-      type: Array
+      type: Array,
     },
     page: {
-      type: Number
-    }
-  }
+      type: Number,
+    },
+  },
 };
 </script>
 

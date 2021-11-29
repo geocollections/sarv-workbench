@@ -146,18 +146,18 @@ export default {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
-    }
+      default: "grey lighten-4",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin],
@@ -174,7 +174,7 @@ export default {
         request: "FETCH_SARV_ISSUES",
         title: "header.sarv_issues",
         object: "sarv_issue",
-        field: "title"
+        field: "title",
       });
     }
 
@@ -183,11 +183,11 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
@@ -199,7 +199,7 @@ export default {
       if (this.$route.meta.isEdit && this.sarv_issue) {
         return this.sarv_issue?.to_user?.id === this.getUserId;
       } else return false;
-    }
+    },
   },
 
   methods: {
@@ -212,17 +212,17 @@ export default {
           "url",
           "to_user",
           "from_user",
-          "response"
+          "response",
         ],
         sarv_issue: {},
         requiredFields: ["title", "description", "to_user"],
         autocomplete: {
-          users: []
+          users: [],
         },
         block: {
-          info: true
+          info: true,
         },
-        initialResponse: null
+        initialResponse: null,
       };
     },
 
@@ -237,22 +237,24 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchSarvIssue(this.$route.params.id, this.getUserId).then(response => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "sarv_issue", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.sarv_issue);
-            this.removeUnnecessaryFields(this.sarv_issue, this.copyFields);
-            this.setInitialResponse(this.sarv_issue);
+        fetchSarvIssue(this.$route.params.id, this.getUserId).then(
+          (response) => {
+            let handledResponse = this.handleResponse(response);
+            if (handledResponse.length > 0) {
+              this.$emit("object-exists", true);
+              this.$set(this, "sarv_issue", this.handleResponse(response)[0]);
+              this.fillAutocompleteFields(this.sarv_issue);
+              this.removeUnnecessaryFields(this.sarv_issue, this.copyFields);
+              this.setInitialResponse(this.sarv_issue);
 
-            this.$emit("data-loaded", this.sarv_issue);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
+              this.$emit("data-loaded", this.sarv_issue);
+              this.setLoadingState(false);
+            } else {
+              this.setLoadingState(false);
+              this.$emit("object-exists", false);
+            }
           }
-        });
+        );
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -260,7 +262,7 @@ export default {
 
     loadAutocompleteFields() {
       fetchUsers().then(
-        response => (this.autocomplete.users = this.handleResponse(response))
+        (response) => (this.autocomplete.users = this.handleResponse(response))
       );
     },
 
@@ -268,14 +270,14 @@ export default {
       if (this.isNotEmpty(obj.to_user)) {
         this.sarv_issue.to_user = {
           id: obj.to_user,
-          username: obj.to_user__username
+          username: obj.to_user__username,
         };
         this.autocomplete.users.push(this.sarv_issue.to_user);
       }
       if (this.isNotEmpty(obj.from_user)) {
         this.sarv_issue.from_user = {
           id: obj.from_user,
-          username: obj.from_user__username
+          username: obj.from_user__username,
         };
         this.autocomplete.users.push(this.sarv_issue.from_user);
       }
@@ -290,10 +292,10 @@ export default {
 
       if (this.$route.meta.isEdit) {
         uploadableObject = {
-          response: uploadableObject.response || null
+          response: uploadableObject.response || null,
         };
       } else {
-        Object.keys(uploadableObject).forEach(key => {
+        Object.keys(uploadableObject).forEach((key) => {
           if (
             typeof uploadableObject[key] === "object" &&
             uploadableObject[key] !== null
@@ -312,8 +314,8 @@ export default {
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
-    }
-  }
+    },
+  },
 };
 </script>
 

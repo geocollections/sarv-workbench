@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -82,7 +82,7 @@
             <span
               v-translate="{
                 et: item.locality__locality,
-                en: item.locality__locality_en
+                en: item.locality__locality_en,
               }"
             />
           </router-link>
@@ -96,7 +96,7 @@
             <span
               v-translate="{
                 et: item.locality.locality,
-                en: item.locality.locality_en
+                en: item.locality.locality_en,
               }"
             />
           </router-link>
@@ -111,7 +111,7 @@
           <span
             v-translate="{
               et: item.locality__locality,
-              en: item.locality__locality_en
+              en: item.locality__locality_en,
             }"
           />
         </router-link>
@@ -129,7 +129,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_base__stratigraphy,
-                en: item.stratigraphy_base__stratigraphy_en
+                en: item.stratigraphy_base__stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -143,7 +143,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_base.stratigraphy,
-                en: item.stratigraphy_base.stratigraphy_en
+                en: item.stratigraphy_base.stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -158,7 +158,7 @@
           <span
             v-translate="{
               et: item.stratigraphy_base__stratigraphy,
-              en: item.stratigraphy_base__stratigraphy_en
+              en: item.stratigraphy_base__stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -176,7 +176,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_top__stratigraphy,
-                en: item.stratigraphy_top__stratigraphy_en
+                en: item.stratigraphy_top__stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -190,7 +190,7 @@
             <span
               v-translate="{
                 et: item.stratigraphy_top.stratigraphy,
-                en: item.stratigraphy_top.stratigraphy_en
+                en: item.stratigraphy_top.stratigraphy_en,
               }"
             ></span>
           </router-link>
@@ -205,7 +205,7 @@
           <span
             v-translate="{
               et: item.stratigraphy_top__stratigraphy,
-              en: item.stratigraphy_top__stratigraphy_en
+              en: item.stratigraphy_top__stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -215,7 +215,7 @@
         <div
           v-translate="{
             et: item.stratigraphic_distribution,
-            en: item.stratigraphic_distribution_en
+            en: item.stratigraphic_distribution_en,
           }"
         ></div>
       </template>
@@ -366,58 +366,66 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "TaxonOccurrenceTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -429,17 +437,16 @@ export default {
       { text: "taxon.stratigraphy_top", value: "stratigraphy_top" },
       {
         text: "taxon.stratigraphic_distribution",
-        value: "stratigraphic_distribution"
+        value: "stratigraphic_distribution",
       },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
-    dialog: false,
     item: {
       reference: null,
       locality: null,
@@ -450,9 +457,8 @@ export default {
       stratigraphy_top: null,
       stratigraphic_distribution: "",
       stratigraphic_distribution_en: "",
-      remarks: ""
+      remarks: "",
     },
-    isNewItem: true,
     autocomplete: {
       reference: [],
       locality: [],
@@ -462,33 +468,22 @@ export default {
         reference: false,
         locality: false,
         stratigraphy_base: false,
-        stratigraphy_top: false
-      }
-    }
+        stratigraphy_top: false,
+      },
+    },
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.reference !== "undefined" &&
         this.item.reference !== null
       );
-    }
+    },
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         reference: null,
         locality: null,
@@ -499,40 +494,18 @@ export default {
         stratigraphy_top: null,
         stratigraphic_distribution: "",
         stratigraphic_distribution_en: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "taxon_occurrence",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "taxon_occurrence",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
-          reference: item.reference__reference
+          reference: item.reference__reference,
         };
         this.autocomplete.reference.push(this.item.reference);
       } else if (item.reference !== null) {
@@ -544,7 +517,7 @@ export default {
         this.item.locality = {
           id: item.locality,
           locality: item.locality__locality,
-          locality_en: item.locality__locality_en
+          locality_en: item.locality__locality_en,
         };
         this.autocomplete.locality.push(this.item.locality);
       } else if (item.locality !== null) {
@@ -559,7 +532,7 @@ export default {
         this.item.stratigraphy_base = {
           id: item.stratigraphy_base,
           stratigraphy: item.stratigraphy_base__stratigraphy,
-          stratigraphy_en: item.stratigraphy_base__stratigraphy_en
+          stratigraphy_en: item.stratigraphy_base__stratigraphy_en,
         };
         this.autocomplete.stratigraphy_base.push(this.item.stratigraphy_base);
       } else if (item.stratigraphy_base !== null) {
@@ -574,7 +547,7 @@ export default {
         this.item.stratigraphy_top = {
           id: item.stratigraphy_top,
           stratigraphy: item.stratigraphy_top__stratigraphy,
-          stratigraphy_en: item.stratigraphy_top__stratigraphy_en
+          stratigraphy_en: item.stratigraphy_top__stratigraphy_en,
         };
         this.autocomplete.stratigraphy_top.push(this.item.stratigraphy_top);
       } else if (item.stratigraphy_top !== null) {
@@ -589,30 +562,8 @@ export default {
         item.stratigraphic_distribution_en;
       this.item.locality_free = item.locality_free;
       this.item.remarks = item.remarks;
-
-      this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "taxon_type_specimen",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        } else if (typeof item[key] === "string" && item[key].length === 0) {
-          item[key] = null;
-        }
-      });
-      return item;
-    }
-  }
+  },
 };
 </script>
 

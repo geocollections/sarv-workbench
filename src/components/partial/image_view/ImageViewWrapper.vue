@@ -13,7 +13,7 @@
         v-for="(image, index) in data"
         :key="index"
         class="py-3"
-        style="position:relative;"
+        style="position: relative"
         cols="6"
         sm="4"
         md="3"
@@ -101,7 +101,7 @@
               <span
                 v-if="
                   image.specimen__database__acronym &&
-                    image.specimen__specimen_id
+                  image.specimen__specimen_id
                 "
               >
                 {{ image.specimen__database__acronym }}
@@ -117,7 +117,7 @@
               <span
                 v-translate="{
                   et: image.drillcore_box__drillcore__drillcore,
-                  en: image.drillcore_box__drillcore__drillcore_en
+                  en: image.drillcore_box__drillcore__drillcore_en,
                 }"
               >
               </span>
@@ -127,7 +127,12 @@
 
         <div
           class="d-flex flex-row justify-space-around"
-          style="position: absolute; padding-right: 30px; bottom: 12px; width: 100%"
+          style="
+            position: absolute;
+            padding-right: 30px;
+            bottom: 12px;
+            width: 100%;
+          "
         >
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -137,9 +142,7 @@
                 dark
                 @click.stop="openFileInNewWindow(image)"
               >
-                <v-icon
-                  style="text-shadow: 0 0 6px #000, 0 0 4px #2196F3;"
-                  small
+                <v-icon style="text-shadow: 0 0 6px #000, 0 0 4px #2196f3" small
                   >fas fa-eye</v-icon
                 >
               </v-btn>
@@ -156,7 +159,7 @@
                 icon
                 @click.stop="openInNewTab(object, image[idField])"
                 ><v-icon
-                  style="text-shadow: 0 0 6px #000, 0 0 4px #4CAF50;"
+                  style="text-shadow: 0 0 6px #000, 0 0 4px #4caf50"
                   small
                   >fas fa-edit</v-icon
                 ></v-btn
@@ -202,28 +205,28 @@ export default {
   name: "ImageViewWrapper",
   props: {
     data: {
-      type: Array
+      type: Array,
     },
     object: {
       type: String,
-      default: "attachment"
+      default: "attachment",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     clearItemBackground: Boolean,
     openFile: Boolean,
-    showAttachmentLink: Boolean
+    showAttachmentLink: Boolean,
   },
   data: () => ({
-    containImages: false
+    containImages: false,
   }),
   computed: {
     editMessage() {
@@ -241,7 +244,7 @@ export default {
       if (this.object === "location") return "storage__id";
       if (this.object === "drillcore_box") return "drillcore_box";
       else return "id";
-    }
+    },
   },
   methods: {
     openFileInNewWindow(file) {
@@ -317,8 +320,8 @@ export default {
     openInNewTab(object, id) {
       let routeData = this.$router.resolve({ path: `/${object}/${id}` });
       window.open(routeData.href, "AttachmentWindow");
-    }
-  }
+    },
+  },
 };
 </script>
 

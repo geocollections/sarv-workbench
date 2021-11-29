@@ -262,44 +262,44 @@ export default {
 
   components: {
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -314,8 +314,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -323,7 +323,7 @@ export default {
       link: null,
       title: "",
       title_en: "",
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -331,17 +331,17 @@ export default {
       taxon: [],
       loaders: {
         attachment: false,
-        taxon: false
-      }
-    }
+        taxon: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -351,7 +351,7 @@ export default {
         typeof this.item.attachment !== "undefined" &&
         this.item.attachment !== null
       );
-    }
+    },
   },
 
   methods: {
@@ -363,7 +363,7 @@ export default {
         link: null,
         title: "",
         title_en: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -375,13 +375,13 @@ export default {
         this.$emit("related:add", {
           table: "taxon_image",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "taxon_image",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -398,7 +398,7 @@ export default {
           id: item.attachment,
           original_filename: item.attachment__original_filename,
           uuid_filename: item.attachment__uuid_filename,
-          attachment_format__value: item.attachment__attachment_format__value
+          attachment_format__value: item.attachment__attachment_format__value,
         };
         this.autocomplete.attachment.push(this.item.attachment);
       } else if (item.attachment !== null) {
@@ -409,7 +409,7 @@ export default {
       if (typeof item.link !== "object" && item.link !== null) {
         this.item.link = {
           id: item.link,
-          taxon: item.link__taxon
+          taxon: item.link__taxon,
         };
         this.autocomplete.taxon.push(this.item.link);
       } else if (item.link !== null) {
@@ -428,12 +428,12 @@ export default {
       this.$emit("related:delete", {
         table: "taxon_image",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -454,8 +454,8 @@ export default {
           2
         )}/${uuid.substring(2, 4)}/${uuid}`;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

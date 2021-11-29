@@ -28,7 +28,7 @@
           color="blue"
           :to="{
             name: 'Site add',
-            query: { project: JSON.stringify(project) }
+            query: { project: JSON.stringify(project) },
           }"
         >
           <v-icon left small>fas fa-globe-americas</v-icon>
@@ -405,7 +405,7 @@
               <v-btn
                 :to="{
                   name: 'Site add',
-                  query: { project: JSON.stringify(project) }
+                  query: { project: JSON.stringify(project) },
                 }"
                 target="newProjectWindow"
                 :color="bodyActiveColor"
@@ -430,7 +430,15 @@
           <!-- PAGINATION -->
           <div
             v-if="relatedData.sites.count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between pa-1 mt-2"
+            class="
+              d-flex
+              flex-column
+              justify-space-around
+              flex-md-row
+              justify-md-space-between
+              pa-1
+              mt-2
+            "
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -503,7 +511,7 @@ import {
   fetchProjectType,
   fetchProjectAgent,
   fetchProjectAttachment,
-  fetchLinkedSite
+  fetchLinkedSite,
 } from "../../assets/js/api/apiCalls";
 
 import MapComponent from "../partial/MapComponent";
@@ -530,30 +538,30 @@ export default {
     InputWrapper,
     MapComponent,
     ExportButtons,
-    SiteTable
+    SiteTable,
   },
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
-    }
+      default: "grey lighten-4",
+    },
   },
   mixins: [
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    sidebarMixin
+    sidebarMixin,
   ],
 
   data() {
@@ -564,7 +572,7 @@ export default {
     ...mapState("search", [
       "projectSearchParameters",
       "activeProject",
-      "sidebarUserAction"
+      "sidebarUserAction",
     ]),
     ...mapState("map", ["showMap"]),
 
@@ -574,17 +582,17 @@ export default {
       },
       set(value) {
         this.updateShowMap(value);
-      }
+      },
     },
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
   created() {
     // USED BY SIDEBAR
@@ -594,7 +602,7 @@ export default {
         request: "FETCH_PROJECTS",
         title: "header.projects",
         object: "project",
-        field: "name"
+        field: "name",
       });
     }
 
@@ -603,10 +611,10 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     sidebarUserAction(newVal) {
       this.handleUserAction(newVal, "project", this.project);
@@ -618,8 +626,8 @@ export default {
         }
       },
       immediate: true,
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -627,7 +635,7 @@ export default {
     ...mapActions("map", ["updateShowMap"]),
 
     fetchLinkedSiteWrapper() {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         resolve(
           fetchLinkedSite(
             this.relatedData.searchParameters.site,
@@ -646,7 +654,7 @@ export default {
       return {
         window: {
           width: 0,
-          height: 0
+          height: 0,
         },
         relatedData: this.setDefaultRalatedData(),
         copyFields: [
@@ -662,7 +670,7 @@ export default {
           "owner",
           "remarks",
           "is_private",
-          "projectagent"
+          "projectagent",
         ],
         autocomplete: {
           loaders: {
@@ -670,13 +678,13 @@ export default {
             parent_project: false,
             owner: false,
             projectagent: false,
-            attachment: false
+            attachment: false,
           },
           project_type: [],
           parent_project: [],
           agent: [],
           projectagent: [],
-          attachment: []
+          attachment: [],
         },
         requiredFields: ["name"],
         project: {},
@@ -690,20 +698,20 @@ export default {
             id: "date_start",
             title: "common.date_start",
             type: "text",
-            isDate: true
+            isDate: true,
           },
           {
             id: "date_end",
             title: "common.date_end",
             type: "text",
-            isDate: true
+            isDate: true,
           },
           {
             id: "date_free",
             title: "site.date_free",
             type: "text",
-            isDate: true
-          }
+            isDate: true,
+          },
         ],
         isActive: false,
         watchedSite: null,
@@ -712,7 +720,7 @@ export default {
           description: true,
           members: true,
           files: true,
-          sites: true
+          sites: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -721,8 +729,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -732,7 +740,7 @@ export default {
     },
 
     loadFullInfo() {
-      fetchProjectType().then(response => {
+      fetchProjectType().then((response) => {
         this.autocomplete.project_type = this.handleResponse(response);
       });
 
@@ -740,7 +748,7 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
         this.$emit("set-object", "project");
-        fetchProject(this.$route.params.id).then(response => {
+        fetchProject(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -766,7 +774,7 @@ export default {
         //set default user
         this.project.owner = {
           agent: this.getCurrentUser.user,
-          id: this.getCurrentUser.id
+          id: this.getCurrentUser.id,
         };
         this.autocomplete.agent.push(this.project.owner);
       }
@@ -778,26 +786,26 @@ export default {
         attachment_link: [],
         sites: {
           count: 0,
-          results: []
+          results: [],
         },
         searchParameters: {
           site: {
             page: 1,
             paginateBy: 100,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
+            sortDesc: [true],
+          },
         },
         page: { projectagent: 1, attachment_link: 1 },
         paginateBy: { projectagent: 25, attachment_link: 25 },
-        count: { projectagent: 0, attachment_link: 0 }
+        count: { projectagent: 0, attachment_link: 0 },
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -816,11 +824,10 @@ export default {
         uploadableObject.related_data.agent = this.relatedData.projectagent;
       } else uploadableObject.related_data.agent = null;
       if (this.relatedData.attachment_link.length > 0) {
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link.map(
-          item => {
+        uploadableObject.related_data.attachment =
+          this.relatedData.attachment_link.map((item) => {
             return { id: item.id };
-          }
-        );
+          });
       } else uploadableObject.related_data.attachment = null;
 
       if (!this.isNotEmpty(uploadableObject.related_data))
@@ -835,7 +842,7 @@ export default {
       this.project.project_type = {
         name: obj.project_type__name,
         name_en: obj.project_type__name_en,
-        id: obj.project_type
+        id: obj.project_type,
       };
 
       //set current user as default owner
@@ -849,7 +856,7 @@ export default {
         this.project.parent_project = {
           name: obj.parent_project__name,
           name_en: obj.parent_project__name_en,
-          id: obj.parent_project
+          id: obj.parent_project,
         };
         this.autocomplete.parent_project.push(this.project.parent_project);
       }
@@ -858,11 +865,11 @@ export default {
     fillRelatedDataAutocompleteFields(obj, type) {
       let relatedData = cloneDeep(obj);
       obj = [];
-      relatedData.forEach(entity => {
+      relatedData.forEach((entity) => {
         if (type === "projectagent") {
           let item = {
             agent: entity.projectagent__agent__agent,
-            id: entity.projectagent__agent
+            id: entity.projectagent__agent,
           };
           obj.push(item);
         } else obj.push(entity);
@@ -888,17 +895,17 @@ export default {
           //resolve it for my sites table
           // if(object === 'site') resolve(query);
 
-          query.then(response => {
+          query.then((response) => {
             //projectagent do not have count value
             if (response.status === 200)
               this.relatedData[object] = response.data.results
-                  ? response.data.results
-                  : [];
+                ? response.data.results
+                : [];
 
             this.relatedData.count[object] = response.data.count;
             this.relatedData[object] = this.fillRelatedDataAutocompleteFields(
-                this.relatedData[object],
-                object
+              this.relatedData[object],
+              object
             );
 
             if (object === "projectagent") {
@@ -941,20 +948,20 @@ export default {
       this.relatedData.attachment_link = files;
     },
 
-    searchRelatedData: debounce(function(
+    searchRelatedData: debounce(function (
       searchParameters,
       apiCall,
       relatedObject
     ) {
-      apiCall().then(response => {
+      apiCall().then((response) => {
         if (response.status === 200) {
           this.relatedData[relatedObject].count = response.data.count;
           this.relatedData[relatedObject].results = response.data.results;
         }
       });
     },
-    50)
-  }
+    50),
+  },
 };
 </script>
 

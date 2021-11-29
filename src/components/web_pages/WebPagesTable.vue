@@ -39,7 +39,7 @@
           et: item.content_et,
           en: item.content_en,
           useInnerText: true,
-          characterLimit: 1000
+          characterLimit: 1000,
         }"
       ></div>
     </template>
@@ -59,32 +59,32 @@ export default {
   mixins: [tableHeaderMixin],
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
-  }
+      default: "deep-orange",
+    },
+  },
 };
 </script>

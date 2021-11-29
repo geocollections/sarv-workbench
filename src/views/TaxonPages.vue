@@ -39,14 +39,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -56,7 +56,7 @@ export default {
     this.setActiveSearchParametersFilters([
       { id: "taxon", title: "taxon_page.taxon", type: "text" },
       { id: "language", title: "common.language", type: "text" },
-      { id: "title", title: "taxon_page.title", type: "text" }
+      { id: "title", title: "taxon_page.title", type: "text" },
     ]);
   },
 
@@ -67,8 +67,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

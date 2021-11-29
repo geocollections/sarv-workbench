@@ -140,39 +140,39 @@ export default {
   components: {
     RelatedDataDeleteDialog,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   data: () => ({
@@ -184,19 +184,19 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     item: {
       specimen: null,
-      remarks: ""
+      remarks: "",
     },
     autocomplete: {
       specimen: [],
       loaders: {
-        specimen: false
-      }
-    }
+        specimen: false,
+      },
+    },
   }),
 
   computed: {
@@ -204,14 +204,14 @@ export default {
       return (
         typeof this.item.specimen !== "undefined" && this.item.specimen !== null
       );
-    }
+    },
   },
 
   methods: {
     resetItem() {
       this.item = {
         specimen: null,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -222,7 +222,7 @@ export default {
         this.item.specimen = {
           id: item.specimen,
           specimen_id: item.specimen__specimen_id,
-          coll__number: item.specimen__coll__number
+          coll__number: item.specimen__coll__number,
         };
         this.autocomplete.specimen.push(this.item.specimen);
       } else {
@@ -240,8 +240,8 @@ export default {
       } else {
         return `${option.specimen_id} (ID: ${option.id})`;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -44,14 +44,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.opinion_type__value,
-              en: item.opinion_type__value_en
+              en: item.opinion_type__value_en,
             }"
           />
           <span
             v-else-if="item.opinion_type"
             v-translate="{
               et: item.opinion_type.value,
-              en: item.opinion_type.value_en
+              en: item.opinion_type.value_en,
             }"
           />
         </div>
@@ -59,7 +59,7 @@
           v-else
           v-translate="{
             et: item.opinion_type__value,
-            en: item.opinion_type__value_en
+            en: item.opinion_type__value_en,
           }"
         ></div>
       </template>
@@ -251,61 +251,69 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchTaxonOpinionType } from "../../../assets/js/api/apiCalls";
+import { fetchTaxonOpinionType } from "@/assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "TaxonOpinionTable",
 
   components: {
+    RelatedDataDeleteDialog,
     CheckboxWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -322,10 +330,9 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
-    dialog: false,
     item: {
       opinion_type: null,
       other_taxon: null,
@@ -334,9 +341,8 @@ export default {
       author: "",
       year: "",
       is_preferred: false,
-      remarks: ""
+      remarks: "",
     },
-    isNewItem: true,
     autocomplete: {
       opinion_type: [],
       taxon: [],
@@ -344,39 +350,28 @@ export default {
       loaders: {
         opinion_type: false,
         taxon: false,
-        reference: false
-      }
-    }
+        reference: false,
+      },
+    },
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.opinion_type !== "undefined" &&
         this.item.opinion_type !== null
       );
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         opinion_type: null,
         other_taxon: null,
@@ -385,40 +380,18 @@ export default {
         author: "",
         year: "",
         is_preferred: false,
-        remarks: ""
+        remarks: "",
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "taxon_opinion",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "taxon_opinion",
-          item: formattedItem,
-          rawItem: this.item
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
-          reference: item.reference__reference
+          reference: item.reference__reference,
         };
         this.autocomplete.reference.push(this.item.reference);
       } else if (item.reference !== null) {
@@ -429,7 +402,7 @@ export default {
       if (typeof item.other_taxon !== "object" && item.other_taxon !== null) {
         this.item.other_taxon = {
           id: item.other_taxon,
-          taxon: item.other_taxon__taxon
+          taxon: item.other_taxon__taxon,
         };
         this.autocomplete.taxon.push(this.item.other_taxon);
       } else if (item.other_taxon !== null) {
@@ -441,7 +414,7 @@ export default {
         this.item.opinion_type = {
           id: item.opinion_type,
           value: item.opinion_type__value,
-          value_en: item.opinion_type__value_en
+          value_en: item.opinion_type__value_en,
         };
       } else this.item.opinion_type = item.opinion_type;
 
@@ -450,22 +423,12 @@ export default {
       this.item.year = item.year;
       this.item.is_preferred = item.is_preferred === true;
       this.item.remarks = item.remarks;
-
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "taxon_opinion",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.opinion_type.length <= 1) {
         this.autocomplete.loaders.opinion_type = true;
-        fetchTaxonOpinionType().then(response => {
+        fetchTaxonOpinionType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.opinion_type =
               response.data.count > 0 ? response.data.results : [];
@@ -474,17 +437,7 @@ export default {
         this.autocomplete.loaders.opinion_type = false;
       }
     },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    }
-  }
+  },
 };
 </script>
 

@@ -8,13 +8,13 @@
       :title="$t('editLocation.editMessage')"
     >
       <div class="p-2 pl-3 h-100">
-        <div class="float-left pr-1" style="width: 64% !important;">
+        <div class="float-left pr-1" style="width: 64% !important">
           <div
             class="mb-2"
             style="font-size: 90%"
             v-translate="{
               et: entity.database__name,
-              en: entity.database__name_en
+              en: entity.database__name_en,
             }"
           ></div>
           <div>
@@ -32,8 +32,8 @@
           </div>
         </div>
         <div
-          class="float-left fill-height d-flex "
-          style="width: 36% !important;"
+          class="float-left fill-height d-flex"
+          style="width: 36% !important"
         >
           <div class="qr-code align-self-center">
             <vue-q-r-code-component
@@ -54,19 +54,19 @@ export default {
   name: "LocationListView",
   props: {
     data: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   components: {
-    VueQRCodeComponent
+    VueQRCodeComponent,
   },
   data: () => ({
-    names: []
+    names: [],
   }),
   watch: {
     data: {
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     labelType(code) {
@@ -78,8 +78,8 @@ export default {
       else if (code[0] === "a") return "Alus nr.";
       else if (code[0] === "e") return "Vitriin nr.";
       return "";
-    }
-  }
+    },
+  },
 };
 </script>
 

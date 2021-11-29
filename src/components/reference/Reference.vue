@@ -308,7 +308,8 @@
                 :color="bodyActiveColor"
                 :label="$t('reference.is_estonian_reference')"
                 @change="
-                  reference.is_estonian_reference = !reference.is_estonian_reference
+                  reference.is_estonian_reference =
+                    !reference.is_estonian_reference
                 "
               />
             </v-col>
@@ -768,7 +769,7 @@
                 small
                 :to="{
                   name: 'Stratigraphy add',
-                  query: { reference: JSON.stringify(reference) }
+                  query: { reference: JSON.stringify(reference) },
                 }"
                 target="newStratigraphyWindow"
                 :color="bodyActiveColor"
@@ -804,7 +805,7 @@
                 small
                 :to="{
                   name: 'Taxon add',
-                  query: { reference: JSON.stringify(reference) }
+                  query: { reference: JSON.stringify(reference) },
                 }"
                 target="newTaxonWindow"
                 :color="bodyActiveColor"
@@ -858,10 +859,10 @@
       <new-doi-button
         v-if="
           reference &&
-            reference.type &&
-            reference.type.id > 3 &&
-            validate('reference') &&
-            isUserAllowedTo('add', 'doi')
+          reference.type &&
+          reference.type.id > 3 &&
+          validate('reference') &&
+          isUserAllowedTo('add', 'doi')
         "
         object="reference"
         :data="reference"
@@ -908,7 +909,7 @@ import {
   fetchListLicences,
   fetchJournalForReference,
   fetchLinkedTaxonReference,
-  fetchLinkedStratigraphyReference
+  fetchLinkedStratigraphyReference,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
@@ -943,31 +944,31 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
-    NewDoiButton
+    NewDoiButton,
   },
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
   ],
 
   data() {
@@ -987,10 +988,10 @@ export default {
     ...mapGetters("user", ["isUserAllowedTo"]),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
     },
@@ -998,7 +999,7 @@ export default {
     stratigraphyList() {
       let stratigraphy = this.relatedData.stratigraphy.results;
       if (stratigraphy && stratigraphy.length > 0) {
-        let mappedList = stratigraphy.map(item => ({
+        let mappedList = stratigraphy.map((item) => ({
           id: item.stratigraphy,
           stratigraphy: item.stratigraphy__stratigraphy,
           stratigraphy_en: item.stratigraphy__stratigraphy_en,
@@ -1010,14 +1011,14 @@ export default {
           rank__value_en: item.stratigraphy__rank__value_en,
           scope: item.stratigraphy__scope,
           scope__value: item.stratigraphy__scope__value,
-          scope__value_en: item.stratigraphy__scope__value_en
+          scope__value_en: item.stratigraphy__scope__value_en,
         }));
         return {
           count: this.relatedData.stratigraphy.count,
-          results: mappedList
+          results: mappedList,
         };
       } else return this.relatedData.stratigraphy;
-    }
+    },
   },
 
   created() {
@@ -1028,7 +1029,7 @@ export default {
         request: "FETCH_REFERENCES",
         title: "header.references",
         object: "reference",
-        field: "reference"
+        field: "reference",
       });
     } else {
       if (this.$route.params.journal) {
@@ -1041,30 +1042,30 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         if (this.$route.meta.isEdit) {
           this.loadRelatedData(this.activeTab);
         }
       },
-      deep: true
+      deep: true,
     },
     // This value is changed in formManipulation.js when file upload is successful (value will be savedObjectsId)
     // Do not remember why was it done. Commenting it cause of #382 https://github.com/geocollections/sarv-workbench/issues/382
     isFileAddedAsObject: {
-      handler: function(newVal) {
+      handler: function (newVal) {
         if (this.isNotEmpty(newVal)) {
           // fetchAttachmentForReference(this.$route.params.id).then(
           //   response => (this.attachment = this.handleResponse(response))
           // );
         }
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -1074,7 +1075,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -1086,7 +1087,7 @@ export default {
           { name: "library", iconClass: "fas fa-book" },
           { name: "stratigraphy", iconClass: "fas fa-layer-group" },
           { name: "taxon", iconClass: "fas fa-pastafarianism" },
-          { name: "locality_reference", iconClass: "fas fa-globe" }
+          { name: "locality_reference", iconClass: "fas fa-globe" },
         ],
         activeTab: "library",
         relatedData: this.setDefaultRelatedData(),
@@ -1133,7 +1134,7 @@ export default {
           "book_translated",
           "book_translated_language",
           "parent_reference",
-          "translated_reference"
+          "translated_reference",
         ],
         autocomplete: {
           loaders: {
@@ -1148,7 +1149,7 @@ export default {
             locality_reference_type: false,
             licence: false,
             reference: false,
-            translated_reference: false
+            translated_reference: false,
           },
           types: [],
           languages: [],
@@ -1160,11 +1161,11 @@ export default {
           locality_reference_type: [],
           licence: [],
           reference: [],
-          translated_reference: []
+          translated_reference: [],
         },
         requiredFields: ["reference", "year", "author", "title"],
         reference: {
-          year: "" // Adding it because of reactivity issue
+          year: "", // Adding it because of reactivity issue
         },
         previousRecord: {},
         nextRecord: {},
@@ -1176,7 +1177,7 @@ export default {
           other: true,
           abstract: true,
           digital: true,
-          files: true
+          files: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -1185,8 +1186,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -1201,7 +1202,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchReference(this.$route.params.id).then(response => {
+        fetchReference(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -1221,7 +1222,7 @@ export default {
 
         this.loadAutocompleteFields(false, true);
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -1233,31 +1234,31 @@ export default {
     ) {
       if (regularAutocompleteFields) {
         fetchListReferenceTypes().then(
-          response => (this.autocomplete.types = this.handleResponse(response))
+          (response) =>
+            (this.autocomplete.types = this.handleResponse(response))
         );
         fetchListLanguages().then(
-          response =>
+          (response) =>
             (this.autocomplete.languages = this.handleResponse(response))
         );
         fetchListLocalityReferenceType().then(
-          response =>
-            (this.autocomplete.locality_reference_type = this.handleResponse(
-              response
-            ))
+          (response) =>
+            (this.autocomplete.locality_reference_type =
+              this.handleResponse(response))
         );
         fetchListLicences().then(
-          response =>
+          (response) =>
             (this.autocomplete.licence = this.handleResponse(response))
         );
       }
 
       if (relatedDataAutocompleteFields) {
-        fetchReferenceKeyword(this.$route.params.id).then(response => {
+        fetchReferenceKeyword(this.$route.params.id).then((response) => {
           let referenceKeyword = this.handleResponse(response);
-          this.relatedData.keyword = referenceKeyword.map(entity => {
+          this.relatedData.keyword = referenceKeyword.map((entity) => {
             return {
               keyword: entity.keyword__keyword,
-              id: entity.keyword
+              id: entity.keyword,
             };
           });
           if (this.isNotEmpty(this.relatedData.keyword)) {
@@ -1265,10 +1266,10 @@ export default {
           }
         });
 
-        fetchAttachmentLink(this.$route.params.id).then(response => {
+        fetchAttachmentLink(this.$route.params.id).then((response) => {
           let attachment = this.handleResponse(response);
 
-          this.relatedData.attachment = attachment.map(entity => {
+          this.relatedData.attachment = attachment.map((entity) => {
             return {
               id: entity.attachment,
               description: entity.attachment__description,
@@ -1276,7 +1277,7 @@ export default {
               author__agent: entity.attachment__author__agent,
               uuid_filename: entity.attachment__uuid_filename,
               remarks: entity.attachment__remarks,
-              original_filename: entity.attachment__original_filename
+              original_filename: entity.attachment__original_filename,
             };
           });
           if (this.isNotEmpty(this.relatedData.attachment)) {
@@ -1285,13 +1286,13 @@ export default {
         });
 
         fetchAttachmentForReference(this.$route.params.id).then(
-          response => (this.attachment = this.handleResponse(response))
+          (response) => (this.attachment = this.handleResponse(response))
         );
-        fetchLibrariesForReference(this.$route.params.id).then(response => {
+        fetchLibrariesForReference(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           this.relatedData.library = {
             count: handledResponse.length,
-            results: handledResponse
+            results: handledResponse,
           };
           if (this.relatedData.library.count > 0) {
             this.autocomplete.library = this.relatedData.library.results;
@@ -1307,57 +1308,57 @@ export default {
         keyword: [],
         library: {
           count: 0,
-          results: []
+          results: [],
         },
         stratigraphy: {
           count: 0,
-          results: []
+          results: [],
         },
         taxon: {
           count: 0,
-          results: []
+          results: [],
         },
         locality_reference: {
           count: 0,
-          results: []
+          results: [],
         },
         searchParameters: {
           locality_reference: {
             page: 1,
             paginateBy: 10,
             sortBy: ["locality"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           attachment: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            orderBy: "id",
           },
           keyword: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            orderBy: "id",
           },
           stratigraphy: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           taxon: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -1390,7 +1391,7 @@ export default {
         );
         uploadableObject.related_data.library.forEach((lib, index) => {
           uploadableObject.related_data.library[index] = {
-            id: lib.library ? lib.library : lib.id
+            id: lib.library ? lib.library : lib.id,
           };
         });
       } else uploadableObject.related_data.library = null;
@@ -1402,13 +1403,13 @@ export default {
             this.relatedData.locality_reference.results
           );
           uploadableObject.related_data.locality_reference = clonedLocalities
-            .filter(entity => this.isNotEmpty(entity.locality))
-            .map(loc_ref => {
+            .filter((entity) => this.isNotEmpty(entity.locality))
+            .map((loc_ref) => {
               return {
                 locality: loc_ref.locality.id,
                 pages: loc_ref.pages ? loc_ref.pages : null,
                 figures: loc_ref.figures ? loc_ref.figures : null,
-                remarks: loc_ref.remarks ? loc_ref.remarks : null
+                remarks: loc_ref.remarks ? loc_ref.remarks : null,
               };
             });
         }
@@ -1433,42 +1434,42 @@ export default {
         id: obj.type__id,
         value: obj.type__value,
         value_en: obj.type__value_en,
-        ris_type: obj.type__ris_type
+        ris_type: obj.type__ris_type,
       };
       this.reference.language = {
         id: obj.language__id,
         value: obj.language__value,
         value_en: obj.language__value_en,
-        iso1: obj.language__iso1
+        iso1: obj.language__iso1,
       };
       if (this.isNotEmpty(obj.journal__id)) {
         this.reference.journal = {
           id: obj.journal__id,
-          journal_name: obj.journal__journal_name
+          journal_name: obj.journal__journal_name,
         };
         this.autocomplete.journals.push(this.reference.journal);
       }
       if (this.isNotEmpty(obj.parent_reference)) {
         this.reference.parent_reference = {
           id: obj.parent_reference,
-          reference: obj.parent_reference__reference
+          reference: obj.parent_reference__reference,
         };
         this.autocomplete.reference.push(this.reference.parent_reference);
       }
       this.reference.title_translated_language = {
         id: obj.title_translated_language,
         value: obj.title_translated_language__value,
-        value_en: obj.title_translated_language__value_en
+        value_en: obj.title_translated_language__value_en,
       };
       this.reference.licence = {
         id: obj.licence,
         licence: obj.licence__licence,
-        licence_en: obj.licence__licence_en
+        licence_en: obj.licence__licence_en,
       };
       if (this.isNotEmpty(obj.translated_reference)) {
         this.reference.translated_reference = {
           id: obj.translated_reference,
-          reference: obj.translated_reference__reference
+          reference: obj.translated_reference__reference,
         };
         this.autocomplete.translated_reference.push(
           this.reference.translated_reference
@@ -1499,16 +1500,16 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           if (object === "library") {
             this.relatedData[object].count = response.data.count;
             this.relatedData[object].results = this.handleResponse(response);
           } else {
             this.$set(this.relatedData[object], "count", response.data.count);
             this.$set(
-                this.relatedData[object],
-                "results",
-                this.handleResponse(response)
+              this.relatedData[object],
+              "results",
+              this.handleResponse(response)
             );
           }
         });
@@ -1519,7 +1520,7 @@ export default {
       this.setLoadingState(true);
       this.setLoadingType("fetch");
       fetchDoiCheck(this.reference.doi).then(
-        response => {
+        (response) => {
           this.setLoadingState(false);
           if (response.status === 200) {
             if (response.data.status === "ok") {
@@ -1660,17 +1661,17 @@ export default {
       this.reference.language = {
         id: 1,
         value: "inglise",
-        value_en: "English"
+        value_en: "English",
       };
 
       if (data["container-title"] && data["container-title"].length > 0) {
         let journalName = data["container-title"][0];
-        fetchJournalForReference(journalName).then(response => {
+        fetchJournalForReference(journalName).then((response) => {
           let journal = this.handleResponse(response);
           if (journal.length === 1)
             this.reference.journal = {
               id: journal[0].id,
-              journal_name: journal[0].journal_name
+              journal_name: journal[0].journal_name,
             };
         });
       }
@@ -1704,7 +1705,7 @@ export default {
         this.reference.type = {
           id: 1,
           value: "artikkel ajakirjas",
-          value_en: "article in journal"
+          value_en: "article in journal",
         };
       }
 
@@ -1721,8 +1722,8 @@ export default {
 
     addExistingFiles(files) {
       this.relatedData.attachment = files;
-    }
-  }
+    },
+  },
 };
 </script>
 

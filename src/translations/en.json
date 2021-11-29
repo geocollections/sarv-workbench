@@ -2586,6 +2586,8 @@
     "title": "Title",
     "title_en": "Title EN",
     "rock": "Rock",
+    "meteorite": "Meteorite",
+    "rock_group": "Group",
     "relatedTables": {
       "rock_tree": "Classifications",
       "rock_classification": "Subclasses",

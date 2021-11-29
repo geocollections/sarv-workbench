@@ -170,44 +170,44 @@ export default {
 
   components: {
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -223,8 +223,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -234,23 +234,23 @@ export default {
       oxide: "",
       content_oxide: "",
       content_oxide_max: "",
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
       element: [],
       loaders: {
-        element: false
-      }
-    }
+        element: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -259,13 +259,13 @@ export default {
       return (
         typeof this.item.element !== "undefined" && this.item.element !== null
       );
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -279,7 +279,7 @@ export default {
         oxide: "",
         content_oxide: "",
         content_oxide_max: "",
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -291,13 +291,13 @@ export default {
         this.$emit("related:add", {
           table: "rock_element",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "rock_element",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -312,7 +312,7 @@ export default {
       if (typeof item.element !== "object" && item.element !== null) {
         this.item.element = {
           id: item.element,
-          element: item.element__element
+          element: item.element__element,
         };
         this.autocomplete.element.push(this.item.element);
       } else if (item.element !== null) {
@@ -334,14 +334,14 @@ export default {
       this.$emit("related:delete", {
         table: "rock_element",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.element.length <= 1) {
         this.autocomplete.loaders.element = true;
-        fetchListElement().then(response => {
+        fetchListElement().then((response) => {
           if (response.status === 200) {
             this.autocomplete.element =
               response.data.count > 0 ? response.data.results : [];
@@ -352,15 +352,15 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -36,14 +36,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewSearch,
-    TableViewTitle
+    TableViewTitle,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -56,7 +56,7 @@ export default {
       { id: "rock_type", title: "rock.rock_type", type: "text" },
       { id: "rock_rank", title: "rock.rock_rank", type: "text" },
       { id: "user_changed", title: "common.user_changed", type: "text" },
-      { id: "id", title: "common.id", type: "text" }
+      { id: "id", title: "common.id", type: "text" },
     ]);
   },
 
@@ -66,8 +66,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

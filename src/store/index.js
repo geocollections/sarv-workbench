@@ -13,9 +13,9 @@ Vue.use(Vuex);
 
 function buildLocalStorageKey() {
   const hostname = window?.location?.hostname;
-  const devVersion = "_v1.0.13";
-  const liveVersion = "_v1.0.14";
-  const localVersion = "_v1.0.28";
+  const devVersion = "_v2.0.0";
+  const liveVersion = "_v2.0.0";
+  const localVersion = "_v2.0.0";
 
   if (hostname) {
     if (hostname.startsWith("edit2.") || hostname.startsWith("edit3.")) {
@@ -29,11 +29,11 @@ function buildLocalStorageKey() {
 const vuexLocal = new VuexPersistence({
   key: buildLocalStorageKey(),
   storage: window.localStorage,
-  reducer: state => ({
+  reducer: (state) => ({
     ...state,
     search: { ...state.search, loadingState: false, loadingPercent: 0 },
-    settings: { ...state.settings, showGlobalNotification: true }
-  })
+    settings: { ...state.settings, showGlobalNotification: true },
+  }),
 });
 
 export default new Vuex.Store({
@@ -44,8 +44,8 @@ export default new Vuex.Store({
     settings,
     user,
     admin,
-    tableHeaders
+    tableHeaders,
   },
   plugins: [vuexLocal.plugin],
-  strict: process.env.NODE_ENV !== "production"
+  strict: process.env.NODE_ENV !== "production",
 });

@@ -124,44 +124,44 @@ export default {
 
   components: {
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -173,30 +173,30 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
       date: "",
       date_type: null,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
       date_type: [],
       loaders: {
-        date_type: false
-      }
-    }
+        date_type: false,
+      },
+    },
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -206,13 +206,13 @@ export default {
         typeof this.item.date_type !== "undefined" &&
         this.item.date_type !== null
       );
-    }
+    },
   },
 
   watch: {
     dialog() {
       this.fillListAutocompletes();
-    }
+    },
   },
 
   methods: {
@@ -222,7 +222,7 @@ export default {
       this.item = {
         date: "",
         date_type: null,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -234,13 +234,13 @@ export default {
         this.$emit("related:add", {
           table: "doi_date",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "doi_date",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -256,7 +256,7 @@ export default {
         this.item.date_type = {
           id: item.date_type,
           value: item.date_type__value,
-          value_en: item.date_type__value_en
+          value_en: item.date_type__value_en,
         };
       } else this.item.date_type = item.date_type;
 
@@ -270,14 +270,14 @@ export default {
       this.$emit("related:delete", {
         table: "doi_date",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     fillListAutocompletes() {
       if (this.autocomplete.date_type.length <= 1) {
         this.autocomplete.loaders.date_type = true;
-        fetchDoiDateType().then(response => {
+        fetchDoiDateType().then((response) => {
           if (response.status === 200) {
             this.autocomplete.date_type =
               response.data.count > 0 ? response.data.results : [];
@@ -288,15 +288,15 @@ export default {
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

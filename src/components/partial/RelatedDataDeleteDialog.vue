@@ -40,9 +40,9 @@ export default {
     dialog: {
       type: Boolean,
       required: true,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 </script>
 

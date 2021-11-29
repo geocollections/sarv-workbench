@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -50,7 +50,7 @@
             <div
               v-translate="{
                 et: item.rock__name,
-                en: item.rock__name_en
+                en: item.rock__name_en,
               }"
             />
           </router-link>
@@ -64,7 +64,7 @@
             <div
               v-translate="{
                 et: item.rock.name,
-                en: item.rock.name_en
+                en: item.rock.name_en,
               }"
             />
           </router-link>
@@ -79,7 +79,7 @@
           <div
             v-translate="{
               et: item.rock__name,
-              en: item.rock__name_en
+              en: item.rock__name_en,
             }"
           />
         </router-link>
@@ -91,14 +91,14 @@
             v-if="$route.meta.isEdit"
             v-translate="{
               et: item.rock_classification__name,
-              en: item.rock_classification__name_en
+              en: item.rock_classification__name_en,
             }"
           />
           <div
             v-else-if="item.rock_classification"
             v-translate="{
               et: item.rock_classification.name,
-              en: item.rock_classification.name_en
+              en: item.rock_classification.name_en,
             }"
           />
         </div>
@@ -106,7 +106,7 @@
           v-else
           v-translate="{
             et: item.rock_classification__name,
-            en: item.rock_classification__name_en
+            en: item.rock_classification__name_en,
           }"
         />
       </template>
@@ -181,6 +181,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -189,50 +195,53 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "RockClassificationTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -244,14 +253,14 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
       rock: null,
       rock_classification: null,
-      remarks: ""
+      remarks: "",
     },
     isNewItem: true,
     autocomplete: {
@@ -259,34 +268,23 @@ export default {
       rock: [],
       loaders: {
         rock_classification: false,
-        rock: false
-      }
-    }
+        rock: false,
+      },
+    },
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
-    },
-
     isItemValid() {
       return typeof this.item.rock !== "undefined" && this.item.rock !== null;
-    }
+    },
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         rock: null,
         rock_classification: null,
-        remarks: ""
+        remarks: "",
       };
     },
 
@@ -300,21 +298,19 @@ export default {
         this.$emit("related:add", {
           table: "rock_tree",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "rock_tree",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
     },
 
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) {
         this.item.id = item.id;
         this.item.parent = this.$route.params.id;
@@ -325,7 +321,7 @@ export default {
         this.item.rock = {
           id: item.rock,
           name: item.rock__name,
-          name_en: item.rock__name_en
+          name_en: item.rock__name_en,
         };
         this.autocomplete.rock.push(this.item.rock);
       } else if (item.rock !== null) {
@@ -340,7 +336,7 @@ export default {
         this.item.rock_classification = {
           id: item.rock_classification,
           name: item.rock_classification__name,
-          name_en: item.rock_classification__name_en
+          name_en: item.rock_classification__name_en,
         };
         this.autocomplete.rock_classification.push(
           this.item.rock_classification
@@ -356,25 +352,7 @@ export default {
 
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "rock_tree",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    }
-  }
+  },
 };
 </script>
 

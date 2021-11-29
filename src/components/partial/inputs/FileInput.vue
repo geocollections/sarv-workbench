@@ -31,10 +31,10 @@
       class="ma-2"
       v-if="
         showResetFilesButton &&
-          $route.meta.object === 'reference' &&
-          !acceptMultiple &&
-          userHasInsertedFiles &&
-          !isExistingFilesValid
+        $route.meta.object === 'reference' &&
+        !acceptMultiple &&
+        userHasInsertedFiles &&
+        !isExistingFilesValid
       "
     >
       <v-alert
@@ -321,20 +321,20 @@ export default {
     recordOptions: Boolean,
     recordImage: {
       type: Boolean,
-      default: true
+      default: true,
     },
     recordVideo: {
       type: Boolean,
-      default: true
+      default: true,
     },
     recordAudio: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showExisting: Boolean,
     showExistingPreviews: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showNewFilesImmediately: Boolean,
     showResetFilesButton: Boolean,
@@ -342,30 +342,30 @@ export default {
     acceptableFormat: {
       type: String,
       default: "image/*",
-      validator: value => {
+      validator: (value) => {
         return value.includes("/");
-      }
+      },
     },
     realSize: Boolean,
     filesFromObject: {
-      type: Array
+      type: Array,
     },
     isClearable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     isDraggable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     openFile: Boolean,
-    showAttachmentLink: Boolean
+    showAttachmentLink: Boolean,
   },
   computed: {
     ...mapState("settings", [
       "bodyColor",
       "bodyActiveColor",
-      "bodyActiveColorDark"
+      "bodyActiveColorDark",
     ]),
 
     isFilesValid() {
@@ -382,7 +382,7 @@ export default {
 
     isDisabled() {
       return !this.acceptMultiple && this.userHasInsertedFiles;
-    }
+    },
   },
   data: () => ({
     useExisting: false,
@@ -391,11 +391,11 @@ export default {
     existingFiles: null,
     autocomplete: {
       attachment: [],
-      loaders: { attachment: false }
+      loaders: { attachment: false },
     },
     sourceList: [],
     id: null,
-    singleFileMetadata: null
+    singleFileMetadata: null,
   }),
   mounted() {
     this.id = this._uid;
@@ -416,7 +416,7 @@ export default {
           if (this.showExisting) this.useExisting = true;
         }
       },
-      deep: true
+      deep: true,
     },
     existingFiles(newVal) {
       if (newVal) {
@@ -428,21 +428,22 @@ export default {
       handler() {
         if (this.isDraggable === false) this.useExisting = true;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     dropFile(event) {
       if (!this.isDisabled) {
         if (event.dataTransfer && event.dataTransfer.files) {
           let listOfFiles = [];
-          event.dataTransfer.files.forEach(file => listOfFiles.push(file));
+          const filesArr = Array.from(event.dataTransfer.files);
+          filesArr.forEach((file) => listOfFiles.push(file));
 
           if (!this.acceptMultiple && listOfFiles.length > 1) {
             listOfFiles.splice(1);
           }
 
-          if (this.files) listOfFiles.forEach(item => this.files.push(item));
+          if (this.files) listOfFiles.forEach((item) => this.files.push(item));
           else this.files = listOfFiles;
         }
       } else this.showDisabledError();
@@ -450,8 +451,9 @@ export default {
     },
 
     addFile(file) {
+      if (!Array.isArray(file)) file = [file];
       if (this.acceptMultiple) {
-        if (this.files) file.forEach(item => this.files.push(item));
+        if (this.files) file.forEach((item) => this.files.push(item));
         else this.files = file;
       } else if (this.userHasInsertedFiles) {
         this.showDisabledError();
@@ -467,8 +469,8 @@ export default {
               object.splice(index, 1);
               this.toastError({
                 text: this.$t("messages.validFileFormat", {
-                  file: file.name
-                })
+                  file: file.name,
+                }),
               });
             }
           }
@@ -492,7 +494,7 @@ export default {
         file.type.includes("audio")
       ) {
         let reader = new FileReader();
-        reader.onload = event => {
+        reader.onload = (event) => {
           file.src = event.target.result;
           this.sourceList.push(event.target.result);
         };
@@ -505,7 +507,7 @@ export default {
       return new Promise((resolve, reject) => {
         try {
           let reader = new FileReader();
-          reader.onload = event => {
+          reader.onload = (event) => {
             let fileMetaData = EXIF.readFromBinaryFile(event.target.result);
             resolve(fileMetaData);
           };
@@ -588,7 +590,7 @@ export default {
       this.existingFiles = null;
       this.autocomplete = {
         attachment: [],
-        loaders: { attachment: false }
+        loaders: { attachment: false },
       };
       this.sourceList = [];
     },
@@ -648,8 +650,8 @@ export default {
       } else if (this.isExistingFilesValid) {
         this.toastInfo({ text: "You have already added one existing file." });
       } else this.toastInfo({ text: "You have already uploaded one file." });
-    }
-  }
+    },
+  },
 };
 </script>
 

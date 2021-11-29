@@ -7,16 +7,16 @@ const mutations = {
 
   SET_ALL_TABLE_HEADERS(state, payload) {
     let currentHeaders = state[payload.table]
-      .filter(item => item.show)
-      .map(item => item.value);
+      .filter((item) => item.show)
+      .map((item) => item.value);
     if (currentHeaders && currentHeaders.length === 0)
       currentHeaders = state.defaults[payload.table];
 
-    let allHeaders = payload.headers.map(item => {
+    let allHeaders = payload.headers.map((item) => {
       return {
         value: item,
         text: `${payload.table}.${item}`,
-        show: currentHeaders.includes(item)
+        show: currentHeaders.includes(item),
       };
     });
 
@@ -42,14 +42,14 @@ const mutations = {
         value: "link",
         text: `${payload.table}.link`,
         sortable: false,
-        show: true
+        show: true,
       });
     if (payload.table === "loan") {
       allHeaders.push({
         value: "print",
         text: `${payload.table}.print`,
         sortable: false,
-        show: true
+        show: true,
       });
     }
     if (payload.table === "sarv_issue") {
@@ -57,7 +57,7 @@ const mutations = {
         value: "replied",
         text: `${payload.table}.replied`,
         sortable: false,
-        show: true
+        show: true,
       });
     }
 
@@ -72,22 +72,22 @@ const mutations = {
   },
 
   SET_DEFAULT_TABLE_HEADERS(state, payload) {
-    state[payload.table] = state[payload.table].map(item => {
+    state[payload.table] = state[payload.table].map((item) => {
       return {
         ...item,
-        show: state.defaults[payload.table].includes(item.value)
+        show: state.defaults[payload.table].includes(item.value),
       };
     });
   },
 
   SET_DYNAMIC_SEARCH_FIELDS(state, payload) {
     let currentSearchFields = state.searchFields[payload.table];
-    const dynamicFields = payload.fields.map(item => {
+    const dynamicFields = payload.fields.map((item) => {
       return {
         id: item,
         title: `${payload.table}.${item}`,
         value: null,
-        lookUpType: "icontains"
+        lookUpType: "icontains",
       };
     });
 
@@ -102,7 +102,7 @@ const mutations = {
 
   UPDATE_DYNAMIC_SEARCH_FIELD(state, payload) {
     state.searchFields[payload.table] = state.searchFields[payload.table].map(
-      item => {
+      (item) => {
         if (item.id === payload.id) item[payload.key] = payload.value;
         return item;
       }
@@ -111,15 +111,15 @@ const mutations = {
 
   RESET_DYNAMIC_SEARCH_FIELDS(state, payload) {
     state.searchFields[payload.table] = state.searchFields[payload.table].map(
-      item => {
+      (item) => {
         return {
           ...item,
           value: null,
-          lookUpType: "icontains"
+          lookUpType: "icontains",
         };
       }
     );
-  }
+  },
 };
 
 export default mutations;

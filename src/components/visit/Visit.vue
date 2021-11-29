@@ -200,7 +200,7 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import {
   fetchListAgentType,
   fetchListCountry,
-  fetchVisit
+  fetchVisit,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -214,25 +214,25 @@ export default {
     DateWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [formManipulation, autocompleteMixin],
@@ -249,7 +249,7 @@ export default {
         request: "FETCH_VISITS",
         title: "header.visits",
         object: "visit",
-        field: "visitor__agent"
+        field: "visitor__agent",
       });
     }
 
@@ -258,15 +258,15 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.reloadData();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
-    ...mapState("search", ["visitSearchParameters"])
+    ...mapState("search", ["visitSearchParameters"]),
   },
 
   methods: {
@@ -284,26 +284,26 @@ export default {
           "purpose",
           "collections_studied",
           "items_studied",
-          "remarks"
+          "remarks",
         ],
         autocomplete: {
           loaders: {
             agent: false,
             institution: false,
-            list_country: false
+            list_country: false,
           },
           agent: [],
           institution: [],
-          list_country: []
+          list_country: [],
         },
         visit: {},
         requiredFields: [],
         optionalFields: {
-          visit: ["visitor", "visitor_free"]
+          visit: ["visitor", "visitor_free"],
         },
         block: {
-          info: true
-        }
+          info: true,
+        },
       };
     },
 
@@ -318,7 +318,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchVisit(this.$route.params.id).then(response => {
+        fetchVisit(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
@@ -340,7 +340,7 @@ export default {
 
     loadAutocompleteFields() {
       fetchListCountry().then(
-        response =>
+        (response) =>
           (this.autocomplete.list_country = this.handleResponse(response))
       );
     },
@@ -348,7 +348,7 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -370,31 +370,31 @@ export default {
       if (this.isNotEmpty(obj.visitor)) {
         this.visit.visitor = {
           id: obj.visitor,
-          agent: obj.visitor__agent
+          agent: obj.visitor__agent,
         };
         this.autocomplete.agent.push(this.visit.visitor);
       }
       if (this.isNotEmpty(obj.visitor_institution)) {
         this.visit.visitor_institution = {
           id: obj.visitor_institution,
-          agent: obj.visitor_institution__agent
+          agent: obj.visitor_institution__agent,
         };
         this.autocomplete.institution.push(this.visit.visitor_institution);
       }
       if (this.isNotEmpty(obj.host)) {
         this.visit.host = {
           id: obj.host,
-          agent: obj.host__agent
+          agent: obj.host__agent,
         };
         this.autocomplete.agent.push(this.visit.host);
       }
       this.visit.country = {
         id: obj.country,
         value: obj.visitor_country__value,
-        value_en: obj.visitor_country__value_en
+        value_en: obj.visitor_country__value_en,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

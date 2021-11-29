@@ -50,7 +50,7 @@
             <span
               v-translate="{
                 et: item.locality__locality,
-                en: item.locality__locality_en
+                en: item.locality__locality_en,
               }"
             />
           </router-link>
@@ -64,7 +64,7 @@
             <span
               v-translate="{
                 et: item.locality.locality,
-                en: item.locality.locality_en
+                en: item.locality.locality_en,
               }"
             />
           </router-link>
@@ -79,7 +79,7 @@
           <span
             v-translate="{
               et: item.locality__locality,
-              en: item.locality__locality_en
+              en: item.locality__locality_en,
             }"
           />
         </router-link>
@@ -101,7 +101,7 @@
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
-      <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000;">
+      <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000">
         <template v-slot:activator="{ on }">
           <v-btn :color="bodyActiveColor" small dark v-on="on">{{
             $t("buttons.add_new")
@@ -205,7 +205,7 @@
       <v-dialog
         v-model="polygonDialog"
         max-width="500px"
-        style="z-index: 51000;"
+        style="z-index: 51000"
       >
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title class="headline">{{
@@ -255,44 +255,44 @@ export default {
   components: {
     PolygonMap,
     AutocompleteWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   mixins: [autocompleteMixin],
 
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     filter: {
       type: String,
-      required: false
+      required: false,
     },
     searchParameters: {
       type: Object,
       required: true,
-      default: function() {
+      default: function () {
         return {
           page: 1,
-          paginateBy: 25
+          paginateBy: 25,
         };
-      }
+      },
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     isUsedAsRelatedData: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data: () => ({
@@ -306,8 +306,8 @@ export default {
         text: "common.actions",
         value: "action",
         sortable: false,
-        align: "center"
-      }
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
@@ -315,26 +315,26 @@ export default {
       place: "",
       point_longitude: "",
       point_latitude: "",
-      polygon: ""
+      polygon: "",
     },
     isNewItem: true,
     autocomplete: {
       locality: [],
       loaders: {
-        locality: false
-      }
+        locality: false,
+      },
     },
     polygonDialog: false,
     viewPolygon: false,
-    originalPolygon: ""
+    originalPolygon: "",
   }),
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
     },
@@ -348,7 +348,7 @@ export default {
           this.item.place.trim().length > 0) ||
         (this.item.polygon && this.item.polygon.length > 0)
       );
-    }
+    },
   },
 
   methods: {
@@ -379,7 +379,7 @@ export default {
         place: "",
         point_longitude: "",
         point_latitude: "",
-        polygon: ""
+        polygon: "",
       };
     },
 
@@ -391,13 +391,13 @@ export default {
         this.$emit("related:add", {
           table: "doi_geolocation",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
           table: "doi_geolocation",
           item: formattedItem,
-          rawItem: this.item
+          rawItem: this.item,
         });
       }
       this.cancel();
@@ -413,7 +413,7 @@ export default {
         this.item.locality = {
           id: item.locality,
           locality: item.locality__locality,
-          locality_en: item.locality__locality_en
+          locality_en: item.locality__locality_en,
         };
         this.autocomplete.locality.push(this.item.locality);
       } else if (item.locality !== null) {
@@ -433,12 +433,12 @@ export default {
       this.$emit("related:delete", {
         table: "doi_geolocation",
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item)
+        onDeleteIndex: this.response.results.indexOf(item),
       });
     },
 
     formatItem(item) {
-      Object.keys(item).forEach(key => {
+      Object.keys(item).forEach((key) => {
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
@@ -447,8 +447,8 @@ export default {
         }
       });
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

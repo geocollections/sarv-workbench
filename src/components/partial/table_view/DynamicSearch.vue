@@ -47,7 +47,7 @@
                           id: item.id,
                           key: 'lookUpType',
                           value: $event,
-                          table: $route.meta.object
+                          table: $route.meta.object,
                         })
                       "
                     >
@@ -71,7 +71,7 @@
                           id: item.id,
                           key: 'value',
                           value: $event,
-                          table: $route.meta.object
+                          table: $route.meta.object,
                         })
                       "
                     ></v-text-field>
@@ -93,37 +93,37 @@ export default {
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
+      default: "deep-orange",
     },
     lookUpTypes: {
       type: Array,
-      required: true
+      required: true,
     },
     dynamicSearchFields: {
       type: Array,
-      required: true
+      required: true,
     },
     colSize: {
       type: Number,
-      default: 6
-    }
+      default: 6,
+    },
   },
   data: () => ({
-    showDynamicSearch: false
+    showDynamicSearch: false,
   }),
   mounted() {
     this.showDynamicSearch = this.isOpenAtStart();
   },
   methods: {
     isOpenAtStart() {
-      return this.dynamicSearchFields.filter(item => item.value).length > 0;
-    }
-  }
+      return this.dynamicSearchFields.filter((item) => item.value).length > 0;
+    },
+  },
 };
 </script>
 

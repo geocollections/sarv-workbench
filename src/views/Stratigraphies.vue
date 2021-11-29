@@ -38,14 +38,14 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
@@ -56,14 +56,14 @@ export default {
       {
         id: "stratigraphy",
         title: "common.stratigraphy",
-        type: "text"
+        type: "text",
       },
       { id: "type", title: "common.type", type: "text" },
       { id: "rank", title: "stratigraphy.rank", type: "text" },
       { id: "scope", title: "stratigraphy.scope", type: "text" },
       { id: "parent", title: "stratigraphy.parent", type: "text" },
       { id: "indexes", title: "stratigraphy.indexes", type: "text" },
-      { id: "author", title: "stratigraphy.author", type: "text" }
+      { id: "author", title: "stratigraphy.author", type: "text" },
     ]);
   },
 
@@ -73,8 +73,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

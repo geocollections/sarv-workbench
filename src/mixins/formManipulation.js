@@ -5,7 +5,7 @@ import {
   fetchAttachmentForReference,
   fetchChangeRecordState,
   fetchRotateImage,
-  postRequest
+  postRequest,
 } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
 
@@ -13,7 +13,7 @@ const formManipulation = {
   mixins: [toastMixin],
   data() {
     return {
-      isFileAddedAsObject: null
+      isFileAddedAsObject: null,
     };
   },
   mounted() {
@@ -24,19 +24,19 @@ const formManipulation = {
   },
   computed: {
     ...mapState("search", ["loadingState"]),
-    ...mapGetters("user", ["getCurrentUser", "getDatabaseId"])
+    ...mapGetters("user", ["getCurrentUser", "getDatabaseId"]),
   },
   methods: {
     ...mapActions("search", [
       "setLoadingState",
       "setLoadingType",
       "setLoadingPercent",
-      "setActiveSearchParameters"
+      "setActiveSearchParameters",
     ]),
     ...mapActions("detail", [
       "saveFields",
       "resetFields",
-      "setInitialEditViewDataHasChangedState"
+      "setInitialEditViewDataHasChangedState",
     ]),
 
     /**
@@ -115,11 +115,11 @@ const formManipulation = {
       }
 
       if (this.isNotEmpty(fields))
-        fields.forEach(el => (isValid &= this.isNotEmpty(this[object][el])));
+        fields.forEach((el) => (isValid &= this.isNotEmpty(this[object][el])));
 
       if (this.isNotEmpty(optionalFields))
         optionalFields.forEach(
-          el => (isValidOptional |= this.isNotEmpty(this[object][el]))
+          (el) => (isValidOptional |= this.isNotEmpty(this[object][el]))
         );
       else isValidOptional = true;
 
@@ -146,7 +146,7 @@ const formManipulation = {
       saveAsNew = false,
       saveAsDifferentObject
     ) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         if (
           this.validate(object) &&
           !this.loadingState &&
@@ -183,7 +183,7 @@ const formManipulation = {
           }
 
           this.saveData(object, formData, url).then(
-            savedObjectId => {
+            (savedObjectId) => {
               console.log(savedObjectId);
               console.log("^^^^^^ Saved object ID ^^^^^^ ");
 
@@ -198,7 +198,7 @@ const formManipulation = {
               if (saveAsNew) {
                 if (this.isNotEmpty(savedObjectId)) {
                   this.$router.push({
-                    path: "/" + object + "/" + savedObjectId
+                    path: "/" + object + "/" + savedObjectId,
                   });
                 }
               } else {
@@ -219,9 +219,9 @@ const formManipulation = {
                           params: {
                             imageset: {
                               id: savedObjectId,
-                              imageset_number: this[object].imageset_number
-                            }
-                          }
+                              imageset_number: this[object].imageset_number,
+                            },
+                          },
                         });
                       } else if (object === "journal") {
                         this.$router.push({
@@ -229,13 +229,13 @@ const formManipulation = {
                           params: {
                             journal: {
                               id: savedObjectId,
-                              journal_name: this[object].journal_name
-                            }
-                          }
+                              journal_name: this[object].journal_name,
+                            },
+                          },
                         });
                       } else
                         this.$router.push({
-                          path: "/" + object + "/" + savedObjectId
+                          path: "/" + object + "/" + savedObjectId,
                         });
                     }
                   } else {
@@ -264,7 +264,7 @@ const formManipulation = {
     },
 
     saveData(object, formData, url) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         this.request(object, formData, url, resolve);
       });
     },
@@ -275,16 +275,16 @@ const formManipulation = {
       this.setLoadingPercent(0);
 
       postRequest(url, formData, "", false, {
-        onUploadProgress: progressEvent => {
+        onUploadProgress: (progressEvent) => {
           if (progressEvent.lengthComputable) {
             let loadingPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
             );
             this.setLoadingPercent(loadingPercent);
           }
-        }
+        },
       }).then(
-        response => {
+        (response) => {
           console.log(response);
           this.setLoadingState(false);
           if (response.status === 200) {
@@ -292,28 +292,28 @@ const formManipulation = {
               if (this.$i18n.locale === "ee") {
                 if (response.data.message_et)
                   this.toastSuccess({
-                    text: response?.data?.message_et.toString() || "Success"
+                    text: response?.data?.message_et.toString() || "Success",
                   });
                 else if (response.data.message)
                   this.toastSuccess({
-                    text: response?.data?.message.toString() || "Success"
+                    text: response?.data?.message.toString() || "Success",
                   });
                 else if (response.data.error_et)
                   this.toastError({
-                    text: response?.data?.error_et.toString() || "Error"
+                    text: response?.data?.error_et.toString() || "Error",
                   });
                 else if (response.data.error)
                   this.toastError({
-                    text: response?.data?.error.toString() || "Error"
+                    text: response?.data?.error.toString() || "Error",
                   });
               } else {
                 if (response.data.message)
                   this.toastSuccess({
-                    text: response?.data?.message.toString() || "Success"
+                    text: response?.data?.message.toString() || "Success",
                   });
                 else if (response.data.error)
                   this.toastError({
-                    text: response?.data?.error.toString() || "Error"
+                    text: response?.data?.error.toString() || "Error",
                   });
               }
 
@@ -326,7 +326,7 @@ const formManipulation = {
             } else resolve(undefined);
           } else resolve(undefined);
         },
-        errResponse => {
+        (errResponse) => {
           this.setLoadingState(false);
           console.log("ERROR: " + JSON.stringify(errResponse));
           this.toastError({ text: this.$t("messages.uploadError") });
@@ -339,7 +339,7 @@ const formManipulation = {
     addFileAsObject(files, relatedObject) {
       let formData = new FormData();
 
-      let notYetUploadedFiles = files.filter(file => !file.isAlreadyUploaded);
+      let notYetUploadedFiles = files.filter((file) => !file.isAlreadyUploaded);
 
       notYetUploadedFiles.forEach((file, index) => {
         formData.append(
@@ -358,7 +358,7 @@ const formManipulation = {
               : this.getCurrentFormattedDate("YYYY-MM-DD"),
             is_private: !this[relatedObject].is_oa,
             specimen_image_attachment: relatedObject === "reference" ? 4 : 3,
-            [relatedObject]: this[relatedObject].id
+            [relatedObject]: this[relatedObject].id,
           })
         );
 
@@ -369,13 +369,14 @@ const formManipulation = {
 
       try {
         this.saveData("attachment", formData, "add/attachment/").then(
-          savedObjectId => {
+          (savedObjectId) => {
             if (this.isNotEmpty(savedObjectId)) {
               this.isFileAddedAsObject = savedObjectId;
 
               if (this.$route.meta.object === "reference") {
                 fetchAttachmentForReference(this.$route.params.id).then(
-                  response => (this.attachment = this.handleResponse(response))
+                  (response) =>
+                    (this.attachment = this.handleResponse(response))
                 );
               }
             }
@@ -402,7 +403,7 @@ const formManipulation = {
 
       let formData = new FormData();
 
-      let notYetUploadedFiles = files.filter(file => !file.isAlreadyUploaded);
+      let notYetUploadedFiles = files.filter((file) => !file.isAlreadyUploaded);
 
       notYetUploadedFiles.forEach((file, index) => {
         if (!file.isAlreadyUploaded) {
@@ -427,13 +428,13 @@ const formManipulation = {
                 ? true
                 : false,
             is_locked: relatedObject === "doi",
-            related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
+            related_data: { [attach_link]: [{ id: this[relatedObject].id }] },
           };
 
           if (singleFileMetadata)
             newUploadableObject = {
               ...singleFileMetadata,
-              ...newUploadableObject
+              ...newUploadableObject,
             };
 
           formData.append("data", JSON.stringify(newUploadableObject));
@@ -445,7 +446,7 @@ const formManipulation = {
 
       try {
         this.saveData("attachment", formData, "add/attachment/").then(
-          savedObjectId => {
+          (savedObjectId) => {
             console.log(savedObjectId);
             if (savedObjectId) {
               if (relatedObject === "reference")
@@ -552,7 +553,7 @@ const formManipulation = {
       let routeData = this.$router.resolve({
         path: path,
         query: query,
-        meta: meta
+        meta: meta,
       });
       let height = window.screen.height;
       let top = height ? height / 2 - 364 : 176;
@@ -637,7 +638,7 @@ const formManipulation = {
      */
     removeUnnecessaryFields(object, copyFields) {
       //copy only certain fields
-      Object.entries(object).forEach(entry => {
+      Object.entries(object).forEach((entry) => {
         if (copyFields.indexOf(entry[0]) < 0) {
           delete object[entry[0]];
         }
@@ -658,7 +659,7 @@ const formManipulation = {
         typeof fields !== "undefined" &&
         fields !== null
       ) {
-        fields.forEach(field => {
+        fields.forEach((field) => {
           if (typeof this[objectName][field] === "undefined") {
             this.$set(this[objectName], field, null);
           }
@@ -718,7 +719,7 @@ const formManipulation = {
       if (choice === "CANCEL") this.$router.push({ path: "/" + object });
 
       if (choice === "COPY_TO_LOCALITY") {
-        this.add(true, object, true, false, "locality").then(localityId => {
+        this.add(true, object, true, false, "locality").then((localityId) => {
           console.log(localityId);
           if (this.isNotEmpty(localityId)) {
             this[object].locality.id = localityId;
@@ -753,11 +754,7 @@ const formManipulation = {
     },
 
     formatDateForUpload(date) {
-      return (
-        moment(date)
-          .toISOString(true)
-          .split(".")[0] + "Z"
-      ); // Without fractions
+      return moment(date).toISOString(true).split(".")[0] + "Z"; // Without fractions
     },
 
     unformatISOStringToDate(date, format = "YYYY-MM-DD HH:mm:ss") {
@@ -814,7 +811,7 @@ const formManipulation = {
         this.toastError({
           text: isDelete
             ? this.$t("messages.deleteError")
-            : this.$t("messages.uploadError")
+            : this.$t("messages.uploadError"),
         });
       }
     },
@@ -828,7 +825,7 @@ const formManipulation = {
       formData.append("data", JSON.stringify({ ...data }));
 
       fetchChangeRecordState(table, id, formData).then(
-        response => {
+        (response) => {
           if (response && response.data) {
             if (this.$i18n.locale === "ee") {
               if (response.data.message_et)
@@ -843,7 +840,7 @@ const formManipulation = {
             }
           }
         },
-        errResponse => {
+        (errResponse) => {
           if (errResponse && errResponse.data && errResponse.data.error)
             this.toastError({ text: errResponse.data.error });
           this.toastError({ text: this.$t("messages.uploadError") });
@@ -856,7 +853,7 @@ const formManipulation = {
         let formData = new FormData();
         const data = {
           image_ids: [this[object].id],
-          degrees: degrees
+          degrees: degrees,
         };
 
         formData.append("data", JSON.stringify({ ...data }));
@@ -874,8 +871,8 @@ const formManipulation = {
 
         console.log(response);
       }
-    }
-  }
+    },
+  },
 };
 
 export default formManipulation;

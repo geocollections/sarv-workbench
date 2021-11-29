@@ -37,7 +37,7 @@ export default {
   components: {
     ListModuleCore,
     TableViewTitle,
-    TableViewSearch
+    TableViewSearch,
   },
 
   name: "References",
@@ -46,14 +46,14 @@ export default {
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
 
   computed: {
     ...mapState("search", ["librarySearchParameters"]),
 
-    ...mapGetters("user", ["getCurrentUser"])
+    ...mapGetters("user", ["getCurrentUser"]),
   },
 
   async created() {
@@ -66,7 +66,7 @@ export default {
       title: "header.libraries",
       object: "library",
       field: "title_en",
-      agent: this.getCurrentUser
+      agent: this.getCurrentUser,
     });
 
     this.setActiveSearchParametersFilters([
@@ -77,17 +77,17 @@ export default {
       {
         id: "abstractRemarks",
         title: "reference.abstractRemarks",
-        type: "text"
+        type: "text",
       },
       { id: "keywords", title: "reference.keywordsSearch", type: "text" },
       { id: "id", title: "common.id", type: "number" },
       {
         id: "libraryAuthorIdTitle",
         title: "reference.libraryAuthorIdTitle",
-        type: "text"
+        type: "text",
       },
       // {id: "solrSearch", title: "reference.solrSearch", type: "text"},
-      { id: "userAdded", title: "reference.userAdded", type: "text" }
+      { id: "userAdded", title: "reference.userAdded", type: "text" },
     ]);
   },
 
@@ -99,8 +99,8 @@ export default {
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

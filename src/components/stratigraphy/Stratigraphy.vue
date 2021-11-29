@@ -623,7 +623,7 @@ import {
   fetchStratigraphy,
   fetchStratigraphyReferences,
   fetchStratigraphyStratotypes,
-  fetchStratigraphySynonyms
+  fetchStratigraphySynonyms,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import StratigraphySynonymTable from "./relatedTables/StratigraphySynonymTable";
@@ -646,32 +646,32 @@ export default {
     CheckboxWrapper,
     AutocompleteWrapper,
     TextareaWrapper,
-    InputWrapper
+    InputWrapper,
   },
 
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
 
   mixins: [
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
   ],
 
   data() {
@@ -686,7 +686,7 @@ export default {
         request: "FETCH_STRATIGRAPHY",
         title: "header.stratigraphies",
         object: "stratigraphy",
-        field: "stratigraphy_en"
+        field: "stratigraphy_en",
       });
     }
 
@@ -695,33 +695,33 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function() {
+      handler: function () {
         this.setInitialData();
         this.reloadData();
       },
-      deep: true
+      deep: true,
     },
     "relatedData.searchParameters": {
-      handler: function() {
+      handler: function () {
         if (this.$route.meta.isEdit) {
           this.loadRelatedData(this.activeTab);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     ...mapState("search", ["stratigraphySearchParameters"]),
 
     paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
+      return this.paginateByOptions.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value })
+          text: this.$t(item.text, { num: item.value }),
         };
       });
-    }
+    },
   },
 
   methods: {
@@ -731,7 +731,7 @@ export default {
       if (type) {
         this.updateActiveTab({
           tab: type,
-          object: this.$route.meta.object
+          object: this.$route.meta.object,
         });
         this.activeTab = type;
       }
@@ -742,7 +742,7 @@ export default {
         relatedTabs: [
           { name: "stratigraphy_reference", iconClass: "fas fa-book" },
           { name: "stratigraphy_stratotype", iconClass: "fas fa-cut" },
-          { name: "stratigraphy_synonym", iconClass: "fas fa-list-ol" }
+          { name: "stratigraphy_synonym", iconClass: "fas fa-list-ol" },
         ],
         activeTab: "stratigraphy_reference",
         relatedData: this.setDefaultRelatedData(),
@@ -789,7 +789,7 @@ export default {
           "is_private",
           "remarks",
           "index_old",
-          "maaamet_kood"
+          "maaamet_kood",
         ],
         autocomplete: {
           loaders: {
@@ -801,7 +801,7 @@ export default {
             reference: false,
             age_chronostratigraphy: false,
             locality: false,
-            list_language: false
+            list_language: false,
           },
           parent_stratigraphy: [],
           list_stratigraphy_type: [],
@@ -811,13 +811,13 @@ export default {
           reference: [],
           age_chronostratigraphy: [],
           locality: [],
-          list_language: []
+          list_language: [],
         },
         requiredFields: ["stratigraphy", "stratigraphy_en"],
         stratigraphy: {},
         block: {
           info: true,
-          description: true
+          description: true,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -826,8 +826,8 @@ export default {
           { text: "main.pagination", value: 100 },
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 }
-        ]
+          { text: "main.pagination", value: 1000 },
+        ],
       };
     },
 
@@ -842,7 +842,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchStratigraphy(this.$route.params.id).then(response => {
+        fetchStratigraphy(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
 
           if (handledResponse.length > 0) {
@@ -860,7 +860,7 @@ export default {
           }
         });
 
-        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -872,40 +872,35 @@ export default {
     ) {
       if (regularAutocompleteFields) {
         fetchListStratigraphyType().then(
-          response =>
-            (this.autocomplete.list_stratigraphy_type = this.handleResponse(
-              response
-            ))
+          (response) =>
+            (this.autocomplete.list_stratigraphy_type =
+              this.handleResponse(response))
         );
         fetchListStratigraphyRank().then(
-          response =>
-            (this.autocomplete.list_stratigraphy_rank = this.handleResponse(
-              response
-            ))
+          (response) =>
+            (this.autocomplete.list_stratigraphy_rank =
+              this.handleResponse(response))
         );
         fetchListStratigraphyScope().then(
-          response =>
-            (this.autocomplete.list_stratigraphy_scope = this.handleResponse(
-              response
-            ))
+          (response) =>
+            (this.autocomplete.list_stratigraphy_scope =
+              this.handleResponse(response))
         );
         fetchListStratigraphyStatus().then(
-          response =>
-            (this.autocomplete.list_stratigraphy_status = this.handleResponse(
-              response
-            ))
+          (response) =>
+            (this.autocomplete.list_stratigraphy_status =
+              this.handleResponse(response))
         );
       }
 
       if (relatedDataAutocompleteFields) {
         fetchListStratotypeType().then(
-          response =>
-            (this.autocomplete.list_stratotype_type = this.handleResponse(
-              response
-            ))
+          (response) =>
+            (this.autocomplete.list_stratotype_type =
+              this.handleResponse(response))
         );
         fetchListLanguages().then(
-          response =>
+          (response) =>
             (this.autocomplete.list_language = this.handleResponse(response))
         );
       }
@@ -921,28 +916,28 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["reference"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           stratigraphy_stratotype: {
             page: 1,
             paginateBy: 10,
             sortBy: ["locality"],
-            sortDesc: [true]
+            sortDesc: [true],
           },
           stratigraphy_synonym: {
             page: 1,
             paginateBy: 10,
             sortBy: ["synonym"],
-            sortDesc: [true]
-          }
-        }
+            sortDesc: [true],
+          },
+        },
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      Object.keys(uploadableObject).forEach(key => {
+      Object.keys(uploadableObject).forEach((key) => {
         if (
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
@@ -966,14 +961,13 @@ export default {
       if (!this.$route.meta.isEdit) {
         uploadableObject.related_data = {};
 
-        this.relatedTabs.forEach(tab => {
+        this.relatedTabs.forEach((tab) => {
           if (this.relatedData[tab.name].count > 0) {
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ].results;
+            uploadableObject.related_data[tab.name] =
+              this.relatedData[tab.name].results;
 
-            uploadableObject.related_data[tab.name].forEach(item => {
-              Object.keys(item).forEach(key => {
+            uploadableObject.related_data[tab.name].forEach((item) => {
+              Object.keys(item).forEach((key) => {
                 if (typeof item[key] === "object" && item[key] !== null) {
                   item[key] = item[key].id ? item[key].id : null;
                 }
@@ -997,14 +991,14 @@ export default {
           id: obj.parent,
           stratigraphy: obj.parent__stratigraphy,
           stratigraphy_en: obj.parent__stratigraphy_en,
-          hierarchy_string: obj.parent__hierarchy_string
+          hierarchy_string: obj.parent__hierarchy_string,
         };
         this.autocomplete.parent_stratigraphy.push(this.stratigraphy.parent);
       }
       if (this.isNotEmpty(obj.age_reference)) {
         this.stratigraphy.age_reference = {
           id: obj.age_reference,
-          reference: obj.age_reference__reference
+          reference: obj.age_reference__reference,
         };
         this.autocomplete.reference.push(this.stratigraphy.age_reference);
       }
@@ -1012,7 +1006,7 @@ export default {
         this.stratigraphy.age_chronostratigraphy = {
           id: obj.age_chronostratigraphy,
           stratigraphy: obj.age_chronostratigraphy__stratigraphy,
-          stratigraphy_en: obj.age_chronostratigraphy__stratigraphy_en
+          stratigraphy_en: obj.age_chronostratigraphy__stratigraphy_en,
         };
         this.autocomplete.age_chronostratigraphy.push(
           this.stratigraphy.age_chronostratigraphy
@@ -1022,28 +1016,28 @@ export default {
         this.stratigraphy.type = {
           id: obj.type,
           value: obj.type__value,
-          value_en: obj.type__value_en
+          value_en: obj.type__value_en,
         };
       }
       if (this.isNotEmpty(obj.rank)) {
         this.stratigraphy.rank = {
           id: obj.rank,
           value: obj.rank__value,
-          value_en: obj.rank__value_en
+          value_en: obj.rank__value_en,
         };
       }
       if (this.isNotEmpty(obj.scope)) {
         this.stratigraphy.scope = {
           id: obj.scope,
           value: obj.scope__value,
-          value_en: obj.scope__value_en
+          value_en: obj.scope__value_en,
         };
       }
       if (this.isNotEmpty(obj.status)) {
         this.stratigraphy.status = {
           id: obj.status,
           value: obj.status__value,
-          value_en: obj.status__value_en
+          value_en: obj.status__value_en,
         };
       }
     },
@@ -1069,7 +1063,7 @@ export default {
       }
 
       if (query) {
-        query.then(response => {
+        query.then((response) => {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
@@ -1081,8 +1075,8 @@ export default {
         this.stratigraphy.hierarchy_string =
           parent.hierarchy_string + "-" + this.$route.params.id;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -67,7 +67,7 @@
           <span
             v-translate="{
               et: item.age_chronostratigraphy__stratigraphy,
-              en: item.age_chronostratigraphy__stratigraphy_en
+              en: item.age_chronostratigraphy__stratigraphy_en,
             }"
           />
         </router-link>
@@ -84,7 +84,7 @@
           <span
             v-translate="{
               et: item.parent__stratigraphy,
-              en: item.parent__stratigraphy_en
+              en: item.parent__stratigraphy_en,
             }"
           />
         </router-link>
@@ -104,7 +104,7 @@
               class="font-weight-bold"
               v-translate="{
                 et: item.stratotype_type__value,
-                en: item.stratotype_type__value_en
+                en: item.stratotype_type__value_en,
               }"
             />:
 
@@ -118,7 +118,7 @@
                 <span
                   v-translate="{
                     et: item.stratigraphy__stratigraphy,
-                    en: item.stratigraphy__stratigraphy_en
+                    en: item.stratigraphy__stratigraphy_en,
                   }"
                 />
               </router-link>
@@ -179,18 +179,18 @@ export default {
   name: "StratigraphyCatalogueTable",
   props: {
     response: {
-      type: Object
+      type: Object,
     },
     bodyColor: {
       type: String,
       required: false,
-      default: "grey lighten-4"
+      default: "grey lighten-4",
     },
     bodyActiveColor: {
       type: String,
       required: false,
-      default: "deep-orange"
-    }
+      default: "deep-orange",
+    },
   },
   data: () => ({
     search: "",
@@ -204,25 +204,25 @@ export default {
       { text: "stratigraphy.stratotypes", value: "stratotypes" },
       { text: "stratigraphy.references", value: "references" },
       { text: "common.remarks", value: "remarks" },
-      { text: "stratigraphy.status", value: "status" }
-    ]
+      { text: "stratigraphy.status", value: "status" },
+    ],
   }),
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
+      return this.headers.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text)
+          text: this.$t(header.text),
         };
       });
-    }
+    },
   },
 
   methods: {
     getListOfTypes(id, type) {
-      return this.response[type].filter(item => item.stratigraphy === id);
-    }
-  }
+      return this.response[type].filter((item) => item.stratigraphy === id);
+    },
+  },
 };
 </script>
 

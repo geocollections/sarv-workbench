@@ -74,8 +74,8 @@ export default {
   data() {
     return {
       block: {
-        activeUsers: true
-      }
+        activeUsers: true,
+      },
     };
   },
 
@@ -84,10 +84,10 @@ export default {
       "bodyColor",
       "bodyDark",
       "bodyActiveColor",
-      "bodyActiveColorDark"
+      "bodyActiveColorDark",
     ]),
 
-    ...mapState("admin", ["activeUsers"])
+    ...mapState("admin", ["activeUsers"]),
   },
 
   created() {
@@ -95,8 +95,8 @@ export default {
   },
 
   methods: {
-    ...mapActions("admin", ["fetchActiveUsers"])
-  }
+    ...mapActions("admin", ["fetchActiveUsers"]),
+  },
 };
 </script>
 

@@ -33,8 +33,8 @@ export default {
   components: { InputWrapper },
   inheritAttrs: false,
   data: () => ({
-    menuState: false
-  })
+    menuState: false,
+  }),
 };
 </script>
 

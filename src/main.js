@@ -34,7 +34,7 @@ Vue.config.productionTip = false;
 // Gets translations from json files
 const messages = {
   en: require("./translations/en"),
-  ee: require("./translations/ee")
+  ee: require("./translations/ee"),
 };
 
 // Gets preferred language from store (fallback is ee)
@@ -45,13 +45,13 @@ const i18n = new VueI18n({
   locale: lang,
   fallbackLocale: "en",
   silentTranslationWarn: process.env.NODE_ENV === "production",
-  messages
+  messages,
 });
 /******************************
  ***  TRANSLATION CODE END  ***
  ******************************/
 
-Vue.directive("translate", function(el, binding) {
+Vue.directive("translate", function (el, binding) {
   let value = i18n.locale === "ee" ? binding.value.et : binding.value.en;
   if (
     value &&
@@ -68,5 +68,5 @@ new Vue({
   store,
   router,
   vuetify,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");

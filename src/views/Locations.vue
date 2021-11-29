@@ -40,18 +40,18 @@ export default {
   components: {
     ListModuleCore,
     TableViewSearch,
-    TableViewTitle
+    TableViewTitle,
   },
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
   data() {
     return {
-      block: { search: true }
+      block: { search: true },
     };
   },
   computed: {
-    ...mapState("search", ["locationViewType"])
+    ...mapState("search", ["locationViewType"]),
   },
   async created() {
     await this.$_tableHeaderMixin_getDynamicFields();
@@ -61,11 +61,11 @@ export default {
       {
         id: "location_location",
         title: "location.location_location",
-        type: "text"
+        type: "text",
       },
       { id: "stratigraphy_free", title: "common.stratigraphy", type: "text" },
       { id: "agent", title: "location.agent", type: "text" },
-      { id: "contents", title: "location.contents", type: "text" }
+      { id: "contents", title: "location.contents", type: "text" },
     ]);
   },
 
@@ -90,8 +90,8 @@ export default {
         this.updateSearchParamsByField(["id"], "sortBy");
         this.updateSearchParamsByField([true], "sortDesc");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

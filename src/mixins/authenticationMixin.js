@@ -1,7 +1,7 @@
 import {
   fetchLogin,
   fetchLoginId,
-  fetchLogout
+  fetchLogout,
 } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
 import { mapActions } from "vuex";
@@ -24,7 +24,7 @@ const authenticationMixin = {
 
         if (authenticationType === "password") {
           fetchLogin(loginData).then(
-            successfulResponse => {
+            (successfulResponse) => {
               return this.$_authenticationMixin_handleSuccessfulAuthentication(
                 successfulResponse,
                 authenticationType
@@ -38,7 +38,7 @@ const authenticationMixin = {
           );
         } else if (authenticationType === "id") {
           fetchLoginId().then(
-            successfulResponse => {
+            (successfulResponse) => {
               return this.$_authenticationMixin_handleSuccessfulAuthentication(
                 successfulResponse,
                 authenticationType
@@ -67,11 +67,11 @@ const authenticationMixin = {
       this.$cookies.remove("csrftoken", null, "geocollections.info");
       this.removeAuthUser();
 
-      fetchLogout().then(response => {
+      fetchLogout().then((response) => {
         if (response.status === 200) {
           this.$router.push({
             name: "login",
-            params: { dontShowSessionExpired: true }
+            params: { dontShowSessionExpired: true },
           });
           this.$_authenticationMixin_toastSuccessMessage(
             response,
@@ -194,8 +194,8 @@ const authenticationMixin = {
         this.toastError({ text: response.data.message });
         return response.data.message;
       }
-    }
-  }
+    },
+  },
 };
 
 export default authenticationMixin;

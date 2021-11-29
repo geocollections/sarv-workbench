@@ -94,9 +94,9 @@ export default {
       table: "area",
       file: [],
       textKey: "text",
-      textValue: "test"
+      textValue: "test",
     },
-    requestResponse: null
+    requestResponse: null,
   }),
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
@@ -107,7 +107,7 @@ export default {
       if (this.test.textKey) {
         return JSON.stringify({ [this.test.textKey]: this.test.textValue });
       } else return null;
-    }
+    },
   },
   methods: {
     addFiles(files) {
@@ -140,8 +140,8 @@ export default {
           this.requestResponse = "ERROR: Something went wrong";
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
