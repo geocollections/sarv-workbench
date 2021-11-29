@@ -11,7 +11,7 @@
     z-index="5000"
   >
     <template #activator="menu">
-      <v-tooltip bottom open-delay="500" z-index="5000">
+      <v-tooltip bottom open-delay="500" z-index="52000">
         <template #activator="tooltip">
           <v-btn
             icon
@@ -22,14 +22,14 @@
             <v-icon>mdi-table-cog</v-icon>
           </v-btn>
         </template>
-        <span>{{ $t("search.table.tooltipConfig") }}</span>
+        <span>{{ $t("headers.tooltipConfig") }}</span>
       </v-tooltip>
     </template>
     <v-card>
       <v-list flat class="">
         <v-list-item-title class="px-2 montserrat align-center">
-          {{ $t("search.table.headers") }}
-          <v-tooltip bottom open-delay="500" z-index="5000">
+          {{ $t("headers.headers") }}
+          <v-tooltip bottom open-delay="500" z-index="52000">
             <template #activator="{ on, attrs }">
               <v-btn
                 color="red"
@@ -41,10 +41,10 @@
                 <v-icon>mdi-refresh</v-icon>
               </v-btn>
             </template>
-            {{ $t("search.table.tooltipResetHeaders") }}
+            {{ $t("headers.tooltipResetHeaders") }}
           </v-tooltip>
 
-          <v-tooltip open-delay="500" bottom z-index="5000">
+          <v-tooltip open-delay="500" bottom z-index="52000">
             <template #activator="{ on, attrs }">
               <v-btn
                 v-bind="attrs"
@@ -58,12 +58,12 @@
               </v-btn>
             </template>
             <span v-if="!onlyVisible">
-              {{ $t("search.table.tooltipShowActiveHeaders") }}
+              {{ $t("headers.tooltipShowActiveHeaders") }}
             </span>
-            <span v-else>{{ $t("search.table.tooltipShowAllHeaders") }}</span>
+            <span v-else>{{ $t("headers.tooltipShowAllHeaders") }}</span>
           </v-tooltip>
 
-          <v-tooltip bottom open-delay="500" z-index="50000">
+          <v-tooltip bottom open-delay="500" z-index="52000">
             <template #activator="{ on, attrs }">
               <v-btn
                 v-bind="attrs"
@@ -76,9 +76,9 @@
               </v-btn>
             </template>
             <span v-if="isTableHeaderFixed">{{
-              $t("search.table.tooltipRemoveFixedHeaders")
+              $t("headers.tooltipRemoveFixedHeaders")
             }}</span>
-            <span v-else>{{ $t("search.table.tooltipAddFixedHeaders") }}</span>
+            <span v-else>{{ $t("headers.tooltipAddFixedHeaders") }}</span>
           </v-tooltip>
 
           <v-text-field
@@ -86,7 +86,7 @@
             class="py-2"
             dense
             hide-details
-            :label="$t('search.table.filter')"
+            :label="$t('headers.headerFilter')"
           />
         </v-list-item-title>
         <v-list-item-group :value="visibleHeaders" multiple>
@@ -104,7 +104,7 @@
               <v-tooltip
                 left
                 :disabled="!sortBy.includes(item.value)"
-                z-index="5000"
+                z-index="52000"
               >
                 <template #activator="{ on, attrs }">
                   <div v-bind="attrs" v-on="on">
@@ -131,7 +131,7 @@
                     </v-list-item>
                   </div>
                 </template>
-                {{ $t("search.table.headerSelectDisabled") }}
+                {{ $t("headers.headerSelectDisabled") }}
               </v-tooltip>
             </template>
           </v-virtual-scroll>

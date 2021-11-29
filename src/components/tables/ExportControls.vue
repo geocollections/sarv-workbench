@@ -34,11 +34,10 @@
 </template>
 
 <script>
-import exportMixin from "@/mixins/exportMixin";
 import toastMixin from "@/mixins/toastMixin";
 
 export default {
   name: "ExportControls",
-  mixins: [exportMixin, toastMixin],
+  mixins: [toastMixin],
 };
 </script>

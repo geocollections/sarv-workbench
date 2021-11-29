@@ -56,7 +56,9 @@
     "medium": "Keskmine",
     "large": "Suur",
     "original": "Originaal",
-    "fields": "Tabeli päised"
+    "fields": "Tabeli päised",
+    "pageSelect": "{current} / {count}",
+    "itemsPerPage": "Ridade arv:"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -1627,7 +1629,6 @@
     "abstract": "Abstract",
     "locality__id": "Lokaliteet ID",
     "reference__id": "Reference ID",
-
     "copyright_agent": "Autoriõigus",
     "copyright_agent__id": "Autoriõigus ID",
     "copyright_agent__agent": "Autoriõigus",
@@ -3083,5 +3084,14 @@
     "date_changed": "Muutis",
     "user_added": "Lisatud",
     "user_changed": "Muudetud"
+  },
+  "headers": {
+    "tooltipConfig": "Tabeli konfiguratsioon",
+    "tooltipResetHeaders": "Lähtesta päised",
+    "tooltipShowActiveHeaders": "Vaata aktiveeritud päiseid",
+    "tooltipShowAllHeaders": "Vaata kõiki päiseid",
+    "headerFilter": "Filter",
+    "headers": "Päised",
+    "headerSelectDisabled": "Veergu sorteeritakse"
   }
 }

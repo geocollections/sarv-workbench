@@ -56,21 +56,6 @@
       </div>
     </v-row>
 
-    <pagination
-      class="pb-2"
-      :body-active-color="bodyActiveColor"
-      :count="response.count"
-      :paginate-by="$_tableViewMixin_options.paginateBy"
-      :options="paginateByOptionsTranslated"
-      :page="$_tableViewMixin_options.page"
-      v-on:update:page="
-        $_tableViewMixin_updateOptions({ value: $event, key: 'page' })
-      "
-      v-on:update:paginateBy="
-        $_tableViewMixin_updateOptions({ value: $event, key: 'paginateBy' })
-      "
-    />
-
     <!-- DATA TABLE -->
     <v-card
       elevation="4"
@@ -131,23 +116,9 @@
             key: $event.key,
           })
         "
+        @update:options="$_tableViewMixin_updateOptions"
       />
     </v-card>
-
-    <pagination
-      class="pt-2 pt-md-0 pb-0 pb-md-5"
-      :body-active-color="bodyActiveColor"
-      :count="response.count"
-      :paginate-by="$_tableViewMixin_options.paginateBy"
-      :options="paginateByOptionsTranslated"
-      :page="$_tableViewMixin_options.page"
-      v-on:update:page="
-        $_tableViewMixin_updateOptions({ value: $event, key: 'page' })
-      "
-      v-on:update:paginateBy="
-        $_tableViewMixin_updateOptions({ value: $event, key: 'paginateBy' })
-      "
-    />
   </div>
 </template>
 
@@ -160,13 +131,11 @@ import { mapActions, mapState } from "vuex";
 import ScrollToTop from "./partial/ScrollToTop";
 import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
-import Pagination from "@/components/partial/Pagination";
 import { fetchChangeRecordState } from "@/assets/js/api/apiCalls";
 import tableViewMixin from "@/mixins/tableViewMixin";
 
 export default {
   components: {
-    Pagination,
     ScrollToTop,
     ExportButtons,
     ListView,
@@ -247,7 +216,7 @@ export default {
       },
       deep: true,
     },
-    $_tableViewMixin_viewType(newVal, oldVal) {
+    $_tableViewMixin_viewType() {
       this.search();
     },
     currentViewType(newVal, oldVal) {
@@ -296,12 +265,12 @@ export default {
         this.response.results = response?.results ?? [];
         this.noResults = this.response.count === 0;
 
-        this.setSidebarList({
-          module: this.module,
-          response,
-          page: this.$_tableViewMixin_options.page,
-          paginateBy: this.$_tableViewMixin_options.paginateBy,
-        });
+        // this.setSidebarList({
+        //   module: this.module,
+        //   response,
+        //   page: this.$_tableViewMixin_options.page,
+        //   paginateBy: this.$_tableViewMixin_options.paginateBy,
+        // });
       }
     }, 500),
 

@@ -13,18 +13,21 @@ const mutations = {
   },
 
   UPDATE_HEADERS(state, payload) {
-    console.log(payload)
     state[payload.module].headers.forEach((item, index) => {
-      state[payload.module].headers[index].show = !!payload.value.includes(
-        item.value
-      );
+      if (state[payload.module].headers[index].value === payload.value) {
+        state[payload.module].headers[index].show =
+          !state[payload.module].headers[index].show;
+      }
     });
   },
 
+  RESET_HEADERS(state, payload) {
+    state[payload.module].headers = payload.headers;
+  },
+
   UPDATE_VIEW_TYPE(state, payload) {
-    console.log(payload)
-    state[payload.module].viewType = payload.value
-  }
+    state[payload.module].viewType = payload.value;
+  },
 };
 
 export default mutations;

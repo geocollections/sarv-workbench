@@ -14,6 +14,23 @@ const actions = {
   updateHeaders({ commit }, payload) {
     commit("UPDATE_HEADERS", payload);
   },
+  async resetHeaders({ commit }, payload) {
+    const module = await import(`./modules/${payload.module}/index.js`);
+
+    const initHeaders = module.default.getDefaultState().headers;
+
+    commit("RESET_HEADERS", { ...payload, headers: initHeaders });
+
+    this.reset({
+      self: false,
+      modules: {
+        [payload.module]: {
+          self: false,
+          modules: { searchFields: { self: true } },
+        },
+      },
+    });
+  },
 
   resetState({ commit }, { module }) {
     this.reset({

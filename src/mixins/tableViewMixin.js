@@ -75,6 +75,11 @@ const tableViewMixin = {
           module: this.$_tableViewMixin_tableName,
         });
       },
+      $_tableViewMixin_resetHeaders(dispatch) {
+        return dispatch("resetHeaders", {
+          module: this.$_tableViewMixin_tableName,
+        });
+      },
     }),
   },
 };

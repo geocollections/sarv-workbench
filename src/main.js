@@ -19,6 +19,7 @@ import "leaflet/dist/leaflet.css"; // Leaflet css
 // Custom css
 import "@/assets/css/styles.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import "@mdi/font/css/materialdesignicons.css";
 
 Vue.use(VueIziToast);
 Vue.use(VueI18n);

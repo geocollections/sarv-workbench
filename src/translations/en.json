@@ -56,7 +56,9 @@
     "medium": "Medium",
     "large": "large",
     "original": "Original",
-    "fields": "Table headers"
+    "fields": "Table headers",
+    "pageSelect": "{current} / {count}",
+    "itemsPerPage": "Rows per page:"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -85,7 +87,9 @@
     "doesnotcontain": "!* does not contain",
     "doesnotequal": "!= does not equal",
     "hierarchy": "-·= hierarchy",
-    "lookUpType": "Filter"
+    "lookUpType": "Filter",
+    "pageSelect": "{current} / {count}",
+    "itemsPerPage": "Rows per page:"
   },
   "login": {
     "password": "Password",
@@ -1629,7 +1633,6 @@
     "abstract": "Abstract",
     "locality__id": "Lokaliteet ID",
     "reference__id": "Reference ID",
-
     "copyright_agent": "Copyright agent",
     "copyright_agent__id": "Copyright agent ID",
     "copyright_agent__agent": "Copyright agent",
@@ -3082,5 +3085,14 @@
     "date_changed": "Date changed",
     "user_added": "User added",
     "user_changed": "User changed"
+  },
+  "headers": {
+    "tooltipConfig": "Table configuration",
+    "tooltipResetHeaders": "Reset headers",
+    "tooltipShowActiveHeaders": "Show active headers",
+    "tooltipShowAllHeaders": "Show all headers",
+    "headerSelectDisabled": "Sorting enabled",
+    "headerFilter": "Filter",
+    "headers": "Headers"
   }
 }
