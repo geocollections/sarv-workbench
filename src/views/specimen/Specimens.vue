@@ -34,7 +34,8 @@ export default {
     apiCall() {
       return this.$api.rw.get("specimen", {
         defaultParams: {
-          nest: 1,
+          nest: 0,
+          fields: 'id,specimen_id'
         },
         options: this.$_tableViewMixin_options,
         searchFields: this.$_tableViewMixin_searchFields,

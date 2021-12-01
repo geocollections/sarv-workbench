@@ -258,7 +258,7 @@
 
             <!-- DYNAMIC SEARCH -->
             <dynamic-search
-              class="mt-4 mb-2"
+              class="my-4"
               :body-color="bodyColor"
               :body-active-color="bodyActiveColor"
               :look-up-types="translatedLookUpTypes"
@@ -266,32 +266,6 @@
               :col-size="3"
               @update:searchFields="updateSearchFieldsDebounced($event)"
             />
-
-            <!-- TABLE HEADERS SELECT BOX -->
-            <v-row no-gutters class="mt-6 mb-4">
-              <v-col cols="12">
-                <v-select
-                  :items="$_tableHeaderMixin_translatedHeaders"
-                  :value="$_tableHeaderMixin_shownHeaders"
-                  chips
-                  small-chips
-                  deletable-chips
-                  multiple
-                  :color="bodyActiveColor"
-                  :label="$t('common.fields')"
-                  clearable
-                  clear-icon="fas fa-times"
-                  @change="
-                    $_tableViewMixin_updateHeaders({
-                      value: $event,
-                    })
-                  "
-                  class="chips-select"
-                  hide-details
-                  dense
-                />
-              </v-col>
-            </v-row>
 
             <!-- RESET SEARCH PREFERENCES -->
             <v-row no-gutters>
@@ -301,8 +275,7 @@
                   :color="bodyActiveColor"
                   dark
                 >
-                  <v-icon left>fas fa-filter</v-icon>
-                  <!-- TODO: Rename to tühjenda/clear -->
+                  <v-icon left>fas fa-eraser</v-icon>
                   {{ $t("buttons.resetSearch") }}
                 </v-btn>
               </v-col>

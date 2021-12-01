@@ -89,7 +89,9 @@
     "hierarchy": "-·= hierarchy",
     "lookUpType": "Filter",
     "pageSelect": "{current} / {count}",
-    "itemsPerPage": "Rows per page:"
+    "itemsPerPage": "Rows per page:",
+    "goTo": "Go to page",
+    "goToBtn": "Go"
   },
   "login": {
     "password": "Password",
@@ -3048,7 +3050,7 @@
     "oldValue": "Old value"
   },
   "buttons": {
-    "resetSearch": "Reset search",
+    "resetSearch": "Clear search",
     "cancel": "Cancel",
     "edit": "Edit",
     "add": "Add",

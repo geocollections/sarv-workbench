@@ -1,9 +1,4 @@
 <template>
-  <!-- NOTE: Using activator now for v-menu.
-    Using the #id based implementation broke HeaderControls when switching between tabs.
-    Right now the button does not appear immediately when page is loading.
-    This is something to do with transitions. https://github.com/vuetifyjs/vuetify/issues/10578
-  -->
   <v-menu
     transition="slide-y-transition"
     offset-y
@@ -61,24 +56,6 @@
               {{ $t("headers.tooltipShowActiveHeaders") }}
             </span>
             <span v-else>{{ $t("headers.tooltipShowAllHeaders") }}</span>
-          </v-tooltip>
-
-          <v-tooltip bottom open-delay="500" z-index="52000">
-            <template #activator="{ on, attrs }">
-              <v-btn
-                v-bind="attrs"
-                icon
-                v-on="on"
-                @click="$emit('toggle', isTableHeaderFixed)"
-              >
-                <v-icon v-if="isTableHeaderFixed">mdi-table-off</v-icon>
-                <v-icon v-else>mdi-table-border</v-icon>
-              </v-btn>
-            </template>
-            <span v-if="isTableHeaderFixed">{{
-              $t("headers.tooltipRemoveFixedHeaders")
-            }}</span>
-            <span v-else>{{ $t("headers.tooltipAddFixedHeaders") }}</span>
           </v-tooltip>
 
           <v-text-field

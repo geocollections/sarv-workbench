@@ -1,31 +1,16 @@
 <template>
   <div>
+    {{ searchParameters }}
     <table-wrapper
       v-bind="$attrs"
-      :headers="$_tableViewMixin_headers"
+      :headers="headers"
       :items="response.results"
-      :items-per-page="searchParameters.paginateBy"
-      :page="searchParameters.page"
       :count="response.count"
+      :options="searchParameters"
       :show-search="false"
-      @change:headers="
-        $_tableViewMixin_updateHeaders({
-          value: $event,
-        })
-      "
-      @reset:headers="$_tableViewMixin_resetHeaders()"
-      :sort-by="searchParameters.sortBy"
-      :sort-desc="searchParameters.sortDesc"
-      @update:sort-by="
-        $emit('update:sorting', { value: $event, key: 'sortBy' })
-      "
-      @update:sort-desc="
-        $emit('update:sorting', { value: $event, key: 'sortDesc' })
-      "
-      @update:page="$emit('update:options', { value: $event, key: 'page' })"
-      @update:paginateBy="
-        $emit('update:options', { value: $event, key: 'paginateBy' })
-      "
+      @change:headers="$emit('change:headers', $value)"
+      @reset:headers="$emit('reset:headers')"
+      @update:options="$emit('update:options', $event)"
     >
       <template v-slot:item.id="{ item }">
         <router-link
@@ -164,12 +149,12 @@ export default {
     searchParameters: {
       type: Object,
       required: true,
-      default: function () {
-        return {
-          page: 1,
-          paginateBy: 25,
-        };
-      },
+      default: () => {},
+    },
+    headers: {
+      type: Array,
+      required: true,
+      default: () => [],
     },
     bodyColor: {
       type: String,
@@ -210,32 +195,35 @@ export default {
       if (listOfSpecimens && listOfSpecimens.length > 0) {
         let listOfIds = listOfSpecimens.map((specimen) => specimen.id);
 
-        const taxonResponse = await this.$api.rw.get(
-          "specimen_identification",
-          {
-            defaultParams: {
-              specimen__in: listOfIds.toString(),
-              current: true,
-            },
-            options: {
-              sortBy: ["name"],
-              sortDesc: [false],
-            },
-          }
-        );
-        const rockResponse = await this.$api.rw.get(
-          "specimen_identification_geology",
-          {
-            defaultParams: {
-              specimen__in: listOfIds.toString(),
-              current: true,
-            },
-            options: {
-              sortBy: ["name"],
-              sortDesc: [false],
-            },
-          }
-        );
+        const taxonResponse = [];
+        const rockResponse = [];
+
+        // const taxonResponse = await this.$api.rw.get(
+        //   "specimen_identification",
+        //   {
+        //     defaultParams: {
+        //       specimen__in: listOfIds.toString(),
+        //       current: true,
+        //     },
+        //     options: {
+        //       sortBy: ["name"],
+        //       sortDesc: [false],
+        //     },
+        //   }
+        // );
+        // const rockResponse = await this.$api.rw.get(
+        //   "specimen_identification_geology",
+        //   {
+        //     defaultParams: {
+        //       specimen__in: listOfIds.toString(),
+        //       current: true,
+        //     },
+        //     options: {
+        //       sortBy: ["name"],
+        //       sortDesc: [false],
+        //     },
+        //   }
+        // );
 
         if (taxonResponse?.count > 0 && rockResponse?.count > 0) {
           const taxonList = taxonResponse.results.map((entity) => {

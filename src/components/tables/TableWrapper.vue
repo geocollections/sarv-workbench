@@ -7,6 +7,8 @@
       enable loading indicator when created.
 ' -->
   <v-card :flat="$attrs.flat">
+    {{ $attrs }}
+    {{ options }}e
     <v-data-table
       id="table"
       item-key="id"
@@ -25,29 +27,17 @@
       :single-expand="singleExpand"
       :expanded.sync="expanded"
       @click:row="handleRowClick"
-      @update:sort-by="$emit('sortBy:changed', $event)"
-      @update:sort-desc="$emit('sortDesc:changed', $event)"
-      @update:items-per-page="$emit('update:paginateBy', $event)"
-      @update:options="updateTableOptions"
+      @update:sort-by="
+        $emit('update:options', { value: $event, key: 'sortBy', test: 'test' })
+      "
+      @update:sort-desc="
+        $emit('update:options', { value: $event, key: 'sortDesc', test: 'test1' })
+      "
     >
       <template #no-data>{{ $t("table.noData") }}</template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
-      <template v-if="!onlyTable" #top="{ pagination, updateOptions, options }">
-        <div>
-          <v-row no-gutters>
-            <v-col v-if="showSearch" cols="12" sm="4" class="px-3 py-0">
-              <v-text-field
-                v-model="search"
-                color="primary darken-2"
-                append-icon="mdi-magnify"
-                :label="$t('common.search')"
-                hide-details
-                clearable
-                @input="handleSearch($event)"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-
+      <template v-if="!onlyTable" #top="{ pagination, options }">
+        <div class="table-top">
           <v-row no-gutters>
             <v-col
               cols="12"
@@ -55,17 +45,19 @@
               class="px-3 my-1 my-sm-3"
               align-self="center"
             >
-              <!-- <export-controls /> -->
+              <!-- Currently using other export component -->
+              <export-controls v-if="false" />
               <header-controls
                 v-if="dynamicHeaders"
                 :headers="headers"
                 :visible-headers="visibleHeaders"
                 :sort-by="options.sortBy"
-                @change="handleHeadersChange"
+                @change="$emit('change:headers', { value: $event.value })"
                 @reset="$emit('reset:headers')"
               />
             </v-col>
             <v-col>
+              {{ options }}
               <pagination-controls
                 :options="options"
                 :pagination="pagination"
@@ -80,7 +72,7 @@
                 :go-to-text="$t('common.goTo')"
                 :go-to-button-text="$t('common.goToBtn')"
                 select-page-id="header-select-btn"
-                @update:options="updateOptions"
+                @update:options="updateTableOptions($event)"
               />
             </v-col>
           </v-row>
@@ -102,10 +94,7 @@
           :go-to-text="$t('common.goTo')"
           :go-to-button-text="$t('common.goToBtn')"
           select-page-id="footer-select-btn"
-          @update:options="
-            isLoading = !onlyTable;
-            handleChange($event);
-          "
+          @update:options="updateTableOptions($event)"
         />
       </template>
       <template
@@ -140,9 +129,10 @@
 import { debounce } from "lodash";
 import HeaderControls from "./HeaderControls.vue";
 import PaginationControls from "./PaginationControls.vue";
+import ExportControls from "@/components/tables/ExportControls";
 export default {
   name: "TableWrapper",
-  components: { PaginationControls, HeaderControls },
+  components: { ExportControls, PaginationControls, HeaderControls },
   props: {
     onlyTable: {
       type: Boolean,
@@ -204,22 +194,14 @@ export default {
     },
   },
   methods: {
-    handleChange: debounce(function (options) {
-      this.$emit("update", { options, search: this.search });
-    }, 500),
-    handleSearch: debounce(function () {
-      const options = { ...this.options, page: 1 };
-      this.isLoading = true;
-      this.$emit("update", {
-        options,
-        search: this.search,
-      });
-    }, 500),
     updateTableOptions(options) {
-      if (this.page !== options.page) this.$emit("update:page", options.page);
-    },
-    handleHeadersChange(e) {
-      this.$emit("change:headers", e.value);
+      if (this.options.page !== options.page)
+        this.$emit("update:options", { value: options.page, key: "page", test: 'test3' });
+      if (this.options.itemsPerPage !== options.itemsPerPage)
+        this.$emit("update:options", {
+          value: options.itemsPerPage,
+          key: "itemsPerPage", test: 'test4'
+        });
     },
     handleRowClick(item, slot) {
       // HACK: This is added to handle propagation,

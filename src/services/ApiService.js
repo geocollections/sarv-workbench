@@ -33,7 +33,6 @@ class ApiService {
 
   buildSearchFields = (searchFields) => {
     if (searchFields?.byIds) {
-      console.log(Object.keys(searchFields.byIds));
       const query = Object.keys(searchFields.byIds).reduce((prev, curr) => {
         let value = searchFields.byIds[curr].value;
         if (value) {
@@ -69,9 +68,6 @@ class ApiService {
         }
         return prev;
       }, {});
-
-      console.log(query);
-
       return query;
     }
     return null;

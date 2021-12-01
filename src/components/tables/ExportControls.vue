@@ -26,7 +26,7 @@
       </v-list-item>
       <v-list-item @click="handleClipboard()">
         <v-list-item-title>
-          {{ $t("search.table.clipboard") }}
+          {{ $t("buttons.copy") }}
         </v-list-item-title>
       </v-list-item>
     </v-list>
@@ -35,9 +35,10 @@
 
 <script>
 import toastMixin from "@/mixins/toastMixin";
+import exportMixin from "@/mixins/exportMixin";
 
 export default {
   name: "ExportControls",
-  mixins: [toastMixin],
+  mixins: [exportMixin, toastMixin],
 };
 </script>

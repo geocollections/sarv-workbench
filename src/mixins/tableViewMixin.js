@@ -64,6 +64,10 @@ const tableViewMixin = {
         });
       },
       $_tableViewMixin_updateOptions(dispatch, payload) {
+        console.log('MIXIN')
+        console.log('!!!!!!!!!!!!!!!!!!!')
+        console.log(payload)
+        console.log('!!!!!!!!!!!!!!!!!!!')
         return dispatch("updateOptions", {
           ...payload,
           module: this.$_tableViewMixin_tableName,

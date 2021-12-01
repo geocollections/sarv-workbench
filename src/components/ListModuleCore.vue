@@ -99,23 +99,20 @@
       />
 
       <router-view
+        v-if="isTableView && response.count > 0"
         ref="table"
         :response="response"
         :filter="filterTable"
         :search-parameters="$_tableViewMixin_options"
-        v-if="isTableView && response.count > 0"
+        :headers="$_tableViewMixin_headers"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:toggle-reference-in-active-library="toggleReferenceInActiveLibrary"
         v-on:toggle-item-in-selection-series="toggleItemInSelectionSeries"
         v-on:toggle-select-all="toggleSelectAll"
         :body-color="bodyColor"
         :body-active-color="bodyActiveColor"
-        v-on:update:sorting="
-          $_tableViewMixin_updateOptions({
-            value: $event.value,
-            key: $event.key,
-          })
-        "
+        @change:headers="$_tableViewMixin_updateHeaders"
+        @reset:headers="$_tableViewMixin_resetHeaders"
         @update:options="$_tableViewMixin_updateOptions"
       />
     </v-card>
@@ -247,7 +244,6 @@ export default {
       this.isLoading = true;
 
       const response = await this.apiCall();
-      console.log(response);
 
       this.isLoading = false;
 

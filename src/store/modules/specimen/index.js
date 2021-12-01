@@ -6,7 +6,7 @@ const getDefaultState = () => {
     count: 0,
     options: {
       page: 1,
-      paginateBy: 50,
+      itemsPerPage: 50,
       sortBy: ["id"],
       sortDesc: [true],
     },
@@ -117,7 +117,7 @@ const getDefaultState = () => {
         is_private: {
           lookUpType: "icontains",
           title: "specimen.is_private",
-          value: "1",
+          value: null,
         },
         kind: {
           lookUpType: "icontains",

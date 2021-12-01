@@ -58,7 +58,9 @@
     "original": "Originaal",
     "fields": "Tabeli päised",
     "pageSelect": "{current} / {count}",
-    "itemsPerPage": "Ridade arv:"
+    "itemsPerPage": "Ridade arv:",
+    "goTo": "Leheküljele",
+    "goToBtn": "Mine"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -3047,7 +3049,7 @@
     "oldValue": "Vana väärtus"
   },
   "buttons": {
-    "resetSearch": "Taasta otsing",
+    "resetSearch": "Tühjenda otsing",
     "cancel": "Katkesta",
     "edit": "Muuda",
     "add": "Lisa",
