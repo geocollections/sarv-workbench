@@ -396,7 +396,7 @@ const getDefaultState = () => {
         show: true,
       },
       {
-        value: "locality__locality",
+        value: "locality.locality",
         text: "specimen.locality__locality",
         show: true,
       },
@@ -406,17 +406,17 @@ const getDefaultState = () => {
         show: true,
       },
       {
-        value: "stratigraphy__stratigraphy",
+        value: "stratigraphy.stratigraphy",
         text: "specimen.stratigraphy__stratigraphy",
         show: true,
       },
       {
-        value: "agent_collected__agent",
+        value: "agent_collected.agent",
         text: "specimen.agent_collected__agent",
         show: true,
       },
       {
-        value: "storage__location",
+        value: "storage.location",
         text: "specimen.storage__location",
         show: true,
       },
@@ -432,12 +432,7 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "coll__id",
-        text: "specimen.coll__id",
-        show: false,
-      },
-      {
-        value: "coll__number",
+        value: "coll.number",
         text: "specimen.coll__number",
         show: false,
       },
@@ -452,47 +447,32 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "type__id",
-        text: "specimen.type__id",
-        show: false,
-      },
-      {
-        value: "type__value",
+        value: "type.value",
         text: "specimen.type__value",
         show: false,
       },
       {
-        value: "type__value_en",
+        value: "type.value_en",
         text: "specimen.type__value_en",
         show: false,
       },
       {
-        value: "subtype_id__id",
-        text: "specimen.subtype_id__id",
-        show: false,
-      },
-      {
-        value: "subtype_id__value",
+        value: "subtype_id.value",
         text: "specimen.subtype_id__value",
         show: false,
       },
       {
-        value: "subtype_id__value_en",
+        value: "subtype_id.value_en",
         text: "specimen.subtype_id__value_en",
         show: false,
       },
       {
-        value: "fossil__id",
-        text: "specimen.fossil__id",
-        show: false,
-      },
-      {
-        value: "fossil__value",
+        value: "fossil.value",
         text: "specimen.fossil__value",
         show: false,
       },
       {
-        value: "fossil__value_en",
+        value: "fossil.value_en",
         text: "specimen.fossil__value_en",
         show: false,
       },
@@ -502,22 +482,7 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "kind",
-        text: "specimen.kind",
-        show: false,
-      },
-      {
-        value: "kind",
-        text: "specimen.kind",
-        show: false,
-      },
-      {
-        value: "classification__id",
-        text: "specimen.classification__id",
-        show: false,
-      },
-      {
-        value: "classification__class_field",
+        value: "classification.class_field",
         text: "specimen.classification__class_field",
         show: false,
       },
@@ -532,12 +497,7 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "locality__id",
-        text: "specimen.locality__id",
-        show: false,
-      },
-      {
-        value: "locality__locality_en",
+        value: "locality.locality_en",
         text: "specimen.locality__locality_en",
         show: false,
       },
@@ -567,22 +527,12 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "sample__id",
-        text: "specimen.sample__id",
-        show: false,
-      },
-      {
-        value: "sample__number",
+        value: "sample.number",
         text: "specimen.sample__number",
         show: false,
       },
       {
-        value: "parent__id",
-        text: "specimen.parent__id",
-        show: false,
-      },
-      {
-        value: "parent__specimen_id",
+        value: "parent.specimen_id",
         text: "specimen.parent__specimen_id",
         show: false,
       },
@@ -592,27 +542,17 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "stratigraphy__id",
-        text: "specimen.stratigraphy__id",
-        show: false,
-      },
-      {
-        value: "stratigraphy__stratigraphy_en",
+        value: "stratigraphy.stratigraphy_en",
         text: "specimen.stratigraphy__stratigraphy_en",
         show: false,
       },
       {
-        value: "lithostratigraphy__id",
-        text: "specimen.lithostratigraphy__id",
-        show: false,
-      },
-      {
-        value: "lithostratigraphy__stratigraphy",
+        value: "lithostratigraphy.stratigraphy",
         text: "specimen.lithostratigraphy__stratigraphy",
         show: false,
       },
       {
-        value: "lithostratigraphy__stratigraphy_en",
+        value: "lithostratigraphy.stratigraphy_en",
         text: "specimen.lithostratigraphy__stratigraphy_en",
         show: false,
       },
@@ -622,8 +562,8 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "agent_collected__id",
-        text: "specimen.agent_collected__id",
+        value: "agent_collected__agent",
+        text: "specimen.agent_collected",
         show: false,
       },
       {
@@ -657,22 +597,17 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "presence__id",
-        text: "specimen.presence__id",
-        show: false,
-      },
-      {
-        value: "presence__value",
+        value: "presence.value",
         text: "specimen.presence__value",
         show: false,
       },
       {
-        value: "presence__value_en",
+        value: "presence.value_en",
         text: "specimen.presence__value_en",
         show: false,
       },
       {
-        value: "storage__id",
+        value: "storage.id",
         text: "specimen.storage__id",
         show: false,
       },
@@ -682,32 +617,22 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "status__id",
-        text: "specimen.status__id",
-        show: false,
-      },
-      {
-        value: "status__value",
+        value: "status.value",
         text: "specimen.status__value",
         show: false,
       },
       {
-        value: "status__value_en",
+        value: "status.value_en",
         text: "specimen.status__value_en",
         show: false,
       },
       {
-        value: "original_status__id",
-        text: "specimen.original_status__id",
-        show: false,
-      },
-      {
-        value: "original_status__value",
+        value: "original_status.value",
         text: "specimen.original_status__value",
         show: false,
       },
       {
-        value: "original_status__value_en",
+        value: "original_status.value_en",
         text: "specimen.original_status__value_en",
         show: false,
       },
@@ -717,22 +642,12 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "accession__id",
-        text: "specimen.accession__id",
-        show: false,
-      },
-      {
-        value: "accession__number",
+        value: "accession.number",
         text: "specimen.accession__number",
         show: false,
       },
       {
-        value: "deaccession__id",
-        text: "specimen.deaccession__id",
-        show: false,
-      },
-      {
-        value: "deaccession__number",
+        value: "deaccession.number",
         text: "specimen.deaccession__number",
         show: false,
       },
@@ -757,12 +672,7 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "database__id",
-        text: "specimen.database__id",
-        show: false,
-      },
-      {
-        value: "database__acronym",
+        value: "database.acronym",
         text: "specimen.database__acronym",
         show: false,
       },

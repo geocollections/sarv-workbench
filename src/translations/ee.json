@@ -1117,6 +1117,8 @@
     "number_pieces": "Tükkide arv",
     "save_as_new_sample": "Salvesta uue proovina",
     "specimenImages": "Pildid",
+    "specimen_full_name": "Eksemplar",
+    "identification": "Nimi",
     "relatedTables": {
       "specimen_identification": "Taksoni nimed",
       "specimen_identification_geology": "Kivi nimed",

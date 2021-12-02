@@ -7,8 +7,6 @@
       enable loading indicator when created.
 ' -->
   <v-card :flat="$attrs.flat">
-    {{ $attrs }}
-    {{ options }}e
     <v-data-table
       id="table"
       item-key="id"
@@ -27,12 +25,7 @@
       :single-expand="singleExpand"
       :expanded.sync="expanded"
       @click:row="handleRowClick"
-      @update:sort-by="
-        $emit('update:options', { value: $event, key: 'sortBy', test: 'test' })
-      "
-      @update:sort-desc="
-        $emit('update:options', { value: $event, key: 'sortDesc', test: 'test1' })
-      "
+      @update:options="updateTableOptions"
     >
       <template #no-data>{{ $t("table.noData") }}</template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
@@ -57,7 +50,6 @@
               />
             </v-col>
             <v-col>
-              {{ options }}
               <pagination-controls
                 :options="options"
                 :pagination="pagination"
@@ -196,11 +188,24 @@ export default {
   methods: {
     updateTableOptions(options) {
       if (this.options.page !== options.page)
-        this.$emit("update:options", { value: options.page, key: "page", test: 'test3' });
+        this.$emit("update:options", {
+          value: options.page,
+          key: "page",
+        });
       if (this.options.itemsPerPage !== options.itemsPerPage)
         this.$emit("update:options", {
           value: options.itemsPerPage,
-          key: "itemsPerPage", test: 'test4'
+          key: "itemsPerPage",
+        });
+      if (this.options.sortBy !== options.sortBy)
+        this.$emit("update:options", {
+          value: options.sortBy,
+          key: "sortBy",
+        });
+      if (this.options.sortDesc !== options.sortDesc)
+        this.$emit("update:options", {
+          value: options.sortDesc,
+          key: "sortDesc",
         });
     },
     handleRowClick(item, slot) {

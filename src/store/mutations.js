@@ -6,10 +6,6 @@ const mutations = {
   },
 
   UPDATE_OPTIONS(state, payload) {
-    console.log("-------------------------");
-    console.log("UPDATE OPTIONS");
-    console.log(payload);
-    console.log("-------------------------");
     state[payload.module].options[payload.key] = payload.value;
     if (payload.key !== "page" && state[payload.module].options.page !== 1)
       state[payload.module].options.page = 1;

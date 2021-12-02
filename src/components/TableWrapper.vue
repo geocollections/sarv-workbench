@@ -24,6 +24,7 @@
       :show-expand="expandable"
       :single-expand="singleExpand"
       :expanded.sync="expanded"
+      expand-icon="fas fa-caret-down"
       @click:row="handleRowClick"
       @update:options="
         isLoading = !onlyTable;

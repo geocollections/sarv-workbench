@@ -104,7 +104,7 @@
         :response="response"
         :filter="filterTable"
         :search-parameters="$_tableViewMixin_options"
-        :headers="$_tableViewMixin_headers"
+        :headers="$_tableHeaderMixin_translatedHeaders"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:toggle-reference-in-active-library="toggleReferenceInActiveLibrary"
         v-on:toggle-item-in-selection-series="toggleItemInSelectionSeries"

@@ -1120,6 +1120,8 @@
     "number_pieces": "Number of pieces",
     "save_as_new_sample": "Save as new sample",
     "specimenImages": "Images",
+    "specimen_full_name": "Specimen",
+    "identification": "Name",
     "relatedTables": {
       "specimen_identification": "Taxon names",
       "specimen_identification_geology": "Rock names",

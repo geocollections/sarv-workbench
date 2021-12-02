@@ -1,22 +1,14 @@
 <template>
-  <v-data-table
-    :headers="$_tableHeaderMixin_shownHeaders"
-    hide-default-footer
-    dense
+  <table-wrapper
+    v-bind="$attrs"
+    :headers="headers"
     :items="response.results"
-    :items-per-page="searchParameters.paginateBy"
-    multi-sort
-    :page="searchParameters.page"
-    :search="filter"
-    expand-icon="fas fa-caret-down"
-    :sort-by="searchParameters.sortBy"
-    :sort-desc="searchParameters.sortDesc"
-    @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
-    @update:sort-desc="
-      $emit('update:sorting', { value: $event, key: 'sortDesc' })
-    "
-    :server-items-length="response.count"
-    :class="bodyColor.split('n-')[0] + 'n-5'"
+    :count="response.count"
+    :options="searchParameters"
+    :show-search="false"
+    @change:headers="$emit('change:headers', $event)"
+    @reset:headers="$emit('reset:headers')"
+    @update:options="$emit('update:options', $event)"
   >
     <template v-slot:item.id="{ item }">
       <router-link
@@ -39,14 +31,16 @@
         {{ item.journal_name }}
       </router-link>
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
 import tableViewMixin from "@/mixins/tableViewMixin";
+import TableWrapper from "@/components/tables/TableWrapper";
 
 export default {
   name: "JournalTable",
+  components: { TableWrapper },
   mixins: [tableViewMixin],
   props: {
     response: {
@@ -65,6 +59,11 @@ export default {
           paginateBy: 25,
         };
       },
+    },
+    headers: {
+      type: Array,
+      required: true,
+      default: () => [],
     },
     bodyColor: {
       type: String,

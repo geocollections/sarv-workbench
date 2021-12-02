@@ -8,6 +8,7 @@ import store from "./store/store";
 import vuetify from "./plugins/vuetify";
 import constants from "@/plugins/constants";
 import api from "@/plugins/api";
+import formatDate from "@/plugins/formatDate";
 // import moment from "moment";
 require("moment/locale/et");
 
@@ -31,6 +32,7 @@ Vue.use(api, {
   rwapi_url: process.env.VUE_APP_RWAPI_URL,
   auth_url: process.env.VUE_APP_AUTH_URL,
 });
+Vue.use(formatDate)
 
 Vue.config.productionTip = false;
 
