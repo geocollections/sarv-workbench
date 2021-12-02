@@ -131,16 +131,16 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import { fetchTaxonPagesDetail } from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
 
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import Editor from "../partial/inputs/Editor";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import Editor from "../../components/partial/inputs/Editor";
 import { mapState } from "vuex";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "TaxonPage",
@@ -170,25 +170,15 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    globalUtilsMixin,
+    detailViewUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
-  },
-
-  created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.taxon_pagesSearchParameters,
-        request: "FETCH_TAXON_PAGES",
-        title: "header.taxon_pages",
-        object: "taxon_page",
-        field: "title",
-      });
-    }
-
-    this.loadFullInfo();
   },
 
   watch: {
@@ -196,12 +186,8 @@ export default {
       handler: function () {
         this.reloadData();
       },
-      deep: true,
+      immediate: true,
     },
-  },
-
-  computed: {
-    ...mapState("search", ["taxon_pagesSearchParameters"]),
   },
 
   methods: {
@@ -233,69 +219,30 @@ export default {
         },
       };
     },
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.taxon)) {
-        this.taxon_page.taxon = {
-          id: obj.taxon,
-          taxon: obj.taxon__taxon,
-        };
-        this.autocomplete.taxon.push(this.taxon_page.taxon);
-      }
-      if (this.isNotEmpty(obj.author)) {
-        this.taxon_page.author = {
-          id: obj.agent,
-          agent: obj.author__agent,
-        };
-        this.autocomplete.agent.push(this.taxon_page.author);
-      }
-    },
     reloadData() {
       Object.assign(this.$data, this.setInitialData());
       this.loadFullInfo();
     },
 
-    loadFullInfo() {
+    async loadFullInfo() {
+      console.log(this.$route.meta.isEdit)
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
 
-        fetchTaxonPagesDetail(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "taxon_page", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.taxon_page);
-            this.removeUnnecessaryFields(this.taxon_page, this.copyFields);
-            this.$emit("data-loaded", this.taxon_page);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        const res = await this.$api.rw.getDetail(
+          "taxon_page",
+          this.$route.params.id,
+          { nest: 1 }
+        );
+
+        if (res?.id) {
+          this.$emit("object-exists", true);
+          this.$set(this, "taxon_page", res);
+          this.fillAutocompleteFields(this.taxon_page);
+          this.$emit("data-loaded", this.taxon_page);
+        } else this.$emit("object-exists", false);
+        this.setLoadingState(false);
       }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
   },
 };
