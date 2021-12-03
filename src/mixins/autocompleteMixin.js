@@ -228,12 +228,6 @@ const autocompleteMixin = {
     autocompleteAttachmentSearch(value) {
       this.$_autocompleteMixin_search(value, "attachment", "attachment");
     },
-    autocompleteAttachmentSearch2(value) {
-      this.$_autocompleteMixin_search(value, "attachment", "attachment");
-    },
-    autocompleteAttachmentSearch3(value) {
-      this.$_autocompleteMixin_search(value, "attachment3", "attachment");
-    },
     autocompletePublicAttachmentSearch(value) {
       this.$_autocompleteMixin_search(value, "attachment_public", "attachment");
     },
@@ -442,23 +436,22 @@ function handleResponse(response) {
 function buildAutocompleteQuery(type, value, currentUser, groupByField) {
   switch (type) {
     case "analysis":
-      return `analysis/?multi_search=value:${value};fields:id;lookuptype:icontains&fields=id,analysis_method__analysis_method,analysis_method__method_en`;
+      return `analysis/?search=${value}&search_fields=id&fields=id,analysis_method__analysis_method,analysis_method__method_en`;
     case "preparation":
-      return `preparation/?multi_search=value:${value};fields:preparation_number,id;lookuptype:icontains&fields=id,preparation_number`;
+      return `preparation/?or_search=preparation_number__icontains:${value} OR id__icontains:${value}&fields=id,preparation_number`;
     case "locality":
-      return `locality/?multi_search=value:${value};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en,longitude,latitude`;
+      return `locality/?or_search=id__icontains:${value} OR locality__icontains:${value} OR locality_en__icontains:${value}&fields=id,locality,locality_en,longitude,latitude`;
     case "storage_additional":
     case "storage":
-      return `location/?multi_search=value:${value};fields:location;lookuptype:icontains&fields=id,location`;
+      return `location/?search=${value}&search_fields=location&fields=id,location`;
     case "stratigraphy":
-      return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en,hierarchy_string`;
-    case "chronostratigraphy":
-      return `stratigraphy/?type=1&multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
-    case "lithostratigraphy":
-      return `stratigraphy/?type=2&multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&type__value_en=lithostratigraphy&fields=id,stratigraphy,stratigraphy_en`;
     case "stratigraphy_top":
     case "stratigraphy_base":
-      return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
+      return `stratigraphy/?or_search=id__icontains:${value} OR stratigraphy__icontains:${value} OR stratigraphy_en__icontains:${value}&fields=id,stratigraphy,stratigraphy_en,hierarchy_string`;
+    case "chronostratigraphy":
+      return `stratigraphy/?type=1&or_search=id__icontains:${value} OR stratigraphy__icontains:${value} OR stratigraphy_en__icontains:${value}&fields=id,stratigraphy,stratigraphy_en`;
+    case "lithostratigraphy":
+      return `stratigraphy/?type=2&or_search=id__icontains:${value} OR stratigraphy__icontains:${value} OR stratigraphy_en__icontains:${value}&fields=id,stratigraphy,stratigraphy_en`;
     case "projectagent":
     case "library_agent":
     case "agent":
@@ -466,74 +459,68 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "agent_digitised":
     case "agent_collected":
     case "copyright_agent":
-      return `agent/?multi_search=value:${value};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,forename,surename,orcid`;
+    case "doi_agent":
+      return `agent/?or_search=id__icontains:${value} OR agent__icontains:${value} OR forename__icontains:${value} OR surename__icontains:${value}&fields=id,agent,forename,surename,orcid`;
     case "institution":
-      return `agent/?multi_search=value:${value};fields:id,agent,institution_name,institution_name_en;lookuptype:icontains&fields=id,agent,institution_name,institution_name_en`;
+      return `agent/?or_search=id__icontains:${value} OR agent__icontains:${value} OR institution_name__icontains:${value} OR institution_name_en__icontains:${value}&fields=id,agent,institution_name,institution_name_en`;
     case "rock":
-      return `rock/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
-    case "sample":
-      return `sample/?multi_search=value:${value};fields:number;lookuptype:icontains&fields=id,number`;
-    case "series": //sample series
-      return `sample_series/?multi_search=value:${value};fields:name;lookuptype:icontains&fields=id,name`;
-    case "specimen":
-      return `specimen/?multi_search=value:${value};fields:specimen_id,coll__number;lookuptype:icontains&fields=id,specimen_id,coll__number`;
-    case "reference":
-      return `reference/?multi_search=value:${value};fields:reference,id;lookuptype:icontains&fields=id,reference,pages,figures,remarks`;
-    case "synonym":
-      return `locality_synonym/?multi_search=value:${value};fields:synonym;lookuptype:icontains&fields=id,synonym,reference__reference,pages,remarks`;
-    case "attachment":
-      return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&fields=id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number,is_preferred,is_private,remarks`;
-    case "attachment_public":
-      return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&is_private=0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
-    case "attachment_public_image":
-      return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&is_private=0&attachment_format__value__icontains=image&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename,attachment_format__value`;
-    case "attachment3":
-      return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&or_search=user_added__iexact:${currentUser.user};is_private__iexact:0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
-    case "taxon":
-      return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&fields=id,taxon,hierarchy_string`;
+      return `rock/?or_search=name__icontains:${value} OR name_en__icontains:${value}&fields=id,name,name_en`;
     case "project":
     case "parent_project":
-      return `project/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+      return `project/?or_search=name__icontains:${value} OR name_en__icontains:${value}&fields=id,name,name_en`;
     case "area":
-      return `area/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
-    case "library":
-      return `library/?multi_search=value:${value};fields:id,title,title_en;lookuptype:icontains&author=${currentUser.id}&fields=id,title,title_en`;
-    case "journals":
-      return `journal/?multi_search=value:${value};fields:id,journal_name,journal_short;lookuptype:icontains`;
+      return `area/?or_search=name__icontains:${value} OR name_en__icontains:${value}&fields=id,name,name_en`;
     case "site":
-      return `site/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+      return `site/?or_search=name__icontains:${value} OR name_en__icontains:${value}&fields=id,name,name_en`;
     case "dataset":
-      return `dataset/?multi_search=value:${value};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
-    case "doi_agent":
-      return `agent/?multi_search=value:${value};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,institution__institution_name_en,orcid`;
-    case "library_agent_search":
-      return `library_agent/?agent=${currentUser.id}&multi_search=value:${value};fields:library__title,library__title_en;lookuptype:icontains&fields=library,library__title,library__title_en`;
+      return `dataset/?or_search=name__icontains:${value} OR name_en__icontains:${value}&fields=id,name,name_en`;
+    case "sample":
+      return `sample/?search=${value}&search_fields=number&fields=id,number`;
+    case "series":
+      return `sample_series/?search=${value}&search_fields=name&fields=id,name`;
+    case "specimen":
+      return `specimen/?or_search=specimen_id__icontains:${value} OR coll__number__icontains:${value}&fields=id,specimen_id,coll__number`;
+    case "reference":
+      return `reference/?or_search=id__icontains:${value} OR reference__icontains:${value}&fields=id,reference,pages,figures,remarks`;
+    case "synonym":
+      return `locality_synonym/?search=${value}&search_fields=synonym&fields=id,synonym,reference,pages,remarks`;
+    case "attachment":
+      return `attachment/?or_search=id__icontains:${value} OR author__agent__icontains:${value} OR original_filename__icontains:${value} OR description__icontains:${value} OR description_en__icontains:${value}&fields=id,uuid_filename,description,description_en,original_filename,date_created,attachment_format,author__agent,image_number,is_preferred,is_private,remarks`;
+    case "attachment_public":
+      return `attachment/?or_search=id__icontains:${value} OR author__agent__icontains:${value} OR original_filename__icontains:${value} OR description__icontains:${value} OR description_en__icontains:${value}&is_private=false&fields=id,author,original_filename,description,description_en,remarks,uuid_filename`;
+    case "attachment_public_image":
+      return `attachment/?or_search=id__icontains:${value} OR author__agent__icontains:${value} OR original_filename__icontains:${value} OR description__icontains:${value} OR description_en__icontains:${value}&is_private=0&attachment_format__value__icontains=image&fields=id,author,original_filename,description,description_en,remarks,uuid_filename,attachment_format`;
+    case "taxon":
+      return `taxon/?search=${value}&search_fields=taxon&fields=id,taxon,hierarchy_string`;
+    case "library":
+      return `library/?or_search=id__icontains:${value} OR title__icontains:${value} OR title_en__icontains:${value}&author=${currentUser.id}&fields=id,title,title_en`;
+    case "journals":
+      return `journal/?or_search=id__icontains:${value} OR journal_name__icontains:${value} OR journal_short__icontains:${value}`;
+    case "library_agent_search": // Todo: This should be done through library not library_agent
+      return `library_agent/?agent=${currentUser.id}&or_search=library__title__icontains:${value} OR library__title_en__icontains:${value}&fields=library&nest=1`;
     case "coll":
-      return `collection/?number__icontains=${value}&fields=id,number`;
+      return `collection/?search=${value}&search_fields=number&fields=id,number`;
     case "classification":
-      return `classification/?multi_search=value:${value};fields:id,class_field,class_en;lookuptype:icontains&fields=id,class_field,class_en`;
+      return `classification/?or_search=id__icontains:${value} OR class_field__icontains:${value} OR class_en__icontains:${value}&fields=id,class_field,class_en`;
     case "keyword":
-      return `keyword/?multi_search=value:${value};fields:id,keyword;lookuptype:icontains`;
-    case "keyword_group_by":
-      return `keyword/?multi_search=value:${value};fields:keyword,${groupByField};lookuptype:icontains&group_by=${groupByField}`;
-    case "keyword_category":
-      return `keyword_category/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case "related_keyword":
-      return `keyword/?keyword__icontains=${value}&fields=id,keyword`;
+      return `keyword/?or_search=id__icontains:${value} OR keyword__icontains:${value}`;
+    case "keyword_category":
+      return `keyword_category/?or_search=name__icontains:${value} OR name_en__icontains:${value}&fields=id,name,name_en`;
     case "analysis_method":
-      return `analysis_method/?multi_search=value:${value};fields:analysis_method,method_en;lookuptype:icontains&fields=id,analysis_method,method_en`;
+      return `analysis_method/?or_search=analysis_method__icontains:${value} OR method_en__icontains:${value}&fields=id,analysis_method,method_en`;
     case "drillcore":
-      return `drillcore/?multi_search=value:${value};fields:drillcore,drillcore_en;lookuptype:icontains&fields=id,drillcore,drillcore_en`;
+      return `drillcore/?or_search=drillcore__icontains:${value} OR drillcore_en__icontains:${value}&fields=id,drillcore,drillcore_en`;
     case "analysis_parameter":
-      return `analysis_parameter/?multi_search=value:${value};fields:parameter,parameter_name,parameter_name_en;lookuptype:icontains&fields=id,parameter,parameter_name,parameter_name_en,parameter_html`;
+      return `analysis_parameter/?or_search=parameter__icontains:${value} OR parameter_name__icontains:${value} OR parameter_name_en__icontains:${value}&fields=id,parameter,parameter_name,parameter_name_en,parameter_html`;
     case "imageset":
-      return `imageset/?imageset_number__icontains=${value}&or_search=user_added:${currentUser.forename};author__id:${currentUser.id}`;
+      return `imageset/?or_search=user_added:${currentUser.forename} OR author__id:${currentUser.id}&search=${value}&search_fields=imageset_number`;
     case "user":
-      return `user/?username__icontains=${value}&fields=id,username`;
+      return `user/?search=${value}&search_fields=username&fields=id,username`;
     case "rock_classification":
-      return `rock_classification/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+      return `rock_classification/?or_search=id__icontains:${value} OR name__icontains:${value} OR name_en__icontains:${value}&fields=id,name,name_en`;
     case "selection_series":
-      return `selection_series/?multi_search=value:${value};fields:id,name,tablename,remarks;lookuptype:icontains&fields=id,name,tablename,remarks`;
+      return `selection_series/?or_search=id__icontains:${value} OR name_en__icontains:${value} OR tablename_en__icontains:${value} OR remarks__icontains:${value}&fields=id,name,tablename,remarks`;
     case "attach_link__collection":
     case "attach_link__dataset":
     case "attach_link__project":
