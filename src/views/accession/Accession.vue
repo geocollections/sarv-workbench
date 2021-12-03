@@ -68,14 +68,14 @@
               <autocomplete-wrapper
                 v-model="accession.agent_andis"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.agent_andis"
+                :loading="autocomplete.loaders.agent_andis"
                 item-text="agent"
                 :label="$t('accession.agent_andis')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'agent_andis')"
               />
             </v-col>
 
@@ -83,14 +83,14 @@
               <autocomplete-wrapper
                 v-model="accession.agent_vottis"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.agent_vottis"
+                :loading="autocomplete.loaders.agent_vottis"
                 item-text="agent"
                 :label="$t('accession.agent_vottis')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'agent_vottis')"
               />
             </v-col>
 
@@ -98,14 +98,14 @@
               <autocomplete-wrapper
                 v-model="accession.agent_kinnitas"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.agent_kinnitas"
+                :loading="autocomplete.loaders.agent_kinnitas"
                 item-text="agent"
                 :label="$t('accession.agent_kinnitas')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'agent_kinnitas')"
               />
             </v-col>
           </v-row>
@@ -150,15 +150,16 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import { fetchAccessionDetail } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import DateWrapper from "../partial/inputs/DateWrapper";
+import DateWrapper from "../../components/partial/inputs/DateWrapper";
 import { mapState } from "vuex";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "Accession",
@@ -188,142 +189,47 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin],
+  mixins: [formManipulation, autocompleteMixin, detailViewUtilsMixin],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.accessionSearchParameters,
-        request: "FETCH_ACCESSIONS",
-        title: "header.accessions",
-        object: "accession",
-        field: "number",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    ...mapState("search", ["accessionSearchParameters"]),
   },
 
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "number",
-          "date_signed",
-          "date_confirmed",
-          "agent_andis",
-          "agent_vottis",
-          "agent_kinnitas",
-          "agent_kinnitas",
-          "number_items",
-          "description",
-          "remarks",
-        ],
+        copyFields: [],
         autocomplete: {
           loaders: {
-            agent: false,
+            agent_andis: false,
+            agent_vottis: false,
+            agent_kinnitas: false,
           },
-          agent: [],
+          agent_andis: [],
+          agent_vottis: [],
+          agent_kinnitas: [],
         },
-        accession: {},
+        accession: {
+          id: null,
+          number: null,
+          date_signed: null,
+          date_confirmed: null,
+          agent_andis: null,
+          agent_vottis: null,
+          agent_kinnitas: null,
+          number_items: null,
+          description: null,
+          remarks: null,
+        },
         requiredFields: ["number"],
         block: {
           info: true,
         },
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchAccessionDetail(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "accession", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.accession);
-            this.removeUnnecessaryFields(this.accession, this.copyFields);
-
-            this.$emit("data-loaded", this.accession);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.agent_andis)) {
-        this.accession.agent_andis = {
-          id: obj.agent_andis,
-          agent: obj.agent_andis__agent,
-        };
-        this.autocomplete.agent.push(this.accession.agent_andis);
-      }
-      if (this.isNotEmpty(obj.agent_vottis)) {
-        this.accession.agent_vottis = {
-          id: obj.agent_vottis,
-          agent: obj.agent_vottis__agent,
-        };
-        this.autocomplete.agent.push(this.accession.agent_vottis);
-      }
-      if (this.isNotEmpty(obj.agent_kinnitas)) {
-        this.accession.agent_kinnitas = {
-          id: obj.agent_kinnitas,
-          agent: obj.agent_kinnitas__agent,
-        };
-        this.autocomplete.agent.push(this.accession.agent_kinnitas);
-      }
     },
   },
 };

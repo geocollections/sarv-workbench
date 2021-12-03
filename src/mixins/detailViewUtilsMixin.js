@@ -5,6 +5,7 @@ const detailViewUtilsMixin = {
     fillAutocompleteFields(obj) {
       Object.entries(obj).forEach((entry) => {
         if (isPlainObject(entry[1])) {
+          console.log(entry[0]);
           // If autocomplete field doesn't exist then creates it (better to initialise it in data and remove the creation here)
           if (!this.autocomplete?.[entry[0]]) this.autocomplete[entry[0]] = [];
           this.autocomplete[entry[0]].push(entry[1]);
@@ -51,6 +52,49 @@ const detailViewUtilsMixin = {
       let uploadableObject = { ...object };
       uploadableObject = cleanObject(uploadableObject);
       return uploadableObject;
+    },
+
+    reloadData() {
+      Object.assign(this.$data, this.setInitialData());
+      this.loadFullInfo();
+    },
+
+    async loadFullInfo() {
+      const module = this.$route.meta.object;
+
+      if (this?.listOfAutocompleteTables)
+        this?.loadAutocompleteFields(this.listOfAutocompleteTables);
+
+      if (this.$route.meta.isEdit) {
+        this.setLoadingState(true);
+
+        const res = await this.$api.rw.getDetail(
+          module,
+          this.$route.params.id,
+          { nest: 1 }
+        );
+
+        if (res?.id) {
+          this.$emit("object-exists", true);
+          this.$set(this, module, res);
+          this.fillAutocompleteFields(this[module]);
+          this.$emit("data-loaded", this[module]);
+        } else this.$emit("object-exists", false);
+        this.setLoadingState(false);
+
+        if (this?.relatedTabs?.length > 0)
+          this.loadRelatedData(
+            this.relatedTabs.map((tab) => tab.name),
+            module,
+            res.id
+          );
+      }
+    },
+  },
+
+  watch: {
+    "$route.params.id"() {
+      this.reloadData();
     },
   },
 };

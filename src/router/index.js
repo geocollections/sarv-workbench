@@ -1864,7 +1864,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/deaccession/Deaccession.vue"),
+                import("../views/deaccession/Deaccession.vue"),
               meta: {
                 isEdit: true,
                 table: "deaccession",
@@ -1886,7 +1886,7 @@ const router = new Router({
               path: "",
               name: "Deaccession add",
               component: () =>
-                import("../components/deaccession/Deaccession.vue"),
+                import("../views/deaccession/Deaccession.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.deaccession",
@@ -1928,7 +1928,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/accession/Accession.vue"),
+              component: () => import("../views/accession/Accession.vue"),
               meta: {
                 isEdit: true,
                 table: "accession",
@@ -1949,7 +1949,7 @@ const router = new Router({
             {
               path: "",
               name: "Accession add",
-              component: () => import("../components/accession/Accession.vue"),
+              component: () => import("../views/accession/Accession.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.accession",
@@ -2050,7 +2050,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/loan/Loan.vue"),
+              component: () => import("../views/loan/Loan.vue"),
               meta: {
                 isEdit: true,
                 table: "loan",
@@ -2071,7 +2071,7 @@ const router = new Router({
             {
               path: "",
               name: "Loan add",
-              component: () => import("../components/loan/Loan.vue"),
+              component: () => import("../views/loan/Loan.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.loan",
@@ -2111,7 +2111,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/web_news/WebNews.vue"),
+              component: () => import("../views/web_news/WebNew.vue"),
               meta: {
                 isEdit: true,
                 table: "web_news",
@@ -2132,7 +2132,7 @@ const router = new Router({
             {
               path: "",
               name: "Web news add",
-              component: () => import("../components/web_news/WebNews.vue"),
+              component: () => import("../views/web_news/WebNew.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.web_news",
@@ -2172,7 +2172,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/web_pages/WebPages.vue"),
+              component: () => import("../views/web_pages/WebPage.vue"),
               meta: {
                 isEdit: true,
                 table: "web_pages",
@@ -2193,7 +2193,7 @@ const router = new Router({
             {
               path: "",
               name: "Web pages add",
-              component: () => import("../components/web_pages/WebPages.vue"),
+              component: () => import("../views/web_pages/WebPage.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.web_pages",

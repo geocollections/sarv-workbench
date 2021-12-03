@@ -131,15 +131,12 @@
 </template>
 
 <script>
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import Editor from "../../components/partial/inputs/Editor";
-import { mapState } from "vuex";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import Editor from "@/components/partial/inputs/Editor";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
-import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
@@ -170,40 +167,19 @@ export default {
     },
   },
 
-  mixins: [
-    formManipulation,
-    autocompleteMixin,
-    globalUtilsMixin,
-    detailViewUtilsMixin,
-  ],
+  mixins: [formManipulation, autocompleteMixin, detailViewUtilsMixin],
 
   data() {
     return this.setInitialData();
   },
 
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      immediate: true,
-    },
+  created() {
+    this.loadFullInfo();
   },
 
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "frontpage",
-          "language",
-          "frontpage_title",
-          "title",
-          "on_frontpage",
-          "taxon",
-          "content",
-          "author",
-        ],
         autocomplete: {
           loaders: {
             taxon: false,
@@ -212,37 +188,22 @@ export default {
           taxon: [],
           agent: [],
         },
-        taxon_page: {},
+        taxon_page: {
+          id: null,
+          frontpage: null,
+          language: null,
+          frontpage_title: null,
+          title: null,
+          on_frontpage: null,
+          taxon: null,
+          content: null,
+          author: null,
+        },
         requiredFields: ["taxon"],
         block: {
           info: true,
         },
       };
-    },
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    async loadFullInfo() {
-      console.log(this.$route.meta.isEdit)
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        const res = await this.$api.rw.getDetail(
-          "taxon_page",
-          this.$route.params.id,
-          { nest: 1 }
-        );
-
-        if (res?.id) {
-          this.$emit("object-exists", true);
-          this.$set(this, "taxon_page", res);
-          this.fillAutocompleteFields(this.taxon_page);
-          this.$emit("data-loaded", this.taxon_page);
-        } else this.$emit("object-exists", false);
-        this.setLoadingState(false);
-      }
     },
   },
 };

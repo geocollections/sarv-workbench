@@ -461,4 +461,5 @@ export default {
   getters,
   actions,
   mutations,
+  getDefaultState,
 };

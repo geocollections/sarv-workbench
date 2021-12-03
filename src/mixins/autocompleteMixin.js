@@ -152,8 +152,8 @@ const autocompleteMixin = {
         "stratigraphy_base"
       );
     },
-    autocompleteAgentSearch(value) {
-      this.$_autocompleteMixin_search(value, "agent", "agent");
+    autocompleteAgentSearch(value, options = "agent") {
+      this.$_autocompleteMixin_search(value, "agent", options);
     },
     autocompleteOwnerSearch(value) {
       this.$_autocompleteMixin_search(value, "owner", "agent");
@@ -520,7 +520,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "rock_classification":
       return `rock_classification/?or_search=id__icontains:${value} OR name__icontains:${value} OR name_en__icontains:${value}&fields=id,name,name_en`;
     case "selection_series":
-      return `selection_series/?or_search=id__icontains:${value} OR name_en__icontains:${value} OR tablename_en__icontains:${value} OR remarks__icontains:${value}&fields=id,name,tablename,remarks`;
+      return `selection_series/?or_search=id__icontains:${value} OR tablename__icontains:${value} OR remarks__icontains:${value}&fields=id,name,tablename,remarks`;
     case "attach_link__collection":
     case "attach_link__dataset":
     case "attach_link__project":
