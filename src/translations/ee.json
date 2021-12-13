@@ -3097,5 +3097,9 @@
     "headerFilter": "Filter",
     "headers": "Päised",
     "headerSelectDisabled": "Veergu sorteeritakse"
+  },
+  "table": {
+    "noData": "Andmeid ei leitud",
+    "loading": "Andmeid laetakse..."
   }
 }

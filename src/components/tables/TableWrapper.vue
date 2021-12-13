@@ -14,6 +14,8 @@
       dense
       calculate-widths
       multi-sort
+      :loading-text="$t('table.loading')"
+      :loader-height="0"
       :loading="isLoading"
       :headers="visibleHeaders"
       :items="items"
@@ -162,6 +164,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -172,17 +178,11 @@ export default {
         "items-per-page-text": this.$t("common.itemsPerPage"),
       },
       expanded: [],
-      isLoading: false,
     };
   },
   computed: {
     visibleHeaders() {
       return this.headers.filter((header) => header.show);
-    },
-  },
-  watch: {
-    items() {
-      this.isLoading = false;
     },
   },
   methods: {

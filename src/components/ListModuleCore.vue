@@ -9,7 +9,7 @@
     <!-- EXPORT and OPTIONS -->
     <v-row align="center" justify="start" class="px-4 mt-4 mb-1 d-print-none">
       <!-- EXPORT -->
-      <div class="mr-4 mb-2" v-if="exportButtons">
+      <div class="mb-2 mr-4" v-if="exportButtons">
         <export-buttons
           :filename="module"
           :table-data="response.results"
@@ -20,7 +20,7 @@
       <!-- OPTIONS -->
       <div v-if="useListView || useImageView" class="mb-2">
         <v-radio-group
-          class="radio-buttons mt-0"
+          class="mt-0 radio-buttons"
           :value="$_tableViewMixin_viewType"
           @change="$_tableViewMixin_updateViewType({ value: $event })"
           row
@@ -60,7 +60,7 @@
     <v-card
       elevation="4"
       :color="bodyColor.split('n-')[0] + 'n-3'"
-      class="table-card my-1"
+      class="my-1 table-card"
       :loading="isLoading"
     >
       <template v-slot:progress>
@@ -99,7 +99,7 @@
       />
 
       <router-view
-        v-if="isTableView && response.count > 0"
+        v-if="isTableView"
         ref="table"
         :response="response"
         :filter="filterTable"
@@ -110,6 +110,7 @@
         v-on:toggle-item-in-selection-series="toggleItemInSelectionSeries"
         v-on:toggle-select-all="toggleSelectAll"
         :body-color="bodyColor"
+        :is-loading="isLoading"
         :body-active-color="bodyActiveColor"
         @change:headers="$_tableViewMixin_updateHeaders"
         @reset:headers="$_tableViewMixin_resetHeaders"

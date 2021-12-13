@@ -58,7 +58,9 @@
     "original": "Original",
     "fields": "Table headers",
     "pageSelect": "{current} / {count}",
-    "itemsPerPage": "Rows per page:"
+    "itemsPerPage": "Rows per page:",
+    "goTo": "Go to page",
+    "goToBtn": "Go"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -1672,8 +1674,6 @@
     "referenceAndLocality": "Reference and Locality",
     "resourceTypePlaceholder": "Dataset",
     "reference": "Reference",
-    "title": "Title",
-    "title_en": "Title EN",
     "relatedTables": {
       "dataset_author": "Authors",
       "dataset_reference": "References",
@@ -3098,5 +3098,9 @@
     "headerSelectDisabled": "Sorting enabled",
     "headerFilter": "Filter",
     "headers": "Headers"
+  },
+  "table": {
+    "noData": "No data found",
+    "loading": "Loading items..."
   }
 }

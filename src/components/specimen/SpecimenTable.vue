@@ -6,6 +6,7 @@
     :count="response.count"
     :options="searchParameters"
     :show-search="false"
+    :is-loading="isLoading"
     @change:headers="$emit('change:headers', $event)"
     @reset:headers="$emit('reset:headers')"
     @update:options="$emit('update:options', $event)"
@@ -185,6 +186,10 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
