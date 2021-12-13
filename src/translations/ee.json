@@ -1616,8 +1616,6 @@
   },
   "dataset": {
     "creators": "Author",
-    "title": "Title",
-    "title_en": "Title EN",
     "title_alternative": "Title, alt",
     "title_translated": "Title, translated",
     "title_translated_language__id": "Trans, title lang",
