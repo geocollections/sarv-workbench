@@ -605,10 +605,10 @@
 </template>
 
 <script>
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import InputWrapper from "../partial/inputs/InputWrapper";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
 
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -626,13 +626,15 @@ import {
   fetchStratigraphySynonyms,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import StratigraphySynonymTable from "./relatedTables/StratigraphySynonymTable";
+import StratigraphySynonymTable from "../../components/stratigraphy/relatedTables/StratigraphySynonymTable";
 import requestsMixin from "../../mixins/requestsMixin";
-import StratigraphyReferenceTable from "./relatedTables/StratigraphyReferenceTable";
-import StratigraphyStratotypeTable from "./relatedTables/StratigraphyStratotypeTable";
-import Editor from "../partial/inputs/Editor";
+import StratigraphyReferenceTable from "../../components/stratigraphy/relatedTables/StratigraphyReferenceTable";
+import StratigraphyStratotypeTable from "../../components/stratigraphy/relatedTables/StratigraphyStratotypeTable";
+import Editor from "../../components/partial/inputs/Editor";
 import { mapActions, mapState } from "vuex";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Stratigraphy",
@@ -672,6 +674,8 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -679,28 +683,10 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.stratigraphySearchParameters,
-        request: "FETCH_STRATIGRAPHY",
-        title: "header.stratigraphies",
-        object: "stratigraphy",
-        field: "stratigraphy_en",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler: function () {
         if (this.$route.meta.isEdit) {
@@ -708,19 +694,6 @@ export default {
         }
       },
       deep: true,
-    },
-  },
-
-  computed: {
-    ...mapState("search", ["stratigraphySearchParameters"]),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
     },
   },
 
@@ -746,50 +719,13 @@ export default {
         ],
         activeTab: "stratigraphy_reference",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "stratigraphy",
-          "stratigraphy_en",
-          "stratigraphy_original",
-          "author_free",
-          "year",
-          "etymon",
-          "etymon_en",
-          "original_locality",
-          "original_rank",
-          "index_main",
-          "index_main_html",
-          "index_additional",
-          "index_additional_html",
-          "color_code_cgmw",
-          "color_code_additional",
-          "hierarchy_string",
-          "parent",
-          "type",
-          "rank",
-          "scope",
-          "status",
-          "region",
-          "region_en",
-          "lithology",
-          "lithology_en",
-          "max_thickness",
-          "description",
-          "description_en",
-          "definition",
-          "definition_en",
-          "age_base",
-          "age_top",
-          "age_precision",
-          "age_reference",
-          "age_chronostratigraphy",
-          "sort_within_parent",
-          "approved_ics",
-          "approved_esk",
-          "is_private",
-          "remarks",
-          "index_old",
-          "maaamet_kood",
+        listOfAutocompleteTables: [
+          "list_stratigraphy_type",
+          "list_stratigraphy_rank",
+          "list_stratigraphy_scope",
+          "list_stratigraphy_status",
+          "list_stratotype_type",
+          "list_language",
         ],
         autocomplete: {
           loaders: {
@@ -798,6 +734,7 @@ export default {
             list_stratigraphy_rank: false,
             list_stratigraphy_scope: false,
             list_stratigraphy_status: false,
+            list_stratotype_type: false,
             reference: false,
             age_chronostratigraphy: false,
             locality: false,
@@ -808,102 +745,63 @@ export default {
           list_stratigraphy_rank: [],
           list_stratigraphy_scope: [],
           list_stratigraphy_status: [],
+          list_stratotype_type: [],
           reference: [],
           age_chronostratigraphy: [],
           locality: [],
           list_language: [],
         },
         requiredFields: ["stratigraphy", "stratigraphy_en"],
-        stratigraphy: {},
+        stratigraphy: {
+          id: null,
+          stratigraphy: null,
+          stratigraphy_en: null,
+          stratigraphy_original: null,
+          author_free: null,
+          year: null,
+          etymon: null,
+          etymon_en: null,
+          original_locality: null,
+          original_rank: null,
+          index_main: null,
+          index_main_html: null,
+          index_additional: null,
+          index_additional_html: null,
+          color_code_cgmw: null,
+          color_code_additional: null,
+          hierarchy_string: null,
+          parent: null,
+          type: null,
+          rank: null,
+          scope: null,
+          status: null,
+          region: null,
+          region_en: null,
+          lithology: null,
+          lithology_en: null,
+          max_thickness: null,
+          description: null,
+          description_en: null,
+          definition: null,
+          definition_en: null,
+          age_base: null,
+          age_top: null,
+          age_precision: null,
+          age_reference: null,
+          age_chronostratigraphy: null,
+          sort_within_parent: null,
+          approved_ics: null,
+          approved_esk: null,
+          is_private: null,
+          remarks: null,
+          index_old: null,
+          maaamet_kood: null,
+        },
         block: {
           info: true,
           description: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields(true, true);
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchStratigraphy(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "stratigraphy", this.handleResponse(response)[0]);
-            // this.stratigraphy = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.stratigraphy);
-
-            this.removeUnnecessaryFields(this.stratigraphy, this.copyFields);
-            this.$emit("data-loaded", this.stratigraphy);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    loadAutocompleteFields(
-      regularAutocompleteFields = true,
-      relatedDataAutocompleteFields = false
-    ) {
-      if (regularAutocompleteFields) {
-        fetchListStratigraphyType().then(
-          (response) =>
-            (this.autocomplete.list_stratigraphy_type =
-              this.handleResponse(response))
-        );
-        fetchListStratigraphyRank().then(
-          (response) =>
-            (this.autocomplete.list_stratigraphy_rank =
-              this.handleResponse(response))
-        );
-        fetchListStratigraphyScope().then(
-          (response) =>
-            (this.autocomplete.list_stratigraphy_scope =
-              this.handleResponse(response))
-        );
-        fetchListStratigraphyStatus().then(
-          (response) =>
-            (this.autocomplete.list_stratigraphy_status =
-              this.handleResponse(response))
-        );
-      }
-
-      if (relatedDataAutocompleteFields) {
-        fetchListStratotypeType().then(
-          (response) =>
-            (this.autocomplete.list_stratotype_type =
-              this.handleResponse(response))
-        );
-        fetchListLanguages().then(
-          (response) =>
-            (this.autocomplete.list_language = this.handleResponse(response))
-        );
-      }
     },
 
     setDefaultRelatedData() {
@@ -932,142 +830,6 @@ export default {
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      if (!this.isNotEmpty(uploadableObject.age_base))
-        uploadableObject.age_base = null;
-      if (!this.isNotEmpty(uploadableObject.age_top))
-        uploadableObject.age_top = null;
-      if (!this.isNotEmpty(uploadableObject.age_precision))
-        uploadableObject.age_precision = null;
-
-      // Adding related data only on add view
-      if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0) {
-            uploadableObject.related_data[tab.name] =
-              this.relatedData[tab.name].results;
-
-            uploadableObject.related_data[tab.name].forEach((item) => {
-              Object.keys(item).forEach((key) => {
-                if (typeof item[key] === "object" && item[key] !== null) {
-                  item[key] = item[key].id ? item[key].id : null;
-                }
-              });
-            });
-          }
-        });
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.parent)) {
-        this.stratigraphy.parent = {
-          id: obj.parent,
-          stratigraphy: obj.parent__stratigraphy,
-          stratigraphy_en: obj.parent__stratigraphy_en,
-          hierarchy_string: obj.parent__hierarchy_string,
-        };
-        this.autocomplete.parent_stratigraphy.push(this.stratigraphy.parent);
-      }
-      if (this.isNotEmpty(obj.age_reference)) {
-        this.stratigraphy.age_reference = {
-          id: obj.age_reference,
-          reference: obj.age_reference__reference,
-        };
-        this.autocomplete.reference.push(this.stratigraphy.age_reference);
-      }
-      if (this.isNotEmpty(obj.age_chronostratigraphy)) {
-        this.stratigraphy.age_chronostratigraphy = {
-          id: obj.age_chronostratigraphy,
-          stratigraphy: obj.age_chronostratigraphy__stratigraphy,
-          stratigraphy_en: obj.age_chronostratigraphy__stratigraphy_en,
-        };
-        this.autocomplete.age_chronostratigraphy.push(
-          this.stratigraphy.age_chronostratigraphy
-        );
-      }
-      if (this.isNotEmpty(obj.type)) {
-        this.stratigraphy.type = {
-          id: obj.type,
-          value: obj.type__value,
-          value_en: obj.type__value_en,
-        };
-      }
-      if (this.isNotEmpty(obj.rank)) {
-        this.stratigraphy.rank = {
-          id: obj.rank,
-          value: obj.rank__value,
-          value_en: obj.rank__value_en,
-        };
-      }
-      if (this.isNotEmpty(obj.scope)) {
-        this.stratigraphy.scope = {
-          id: obj.scope,
-          value: obj.scope__value,
-          value_en: obj.scope__value_en,
-        };
-      }
-      if (this.isNotEmpty(obj.status)) {
-        this.stratigraphy.status = {
-          id: obj.status,
-          value: obj.status__value,
-          value_en: obj.status__value_en,
-        };
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "stratigraphy_reference") {
-        query = fetchStratigraphyReferences(
-          this.$route.params.id,
-          this.relatedData.searchParameters.stratigraphy_reference
-        );
-      } else if (object === "stratigraphy_stratotype") {
-        query = fetchStratigraphyStratotypes(
-          this.$route.params.id,
-          this.relatedData.searchParameters.stratigraphy_stratotype
-        );
-      } else if (object === "stratigraphy_synonym") {
-        query = fetchStratigraphySynonyms(
-          this.$route.params.id,
-          this.relatedData.searchParameters.stratigraphy_synonym
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
     },
 
     updateHierarchyString(parent) {

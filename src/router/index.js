@@ -1536,7 +1536,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/stratigraphy/Stratigraphy.vue"),
+                import("../views/stratigraphy/Stratigraphy.vue"),
               meta: {
                 isEdit: true,
                 table: "stratigraphy",
@@ -1558,7 +1558,7 @@ const router = new Router({
               path: "",
               name: "Stratigraphy add",
               component: () =>
-                import("../components/stratigraphy/Stratigraphy.vue"),
+                import("../views/stratigraphy/Stratigraphy.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.stratigraphy",
