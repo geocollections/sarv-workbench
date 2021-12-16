@@ -197,8 +197,8 @@ const autocompleteMixin = {
         1
       );
     },
-    autocompleteRockSearch(value) {
-      this.$_autocompleteMixin_search(value, "rock", "rock");
+    autocompleteRockSearch(value, options = "rock") {
+      this.$_autocompleteMixin_search(value, "rock", options);
     },
     autocompleteSampleSeriesSearch(value) {
       this.$_autocompleteMixin_search(value, "series", "series");

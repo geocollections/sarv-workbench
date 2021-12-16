@@ -1802,7 +1802,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/rock/Rock.vue"),
+              component: () => import("../views/rock/Rock.vue"),
               meta: {
                 isEdit: true,
                 table: "rock",
@@ -1823,7 +1823,7 @@ const router = new Router({
             {
               path: "",
               name: "Rock add",
-              component: () => import("../components/rock/Rock.vue"),
+              component: () => import("../views/rock/Rock.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.rock",
