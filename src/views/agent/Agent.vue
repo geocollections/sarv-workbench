@@ -344,20 +344,14 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {
-  fetchAgent,
-  fetchListAgentType,
-  fetchListCountry,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import DateWrapper from "../../components/partial/inputs/DateWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import { mapState } from "vuex";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "Agent",
@@ -384,66 +378,22 @@ export default {
       default: "deep-orange",
     },
   },
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    detailViewUtilsMixin,
+  ],
   data() {
     return this.setInitialData();
   },
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.agentSearchParameters,
-        request: "FETCH_AGENTS",
-        title: "header.agents",
-        object: "agent",
-        field: "agent",
-      });
-    }
-
     this.loadFullInfo();
-  },
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
-  },
-  computed: {
-    ...mapState("search", ["agentSearchParameters"]),
   },
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "agent",
-          "type",
-          "forename",
-          "surename",
-          "institution",
-          "institution_name",
-          "institution_name_en",
-          "title",
-          "profession",
-          "profession_en",
-          "address",
-          "address1",
-          "address2",
-          "http",
-          "orcid",
-          "country",
-          "country_txt",
-          "phone",
-          "email",
-          "date_born",
-          "date_deceased",
-          "old_name",
-          "new_name",
-          "remarks",
-        ],
+        listOfAutocompleteTables: ["list_country", "agent_type"],
         autocomplete: {
           loaders: {
             agent_type: false,
@@ -463,92 +413,6 @@ export default {
         },
         menuDateBorn: false,
         menuDateDeceased: false,
-      };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchAgent(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "agent", this.handleResponse(response)[0]);
-            // this.agent = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.agent);
-
-            this.removeUnnecessaryFields(this.agent, this.copyFields);
-            this.$emit("data-loaded", this.agent);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    loadAutocompleteFields() {
-      fetchListCountry().then(
-        (response) =>
-          (this.autocomplete.list_country = this.handleResponse(response))
-      );
-
-      fetchListAgentType().then(
-        (response) =>
-          (this.autocomplete.agent_type = this.handleResponse(response))
-      );
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      this.agent.type = {
-        id: obj.type,
-        value: obj.type__value,
-        value_en: obj.type__value_en,
-      };
-      if (this.isNotEmpty(obj.institution)) {
-        this.agent.institution = {
-          id: obj.institution,
-          agent: obj.institution__agent,
-        };
-        this.autocomplete.institution.push(this.agent.institution);
-      }
-      this.agent.country = {
-        id: obj.country,
-        value: obj.country__value,
-        value_en: obj.country__value_en,
       };
     },
   },

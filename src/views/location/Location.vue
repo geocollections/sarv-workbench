@@ -131,6 +131,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -239,6 +240,7 @@
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
                 <specimen-table
+                  :headers="specimenHeadersTranslated"
                   ref="table"
                   :response="relatedData.specimen"
                   :search-parameters="relatedData.searchParameters.specimen"
@@ -326,6 +328,7 @@
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
                 <sample-table
+                  :headers="sampleHeadersTranslated"
                   ref="table"
                   :response="relatedData.sample"
                   :search-parameters="relatedData.searchParameters.sample"
@@ -475,28 +478,22 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {
-  fetchLocation,
-  fetchLocationAttachment,
-  fetchLocationSamples,
-  fetchLocationSpecimens,
-  fetchMultiChangeSpecimen,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
 import { mapActions, mapState } from "vuex";
-import FileInput from "../partial/inputs/FileInput";
-import requestsMixin from "../../mixins/requestsMixin";
-import SpecimenTable from "../specimen/SpecimenTable";
-import SampleTable from "../sample/SampleTable";
-import ExportButtons from "../partial/export/ExportButtons";
+import FileInput from "@/components/partial/inputs/FileInput";
+import requestsMixin from "@/mixins/requestsMixin";
+import SpecimenTable from "@/components/specimen/SpecimenTable";
+import SampleTable from "@/components/sample/SampleTable";
+import ExportButtons from "@/components/partial/export/ExportButtons";
 import { fetchMultiChangeLocation } from "@/assets/js/api/apiCalls";
 import ListView from "@/components/partial/ListView";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Location",
@@ -531,34 +528,23 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.locationSearchParameters,
-        request: "FETCH_LOCATIONS",
-        title: "header.locations",
-        object: "location",
-        field: "location",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler: function () {
         this.loadRelatedData(this.activeTab);
@@ -573,22 +559,32 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["locationSearchParameters"]),
+    ...mapState("specimen", { specimenHeaders: (state) => state.headers }),
+    ...mapState("sample", { sampleHeaders: (state) => state.headers }),
+
+    specimenHeadersTranslated() {
+      return this.specimenHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
+
+    sampleHeadersTranslated() {
+      return this.sampleHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
       if (tabObject && tabObject[this.$route.meta.object]) {
         return tabObject[this.$route.meta.object];
       } else return null;
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
     },
 
     // Returns objects which are valid for location change
@@ -683,18 +679,6 @@ export default {
         relatedData: this.setDefaultRelatedData(),
         activeTab: "attachment_link",
         currentViewType: "table",
-        copyFields: [
-          "id",
-          "location",
-          "parent_location",
-          "number_items",
-          "number_items_registered",
-          "agent",
-          "stratigraphy_free",
-          "date_collected_free",
-          "contents",
-          "remarks",
-        ],
         autocomplete: {
           loaders: {
             agent: false,
@@ -703,7 +687,18 @@ export default {
           agent: [],
           storage: [],
         },
-        location: {},
+        location: {
+          id: null,
+          location: null,
+          parent_location: null,
+          number_items: null,
+          number_items_registered: null,
+          agent: null,
+          stratigraphy_free: null,
+          date_collected_free: null,
+          contents: null,
+          remarks: null,
+        },
         requiredFields: ["location"],
         block: {
           info: true,
@@ -721,41 +716,6 @@ export default {
           { text: "main.pagination", value: 1000 },
         ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchLocation(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "location", this.handleResponse(response)[0]);
-            // this.location = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.location);
-            this.removeUnnecessaryFields(this.location, this.copyFields);
-
-            this.$emit("data-loaded", this.location);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => {
-          this.loadRelatedData(tab.name);
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
     },
 
     setDefaultRelatedData() {
@@ -786,110 +746,8 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0)
-            if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment =
-                this.relatedData.attachment_link.results.map((item) => {
-                  return { id: item.id };
-                });
-            } else {
-              uploadableObject.related_data[tab.name] =
-                this.relatedData[tab.name].results;
-
-              uploadableObject.related_data[tab.name].forEach((item) => {
-                Object.keys(item).forEach((key) => {
-                  if (typeof item[key] === "object" && item[key] !== null) {
-                    item[key] = item[key].id ? item[key].id : null;
-                  }
-                });
-              });
-            }
-        });
-      } else {
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment_link.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.agent)) {
-        this.location.agent = {
-          id: obj.agent,
-          agent: obj.agent__agent,
-        };
-        this.autocomplete.agent.push(this.location.agent);
-      }
-      if (this.isNotEmpty(obj.parent_location)) {
-        this.location.parent_location = {
-          id: obj.parent_location,
-          location: obj.parent_location__location,
-        };
-        this.autocomplete.storage.push(this.location.parent_location);
-      }
-    },
-
-    loadRelatedData(type) {
-      let query;
-
-      if (type === "attachment_link") {
-        query = fetchLocationAttachment(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      } else if (type === "specimen") {
-        query = fetchLocationSpecimens(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen
-        );
-      } else if (type === "sample") {
-        query = fetchLocationSamples(
-          this.$route.params.id,
-          this.relatedData.searchParameters.sample
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[type].count = response.data.count;
-          this.relatedData[type].results = this.handleResponse(response);
-        });
-      }
-    },
-
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "location", singleFileMetadata);
+      this.addFileAsRelatedDataNew(files, "storage", singleFileMetadata);
     },
 
     addExistingFiles(files) {

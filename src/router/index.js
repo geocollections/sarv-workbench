@@ -1742,7 +1742,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/location/Location.vue"),
+              component: () => import("../views/location/Location.vue"),
               meta: {
                 isEdit: true,
                 table: "location",
@@ -1763,7 +1763,7 @@ const router = new Router({
             {
               path: "",
               name: "Location add",
-              component: () => import("../components/location/Location.vue"),
+              component: () => import("../views/location/Location.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.location",
@@ -1990,7 +1990,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/visit/Visit.vue"),
+              component: () => import("../views/visit/Visit.vue"),
               meta: {
                 isEdit: true,
                 table: "visit",
@@ -2011,7 +2011,7 @@ const router = new Router({
             {
               path: "",
               name: "Visit add",
-              component: () => import("../components/visit/Visit.vue"),
+              component: () => import("../views/visit/Visit.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.visit",
