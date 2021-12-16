@@ -1220,7 +1220,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/selection_series/SelectionSeries.vue"),
+                import("../views/selection_series/SelectionSerie.vue"),
               meta: {
                 isEdit: true,
                 table: "selection_series",
@@ -1242,7 +1242,7 @@ const router = new Router({
               path: "",
               name: "Selection series add",
               component: () =>
-                import("../components/selection_series/SelectionSeries.vue"),
+                import("../views/selection_series/SelectionSerie.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addSelectionSeries",
