@@ -1156,7 +1156,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/taxon/Taxon.vue"),
+              component: () => import("../views/taxon/Taxon.vue"),
               meta: {
                 isEdit: true,
                 table: "taxon",
@@ -1177,7 +1177,7 @@ const router = new Router({
             {
               path: "",
               name: "Taxon add",
-              component: () => import("../components/taxon/Taxon.vue"),
+              component: () => import("../views/taxon/Taxon.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addTaxon",

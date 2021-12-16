@@ -342,6 +342,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
