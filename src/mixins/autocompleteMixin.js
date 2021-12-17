@@ -308,13 +308,8 @@ const autocompleteMixin = {
         1
       );
     },
-    autocompleteAnalysisMethodSearch(value) {
-      this.$_autocompleteMixin_search(
-        value,
-        "analysis_method",
-        "analysis_method",
-        1
-      );
+    autocompleteAnalysisMethodSearch(value, options = "analysis_method") {
+      this.$_autocompleteMixin_search(value, "analysis_method", options, 1);
     },
     autocompleteImagesetSearch(value) {
       this.$_autocompleteMixin_search(value, "imageset", "imageset", 2);
@@ -354,13 +349,8 @@ const autocompleteMixin = {
         2
       );
     },
-    autocompleteAnalysisParameterSearch(value) {
-      this.$_autocompleteMixin_search(
-        value,
-        "analysis_parameter",
-        "analysis_parameter",
-        1
-      );
+    autocompleteAnalysisParameterSearch(value, options = "analysis_parameter") {
+      this.$_autocompleteMixin_search(value, "analysis_parameter", options, 1);
     },
     autocompleteUserSearch(value) {
       this.$_autocompleteMixin_search(value, "user", "user", 2);

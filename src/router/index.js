@@ -901,7 +901,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/analysis/Analysis.vue"),
+              component: () => import("../views/analysis/Analysis.vue"),
               meta: {
                 isEdit: true,
                 table: "analysis",
@@ -922,7 +922,7 @@ const router = new Router({
             {
               path: "",
               name: "Analysis add",
-              component: () => import("../components/analysis/Analysis.vue"),
+              component: () => import("../views/analysis/Analysis.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAnalysis",
@@ -2432,7 +2432,7 @@ const router = new Router({
               path: "",
               component: () =>
                 import(
-                  "../components/analysis_parameter/AnalysisParameter.vue"
+                  "../views/analysis_parameter/AnalysisParameter.vue"
                 ),
               meta: {
                 isEdit: true,
@@ -2456,7 +2456,7 @@ const router = new Router({
               name: "Analysis parameter add",
               component: () =>
                 import(
-                  "../components/analysis_parameter/AnalysisParameter.vue"
+                  "../views/analysis_parameter/AnalysisParameter.vue"
                 ),
               meta: {
                 isEdit: false,
@@ -2503,7 +2503,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/analysis_method/AnalysisMethod.vue"),
+                import("../views/analysis_method/AnalysisMethod.vue"),
               meta: {
                 isEdit: true,
                 table: "analysis_method",
@@ -2525,7 +2525,7 @@ const router = new Router({
               path: "",
               name: "Analysis method add",
               component: () =>
-                import("../components/analysis_method/AnalysisMethod.vue"),
+                import("../views/analysis_method/AnalysisMethod.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.analysis_method",

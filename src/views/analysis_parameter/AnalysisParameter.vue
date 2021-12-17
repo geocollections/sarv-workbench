@@ -47,14 +47,19 @@
               <autocomplete-wrapper
                 v-model="analysis_parameter.parent_parameter"
                 :color="bodyActiveColor"
-                :items="autocomplete.analysis_parameter"
-                :loading="autocomplete.loaders.analysis_parameter"
+                :items="autocomplete.parent_parameter"
+                :loading="autocomplete.loaders.parent_parameter"
                 :item-text="parameterNameLabel"
                 :label="$t('analysis_parameter.parent_parameter')"
                 is-link
                 route-object="analysis_parameter"
                 is-searchable
-                v-on:search:items="autocompleteAnalysisParameterSearch"
+                v-on:search:items="
+                  autocompleteAnalysisParameterSearch(
+                    $event,
+                    'parent_parameter'
+                  )
+                "
               />
             </v-col>
           </v-row>
@@ -143,15 +148,13 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { fetchAnalysisParameter } from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import { mapState } from "vuex";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "AnalysisParameter",
@@ -177,136 +180,45 @@ export default {
       default: "deep-orange",
     },
   },
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    detailViewUtilsMixin,
+  ],
   data() {
     return this.setInitialData();
   },
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.analysis_parameterSearchParameters,
-        request: "FETCH_ANALYSIS_PARAMETERS",
-        title: "header.analysis_parameter",
-        object: "analysis_parameter",
-        field: "parameter",
-      });
-    }
-
     this.loadFullInfo();
-  },
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
-  },
-  computed: {
-    ...mapState("search", ["analysis_parameterSearchParameters"]),
   },
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "parameter",
-          "parameter_name",
-          "parameter_name_en",
-          "parameter_html",
-          "synonyms",
-          "parent_parameter",
-          "remarks",
-        ],
+        copyFields: [],
         autocomplete: {
           loaders: {
-            analysis_parameter: false,
+            parent_parameter: false,
           },
-          analysis_parameter: [],
+          parent_parameter: [],
         },
         requiredFields: ["parameter"],
-        analysis_parameter: {},
+        analysis_parameter: {
+          id: null,
+          parameter: null,
+          parameter_name: null,
+          parameter_name_en: null,
+          parameter_html: null,
+          synonyms: null,
+          parent_parameter: null,
+          remarks: null,
+        },
         block: {
           info: true,
           description: true,
         },
       };
     },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchAnalysisParameter(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(
-              this,
-              "analysis_parameter",
-              this.handleResponse(response)[0]
-            );
-            this.fillAutocompleteFields(this.analysis_parameter);
-
-            this.removeUnnecessaryFields(
-              this.analysis_parameter,
-              this.copyFields
-            );
-            this.$emit("data-loaded", this.analysis_parameter);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.parent_parameter)) {
-        this.analysis_parameter.parent_parameter = {
-          id: obj.parent_parameter,
-          parameter_name: obj.parent_parameter__parameter_name,
-          parameter_name_en: obj.parent_parameter__parameter_name_en,
-        };
-        this.autocomplete.analysis_parameter.push(
-          this.analysis_parameter.parent_parameter
-        );
-      }
-    },
   },
 };
 </script>
-
-<style scoped></style>

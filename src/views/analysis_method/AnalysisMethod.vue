@@ -54,14 +54,16 @@
               <autocomplete-wrapper
                 v-model="analysis_method.parent_method"
                 :color="bodyActiveColor"
-                :items="autocomplete.analysis_method"
-                :loading="autocomplete.loaders.analysis_method"
+                :items="autocomplete.parent_method"
+                :loading="autocomplete.loaders.parent_method"
                 :item-text="analysisMethodLabel"
                 :label="$t('analysis_method.parent_method')"
                 is-link
                 route-object="analysis_method"
                 is-searchable
-                v-on:search:items="autocompleteAnalysisMethodSearch"
+                v-on:search:items="
+                  autocompleteAnalysisMethodSearch($event, 'parent_method')
+                "
               />
             </v-col>
           </v-row>
@@ -114,15 +116,13 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { fetchAnalysisMethodDetail } from "@/assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import { mapState } from "vuex";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "AnalysisMethod",
@@ -148,130 +148,41 @@ export default {
       default: "deep-orange",
     },
   },
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    detailViewUtilsMixin,
+  ],
   data() {
     return this.setInitialData();
   },
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.analysis_methodSearchParameters,
-        request: "FETCH_ANALYSIS_METHODS",
-        title: "header.analysis_method",
-        object: "analysis_method",
-        field: "analysis_method",
-      });
-    }
-
     this.loadFullInfo();
-  },
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
-  },
-  computed: {
-    ...mapState("search", ["analysis_methodSearchParameters"]),
   },
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "analysis_method",
-          "method_en",
-          "parent_method",
-          "remarks",
-        ],
         autocomplete: {
           loaders: {
-            analysis_method: false,
+            parent_method: false,
           },
-          analysis_method: [],
+          parent_method: [],
         },
         requiredFields: ["analysis_method"],
-        analysis_method: {},
+        analysis_method: {
+          id: null,
+          analysis_method: null,
+          method_en: null,
+          parent_method: null,
+          remarks: null,
+        },
         block: {
           info: true,
           description: true,
         },
       };
     },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchAnalysisMethodDetail(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(
-              this,
-              "analysis_method",
-              this.handleResponse(response)[0]
-            );
-            this.fillAutocompleteFields(this.analysis_method);
-
-            this.removeUnnecessaryFields(this.analysis_method, this.copyFields);
-            this.$emit("data-loaded", this.analysis_method);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.parent_method)) {
-        this.analysis_method.parent_method = {
-          id: obj.parent_method,
-          analysis_method: obj.parent_method__analysis_method,
-          method_en: obj.parent_method__method_en,
-        };
-        this.autocomplete.analysis_method.push(
-          this.analysis_method.parent_method
-        );
-      }
-    },
   },
 };
 </script>
-
-<style scoped></style>
