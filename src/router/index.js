@@ -1411,7 +1411,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/preparation/Preparation.vue"),
+                import("../views/preparation/Preparation.vue"),
               meta: {
                 isEdit: true,
                 table: "preparation",
@@ -1433,7 +1433,7 @@ const router = new Router({
               path: "",
               name: "Preparation add",
               component: () =>
-                import("../components/preparation/Preparation.vue"),
+                import("../views/preparation/Preparation.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addPreparation",

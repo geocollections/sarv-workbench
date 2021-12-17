@@ -273,11 +273,11 @@ const autocompleteMixin = {
         2
       );
     },
-    autocompleteClassificationSearch(value) {
+    autocompleteClassificationSearch(value, options = "classification") {
       this.$_autocompleteMixin_search(
         value,
         "classification",
-        "classification",
+        options,
         2
       );
     },
