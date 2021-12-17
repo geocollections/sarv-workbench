@@ -206,8 +206,8 @@ const autocompleteMixin = {
     autocompleteSampleSearch(value) {
       this.$_autocompleteMixin_search(value, "sample", "sample", 1);
     },
-    autocompleteSpecimenSearch(value) {
-      this.$_autocompleteMixin_search(value, "specimen", "specimen");
+    autocompleteSpecimenSearch(value, options = "specimen") {
+      this.$_autocompleteMixin_search(value, "specimen", options);
     },
     autocompleteSiteSearch(value) {
       this.$_autocompleteMixin_search(value, "site", "site");

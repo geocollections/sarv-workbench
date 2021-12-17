@@ -827,7 +827,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/doi/Doi.vue"),
+              component: () => import("../views/doi/Doi.vue"),
               meta: {
                 isEdit: true,
                 table: "doi",
@@ -847,7 +847,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/doi/Doi.vue"),
+              component: () => import("../views/doi/Doi.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addDoi",
@@ -858,7 +858,7 @@ const router = new Router({
               children: [
                 {
                   path: "egf/:id(\\d+)",
-                  component: () => import("../components/doi/Doi.vue"),
+                  component: () => import("../views/doi/Doi.vue"),
                   meta: {
                     isEdit: false,
                     isEGF: true,
@@ -1093,7 +1093,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/collection/Collection.vue"),
+                import("../views/collection/Collection.vue"),
               meta: {
                 isEdit: true,
                 table: "collection",
@@ -1115,7 +1115,7 @@ const router = new Router({
               path: "",
               name: "Collection add",
               component: () =>
-                import("../components/collection/Collection.vue"),
+                import("../views/collection/Collection.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addCollection",
@@ -1474,7 +1474,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/dataset/Dataset.vue"),
+              component: () => import("../views/dataset/Dataset.vue"),
               meta: {
                 isEdit: true,
                 table: "dataset",
@@ -1495,7 +1495,7 @@ const router = new Router({
             {
               path: "",
               name: "Dataset add",
-              component: () => import("../components/dataset/Dataset.vue"),
+              component: () => import("../views/dataset/Dataset.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addDataset",

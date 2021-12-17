@@ -162,6 +162,11 @@ const getDefaultState = () => {
     },
     headers: [
       {
+        value: "id",
+        text: "collection.id",
+        show: true,
+      },
+      {
         value: "collection_id",
         text: "collection.collection_id",
         show: true,
@@ -186,11 +191,6 @@ const getDefaultState = () => {
         text: "collection.link",
         sortable: false,
         show: true,
-      },
-      {
-        value: "id",
-        text: "collection.id",
-        show: false,
       },
       {
         value: "number",

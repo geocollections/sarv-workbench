@@ -77,6 +77,9 @@ class ApiService {
     const status = error.response.status;
     const detail = error?.response?.data?.detail ?? "";
     const outputMessage = `${detail} URL: ${url}`;
+    // Todo: Beautify error message
+    if (status === 400)
+      return `<b>Bad Request!</b> ${JSON.stringify(error?.response?.data)} URL: ${url}`;
     if (status === 403) return `<b>Forbidden!</b> ${outputMessage}`;
     if (status === 404) return `<b>Page not Found!</b> ${outputMessage}`;
     if (status === 405) return `<b>Method not Allowed!</b> ${outputMessage}`;

@@ -1,4 +1,5 @@
 import { isPlainObject } from "lodash";
+import { fetchDoiUsingEGF } from "@/assets/js/api/apiCalls";
 
 const detailViewUtilsMixin = {
   methods: {
@@ -90,6 +91,15 @@ const detailViewUtilsMixin = {
             module,
             res.id
           );
+      } else if (this.$route.meta.isEGF && !this.$route.meta.isEdit) {
+        // DOI special case
+        fetchDoiUsingEGF(this.$route.params.id).then((response) => {
+          if (response?.data) this.assignEgfFieldsToDoiObject(response?.data);
+          else
+            this.toastError({
+              text: `Couldn't fetch <b>Fond</b> with an ID: <b>${this.$route.params.id}</b>`,
+            });
+        });
       }
     },
   },
