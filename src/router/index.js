@@ -2301,7 +2301,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/sample_series/SampleSeries.vue"),
+                import("../views/sample_series/SampleSerie.vue"),
               meta: {
                 isEdit: true,
                 table: "sample_series",
@@ -2323,7 +2323,7 @@ const router = new Router({
               path: "",
               name: "Sample series add",
               component: () =>
-                import("../components/sample_series/SampleSeries.vue"),
+                import("../views/sample_series/SampleSerie.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.sample_series",

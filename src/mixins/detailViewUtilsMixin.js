@@ -28,6 +28,7 @@ const detailViewUtilsMixin = {
     loadRelatedData(tables, module, moduleId) {
       // Exception for location / storage naming
       if (module === "location") module = "storage";
+      if (module === "sample_series") module = "series";
       Promise.all(
         tables.map((table) =>
           this.$api.rw

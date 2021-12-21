@@ -2861,8 +2861,8 @@
     "location": "Hoiukoht",
     "locality_free": "Lokaliteet (txt)",
     "relatedTables": {
-      "samples": "Proovid",
-      "attachments": "Failid"
+      "sample": "Proovid",
+      "attachment": "Failid"
     }
   },
   "site_groundwater": {

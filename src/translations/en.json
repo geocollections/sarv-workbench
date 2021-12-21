@@ -2865,8 +2865,8 @@
     "location": "Location",
     "locality_free": "Locality (txt)",
     "relatedTables": {
-      "samples": "Samples",
-      "attachments": "Attachments"
+      "sample": "Samples",
+      "attachment": "Attachments"
     }
   },
   "site_groundwater": {
