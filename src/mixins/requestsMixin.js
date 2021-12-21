@@ -16,14 +16,14 @@ const requestsMixin = {
         let formData = new FormData();
         let uploadableObject = cloneDeep(payload.item);
 
-        let mainObjectKey = this.$route.meta.table;
+        let mainObjectKey = this.$route.meta.object;
         if (connectionField) mainObjectKey = connectionField;
         if (payload.table === "taxon_subclass" && table === "taxon") {
           mainObjectKey = "parent";
           uploadableObject.taxon = payload.rawItem.taxon;
         }
 
-        uploadableObject[mainObjectKey] = this[this.$route.meta.table].id;
+        uploadableObject[mainObjectKey] = this[this.$route.meta.object].id;
 
         formData.append("data", JSON.stringify(uploadableObject));
 
@@ -65,7 +65,7 @@ const requestsMixin = {
         delete uploadableObject.id;
 
         if (payload.table === "taxon_subclass" && table === "taxon") {
-          uploadableObject.parent = this[this.$route.meta.table].id;
+          uploadableObject.parent = this[this.$route.meta.object].id;
           uploadableObject.taxon = payload.rawItem.taxon;
         }
 

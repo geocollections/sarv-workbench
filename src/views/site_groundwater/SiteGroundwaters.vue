@@ -1,6 +1,6 @@
 <template>
   <div class="site-groundwaters">
-    <table-view-title title="header.site_groundwater" buttonPath="/site/add" />
+    <table-view-title title="header.site_groundwater" />
 
     <table-view-search :col-size="4" />
 

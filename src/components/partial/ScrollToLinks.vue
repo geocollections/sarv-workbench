@@ -17,7 +17,7 @@
         <v-icon x-small left>{{
           getIconPack(name) + " " + getIcon(name)
         }}</v-icon>
-        {{ $t("sidebar." + $route.meta.table + "." + name) }}
+        {{ $t("sidebar." + $route.meta.object + "." + name) }}
       </v-btn>
     </v-btn-toggle>
   </div>
