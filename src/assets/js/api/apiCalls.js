@@ -111,7 +111,7 @@ async function get(child = "", customUrl) {
 }
 
 async function post(child, data, customUrl, method) {
-  let url = api.url + child + "dsfs";
+  let url = api.url + child;
   if (customUrl && customUrl.length > 0) url = customUrl + child + "/";
   const service = axios.create({
     method,

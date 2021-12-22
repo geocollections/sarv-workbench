@@ -370,14 +370,14 @@
               <autocomplete-wrapper
                 v-model="specimen.parent"
                 :color="bodyActiveColor"
-                :items="autocomplete.specimen"
-                :loading="autocomplete.loaders.specimen"
+                :items="autocomplete.parent"
+                :loading="autocomplete.loaders.parent"
                 item-text="specimen_id"
                 :label="$t('specimen.related_specimen')"
                 is-link
                 route-object="specimen"
                 is-searchable
-                v-on:search:items="autocompleteSpecimenSearch"
+                v-on:search:items="autocompleteSpecimenSearch($event, 'parent')"
               />
             </v-col>
           </v-row>
@@ -836,13 +836,6 @@ export default {
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler: function () {
         this.loadRelatedData(
@@ -856,7 +849,6 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["specimenSearchParameters"]),
     ...mapState("search", {
       activeRelatedDataTab: (state) => state.activeRelatedDataTab.specimen,
     }),
@@ -1024,41 +1016,6 @@ export default {
       };
     },
 
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    async loadFullInfo() {
-      this.loadAutocompleteFields(this.listOfAutocompleteTables);
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        const res = await this.$api.rw.getDetail(
-          "specimen",
-          this.$route.params.id,
-          { nest: 1 }
-        );
-        if (res?.id) {
-          this.$emit("object-exists", true);
-          this.$set(this, "specimen", res);
-
-          this.fillAutocompleteFields(this.specimen);
-          this.$emit("data-loaded", this.specimen);
-
-          this.loadRelatedData(
-            this.relatedTabs.map((tab) => tab.name),
-            "specimen",
-            res.id
-          );
-          this.loadSpecimenImages(this.$route.params.id);
-        } else this.$emit("object-exists", false);
-
-        this.setLoadingState(false);
-      }
-    },
-
     loadSpecimenImages(specimenId) {
       this.specimenImages = this.$api.rw.get("attachment", {
         defaultParams: {
@@ -1128,12 +1085,6 @@ export default {
           },
         },
       };
-    },
-
-    formatDataForUpload(object) {
-      let uploadableObject = { ...object };
-      uploadableObject = this.cleanObject(uploadableObject);
-      return uploadableObject;
     },
 
     addFiles(files, singleFileMetadata) {

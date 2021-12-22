@@ -71,7 +71,7 @@
         enablePermissions
       "
       class="d-print-none"
-      :table="$route.meta.table"
+      :table="$route.meta.object"
       :object-data="data"
       :key="permissionsComponentKey"
       :body-color="bodyColor"
@@ -82,7 +82,7 @@
     <log
       v-if="typeof data === 'object' && data !== null && objectExists"
       class="d-print-none"
-      :table="$route.meta.table"
+      :table="$route.meta.object"
       :object-data="data"
       :key="logComponentKey"
       :body-color="bodyColor"
@@ -150,7 +150,7 @@ export default {
     ...mapState("detail", ["initialEditViewDataHasChangedState"]),
 
     enablePermissions() {
-      let table = this.$route.meta.table;
+      let table = this.$route.meta.object;
       let availableTables = [
         "analysis",
         "attachment",

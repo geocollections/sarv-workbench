@@ -51,8 +51,8 @@
               <autocomplete-wrapper
                 v-model="doi.resource_type"
                 :color="bodyActiveColor"
-                :items="autocomplete.resource_type"
-                :loading="autocomplete.loaders.resource_type"
+                :items="autocomplete.doi_resource_type"
+                :loading="autocomplete.loaders.doi_resource_type"
                 item-text="value"
                 :label="$t('doi.resourceTypeGeneral')"
                 use-state
@@ -197,8 +197,8 @@
               <autocomplete-wrapper
                 v-model="doi.title_translated_language"
                 :color="bodyActiveColor"
-                :items="autocomplete.language"
-                :loading="autocomplete.loaders.language"
+                :items="autocomplete.list_language"
+                :loading="autocomplete.loaders.list_language"
                 :item-text="commonLabel"
                 :label="$t('doi.title_translated_language')"
               />
@@ -211,8 +211,8 @@
               <autocomplete-wrapper
                 v-model="doi.language"
                 :color="bodyActiveColor"
-                :items="autocomplete.language"
-                :loading="autocomplete.loaders.language"
+                :items="autocomplete.list_language"
+                :loading="autocomplete.loaders.list_language"
                 :item-text="commonLabel"
                 :label="$t('doi.language')"
               />
@@ -319,8 +319,8 @@
               <autocomplete-wrapper
                 v-model="doi.licence"
                 :color="bodyActiveColor"
-                :items="autocomplete.licence"
-                :loading="autocomplete.loaders.licence"
+                :items="autocomplete.list_licence"
+                :loading="autocomplete.loaders.list_licence"
                 :item-text="licenceLabel"
                 :label="$t('common.licence')"
               />
@@ -363,7 +363,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
-                v-model="relatedData.reference"
+                v-model="doi.reference"
                 :color="bodyActiveColor"
                 :items="autocomplete.reference"
                 :loading="autocomplete.loaders.reference"
@@ -378,7 +378,7 @@
 
             <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
-                v-model="relatedData.dataset"
+                v-model="doi.dataset"
                 :color="bodyActiveColor"
                 :items="autocomplete.dataset"
                 :loading="autocomplete.loaders.dataset"
@@ -439,6 +439,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -884,20 +885,22 @@ import {
 } from "@/assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileInput from "../partial/inputs/FileInput";
-import DoiRelatedIdentifierTable from "./relatedTables/DoiRelatedIdentifierTable";
-import DoiGeolocationTable from "./relatedTables/DoiGeolocationTable";
-import DoiAgentTable from "./relatedTables/DoiAgentTable";
-import DoiDateTable from "./relatedTables/DoiDateTable";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import FileInput from "../../components/partial/inputs/FileInput";
+import DoiRelatedIdentifierTable from "../../components/doi/relatedTables/DoiRelatedIdentifierTable";
+import DoiGeolocationTable from "../../components/doi/relatedTables/DoiGeolocationTable";
+import DoiAgentTable from "../../components/doi/relatedTables/DoiAgentTable";
+import DoiDateTable from "../../components/doi/relatedTables/DoiDateTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import toastMixin from "../../mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
 import Pagination from "@/components/partial/Pagination";
 import { orderBy } from "lodash";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   components: {
@@ -937,6 +940,8 @@ export default {
     formSectionsMixin,
     requestsMixin,
     toastMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   name: "Doi",
@@ -946,26 +951,10 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.doiSearchParameters,
-        request: "FETCH_DOIS",
-        title: "header.dois",
-        object: "doi",
-        field: "title",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-    },
     "relatedData.searchParameters": {
       handler: function () {
         this.loadRelatedData(this.activeTab);
@@ -981,22 +970,11 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["doiSearchParameters"]),
-
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
       if (tabObject && tabObject[this.$route.meta.object]) {
         return tabObject[this.$route.meta.object];
       } else return null;
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
     },
 
     xmlDiff() {
@@ -1050,38 +1028,17 @@ export default {
         ],
         activeTab: "doi_agent",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "identifier",
-          "creators",
-          "publisher",
-          "publication_year",
-          "title",
-          "title_alternative",
-          "title_translated",
-          "title_translated_language",
-          "abstract",
-          "resource_type",
-          "resource",
-          "methods",
-          "version",
-          "sizes",
-          "formats",
-          "language",
-          "subjects",
-          "copyright_agent",
-          "licence",
-          "remarks",
-          "owner",
-          "is_private",
-          "is_locked",
-          "datacite_created",
-          "datacite_updated",
-          "egf",
+        listOfAutocompleteTables: [
+          "doi_resource_type",
+          "doi_publisher",
+          "list_language",
+          "list_licence",
         ],
         autocomplete: {
           loaders: {
-            resource_type: false,
+            doi_resource_type: false,
+            list_language: false,
+            list_licence: false,
             doi_publisher: false,
             agent: false,
             language: false,
@@ -1097,7 +1054,9 @@ export default {
             doi_date_type: false,
             attachment_public: false,
           },
-          resource_type: [],
+          doi_resource_type: [],
+          list_language: [],
+          list_licence: [],
           doi_publisher: [],
           agent: [],
           language: [],
@@ -1116,12 +1075,42 @@ export default {
         requiredFields: [
           "resource_type",
           "resource",
-          "creators",
+          // "creators",
           "publication_year",
           "publisher",
           "title",
         ],
-        doi: {},
+        doi: {
+          id: null,
+          identifier: null,
+          creators: null,
+          publisher: null,
+          publication_year: null,
+          title: null,
+          title_alternative: null,
+          title_translated: null,
+          title_translated_language: null,
+          abstract: null,
+          resource_type: null,
+          resource: null,
+          methods: null,
+          version: null,
+          sizes: null,
+          formats: null,
+          language: null,
+          subjects: null,
+          copyright_agent: null,
+          licence: null,
+          remarks: null,
+          owner: null,
+          is_private: null,
+          is_locked: null,
+          datacite_created: null,
+          datacite_updated: null,
+          egf: null,
+          reference: null,
+          dataset: null,
+        },
         block: {
           requiredFields: true,
           info: true,
@@ -1139,114 +1128,11 @@ export default {
         dataciteXML: null,
         doiURL: null,
         dataciteURL: null,
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields(true, true);
-
-      if (!this.$route.meta.isEdit) {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "doi");
-
-        fetchDoi(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "doi", this.handleResponse(response)[0]);
-            // this.doi = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.doi);
-
-            // Loading REFERENCE and DATASET here because they don't need api request
-            this.loadRelatedData("reference", this.doi);
-            this.loadRelatedData("dataset", this.doi);
-
-            this.removeUnnecessaryFields(this.doi, this.copyFields);
-            this.$emit("data-loaded", this.doi);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-
-          this.checkMetadata();
-          this.checkDoiUrl();
-
-          // Load Related Data which is in tabs
-          this.relatedTabs.forEach((tab) => {
-            this.loadRelatedData(tab.name);
-          });
-        });
-      } else if (this.$route.meta.isEGF && !this.$route.meta.isEdit) {
-        fetchDoiUsingEGF(this.$route.params.id).then((response) => {
-          if (response?.data) this.assignEgfFieldsToDoiObject(response?.data);
-          else
-            this.toastError({
-              text: `Couldn't fetch <b>Fond</b> with an ID: <b>${this.$route.params.id}</b>`,
-            });
-        });
-      } else {
-        this.doi.version = "1.0";
-      }
-
-      if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
-      else this.setTab("doi_agent");
-    },
-
-    loadAutocompleteFields() {
-      fetchDoiResourceType().then(
-        (response) =>
-          (this.autocomplete.resource_type = this.handleResponse(response))
-      );
-      fetchDoiPublisher().then((response) => {
-        this.autocomplete.doi_publisher = [
-          ...this.autocomplete.doi_publisher,
-          ...this.handleResponse(response),
-        ];
-        if (
-          !this.$route.meta.isEdit &&
-          !this.doi.publisher &&
-          this.autocomplete.doi_publisher.length > 0
-        ) {
-          if (this.$route.meta.isEGF)
-            this.doi.publisher = this.autocomplete.doi_publisher[4].value;
-          else this.doi.publisher = this.autocomplete.doi_publisher[0].value;
-        }
-      });
-      fetchListLanguages().then(
-        (response) =>
-          (this.autocomplete.language = this.handleResponse(response))
-      );
-      fetchListLicences().then(
-        (response) =>
-          (this.autocomplete.licence = this.handleResponse(response))
-      );
     },
 
     setDefaultRelatedData() {
       return {
-        reference: null,
-        dataset: null,
         attachment_link: { count: 0, results: [] },
         doi_agent: { count: 0, results: [] },
         doi_related_identifier: { count: 0, results: [] },
@@ -1409,137 +1295,6 @@ export default {
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      this.doi.resource_type = {
-        id: obj.resource_type,
-        value: obj.resource_type__value,
-      };
-      this.doi.title_translated_language = {
-        id: obj.title_translated_language,
-        value: obj.title_translated_language__value,
-        value_en: obj.title_translated_language__value_en,
-      };
-      if (this.isNotEmpty(obj.owner)) {
-        this.doi.owner = { id: obj.owner, agent: obj.owner__agent };
-        this.autocomplete.agent.push(this.doi.owner);
-      }
-      this.doi.language = {
-        id: obj.language,
-        value: obj.language__value,
-        value_en: obj.language__value_en,
-      };
-      if (this.isNotEmpty(obj.copyright_agent)) {
-        this.doi.copyright_agent = {
-          id: obj.copyright_agent,
-          agent: obj.copyright_agent__agent,
-        };
-        this.autocomplete.copyright_agent.push(this.doi.copyright_agent);
-      }
-      this.doi.licence = {
-        id: obj.licence,
-        licence: obj.licence__licence,
-        licence_en: obj.licence__licence_en,
-      };
-
-      // Filling related data, doing it here because there is only 1 reference and 1 dataset
-      // Reference and Dataset are direct links and should be added without relatedData object.
-      this.doi.reference = {
-        id: obj.reference,
-        reference: obj.reference__reference,
-      };
-      this.doi.dataset = {
-        id: obj.dataset,
-        name: obj.dataset__name,
-        name_en: obj.dataset__name_en,
-      };
-
-      if (this.doi.publisher) {
-        if (
-          !this.autocomplete.doi_publisher.some(
-            (item) => item.value === this.doi.publisher
-          )
-        ) {
-          this.autocomplete.doi_publisher = [
-            ...this.autocomplete.doi_publisher,
-            { value: this.doi.publisher },
-          ];
-        }
-      }
-    },
-
-    loadRelatedData(object, doi = null) {
-      let query;
-
-      if (
-        object === "reference" &&
-        doi !== null &&
-        doi.reference !== null &&
-        doi.reference.id !== null
-      ) {
-        this.relatedData.count[object] = 1;
-        this.relatedData[object] = {
-          id: doi.reference__id,
-          reference: doi.reference__reference,
-        };
-        this.autocomplete.reference.push(this.relatedData[object]);
-        this.setBlockVisibility(object, this.relatedData.count[object]);
-        return;
-      } else if (
-        object === "dataset" &&
-        doi !== null &&
-        doi.dataset !== null &&
-        doi.dataset.id !== null
-      ) {
-        this.relatedData.count[object] = 1;
-        this.relatedData[object] = {
-          id: doi.dataset__id,
-          name: doi.dataset__name,
-          name_en: doi.dataset__name_en,
-        };
-        this.autocomplete.dataset.push(this.relatedData[object]);
-        this.setBlockVisibility(object, this.relatedData.count[object]);
-        return;
-      } else if (object === "attachment_link") {
-        query = fetchDoiAttachment(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      } else if (object === "doi_related_identifier") {
-        query = fetchDoiRelatedIdentifier(
-          this.$route.params.id,
-          this.relatedData.searchParameters.doi_related_identifier
-        );
-      } else if (object === "doi_geolocation") {
-        query = fetchDoiGeolocation(
-          this.$route.params.id,
-          this.relatedData.searchParameters.doi_geolocation
-        );
-      } else if (object === "doi_agent") {
-        query = fetchDoiAgent(
-          this.$route.params.id,
-          this.relatedData.searchParameters.doi_agent
-        );
-      } else if (object === "doi_date") {
-        query = fetchDoiDate(
-          this.$route.params.id,
-          this.relatedData.searchParameters.doi_date
-        );
-      }
-
-      // Dataset and Reference are direct links and do not need extra request.
-      if (query && object !== "dataset" && object !== "reference") {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
-    },
-
-    setBlockVisibility(object, count) {
-      if (object === "reference" || object === "dataset")
-        this.block.referenceAndDataset = count > 0;
     },
 
     //check required fields for related data
@@ -1707,7 +1462,6 @@ export default {
         ) {
           this.setLoadingState(true);
 
-
           fetchRegisterMetadataToDataCite(this.$route.params.id).then(
             (response) => {
               if (response.status === 200) {
@@ -1753,7 +1507,6 @@ export default {
           )
         ) {
           this.setLoadingState(true);
-
 
           fetchRegisterDoiUrlToDataCite(this.$route.params.id).then(
             (response) => {

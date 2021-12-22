@@ -5,7 +5,7 @@
     <slot name="basic-form" v-if="!simpleView"></slot>
     <slot name="simplified-form" v-if="simpleView"></slot>
     <slot name="privacy"></slot>
-    <slot name="related-data" v-if="!simpleView"></slot>
+    <slot name="related-data" v-if="!simpleView && $route.meta.isEdit"></slot>
     <slot name="buttons"></slot>
   </div>
 </template>

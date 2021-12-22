@@ -53,8 +53,8 @@
               <autocomplete-wrapper
                 v-model="collection.type"
                 :color="bodyActiveColor"
-                :items="autocomplete.type"
-                :loading="autocomplete.loaders.type"
+                :items="autocomplete.list_collection_type"
+                :loading="autocomplete.loaders.list_collection_type"
                 :item-text="commonLabel"
                 :label="$t('common.type')"
               />
@@ -401,11 +401,13 @@ import {
   fetchSpecimens,
 } from "../../assets/js/api/apiCalls";
 import { cloneDeep } from "lodash";
-import SpecimenTable from "../specimen/SpecimenTable";
+import SpecimenTable from "../../components/specimen/SpecimenTable";
 import { mapActions, mapState } from "vuex";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Collection",
@@ -430,37 +432,24 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
   },
 
   computed: {
-    ...mapState("search", ["collectionSearchParameters"]),
     ...mapState("detail", ["collectionDetail"]),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.collectionSearchParameters,
-        request: "FETCH_COLLECTIONS",
-        title: "header.collections",
-        object: "collection",
-        field: "number",
-      });
-    } else {
+    if (!this.$route.meta.isEdit) {
       // Adding collection default values from local storage
       const collectionHistory = cloneDeep(this.collectionDetail);
       if (collectionHistory) {
@@ -472,14 +461,6 @@ export default {
   },
 
   watch: {
-    "$route.params.id": {
-      handler() {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
-
     specimenSearchParameters: {
       handler() {
         this.getSpecimensBelongingToCollection();
@@ -493,24 +474,7 @@ export default {
 
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "number",
-          "collection_id",
-          "type",
-          "name",
-          "name_long",
-          "name_en",
-          "name_long_en",
-          "classification",
-          "agent",
-          "locality",
-          "stratigraphy",
-          "reference",
-          "remarks",
-          "number_objects",
-          "number_types",
-        ],
+        listOfAutocompleteTables: ["list_collection_type"],
         autocomplete: {
           loaders: {
             type: false,
@@ -519,6 +483,7 @@ export default {
             locality: false,
             stratigraphy: false,
             reference: false,
+            list_collection_type: false,
           },
           type: [],
           classification: [],
@@ -526,9 +491,27 @@ export default {
           locality: [],
           stratigraphy: [],
           reference: [],
+          list_collection_type: [],
         },
         requiredFields: ["collection_id", "number"],
-        collection: {},
+        collection: {
+          id: null,
+          number: null,
+          collection_id: null,
+          type: null,
+          name: null,
+          name_long: null,
+          name_en: null,
+          name_long_en: null,
+          classification: null,
+          agent: null,
+          locality: null,
+          stratigraphy: null,
+          reference: null,
+          remarks: null,
+          number_objects: null,
+          number_types: null,
+        },
         block: {
           info: true,
           relatedInfo: true,
@@ -553,53 +536,7 @@ export default {
           paginateBy: 25,
           orderBy: "-id",
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "collection");
-        fetchCollection(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "collection", this.handleResponse(response)[0]);
-            // this.collection = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.collection);
-
-            // Needs to be before fields are removed
-            this.specimenSearchParameters.collNumber = this.collection.number;
-
-            this.removeUnnecessaryFields(this.collection, this.copyFields);
-            this.$emit("data-loaded", this.collection);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
     },
 
     getSpecimensBelongingToCollection() {
@@ -611,83 +548,30 @@ export default {
       });
     },
 
-    loadAutocompleteFields(regularAutocompleteFields = true) {
-      if (regularAutocompleteFields) {
-        fetchListCollectionType().then(
-          (response) => (this.autocomplete.type = this.handleResponse(response))
-        );
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      if (!this.$route.meta.isEdit) {
-        this.saveFields({ key: "collectionDetail", value: objectToUpload });
-      }
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.type)) {
-        this.collection.type = {
-          id: obj.type,
-          value: obj.type__value,
-          value_en: obj.type__value_en,
-        };
-      }
-      if (this.isNotEmpty(obj.classification)) {
-        this.collection.classification = {
-          id: obj.classification,
-          class_field: obj.classification__class_field,
-          class_en: obj.classification__class_en,
-        };
-        this.autocomplete.classification.push(this.collection.classification);
-      }
-      if (this.isNotEmpty(obj.agent)) {
-        this.collection.agent = { id: obj.agent, agent: obj.agent__agent };
-        this.autocomplete.agent.push(this.collection.agent);
-      }
-      if (this.isNotEmpty(obj.locality)) {
-        this.collection.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.collection.locality);
-      }
-      if (this.isNotEmpty(obj.stratigraphy)) {
-        this.collection.stratigraphy = {
-          id: obj.stratigraphy,
-          stratigraphy: obj.stratigraphy__stratigraphy,
-          stratigraphy_en: obj.stratigraphy__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy.push(this.collection.stratigraphy);
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        this.collection.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference,
-        };
-        this.autocomplete.reference.push(this.collection.reference);
-      }
-    },
+    // formatDataForUpload(objectToUpload) {
+    //   let uploadableObject = cloneDeep(objectToUpload);
+    //
+    //   if (!this.$route.meta.isEdit) {
+    //     this.saveFields({ key: "collectionDetail", value: objectToUpload });
+    //   }
+    //
+    //   Object.keys(uploadableObject).forEach((key) => {
+    //     if (
+    //       typeof uploadableObject[key] === "object" &&
+    //       uploadableObject[key] !== null
+    //     ) {
+    //       uploadableObject[key] = uploadableObject[key].id
+    //         ? uploadableObject[key].id
+    //         : null;
+    //     } else if (typeof uploadableObject[key] === "undefined") {
+    //       uploadableObject[key] = null;
+    //     }
+    //   });
+    //
+    //   console.log("This object is sent in string format:");
+    //   console.log(uploadableObject);
+    //   return JSON.stringify(uploadableObject);
+    // },
   },
 };
 </script>

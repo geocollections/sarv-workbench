@@ -284,8 +284,8 @@
               <autocomplete-wrapper
                 v-model="site.coord_det_method"
                 :color="bodyActiveColor"
-                :items="autocomplete.coordMethod"
-                :loading="autocomplete.loaders.coordMethod"
+                :items="autocomplete.list_coordinate_method"
+                :loading="autocomplete.loaders.list_coordinate_method"
                 :item-text="commonLabel"
                 :label="$t('site.coord_det_method')"
               />
@@ -428,6 +428,7 @@
 
     <!-- RELATED DATA TABS -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -803,6 +804,8 @@ import SiteLocalityReferenceTable from "../../components/site/relatedTables/Site
 import toastMixin from "@/mixins/toastMixin";
 import Pagination from "@/components/partial/Pagination";
 import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Site",
@@ -843,16 +846,14 @@ export default {
     sidebarMixin,
     requestsMixin,
     toastMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
   data() {
     return this.setInitialData();
   },
   computed: {
-    ...mapState("search", [
-      "siteSearchParameters",
-      "sidebarUserAction",
-      "activeProject",
-    ]),
+    ...mapState("search", ["sidebarUserAction", "activeProject"]),
 
     ...mapState("map", ["showMap"]),
 
@@ -866,27 +867,10 @@ export default {
         this.updateShowMap(value);
       },
     },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
   created() {
     // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.siteSearchParameters,
-        request: "FETCH_SITES",
-        title: "header.sites",
-        object: "site",
-        field: "name",
-      });
-    } else {
+    if (!this.$route.meta.isEdit) {
       // Add view
       this.$set(this.site, "date_start", this.getCurrentFormattedDate());
 
@@ -933,11 +917,6 @@ export default {
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-    },
     sidebarUserAction(newVal) {
       this.handleUserAction(newVal, "site", this.site);
     },
@@ -1027,70 +1006,69 @@ export default {
         ],
         activeTab: "attachment_link",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "name",
-          "name_en",
-          "site_type",
-          "number",
-          "project",
-          "date_start",
-          "date_end",
-          "date_free",
-          "coord_det_method",
-          "locality",
-          "coordx",
-          "coordy",
-          "epsg",
-          "latitude",
-          "longitude",
-          "location_accuracy",
-          "elevation",
-          "elevation_accuracy",
-          "extent",
-          "depth",
-          "remarks_location",
-          "description",
-          "remarks",
-          "area",
-          "is_private",
-        ],
-        siteGroundwaterCopyFields: [
-          "id",
-          "site",
-          "aquifer_system",
-          "aquifer",
-          "well_depth",
-          "type_txt",
-          "filter_type",
-          "filter_top",
-          "filter_top_z",
-          "filter_bottom",
-          "filter_bottom_z",
-          "url_veka",
-          "remarks",
-          "kataster_id",
-          "keskkonnaregister_id",
-        ],
+        listOfAutocompleteTables: ["list_coordinate_method", "site_type"],
         autocomplete: {
           loaders: {
             project: false,
             attachment: false,
-            coordMethod: false,
+            list_coordinate_method: false,
             locality: false,
             area: false,
             site_type: false,
           },
           project: [],
           attachment: [],
-          coordMethod: [],
+          list_coordinate_method: [],
           locality: [],
           area: [],
           site_type: [],
         },
         requiredFields: ["latitude", "longitude"],
-        site: {},
-        site_groundwater: {},
+        site: {
+          id: null,
+          name: null,
+          name_en: null,
+          site_type: null,
+          number: null,
+          project: null,
+          date_start: null,
+          date_end: null,
+          date_free: null,
+          coord_det_method: null,
+          locality: null,
+          coordx: null,
+          coordy: null,
+          epsg: null,
+          latitude: null,
+          longitude: null,
+          location_accuracy: null,
+          elevation: null,
+          elevation_accuracy: null,
+          extent: null,
+          depth: null,
+          remarks_location: null,
+          description: null,
+          remarks: null,
+          area: null,
+          is_private: null,
+        },
+        site_groundwater: {
+          id: null,
+          site: null,
+          aquifer_system: null,
+          aquifer: null,
+          well_depth: null,
+          type_txt: null,
+          filter_type: null,
+          filter_top: null,
+          filter_top_z: null,
+          filter_bottom: null,
+          filter_bottom_z: null,
+          url_veka: null,
+          remarks: null,
+          kataster_id: null,
+          keskkonnaregister_id: null,
+        },
         block: {
           info: !this.$route.meta.isEdit,
           location: this.$route.meta.isEdit,
@@ -1112,60 +1090,6 @@ export default {
     reloadData() {
       Object.assign(this.$data, this.setInitialData());
       this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      fetchListCoordinateMethod().then((response) => {
-        this.autocomplete.coordMethod = this.handleResponse(response);
-      });
-
-      fetchListSiteType().then((response) => {
-        this.autocomplete.site_type = this.handleResponse(response);
-      });
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-        this.$emit("set-object", "site");
-
-        fetchSite(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "site", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.site);
-            this.removeUnnecessaryFields(this.site, this.copyFields);
-
-            this.updateDateFields(this.site);
-
-            this.$emit("data-loaded", this.site);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        fetchSiteGroundwaterUsingSite(this.$route.params.id).then(
-          (response) => {
-            let handledResponse = this.handleResponse(response);
-            if (handledResponse.length > 0) {
-              this.$set(
-                this,
-                "site_groundwater",
-                this.handleResponse(response)[0]
-              );
-              this.removeUnnecessaryFields(
-                this.site_groundwater,
-                this.siteGroundwaterCopyFields
-              );
-            }
-          }
-        );
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
     },
 
     setDefaultRelatedData() {
@@ -1214,184 +1138,6 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      if (this.isNotEmpty(uploadableObject.date_start)) {
-        if (this.isValidDateTime(uploadableObject.date_start)) {
-          uploadableObject.date_start = this.formatDateForUpload(
-            uploadableObject.date_start
-          );
-        } else {
-          this.site.date_start = null;
-          uploadableObject.date_start = null;
-          this.toastInfo({ text: "Field 'Date start' is invalid" });
-        }
-      }
-      if (this.isNotEmpty(uploadableObject.date_end)) {
-        if (this.isValidDateTime(uploadableObject.date_end)) {
-          uploadableObject.date_end = this.formatDateForUpload(
-            uploadableObject.date_end
-          );
-        } else {
-          this.site.date_end = null;
-          uploadableObject.date_end = null;
-          this.toastInfo({ text: "Field 'Date end' is invalid" });
-        }
-      }
-
-      if (this.isNotEmpty(objectToUpload.location_accuracy))
-        uploadableObject.location_accuracy =
-          typeof uploadableObject.location_accuracy === "string"
-            ? parseFloat(objectToUpload.location_accuracy).toFixed(2)
-            : objectToUpload.location_accuracy.toFixed(2);
-      else uploadableObject.location_accuracy = null;
-
-      if (this.isNotEmpty(objectToUpload.elevation_accuracy))
-        uploadableObject.elevation_accuracy =
-          typeof uploadableObject.elevation_accuracy === "string"
-            ? parseFloat(objectToUpload.elevation_accuracy).toFixed(2)
-            : objectToUpload.elevation_accuracy.toFixed(2);
-      else uploadableObject.elevation_accuracy = null;
-
-      if (this.isNotEmpty(objectToUpload.latitude))
-        uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(
-          6
-        );
-      else uploadableObject.latitude = null;
-
-      if (this.isNotEmpty(objectToUpload.longitude))
-        uploadableObject.longitude = parseFloat(
-          objectToUpload.longitude
-        ).toFixed(6);
-      else uploadableObject.longitude = null;
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.isNotEmpty(this.relatedData[tab.name]))
-            if (tab.name !== "samples") {
-              if (tab.name === "attachment_link") {
-                uploadableObject.related_data.attachment =
-                  this.relatedData.attachment_link.results.map((item) => {
-                    return { id: item.id };
-                  });
-              } else {
-                uploadableObject.related_data[tab.name] =
-                  this.relatedData[tab.name].results;
-
-                uploadableObject.related_data[tab.name].forEach((item) => {
-                  Object.keys(item).forEach((key) => {
-                    if (typeof item[key] === "object" && item[key] !== null) {
-                      item[key] = item[key].id ? item[key].id : null;
-                    }
-                  });
-                });
-              }
-            }
-        });
-      } else {
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment_link.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.area)) {
-        this.site.area = {
-          name: obj.area__name,
-          name_en: obj.area__name_en,
-          id: obj.area,
-        };
-        this.autocomplete.area.push(this.site.area);
-      }
-      if (this.isNotEmpty(obj.project)) {
-        this.site.project = {
-          name: obj.project__name,
-          name_en: obj.project__name_en,
-          id: obj.project,
-        };
-        this.autocomplete.project.push(this.site.project);
-      }
-      this.site.coord_det_method = {
-        value: obj.coord_det_method__value,
-        value_en: obj.coord_det_method__value_en,
-        id: obj.coord_det_method,
-      };
-      this.site.site_type = {
-        value: obj.site_type__value,
-        value_en: obj.site_type__value_en,
-        id: obj.site_type,
-      };
-      if (this.isNotEmpty(obj.locality__id)) {
-        this.site.locality = {
-          id: obj.locality__id,
-          locality_en: obj.locality__locality_en,
-          locality: obj.locality__locality,
-        };
-        this.autocomplete.locality.push(this.site.locality);
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "attachment_link") {
-        query = fetchSiteAttachment(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      } else if (object === "samples") {
-        query = fetchLinkedSamples(
-          this.relatedData.searchParameters.samples,
-          this.$route.params.id
-        );
-      } else if (object === "locality_description") {
-        query = fetchSiteLocalityDescriptions(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_description
-        );
-      } else if (object === "locality_reference") {
-        query = fetchSiteLocalityReferences(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_reference
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
-    },
-
     customLabelForAttachment(option) {
       return this.$i18n.locale === "ee"
         ? `${option.id} - (${option.description}) (${option.author__agent})`
@@ -1434,17 +1180,6 @@ export default {
       });
     },
 
-    handleUserChoiceFromModal(choice) {
-      let vm = this;
-      if (choice === "SAVE_AND_LEAVE") {
-        this.save("site", true).then(() => {
-          vm.$root.$emit("close-new-site-modal");
-        });
-      } else if (choice === "SAVE") {
-        this.save("site");
-      }
-    },
-
     // Resetting accuracy and coord det method because user changed coordinates manually
     handleCoordinateChange() {
       this.site.location_accuracy = null;
@@ -1474,10 +1209,6 @@ export default {
 </script>
 
 <style scoped>
-.tooltip .fade {
-  background-color: red !important;
-}
-
 label {
   margin: 0;
   color: rgba(0, 0, 0, 0.54);

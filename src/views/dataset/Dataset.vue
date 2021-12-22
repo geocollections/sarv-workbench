@@ -99,9 +99,8 @@
               <autocomplete-wrapper
                 v-model="dataset.publisher"
                 :color="bodyActiveColor"
-                :items="autocomplete.publishers"
-                :loading="autocomplete.loaders.publishers"
-                item-value="test"
+                :items="autocomplete.doi_publisher"
+                :loading="autocomplete.loaders.doi_publisher"
                 item-text="value"
                 :label="$t('doi.publisher')"
                 use-state
@@ -159,8 +158,8 @@
               <autocomplete-wrapper
                 v-model="dataset.title_translated_language"
                 :color="bodyActiveColor"
-                :items="autocomplete.language"
-                :loading="autocomplete.loaders.language"
+                :items="autocomplete.list_language"
+                :loading="autocomplete.loaders.list_language"
                 :item-text="commonLabel"
                 :label="$t('doi.title_translated_language')"
               />
@@ -173,8 +172,8 @@
               <autocomplete-wrapper
                 v-model="dataset.language"
                 :color="bodyActiveColor"
-                :items="autocomplete.language"
-                :loading="autocomplete.loaders.language"
+                :items="autocomplete.list_language"
+                :loading="autocomplete.loaders.list_language"
                 :item-text="commonLabel"
                 :label="$t('doi.language')"
               />
@@ -261,8 +260,8 @@
               <autocomplete-wrapper
                 v-model="dataset.licence"
                 :color="bodyActiveColor"
-                :items="autocomplete.licence"
-                :loading="autocomplete.loaders.licence"
+                :items="autocomplete.list_licence"
+                :loading="autocomplete.loaders.list_licence"
                 :item-text="licenceLabel"
                 :label="$t('common.licence')"
               />
@@ -389,6 +388,7 @@
 
     <!-- RELATED DATA TABS -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -505,34 +505,24 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
-import {
-  fetchDataset,
-  fetchDatasetAnalyses,
-  fetchDatasetAuthors,
-  fetchDatasetGeolocation,
-  fetchDatasetReferences,
-  fetchDoiPublisher,
-  fetchDoiResourceType,
-  fetchListLanguages,
-  fetchListLicences,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import DateWrapper from "../partial/inputs/DateWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import DatasetAuthorTable from "./relatedTables/DatasetAuthorTable";
-import DatasetReferenceTable from "./relatedTables/DatasetReferenceTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import DatasetAnalysisTable from "./relatedTables/DatasetAnalysisTable";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import DatasetAuthorTable from "@/components/dataset/relatedTables/DatasetAuthorTable";
+import DatasetReferenceTable from "@/components/dataset/relatedTables/DatasetReferenceTable";
+import requestsMixin from "@/mixins/requestsMixin";
+import DatasetAnalysisTable from "@/components/dataset/relatedTables/DatasetAnalysisTable";
 import Pagination from "@/components/partial/Pagination";
 import { orderBy } from "lodash";
 import DatasetGeolocationTable from "@/components/dataset/relatedTables/DatasetGeolocationTable";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Dataset",
@@ -573,6 +563,8 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -580,28 +572,10 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.datasetSearchParameters,
-        request: "FETCH_DATASETS",
-        title: "header.datasets",
-        object: "dataset",
-        field: "name",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler: function () {
         this.loadRelatedData(this.activeTab);
@@ -617,19 +591,9 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["datasetSearchParameters"]),
     ...mapState("search", {
       activeRelatedDataTab: (state) => state.activeRelatedDataTab.dataset,
     }),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
 
   methods: {
@@ -655,48 +619,27 @@ export default {
         ],
         activeTab: "dataset_author",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "dataset_html",
-          "date",
-          "date_txt",
-          "is_private",
-          "owner",
-          "owner_txt",
-          "copyright_agent",
-          "licence",
-          "remarks",
-          "creators",
-          "publisher",
-          "publication_year",
-          "title",
-          "title_alternative",
-          "title_translated",
-          "title_translated_language",
-          "abstract",
-          "resource_type",
-          "resource",
-          "methods",
-          "version",
-          "language",
-          "subjects",
-          "reference",
-          "locality",
+        listOfAutocompleteTables: [
+          "list_language",
+          "list_licence",
+          "doi_resource_type",
+          "doi_publisher",
         ],
         autocomplete: {
           loaders: {
-            resource_type: false,
-            publishers: false,
+            doi_resource_type: false,
+            doi_publisher: false,
             copyright_agent: false,
             owner: false,
             agent: false,
             reference: false,
             locality: false,
           },
-          resource_type: [],
-          publishers: [],
+          doi_resource_type: [],
+          doi_publisher: [],
           copyright_agent: [],
-          licence: [],
+          list_language: [],
+          list_licence: [],
           owner: [],
           agent: [],
           reference: [],
@@ -704,104 +647,47 @@ export default {
         },
         requiredFields: [
           "resource",
-          "creators",
+          // "creators",
           "publication_year",
           "publisher",
           "title",
         ],
-        dataset: {},
+        dataset: {
+          id: null,
+          dataset_html: null,
+          date: null,
+          date_txt: null,
+          is_private: null,
+          owner: null,
+          owner_txt: null,
+          copyright_agent: null,
+          licence: null,
+          remarks: null,
+          creators: null,
+          publisher: null,
+          publication_year: null,
+          title: null,
+          title_alternative: null,
+          title_translated: null,
+          title_translated_language: null,
+          abstract: null,
+          resource_type: null,
+          resource: null,
+          methods: null,
+          version: null,
+          language: null,
+          subjects: null,
+          reference: null,
+          locality: null,
+        },
         block: {
           requiredFields: true,
           info: true,
           referenceAndLocality: false,
           description: false,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
         dateState: false,
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "dataset");
-        fetchDataset(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "dataset", this.handleResponse(response)[0]);
-            // this.dataset = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.dataset);
-
-            this.removeUnnecessaryFields(this.dataset, this.copyFields);
-            this.$emit("data-loaded", this.dataset);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-
-        this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map((tab) => tab.name)
-        );
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-
-        // NOTE: Dataset ID is 3
-        this.dataset.resource_type = 3;
-      }
-    },
-
-    loadAutocompleteFields() {
-      fetchDoiResourceType().then(
-        (response) =>
-          (this.autocomplete.resource_type = this.handleResponse(response))
-      );
-      fetchDoiPublisher().then((response) => {
-        this.autocomplete.publishers = [
-          ...this.autocomplete.publishers,
-          ...this.handleResponse(response),
-        ];
-        if (
-          !this.$route.meta.isEdit &&
-          !this.dataset.publisher &&
-          this.autocomplete.publishers.length > 0
-        ) {
-          this.dataset.publisher = this.autocomplete.publishers[0].value;
-        }
-      });
-      fetchListLanguages().then(
-        (response) =>
-          (this.autocomplete.language = this.handleResponse(response))
-      );
-      fetchListLicences().then(
-        (response) =>
-          (this.autocomplete.licence = this.handleResponse(response))
-      );
     },
 
     setDefaultRelatedData() {
@@ -837,120 +723,6 @@ export default {
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0) {
-            uploadableObject.related_data[tab.name] =
-              this.relatedData[tab.name].results;
-
-            uploadableObject.related_data[tab.name].forEach((item) => {
-              Object.keys(item).forEach((key) => {
-                if (typeof item[key] === "object" && item[key] !== null) {
-                  item[key] = item[key].id ? item[key].id : null;
-                }
-              });
-            });
-          }
-        });
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.copyright_agent)) {
-        this.dataset.copyright_agent = {
-          id: obj.copyright_agent,
-          agent: obj.copyright_agent__agent,
-        };
-        this.autocomplete.copyright_agent.push(this.dataset.copyright_agent);
-      }
-      this.dataset.licence = {
-        id: obj.licence,
-        licence: obj.licence__licence,
-        licence_en: obj.licence__licence_en,
-      };
-      if (this.isNotEmpty(obj.owner)) {
-        this.dataset.owner = {
-          id: obj.owner,
-          agent: obj.owner__agent,
-        };
-        this.autocomplete.owner.push(this.dataset.owner);
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        this.dataset.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference,
-        };
-        this.autocomplete.reference.push(this.dataset.reference);
-      }
-      if (this.isNotEmpty(obj.locality)) {
-        this.dataset.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.dataset.locality);
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "dataset_author") {
-        query = fetchDatasetAuthors(
-          this.$route.params.id,
-          this.relatedData.searchParameters.dataset_author
-        );
-      } else if (object === "dataset_reference") {
-        query = fetchDatasetReferences(
-          this.$route.params.id,
-          this.relatedData.searchParameters.dataset_reference
-        );
-      } else if (object === "dataset_analysis") {
-        query = fetchDatasetAnalyses(
-          this.$route.params.id,
-          this.relatedData.searchParameters.dataset_analysis
-        );
-      } else if (object === "dataset_geolocation") {
-        query = fetchDatasetGeolocation(
-          this.$route.params.id,
-          this.relatedData.searchParameters.dataset_geolocation
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
     },
 
     /**

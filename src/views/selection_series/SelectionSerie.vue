@@ -283,23 +283,16 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import {
   fetchMultiRemoveRecordFromSelection,
-  fetchSelectedAnalyses,
-  fetchSelectedAttachments,
-  fetchSelectedLocalities,
-  fetchSelectedReferences,
-  fetchSelectedSamples,
   fetchSelectedSpecimens,
-  fetchSelectedTaxa,
-  fetchSelectionSerie,
-} from "../../assets/js/api/apiCalls";
+} from "@/assets/js/api/apiCalls";
 
-import InputWrapper from "../partial/inputs/InputWrapper";
-import requestsMixin from "../../mixins/requestsMixin";
-import SelectionSeriesDataTable from "./relatedTables/SelectionSeriesDataTable";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import requestsMixin from "@/mixins/requestsMixin";
+import SelectionSeriesDataTable from "@/components/selection_series/relatedTables/SelectionSeriesDataTable";
 import { mapActions, mapState } from "vuex";
 import {
   fetchAllSelections,
@@ -308,6 +301,8 @@ import {
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "SelectionSeries",
@@ -342,6 +337,8 @@ export default {
     formSectionsMixin,
     requestsMixin,
     autocompleteMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -349,28 +346,10 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.selection_seriesSearchParameters,
-        request: "FETCH_SELECTION_SERIES",
-        title: "header.selectionSeries",
-        object: "selection_series",
-        field: "name",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler() {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler: function () {
         if (this.$route.meta.isEdit) {
@@ -382,17 +361,6 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["selection_seriesSearchParameters"]),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
-
     isRelatedDataFilled() {
       let result = Object.keys(this.relatedData).find(
         (item) => this.relatedData[item]?.count > 0
@@ -523,9 +491,12 @@ export default {
         ],
         activeTab: "specimen",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: ["id", "name", "remarks"],
         requiredFields: ["name"],
-        selection_series: {},
+        selection_series: {
+          id: null,
+          name: null,
+          remarks: null,
+        },
         new_specimen_storage: null,
         autocomplete: {
           loaders: {
@@ -536,62 +507,7 @@ export default {
         clearSelectionModal: false,
         changeStorageDialog: false,
         block: { info: true, storage: true },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "selection_series");
-        fetchSelectionSerie(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(
-              this,
-              "selection_series",
-              this.handleResponse(response)[0]
-            );
-            // this.selection_series = this.handleResponse(response)[0];
-
-            this.removeUnnecessaryFields(
-              this.selection_series,
-              this.copyFields
-            );
-            this.$emit("data-loaded", this.selection_series);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      console.log("This object is sent in string format:");
-      console.log(objectToUpload);
-      return JSON.stringify(objectToUpload);
     },
 
     setDefaultRelatedData() {
@@ -650,51 +566,30 @@ export default {
       };
     },
 
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "specimen") {
-        query = fetchSelectedSpecimens(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen
-        );
-      } else if (object === "sample") {
-        query = fetchSelectedSamples(
-          this.$route.params.id,
-          this.relatedData.searchParameters.sample
-        );
-      } else if (object === "attachment") {
-        query = fetchSelectedAttachments(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment
-        );
-      } else if (object === "locality") {
-        query = fetchSelectedLocalities(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality
-        );
-      } else if (object === "reference") {
-        query = fetchSelectedReferences(
-          this.$route.params.id,
-          this.relatedData.searchParameters.reference
-        );
-      } else if (object === "taxon") {
-        query = fetchSelectedTaxa(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon
-        );
-      } else if (object === "analysis") {
-        query = fetchSelectedAnalyses(
-          this.$route.params.id,
-          this.relatedData.searchParameters.analysis
-        );
-      }
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
+    // Overrides loadRelatedData method in detailViewUtilsMixin.js
+    loadRelatedData(tables, module, moduleId) {
+      Promise.all(
+        tables.map((table) =>
+          this.$api.rw
+            .get("selection", {
+              defaultParams: {
+                selection: moduleId,
+                [`${table}__isnull`]: false,
+              },
+              options: {
+                ...this.relatedData.searchParameters[table],
+              },
+            })
+            .then((res) => {
+              this.relatedData[table].count = res?.count ?? 0;
+              this.relatedData[table].results = res?.results ?? [];
+            })
+            .catch((err) => {
+              this.relatedData[table].count = 0;
+              this.relatedData[table].results = [];
+            })
+        )
+      );
     },
   },
 };

@@ -120,8 +120,8 @@
                 <autocomplete-wrapper
                   v-model="sample.sample_purpose"
                   :color="bodyActiveColor"
-                  :items="autocomplete.purpose"
-                  :loading="autocomplete.loaders.purpose"
+                  :items="autocomplete.list_sample_purpose"
+                  :loading="autocomplete.loaders.list_sample_purpose"
                   :item-text="commonLabel"
                   :label="$t('sample.sample_purpose')"
                 />
@@ -453,8 +453,8 @@
                 <autocomplete-wrapper
                   v-model="sample.parent_sample"
                   :color="bodyActiveColor"
-                  :items="autocomplete.sample"
-                  :loading="autocomplete.loaders.sample"
+                  :items="autocomplete.parent_sample"
+                  :loading="autocomplete.loaders.parent_sample"
                   item-text="number"
                   :label="$t('sample.parent_sample')"
                   is-link
@@ -468,8 +468,8 @@
                 <autocomplete-wrapper
                   v-model="sample.parent_specimen"
                   :color="bodyActiveColor"
-                  :items="autocomplete.specimen"
-                  :loading="autocomplete.loaders.specimen"
+                  :items="autocomplete.parent_specimen"
+                  :loading="autocomplete.loaders.parent_specimen"
                   item-text="specimen_id"
                   :label="$t('sample.parent_specimen')"
                   is-link
@@ -582,8 +582,8 @@
                 <autocomplete-wrapper
                   v-model="sample.sample_purpose"
                   :color="bodyActiveColor"
-                  :items="autocomplete.purpose"
-                  :loading="autocomplete.loaders.purpose"
+                  :items="autocomplete.list_sample_purpose"
+                  :loading="autocomplete.loaders.list_sample_purpose"
                   :item-text="commonLabel"
                   :label="$t('sample.sample_purpose')"
                 />
@@ -684,14 +684,14 @@
                 <autocomplete-wrapper
                   v-model="sample.agent_collected"
                   :color="bodyActiveColor"
-                  :items="autocomplete.agent"
-                  :loading="autocomplete.loaders.agent"
+                  :items="autocomplete.agent_collected"
+                  :loading="autocomplete.loaders.agent_collected"
                   item-text="agent"
                   :label="$t('sample.agent_collected')"
                   is-link
                   route-object="agent"
                   is-searchable
-                  v-on:search:items="autocompleteAgentSearch"
+                  v-on:search:items="autocompleteAgentSearch($event, 'agent_collected')"
                 />
               </v-col>
 
@@ -1012,35 +1012,27 @@
 </template>
 
 <script>
-import {
-  fetchSample,
-  fetchSamplePurpose,
-  fetchLSampleAttachment,
-  fetchSampleReference,
-  fetchSampleAnalysis,
-  fetchSamplePreparation,
-  fetchTaxonList,
-  fetchLatestSampleInSite,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import SampleWrapper from "../../components/sample/SampleWrapper";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
+import { fetchLatestSampleInSite } from "@/assets/js/api/apiCalls";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import SampleWrapper from "@/components/sample/SampleWrapper";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import DateWrapper from "../../components/partial/inputs/DateWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
-import AnalysisTable from "../../components/sample/relatedTables/AnalysisTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import PreparationTable from "../../components/sample/relatedTables/PreparationTable";
-import TaxonListTable from "../../components/sample/relatedTables/TaxonListTable";
-import SampleReferenceTable from "../../components/sample/relatedTables/SampleReferenceTable";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import AnalysisTable from "@/components/sample/relatedTables/AnalysisTable";
+import requestsMixin from "@/mixins/requestsMixin";
+import PreparationTable from "@/components/sample/relatedTables/PreparationTable";
+import TaxonListTable from "@/components/sample/relatedTables/TaxonListTable";
+import SampleReferenceTable from "@/components/sample/relatedTables/SampleReferenceTable";
 import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Sample",
@@ -1079,6 +1071,8 @@ export default {
     formSectionsMixin,
     requestsMixin,
     saveAsNewMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -1086,17 +1080,6 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.sampleSearchParameters,
-        request: "FETCH_SAMPLES",
-        title: "header.samples",
-        object: "sample",
-        field: "number",
-      });
-    }
-
     if (this.$route.query.site)
       this.addSiteDataToSampleObject(JSON.parse(this.$route.query.site));
     else if (this.$route.params.site)
@@ -1113,13 +1096,6 @@ export default {
     this.loadFullInfo();
   },
 
-  beforeDestroy() {
-    this.$root.$off(
-      "add-new-sample-from-modal",
-      this.handleUserChoiceFromModal
-    );
-  },
-
   beforeRouteLeave(to, from, next) {
     if (this.$route.meta.isEdit) {
       this.setActiveSample(this.sample);
@@ -1128,12 +1104,6 @@ export default {
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler: function () {
         this.loadRelatedData(this.activeTab);
@@ -1143,7 +1113,7 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["sampleSearchParameters", "isSampleSimpleView"]),
+    ...mapState("search", ["isSampleSimpleView"]),
 
     isSimpleView: {
       get() {
@@ -1160,15 +1130,6 @@ export default {
       if (tabObject && tabObject[this.$route.meta.object]) {
         return tabObject[this.$route.meta.object];
       } else return null;
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
     },
   },
 
@@ -1200,43 +1161,6 @@ export default {
         ],
         activeTab: "analysis",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "number",
-          "number_additional",
-          "number_field",
-          "series",
-          "sample_purpose",
-          "sample_type",
-          "parent_sample",
-          "parent_specimen",
-          "depth",
-          "depth_interval",
-          "stratigraphy",
-          "lithostratigraphy",
-          "stratigraphy_free",
-          "stratigraphy_bed",
-          "agent_collected",
-          "agent_collected_free",
-          "date_collected",
-          "date_collected_free",
-          "classification_rock",
-          "rock",
-          "rock_en",
-          "fossils",
-          "mass",
-          "storage",
-          "storage_additional",
-          "owner",
-          "palaeontology",
-          "analysis",
-          "locality",
-          "locality_free",
-          "remarks",
-          "is_private",
-          "site",
-          "project",
-        ],
         simplifiedFormCopyFields: [
           "number",
           "number_field",
@@ -1253,15 +1177,17 @@ export default {
           "remarks",
           "is_private",
         ],
+        listOfAutocompleteTables: ["list_sample_purpose"],
         autocomplete: {
           loaders: {
             series: false,
-            sample: false,
-            specimen: false,
+            parent_sample: false,
+            parent_specimen: false,
             locality: false,
             stratigraphy: false,
             lithostratigraphy: false,
             agent: false,
+            agent_collected: false,
             rock: false,
             storage: false,
             additional_storage: false,
@@ -1275,16 +1201,17 @@ export default {
             preparation: false,
             site: false,
             project: false,
-            purpose: false,
+            list_sample_purpose: false,
           },
           series: [],
-          purpose: [],
-          sample: [],
-          specimen: [],
+          list_sample_purpose: [],
+          parent_sample: [],
+          parent_specimen: [],
           locality: [],
           stratigraphy: [],
           lithostratigraphy: [],
           agent: [],
+          agent_collected: [],
           rock: [],
           storage: [],
           storage_additional: [],
@@ -1302,70 +1229,45 @@ export default {
           project: [],
         },
         requiredFields: [],
-        sample: {},
+        sample: {
+          id: null,
+          number: null,
+          number_additional: null,
+          number_field: null,
+          series: null,
+          sample_purpose: null,
+          sample_type: null,
+          parent_sample: null,
+          parent_specimen: null,
+          depth: null,
+          depth_interval: null,
+          stratigraphy: null,
+          lithostratigraphy: null,
+          stratigraphy_free: null,
+          stratigraphy_bed: null,
+          agent_collected: null,
+          agent_collected_free: null,
+          date_collected: null,
+          date_collected_free: null,
+          classification_rock: null,
+          rock: null,
+          rock_en: null,
+          fossils: null,
+          mass: null,
+          storage: null,
+          storage_additional: null,
+          owner: null,
+          palaeontology: null,
+          analysis: null,
+          locality: null,
+          locality_free: null,
+          remarks: null,
+          is_private: null,
+          site: null,
+          project: null,
+        },
         block: { info: true, relatedInfo: true, description: true },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "sample");
-
-        fetchSample(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "sample", this.handleResponse(response)[0]);
-            // this.sample = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.sample);
-
-            this.removeUnnecessaryFields(this.sample, this.copyFields);
-            this.$emit("data-loaded", this.sample);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => {
-          this.loadRelatedData(tab.name);
-        });
-
-        this.$on("tab-changed", this.setTab);
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-
-      if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
-      else this.setTab("analysis");
-    },
-
-    loadAutocompleteFields() {
-      fetchSamplePurpose().then(
-        (response) =>
-          (this.autocomplete.purpose = this.handleResponse(response))
-      );
     },
 
     setDefaultRelatedData() {
@@ -1408,216 +1310,6 @@ export default {
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      if (this.isNotEmpty(objectToUpload.latitude1))
-        uploadableObject.latitude1 = objectToUpload.latitude1.toFixed(6);
-      else uploadableObject.latitude1 = null;
-      if (this.isNotEmpty(objectToUpload.longitude1))
-        uploadableObject.longitude1 = objectToUpload.longitude1.toFixed(6);
-      else uploadableObject.longitude1 = null;
-      if (this.isNotEmpty(objectToUpload.depth))
-        uploadableObject.depth = parseFloat(objectToUpload.depth);
-      else uploadableObject.depth = null;
-      if (this.isNotEmpty(objectToUpload.depth_interval))
-        uploadableObject.depth_interval = parseFloat(
-          objectToUpload.depth_interval
-        );
-      else uploadableObject.depth_interval = null;
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0)
-            if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment =
-                this.relatedData.attachment_link.results.map((item) => {
-                  return { id: item.id };
-                });
-            } else {
-              uploadableObject.related_data[tab.name] =
-                this.relatedData[tab.name].results;
-
-              uploadableObject.related_data[tab.name].forEach((item) => {
-                Object.keys(item).forEach((key) => {
-                  if (typeof item[key] === "object" && item[key] !== null) {
-                    item[key] = item[key].id ? item[key].id : null;
-                  }
-                });
-              });
-            }
-        });
-      } else {
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment_link.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.series_id)) {
-        this.sample.series = { name: obj.series__name, id: obj.series_id };
-        this.autocomplete.series.push(this.sample.series);
-      }
-      this.sample.sample_purpose = {
-        value: obj.sample_purpose__value,
-        value_en: obj.sample_purpose__value_en,
-        id: obj.sample_purpose__id,
-      };
-      if (this.isNotEmpty(obj.parent_sample)) {
-        this.sample.parent_sample = {
-          number: obj.parent_sample__number,
-          id: obj.parent_sample,
-        };
-        this.autocomplete.sample.push(this.sample.parent_sample);
-      }
-      if (this.isNotEmpty(obj.parent_specimen)) {
-        this.sample.parent_specimen = {
-          specimen_id: obj.parent_specimen__specimen_id,
-          id: obj.parent_specimen,
-        };
-        this.autocomplete.specimen.push(this.sample.parent_specimen);
-      }
-      if (this.isNotEmpty(obj.locality__id)) {
-        this.sample.locality = {
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-          id: obj.locality__id,
-        };
-        this.autocomplete.locality.push(this.sample.locality);
-      }
-      if (this.isNotEmpty(obj.stratigraphy__id)) {
-        this.sample.stratigraphy = {
-          stratigraphy: obj.stratigraphy__stratigraphy,
-          stratigraphy_en: obj.stratigraphy__stratigraphy_en,
-          id: obj.stratigraphy__id,
-        };
-        this.autocomplete.stratigraphy.push(this.sample.stratigraphy);
-      }
-      if (this.isNotEmpty(obj.lithostratigraphy_id)) {
-        this.sample.lithostratigraphy = {
-          stratigraphy: obj.lithostratigraphy__stratigraphy,
-          stratigraphy_en: obj.lithostratigraphy__stratigraphy_en,
-          id: obj.lithostratigraphy_id,
-        };
-        this.autocomplete.lithostratigraphy.push(this.sample.lithostratigraphy);
-      }
-      if (this.isNotEmpty(obj.agent_collected__id)) {
-        this.sample.agent_collected = {
-          agent: obj.agent_collected__agent,
-          id: obj.agent_collected__id,
-        };
-        this.autocomplete.agent.push(this.sample.agent_collected);
-      }
-      if (this.isNotEmpty(obj.classification_rock__id)) {
-        this.sample.classification_rock = {
-          name: obj.classification_rock__name,
-          name_en: obj.classification_rock__name_en,
-          id: obj.classification_rock__id,
-        };
-        this.autocomplete.rock.push(this.sample.classification_rock);
-      }
-      if (this.isNotEmpty(obj.owner__id)) {
-        this.sample.owner = { agent: obj.owner__agent, id: obj.owner__id };
-        this.autocomplete.agent.push(this.sample.owner);
-      }
-      if (this.isNotEmpty(obj.storage)) {
-        this.sample.storage = {
-          location: obj.storage__location,
-          id: obj.storage,
-        };
-        this.autocomplete.storage.push(this.sample.storage);
-      }
-      if (this.isNotEmpty(obj.storage_additional)) {
-        this.sample.storage_additional = {
-          location: obj.storage_additional__location,
-          id: obj.storage_additional,
-        };
-        this.autocomplete.storage_additional.push(
-          this.sample.storage_additional
-        );
-      }
-      if (this.isNotEmpty(obj.site)) {
-        this.sample.site = { id: obj.site, name: obj.site__name };
-        this.autocomplete.site.push(this.sample.site);
-      }
-      if (this.isNotEmpty(obj.project)) {
-        this.sample.project = {
-          name: obj.project__name,
-          name_en: obj.project__name_en,
-          id: obj.project,
-        };
-        this.autocomplete.project.push(this.sample.project);
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "analysis") {
-        query = fetchSampleAnalysis(
-          this.$route.params.id,
-          this.relatedData.searchParameters.analysis
-        );
-      } else if (object === "preparation") {
-        query = fetchSamplePreparation(
-          this.$route.params.id,
-          this.relatedData.searchParameters.preparation
-        );
-      } else if (object === "taxon_list") {
-        query = fetchTaxonList(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_list
-        );
-      } else if (object === "sample_reference") {
-        query = fetchSampleReference(
-          this.$route.params.id,
-          this.relatedData.searchParameters.sample_reference
-        );
-      } else if (object === "attachment_link") {
-        query = fetchLSampleAttachment(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      }
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].results = this.handleResponse(response);
-          this.relatedData[object].count = response.data.count;
-        });
-      }
-    },
-
-    siteLabel(option) {
-      return `id: ${option.id} - ${option.name}`;
     },
 
     addSiteDataToSampleObject(site) {

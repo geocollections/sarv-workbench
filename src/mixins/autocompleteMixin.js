@@ -197,8 +197,8 @@ const autocompleteMixin = {
         1
       );
     },
-    autocompleteRockSearch(value) {
-      this.$_autocompleteMixin_search(value, "rock", "rock");
+    autocompleteRockSearch(value, options = "rock") {
+      this.$_autocompleteMixin_search(value, "rock", options);
     },
     autocompleteSampleSeriesSearch(value) {
       this.$_autocompleteMixin_search(value, "series", "series");
@@ -206,8 +206,8 @@ const autocompleteMixin = {
     autocompleteSampleSearch(value) {
       this.$_autocompleteMixin_search(value, "sample", "sample", 1);
     },
-    autocompleteSpecimenSearch(value) {
-      this.$_autocompleteMixin_search(value, "specimen", "specimen");
+    autocompleteSpecimenSearch(value, options = "specimen") {
+      this.$_autocompleteMixin_search(value, "specimen", options);
     },
     autocompleteSiteSearch(value) {
       this.$_autocompleteMixin_search(value, "site", "site");
@@ -273,11 +273,11 @@ const autocompleteMixin = {
         2
       );
     },
-    autocompleteClassificationSearch(value) {
+    autocompleteClassificationSearch(value, options = "classification") {
       this.$_autocompleteMixin_search(
         value,
         "classification",
-        "classification",
+        options,
         2
       );
     },
@@ -308,13 +308,8 @@ const autocompleteMixin = {
         1
       );
     },
-    autocompleteAnalysisMethodSearch(value) {
-      this.$_autocompleteMixin_search(
-        value,
-        "analysis_method",
-        "analysis_method",
-        1
-      );
+    autocompleteAnalysisMethodSearch(value, options = "analysis_method") {
+      this.$_autocompleteMixin_search(value, "analysis_method", options, 1);
     },
     autocompleteImagesetSearch(value) {
       this.$_autocompleteMixin_search(value, "imageset", "imageset", 2);
@@ -354,13 +349,8 @@ const autocompleteMixin = {
         2
       );
     },
-    autocompleteAnalysisParameterSearch(value) {
-      this.$_autocompleteMixin_search(
-        value,
-        "analysis_parameter",
-        "analysis_parameter",
-        1
-      );
+    autocompleteAnalysisParameterSearch(value, options = "analysis_parameter") {
+      this.$_autocompleteMixin_search(value, "analysis_parameter", options, 1);
     },
     autocompleteUserSearch(value) {
       this.$_autocompleteMixin_search(value, "user", "user", 2);

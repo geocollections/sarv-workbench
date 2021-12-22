@@ -67,8 +67,8 @@
               <autocomplete-wrapper
                 v-model="taxon.rank"
                 :color="bodyActiveColor"
-                :items="autocomplete.rank"
-                :loading="autocomplete.loaders.rank"
+                :items="autocomplete.taxon_rank"
+                :loading="autocomplete.loaders.taxon_rank"
                 :item-text="rankLabel"
                 :label="$t('taxon.rank')"
               />
@@ -442,6 +442,7 @@
 
     <!-- RELATED DATA TABS  -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -647,22 +648,24 @@ import {
   fetchTaxonByTaxonTypeId,
 } from "../../assets/js/api/apiCalls";
 
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileInput from "../partial/inputs/FileInput";
-import TaxonSubclassTable from "./relatedTables/TaxonSubclassTable";
-import TaxonSynonymTable from "./relatedTables/TaxonSynonymTable";
+import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
+import FileInput from "../../components/partial/inputs/FileInput";
+import TaxonSubclassTable from "../../components/taxon/relatedTables/TaxonSubclassTable";
+import TaxonSynonymTable from "../../components/taxon/relatedTables/TaxonSynonymTable";
 import requestsMixin from "../../mixins/requestsMixin";
-import TaxonTypeSpecimenTable from "./relatedTables/TaxonTypeSpecimenTable";
-import TaxonOccurrenceTable from "./relatedTables/TaxonOccurrenceTable";
-import TaxonOpinionTable from "./relatedTables/TaxonOpinionTable";
-import TaxonCommonNameTable from "./relatedTables/TaxonCommonNameTable";
-import TaxonDescriptionTable from "./relatedTables/TaxonDescriptionTable";
-import TaxonPageTable from "./relatedTables/TaxonPageTable";
-import TaxonImageTable from "./relatedTables/TaxonImageTable";
-import Editor from "../partial/inputs/Editor";
+import TaxonTypeSpecimenTable from "../../components/taxon/relatedTables/TaxonTypeSpecimenTable";
+import TaxonOccurrenceTable from "../../components/taxon/relatedTables/TaxonOccurrenceTable";
+import TaxonOpinionTable from "../../components/taxon/relatedTables/TaxonOpinionTable";
+import TaxonCommonNameTable from "../../components/taxon/relatedTables/TaxonCommonNameTable";
+import TaxonDescriptionTable from "../../components/taxon/relatedTables/TaxonDescriptionTable";
+import TaxonPageTable from "../../components/taxon/relatedTables/TaxonPageTable";
+import TaxonImageTable from "../../components/taxon/relatedTables/TaxonImageTable";
+import Editor from "../../components/partial/inputs/Editor";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Taxon",
@@ -703,6 +706,8 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -710,28 +715,10 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.taxonSearchParameters,
-        request: "FETCH_TAXA",
-        title: "header.taxa",
-        object: "taxon",
-        field: "taxon",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler() {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler() {
         this.loadRelatedData(this.activeTab);
@@ -741,8 +728,6 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["taxonSearchParameters"]),
-
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
       if (tabObject && tabObject[this.$route.meta.object]) {
@@ -755,15 +740,6 @@ export default {
         if (!this.$route.meta.isEdit) {
           if (tab.name !== "taxon_subclass") return tab;
         } else return tab;
-      });
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
       });
     },
   },
@@ -798,39 +774,7 @@ export default {
         ],
         activeTab: this.$route.meta.isEdit ? "taxon_subclass" : "taxon_synonym",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "taxon",
-          "author_year",
-          "taxon_epithet",
-          "taxon_original_name",
-          "reference",
-          "parent",
-          "fossil_group",
-          "hierarchy_string",
-          "rank",
-          "rank_original",
-          "type_taxon",
-          "type_taxon_txt",
-          "stratigraphy_base",
-          "stratigraphy_top",
-          "in_estonia",
-          "in_baltoscandia",
-          "is_fossil",
-          "is_private",
-          "is_valid",
-          "is_fossil_group",
-          "sort",
-          "taxon_id_pbdb",
-          "taxon_id_plutof",
-          "taxon_id_tol",
-          "taxon_id_eol",
-          "taxon_id_nrm",
-          "remarks",
-          "owner",
-          "is_authorized",
-          "user_authorized",
-        ],
+        listOfAutocompleteTables: ["taxon_rank"],
         autocomplete: {
           loaders: {
             reference: false,
@@ -850,6 +794,7 @@ export default {
             taxon: false,
             language: false,
             attachment: false,
+            taxon_rank: false,
           },
           reference: [],
           rank: [],
@@ -868,71 +813,49 @@ export default {
           taxon: [],
           language: [],
           attachment: [],
+          taxon_rank: [],
         },
         requiredFields: ["taxon"],
-        taxon: {},
+        taxon: {
+          id: null,
+          taxon: null,
+          author_year: null,
+          taxon_epithet: null,
+          taxon_original_name: null,
+          reference: null,
+          parent: null,
+          fossil_group: null,
+          hierarchy_string: null,
+          rank: null,
+          rank_original: null,
+          type_taxon: null,
+          type_taxon_txt: null,
+          stratigraphy_base: null,
+          stratigraphy_top: null,
+          in_estonia: null,
+          in_baltoscandia: null,
+          is_fossil: null,
+          is_private: null,
+          is_valid: null,
+          is_fossil_group: null,
+          sort: null,
+          taxon_id_pbdb: null,
+          taxon_id_plutof: null,
+          taxon_id_tol: null,
+          taxon_id_eol: null,
+          taxon_id_nrm: null,
+          remarks: null,
+          owner: null,
+          is_authorized: null,
+          user_authorized: null,
+        },
         block: {
           info: true,
           details: true,
           additionalInfo: true,
           description: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "taxon");
-        fetchTaxon(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "taxon", this.handleResponse(response)[0]);
-            // this.taxon = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.taxon);
-
-            this.removeUnnecessaryFields(this.taxon, this.copyFields);
-            this.$emit("data-loaded", this.taxon);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-
-        this.$on("tab-changed", this.setTab);
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    loadAutocompleteFields() {
-      fetchTaxonRank().then((response) => {
-        this.autocomplete.rank = this.handleResponse(response);
-        this.autocomplete.rank_original = this.handleResponse(response);
-      });
     },
 
     setDefaultRelatedData() {
@@ -1010,193 +933,6 @@ export default {
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (tab.name !== "taxon_subclass") {
-            if (this.relatedData[tab.name].count > 0)
-              if (tab.name === "attachment") {
-                uploadableObject.related_data.attachment =
-                  this.relatedData.attachment.results.map((item) => {
-                    return { id: item.id };
-                  });
-              } else {
-                uploadableObject.related_data[tab.name] =
-                  this.relatedData[tab.name].results;
-
-                uploadableObject.related_data[tab.name].forEach((item) => {
-                  Object.keys(item).forEach((key) => {
-                    if (typeof item[key] === "object" && item[key] !== null) {
-                      item[key] = item[key].id ? item[key].id : null;
-                    }
-                  });
-                });
-              }
-          }
-        });
-      } else {
-        if (this.relatedData.attachment.count > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-
-      if (saveAsNew) {
-        uploadableObject.taxon += " (copy)";
-      }
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.reference)) {
-        this.taxon.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference,
-        };
-        this.autocomplete.reference.push(this.taxon.reference);
-      }
-      if (this.isNotEmpty(obj.rank)) {
-        this.taxon.rank = {
-          id: obj.rank,
-          rank: obj.rank__rank,
-          rank_en: obj.rank__rank_en,
-        };
-      }
-      if (this.isNotEmpty(obj.rank_original)) {
-        this.taxon.rank_original = {
-          id: obj.rank_original,
-          rank: obj.rank_original__rank,
-          rank_en: obj.rank_original__rank_en,
-        };
-      }
-      if (this.isNotEmpty(obj.parent)) {
-        this.taxon.parent = {
-          id: obj.parent,
-          taxon: obj.parent__taxon,
-          hierarchy_string: obj.parent__hierarchy_string,
-        };
-        this.autocomplete.parent.push(this.taxon.parent);
-      }
-      if (this.isNotEmpty(obj.fossil_group)) {
-        this.taxon.fossil_group = {
-          id: obj.fossil_group,
-          taxon: obj.fossil_group__taxon,
-        };
-        this.autocomplete.fossil_group.push(this.taxon.fossil_group);
-      }
-      if (this.isNotEmpty(obj.type_taxon)) {
-        this.taxon.type_taxon = {
-          id: obj.type_taxon,
-          taxon: obj.type_taxon__taxon,
-        };
-        this.autocomplete.type_taxon.push(this.taxon.type_taxon);
-      }
-      if (this.isNotEmpty(obj.stratigraphy_top)) {
-        this.taxon.stratigraphy_top = {
-          id: obj.stratigraphy_top,
-          stratigraphy: obj.stratigraphy_top__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy_top.push(this.taxon.stratigraphy_top);
-      }
-      if (this.isNotEmpty(obj.stratigraphy_base)) {
-        this.taxon.stratigraphy_base = {
-          id: obj.stratigraphy_base,
-          stratigraphy: obj.stratigraphy_base__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy_base.push(this.taxon.stratigraphy_base);
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "taxon_subclass") {
-        query = fetchTaxonSubclass(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_subclass
-        );
-      } else if (object === "taxon_synonym") {
-        query = fetchTaxonSynonym(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_synonym
-        );
-      } else if (object === "taxon_type_specimen") {
-        query = fetchTaxonTypeSpecimen(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_type_specimen
-        );
-      } else if (object === "taxon_occurrence") {
-        query = fetchTaxonOccurrence(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_occurrence
-        );
-      } else if (object === "taxon_opinion") {
-        query = fetchTaxonOpinion(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_opinion
-        );
-      } else if (object === "taxon_common_name") {
-        query = fetchTaxonCommonName(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_common_name
-        );
-      } else if (object === "taxon_description") {
-        query = fetchTaxonDescription(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_description
-        );
-      } else if (object === "taxon_page") {
-        query = fetchTaxonPage(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_page
-        );
-      } else if (object === "attachment") {
-        query = fetchTaxonAttachments(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment
-        );
-      } else if (object === "taxon_image") {
-        query = fetchTaxonImage(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_image
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].results = this.handleResponse(response);
-          this.relatedData[object].count = response.data.count;
-        });
-      }
     },
 
     addFiles(files, singleFileMetadata) {

@@ -74,7 +74,7 @@
           v-for="entity in sidebarList.results"
           :key="entity.id"
           :to="{
-            path: `/${$route.meta.table}/${entity.id}`,
+            path: `/${$route.meta.object}/${entity.id}`,
           }"
           :color="drawerActiveColor"
           :title="entity[activeSearchParams.field]"
@@ -132,7 +132,7 @@
 
       <!-- SAMPLES only for Site -->
       <v-list-item
-        v-if="$route.meta.isEdit && $route.meta.table === 'site'"
+        v-if="$route.meta.isEdit && $route.meta.object === 'site'"
         :to="{
           name: 'Sample add',
           query: { site: JSON.stringify(this.activeSite) },
