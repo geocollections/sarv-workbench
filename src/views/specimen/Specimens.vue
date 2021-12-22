@@ -34,6 +34,7 @@ export default {
     apiCall() {
       return this.$api.rw.get("specimen", {
         defaultParams: {
+          // NOTE: Should be changed to 0 as api uses now SpecimenCompactSerializer and nest=1 is slow and unnecessary
           nest: 1,
         },
         options: this.$_tableViewMixin_options,
