@@ -8,13 +8,9 @@
       :title="$t('editSpecimen.editMessage')"
     >
       <div class="label2_head">
-        <div
-          style="float: left; font-size: 84%"
-          v-translate="{
-            et: entity.database__name,
-            en: entity.database__name_en,
-          }"
-        ></div>
+        <span style="float: left; font-size: 84%">{{
+          entity.database__name_label
+        }}</span>
 
         <div style="float: right; text-align: right; font-size: 95%">
           {{ entity.database__acronym }} {{ entity.specimen_id }}
