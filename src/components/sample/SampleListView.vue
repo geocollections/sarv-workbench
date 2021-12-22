@@ -8,15 +8,11 @@
       :title="$t('editSample.editMessage')"
     >
       <div class="label2_head">
-        <div
-          style="float: left; font-size: 90%"
-          v-translate="{
-            et: entity.database__name,
-            en: entity.database__name_en,
-          }"
-        ></div>
+        <span style="float: left; font-size: 84%">{{
+          entity.database__name_label
+        }}</span>
 
-        <div
+        <span
           style="
             float: right;
             text-align: right;
@@ -26,7 +22,7 @@
           "
         >
           ID: {{ entity.id }}
-        </div>
+        </span>
       </div>
 
       <div
