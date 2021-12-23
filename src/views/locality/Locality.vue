@@ -71,8 +71,8 @@
               <autocomplete-wrapper
                 v-model="locality.type"
                 :color="bodyActiveColor"
-                :items="autocomplete.localityTypes"
-                :loading="autocomplete.loaders.localityTypes"
+                :items="autocomplete.list_locality_type"
+                :loading="autocomplete.loaders.list_locality_type"
                 :item-text="commonLabel"
                 :label="$t('common.type')"
               />
@@ -270,8 +270,8 @@
               <autocomplete-wrapper
                 v-model="locality.extent"
                 :color="bodyActiveColor"
-                :items="autocomplete.extent"
-                :loading="autocomplete.loaders.extent"
+                :items="autocomplete.list_locality_extent"
+                :loading="autocomplete.loaders.list_locality_extent"
                 :item-text="commonLabel"
                 :label="$t('locality.extent')"
               />
@@ -290,8 +290,8 @@
               <autocomplete-wrapper
                 v-model="locality.country"
                 :color="bodyActiveColor"
-                :items="autocomplete.country"
-                :loading="autocomplete.loaders.country"
+                :items="autocomplete.list_country"
+                :loading="autocomplete.loaders.list_country"
                 :item-text="commonLabel"
                 :label="$t('locality.country')"
               />
@@ -304,8 +304,8 @@
               <autocomplete-wrapper
                 v-model="locality.coord_det_precision"
                 :color="bodyActiveColor"
-                :items="autocomplete.coordPrecision"
-                :loading="autocomplete.loaders.coordPrecision"
+                :items="autocomplete.list_coordinate_precision"
+                :loading="autocomplete.loaders.list_coordinate_precision"
                 :item-text="commonLabel"
                 :label="$t('locality.coord_det_precision')"
               />
@@ -315,8 +315,8 @@
               <autocomplete-wrapper
                 v-model="locality.coord_det_method"
                 :color="bodyActiveColor"
-                :items="autocomplete.coordMethod"
-                :loading="autocomplete.loaders.coordMethod"
+                :items="autocomplete.list_coordinate_method"
+                :loading="autocomplete.loaders.list_coordinate_method"
                 :item-text="commonLabel"
                 :label="$t('locality.coord_det_method')"
               />
@@ -484,6 +484,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -633,6 +634,8 @@ import LocalityStratigraphyTable from "../../components/locality/relatedTables/L
 import requestsMixin from "../../mixins/requestsMixin";
 import LocalityDescriptionTable from "../../components/locality/relatedTables/LocalityDescriptionTable";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Locality",
@@ -669,6 +672,8 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -676,26 +681,10 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.localitySearchParameters,
-        request: "FETCH_LOCALITIES",
-        title: "header.localities",
-        object: "locality",
-        field: "locality_en",
-      });
-    }
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler: function () {
         this.loadRelatedData(this.activeTab);
@@ -705,8 +694,6 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["localitySearchParameters"]),
-
     ...mapState("map", ["showMap"]),
 
     myShowMap: {
@@ -723,15 +710,6 @@ export default {
       if (tabObject && tabObject[this.$route.meta.object]) {
         return tabObject[this.$route.meta.object];
       } else return null;
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
     },
   },
 
@@ -760,37 +738,12 @@ export default {
         ],
         activeTab: "locality_reference",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "locality",
-          "locality_en",
-          "number",
-          "code",
-          "latitude",
-          "longitude",
-          "elevation",
-          "depth",
-          "coordx",
-          "coordy",
-          "epsg",
-          "coord_system",
-          "stratigraphy_top_free",
-          "stratigraphy_base_free",
-          "maaamet_pa_id",
-          "mindat_id",
-          "eelis",
-          "remarks_location",
-          "remarks",
-          "is_private",
-          "type",
-          "parent",
-          "extent",
-          "coord_det_precision",
-          "coord_det_method",
-          "coord_det_agent",
-          "country",
-          "stratigraphy_top",
-          "stratigraphy_base",
+        listOfAutocompleteTables: [
+          "list_locality_type",
+          "list_locality_extent",
+          "list_coordinate_method",
+          "list_coordinate_precision",
+          "list_country",
         ],
         autocomplete: {
           loaders: {
@@ -802,15 +755,15 @@ export default {
             synonym: false,
             attachment: false,
             stratigraphy: false,
+            list_locality_type: false,
+            list_locality_extent: false,
+            list_coordinate_method: false,
+            list_coordinate_precision: false,
+            list_country: false,
           },
-          localityTypes: [],
           locality: [],
-          extent: [],
-          coordPrecision: [],
-          coordMethod: [],
           reference: [],
           agent: [],
-          country: [],
           county: [],
           parish: [],
           stratigraphy_top: [],
@@ -818,67 +771,52 @@ export default {
           synonym: [],
           attachment: [],
           stratigraphy: [],
+          list_locality_type: [],
+          list_locality_extent: [],
+          list_coordinate_method: [],
+          list_coordinate_precision: [],
+          list_country: [],
         },
         requiredFields: ["locality", "locality_en"],
-        locality: {},
+        locality: {
+          id: null,
+          locality: null,
+          locality_en: null,
+          number: null,
+          code: null,
+          latitude: null,
+          longitude: null,
+          elevation: null,
+          depth: null,
+          coordx: null,
+          coordy: null,
+          epsg: null,
+          coord_system: null,
+          stratigraphy_top_free: null,
+          stratigraphy_base_free: null,
+          maaamet_pa_id: null,
+          mindat_id: null,
+          eelis: null,
+          remarks_location: null,
+          remarks: null,
+          is_private: null,
+          type: null,
+          parent: null,
+          extent: null,
+          coord_det_precision: null,
+          coord_det_method: null,
+          coord_det_agent: null,
+          country: null,
+          stratigraphy_top: null,
+          stratigraphy_base: null,
+        },
         block: {
           info: true,
           map: true,
           additionalInfo: true,
           description: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-
-        fetchLocality(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "locality", this.handleResponse(response)[0]);
-            // this.locality = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.locality);
-
-            this.removeUnnecessaryFields(this.locality, this.copyFields);
-            this.$emit("data-loaded", this.locality);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => {
-          this.loadRelatedData(tab.name);
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-
-      if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
-      else this.setTab("locality_reference");
     },
 
     loadAutocompleteFields() {
@@ -946,181 +884,6 @@ export default {
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      if (this.isNotEmpty(uploadableObject.elevation))
-        uploadableObject.elevation = parseFloat(
-          uploadableObject.elevation
-        ).toFixed(1);
-      else uploadableObject.elevation = null;
-      if (this.isNotEmpty(uploadableObject.latitude))
-        uploadableObject.latitude = parseFloat(
-          uploadableObject.latitude
-        ).toFixed(6);
-      else uploadableObject.latitude = null;
-      if (this.isNotEmpty(uploadableObject.longitude))
-        uploadableObject.longitude = parseFloat(
-          uploadableObject.longitude
-        ).toFixed(6);
-      else uploadableObject.longitude = null;
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      if (!this.isNotEmpty(uploadableObject.depth))
-        uploadableObject.depth = null;
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0)
-            if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment =
-                this.relatedData.attachment_link.results.map((item) => {
-                  return { id: item.id };
-                });
-            } else {
-              uploadableObject.related_data[tab.name] =
-                this.relatedData[tab.name].results;
-
-              uploadableObject.related_data[tab.name].forEach((item) => {
-                Object.keys(item).forEach((key) => {
-                  if (typeof item[key] === "object" && item[key] !== null) {
-                    item[key] = item[key].id ? item[key].id : null;
-                  }
-                });
-              });
-            }
-        });
-      } else {
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment_link.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      this.locality.type = {
-        value: obj.type__value,
-        value_en: obj.type__value_en,
-        id: obj.type__id,
-      };
-      if (this.isNotEmpty(obj.parent__id)) {
-        this.locality.parent = {
-          locality: obj.parent__locality,
-          locality_en: obj.parent__locality_en,
-          id: obj.parent__id,
-        };
-        this.autocomplete.locality.push(this.locality.parent);
-      }
-      this.locality.extent = {
-        value: obj.extent__value,
-        value_en: obj.extent__value_en,
-        id: obj.extent__id,
-      };
-      this.locality.coord_det_precision = {
-        value: obj.coord_det_precision__value,
-        value_en: obj.coord_det_precision__value_en,
-        id: obj.coord_det_precision__id,
-      };
-      this.locality.coord_det_method = {
-        value: obj.coord_det_method__value,
-        value_en: obj.coord_det_method__value_en,
-        id: obj.coord_det_method__id,
-      };
-      if (this.isNotEmpty(obj.coord_det_agent__id)) {
-        this.locality.coord_det_agent = {
-          agent: obj.coord_det_agent__agent,
-          id: obj.coord_det_agent__id,
-        };
-        this.autocomplete.agent.push(this.locality.coord_det_agent);
-      }
-      this.locality.country = {
-        value: obj.country__value,
-        value_en: obj.country__value_en,
-        id: obj.country__id,
-      };
-      if (this.isNotEmpty(obj.stratigraphy_top__id)) {
-        this.locality.stratigraphy_top = {
-          stratigraphy: obj.stratigraphy_top__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en,
-          id: obj.stratigraphy_top__id,
-        };
-        this.autocomplete.stratigraphy_top.push(this.locality.stratigraphy_top);
-      }
-      if (this.isNotEmpty(obj.stratigraphy_base__id)) {
-        this.locality.stratigraphy_base = {
-          stratigraphy: obj.stratigraphy_base__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
-          id: obj.stratigraphy_base__id,
-        };
-        this.autocomplete.stratigraphy_base.push(
-          this.locality.stratigraphy_base
-        );
-      }
-    },
-
-    loadRelatedData(type) {
-      let query;
-
-      if (type === "locality_reference") {
-        query = fetchLocalityReference(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_reference
-        );
-      } else if (type === "locality_synonym") {
-        query = fetchLocalitySynonym(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_synonym
-        );
-      } else if (type === "attachment_link") {
-        query = fetchLocalityAttachment(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      } else if (type === "locality_stratigraphy") {
-        query = fetchLocalityDescriptions(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_stratigraphy
-        );
-      } else if (type === "locality_description") {
-        query = fetchLocalityDescriptions(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_description
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[type].count = response.data.count;
-          this.relatedData[type].results = this.handleResponse(response);
-        });
-      }
     },
 
     updateLocation(location) {

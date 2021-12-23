@@ -113,6 +113,7 @@ import { mapActions, mapState } from "vuex";
 import { fetchJournal } from "../../assets/js/api/apiCalls";
 import InputWrapper from "../../components/partial/inputs/InputWrapper";
 import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "Journal",
@@ -140,90 +141,29 @@ export default {
     },
   },
 
-  mixins: [formManipulation, formSectionsMixin],
+  mixins: [formManipulation, formSectionsMixin, detailViewUtilsMixin],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.journalSearchParameters,
-        request: "FETCH_JOURNALS",
-        title: "header.journals",
-        object: "journal",
-        field: "journal_name",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    ...mapState("search", ["journalSearchParameters"]),
   },
 
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "journal_name",
-          "journal_short",
-          "publisher",
-          "remarks",
-        ],
         requiredFields: ["journal_name"],
-        journal: {},
+        journal: {
+          id: null,
+          journal_name: null,
+          journal_short: null,
+          publisher: null,
+          remarks: null,
+        },
         block: { requiredFields: true, info: true },
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchJournal(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "journal", this.handleResponse(response)[0]);
-            // this.journal = this.handleResponse(response)[0];
-
-            this.removeUnnecessaryFields(this.journal, this.copyFields);
-            this.$emit("data-loaded", this.journal);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      console.log("This object is sent in string format:");
-      console.log(objectToUpload);
-      return JSON.stringify(objectToUpload);
     },
   },
 };

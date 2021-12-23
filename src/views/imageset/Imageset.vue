@@ -129,6 +129,7 @@ import InputWrapper from "../../components/partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
 import { fetchImageset } from "@/assets/js/api/apiCalls";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "Imageset",
@@ -157,30 +158,23 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    detailViewUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
   },
 
   computed: {
-    ...mapState("search", ["imagesetSearchParameters"]),
     ...mapState("detail", ["imagesetDetail"]),
   },
 
   created() {
     if (this.imagesetDetail) this.imageset = cloneDeep(this.imagesetDetail);
-
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.imagesetSearchParameters,
-        request: "FETCH_IMAGESETS",
-        title: "header.imageset",
-        object: "imageset",
-        field: "imageset_number",
-      });
-    }
 
     this.loadFullInfo();
 
@@ -196,13 +190,6 @@ export default {
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-
     "imageset.imageset_number": function (newVal) {
       if (newVal && newVal.trim().length > 0) {
         this.isInImagesetTable(newVal);
@@ -211,14 +198,8 @@ export default {
   },
 
   methods: {
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
     setInitialData() {
       return {
-        copyFields: ["id", "imageset_number", "author", "description"],
         autocomplete: {
           loaders: {
             agent: false,
@@ -226,69 +207,15 @@ export default {
           agent: [],
         },
         requiredFields: ["imageset_number", "author"],
-        imageset: {},
+        imageset: {
+          id: null,
+          imageset_number: null,
+          author: null,
+          description: null,
+        },
         imagesetNumberExists: false,
         block: { info: true },
       };
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchImageset(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "imageset", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.imageset);
-            this.removeUnnecessaryFields(this.imageset, this.copyFields);
-
-            this.$emit("data-loaded", this.imageset);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      if (!this.$route.meta.isEdit)
-        this.saveFields({ key: "imagesetDetail", value: objectToUpload });
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.author)) {
-        this.imageset.author = {
-          id: obj.author,
-          agent: obj.author__agent,
-        };
-        this.autocomplete.agent.push(this.imageset.author);
-      }
     },
 
     isInImagesetTable(query) {

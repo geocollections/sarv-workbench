@@ -526,6 +526,8 @@ import DateWrapper from "../../components/partial/inputs/DateWrapper";
 import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
 import FileInput from "../../components/partial/inputs/FileInput";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "Project",
@@ -562,6 +564,7 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     sidebarMixin,
+    detailViewUtilsMixin,
   ],
 
   data() {
@@ -569,11 +572,7 @@ export default {
   },
 
   computed: {
-    ...mapState("search", [
-      "projectSearchParameters",
-      "activeProject",
-      "sidebarUserAction",
-    ]),
+    ...mapState("search", ["activeProject", "sidebarUserAction"]),
     ...mapState("map", ["showMap"]),
 
     myShowMap: {
@@ -584,38 +583,12 @@ export default {
         this.updateShowMap(value);
       },
     },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.projectSearchParameters,
-        request: "FETCH_PROJECTS",
-        title: "header.projects",
-        object: "project",
-        field: "name",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
     sidebarUserAction(newVal) {
       this.handleUserAction(newVal, "project", this.project);
     },
@@ -656,22 +629,8 @@ export default {
           width: 0,
           height: 0,
         },
-        relatedData: this.setDefaultRalatedData(),
-        copyFields: [
-          "id",
-          "name",
-          "name_en",
-          "project_type",
-          "parent_project",
-          "date_start",
-          "date_end",
-          "date_free",
-          "description",
-          "owner",
-          "remarks",
-          "is_private",
-          "projectagent",
-        ],
+        relatedData: this.setDefaultRelatedData(),
+        listOfAutocompleteTables: ["project_type"],
         autocomplete: {
           loaders: {
             project_type: false,
@@ -687,7 +646,21 @@ export default {
           attachment: [],
         },
         requiredFields: ["name"],
-        project: {},
+        project: {
+          id: null,
+          name: null,
+          name_en: null,
+          project_type: null,
+          parent_project: null,
+          date_start: null,
+          date_end: null,
+          date_free: null,
+          description: null,
+          owner: null,
+          remarks: null,
+          is_private: null,
+          projectagent: null,
+        },
         previousRecord: {},
         nextRecord: {},
         columns: [
@@ -722,65 +695,10 @@ export default {
           files: true,
           sites: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
     },
 
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      fetchProjectType().then((response) => {
-        this.autocomplete.project_type = this.handleResponse(response);
-      });
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "project");
-        fetchProject(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "project", this.handleResponse(response)[0]);
-            // this.project = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.project);
-            this.removeUnnecessaryFields(this.project, this.copyFields);
-            this.project.related_data = {};
-            // this.$set(this,'activeProject', this.checkIfProjectIsActive());
-            this.$emit("data-loaded", this.project);
-            this.setLoadingState(false);
-            // this.getListRecords('project')
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-        this.loadRelatedData("projectagent");
-        this.loadRelatedData("attachment_link");
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-
-        //set default user
-        this.project.owner = {
-          agent: this.getCurrentAgent.user,
-          id: this.getCurrentAgent.id,
-        };
-        this.autocomplete.agent.push(this.project.owner);
-      }
-    },
-
-    setDefaultRalatedData() {
+    setDefaultRelatedData() {
       return {
         projectagent: [],
         attachment_link: [],
@@ -802,66 +720,6 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      //add related data
-      uploadableObject.related_data = {};
-      if (this.relatedData.projectagent.length > 0) {
-        uploadableObject.related_data.agent = this.relatedData.projectagent;
-      } else uploadableObject.related_data.agent = null;
-      if (this.relatedData.attachment_link.length > 0) {
-        uploadableObject.related_data.attachment =
-          this.relatedData.attachment_link.map((item) => {
-            return { id: item.id };
-          });
-      } else uploadableObject.related_data.attachment = null;
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      this.project.project_type = {
-        name: obj.project_type__name,
-        name_en: obj.project_type__name_en,
-        id: obj.project_type,
-      };
-
-      //set current user as default owner
-
-      // this.project.owner = this.isNotEmpty(this.project.owner) ? {agent:obj.owner__agent,id:obj.owner} : {agent:this.currentUser.user,id:this.currentUser.id}
-      if (this.isNotEmpty(obj.owner)) {
-        this.project.owner = { agent: obj.owner__agent, id: obj.owner };
-        this.autocomplete.agent.push(this.project.owner);
-      }
-      if (this.isNotEmpty(obj.parent_project)) {
-        this.project.parent_project = {
-          name: obj.parent_project__name,
-          name_en: obj.parent_project__name_en,
-          id: obj.parent_project,
-        };
-        this.autocomplete.parent_project.push(this.project.parent_project);
-      }
-    },
-
     fillRelatedDataAutocompleteFields(obj, type) {
       let relatedData = cloneDeep(obj);
       obj = [];
@@ -877,49 +735,6 @@ export default {
       return obj;
     },
 
-    loadRelatedData(object) {
-      let query;
-      if (object === "projectagent") {
-        query = fetchProjectAgent(
-          this.$route.params.id,
-          this.relatedData.page.projectagent
-        );
-      } else if (object === "attachment_link") {
-        query = fetchProjectAttachment(
-          this.$route.params.id,
-          this.relatedData.page.attachment_link
-        );
-      }
-      if (query) {
-        return new Promise(() => {
-          //resolve it for my sites table
-          // if(object === 'site') resolve(query);
-
-          query.then((response) => {
-            //projectagent do not have count value
-            if (response.status === 200)
-              this.relatedData[object] = response.data.results
-                ? response.data.results
-                : [];
-
-            this.relatedData.count[object] = response.data.count;
-            this.relatedData[object] = this.fillRelatedDataAutocompleteFields(
-              this.relatedData[object],
-              object
-            );
-
-            if (object === "projectagent") {
-              this.autocomplete.projectagent = this.relatedData[object];
-            }
-            if (object === "attachment_link") {
-              this.autocomplete.attachment = this.relatedData[object];
-            }
-            // if(object === 'site')  this.forceMapRerender()
-            this.setBlockVisibility(object, this.relatedData[object].length);
-          });
-        });
-      }
-    },
     setBlockVisibility(object, count) {
       if (object === "projectagent") this.block.members = count > 0;
       if (object === "attachment_link") this.block.files = count > 0;

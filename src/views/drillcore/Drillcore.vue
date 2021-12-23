@@ -210,6 +210,7 @@
 
     <!-- RELATED DATA TABS -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -378,6 +379,8 @@ import { mapActions, mapState } from "vuex";
 import { fetchRelatedDrillcoreBoxImages } from "@/assets/js/api/apiCalls";
 import DrillcoreBoxListView from "@/components/drillcore_box/DrillcoreBoxListView";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Drillcore",
@@ -417,6 +420,8 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -424,28 +429,10 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.drillcoreSearchParameters,
-        request: "FETCH_DRILLCORES",
-        title: "header.drillcores",
-        object: "drillcore",
-        field: "drillcore",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler: function () {
         this.loadRelatedData(this.activeTab);
@@ -455,19 +442,9 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["drillcoreSearchParameters"]),
     ...mapState("search", {
       activeRelatedDataTab: (state) => state.activeRelatedDataTab.drillcore,
     }),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
 
   methods: {
@@ -501,24 +478,7 @@ export default {
         ],
         activeTab: "drillcore_box",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "drillcore",
-          "drillcore_en",
-          "locality",
-          "year",
-          "agent",
-          "depository",
-          "location",
-          "storage",
-          "boxes",
-          "box_numbers",
-          "number_meters",
-          "direction_lr",
-          "depth",
-          "remarks",
-          "is_private",
-        ],
+        listOfAutocompleteTables: ["list_drillcore_storage"],
         autocomplete: {
           loaders: {
             locality: false,
@@ -538,73 +498,29 @@ export default {
           stratigraphy_top: [],
         },
         requiredFields: ["drillcore", "drillcore_en"],
-        drillcore: {},
+        drillcore: {
+          id: null,
+          drillcore: null,
+          drillcore_en: null,
+          locality: null,
+          year: null,
+          agent: null,
+          depository: null,
+          location: null,
+          storage: null,
+          boxes: null,
+          box_numbers: null,
+          number_meters: null,
+          direction_lr: null,
+          depth: null,
+          remarks: null,
+          is_private: null,
+        },
         block: {
           info: true,
           details: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "drillcore");
-        fetchDrillcore(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "drillcore", this.handleResponse(response)[0]);
-            // this.drillcore = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.drillcore);
-
-            this.removeUnnecessaryFields(this.drillcore, this.copyFields);
-            this.$emit("data-loaded", this.drillcore);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-
-        this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map((tab) => tab.name)
-        );
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    loadAutocompleteFields() {
-      fetchListDrillcoreStorage().then(
-        (response) =>
-          (this.autocomplete.list_drillcore_storage =
-            this.handleResponse(response))
-      );
     },
 
     setDefaultRelatedData() {
@@ -640,126 +556,6 @@ export default {
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0)
-            if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment =
-                this.relatedData.attachment_link.results.map((item) => {
-                  return { id: item.id };
-                });
-            } else {
-              uploadableObject.related_data[tab.name] =
-                this.relatedData[tab.name].results;
-
-              uploadableObject.related_data[tab.name].forEach((item) => {
-                Object.keys(item).forEach((key) => {
-                  if (typeof item[key] === "object" && item[key] !== null) {
-                    item[key] = item[key].id ? item[key].id : null;
-                  }
-                });
-              });
-            }
-        });
-      } else {
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment_link.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.locality)) {
-        this.drillcore.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.drillcore.locality);
-      }
-      if (this.isNotEmpty(obj.agent)) {
-        this.drillcore.agent = {
-          id: obj.agent,
-          agent: obj.agent__agent,
-        };
-        this.autocomplete.agent.push(this.drillcore.agent);
-      }
-      this.drillcore.depository = {
-        id: obj.depository,
-        value: obj.depository__value,
-        value_en: obj.depository__value_en,
-      };
-      if (this.isNotEmpty(obj.storage)) {
-        this.drillcore.storage = {
-          id: obj.storage,
-          location: obj.storage__location,
-        };
-        this.autocomplete.storage.push(this.drillcore.storage);
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "drillcore_box") {
-        query = fetchRelatedDrillcoreBoxes(
-          this.$route.params.id,
-          this.relatedData.searchParameters.drillcore_box
-        );
-      } else if (object === "drillcore_box_images") {
-        query = fetchRelatedDrillcoreBoxImages(
-          this.$route.params.id,
-          this.relatedData.searchParameters.drillcore_box_images
-        );
-      } else if (object === "drillcore_study") {
-        query = fetchDrillcoreStudies(
-          this.$route.params.id,
-          this.relatedData.searchParameters.drillcore_study
-        );
-      } else if (object === "attachment_link") {
-        query = fetchDrillcoreAttachments(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
     },
 
     openDrillcorePrintView(id) {

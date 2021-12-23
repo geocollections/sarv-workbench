@@ -229,6 +229,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -338,6 +339,8 @@ import LibraryReferenceTable from "../../components/library/relatedTables/Librar
 import requestsMixin from "../../mixins/requestsMixin";
 import Editor from "../../components/partial/inputs/Editor";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Library",
@@ -373,6 +376,8 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -380,27 +385,10 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.librarySearchParameters,
-        request: "FETCH_LIBRARIES",
-        title: "header.libraries",
-        object: "library",
-        field: "title_en",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
     "relatedData.searchParameters": {
       handler: function () {
         if (this.$route.meta.isEdit) {
@@ -412,22 +400,11 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["librarySearchParameters"]),
-
     filteredRelatedTabs() {
       return this.relatedTabs.filter((tab) => {
         if (tab.name === "library_reference_list") {
           if (this.$route.meta.isEdit) return tab;
         } else return tab;
-      });
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
       });
     },
 
@@ -459,19 +436,7 @@ export default {
         ],
         activeTab: "library_reference",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "author_txt",
-          "year",
-          "title",
-          "title_short",
-          "title_en",
-          "title_short_en",
-          "keywords",
-          "abstract",
-          "abstract_en",
-          "is_private",
-        ],
+        listOfAutocompleteTables: ["library_agent"],
         autocomplete: {
           loaders: {
             reference: false,
@@ -481,66 +446,21 @@ export default {
           library_agent: [],
         },
         requiredFields: ["author_txt"],
-        library: {},
+        library: {
+          id: null,
+          author_txt: null,
+          year: null,
+          title: null,
+          title_short: null,
+          title_en: null,
+          title_short_en: null,
+          keywords: null,
+          abstract: null,
+          abstract_en: null,
+          is_private: null,
+        },
         block: { info: true, description: true, members: true },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchLibrary(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "library", this.handleResponse(response)[0]);
-
-            this.removeUnnecessaryFields(this.library, this.copyFields);
-            this.$emit("data-loaded", this.library);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        this.loadAutocompleteFields();
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    loadAutocompleteFields() {
-      fetchLibraryAgent(this.$route.params.id).then((response) => {
-        let libraryAgent = this.handleResponse(response);
-        this.relatedData.library_agent = libraryAgent.map((entity) => {
-          return {
-            agent: entity.agent__agent,
-            id: entity.agent,
-          };
-        });
-        if (this.isNotEmpty(this.relatedData.library_agent)) {
-          this.autocomplete.library_agent = this.relatedData.library_agent;
-        }
-      });
     },
 
     setDefaultRelatedData() {
@@ -571,73 +491,6 @@ export default {
           library_agent: 0,
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data
-      if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
-        if (this.isNotEmpty(this.relatedData.library_agent))
-          uploadableObject.related_data.agent = this.relatedData.library_agent;
-
-        this.relatedTabs.forEach((tab) => {
-          if (tab.name !== "library_reference_list") {
-            if (this.isNotEmpty(this.relatedData[tab.name].count > 0))
-              uploadableObject.related_data[tab.name] =
-                this.relatedData[tab.name].results;
-          }
-        });
-      } else {
-        // Library agent is not in tab.
-        if (this.isNotEmpty(this.relatedData.library_agent)) {
-          uploadableObject.related_data = {};
-          uploadableObject.related_data.agent = this.relatedData.library_agent;
-        } else uploadableObject.related_data.agent = null;
-      }
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "library_reference") {
-        query = fetchLibraryReference(
-          this.$route.params.id,
-          this.relatedData.searchParameters.library_reference
-        );
-      }
-      if (object === "library_reference_list") {
-        query = fetchLibraryReference(
-          this.$route.params.id,
-          this.relatedData.searchParameters.library_reference_list
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
     },
   },
 };
