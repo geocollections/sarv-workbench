@@ -110,8 +110,8 @@
               <autocomplete-wrapper
                 v-model="reference.type"
                 :color="bodyActiveColor"
-                :items="autocomplete.types"
-                :loading="autocomplete.loaders.types"
+                :items="autocomplete.list_reference_type"
+                :loading="autocomplete.loaders.list_reference_type"
                 :item-text="commonLabel"
                 :label="$t('common.type')"
               />
@@ -1071,7 +1071,7 @@ export default {
         activeTab: "library",
         relatedData: this.setDefaultRelatedData(),
         listOfAutocompleteTables: [
-          "locality_reference_type",
+          "list_reference_type",
           "list_language",
           "list_locality_reference_type",
           "list_licence",
@@ -1087,6 +1087,7 @@ export default {
             attachment3: false, // For #158, regarding p-2
             library: false,
             list_locality_reference_type: false,
+            list_reference_type: false,
             list_licence: false,
             reference: false,
             translated_reference: false,
@@ -1099,6 +1100,7 @@ export default {
           attachment: [],
           library: [],
           list_locality_reference_type: [],
+          list_reference_type: [],
           list_licence: [],
           reference: [],
           translated_reference: [],

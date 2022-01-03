@@ -76,8 +76,8 @@
               <autocomplete-wrapper
                 v-model="imageset.author"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.author"
+                :loading="autocomplete.loaders.author"
                 item-text="agent"
                 :label="$t('common.author')"
                 use-state
@@ -86,7 +86,7 @@
                 is-searchable
                 :disabled="$route.meta.isEdit"
                 :readonly="$route.meta.isEdit"
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'author')"
                 name="author"
               />
             </v-col>
@@ -94,7 +94,16 @@
 
           <!-- DESCRIPTION -->
           <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
+            <v-col cols="12" md="6" class="pa-1">
+              <textarea-wrapper
+                v-model="imageset.imageset_series"
+                :color="bodyActiveColor"
+                :label="$t('imageset.imageset_series')"
+                name="description"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
               <textarea-wrapper
                 v-model="imageset.description"
                 :color="bodyActiveColor"
@@ -185,7 +194,7 @@ export default {
         forename: this.getCurrentAgent.forename,
         surename: this.getCurrentAgent.surename,
       };
-      this.autocomplete.agent.push(this.imageset.author);
+      this.autocomplete.author.push(this.imageset.author);
     }
   },
 
@@ -202,9 +211,9 @@ export default {
       return {
         autocomplete: {
           loaders: {
-            agent: false,
+            author: false,
           },
-          agent: [],
+          author: [],
         },
         requiredFields: ["imageset_number", "author"],
         imageset: {

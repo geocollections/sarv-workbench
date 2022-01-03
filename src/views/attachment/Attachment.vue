@@ -149,8 +149,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.author"
                     :color="bodyActiveColor"
-                    :items="autocomplete.agent"
-                    :loading="autocomplete.loaders.agent"
+                    :items="autocomplete.author"
+                    :loading="autocomplete.loaders.author"
                     item-text="agent"
                     :label="$t('attachment.author__agent')"
                     use-custom-state
@@ -167,7 +167,7 @@
                     is-link
                     route-object="agent"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch"
+                    v-on:search:items="autocompleteAgentSearch($event, 'author')"
                   />
                 </v-col>
 
@@ -536,8 +536,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.licence"
                     :color="bodyActiveColor"
-                    :items="autocomplete.licence"
-                    :loading="autocomplete.loaders.licence"
+                    :items="autocomplete.list_licence"
+                    :loading="autocomplete.loaders.list_licence"
                     :item-text="licenceLabel"
                     :label="$t('common.licence')"
                   />
@@ -565,8 +565,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.image_type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.image_type"
-                    :loading="autocomplete.loaders.image_type"
+                    :items="autocomplete.list_image_type"
+                    :loading="autocomplete.loaders.list_image_type"
                     :item-text="commonLabel"
                     :label="$t('attachment.imageType')"
                   />
@@ -1578,8 +1578,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.author"
                     :color="bodyActiveColor"
-                    :items="autocomplete.agent"
-                    :loading="autocomplete.loaders.agent"
+                    :items="autocomplete.author"
+                    :loading="autocomplete.loaders.author"
                     item-text="agent"
                     :label="$t('attachment.author__agent')"
                     use-custom-state
@@ -1596,7 +1596,7 @@
                     is-link
                     route-object="agent"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch"
+                    v-on:search:items="autocompleteAgentSearch($event, 'author')"
                   />
                 </v-col>
 
@@ -1764,8 +1764,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.licence"
                     :color="bodyActiveColor"
-                    :items="autocomplete.licence"
-                    :loading="autocomplete.loaders.licence"
+                    :items="autocomplete.list_licence"
+                    :loading="autocomplete.loaders.list_licence"
                     :item-text="licenceLabel"
                     :label="$t('common.licence')"
                   />
@@ -1793,8 +1793,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.image_type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.image_type"
-                    :loading="autocomplete.loaders.image_type"
+                    :items="autocomplete.list_image_type"
+                    :loading="autocomplete.loaders.list_image_type"
                     :item-text="commonLabel"
                     :label="$t('attachment.imageType')"
                   />
@@ -1893,8 +1893,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.author"
                     :color="bodyActiveColor"
-                    :items="autocomplete.agent"
-                    :loading="autocomplete.loaders.agent"
+                    :items="autocomplete.author"
+                    :loading="autocomplete.loaders.author"
                     item-text="agent"
                     :label="$t('attachment.author__agent')"
                     use-custom-state
@@ -1911,7 +1911,7 @@
                     is-link
                     route-object="agent"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch"
+                    v-on:search:items="autocompleteAgentSearch($event, 'author')"
                   />
                 </v-col>
 
@@ -2014,8 +2014,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.type"
-                    :loading="autocomplete.loaders.type"
+                    :items="autocomplete.list_attachment_type"
+                    :loading="autocomplete.loaders.list_attachment_type"
                     :item-text="commonLabel"
                     :label="$t('common.type')"
                   />
@@ -2227,8 +2227,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.licence"
                     :color="bodyActiveColor"
-                    :items="autocomplete.licence"
-                    :loading="autocomplete.loaders.licence"
+                    :items="autocomplete.list_licence"
+                    :loading="autocomplete.loaders.list_licence"
                     :item-text="licenceLabel"
                     :label="$t('common.licence')"
                   />
@@ -2256,8 +2256,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.image_type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.image_type"
-                    :loading="autocomplete.loaders.image_type"
+                    :items="autocomplete.list_image_type"
+                    :loading="autocomplete.loaders.list_image_type"
                     :item-text="commonLabel"
                     :label="$t('attachment.imageType')"
                   />
@@ -3423,8 +3423,8 @@
                   <autocomplete-wrapper
                     v-model="attachment.licence"
                     :color="bodyActiveColor"
-                    :items="autocomplete.licence"
-                    :loading="autocomplete.loaders.licence"
+                    :items="autocomplete.list_licence"
+                    :loading="autocomplete.loaders.list_licence"
                     :item-text="licenceLabel"
                     :label="$t('common.licence')"
                   />
@@ -3926,7 +3926,7 @@ export default {
               forename: this.getCurrentAgent.forename,
               surename: this.getCurrentAgent.surename,
             });
-            this.autocomplete.agent.push(this.attachment.author);
+            this.autocomplete.author.push(this.attachment.author);
           }
         }
       },
@@ -4088,10 +4088,11 @@ export default {
         autocomplete: {
           loaders: {
             agent: false,
+            author: false,
             imageset: false,
             reference: false,
             locality: false,
-            licence: false,
+            list_licence: false,
             copyright_agent: false,
             image_type: false,
             agent_digitised: false,
@@ -4114,10 +4115,11 @@ export default {
             taxon: false,
           },
           agent: [],
+          author: [],
           imageset: [],
           reference: [],
           locality: [],
-          licence: [],
+          list_licence: [],
           copyright_agent: [],
           image_type: [],
           agent_digitised: [],
