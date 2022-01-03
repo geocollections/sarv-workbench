@@ -96,15 +96,6 @@ export default {
   },
   data: () => ({
     expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "common.name", value: "name" },
-      { text: "common.type", value: "project_type__name" },
-      { text: "common.date_start", value: "date_start" },
-      { text: "common.date_end", value: "date_end" },
-      { text: "common.date_txt", value: "date_free" },
-      { text: "common.owner", value: "owner__agent" },
-    ],
     names: [],
   }),
   methods: {

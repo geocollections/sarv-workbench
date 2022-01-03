@@ -86,8 +86,8 @@ const autocompleteMixin = {
     autocompleteAreaSearch(value) {
       this.$_autocompleteMixin_search(value, "area", "area");
     },
-    autocompleteLocalitySearch(value) {
-      this.$_autocompleteMixin_search(value, "locality", "locality");
+    autocompleteLocalitySearch(value, options = "locality") {
+      this.$_autocompleteMixin_search(value, "locality", options);
     },
     autocompleteLocalitySearch2(value) {
       this.$_autocompleteMixin_search(value, "locality", "locality");
@@ -155,8 +155,8 @@ const autocompleteMixin = {
     autocompleteAgentSearch(value, options = "agent") {
       this.$_autocompleteMixin_search(value, "agent", options);
     },
-    autocompleteOwnerSearch(value) {
-      this.$_autocompleteMixin_search(value, "owner", "agent");
+    autocompleteOwnerSearch(value, options = "agent") {
+      this.$_autocompleteMixin_search(value, "owner", options);
     },
     autocompleteOwner2Search(value) {
       this.$_autocompleteMixin_search(value, "owner", "owner");
@@ -274,12 +274,7 @@ const autocompleteMixin = {
       );
     },
     autocompleteClassificationSearch(value, options = "classification") {
-      this.$_autocompleteMixin_search(
-        value,
-        "classification",
-        options,
-        2
-      );
+      this.$_autocompleteMixin_search(value, "classification", options, 2);
     },
     autocompleteKeywordSearch(value) {
       this.$_autocompleteMixin_search(

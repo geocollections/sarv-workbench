@@ -82,14 +82,14 @@
               <autocomplete-wrapper
                 v-model="locality.parent"
                 :color="bodyActiveColor"
-                :items="autocomplete.locality"
-                :loading="autocomplete.loaders.locality"
+                :items="autocomplete.parent"
+                :loading="autocomplete.loaders.parent"
                 :item-text="localityLabel"
                 :label="$t('locality.parent')"
                 is-link
                 route-object="locality"
                 is-searchable
-                v-on:search:items="autocompleteLocalitySearch"
+                v-on:search:items="autocompleteLocalitySearch($event, 'parent')"
               />
             </v-col>
           </v-row>
@@ -326,14 +326,14 @@
               <autocomplete-wrapper
                 v-model="locality.coord_det_agent"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.coord_det_agent"
+                :loading="autocomplete.loaders.coord_det_agent"
                 item-text="agent"
                 :label="$t('locality.coord_det_agent')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'coord_det_agent')"
               />
             </v-col>
           </v-row>
@@ -760,6 +760,8 @@ export default {
             list_coordinate_method: false,
             list_coordinate_precision: false,
             list_country: false,
+            parent: false,
+            coord_det_agent: false,
           },
           locality: [],
           reference: [],
@@ -776,6 +778,8 @@ export default {
           list_coordinate_method: [],
           list_coordinate_precision: [],
           list_country: [],
+          parent: [],
+          coord_det_agent: [],
         },
         requiredFields: ["locality", "locality_en"],
         locality: {
@@ -817,28 +821,6 @@ export default {
           description: true,
         },
       };
-    },
-
-    loadAutocompleteFields() {
-      fetchListLocalityTypes().then(
-        (response) =>
-          (this.autocomplete.localityTypes = this.handleResponse(response))
-      );
-      fetchListLocalityExtent().then(
-        (response) => (this.autocomplete.extent = this.handleResponse(response))
-      );
-      fetchListCoordinateMethod().then(
-        (response) =>
-          (this.autocomplete.coordMethod = this.handleResponse(response))
-      );
-      fetchListCoordinatePrecision().then(
-        (response) =>
-          (this.autocomplete.coordPrecision = this.handleResponse(response))
-      );
-      fetchListCountry().then(
-        (response) =>
-          (this.autocomplete.country = this.handleResponse(response))
-      );
     },
 
     setDefaultRelatedData() {
