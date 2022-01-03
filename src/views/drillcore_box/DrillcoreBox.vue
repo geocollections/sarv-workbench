@@ -406,7 +406,6 @@ export default {
           stratigraphy_free: null,
           remarks: null,
         },
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
         },

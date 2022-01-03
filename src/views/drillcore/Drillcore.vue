@@ -132,7 +132,7 @@
         <div v-show="block.details" class="pa-1">
           <!-- DEPOSITORY, LOCATION and STORAGE -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
                 v-model="drillcore.depository"
                 :color="bodyActiveColor"
@@ -143,15 +143,15 @@
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="drillcore.location"
-                :color="bodyActiveColor"
-                :label="$t('common.location')"
-              />
-            </v-col>
+<!--            <v-col cols="12" md="4" class="pa-1">-->
+<!--              <input-wrapper-->
+<!--                v-model="drillcore.location"-->
+<!--                :color="bodyActiveColor"-->
+<!--                :label="$t('common.location')"-->
+<!--              />-->
+<!--            </v-col>-->
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
                 v-model="drillcore.storage"
                 :color="bodyActiveColor"
@@ -506,7 +506,7 @@ export default {
           year: null,
           agent: null,
           depository: null,
-          location: null,
+          // location: null,
           storage: null,
           boxes: null,
           box_numbers: null,
