@@ -36,6 +36,7 @@ class ApiService {
       const query = Object.keys(searchFields.byIds).reduce((prev, curr) => {
         let value = searchFields.byIds[curr].value;
         if (value) {
+          // Todo: Review iexact lookuptype not working properly
           const lookUpType =
             searchFields.byIds[curr]?.lookUpType ?? "icontains";
           const type = searchFields.byIds[curr]?.type ?? "text";

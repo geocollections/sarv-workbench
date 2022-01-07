@@ -64,7 +64,6 @@ const tableViewMixin = {
         });
       },
       $_tableViewMixin_updateOptions(dispatch, payload) {
-        console.log(payload)
         return dispatch("updateOptions", {
           ...payload,
           module: this.$_tableViewMixin_tableName,
@@ -82,6 +81,14 @@ const tableViewMixin = {
         });
       },
     }),
+
+    // Note: In case of extra params, override the method in Vue component
+    $_tableViewMixin_apiCall() {
+      return this.$api.rw.get(this.$_tableViewMixin_tableName, {
+        options: this.$_tableViewMixin_options,
+        searchFields: this.$_tableViewMixin_searchFields,
+      });
+    },
   },
 };
 

@@ -6,7 +6,7 @@
 
     <list-module-core
       :module="$route.meta.object"
-      :api-call="apiCall"
+      :api-call="$_tableViewMixin_apiCall"
       :use-list-view="true"
       :use-image-view="true"
     />
@@ -29,19 +29,6 @@ export default {
   name: "Specimens",
 
   mixins: [tableViewMixin],
-
-  methods: {
-    apiCall() {
-      return this.$api.rw.get("specimen", {
-        defaultParams: {
-          // NOTE: Should be changed to 0 as api uses now SpecimenCompactSerializer and nest=1 is slow and unnecessary
-          nest: 1,
-        },
-        options: this.$_tableViewMixin_options,
-        searchFields: this.$_tableViewMixin_searchFields,
-      });
-    },
-  },
 };
 </script>
 

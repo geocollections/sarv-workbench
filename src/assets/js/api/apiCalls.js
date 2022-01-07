@@ -925,7 +925,7 @@ export function fetchLinkedSamples(data, siteID) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id=${data.id}`;
   }
   if (data.number && data.number.trim().length > 0) {
     searchFields += `&multi_search=value:${data.number};fields:number,number_additional,number_field;lookuptype:icontains`;
@@ -1928,7 +1928,7 @@ export function fetchLinkedTaxa(data, prepId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id=${data.id}`;
   }
 
   if (data.taxon && data.taxon.trim().length > 0) {
