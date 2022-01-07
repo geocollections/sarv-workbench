@@ -251,10 +251,24 @@ export default {
         const AVAILABLE_LOGIN_TYPES = [
           "password",
           "idcard",
+          // "google",
+          // "facebook",
+          // "orcid",
+        ];
+        const UNAVAILABLE_LOGIN_TYPES = [
+          // "password",
+          // "idcard",
           "google",
           "facebook",
           "orcid",
         ];
+        if (UNAVAILABLE_LOGIN_TYPES.includes(type)) {
+          this.toastInfo({
+            text: "Logging in using socials is still in progress!",
+          });
+          return;
+        }
+
         if (AVAILABLE_LOGIN_TYPES.includes(type)) {
           if (type === "password") {
             const formData = new FormData();
