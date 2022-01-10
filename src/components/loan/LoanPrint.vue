@@ -694,6 +694,14 @@ export default {
               let item = taxonList.find((rock) => taxon.id === rock.id);
               item ? this.names.push(item) : this.names.push(taxon);
             });
+            taxonList.forEach((taxonItem) => {
+              let secondItem = rockList.find(
+                (rockItem) => taxonItem.id === rockItem.id
+              );
+              secondItem
+                ? this.names.push(secondItem)
+                : this.names.push(taxonItem);
+            });
           } else if (taxonList.length > 0) this.names = taxonList;
           else if (rockList.length > 0) this.names = rockList;
         }
