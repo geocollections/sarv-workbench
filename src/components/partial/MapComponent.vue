@@ -28,10 +28,12 @@
 
 <script>
 import * as L from "leaflet";
+import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
 import "leaflet-measure/dist/leaflet-measure.css";
 import "leaflet-measure/dist/leaflet-measure";
+import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { mapActions, mapState } from "vuex";
 import toastMixin from "@/mixins/toastMixin";
 
@@ -60,6 +62,10 @@ export default {
     },
     showMap: {
       type: Boolean,
+    },
+    gestureHandling: {
+      type: Boolean,
+      default: true,
     },
   },
 
@@ -184,6 +190,14 @@ export default {
         secondaryAreaUnit: "sqmeters",
         thousandsSep: " ",
       },
+      gestureHandlingOptions: {
+        text: {
+          touch: this.$t("gestureHandling.touch"),
+          scroll: this.$t("gestureHandling.scroll"),
+          scrollMac: this.$t("gestureHandling.scrollMac"),
+        },
+        duration: 1000,
+      },
     };
   },
 
@@ -273,9 +287,13 @@ export default {
     ...mapActions("map", ["updateDefaultLayer"]),
 
     initMap() {
+      L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
+
       this.map = L.map("map", {
         layers: [this.tileProviders[0].leafletObject],
-        scrollWheelZoom: false,
+        // scrollWheelZoom: false,
+        gestureHandling: this.gestureHandling,
+        gestureHandlingOptions: this.gestureHandlingOptions,
       }).setView(this.center, this.zoom);
 
       let baseLayers = {};

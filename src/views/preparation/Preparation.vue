@@ -429,24 +429,18 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import cloneDeep from "lodash/cloneDeep";
-import {
-  fetchLinkedTaxa,
-  fetchPreparation,
-} from "../../assets/js/api/apiCalls";
-
-import ExportButtons from "../../components/partial/export/ExportButtons";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import { fetchLinkedTaxa } from "@/assets/js/api/apiCalls";
+import ExportButtons from "@/components/partial/export/ExportButtons";
 import debounce from "lodash/debounce";
-import TaxonListTable from "../../components/taxon/TaxonListTable";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import DateWrapper from "../../components/partial/inputs/DateWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import { mapState } from "vuex";
+import TaxonListTable from "@/components/taxon/TaxonListTable";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 

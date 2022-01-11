@@ -333,7 +333,9 @@
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch($event, 'coord_det_agent')"
+                v-on:search:items="
+                  autocompleteAgentSearch($event, 'coord_det_agent')
+                "
               />
             </v-col>
           </v-row>
@@ -603,36 +605,21 @@
 </template>
 
 <script>
-import {
-  fetchListLocalityTypes,
-  fetchListLocalityExtent,
-  fetchListCoordinateMethod,
-  fetchListCoordinatePrecision,
-  fetchListCountry,
-  fetchLocality,
-  fetchLocalityReference,
-  fetchLocalitySynonym,
-  fetchLocalityAttachment,
-  fetchLocalityStratigraphy,
-  fetchSiteLocalityDescriptions,
-  fetchLocalityDescriptions,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import MapComponent from "../../components/partial/MapComponent";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import MapComponent from "@/components/partial/MapComponent";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import { mapActions, mapState } from "vuex";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
-import LocalityReferenceTable from "../../components/locality/relatedTables/LocalityReferenceTable";
-import LocalitySynonymTable from "../../components/locality/relatedTables/LocalitySynonymTable";
-import LocalityStratigraphyTable from "../../components/locality/relatedTables/LocalityStratigraphyTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import LocalityDescriptionTable from "../../components/locality/relatedTables/LocalityDescriptionTable";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import LocalityReferenceTable from "@/components/locality/relatedTables/LocalityReferenceTable";
+import LocalitySynonymTable from "@/components/locality/relatedTables/LocalitySynonymTable";
+import LocalityStratigraphyTable from "@/components/locality/relatedTables/LocalityStratigraphyTable";
+import requestsMixin from "@/mixins/requestsMixin";
+import LocalityDescriptionTable from "@/components/locality/relatedTables/LocalityDescriptionTable";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";

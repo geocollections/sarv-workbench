@@ -143,13 +143,13 @@
               />
             </v-col>
 
-<!--            <v-col cols="12" md="4" class="pa-1">-->
-<!--              <input-wrapper-->
-<!--                v-model="drillcore.location"-->
-<!--                :color="bodyActiveColor"-->
-<!--                :label="$t('common.location')"-->
-<!--              />-->
-<!--            </v-col>-->
+            <!--            <v-col cols="12" md="4" class="pa-1">-->
+            <!--              <input-wrapper-->
+            <!--                v-model="drillcore.location"-->
+            <!--                :color="bodyActiveColor"-->
+            <!--                :label="$t('common.location')"-->
+            <!--              />-->
+            <!--            </v-col>-->
 
             <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
@@ -356,27 +356,18 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {
-  fetchDrillcore,
-  fetchDrillcoreAttachments,
-  fetchDrillcoreStudies,
-  fetchListDrillcoreStorage,
-  fetchRelatedDrillcoreBoxes,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
-import DrillcoreBoxTable from "../../components/drillcore/relatedTables/DrillcoreBoxTable";
-import DrillcoreStudyTable from "../../components/drillcore/relatedTables/DrillcoreStudyTable";
-import requestsMixin from "../../mixins/requestsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import DrillcoreBoxTable from "@/components/drillcore/relatedTables/DrillcoreBoxTable";
+import DrillcoreStudyTable from "@/components/drillcore/relatedTables/DrillcoreStudyTable";
+import requestsMixin from "@/mixins/requestsMixin";
 import { mapActions, mapState } from "vuex";
-import { fetchRelatedDrillcoreBoxImages } from "@/assets/js/api/apiCalls";
 import DrillcoreBoxListView from "@/components/drillcore_box/DrillcoreBoxListView";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";

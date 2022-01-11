@@ -432,10 +432,7 @@ import { mapActions, mapGetters } from "vuex";
 import LoanSampleTable from "@/components/loan/relatedTables/LoanSampleTable";
 import LoanSpecimenTable from "@/components/loan/relatedTables/LoanSpecimenTable";
 import requestsMixin from "@/mixins/requestsMixin";
-import {
-  fetchIdsUsingSelection,
-  fetchMultiAddLoanLists,
-} from "@/assets/js/api/apiCalls";
+import { fetchMultiAddLoanLists } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";

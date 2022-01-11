@@ -320,24 +320,17 @@
 </template>
 
 <script>
-import {
-  fetchLibrary,
-  fetchLibraryReference,
-  fetchLibraryAgent,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import LibraryReferenceListView from "../../components/library/relatedTables/LibraryReferenceListView";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapState } from "vuex";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import LibraryReferenceTable from "../../components/library/relatedTables/LibraryReferenceTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import Editor from "../../components/partial/inputs/Editor";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import LibraryReferenceListView from "@/components/library/relatedTables/LibraryReferenceListView";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import LibraryReferenceTable from "@/components/library/relatedTables/LibraryReferenceTable";
+import requestsMixin from "@/mixins/requestsMixin";
+import Editor from "@/components/partial/inputs/Editor";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";

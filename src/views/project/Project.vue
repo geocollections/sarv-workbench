@@ -501,32 +501,23 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import sidebarMixin from "../../mixins/sidebarMixin";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import sidebarMixin from "@/mixins/sidebarMixin";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import cloneDeep from "lodash/cloneDeep";
-import {
-  fetchProject,
-  fetchProjectType,
-  fetchProjectAgent,
-  fetchProjectAttachment,
-  fetchLinkedSite,
-} from "../../assets/js/api/apiCalls";
-
-import MapComponent from "../../components/partial/MapComponent";
-
+import { fetchLinkedSite } from "@/assets/js/api/apiCalls";
+import MapComponent from "@/components/partial/MapComponent";
 import { mapActions, mapState } from "vuex";
-import ExportButtons from "../../components/partial/export/ExportButtons";
-import SiteTable from "../../components/site/SiteTable";
+import ExportButtons from "@/components/partial/export/ExportButtons";
+import SiteTable from "@/components/site/SiteTable";
 import debounce from "lodash/debounce";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import DateWrapper from "../../components/partial/inputs/DateWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
-import globalUtilsMixin from "@/mixins/globalUtilsMixin";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {

@@ -186,15 +186,8 @@
 
 <script>
 import AutocompleteWrapper from "./inputs/AutocompleteWrapper";
-import {
-  fetchGroups,
-  fetchObjectGroupPermissions,
-  fetchObjectPermissions,
-  fetchObjectUserPermissions,
-  fetchUsers,
-  postRequest,
-} from "../../assets/js/api/apiCalls";
-import toastMixin from "../../mixins/toastMixin";
+import { fetchGroups, fetchUsers, postRequest } from "@/assets/js/api/apiCalls";
+import toastMixin from "@/mixins/toastMixin";
 
 export default {
   name: "ObjectPermissions",

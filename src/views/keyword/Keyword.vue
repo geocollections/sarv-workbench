@@ -229,23 +229,15 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {
-  fetchListLanguages,
-  fetchKeyword,
-  fetchKeywordRelation,
-  fetchKeywordRelationReverse,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import Editor from "../../components/partial/inputs/Editor";
-import KeywordRelationTable from "../../components/keyword/relatedTables/KeywordRelationTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import KeywordRelationReverseTable from "../../components/keyword/relatedTables/KeywordRelationReverseTable";
-import { mapActions, mapState } from "vuex";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import Editor from "@/components/partial/inputs/Editor";
+import KeywordRelationTable from "@/components/keyword/relatedTables/KeywordRelationTable";
+import requestsMixin from "@/mixins/requestsMixin";
+import KeywordRelationReverseTable from "@/components/keyword/relatedTables/KeywordRelationReverseTable";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";

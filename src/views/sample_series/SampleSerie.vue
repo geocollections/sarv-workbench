@@ -361,23 +361,17 @@
 </template>
 
 <script>
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {
-  fetchSampleSeriesAttachments,
-  fetchSampleSeriesDetail,
-  fetchSampleSeriesSamples,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
 
-import DateWrapper from "../../components/partial/inputs/DateWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import requestsMixin from "../../mixins/requestsMixin";
-import SampleSeriesSamplesTable from "../../components/sample_series/relatedTables/SampleSeriesSamplesTable";
-import FileInput from "../../components/partial/inputs/FileInput";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import requestsMixin from "@/mixins/requestsMixin";
+import SampleSeriesSamplesTable from "@/components/sample_series/relatedTables/SampleSeriesSamplesTable";
+import FileInput from "@/components/partial/inputs/FileInput";
 import { mapActions, mapState } from "vuex";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";

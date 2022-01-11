@@ -129,15 +129,14 @@
 
 <script>
 import cloneDeep from "lodash/cloneDeep";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import { fetchIsImagesetNumberInImageset } from "@/assets/js/api/apiCalls";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import { fetchImageset } from "@/assets/js/api/apiCalls";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {

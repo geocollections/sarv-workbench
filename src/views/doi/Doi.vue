@@ -862,40 +862,29 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
 import cloneDeep from "lodash/cloneDeep";
 import {
-  fetchDoi,
-  fetchDoiResourceType,
-  fetchListLanguages,
-  fetchListLicences,
-  fetchDoiAttachment,
-  fetchDoiAgent,
-  fetchDoiRelatedIdentifier,
-  fetchDoiGeolocation,
-  fetchDoiDate,
   fetchCheckMetadataInDataCite,
   fetchCheckDoiUrlInDataCite,
   fetchRegisterMetadataToDataCite,
   fetchRegisterDoiUrlToDataCite,
-  fetchDoiUsingEGF,
   fetchAgentUsingName,
-  fetchDoiPublisher,
 } from "@/assets/js/api/apiCalls";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapState } from "vuex";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
-import DoiRelatedIdentifierTable from "../../components/doi/relatedTables/DoiRelatedIdentifierTable";
-import DoiGeolocationTable from "../../components/doi/relatedTables/DoiGeolocationTable";
-import DoiAgentTable from "../../components/doi/relatedTables/DoiAgentTable";
-import DoiDateTable from "../../components/doi/relatedTables/DoiDateTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import toastMixin from "../../mixins/toastMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import { mapActions } from "vuex";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import DoiRelatedIdentifierTable from "@/components/doi/relatedTables/DoiRelatedIdentifierTable";
+import DoiGeolocationTable from "@/components/doi/relatedTables/DoiGeolocationTable";
+import DoiAgentTable from "@/components/doi/relatedTables/DoiAgentTable";
+import DoiDateTable from "@/components/doi/relatedTables/DoiDateTable";
+import requestsMixin from "@/mixins/requestsMixin";
+import toastMixin from "@/mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
 import Pagination from "@/components/partial/Pagination";
 import { orderBy } from "lodash";

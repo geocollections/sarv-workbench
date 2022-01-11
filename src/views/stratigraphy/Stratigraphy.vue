@@ -605,33 +605,20 @@
 </template>
 
 <script>
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
 
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {
-  fetchListLanguages,
-  fetchListStratigraphyRank,
-  fetchListStratigraphyScope,
-  fetchListStratigraphyStatus,
-  fetchListStratigraphyType,
-  fetchListStratotypeType,
-  fetchStratigraphy,
-  fetchStratigraphyReferences,
-  fetchStratigraphyStratotypes,
-  fetchStratigraphySynonyms,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import StratigraphySynonymTable from "../../components/stratigraphy/relatedTables/StratigraphySynonymTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import StratigraphyReferenceTable from "../../components/stratigraphy/relatedTables/StratigraphyReferenceTable";
-import StratigraphyStratotypeTable from "../../components/stratigraphy/relatedTables/StratigraphyStratotypeTable";
-import Editor from "../../components/partial/inputs/Editor";
-import { mapActions, mapState } from "vuex";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import StratigraphySynonymTable from "@/components/stratigraphy/relatedTables/StratigraphySynonymTable";
+import requestsMixin from "@/mixins/requestsMixin";
+import StratigraphyReferenceTable from "@/components/stratigraphy/relatedTables/StratigraphyReferenceTable";
+import StratigraphyStratotypeTable from "@/components/stratigraphy/relatedTables/StratigraphyStratotypeTable";
+import Editor from "@/components/partial/inputs/Editor";
+import { mapActions } from "vuex";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";

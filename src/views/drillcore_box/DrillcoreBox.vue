@@ -283,20 +283,15 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import cloneDeep from "lodash/cloneDeep";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import {
-  fetchDrillcoreBox,
-  fetchDrillcoreBoxAttachments,
-} from "@/assets/js/api/apiCalls";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import requestsMixin from "../../mixins/requestsMixin";
-import FileInput from "../../components/partial/inputs/FileInput";
-import DrillcoreBoxAttachmentTable from "../../components/drillcore_box/related_tables/DrillcoreBoxAttachmentTable";
-import { mapActions, mapState } from "vuex";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import requestsMixin from "@/mixins/requestsMixin";
+import FileInput from "@/components/partial/inputs/FileInput";
+import DrillcoreBoxAttachmentTable from "@/components/drillcore_box/related_tables/DrillcoreBoxAttachmentTable";
+import { mapActions } from "vuex";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";

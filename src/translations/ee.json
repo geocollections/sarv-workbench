@@ -3099,5 +3099,10 @@
   "table": {
     "noData": "Andmeid ei leitud",
     "loading": "Andmeid laetakse..."
+  },
+  "gestureHandling": {
+    "touch": "Kasuta kahte näppu kaardi liigutamiseks",
+    "scroll": "Kasuta ctrl + scroll kaardi suumimiseks",
+    "scrollMac": "Kasuta \u2318 + scroll kaardi suumimiseks"
   }
 }

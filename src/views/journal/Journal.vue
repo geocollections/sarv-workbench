@@ -107,12 +107,10 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapState } from "vuex";
-import { fetchJournal } from "../../assets/js/api/apiCalls";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {

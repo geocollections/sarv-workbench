@@ -627,42 +627,25 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapState } from "vuex";
-import cloneDeep from "lodash/cloneDeep";
-import {
-  fetchTaxon,
-  fetchTaxonSubclass,
-  fetchTaxonCommonName,
-  fetchTaxonDescription,
-  fetchTaxonImage,
-  fetchTaxonOccurrence,
-  fetchTaxonOpinion,
-  fetchTaxonPage,
-  fetchTaxonRank,
-  fetchTaxonSynonym,
-  fetchTaxonTypeSpecimen,
-  fetchTaxonAttachments,
-  fetchTaxonByTaxonTypeId,
-} from "../../assets/js/api/apiCalls";
-
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
-import TaxonSubclassTable from "../../components/taxon/relatedTables/TaxonSubclassTable";
-import TaxonSynonymTable from "../../components/taxon/relatedTables/TaxonSynonymTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import TaxonTypeSpecimenTable from "../../components/taxon/relatedTables/TaxonTypeSpecimenTable";
-import TaxonOccurrenceTable from "../../components/taxon/relatedTables/TaxonOccurrenceTable";
-import TaxonOpinionTable from "../../components/taxon/relatedTables/TaxonOpinionTable";
-import TaxonCommonNameTable from "../../components/taxon/relatedTables/TaxonCommonNameTable";
-import TaxonDescriptionTable from "../../components/taxon/relatedTables/TaxonDescriptionTable";
-import TaxonPageTable from "../../components/taxon/relatedTables/TaxonPageTable";
-import TaxonImageTable from "../../components/taxon/relatedTables/TaxonImageTable";
-import Editor from "../../components/partial/inputs/Editor";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import { mapActions } from "vuex";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import TaxonSubclassTable from "@/components/taxon/relatedTables/TaxonSubclassTable";
+import TaxonSynonymTable from "@/components/taxon/relatedTables/TaxonSynonymTable";
+import requestsMixin from "@/mixins/requestsMixin";
+import TaxonTypeSpecimenTable from "@/components/taxon/relatedTables/TaxonTypeSpecimenTable";
+import TaxonOccurrenceTable from "@/components/taxon/relatedTables/TaxonOccurrenceTable";
+import TaxonOpinionTable from "@/components/taxon/relatedTables/TaxonOpinionTable";
+import TaxonCommonNameTable from "@/components/taxon/relatedTables/TaxonCommonNameTable";
+import TaxonDescriptionTable from "@/components/taxon/relatedTables/TaxonDescriptionTable";
+import TaxonPageTable from "@/components/taxon/relatedTables/TaxonPageTable";
+import TaxonImageTable from "@/components/taxon/relatedTables/TaxonImageTable";
+import Editor from "@/components/partial/inputs/Editor";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";

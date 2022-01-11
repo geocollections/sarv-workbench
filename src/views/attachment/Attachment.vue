@@ -167,7 +167,9 @@
                     is-link
                     route-object="agent"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch($event, 'author')"
+                    v-on:search:items="
+                      autocompleteAgentSearch($event, 'author')
+                    "
                   />
                 </v-col>
 
@@ -409,8 +411,8 @@
                     :show-map="myShowMap && block.map"
                     mode="single"
                     module="attachment"
-                    v-bind:locations="[]"
-                    v-bind:location="{
+                    :locations="[]"
+                    :location="{
                       lat: attachment.image_latitude
                         ? attachment.image_latitude.toString()
                         : null,
@@ -418,7 +420,7 @@
                         ? attachment.image_longitude.toString()
                         : null,
                     }"
-                    v-on:update-coordinates="updateLocation"
+                    @update-coordinates="updateLocation"
                   ></map-component>
                 </v-col>
               </v-row>
@@ -1596,7 +1598,9 @@
                     is-link
                     route-object="agent"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch($event, 'author')"
+                    v-on:search:items="
+                      autocompleteAgentSearch($event, 'author')
+                    "
                   />
                 </v-col>
 
@@ -1911,7 +1915,9 @@
                     is-link
                     route-object="agent"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch($event, 'author')"
+                    v-on:search:items="
+                      autocompleteAgentSearch($event, 'author')
+                    "
                   />
                 </v-col>
 
@@ -2138,8 +2144,8 @@
                     :show-map="myShowMap && block.map"
                     mode="single"
                     module="attachment"
-                    v-bind:locations="[]"
-                    v-bind:location="{
+                    :locations="[]"
+                    :location="{
                       lat: attachment.image_latitude
                         ? attachment.image_latitude.toString()
                         : null,
@@ -3879,7 +3885,6 @@ export default {
 
           if (attachmentHistory) {
             this.attachment = attachmentHistory;
-            this.removeUnnecessaryFields(this.attachment, this.copyFields);
             if (this.isNotEmpty(this.attachment.specimen)) {
               this.autocomplete.specimen.push(this.attachment.specimen);
             }
@@ -4045,41 +4050,6 @@ export default {
           { name: "digitisedReference", value: 4, disabled: false },
         ],
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "agent_digitised",
-          "author",
-          "author_free",
-          "copyright_agent",
-          "date_created",
-          "date_created_free",
-          "date_digitised",
-          "date_digitised_free",
-          "description",
-          "description_en",
-          "device_txt",
-          "id",
-          "image_description",
-          "image_description_en",
-          "image_latitude",
-          "image_longitude",
-          "image_object",
-          "image_people",
-          "image_place",
-          "image_scalebar",
-          "image_type",
-          "imageset",
-          "is_locked",
-          "is_private",
-          "licence",
-          "locality",
-          "reference",
-          "remarks",
-          "specimen",
-          "specimen_image_attachment",
-          "stars",
-          "storage",
-          "type",
-        ],
         listOfAutocompleteTables: [
           "list_licence",
           "list_image_type",
@@ -4560,6 +4530,7 @@ export default {
 
     /* MapComponent Event START */
     updateLocation(location) {
+      console.log(location);
       this.attachment.image_latitude = location.lat.toFixed(6);
       this.attachment.image_longitude = location.lng.toFixed(6);
     },
@@ -4643,12 +4614,14 @@ export default {
     },
 
     customLabelForSpecimen(option) {
-      return `ID: ${option.id} - (${option.coll__number} ${option.specimen_id})`;
+      return `ID: ${option.id} - (${option?.coll__number ?? "Specimen No:"} ${
+        option.specimen_id
+      })`;
     },
 
     customLabelForRelatedData(option) {
-      console.log(option)
-      return option?.id
+      console.log(option);
+      return option?.id;
       // Todo: Review labels
       // switch (this.selectedRelatedTable) {
       //   case "collection":
@@ -4707,6 +4680,35 @@ export default {
 
     setDefaultAttachmentFields() {
       let defaultFields = {
+        agent_digitised: null,
+        author: null,
+        author_free: null,
+        copyright_agent: null,
+        date_created_free: null,
+        date_digitised: null,
+        date_digitised_free: null,
+        description: null,
+        description_en: null,
+        device_txt: null,
+        id: null,
+        image_description: null,
+        image_description_en: null,
+        image_latitude: null,
+        image_longitude: null,
+        image_object: null,
+        image_people: null,
+        image_place: null,
+        image_scalebar: null,
+        imageset: null,
+        is_locked: null,
+        is_private: null,
+        licence: null,
+        locality: null,
+        reference: null,
+        remarks: null,
+        specimen: null,
+        specimen_image_attachment: 3,
+        storage: null,
         date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
         image_type: {
           id: 5,

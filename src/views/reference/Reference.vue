@@ -897,38 +897,25 @@
 
 <script>
 import {
-  fetchReference,
-  fetchListReferenceTypes,
-  fetchListLanguages,
   fetchDoiCheck,
-  fetchReferenceKeyword,
-  fetchAttachmentLink,
-  fetchLocalityReferenceForReference,
-  fetchAttachmentForReference,
-  fetchLibrariesForReference,
-  fetchListLocalityReferenceType,
-  fetchListLicences,
   fetchJournalForReference,
-  fetchLinkedTaxonReference,
-  fetchLinkedStratigraphyReference,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapGetters, mapState } from "vuex";
-import NewDoiButton from "../../components/partial/NewDoiButton";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import Editor from "../../components/partial/inputs/Editor";
-import FileInput from "../../components/partial/inputs/FileInput";
-import ExportButtons from "../../components/partial/export/ExportButtons";
-import StratigraphyTable from "../../components/stratigraphy/StratigraphyTable";
-import TaxonTable from "../../components/taxon/TaxonTable";
-import LocalityReferenceTable from "../../components/reference/relatedTables/LocalityReferenceTable";
-import requestsMixin from "../../mixins/requestsMixin";
+} from "@/assets/js/api/apiCalls";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import { mapActions, mapGetters } from "vuex";
+import NewDoiButton from "@/components/partial/NewDoiButton";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import Editor from "@/components/partial/inputs/Editor";
+import FileInput from "@/components/partial/inputs/FileInput";
+import ExportButtons from "@/components/partial/export/ExportButtons";
+import StratigraphyTable from "@/components/stratigraphy/StratigraphyTable";
+import TaxonTable from "@/components/taxon/TaxonTable";
+import LocalityReferenceTable from "@/components/reference/relatedTables/LocalityReferenceTable";
+import requestsMixin from "@/mixins/requestsMixin";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";

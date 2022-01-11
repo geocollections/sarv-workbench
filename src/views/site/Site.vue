@@ -772,35 +772,24 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import cloneDeep from "lodash/cloneDeep";
-import {
-  fetchSite,
-  fetchListCoordinateMethod,
-  fetchSiteAttachment,
-  fetchLinkedSamples,
-  fetchLastSiteName,
-  fetchSiteLocalityDescriptions,
-  fetchSiteLocalityReferences,
-  fetchSiteGroundwaterUsingSite,
-  postRequest,
-  fetchListSiteType,
-} from "../../assets/js/api/apiCalls";
-import MapComponent from "../../components/partial/MapComponent";
-import sidebarMixin from "../../mixins/sidebarMixin";
-import SampleTable from "../../components/sample/SampleTable";
-import ExportButtons from "../../components/partial/export/ExportButtons";
+import { fetchLastSiteName, postRequest } from "@/assets/js/api/apiCalls";
+import MapComponent from "@/components/partial/MapComponent";
+import sidebarMixin from "@/mixins/sidebarMixin";
+import SampleTable from "@/components/sample/SampleTable";
+import ExportButtons from "@/components/partial/export/ExportButtons";
 import debounce from "lodash/debounce";
 import { mapActions, mapGetters, mapState } from "vuex";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
-import requestsMixin from "../../mixins/requestsMixin";
-import SiteLocalityDescriptionTable from "../../components/site/relatedTables/SiteLocalityDescriptionTable";
-import SiteLocalityReferenceTable from "../../components/site/relatedTables/SiteLocalityReferenceTable";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import requestsMixin from "@/mixins/requestsMixin";
+import SiteLocalityDescriptionTable from "@/components/site/relatedTables/SiteLocalityDescriptionTable";
+import SiteLocalityReferenceTable from "@/components/site/relatedTables/SiteLocalityReferenceTable";
 import toastMixin from "@/mixins/toastMixin";
 import Pagination from "@/components/partial/Pagination";
 import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
