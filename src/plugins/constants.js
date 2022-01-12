@@ -6,7 +6,7 @@ const defaultOptions = {
   IMAGE_URL:
     location.hostname === "localhost"
       ? "http://localhost:6969/"
-      : "http://files-new.geocollections.info/",
+      : "https://files-new.geocollections.info/",
 };
 
 const constants = {
