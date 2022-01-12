@@ -587,8 +587,10 @@ export default {
       if (this.loan.loaner__forename && this.loan.loaner__surename)
         signature += `${this.loan.loaner__forename} ${this.loan.loaner__surename}`;
       else signature += `${this.loan.loaner__agent}`;
-      if (this.loan.loaner__profession)
+      if (this.$i18n.locale === "ee" && this.loan.loaner__profession)
         signature += `, ${this.loan.loaner__profession}`;
+      else if (this.loan.loaner__profession_en)
+        signature += `, ${this.loan.loaner__profession_en}`;
       return signature;
     },
   },
