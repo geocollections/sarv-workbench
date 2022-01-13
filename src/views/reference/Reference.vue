@@ -348,19 +348,40 @@
 
           <!-- REFERENCE KEYWORDS -->
           {{ reference.keywords }}
+          <br />
+          <br />
           {{ autocomplete.keywords }}
-          <br/>
-          ----
-          <br/>
-          {{ relatedData.keyword }}
-          {{ autocomplete.keyword }}
           <div class="d-flex justify-start flex-wrap pa-1">
+            <!--            <div class="mr-3 flex-grow-1">-->
+            <!--              <autocomplete-wrapper-->
+            <!--                v-model="relatedData.keyword"-->
+            <!--                :color="bodyActiveColor"-->
+            <!--                :items="autocomplete.keyword"-->
+            <!--                :loading="autocomplete.loaders.keyword"-->
+            <!--                item-text="keyword"-->
+            <!--                :label="$t('reference.referenceKeyword')"-->
+            <!--                is-link-->
+            <!--                route-object="keyword"-->
+            <!--                is-searchable-->
+            <!--                v-on:search:items="autocompleteKeywordSearch"-->
+            <!--                :multiple="true"-->
+            <!--                v-on:chip:close="-->
+            <!--                  relatedData.keyword.splice(-->
+            <!--                    relatedData.keyword.indexOf($event),-->
+            <!--                    1-->
+            <!--                  )-->
+            <!--                "-->
+            <!--                :menu-props="{ maxHeight: 208 }"-->
+            <!--              />-->
+            <!--            </div>-->
+
             <div class="mr-3 flex-grow-1">
               <autocomplete-wrapper
-                v-model="relatedData.keyword"
+                v-model="reference.keywords"
                 :color="bodyActiveColor"
-                :items="autocomplete.keyword"
-                :loading="autocomplete.loaders.keyword"
+                :items="autocomplete.keywords"
+                :loading="autocomplete.loaders.keywords"
+                item-value="keyword.keyword"
                 item-text="keyword"
                 :label="$t('reference.referenceKeyword')"
                 is-link
@@ -369,32 +390,14 @@
                 v-on:search:items="autocompleteKeywordSearch"
                 :multiple="true"
                 v-on:chip:close="
-                  relatedData.keyword.splice(
-                    relatedData.keyword.indexOf($event),
+                  reference.keywords.splice(
+                    reference.keywords.indexOf($event),
                     1
                   )
                 "
                 :menu-props="{ maxHeight: 208 }"
               />
             </div>
-
-<!--            <div class="mr-3 flex-grow-1">-->
-<!--              <autocomplete-wrapper-->
-<!--                v-model="reference.keywords"-->
-<!--                :color="bodyActiveColor"-->
-<!--                :items="autocomplete.keywords"-->
-<!--                :loading="autocomplete.loaders.keywords"-->
-<!--                item-text="keyword"-->
-<!--                :label="$t('reference.referenceKeyword')"-->
-<!--                is-link-->
-<!--                route-object="keyword"-->
-<!--                is-searchable-->
-<!--                v-on:search:items="autocompleteKeywordSearch"-->
-<!--                :multiple="true"-->
-<!--                v-on:chip:close="reference.keywords = null"-->
-<!--                :menu-props="{ maxHeight: 208 }"-->
-<!--              />-->
-<!--            </div>-->
 
             <div class="mr-2 my-1 align-self-end">
               <v-btn
@@ -753,14 +756,15 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+          <!-- TODO: This needs to be refactored!!! -->
           <v-row v-show="activeTab === 'library'" no-gutters>
             <v-col cols="12" class="pa-1">
               <autocomplete-wrapper
                 v-model="relatedData.library.results"
                 :color="bodyActiveColor"
-                :items="autocomplete.library"
+                :items="relatedData.library.results"
                 :loading="autocomplete.loaders.library"
-                :item-text="libraryTitle"
+                item-text="title"
                 :label="$t('reference.libraries')"
                 is-link
                 route-object="library"
@@ -866,7 +870,11 @@
 
           <!-- PAGINATION -->
           <pagination
-            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+            v-if="
+              $route.meta.isEdit &&
+              (activeTab === 'locality_reference' || activeTab === 'library') &&
+              relatedData[activeTab].count > 10
+            "
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
@@ -1124,7 +1132,6 @@ export default {
             types: false,
             list_language: false,
             journal: false,
-            keyword: false,
             keywords: false,
             locality: false,
             attachment: false,
@@ -1139,7 +1146,6 @@ export default {
           types: [],
           list_language: [],
           journal: [],
-          keyword: [],
           keywords: [],
           locality: [],
           attachment: [],
@@ -1213,7 +1219,6 @@ export default {
     setDefaultRelatedData() {
       return {
         attachment: [],
-        keyword: [],
         library: {
           count: 0,
           results: [],
@@ -1242,11 +1247,6 @@ export default {
             paginateBy: 10,
             orderBy: "id",
           },
-          keyword: {
-            page: 1,
-            paginateBy: 10,
-            orderBy: "id",
-          },
           stratigraphy: {
             page: 1,
             paginateBy: 25,
@@ -1258,6 +1258,12 @@ export default {
             paginateBy: 25,
             sortBy: ["id"],
             sortDesc: [true],
+          },
+          library: {
+            page: 1,
+            paginateBy: 10,
+            sortBy: ["title"],
+            sortDesc: [false],
           },
         },
       };

@@ -280,7 +280,7 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(
         value,
         "keyword",
-        "keyword",
+        "keywords",
         1,
         "",
         false
@@ -390,6 +390,9 @@ const autocompleteMixin = {
 
           this.autocomplete.loaders[options] = true;
           autocompleteSearch(query).then((response) => {
+            console.log(response)
+            console.log(options)
+            console.log(handleResponse(response))
             this.autocomplete.loaders[options] = false;
             this.autocomplete[options] = handleResponse(response);
           });

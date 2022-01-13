@@ -10,6 +10,8 @@ const detailViewUtilsMixin = {
           // If autocomplete field doesn't exist then creates it (better to initialise it in data and remove the creation here)
           if (!this.autocomplete?.[entry[0]]) this.autocomplete[entry[0]] = [];
           this.autocomplete[entry[0]].push(entry[1]);
+        } else if (Array.isArray(entry[1])) {
+          this.autocomplete[entry[0]] = entry[1];
         }
       });
     },
@@ -114,7 +116,14 @@ const detailViewUtilsMixin = {
 
 function cleanObject(obj) {
   for (let i in obj) {
-    if (typeof obj[i] === "object") obj[i] = obj[i]?.id;
+    console.log(i);
+    console.log(isPlainObject(obj[i]));
+    // if (typeof obj[i] === "object") obj[i] = obj[i]?.id;
+    if (isPlainObject(obj[i])) obj[i] = obj[i]?.id;
+    else if (Array.isArray(obj[i])) {
+      obj[i] = obj[i].map((item) => item.id);
+      console.log(obj[i]);
+    }
     if (obj[i] === null || obj[i] === undefined) delete obj[i];
   }
   return obj;
