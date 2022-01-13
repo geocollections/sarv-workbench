@@ -161,7 +161,7 @@ const formManipulation = {
         console.log(response);
 
         let newRecordId = response?.id;
-        if (module === "attachment")
+        if (module === "attachment" && response?.uploaded_ids?.length > 0)
           newRecordId =
             response?.uploaded_ids?.[response?.uploaded_ids?.length - 1];
 
