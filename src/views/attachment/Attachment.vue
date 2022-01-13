@@ -1664,7 +1664,7 @@
                     :color="bodyActiveColor"
                     :items="autocomplete.specimen"
                     :loading="autocomplete.loaders.specimen"
-                    :item-text="customLabelForSpecimen"
+                    item-text="specimen_full_number"
                     :label="$t('attachment.specimen__specimen_id')"
                     use-state
                     is-link
@@ -3591,14 +3591,6 @@
       </div>
     </template>
 
-    <template v-slot:local-storage>
-      <div class="d-flex mt-3">
-        <v-btn @click="clearSavedFields" class="text-none" color="yellow">
-          {{ $t("buttons.clearLocalStorageAndFields") }}
-        </v-btn>
-      </div>
-    </template>
-
     <!--    NOTE: Removed new doi button #644 https://github.com/geocollections/sarv-workbench/issues/644-->
     <template v-slot:add-doi>
       <div class="d-flex justify-end mt-3" v-if="false">
@@ -4579,26 +4571,6 @@ export default {
       else if (type === 4) return "digitisedReference";
     },
 
-    clearSavedFields() {
-      if (this.isPhotoArchive) {
-        this.resetFields("photoArchive");
-        this.resetFields("photoArchiveKeywords");
-      } else if (this.isSpecimenImage) {
-        this.resetFields("specimenImage");
-        this.resetFields("specimenImageKeywords");
-      } else if (this.isOtherFile) {
-        this.resetFields("otherFiles");
-        this.resetFields("otherFilesKeywords");
-      } else if (this.isDigitisedReference)
-        this.resetFields("digitisedReference");
-
-      this.attachment = this.setDefaultAttachmentFields();
-
-      this.toastInfo({
-        text: this.$t("messages.defaultsRemovedAndFieldsCleared"),
-      });
-    },
-
     customSpecimenLabel(option) {
       if (option.coll__number !== null) {
         return `${option.coll__number.split(" ")[0]} ${option.specimen_id} (${
@@ -4611,12 +4583,6 @@ export default {
 
     customLabelForReference(option) {
       return `${option.id} - (${option.reference})`;
-    },
-
-    customLabelForSpecimen(option) {
-      return `ID: ${option.id} - (${option?.coll__number ?? "Specimen No:"} ${
-        option.specimen_id
-      })`;
     },
 
     customLabelForRelatedData(option) {

@@ -464,7 +464,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "series":
       return `sample_series/?search=${value}&search_fields=name&fields=id,name`;
     case "specimen":
-      return `specimen/?or_search=specimen_id__icontains:${value} OR coll__number__icontains:${value}&fields=id,specimen_id,coll__number`;
+      return `specimen/?or_search=specimen_id__icontains:${value} OR coll__number__icontains:${value} OR specimen_full_number__icontains:${value}&fields=id,specimen_id,specimen_full_number`;
     case "reference":
       return `reference/?or_search=id__icontains:${value} OR reference__icontains:${value}&fields=id,reference,pages,figures,remarks`;
     case "synonym":
