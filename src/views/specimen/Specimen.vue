@@ -40,6 +40,25 @@
 
       <transition>
         <div v-show="block.info" class="pa-1">
+          <!-- SPECIMEN_FULL_NUMBER -->
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="pa-1">
+              <v-tooltip top z-index="60000">
+                <template v-slot:activator="{ on, attrs }">
+                  <input-wrapper
+                    v-on="on"
+                    v-bind="attrs"
+                    v-model="specimen.specimen_full_number"
+                    :color="bodyActiveColor"
+                    :label="$t('specimen.specimen_full_number')"
+                    readonly
+                  />
+                </template>
+                <span>{{ $t("specimen.nameTooltip") }}</span>
+              </v-tooltip>
+            </v-col>
+          </v-row>
+
           <!-- FOSSIL, SPECIMEN_ID, COLL and SPECIMEN_NR  -->
           <v-row no-gutters>
             <v-col cols="12" md="3" class="pa-1">
@@ -846,6 +865,18 @@ export default {
       },
       deep: true,
     },
+    "specimen.specimen_id"(newVal) {
+      this.updateSpecimenFullName({
+        specimen_id: newVal,
+        coll: this.specimen?.coll?.number,
+      });
+    },
+    "specimen.coll"(newVal) {
+      this.updateSpecimenFullName({
+        specimen_id: this.specimen?.specimen_id,
+        coll: newVal?.number,
+      });
+    },
   },
 
   computed: {
@@ -863,6 +894,15 @@ export default {
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
     ...mapActions("detail", ["saveFields"]),
+
+    updateSpecimenFullName(obj) {
+      if (!obj.specimen_id || !obj.coll)
+        this.specimen.specimen_full_number = null;
+      else
+        this.specimen.specimen_full_number = `${obj.coll.split(" ")[0]} ${
+          obj.specimen_id
+        }`;
+    },
 
     setTab(type) {
       if (type) {

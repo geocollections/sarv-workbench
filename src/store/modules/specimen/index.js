@@ -381,8 +381,8 @@ const getDefaultState = () => {
         show: true,
       },
       {
-        value: "specimen_full_name",
-        text: "specimen.specimen_full_name",
+        value: "specimen_full_number",
+        text: "specimen.specimen_full_number",
         show: true,
       },
       {

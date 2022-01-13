@@ -1122,8 +1122,9 @@
     "number_pieces": "Number of pieces",
     "save_as_new_sample": "Save as new sample",
     "specimenImages": "Images",
-    "specimen_full_name": "Specimen",
+    "specimen_full_number": "Specimen",
     "identification": "Name",
+    "nameTooltip": "Name will be filled automatically using 'collection' ja 'number' fields",
     "relatedTables": {
       "specimen_identification": "Taxon names",
       "specimen_identification_geology": "Rock names",

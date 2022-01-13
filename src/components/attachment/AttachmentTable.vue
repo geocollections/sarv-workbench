@@ -85,7 +85,7 @@
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        {{ item.specimen.specimen_full_name }}
+        {{ item.specimen.specimen_full_number }}
       </router-link>
     </template>
 
