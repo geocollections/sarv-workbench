@@ -143,8 +143,8 @@
               <autocomplete-wrapper
                 v-model="reference.journal"
                 :color="bodyActiveColor"
-                :items="autocomplete.journals"
-                :loading="autocomplete.loaders.journals"
+                :items="autocomplete.journal"
+                :loading="autocomplete.loaders.journal"
                 item-text="journal_name"
                 :label="$t('reference.journal__journal_name')"
                 is-link
@@ -347,6 +347,13 @@
           </v-row>
 
           <!-- REFERENCE KEYWORDS -->
+          {{ reference.keywords }}
+          {{ autocomplete.keywords }}
+          <br/>
+          ----
+          <br/>
+          {{ relatedData.keyword }}
+          {{ autocomplete.keyword }}
           <div class="d-flex justify-start flex-wrap pa-1">
             <div class="mr-3 flex-grow-1">
               <autocomplete-wrapper
@@ -370,6 +377,24 @@
                 :menu-props="{ maxHeight: 208 }"
               />
             </div>
+
+<!--            <div class="mr-3 flex-grow-1">-->
+<!--              <autocomplete-wrapper-->
+<!--                v-model="reference.keywords"-->
+<!--                :color="bodyActiveColor"-->
+<!--                :items="autocomplete.keywords"-->
+<!--                :loading="autocomplete.loaders.keywords"-->
+<!--                item-text="keyword"-->
+<!--                :label="$t('reference.referenceKeyword')"-->
+<!--                is-link-->
+<!--                route-object="keyword"-->
+<!--                is-searchable-->
+<!--                v-on:search:items="autocompleteKeywordSearch"-->
+<!--                :multiple="true"-->
+<!--                v-on:chip:close="reference.keywords = null"-->
+<!--                :menu-props="{ maxHeight: 208 }"-->
+<!--              />-->
+<!--            </div>-->
 
             <div class="mr-2 my-1 align-self-end">
               <v-btn
@@ -755,11 +780,13 @@
           <div v-show="activeTab === 'stratigraphy'">
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
+                <!-- Todo: Use stratigraphy settings from the store -->
                 <stratigraphy-table
                   :response="stratigraphyList"
                   :search-parameters="relatedData.searchParameters.stratigraphy"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
+                  :headers="stratigraphyTranslatedHeaders"
                 />
               </v-col>
             </v-row>
@@ -791,11 +818,13 @@
           <div v-show="activeTab === 'taxon'">
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
+                <!-- Todo: Use taxon settings from the store -->
                 <taxon-table
                   :response="relatedData.taxon"
                   :search-parameters="relatedData.searchParameters.taxon"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
+                  :headers="taxonTranslatedHeaders"
                 />
               </v-col>
             </v-row>
@@ -903,7 +932,7 @@ import {
 import formManipulation from "@/mixins/formManipulation";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import formSectionsMixin from "@/mixins/formSectionsMixin";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import NewDoiButton from "@/components/partial/NewDoiButton";
 import InputWrapper from "@/components/partial/inputs/InputWrapper";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
@@ -968,6 +997,33 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      stratigraphyHeaders(state) {
+        return state.stratigraphy.headers;
+      },
+      taxonHeaders(state) {
+        return state.taxon.headers;
+      },
+    }),
+
+    stratigraphyTranslatedHeaders() {
+      return this.stratigraphyHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
+
+    taxonTranslatedHeaders() {
+      return this.taxonHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
+
     isValidUrl() {
       if (this.reference.url && this.reference.url.length > 0) {
         let regex = RegExp(
@@ -1067,8 +1123,9 @@ export default {
           loaders: {
             types: false,
             list_language: false,
-            journals: false,
+            journal: false,
             keyword: false,
+            keywords: false,
             locality: false,
             attachment: false,
             attachment3: false, // For #158, regarding p-2
@@ -1081,8 +1138,9 @@ export default {
           },
           types: [],
           list_language: [],
-          journals: [],
+          journal: [],
           keyword: [],
+          keywords: [],
           locality: [],
           attachment: [],
           library: [],
@@ -1116,6 +1174,7 @@ export default {
           isbn: null,
           issn: null,
           abstract: null,
+          keywords: null,
           author_keywords: null,
           remarks: null,
           remarks_private: null,
