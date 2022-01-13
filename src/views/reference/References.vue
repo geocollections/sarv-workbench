@@ -6,7 +6,7 @@
 
     <list-module-core
       :module="$route.meta.object"
-      :api-call="apiCall"
+      :api-call="$_tableViewMixin_apiCall"
       :use-list-view="true"
     />
   </div>
@@ -28,59 +28,6 @@ export default {
   name: "References",
 
   mixins: [tableViewMixin],
-
-  // computed: {
-  //   ...mapState("search", ["librarySearchParameters"]),
-  //
-  //   ...mapGetters("user", ["getCurrentAgent"]),
-  // },
-
-  // async created() {
-  //   // Used by sidebar
-  //   this.setActiveSearchParameters({
-  //     search: this.librarySearchParameters,
-  //     request: "FETCH_LIBRARIES",
-  //     title: "header.libraries",
-  //     object: "library",
-  //     field: "title_en",
-  //     agent: this.getCurrentAgent,
-  //   });
-  //
-  //   this.setActiveSearchParametersFilters([
-  //     { id: "author", title: "reference.author", type: "text" },
-  //     { id: "year", title: "common.year", type: "number" },
-  //     { id: "title", title: "reference.title", type: "text" },
-  //     { id: "bookJournal", title: "reference.bookJournal", type: "text" },
-  //     {
-  //       id: "abstractRemarks",
-  //       title: "reference.abstractRemarks",
-  //       type: "text",
-  //     },
-  //     { id: "keywords", title: "reference.keywordsSearch", type: "text" },
-  //     { id: "id", title: "common.id", type: "number" },
-  //     {
-  //       id: "libraryAuthorIdTitle",
-  //       title: "reference.libraryAuthorIdTitle",
-  //       type: "text",
-  //     },
-  //     // {id: "solrSearch", title: "reference.solrSearch", type: "text"},
-  //     { id: "userAdded", title: "reference.userAdded", type: "text" },
-  //   ]);
-  // },
-
-  methods: {
-    // ...mapActions("search", ["setActiveSearchParameters"]),
-
-    apiCall() {
-      return this.$api.rw.get("reference", {
-        defaultParams: {
-          nest: 1,
-        },
-        options: this.$_tableViewMixin_options,
-        searchFields: this.$_tableViewMixin_searchFields,
-      });
-    },
-  },
 };
 </script>
 
