@@ -592,8 +592,9 @@ const formManipulation = {
 
     async $_formManipulation_rotateImageRequest(imageIds, degrees) {
       if (imageIds) {
+        const arrayOfImageIds = Array.isArray(imageIds) ? imageIds : [imageIds];
         let formData = new FormData();
-        formData.set("image_ids", imageIds);
+        formData.set("image_ids", arrayOfImageIds);
         formData.set("degrees", degrees);
 
         const res = await this.$api.rw.rotateImages(formData);
