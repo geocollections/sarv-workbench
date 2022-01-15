@@ -116,14 +116,8 @@ const detailViewUtilsMixin = {
 
 function cleanObject(obj) {
   for (let i in obj) {
-    console.log(i);
-    console.log(isPlainObject(obj[i]));
     // if (typeof obj[i] === "object") obj[i] = obj[i]?.id;
     if (isPlainObject(obj[i])) obj[i] = obj[i]?.id;
-    else if (Array.isArray(obj[i])) {
-      obj[i] = obj[i].map((item) => item.id);
-      console.log(obj[i]);
-    }
     if (obj[i] === null || obj[i] === undefined) delete obj[i];
   }
   return obj;
