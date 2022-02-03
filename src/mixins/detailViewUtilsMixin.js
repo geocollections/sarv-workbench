@@ -118,8 +118,16 @@ function cleanObject(obj) {
   for (let i in obj) {
     // if (typeof obj[i] === "object") obj[i] = obj[i]?.id;
     if (isPlainObject(obj[i])) obj[i] = obj[i]?.id;
-    if (obj[i] === null || obj[i] === undefined) delete obj[i];
+    else if (Array.isArray(obj[i]) && obj[i].length > 0)
+      obj[i] = obj[i].map((item) => item.id);
+    if (
+      obj[i] === null ||
+      obj[i] === undefined ||
+      (Array.isArray(obj[i]) && obj[i].length === 0)
+    )
+      delete obj[i];
   }
+  console.log(obj);
   return obj;
 }
 

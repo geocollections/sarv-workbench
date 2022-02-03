@@ -142,7 +142,11 @@ const formManipulation = {
 
         // Setting form data
         let formData = new FormData();
-        Object.keys(data).forEach((key) => formData.set(key, data[key]));
+        Object.keys(data).forEach((key) => {
+          if (Array.isArray(data[key]) && data[key].length > 0) {
+            data[key].forEach((item) => formData.append(key, item));
+          } else formData.set(key, data[key]);
+        });
 
         // Adding files if any to form data
         if (module === "attachment" && this?.files?.length > 0) {

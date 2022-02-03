@@ -497,12 +497,15 @@
 
               <!-- KEYWORDS -->
               <div class="d-flex justify-start flex-wrap pa-1">
+                {{ attachment.autocomplete.keywords }}
+                <br/>
+                {{ attachment.keywords }}
                 <div class="mr-3 flex-grow-1">
                   <autocomplete-wrapper
-                    v-model="relatedData.keyword"
+                    v-model="attachment.keywords"
                     :color="bodyActiveColor"
-                    :items="autocomplete.keyword"
-                    :loading="autocomplete.loaders.keyword"
+                    :items="autocomplete.keywords"
+                    :loading="autocomplete.loaders.keywords"
                     item-text="keyword"
                     :label="$t('attachment.keywords')"
                     is-link
@@ -511,8 +514,8 @@
                     v-on:search:items="autocompleteKeywordSearch"
                     :multiple="true"
                     v-on:chip:close="
-                      relatedData.keyword.splice(
-                        relatedData.keyword.indexOf($event),
+                      attachment.keywords.splice(
+                        attachment.keywords.indexOf($event),
                         1
                       )
                     "
@@ -1729,10 +1732,10 @@
               <div class="d-flex justify-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
                   <autocomplete-wrapper
-                    v-model="relatedData.keyword"
+                    v-model="attachment.keywords"
                     :color="bodyActiveColor"
-                    :items="autocomplete.keyword"
-                    :loading="autocomplete.loaders.keyword"
+                    :items="autocomplete.keywords"
+                    :loading="autocomplete.loaders.keywords"
                     item-text="keyword"
                     :label="$t('attachment.keywords')"
                     is-link
@@ -1741,8 +1744,8 @@
                     v-on:search:items="autocompleteKeywordSearch"
                     :multiple="true"
                     v-on:chip:close="
-                      relatedData.keyword.splice(
-                        relatedData.keyword.indexOf($event),
+                      attachemnt.keyword.splice(
+                        attachment.keyword.indexOf($event),
                         1
                       )
                     "
@@ -2194,10 +2197,10 @@
               <div class="d-flex justify-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
                   <autocomplete-wrapper
-                    v-model="relatedData.keyword"
+                    v-model="attachment.keywords"
                     :color="bodyActiveColor"
-                    :items="autocomplete.keyword"
-                    :loading="autocomplete.loaders.keyword"
+                    :items="autocomplete.keywords"
+                    :loading="autocomplete.loaders.keywords"
                     item-text="keyword"
                     :label="$t('attachment.keywords')"
                     is-link
@@ -2206,8 +2209,8 @@
                     v-on:search:items="autocompleteKeywordSearch"
                     :multiple="true"
                     v-on:chip:close="
-                      relatedData.keyword.splice(
-                        relatedData.keyword.indexOf($event),
+                      attachment.keywords.splice(
+                        attachment.keywords.indexOf($event),
                         1
                       )
                     "
@@ -4058,7 +4061,7 @@ export default {
             copyright_agent: false,
             image_type: false,
             agent_digitised: false,
-            keyword: false,
+            keywords: false,
             specimen: false,
             type: false,
             collection: false,
@@ -4085,7 +4088,7 @@ export default {
           copyright_agent: [],
           image_type: [],
           agent_digitised: [],
-          keyword: [],
+          keywords: [],
           specimen: [],
           type: [],
           collection: [],
