@@ -6,7 +6,7 @@ const detailViewUtilsMixin = {
     fillAutocompleteFields(obj) {
       Object.entries(obj).forEach((entry) => {
         if (isPlainObject(entry[1])) {
-          console.log(entry[0]);
+          // console.log(entry[0]);
           // If autocomplete field doesn't exist then creates it (better to initialise it in data and remove the creation here)
           if (!this.autocomplete?.[entry[0]]) this.autocomplete[entry[0]] = [];
           this.autocomplete[entry[0]].push(entry[1]);

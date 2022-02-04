@@ -20,6 +20,8 @@
 
     <slot name="digitised-reference" v-if="isDigitisedReference"></slot>
 
+    <slot name="related-data" v-if="$route.meta.isEdit"></slot>
+
     <slot name="change-type" v-if="$route.meta.isEdit"></slot>
 
     <slot name="checkbox"></slot>
@@ -50,5 +52,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
