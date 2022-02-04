@@ -405,8 +405,11 @@ export default {
       this.resetData();
       this.$emit("files-cleared");
     },
-    files(newVal) {
-      this.readFile(newVal);
+    files: {
+      handler(newVal) {
+        this.readFile(newVal);
+      },
+      deep: true,
     },
     filesFromObject: {
       handler(newVal) {

@@ -2392,11 +2392,11 @@ export default {
 
     /* FileInput Events START */
     addFiles(files) {
-      this.files = files;
+      this.files = [...files];
     },
 
     clearUploadedFiles() {
-      this.files = [];
+      this.files = null;
     },
 
     updateFields(metadata) {
