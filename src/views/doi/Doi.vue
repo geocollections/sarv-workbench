@@ -883,7 +883,6 @@ import DoiRelatedIdentifierTable from "@/components/doi/relatedTables/DoiRelated
 import DoiGeolocationTable from "@/components/doi/relatedTables/DoiGeolocationTable";
 import DoiAgentTable from "@/components/doi/relatedTables/DoiAgentTable";
 import DoiDateTable from "@/components/doi/relatedTables/DoiDateTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import toastMixin from "@/mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
 import Pagination from "@/components/partial/Pagination";
@@ -927,7 +926,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     toastMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,

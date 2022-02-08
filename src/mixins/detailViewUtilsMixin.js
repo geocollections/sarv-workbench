@@ -1,5 +1,5 @@
 import { isPlainObject } from "lodash";
-import { fetchDoiUsingEGF } from "@/assets/js/api/apiCalls";
+import { fetchDeleteRecord, fetchDoiUsingEGF } from "@/assets/js/api/apiCalls";
 
 const detailViewUtilsMixin = {
   methods: {
@@ -37,6 +37,7 @@ const detailViewUtilsMixin = {
             .get(table, {
               defaultParams: {
                 [module]: moduleId,
+                nest: 1, // Todo: Should drop nest for performance issues
               },
               options: {
                 ...this.relatedData.searchParameters[table],
@@ -105,11 +106,102 @@ const detailViewUtilsMixin = {
         });
       }
     },
+
+    // Todo: Homme tegele esimesena: kaota requests mixin ja pane related data asjad siia
+
+    // RELATED DATA
+    async addRelatedItem(payload, connectionField = null) {
+      let table = payload.table;
+      if (table === "taxon_subclass") table = "taxon";
+
+      let url = `${table}`;
+      let formData = new FormData();
+      let uploadableObject = this.formatDataForUpload(payload.item);
+
+      let mainObjectKey = this.$route.meta.object;
+      if (connectionField) mainObjectKey = connectionField;
+      if (payload.table === "taxon_subclass" && table === "taxon") {
+        mainObjectKey = "parent";
+        uploadableObject.taxon = payload.rawItem.taxon;
+      }
+
+      uploadableObject[mainObjectKey] = this[this.$route.meta.object].id;
+
+      Object.keys(uploadableObject).forEach((key) =>
+        formData.set(key, uploadableObject[key])
+      );
+
+      const response = await this.$api.rw.post(url, formData);
+
+      if (response?.id && this?.[this.$route.meta.object]?.id) {
+        this.loadRelatedData(
+          [table],
+          this.$route.meta.object,
+          this[this.$route.meta.object].id
+        );
+      }
+    },
+
+    async editRelatedItem(payload) {
+      console.log(payload);
+      let table = payload.table;
+      if (table === "taxon_subclass") table = "taxon";
+
+      let formData = new FormData();
+      let uploadableObject = this.formatDataForUpload(payload.item);
+      delete uploadableObject.id;
+
+      if (payload.table === "taxon_subclass" && table === "taxon") {
+        uploadableObject.parent = this[this.$route.meta.object].id;
+        uploadableObject.taxon = payload.rawItem.taxon;
+      }
+
+      Object.keys(uploadableObject).forEach((key) =>
+        formData.set(key, uploadableObject[key])
+      );
+
+      const response = await this.$api.rw.put(table, payload.item.id, formData);
+
+      if (response?.id && this?.[this.$route.meta.object]?.id) {
+        this.loadRelatedData(
+          [table],
+          this.$route.meta.object,
+          this[this.$route.meta.object].id
+        );
+      }
+    },
+
+    async deleteRelatedItem(payload) {
+      console.log(payload);
+      let table = payload.table;
+
+      const response = await this.$api.rw.delete(table, payload.item.id);
+
+      if (response && this?.[this.$route.meta.object]?.id) {
+        this.loadRelatedData(
+          [table],
+          this.$route.meta.object,
+          this[this.$route.meta.object].id
+        );
+      }
+    },
   },
 
   watch: {
     "$route.params.id"() {
       this.reloadData();
+    },
+    "relatedData.searchParameters": {
+      handler: function () {
+        if (this.$route.meta.isEdit) {
+          this.loadRelatedData(
+            [this.activeTab],
+            this.$route.meta.object,
+            this[this.$route.meta.object].id
+          );
+        }
+      },
+      deep: true,
     },
   },
 };

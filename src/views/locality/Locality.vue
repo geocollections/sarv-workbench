@@ -618,7 +618,6 @@ import FileInput from "@/components/partial/inputs/FileInput";
 import LocalityReferenceTable from "@/components/locality/relatedTables/LocalityReferenceTable";
 import LocalitySynonymTable from "@/components/locality/relatedTables/LocalitySynonymTable";
 import LocalityStratigraphyTable from "@/components/locality/relatedTables/LocalityStratigraphyTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import LocalityDescriptionTable from "@/components/locality/relatedTables/LocalityDescriptionTable";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
@@ -658,7 +657,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

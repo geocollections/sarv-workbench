@@ -369,7 +369,6 @@ import autocompleteMixin from "@/mixins/autocompleteMixin";
 
 import DateWrapper from "@/components/partial/inputs/DateWrapper";
 import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
-import requestsMixin from "@/mixins/requestsMixin";
 import SampleSeriesSamplesTable from "@/components/sample_series/relatedTables/SampleSeriesSamplesTable";
 import FileInput from "@/components/partial/inputs/FileInput";
 import { mapActions, mapState } from "vuex";
@@ -412,7 +411,6 @@ export default {
   mixins: [
     formManipulation,
     autocompleteMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

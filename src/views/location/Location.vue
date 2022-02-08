@@ -485,7 +485,6 @@ import formManipulation from "@/mixins/formManipulation";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import { mapActions, mapState } from "vuex";
 import FileInput from "@/components/partial/inputs/FileInput";
-import requestsMixin from "@/mixins/requestsMixin";
 import SpecimenTable from "@/components/specimen/SpecimenTable";
 import SampleTable from "@/components/sample/SampleTable";
 import ExportButtons from "@/components/partial/export/ExportButtons";
@@ -531,7 +530,6 @@ export default {
   mixins: [
     formManipulation,
     autocompleteMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

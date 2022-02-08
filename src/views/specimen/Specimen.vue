@@ -778,7 +778,6 @@ import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
 import DateWrapper from "../../components/partial/inputs/DateWrapper";
 import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
 import FileInput from "../../components/partial/inputs/FileInput";
-import requestsMixin from "../../mixins/requestsMixin";
 import SpecimenIdentificationTable from "../../components/specimen/relatedTables/SpecimenIdentificationTable";
 import SpecimenIdentificationGeologyTable from "../../components/specimen/relatedTables/SpecimenIdentificationGeologyTable";
 import SpecimenReferenceTable from "../../components/specimen/relatedTables/SpecimenReferenceTable";
@@ -835,7 +834,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     saveAsNewMixin,
     globalUtilsMixin,
     detailViewUtilsMixin,

@@ -236,7 +236,6 @@ import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper
 import InputWrapper from "@/components/partial/inputs/InputWrapper";
 import Editor from "@/components/partial/inputs/Editor";
 import KeywordRelationTable from "@/components/keyword/relatedTables/KeywordRelationTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import KeywordRelationReverseTable from "@/components/keyword/relatedTables/KeywordRelationReverseTable";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
@@ -273,7 +272,6 @@ export default {
   mixins: [
     formManipulation,
     autocompleteMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

@@ -508,7 +508,6 @@ import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
 import formManipulation from "@/mixins/formManipulation";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import formSectionsMixin from "@/mixins/formSectionsMixin";
-import requestsMixin from "@/mixins/requestsMixin";
 import RockMineralTable from "@/components/rock/related_tables/RockMineralTable";
 import RockLocalityTable from "@/components/rock/related_tables/RockLocalityTable";
 import RockElementTable from "@/components/rock/related_tables/RockElementTable";
@@ -565,7 +564,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

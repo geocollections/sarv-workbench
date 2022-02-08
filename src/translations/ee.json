@@ -2213,9 +2213,9 @@
       "locality": "Lokaliteet",
       "reference_keyword": "Kasutaja märksõnad",
       "locality_reference": "Kirjeldatud lokaliteedid",
-      "library": "Seotud kogumikud",
+      "library_reference": "Seotud kogumikud",
       "taxon": "Taksonid",
-      "stratigraphy": "Stratigraafia"
+      "stratigraphy_reference": "Stratigraafia"
     },
     "translation_of": "Tõlge teosest"
   },

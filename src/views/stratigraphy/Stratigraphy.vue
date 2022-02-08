@@ -614,7 +614,6 @@ import formManipulation from "@/mixins/formManipulation";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import formSectionsMixin from "@/mixins/formSectionsMixin";
 import StratigraphySynonymTable from "@/components/stratigraphy/relatedTables/StratigraphySynonymTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import StratigraphyReferenceTable from "@/components/stratigraphy/relatedTables/StratigraphyReferenceTable";
 import StratigraphyStratotypeTable from "@/components/stratigraphy/relatedTables/StratigraphyStratotypeTable";
 import Editor from "@/components/partial/inputs/Editor";
@@ -660,7 +659,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

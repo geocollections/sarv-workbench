@@ -353,7 +353,6 @@ import debounce from "lodash/debounce";
 import { mapActions, mapState } from "vuex";
 import SiteTable from "@/components/site/SiteTable";
 import AreaLocalityReferenceTable from "@/components/area/relatedTables/AreaLocalityReferenceTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";
@@ -393,7 +392,6 @@ export default {
   mixins: [
     formManipulation,
     autocompleteMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

@@ -99,7 +99,10 @@ class RWApiService extends ApiService {
   }
 
   async rotateImages(data) {
-    const baseUrlWithoutApiPath = this.baseURL.substring(0, this.baseURL.length - 3)
+    const baseUrlWithoutApiPath = this.baseURL.substring(
+      0,
+      this.baseURL.length - 3
+    );
     const url = `${baseUrlWithoutApiPath}image_processor/rotate/`;
     try {
       const res = await this.service.post(url, data);
@@ -110,8 +113,17 @@ class RWApiService extends ApiService {
     }
   }
 
-  static async delete(table, id) {
-    // Todo
+  async delete(table, id) {
+    const url = `${this.baseURL}/${table}/${id}/`;
+    try {
+      const res = await this.service.delete(url);
+      this.toastSuccess("Record deleted!");
+      // Successful delete is 204 No Content
+      return res?.status === 204 ? res.status : false;
+    } catch (err) {
+      this.toastError(err, url);
+      return this.handleError(err, url);
+    }
   }
 }
 

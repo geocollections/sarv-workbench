@@ -329,7 +329,6 @@ import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
 import LibraryReferenceTable from "@/components/library/relatedTables/LibraryReferenceTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import Editor from "@/components/partial/inputs/Editor";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
@@ -368,7 +367,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

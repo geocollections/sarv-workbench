@@ -515,7 +515,6 @@ import DateWrapper from "@/components/partial/inputs/DateWrapper";
 import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
 import FileInput from "@/components/partial/inputs/FileInput";
 import AnalysisResultsTable from "@/components/analysis/relatedTables/AnalysisResultsTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";
@@ -549,7 +548,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

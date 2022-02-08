@@ -346,44 +346,16 @@
             </v-col>
           </v-row>
 
-          <!-- REFERENCE KEYWORDS -->
-          {{ reference.keywords }}
-          <br />
-          <br />
-          {{ autocomplete.keywords }}
+          <!-- KEYWORDS -->
           <div class="d-flex justify-start flex-wrap pa-1">
-            <!--            <div class="mr-3 flex-grow-1">-->
-            <!--              <autocomplete-wrapper-->
-            <!--                v-model="relatedData.keyword"-->
-            <!--                :color="bodyActiveColor"-->
-            <!--                :items="autocomplete.keyword"-->
-            <!--                :loading="autocomplete.loaders.keyword"-->
-            <!--                item-text="keyword"-->
-            <!--                :label="$t('reference.referenceKeyword')"-->
-            <!--                is-link-->
-            <!--                route-object="keyword"-->
-            <!--                is-searchable-->
-            <!--                v-on:search:items="autocompleteKeywordSearch"-->
-            <!--                :multiple="true"-->
-            <!--                v-on:chip:close="-->
-            <!--                  relatedData.keyword.splice(-->
-            <!--                    relatedData.keyword.indexOf($event),-->
-            <!--                    1-->
-            <!--                  )-->
-            <!--                "-->
-            <!--                :menu-props="{ maxHeight: 208 }"-->
-            <!--              />-->
-            <!--            </div>-->
-
             <div class="mr-3 flex-grow-1">
               <autocomplete-wrapper
                 v-model="reference.keywords"
                 :color="bodyActiveColor"
                 :items="autocomplete.keywords"
                 :loading="autocomplete.loaders.keywords"
-                item-value="keyword.keyword"
                 item-text="keyword"
-                :label="$t('reference.referenceKeyword')"
+                :label="$t('attachment.keywords')"
                 is-link
                 route-object="keyword"
                 is-searchable
@@ -395,17 +367,16 @@
                     1
                   )
                 "
-                :menu-props="{ maxHeight: 208 }"
               />
             </div>
 
             <div class="mr-2 my-1 align-self-end">
               <v-btn
                 icon
+                color="green"
                 :title="$t('add.new')"
                 @click="windowOpenNewTab('/keyword/add')"
                 target="newKeywordWindow"
-                color="green"
               >
                 <v-icon>fas fa-plus</v-icon>
               </v-btn>
@@ -703,15 +674,73 @@
             <v-col cols="12" class="pa-1">
               <file-input
                 show-existing
-                :files-from-object="relatedData.attachment"
-                v-on:update:existing-files="addExistingFiles"
-                v-on:file-uploaded="addFiles"
+                :files-from-object="reference.attachments"
+                @update:existing-files="reference.attachments = $event"
+                @file-uploaded="addFiles"
                 accept-multiple
                 :record-options="$route.meta.isEdit"
                 open-file
                 acceptable-format="*/*"
                 :is-draggable="$route.meta.isEdit"
                 show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- RELATED LIBRARIES -->
+    <v-card
+      class="mt-2"
+      id="block-libraries"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.libraries = !block.libraries"
+        >
+          <span>{{ $t("reference.relatedTables.library_reference") }}</span>
+          <v-icon right>fas fa-book</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.libraries = !block.libraries"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.libraries ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.libraries" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <autocomplete-wrapper
+                v-model="reference.libraries"
+                :color="bodyActiveColor"
+                :items="autocomplete.libraries"
+                :loading="autocomplete.loaders.libraries"
+                :item-text="titleLabel"
+                :label="$t('reference.libraries')"
+                is-link
+                route-object="library"
+                is-searchable
+                v-on:search:items="
+                  autocompleteLibrarySearch($event, 'libraries')
+                "
+                :multiple="true"
+                v-on:chip:close="
+                  reference.libraries.results.splice(
+                    reference.libraries.results.indexOf($event),
+                    1
+                  )
+                "
               />
             </v-col>
           </v-row>
@@ -756,73 +785,22 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <!-- TODO: This needs to be refactored!!! -->
-          <v-row v-show="activeTab === 'library'" no-gutters>
-            <v-col cols="12" class="pa-1">
-              <autocomplete-wrapper
-                v-model="relatedData.library.results"
-                :color="bodyActiveColor"
-                :items="relatedData.library.results"
-                :loading="autocomplete.loaders.library"
-                item-text="title"
-                :label="$t('reference.libraries')"
-                is-link
-                route-object="library"
-                is-searchable
-                v-on:search:items="autocompleteLibraryAgentSearch2"
-                :multiple="true"
-                v-on:chip:close="
-                  relatedData.library.results.splice(
-                    relatedData.library.results.indexOf($event),
-                    1
-                  )
-                "
-              />
-            </v-col>
-          </v-row>
-
-          <div v-show="activeTab === 'stratigraphy'">
-            <v-row no-gutters>
-              <v-col cols="12" class="px-1">
-                <!-- Todo: Use stratigraphy settings from the store -->
-                <stratigraphy-table
-                  :response="stratigraphyList"
-                  :search-parameters="relatedData.searchParameters.stratigraphy"
-                  :body-active-color="bodyActiveColor"
-                  :body-color="bodyColor"
-                  :headers="stratigraphyTranslatedHeaders"
-                />
-              </v-col>
-            </v-row>
-
-            <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
-              <v-btn
-                class="mr-2"
-                small
-                :to="{
-                  name: 'Stratigraphy add',
-                  query: { reference: JSON.stringify(reference) },
-                }"
-                target="newStratigraphyWindow"
-                :color="bodyActiveColor"
-                :dark="isBodyActiveColorDark"
-                >{{ $t("add.new") }}</v-btn
-              >
-              <export-buttons
-                v-if="relatedData.stratigraphy.count > 0"
-                filename="stratigraphy"
-                :table-data="relatedData.stratigraphy.results"
-                clipboard-class="stratigraphy-table"
-                :body-active-color="bodyActiveColor"
-                small
-              />
-            </v-toolbar>
-          </div>
+          <stratigraphy-reference-table
+            v-show="activeTab === 'stratigraphy_reference'"
+            :response="relatedData.stratigraphy_reference"
+            :search-parameters="
+              relatedData.searchParameters.stratigraphy_reference
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <div v-show="activeTab === 'taxon'">
             <v-row no-gutters>
-              <v-col cols="12" class="px-1">
-                <!-- Todo: Use taxon settings from the store -->
+              <v-col cols="12" class="px-1 pb-1">
                 <taxon-table
                   :response="relatedData.taxon"
                   :search-parameters="relatedData.searchParameters.taxon"
@@ -949,21 +927,20 @@ import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
 import Editor from "@/components/partial/inputs/Editor";
 import FileInput from "@/components/partial/inputs/FileInput";
 import ExportButtons from "@/components/partial/export/ExportButtons";
-import StratigraphyTable from "@/components/stratigraphy/StratigraphyTable";
 import TaxonTable from "@/components/taxon/TaxonTable";
 import LocalityReferenceTable from "@/components/reference/relatedTables/LocalityReferenceTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";
+import StratigraphyReferenceTable from "@/components/stratigraphy/relatedTables/StratigraphyReferenceTable";
 
 export default {
   name: "Reference",
   components: {
+    StratigraphyReferenceTable,
     Pagination,
     LocalityReferenceTable,
     TaxonTable,
-    StratigraphyTable,
     ExportButtons,
     FileInput,
     Editor,
@@ -995,7 +972,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],
@@ -1006,22 +982,10 @@ export default {
 
   computed: {
     ...mapState({
-      stratigraphyHeaders(state) {
-        return state.stratigraphy.headers;
-      },
       taxonHeaders(state) {
         return state.taxon.headers;
       },
     }),
-
-    stratigraphyTranslatedHeaders() {
-      return this.stratigraphyHeaders.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text),
-        };
-      });
-    },
 
     taxonTranslatedHeaders() {
       return this.taxonHeaders.map((item) => {
@@ -1041,30 +1005,6 @@ export default {
       } else return true;
     },
     ...mapGetters("user", ["isUserAllowedTo"]),
-
-    stratigraphyList() {
-      let stratigraphy = this.relatedData.stratigraphy.results;
-      if (stratigraphy && stratigraphy.length > 0) {
-        let mappedList = stratigraphy.map((item) => ({
-          id: item.stratigraphy,
-          stratigraphy: item.stratigraphy__stratigraphy,
-          stratigraphy_en: item.stratigraphy__stratigraphy_en,
-          type: item.stratigraphy__type,
-          type__value: item.stratigraphy__type__value,
-          type__value_en: item.stratigraphy__type__value_en,
-          rank: item.stratigraphy__rank,
-          rank__value: item.stratigraphy__rank__value,
-          rank__value_en: item.stratigraphy__rank__value_en,
-          scope: item.stratigraphy__scope,
-          scope__value: item.stratigraphy__scope__value,
-          scope__value_en: item.stratigraphy__scope__value_en,
-        }));
-        return {
-          count: this.relatedData.stratigraphy.count,
-          results: mappedList,
-        };
-      } else return this.relatedData.stratigraphy;
-    },
   },
 
   created() {
@@ -1074,28 +1014,6 @@ export default {
     }
 
     this.loadFullInfo();
-  },
-
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
-    // This value is changed in formManipulation.js when file upload is successful (value will be savedObjectsId)
-    // Do not remember why was it done. Commenting it cause of #382 https://github.com/geocollections/sarv-workbench/issues/382
-    isFileAddedAsObject: {
-      handler: function (newVal) {
-        if (this.isNotEmpty(newVal)) {
-          // fetchAttachmentForReference(this.$route.params.id).then(
-          //   response => (this.attachment = this.handleResponse(response))
-          // );
-        }
-      },
-    },
   },
 
   methods: {
@@ -1114,12 +1032,11 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "library", iconClass: "fas fa-book" },
-          { name: "stratigraphy", iconClass: "fas fa-layer-group" },
+          { name: "stratigraphy_reference", iconClass: "fas fa-layer-group" },
           { name: "taxon", iconClass: "fas fa-pastafarianism" },
           { name: "locality_reference", iconClass: "fas fa-globe" },
         ],
-        activeTab: "library",
+        activeTab: "stratigraphy_reference",
         relatedData: this.setDefaultRelatedData(),
         listOfAutocompleteTables: [
           "list_reference_type",
@@ -1136,7 +1053,7 @@ export default {
             locality: false,
             attachment: false,
             attachment3: false, // For #158, regarding p-2
-            library: false,
+            libraries: false,
             list_locality_reference_type: false,
             list_reference_type: false,
             list_licence: false,
@@ -1149,7 +1066,7 @@ export default {
           keywords: [],
           locality: [],
           attachment: [],
-          library: [],
+          libraries: [],
           list_locality_reference_type: [],
           list_reference_type: [],
           list_licence: [],
@@ -1200,6 +1117,8 @@ export default {
           book_translated_language: null,
           parent_reference: null,
           translated_reference: null,
+          attachments: null,
+          libraries: null,
         },
         previousRecord: {},
         nextRecord: {},
@@ -1212,18 +1131,14 @@ export default {
           abstract: true,
           digital: true,
           files: true,
+          libraries: true,
         },
       };
     },
 
     setDefaultRelatedData() {
       return {
-        attachment: [],
-        library: {
-          count: 0,
-          results: [],
-        },
-        stratigraphy: {
+        stratigraphy_reference: {
           count: 0,
           results: [],
         },
@@ -1242,15 +1157,10 @@ export default {
             sortBy: ["locality"],
             sortDesc: [true],
           },
-          attachment: {
-            page: 1,
-            paginateBy: 10,
-            orderBy: "id",
-          },
-          stratigraphy: {
+          stratigraphy_reference: {
             page: 1,
             paginateBy: 25,
-            sortBy: ["id"],
+            sortBy: ["stratigraphy"],
             sortDesc: [true],
           },
           taxon: {
@@ -1258,12 +1168,6 @@ export default {
             paginateBy: 25,
             sortBy: ["id"],
             sortDesc: [true],
-          },
-          library: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["title"],
-            sortDesc: [false],
           },
         },
       };
@@ -1471,10 +1375,6 @@ export default {
 
     addFiles(files, singleFileMetadata) {
       this.addFileAsRelatedDataNew(files, "reference", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      this.relatedData.attachment = files;
     },
   },
 };

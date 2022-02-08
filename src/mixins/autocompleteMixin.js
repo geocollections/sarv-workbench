@@ -38,6 +38,9 @@ const autocompleteMixin = {
     propertyLabel() {
       return this.$i18n.locale === "ee" ? "property" : "property_en";
     },
+    titleLabel() {
+      return this.$i18n.locale === "ee" ? "title" : "title_en";
+    },
     keywordCategoryLabel() {
       return this.$i18n.locale === "ee"
         ? "keyword_category__name"
@@ -239,10 +242,10 @@ const autocompleteMixin = {
       );
     },
     autocompleteJournalSearch(value) {
-      this.$_autocompleteMixin_search(value, "journals", "journals", 1);
+      this.$_autocompleteMixin_search(value, "journal", "journal", 1);
     },
-    autocompleteLibrarySearch(value) {
-      this.$_autocompleteMixin_search(value, "library", "library", 1);
+    autocompleteLibrarySearch(value, options = "library") {
+      this.$_autocompleteMixin_search(value, "library", options, 1);
     },
     autocompleteDoiReferenceSearch(value) {
       this.$_autocompleteMixin_search(value, "reference", "reference");
@@ -310,12 +313,7 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "imageset", "imageset", 2);
     },
     autocompleteRelatedDataSearch(value, type, options) {
-      this.$_autocompleteMixin_search(
-        value,
-        type,
-        options,
-        2
-      );
+      this.$_autocompleteMixin_search(value, type, options, 2);
     },
     autocompleteInstitutionSearch(value) {
       this.$_autocompleteMixin_search(value, "institution", "institution", 2);
@@ -390,9 +388,9 @@ const autocompleteMixin = {
 
           this.autocomplete.loaders[options] = true;
           autocompleteSearch(query).then((response) => {
-            console.log(response)
-            console.log(options)
-            console.log(handleResponse(response))
+            console.log(response);
+            console.log(options);
+            console.log(handleResponse(response));
             this.autocomplete.loaders[options] = false;
             this.autocomplete[options] = handleResponse(response);
           });
@@ -482,7 +480,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `taxon/?search=${value}&search_fields=taxon&fields=id,taxon,hierarchy_string`;
     case "library":
       return `library/?or_search=id__icontains:${value} OR title__icontains:${value} OR title_en__icontains:${value}&author=${currentUser.id}&fields=id,title,title_en`;
-    case "journals":
+    case "journal":
       return `journal/?or_search=id__icontains:${value} OR journal_name__icontains:${value} OR journal_short__icontains:${value}`;
     case "library_agent_search": // Todo: This should be done through library not library_agent
       return `library_agent/?agent=${currentUser.id}&or_search=library__title__icontains:${value} OR library__title_en__icontains:${value}&fields=library&nest=1`;

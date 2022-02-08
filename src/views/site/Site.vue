@@ -787,7 +787,6 @@ import InputWrapper from "@/components/partial/inputs/InputWrapper";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import FileInput from "@/components/partial/inputs/FileInput";
-import requestsMixin from "@/mixins/requestsMixin";
 import SiteLocalityDescriptionTable from "@/components/site/relatedTables/SiteLocalityDescriptionTable";
 import SiteLocalityReferenceTable from "@/components/site/relatedTables/SiteLocalityReferenceTable";
 import toastMixin from "@/mixins/toastMixin";
@@ -833,7 +832,6 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     sidebarMixin,
-    requestsMixin,
     toastMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,

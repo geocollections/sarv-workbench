@@ -366,7 +366,6 @@ import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
 import FileInput from "@/components/partial/inputs/FileInput";
 import DrillcoreBoxTable from "@/components/drillcore/relatedTables/DrillcoreBoxTable";
 import DrillcoreStudyTable from "@/components/drillcore/relatedTables/DrillcoreStudyTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import { mapActions, mapState } from "vuex";
 import DrillcoreBoxListView from "@/components/drillcore_box/DrillcoreBoxListView";
 import Pagination from "@/components/partial/Pagination";
@@ -410,7 +409,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

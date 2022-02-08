@@ -288,7 +288,6 @@ import autocompleteMixin from "@/mixins/autocompleteMixin";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
 import InputWrapper from "@/components/partial/inputs/InputWrapper";
 import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
-import requestsMixin from "@/mixins/requestsMixin";
 import FileInput from "@/components/partial/inputs/FileInput";
 import DrillcoreBoxAttachmentTable from "@/components/drillcore_box/related_tables/DrillcoreBoxAttachmentTable";
 import { mapActions } from "vuex";
@@ -329,7 +328,6 @@ export default {
   mixins: [
     formManipulation,
     autocompleteMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

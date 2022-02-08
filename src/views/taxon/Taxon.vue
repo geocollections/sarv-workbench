@@ -637,7 +637,6 @@ import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
 import FileInput from "@/components/partial/inputs/FileInput";
 import TaxonSubclassTable from "@/components/taxon/relatedTables/TaxonSubclassTable";
 import TaxonSynonymTable from "@/components/taxon/relatedTables/TaxonSynonymTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import TaxonTypeSpecimenTable from "@/components/taxon/relatedTables/TaxonTypeSpecimenTable";
 import TaxonOccurrenceTable from "@/components/taxon/relatedTables/TaxonOccurrenceTable";
 import TaxonOpinionTable from "@/components/taxon/relatedTables/TaxonOpinionTable";
@@ -688,7 +687,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

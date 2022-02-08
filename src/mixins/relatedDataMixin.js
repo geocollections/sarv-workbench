@@ -1,21 +1,20 @@
-import { cloneDeep } from "lodash";
-
 const relatedDataMixin = {
-  data: () => ({
-    dialog: false,
-    deleteDialog: false,
-    emitDeleteData: null,
-    isNewItem: true,
-  }),
+  data() {
+    return {
+      dialog: false,
+      deleteDialog: false,
+      emitDeleteData: null,
+      isNewItem: true,
+    };
+  },
 
   computed: {
-    // Todo: This enforces component names to follow strict guideline
+    // This enforces component names to follow strict guideline
     tableName() {
       // Use component name to get table name for api
       let arr = this.$options.name.match(/[A-Z][a-z]+/g);
       arr.pop();
-      let name = arr.join("_").toLowerCase();
-      return name;
+      return arr.join("_").toLowerCase();
     },
 
     translatedHeaders() {
@@ -34,7 +33,7 @@ const relatedDataMixin = {
      ******************/
 
     addItem() {
-      let clonedItem = cloneDeep(this.item);
+      let clonedItem = { ...this.item };
       let formattedItem = this.formatItem(clonedItem);
 
       if (this.isNewItem) {
@@ -74,7 +73,6 @@ const relatedDataMixin = {
       this.emitDeleteData = {
         table: this.tableName,
         item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
       };
     },
 

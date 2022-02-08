@@ -516,7 +516,6 @@ import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper
 import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
 import DatasetAuthorTable from "@/components/dataset/relatedTables/DatasetAuthorTable";
 import DatasetReferenceTable from "@/components/dataset/relatedTables/DatasetReferenceTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import DatasetAnalysisTable from "@/components/dataset/relatedTables/DatasetAnalysisTable";
 import Pagination from "@/components/partial/Pagination";
 import { orderBy } from "lodash";
@@ -562,7 +561,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

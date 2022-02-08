@@ -26,7 +26,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -38,34 +38,31 @@
       </template>
 
       <template v-slot:item.reference="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/reference/' + item.reference }"
+          v-if="item.reference"
+          :to="{ path: '/reference/' + item.reference.id }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.reference__reference }}
+          {{ item.reference.reference }}
+        </router-link>
+      </template>
+
+      <template v-slot:item.stratigraphy="{ item }">
+        <router-link
+          v-if="item.stratigraphy"
+          :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
+          :title="$t('editStratigraphy.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-translate="{
+              et: item.stratigraphy.stratigraphy,
+              en: item.stratigraphy.stratigraphy_en,
+            }"
+          ></span>
         </router-link>
       </template>
 
@@ -94,6 +91,7 @@
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
+                    v-if="$route.meta.object === 'stratigraphy'"
                     v-model="item.reference"
                     :color="bodyActiveColor"
                     :items="autocomplete.reference"
@@ -105,6 +103,20 @@
                     route-object="reference"
                     is-searchable
                     v-on:search:items="autocompleteReferenceSearch"
+                  />
+
+                  <autocomplete-wrapper
+                    v-model="item.stratigraphy"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.stratigraphy"
+                    :loading="autocomplete.loaders.stratigraphy"
+                    :item-text="stratigraphyLabel"
+                    :label="$t('common.stratigraphy')"
+                    use-state
+                    is-link
+                    route-object="stratigraphy"
+                    is-searchable
+                    v-on:search:items="autocompleteStratigraphySearch"
                   />
                 </v-col>
 
@@ -203,6 +215,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -212,13 +230,21 @@ import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
+import RelatedDataTableWrapper from "@/components/partial/RelatedDataTableWrapper";
 
 export default {
   name: "StratigraphyReferenceTable",
 
-  components: { CheckboxWrapper, AutocompleteWrapper, InputWrapper },
+  components: {
+    RelatedDataDeleteDialog,
+    CheckboxWrapper,
+    AutocompleteWrapper,
+    InputWrapper,
+  },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -248,16 +274,14 @@ export default {
       required: false,
       default: "deep-orange",
     },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
+    hideReference: Boolean,
+    hideStratigraphy: Boolean,
   },
 
   data: () => ({
     headers: [
       { text: "common.reference", value: "reference" },
+      { text: "common.stratigraphy", value: "stratigraphy" },
       { text: "stratigraphy_reference.content", value: "content" },
       { text: "stratigraphy_reference.content_en", value: "content_en" },
       { text: "stratigraphy_reference.age_base", value: "age_base" },
@@ -283,6 +307,7 @@ export default {
     dialog: false,
     item: {
       reference: null,
+      stratigraphy: null,
       content: "",
       content_en: "",
       age_base: null,
@@ -296,35 +321,35 @@ export default {
     isNewItem: true,
     autocomplete: {
       reference: [],
+      stratigraphy: [],
       loaders: {
         reference: false,
+        stratigraphy: false,
       },
     },
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
-      return (
-        typeof this.item.reference === "object" && this.item.reference !== null
-      );
+      if (this.$route.meta.object === "reference") {
+        return (
+          typeof this.item.stratigraphy === "object" &&
+          this.item.stratigraphy !== null
+        );
+      } else {
+        return (
+          typeof this.item.reference === "object" &&
+          this.item.reference !== null
+        );
+      }
     },
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         reference: null,
+        stratigraphy: null,
         content: "",
         content_en: "",
         age_base: null,
@@ -337,41 +362,16 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "stratigraphy_reference",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "stratigraphy_reference",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference,
-        };
-        this.autocomplete.reference.push(this.item.reference);
-      } else {
+      if (item.reference) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
+      }
+      if (item.stratigraphy) {
+        this.item.stratigraphy = item.stratigraphy;
+        this.autocomplete.stratigraphy.push(this.item.stratigraphy);
       }
 
       this.item.content = item.content;
@@ -386,28 +386,6 @@ export default {
 
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "stratigraphy_reference",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        } else if (typeof item[key] === "string" && item[key].length === 0) {
-          item[key] = null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped></style>

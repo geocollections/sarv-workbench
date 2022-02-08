@@ -291,7 +291,6 @@ import {
 } from "@/assets/js/api/apiCalls";
 
 import InputWrapper from "@/components/partial/inputs/InputWrapper";
-import requestsMixin from "@/mixins/requestsMixin";
 import SelectionSeriesDataTable from "@/components/selection_series/relatedTables/SelectionSeriesDataTable";
 import { mapActions, mapState } from "vuex";
 import {
@@ -335,7 +334,6 @@ export default {
   mixins: [
     formManipulation,
     formSectionsMixin,
-    requestsMixin,
     autocompleteMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,

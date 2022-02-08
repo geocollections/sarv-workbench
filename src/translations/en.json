@@ -2217,9 +2217,9 @@
       "locality": "Locality",
       "reference_keyword": "User keywords",
       "locality_reference": "Locality references",
-      "library": "Related libraries",
+      "library_reference": "Related libraries",
       "taxon": "Taxon",
-      "stratigraphy": "Stratigraphy"
+      "stratigraphy_reference": "Stratigraphy"
     },
     "translation_of": "Translation of"
   },

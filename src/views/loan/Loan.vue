@@ -431,7 +431,6 @@ import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
 import { mapActions, mapGetters } from "vuex";
 import LoanSampleTable from "@/components/loan/relatedTables/LoanSampleTable";
 import LoanSpecimenTable from "@/components/loan/relatedTables/LoanSpecimenTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import { fetchMultiAddLoanLists } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
@@ -472,7 +471,6 @@ export default {
   mixins: [
     formManipulation,
     autocompleteMixin,
-    requestsMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
   ],

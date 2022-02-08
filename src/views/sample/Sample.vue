@@ -1025,7 +1025,6 @@ import DateWrapper from "@/components/partial/inputs/DateWrapper";
 import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import FileInput from "@/components/partial/inputs/FileInput";
 import AnalysisTable from "@/components/sample/relatedTables/AnalysisTable";
-import requestsMixin from "@/mixins/requestsMixin";
 import PreparationTable from "@/components/sample/relatedTables/PreparationTable";
 import TaxonListTable from "@/components/sample/relatedTables/TaxonListTable";
 import SampleReferenceTable from "@/components/sample/relatedTables/SampleReferenceTable";
@@ -1069,7 +1068,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     saveAsNewMixin,
     detailViewUtilsMixin,
     globalUtilsMixin,
