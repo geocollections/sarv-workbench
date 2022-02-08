@@ -1340,7 +1340,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "sample", singleFileMetadata);
+      this.addFilesAsNewObjects(files, "sample", singleFileMetadata);
     },
 
     addExistingFiles(files) {

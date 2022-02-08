@@ -1150,7 +1150,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "site", singleFileMetadata);
+      this.addFilesAsNewObjects(files, "site", singleFileMetadata);
     },
 
     addExistingFiles(files) {

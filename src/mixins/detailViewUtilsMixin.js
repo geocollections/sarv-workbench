@@ -64,6 +64,7 @@ const detailViewUtilsMixin = {
     reloadData() {
       Object.assign(this.$data, this.setInitialData());
       this.loadFullInfo();
+      if (this.$route.meta.object === "reference") this.loadPDF();
     },
 
     async loadFullInfo() {
@@ -106,8 +107,6 @@ const detailViewUtilsMixin = {
         });
       }
     },
-
-    // Todo: Homme tegele esimesena: kaota requests mixin ja pane related data asjad siia
 
     // RELATED DATA
     async addRelatedItem(payload, connectionField = null) {

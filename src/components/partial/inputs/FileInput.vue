@@ -26,34 +26,6 @@
       </v-col>
     </v-row>
 
-    <!-- This is special use case for reference digital version (pdf). -->
-    <div
-      class="ma-2"
-      v-if="
-        showResetFilesButton &&
-        $route.meta.object === 'reference' &&
-        !acceptMultiple &&
-        userHasInsertedFiles &&
-        !isExistingFilesValid
-      "
-    >
-      <v-alert
-        class="mb-3"
-        border="left"
-        :color="bodyColor.split('n-')[0] + 'n-2'"
-        elevation="3"
-        icon="fas fa-info"
-        >{{ $t("messages.reference_file_upload_failed") }}</v-alert
-      >
-      <v-btn
-        @click="files = null"
-        :dark="bodyActiveColorDark"
-        :color="bodyActiveColor"
-        >{{ $t("buttons.reset_files") }}
-        <v-icon right>far fa-trash-alt</v-icon></v-btn
-      >
-    </div>
-
     <!-- BUTTONS -->
     <div class="d-flex flex-wrap">
       <div class="ma-1" v-if="recordOptions && recordImage">
@@ -372,7 +344,7 @@ export default {
     },
 
     isExistingFilesValid() {
-      return !!this.existingFiles;
+      return this.existingFiles?.length > 0;
     },
 
     userHasInsertedFiles() {

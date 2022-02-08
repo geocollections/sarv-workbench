@@ -108,6 +108,16 @@ class ApiService {
       displayMode: "replace",
     });
   }
+
+  toastInfo(text) {
+    Vue.prototype.toast.info(text, "Info", {
+      position: "topCenter",
+      timeout: 3000,
+      closeOnEscape: true,
+      pauseOnHover: false,
+      displayMode: "replace",
+    });
+  }
 }
 
 export default ApiService;

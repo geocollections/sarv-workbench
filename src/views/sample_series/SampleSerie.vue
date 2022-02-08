@@ -547,7 +547,7 @@ export default {
     // },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "sample_series", singleFileMetadata);
+      this.addFilesAsNewObjects(files, "sample_series", singleFileMetadata);
     },
 
     addExistingFiles(files) {

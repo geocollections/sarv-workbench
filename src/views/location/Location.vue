@@ -745,7 +745,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "storage", singleFileMetadata);
+      this.addFilesAsNewObjects(files, "storage", singleFileMetadata);
     },
 
     addExistingFiles(files) {

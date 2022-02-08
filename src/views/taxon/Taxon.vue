@@ -917,7 +917,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "taxon", singleFileMetadata);
+      this.addFilesAsNewObjects(files, "taxon", singleFileMetadata);
     },
 
     addExistingFiles(files) {

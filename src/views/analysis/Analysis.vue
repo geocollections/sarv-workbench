@@ -699,7 +699,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "analysis", singleFileMetadata);
+      this.addFilesAsNewObjects(files, "analysis", singleFileMetadata);
     },
 
     addExistingFiles(files) {

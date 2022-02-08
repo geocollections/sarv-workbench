@@ -1014,6 +1014,7 @@ export default {
     }
 
     this.loadFullInfo();
+    this.loadPDF();
   },
 
   methods: {
@@ -1117,8 +1118,8 @@ export default {
           book_translated_language: null,
           parent_reference: null,
           translated_reference: null,
-          attachments: null,
-          libraries: null,
+          attachments: [],
+          libraries: [],
         },
         previousRecord: {},
         nextRecord: {},
@@ -1369,12 +1370,27 @@ export default {
       this.toastInfo({ text: this.$t("reference.doiCheckSuccessful") });
     },
 
-    addPDF(fileData) {
-      this.addFileAsObject(fileData, "reference");
+    async addPDF(file) {
+      if (file && file.length === 1) {
+        const isFileUploaded = await this.addReferencePDF(
+          file[0],
+          this.reference
+        );
+        if (isFileUploaded) this.loadPDF();
+      }
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "reference", singleFileMetadata);
+      this.addFilesAsNewObjects(files, this.reference, singleFileMetadata);
+    },
+
+    async loadPDF() {
+      const response = await this.$api.rw.get("attachment", {
+        defaultParams: {
+          reference: this.$route.params.id,
+        },
+      });
+      if (response?.count > 0) this.attachment = response.results;
     },
   },
 };

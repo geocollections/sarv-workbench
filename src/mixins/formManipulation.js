@@ -9,11 +9,6 @@ import toastMixin from "./toastMixin";
 
 const formManipulation = {
   mixins: [toastMixin],
-  data() {
-    return {
-      isFileAddedAsObject: null,
-    };
-  },
   mounted() {
     this.$parent.$on("button-clicked", this.bottomOptionClicked);
   },
@@ -241,133 +236,83 @@ const formManipulation = {
       }
     },
 
-    // Currently this method has only one use case and it is in Reference.vue when adding digital version (pdf)
-    addFileAsObject(files, relatedObject) {
-      let formData = new FormData();
-
-      let notYetUploadedFiles = files.filter((file) => !file.isAlreadyUploaded);
-
-      notYetUploadedFiles.forEach((file, index) => {
-        formData.append(
-          "data",
-          JSON.stringify({
-            description: file.type.includes("pdf")
-              ? null
-              : file.type +
-                " for " +
-                relatedObject +
-                ": " +
-                this[relatedObject].id,
-            author: file.type.includes("pdf") ? null : this.getCurrentAgent.id,
-            date_created: file.type.includes("pdf")
-              ? null
-              : this.getCurrentFormattedDate("YYYY-MM-DD"),
-            is_private: !this[relatedObject].is_oa,
-            specimen_image_attachment: relatedObject === "reference" ? 4 : 3,
-            [relatedObject]: this[relatedObject].id,
-          })
-        );
-
-        formData.append("file" + [index], file);
-
-        file.isAlreadyUploaded = true;
-      });
-
-      try {
-        this.saveData("attachment", formData, "add/attachment/").then(
-          (savedObjectId) => {
-            if (this.isNotEmpty(savedObjectId)) {
-              this.isFileAddedAsObject = savedObjectId;
-
-              if (this.$route.meta.object === "reference") {
-                fetchAttachmentForReference(this.$route.params.id).then(
-                  (response) =>
-                    (this.attachment = this.handleResponse(response))
-                );
-              }
-            }
-          }
-        );
-      } catch (e) {
-        console.log("Attachment cannot be added");
-        console.log(e);
-      }
-    },
-
-    addFileAsRelatedDataNew(
+    async addFilesAsNewObjects(
       files,
       relatedObject,
       singleFileMetadata,
       totalAttachmentCount
     ) {
-      console.log(files);
-      console.log(totalAttachmentCount);
-      console.log(singleFileMetadata);
-      let attach_link = `${
-        relatedObject === "location" ? "storage" : relatedObject
-      }`;
-
       let formData = new FormData();
 
       let notYetUploadedFiles = files.filter((file) => !file.isAlreadyUploaded);
 
       notYetUploadedFiles.forEach((file, index) => {
-        if (!file.isAlreadyUploaded) {
-          let newUploadableObject = {
-            description:
-              file.type +
-              " for " +
-              relatedObject +
-              ": " +
-              this[relatedObject].id,
-            description_en:
-              file.type +
-              " for " +
-              relatedObject +
-              ": " +
-              this[relatedObject].id,
-            author: this.getCurrentAgent.id,
-            date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
-            is_private: true,
-            is_preferred:
-              relatedObject === "drillcore_box" && totalAttachmentCount === 0
-                ? true
-                : false,
-            is_locked: relatedObject === "doi",
-            related_data: { [attach_link]: [{ id: this[relatedObject].id }] },
-          };
+        formData.set(
+          "description",
+          file.type + " for " + relatedObject + ": " + relatedObject.id
+        );
+        formData.set(
+          "description_en",
+          file.type + " for " + relatedObject + ": " + relatedObject.id
+        );
+        formData.set("author", this.getCurrentAgent.id);
+        formData.set(
+          "date_created",
+          this.getCurrentFormattedDate("YYYY-MM-DD")
+        );
+        formData.set("is_private", true);
+        formData.set(
+          "is_preferred",
+          this.$route.meta.object === "drillcore_box" &&
+            totalAttachmentCount === 0
+        );
+        formData.set("is_locked", this.$route.meta.object === "doi");
+        formData.set("specimen_image_attachment", 3);
 
-          if (singleFileMetadata)
-            newUploadableObject = {
-              ...singleFileMetadata,
-              ...newUploadableObject,
-            };
+        formData.set(
+          [getPluralModuleName(this.$route.meta.object)],
+          [this.$route.params.id]
+        );
 
-          formData.append("data", JSON.stringify(newUploadableObject));
-          formData.append("file" + [index], file);
-
-          file.isAlreadyUploaded = true;
+        // If metadata exists then set data from metadata (only for single files)
+        if (singleFileMetadata) {
+          Object.keys(singleFileMetadata).forEach((key) =>
+            formData.set(key, singleFileMetadata[key])
+          );
         }
+
+        formData.append(`file${index}`, file);
+
+        file.isAlreadyUploaded = true;
       });
 
-      try {
-        this.saveData("attachment", formData, "add/attachment/").then(
-          (savedObjectId) => {
-            console.log(savedObjectId);
-            if (savedObjectId) {
-              if (relatedObject === "reference")
-                this.loadAutocompleteFields(false, true);
-              else {
-                this.loadRelatedData("attachment");
-                this.loadRelatedData("attachment_link");
-              }
-            }
-          }
+      const response = await this.$api.rw.post("attachment", formData);
+
+      console.log(response);
+
+      if (response?.uploaded_ids?.length > 0) {
+        this.reloadData();
+      } else if (response?.attachments_failed?.length > 0) {
+        response.attachments_failed.forEach((item) =>
+          this.toastError({ text: item })
         );
-      } catch (e) {
-        console.log("Attachment cannot be added");
-        console.log(e);
       }
+    },
+
+    // Special case for reference detail view when adding attachment which is digitised reference
+    async addReferencePDF(file, relatedObject) {
+      let formData = new FormData();
+
+      if (!file.isAlreadyUploaded) {
+        formData.set("is_private", !relatedObject?.is_oa);
+        formData.set("specimen_image_attachment", 4);
+        formData.set("reference", relatedObject.id);
+        formData.set(`file0`, file);
+      }
+
+      const response = await this.$api.rw.post("attachment", formData);
+
+      return response?.uploaded_ids?.length > 0;
     },
 
     windowOpenNewTab(path, query = {}, meta) {
@@ -614,5 +559,16 @@ const formManipulation = {
     },
   },
 };
+
+function getPluralModuleName(module) {
+  let pluralName = module;
+  if (module === "analysis") pluralName = "analyses";
+  else if (module === "drillcore_box") pluralName = "drillcore_boxes";
+  else if (module === "locality") pluralName = "localities";
+  else if (module === "sample_series") pluralName = "sample_series_set";
+  else if (module === "taxon") pluralName = "taxa";
+  else pluralName = `${pluralName}s`;
+  return pluralName;
+}
 
 export default formManipulation;

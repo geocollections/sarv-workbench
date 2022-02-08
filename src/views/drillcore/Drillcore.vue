@@ -555,7 +555,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "drillcore", singleFileMetadata);
+      this.addFilesAsNewObjects(files, "drillcore", singleFileMetadata);
     },
     addExistingFiles(files) {
       // this.relatedData.attachment_link.count = files.length;

@@ -859,7 +859,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "locality", singleFileMetadata);
+      this.addFilesAsNewObjects(files, "locality", singleFileMetadata);
     },
 
     addExistingFiles(files) {

@@ -420,7 +420,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(
+      this.addFilesAsNewObjects(
         files,
         "drillcore_box",
         singleFileMetadata,

@@ -1943,7 +1943,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "doi", singleFileMetadata);
+      this.addFilesAsNewObjects(files, "doi", singleFileMetadata);
     },
 
     addExistingFiles(files) {
