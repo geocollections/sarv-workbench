@@ -291,7 +291,7 @@ const formManipulation = {
       console.log(response);
 
       if (response?.uploaded_ids?.length > 0) {
-        this.reloadData();
+        await this.reloadData();
       } else if (response?.attachments_failed?.length > 0) {
         response.attachments_failed.forEach((item) =>
           this.toastError({ text: item })

@@ -61,9 +61,9 @@ const detailViewUtilsMixin = {
       return uploadableObject;
     },
 
-    reloadData() {
+    async reloadData() {
       Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
+      await this.loadFullInfo();
       if (this.$route.meta.object === "reference") this.loadPDF();
     },
 
@@ -154,6 +154,9 @@ const detailViewUtilsMixin = {
         uploadableObject.parent = this[this.$route.meta.object].id;
         uploadableObject.taxon = payload.rawItem.taxon;
       }
+
+      uploadableObject[this.$route.meta.object] =
+        this[this.$route.meta.object].id;
 
       Object.keys(uploadableObject).forEach((key) =>
         formData.set(key, uploadableObject[key])

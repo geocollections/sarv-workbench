@@ -26,7 +26,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,21 +38,7 @@
 
       <template v-slot:item.locality="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/locality/' + item.locality }"
-          :title="$t('editLocality.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          <span
-            v-translate="{
-              et: item.locality__locality,
-              en: item.locality__locality_en,
-            }"
-          ></span>
-        </router-link>
-        <router-link
-          v-else-if="item.locality"
+          v-if="item.locality"
           :to="{ path: '/locality/' + item.locality.id }"
           :title="$t('editLocality.editMessage')"
           class="sarv-link"
@@ -248,14 +233,7 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.locality !== "object" && item.locality !== null) {
-        this.item.locality = {
-          id: item.locality,
-          locality: item.locality__locality,
-          locality_en: item.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.item.locality);
-      } else {
+      if (item.locality) {
         this.item.locality = item.locality;
         this.autocomplete.locality.push(this.item.locality);
       }
@@ -269,5 +247,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
