@@ -153,10 +153,10 @@ const detailViewUtilsMixin = {
       if (payload.table === "taxon_subclass" && table === "taxon") {
         uploadableObject.parent = this[this.$route.meta.object].id;
         uploadableObject.taxon = payload.rawItem.taxon;
+      } else {
+        uploadableObject[this.$route.meta.object] =
+          this[this.$route.meta.object].id;
       }
-
-      uploadableObject[this.$route.meta.object] =
-        this[this.$route.meta.object].id;
 
       Object.keys(uploadableObject).forEach((key) =>
         formData.set(key, uploadableObject[key])
