@@ -123,7 +123,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
-      v-if="$route.meta.isEdit && computedRelatedTabs.length > 0"
+      v-if="$route.meta.isEdit && relatedTabs.length > 0"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -138,7 +138,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in computedRelatedTabs"
+          v-for="tab in relatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -167,21 +167,6 @@
             v-on:related:add="addRelatedItem"
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
-            :is-keyword-base-term="!!keyword.is_primary"
-          />
-
-          <keyword-relation-reverse-table
-            v-show="
-              activeTab === 'keyword_relation' &&
-              $route.meta.isEdit &&
-              relatedData.keyword_relation_reverse.count > 0
-            "
-            :response="relatedData.keyword_relation_reverse"
-            :search-parameters="
-              relatedData.searchParameters.keyword_relation_reverse
-            "
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
           />
 
           <!-- PAGINATION -->
@@ -245,7 +230,6 @@ export default {
   name: "Keyword",
   components: {
     Pagination,
-    KeywordRelationReverseTable,
     KeywordRelationTable,
     Editor,
     InputWrapper,
@@ -280,27 +264,8 @@ export default {
     return this.setInitialData();
   },
 
-  computed: {
-    computedRelatedTabs() {
-      return this.relatedTabs.filter(
-        (tabs) => tabs.name !== "keyword_relation_reverse"
-      );
-    },
-  },
-
   created() {
     this.loadFullInfo();
-  },
-
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
   },
 
   methods: {
@@ -324,7 +289,6 @@ export default {
       return {
         relatedTabs: [
           { name: "keyword_relation", iconClass: "fas fa-book-open" },
-          { name: "keyword_relation_reverse", iconClass: "fas fa-book-open" },
         ],
         activeTab: "keyword_relation",
         relatedData: this.setDefaultRelatedData(),
@@ -362,18 +326,8 @@ export default {
           count: 0,
           results: [],
         },
-        keyword_relation_reverse: {
-          count: 0,
-          results: [],
-        },
         searchParameters: {
           keyword_relation: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
-          keyword_relation_reverse: {
             page: 1,
             paginateBy: 100,
             sortBy: ["id"],

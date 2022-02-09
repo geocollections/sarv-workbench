@@ -5,13 +5,16 @@ const detailViewUtilsMixin = {
   methods: {
     fillAutocompleteFields(obj) {
       Object.entries(obj).forEach((entry) => {
-        if (isPlainObject(entry[1])) {
-          // console.log(entry[0]);
-          // If autocomplete field doesn't exist then creates it (better to initialise it in data and remove the creation here)
-          if (!this.autocomplete?.[entry[0]]) this.autocomplete[entry[0]] = [];
-          this.autocomplete[entry[0]].push(entry[1]);
-        } else if (Array.isArray(entry[1])) {
-          this.autocomplete[entry[0]] = entry[1];
+        if (entry[0] !== "ids") {
+          if (isPlainObject(entry[1])) {
+            // console.log(entry[0]);
+            // If autocomplete field doesn't exist then creates it (better to initialise it in data and remove the creation here)
+            if (!this.autocomplete?.[entry[0]])
+              this.autocomplete[entry[0]] = [];
+            this.autocomplete[entry[0]].push(entry[1]);
+          } else if (Array.isArray(entry[1])) {
+            this.autocomplete[entry[0]] = entry[1];
+          }
         }
       });
     },

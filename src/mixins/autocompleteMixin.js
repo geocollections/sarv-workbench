@@ -279,16 +279,8 @@ const autocompleteMixin = {
     autocompleteClassificationSearch(value, options = "classification") {
       this.$_autocompleteMixin_search(value, "classification", options, 2);
     },
-    autocompleteKeywordSearch(value) {
-      this.$_autocompleteMixin_search(
-        value,
-        "keyword",
-        "keywords",
-        1,
-        "",
-        false
-      );
-      // this.$_autocompleteMixin_search(value, 'keyword_group_by', 'keyword', 1, this.keywordCategoryLabel)
+    autocompleteKeywordSearch(value, options = "keywords") {
+      this.$_autocompleteMixin_search(value, "keyword", options, 1, "", false);
     },
     autocompleteKeywordCategorySearch(value) {
       this.$_autocompleteMixin_search(
@@ -363,7 +355,6 @@ const autocompleteMixin = {
      * @param type - String which is used for building search queries
      * @param options - String which will toggle loader state and sets results to autocomplete object
      * @param minLength {Integer} - Minimum length needed to trigger search
-     * @param groupByField {String} - Field used to group results
      * @param clearAutocomplete {Boolean} - If set to false then autocomplete won't get cleared when multiselect field is cleared (needed in reference keywords search)
      */
     $_autocompleteMixin_search: debounce(function (
@@ -371,7 +362,6 @@ const autocompleteMixin = {
       type,
       options,
       minLength = 3,
-      groupByField,
       clearAutocomplete = true
     ) {
       if (value) {
@@ -381,8 +371,7 @@ const autocompleteMixin = {
           let query = buildAutocompleteQuery(
             type,
             value,
-            this.getCurrentAgent,
-            groupByField
+            this.getCurrentAgent
           );
           if (query.length === 0) return;
 
@@ -416,10 +405,9 @@ function handleResponse(response) {
  * @param type - Search type of which query is built
  * @param value - User search input
  * @param currentUser - Current logged in user
- * @param groupByField - Field used with &group_by=
  * @returns {string} - Search string
  */
-function buildAutocompleteQuery(type, value, currentUser, groupByField) {
+function buildAutocompleteQuery(type, value, currentUser) {
   switch (type) {
     case "analysis":
       return `analysis/?search=${value}&search_fields=id&fields=id,analysis_method__analysis_method,analysis_method__method_en`;

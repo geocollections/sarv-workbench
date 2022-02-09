@@ -425,7 +425,6 @@ export default {
       };
     },
 
-    // Todo: Would be better to combine those into one
     setDefaultRelatedData() {
       return {
         library_reference: {
