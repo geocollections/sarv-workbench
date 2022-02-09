@@ -37,7 +37,7 @@
       <audio v-if="isAudioFile" controls>
         <source
           :src="getFileLink({ filename: data.uuid_filename })"
-          :type="data.attachment_format__value"
+          :type="data.attachment_format.value"
         />
         Your browser does not support the audio element.
         <i class="far fa-file-audio fa-5x"></i>
@@ -47,7 +47,7 @@
       <video v-else-if="isVideoFile" type="video" controls>
         <source
           :src="getFileLink({ filename: data.uuid_filename })"
-          :type="data.attachment_format__value"
+          :type="data.attachment_format.value"
         />
         Your browser does not support the video element.
         <i class="far fa-file-video fa-5x"></i>
@@ -128,28 +128,30 @@ export default {
   computed: {
     isAudioFile() {
       return !!(
-        this.data.attachment_format__value &&
-        this.data.attachment_format__value.includes("audio")
+        this.data?.attachment_format?.value &&
+        this.data?.attachment_format?.value.includes("audio")
       );
     },
 
     isVideoFile() {
-      if (this.data.attachment_format__value) {
-        return !!this.data.attachment_format__value.includes("video");
-      } else {
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value and only 1 is webm
+      if (this.data?.attachment_format?.value) {
+        return !!this.data.attachment_format.value.includes("video");
+      } else if (this.data?.uuid_filename) {
+        // As of 18.09.2019 total of 1508 attachments are without attachment_format.value and only 1 is webm
         return !!this.data.uuid_filename.split(".")[1].includes("webm");
       }
+      return false;
     },
 
     isImageFile() {
-      if (this.data.attachment_format__value) {
-        return !!this.data.attachment_format__value.includes("image");
-      } else {
+      if (this.data?.attachment_format?.value) {
+        return !!this.data.attachment_format.value.includes("image");
+      } else if (this.data?.uuid_filename) {
         let fileType = this.data.uuid_filename.split(".")[1];
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
+        // As of 18.09.2019 total of 1508 attachments are without attachment_format.value which 859 are jpg and 2 png
         return !!(fileType.includes("jpg") || fileType.includes("png"));
       }
+      return false;
     },
 
     buttons() {
@@ -178,8 +180,8 @@ export default {
   },
   methods: {
     getAttachmentIcon(attachment) {
-      if (attachment.attachment_format__value) {
-        let fileType = attachment.attachment_format__value;
+      if (attachment?.attachment_format?.value) {
+        let fileType = attachment.attachment_format.value;
         if (fileType.includes("application")) {
           if (fileType.includes("docx")) return "fa-file-word";
           else if (fileType.includes("pdf")) return "fa-file-pdf";
@@ -192,9 +194,9 @@ export default {
         else if (fileType.includes("text")) return "fa-file-alt";
         else if (fileType.includes("video")) return "fa-file-video";
         else return "fa-file";
-      } else {
+      } else if (attachment?.uuid_filename) {
         let fileType = attachment.uuid_filename.split(".")[1];
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value
+        // As of 18.09.2019 total of 1508 attachments are without attachment_format.value
         if (fileType.includes("jpg") || fileType.includes("png"))
           return "fa-file-image";
         // 859 jpg and 2 png
@@ -209,10 +211,11 @@ export default {
         // 1 webm
         else return "fa-file"; // 4 hz1
       }
+      return "fa-file";
     },
 
     getFileLink(params) {
-      if (params.size) {
+      if (params?.size) {
         return (
           this.$constants.IMAGE_URL +
           params.size +
@@ -223,7 +226,7 @@ export default {
           "/" +
           params.filename
         );
-      } else {
+      } else if (params?.filename) {
         return (
           this.$constants.IMAGE_URL +
           params.filename.substring(0, 2) +
@@ -233,6 +236,7 @@ export default {
           params.filename
         );
       }
+      return "";
     },
 
     openUrlInNewWindow(params) {

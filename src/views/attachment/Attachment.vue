@@ -95,7 +95,7 @@
             <v-row no-gutters>
               <v-col cols="12" md="6" class="pa-1">
                 <file-preview
-                  :data="rawAttachment"
+                  :data="attachment"
                   :rotation-degrees="imageRotationDegrees"
                   :key="filePreviewKey"
                   object="attachment"
@@ -104,7 +104,7 @@
               </v-col>
 
               <v-col cols="12" md="6" class="pa-1">
-                <file-information :data="rawAttachment" />
+                <file-information :data="attachment" />
               </v-col>
             </v-row>
           </div>
@@ -1797,13 +1797,11 @@
         <new-doi-button
           v-if="
             attachment &&
-            rawAttachment &&
             validate('attachment') &&
             isUserAllowedTo('add', 'doi')
           "
           object="attachment"
           :data="attachment"
-          :raw-data="rawAttachment"
           :related-data="relatedData"
         />
       </div>
@@ -1983,30 +1981,28 @@ export default {
     },
 
     isImageFile() {
-      if (this.rawAttachment) {
-        if (this.rawAttachment.attachment_format__value) {
-          return !!this.rawAttachment.attachment_format__value.includes(
-            "image"
-          );
-        } else {
-          let fileType = this.rawAttachment.uuid_filename.split(".")[1];
+      if (this?.attachment) {
+        const format = this.attachment?.attachment_format?.value;
+        if (format) return format.includes("image");
+        else if (this.attachment?.uuid_filename) {
+          let fileType = this.attachment.uuid_filename.split(".")[1];
           // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
           return !!(fileType.includes("jpg") || fileType.includes("png"));
         }
-      } else return false;
+      }
+      return false;
     },
 
     isPdfFile() {
-      if (this.rawAttachment) {
-        if (this.rawAttachment.attachment_format__value) {
-          return !!this.rawAttachment.attachment_format__value.includes("pdf");
-        } else {
+      if (this?.attachment) {
+        const format = this.attachment?.attachment_format?.value;
+        if (format) return format.includes("pdf");
+        else if (this.attachment?.uuid_filename) {
           // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 635 are pdf
-          return !!this.rawAttachment.uuid_filename
-            .split(".")[1]
-            .includes("pdf");
+          return !!this.attachment.uuid_filename.split(".")[1].includes("pdf");
         }
-      } else return false;
+      }
+      return false;
     },
 
     computedChangeType() {
@@ -2339,7 +2335,6 @@ export default {
           digitised_reference: [],
         },
         attachment: this.setDefaultAttachmentFields(),
-        rawAttachment: null,
         block: {
           fileInput: true,
           file: true,
@@ -2363,31 +2358,6 @@ export default {
     reloadData() {
       Object.assign(this.$data, this.setInitialData());
       this.loadFullInfo();
-    },
-
-    async loadFullInfo() {
-      this.loadAutocompleteFields(this.listOfAutocompleteTables);
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        const res = await this.$api.rw.getDetail(
-          "attachment",
-          this.$route.params.id,
-          { nest: 1 }
-        );
-
-        if (res?.id) {
-          this.$emit("object-exists", true);
-          this.$set(this, "attachment", res);
-          this.rawAttachment = { ...this.attachment };
-
-          this.fillAutocompleteFields(this.attachment);
-          this.$emit("data-loaded", this.attachment);
-        } else this.$emit("object-exists", false);
-
-        this.setLoadingState(false);
-      }
     },
 
     /* FileInput Events START */

@@ -273,8 +273,6 @@ export default {
       required: false,
       default: "deep-orange",
     },
-    hideReference: Boolean,
-    hideStratigraphy: Boolean,
   },
 
   data: () => ({

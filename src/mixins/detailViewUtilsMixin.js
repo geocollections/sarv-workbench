@@ -32,8 +32,12 @@ const detailViewUtilsMixin = {
       if (module === "location") module = "storage";
       if (module === "sample_series") module = "series";
       Promise.all(
-        tables.map((table) =>
-          this.$api.rw
+        tables.map((table) => {
+          // Exception for library_reference_list, could be fixed better with ids etc. but this is a fast fix
+          let urlTable = table;
+          if (urlTable === "library_reference_list")
+            urlTable = "library_reference";
+          return this.$api.rw
             .get(table, {
               defaultParams: {
                 [module]: moduleId,
@@ -50,8 +54,8 @@ const detailViewUtilsMixin = {
             .catch((err) => {
               this.relatedData[table].count = 0;
               this.relatedData[table].results = [];
-            })
-        )
+            });
+        })
       );
     },
 

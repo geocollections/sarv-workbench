@@ -203,20 +203,20 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <autocomplete-wrapper
-                v-model="relatedData.library_agent"
+                v-model="library.agents"
                 :color="bodyActiveColor"
-                :items="autocomplete.library_agent"
-                :loading="autocomplete.loaders.library_agent"
+                :items="autocomplete.agents"
+                :loading="autocomplete.loaders.agents"
                 item-text="agent"
                 :label="$t('library.libraryAgent')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteLibraryAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'agents')"
                 :multiple="true"
                 v-on:chip:close="
-                  relatedData.library_agent.splice(
-                    relatedData.library_agent.indexOf($event),
+                  library.agents.splice(
+                    library.agents.indexOf($event),
                     1
                   )
                 "
@@ -244,7 +244,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in computedRelatedTabs"
+          v-for="tab in relatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -379,34 +379,6 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    filteredRelatedTabs() {
-      return this.relatedTabs.filter((tab) => {
-        if (tab.name === "library_reference_list") {
-          if (this.$route.meta.isEdit) return tab;
-        } else return tab;
-      });
-    },
-
-    computedRelatedTabs() {
-      return this.relatedTabs.filter((tab) => {
-        if (tab.name === "library_reference_list") {
-          if (this.$route.meta.isEdit) return tab;
-        } else return tab;
-      });
-    },
-  },
 
   methods: {
     setTab(type) {
@@ -427,14 +399,13 @@ export default {
         ],
         activeTab: "library_reference",
         relatedData: this.setDefaultRelatedData(),
-        listOfAutocompleteTables: ["library_agent"],
         autocomplete: {
           loaders: {
             reference: false,
-            library_agent: false,
+            agents: false,
           },
           reference: [],
-          library_agent: [],
+          agents: [],
         },
         requiredFields: ["author_txt"],
         library: {
@@ -464,7 +435,6 @@ export default {
           count: 0,
           results: [],
         },
-        library_agent: [],
         searchParameters: {
           library_reference: {
             page: 1,
@@ -475,11 +445,9 @@ export default {
           library_reference_list: {
             page: 1,
             paginateBy: 1000,
-            orderBy: "-sort,reference__author,-reference__year",
+            sortBy: ["sort", "reference__author", "reference__year"],
+            sortDesc: [true, false, true],
           },
-        },
-        count: {
-          library_agent: 0,
         },
       };
     },
