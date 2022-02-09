@@ -38,7 +38,7 @@
             {{ entity.reference.publisher_place }}.
           </span>
 
-          <span v-if="entity.reference.journal.journal_name">
+          <span v-if="entity.reference.journal">
             <i>{{ entity.reference.journal.journal_name }}</i
             >,
           </span>

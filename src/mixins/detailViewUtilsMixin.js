@@ -38,7 +38,7 @@ const detailViewUtilsMixin = {
           if (urlTable === "library_reference_list")
             urlTable = "library_reference";
           return this.$api.rw
-            .get(table, {
+            .get(urlTable, {
               defaultParams: {
                 [module]: moduleId,
                 nest: 1, // Todo: Should drop nest for performance issues
