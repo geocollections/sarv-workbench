@@ -23,14 +23,14 @@
 
     <template v-slot:item.project="{ item }">
       <router-link
-        :to="{ path: '/project/' + item.project }"
+        :to="{ path: '/project/' + item.project.id }"
         :title="$t('editProject.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
         v-if="item.project"
       >
         <span
-          v-translate="{ et: item.project__name, en: item.project__name_en }"
+          v-translate="{ et: item.project.name, en: item.project.name_en }"
         ></span>
       </router-link>
     </template>
@@ -92,18 +92,6 @@ export default {
       default: "deep-orange",
     },
   },
-  data: () => ({
-    expanded: [],
-    headers: [
-      { text: "common.id", value: "id" },
-      { text: "common.name", value: "name" },
-      { text: "site.number", value: "number" },
-      { text: "site.project", value: "project" },
-      { text: "common.date_start", value: "date_start" },
-      { text: "common.date_end", value: "date_end" },
-    ],
-    names: [],
-  }),
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;

@@ -250,22 +250,19 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <autocomplete-wrapper
-                v-model="relatedData.projectagent"
+                v-model="project.agents"
                 :color="bodyActiveColor"
-                :items="autocomplete.projectagent"
-                :loading="autocomplete.loaders.projectagent"
+                :items="autocomplete.agents"
+                :loading="autocomplete.loaders.agents"
                 item-text="agent"
                 :label="$t('site.project')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteProjectAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'agents')"
                 :multiple="true"
                 v-on:chip:close="
-                  relatedData.projectagent.splice(
-                    relatedData.projectagent.indexOf($event),
-                    1
-                  )
+                  project.agents.splice(project.agents.indexOf($event), 1)
                 "
               />
             </v-col>
@@ -303,8 +300,8 @@
         <div v-show="block.files" class="px-1 pt-1 pb-2">
           <file-input
             show-existing
-            :files-from-object="relatedData.attachment_link"
-            v-on:update:existing-files="addExistingFiles"
+            :files-from-object="project.attachments"
+            @update:existing-files="project.attachments = $event"
             v-on:file-uploaded="addFiles"
             :record-options="$route.meta.isEdit"
             accept-multiple
@@ -384,7 +381,7 @@
                 mode="multiple"
                 module="project"
                 v-bind:location="{ lat: null, lng: null }"
-                :locations="relatedData.sites.results"
+                :locations="relatedData.site.results"
               />
             </v-col>
           </v-row>
@@ -422,63 +419,20 @@
             >
               <export-buttons
                 filename="site"
-                :table-data="relatedData.sites.results"
+                :table-data="relatedData.site.results"
               ></export-buttons>
             </v-card>
           </v-card>
 
-          <!-- PAGINATION -->
-          <div
-            v-if="relatedData.sites.count > 10"
-            class="
-              d-flex
-              flex-column
-              justify-space-around
-              flex-md-row
-              justify-md-space-between
-              pa-1
-              mt-2
-            "
-          >
-            <div class="mr-3 mb-3">
-              <v-select
-                v-model="relatedData.searchParameters.site.paginateBy"
-                color="blue"
-                dense
-                :items="paginateByOptionsTranslated"
-                item-color="blue"
-                label="Paginate by"
-                hide-details
-              />
-            </div>
-
-            <div>
-              <v-pagination
-                v-model="relatedData.searchParameters.site.page"
-                color="blue"
-                circle
-                prev-icon="fas fa-angle-left"
-                next-icon="fas fa-angle-right"
-                :length="
-                  Math.ceil(
-                    relatedData.sites.count /
-                      relatedData.searchParameters.site.paginateBy
-                  )
-                "
-                :total-visible="5"
-              />
-            </div>
-          </div>
-
-          <v-row no-gutters>
+          <v-row no-gutters v-if="relatedData.site.count > 0">
             <v-col cols="12" class="px-1">
               <site-table
-                ref="table"
-                :response="relatedData.sites"
+                :response="relatedData.site"
                 :search-parameters="relatedData.searchParameters.site"
-                v-if="relatedData.sites.count > 0"
                 :body-active-color="bodyActiveColor"
                 :body-color="bodyColor"
+                :headers="siteTranslatedHeaders"
+                @update:options="updateOptions"
               />
             </v-col>
           </v-row>
@@ -563,8 +517,23 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["activeProject", "sidebarUserAction"]),
+    ...mapState("search", ["activeProject"]),
     ...mapState("map", ["showMap"]),
+
+    ...mapState({
+      siteHeaders(state) {
+        return state.site.headers;
+      },
+    }),
+
+    siteTranslatedHeaders() {
+      return this.siteHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
 
     myShowMap: {
       get() {
@@ -577,21 +546,6 @@ export default {
   },
   created() {
     this.loadFullInfo();
-  },
-
-  watch: {
-    sidebarUserAction(newVal) {
-      this.handleUserAction(newVal, "project", this.project);
-    },
-    "relatedData.searchParameters.site": {
-      handler(newVal) {
-        if (this.$route.meta.isEdit) {
-          this.searchRelatedData(newVal, this.fetchLinkedSiteWrapper, "sites");
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
   },
 
   methods: {
@@ -616,10 +570,7 @@ export default {
 
     setInitialData() {
       return {
-        window: {
-          width: 0,
-          height: 0,
-        },
+        relatedTabs: [{ name: "site", iconClass: "fas fa-map-pin" }],
         relatedData: this.setDefaultRelatedData(),
         listOfAutocompleteTables: ["project_type"],
         autocomplete: {
@@ -627,15 +578,15 @@ export default {
             project_type: false,
             parent_project: false,
             owner: false,
-            projectagent: false,
             attachment: false,
+            agents: false,
           },
           project_type: [],
           parent_project: [],
           agent: [],
-          projectagent: [],
           owner: [],
           attachment: [],
+          agents: [],
         },
         requiredFields: ["name"],
         project: {
@@ -651,7 +602,8 @@ export default {
           owner: null,
           remarks: null,
           is_private: null,
-          projectagent: null,
+          agents: [],
+          attachments: [],
         },
         previousRecord: {},
         nextRecord: {},
@@ -692,82 +644,35 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        projectagent: [],
-        attachment_link: [],
-        sites: {
+        site: {
           count: 0,
           results: [],
         },
         searchParameters: {
           site: {
             page: 1,
-            paginateBy: 100,
+            itemsPerPage: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },
         },
-        page: { projectagent: 1, attachment_link: 1 },
-        paginateBy: { projectagent: 25, attachment_link: 25 },
-        count: { projectagent: 0, attachment_link: 0 },
       };
     },
 
-    fillRelatedDataAutocompleteFields(obj, type) {
-      let relatedData = cloneDeep(obj);
-      obj = [];
-      relatedData.forEach((entity) => {
-        if (type === "projectagent") {
-          let item = {
-            agent: entity.projectagent__agent__agent,
-            id: entity.projectagent__agent,
-          };
-          obj.push(item);
-        } else obj.push(entity);
-      });
-      return obj;
-    },
-
-    setBlockVisibility(object, count) {
-      if (object === "projectagent") this.block.members = count > 0;
-      if (object === "attachment_link") this.block.files = count > 0;
-      if (object === "site") this.block.sites = count > 0;
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.project = this.project.id;
-
-      // console.log(JSON.stringify(uploadableObject));
-      return JSON.stringify(uploadableObject);
-    },
-
-    customLabelForAttachment(option) {
-      return this.$i18n.locale === "ee"
-        ? `${option.id} - (${option.description}) (${option.author__agent})`
-        : `${option.id} - (${option.description_en}) (${option.author__agent})`;
-    },
-
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "project", singleFileMetadata);
+      this.addFilesAsNewObjects(files, this.project, singleFileMetadata);
     },
 
-    addExistingFiles(files) {
-      this.relatedData.attachment_link = files;
-    },
+    updateOptions(payload) {
+      this.relatedData.searchParameters.site[payload.key] = payload.value;
+      if (
+        payload.key !== "page" &&
+        this.relatedData.searchParameters.site.page !== 1
+      )
+        this.relatedData.searchParameters.site.page = 1;
 
-    searchRelatedData: debounce(function (
-      searchParameters,
-      apiCall,
-      relatedObject
-    ) {
-      apiCall().then((response) => {
-        if (response.status === 200) {
-          this.relatedData[relatedObject].count = response.data.count;
-          this.relatedData[relatedObject].results = response.data.results;
-        }
-      });
+      this.loadRelatedData(["site"], "project", this.$route.params.id);
     },
-    50),
   },
 };
 </script>

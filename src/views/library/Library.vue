@@ -215,10 +215,7 @@
                 v-on:search:items="autocompleteAgentSearch($event, 'agents')"
                 :multiple="true"
                 v-on:chip:close="
-                  library.agents.splice(
-                    library.agents.indexOf($event),
-                    1
-                  )
+                  library.agents.splice(library.agents.indexOf($event), 1)
                 "
               />
             </v-col>
@@ -378,7 +375,6 @@ export default {
   created() {
     this.loadFullInfo();
   },
-
 
   methods: {
     setTab(type) {

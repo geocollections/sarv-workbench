@@ -1,5 +1,5 @@
 import { isPlainObject } from "lodash";
-import { fetchDeleteRecord, fetchDoiUsingEGF } from "@/assets/js/api/apiCalls";
+import { fetchDoiUsingEGF } from "@/assets/js/api/apiCalls";
 
 const detailViewUtilsMixin = {
   methods: {
@@ -202,7 +202,7 @@ const detailViewUtilsMixin = {
     },
     "relatedData.searchParameters": {
       handler: function () {
-        if (this.$route.meta.isEdit) {
+        if (this.$route.meta.isEdit && this?.activeTab) {
           this.loadRelatedData(
             [this.activeTab],
             this.$route.meta.object,
