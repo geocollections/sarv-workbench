@@ -208,6 +208,115 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="drillcore.attachments"
+                @update:existing-files="drillcore.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- DRILLCORE BOX IMAGES -->
+    <v-card
+      v-if="$route.meta.isEdit && drillcore.drillcore_boxes.length > 0"
+      class="mt-2"
+      id="block-drillcore_boxes"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.drillcore_boxes = !block.drillcore_boxes"
+        >
+          <span>{{ $t("drillcore.relatedTables.drillcore_box_images") }}</span>
+          <v-icon right>fas fa-images</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.drillcore_boxes = !block.drillcore_boxes"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.drillcore_boxes ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.drillcore_boxes">
+          <v-btn
+            class="my-3 mx-2"
+            v-if="drillcore.drillcore_boxes.count > 0"
+            :color="bodyActiveColor"
+            dark
+            @click="openDrillcorePrintView($route.params.id)"
+          >
+            <v-icon small class="pr-1">fas fa-print</v-icon>
+            {{ $t("common.print") }}
+          </v-btn>
+          <v-divider class="mt-0" />
+          <drillcore-box-list-view :data="drillcore.drillcore_boxes">
+            <template v-slot:itemTitle="{ item }">
+              <router-link
+                v-if="item && item.id"
+                :to="{ path: '/drillcore_box/' + item.id }"
+                :title="$t('editDrillcoreBox.editMessage')"
+                class="sarv-link ma-0"
+                :class="`${bodyActiveColor}--text`"
+              >
+                <h5
+                  v-translate="{
+                    et: `Kast nr. ${item.number} ${boxRange(item)}`,
+                    en: `Box nr. ${item.number} ${boxRange(item)}`,
+                  }"
+                ></h5>
+              </router-link>
+            </template>
+          </drillcore-box-list-view>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -266,55 +375,6 @@
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
           />
-
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
-          <div v-show="activeTab === 'drillcore_box_images'">
-            <v-btn
-              class="my-3 mx-2"
-              v-if="relatedData.drillcore_box_images.count > 0"
-              :color="bodyActiveColor"
-              dark
-              @click="openDrillcorePrintView($route.params.id)"
-            >
-              <v-icon small class="pr-1">fas fa-print</v-icon>
-              {{ $t("common.print") }}
-            </v-btn>
-            <v-divider class="mt-0" />
-            <drillcore-box-list-view
-              :data="relatedData.drillcore_box_images.results"
-            >
-              <template v-slot:itemTitle="{ item }">
-                <router-link
-                  :to="{ path: '/drillcore_box/' + item.drillcore_box }"
-                  :title="$t('editDrillcoreBox.editMessage')"
-                  class="sarv-link pt-3 ma-0"
-                  :class="`${bodyActiveColor}--text`"
-                >
-                  <h5
-                    v-translate="{
-                      et: `Kast nr. ${item.drillcore_box__number} ${boxRange(
-                        item
-                      )}`,
-                      en: `Box nr. ${item.drillcore_box__number} ${boxRange(
-                        item
-                      )}`,
-                    }"
-                  ></h5>
-                </router-link>
-              </template>
-            </drillcore-box-list-view>
-          </div>
 
           <!-- PAGINATION -->
           <pagination
@@ -421,15 +481,6 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     ...mapState("search", {
       activeRelatedDataTab: (state) => state.activeRelatedDataTab.drillcore,
@@ -439,13 +490,11 @@ export default {
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
     boxRange(item) {
-      if (!item.drillcore_box__depth_start && !item.drillcore_box__depth_end) {
+      if (!item?.depth_start && !item?.depth_end) {
         return "";
       }
 
-      return `(${item.drillcore_box__depth_start ?? ""} - ${
-        item.drillcore_box__depth_end ?? ""
-      } m)`;
+      return `(${item?.depth_start ?? ""} - ${item?.depth_end ?? ""} m)`;
     },
     setTab(type) {
       if (type) {
@@ -461,9 +510,7 @@ export default {
       return {
         relatedTabs: [
           { name: "drillcore_box", iconClass: "fas fa-box" },
-          { name: "drillcore_box_images", iconClass: "fas fa-camera-retro" },
           { name: "drillcore_study", iconClass: "fas fa-school" },
-          { name: "attachment_link", iconClass: "far fa-folder-open" },
         ],
         activeTab: "drillcore_box",
         relatedData: this.setDefaultRelatedData(),
@@ -475,6 +522,8 @@ export default {
             list_drillcore_storage: false,
             storage: false,
             attachment: false,
+            attachments: false,
+            drillcore_boxes: false,
             stratigraphy_base: false,
             stratigraphy_top: false,
           },
@@ -483,6 +532,8 @@ export default {
           list_drillcore_storage: [],
           storage: [],
           attachment: [],
+          attachments: [],
+          drillcore_boxes: [],
           stratigraphy_base: [],
           stratigraphy_top: [],
         },
@@ -504,10 +555,14 @@ export default {
           depth: null,
           remarks: null,
           is_private: null,
+          attachments: [],
+          drillcore_boxes: [],
         },
         block: {
           info: true,
           details: true,
+          files: true,
+          drillcore_boxes: true,
         },
       };
     },
@@ -515,9 +570,7 @@ export default {
     setDefaultRelatedData() {
       return {
         drillcore_box: { count: 0, results: [] },
-        drillcore_box_images: { count: 0, results: [] },
         drillcore_study: { count: 0, results: [] },
-        attachment_link: { count: 0, results: [] },
         searchParameters: {
           drillcore_box: {
             page: 1,
@@ -525,22 +578,10 @@ export default {
             sortBy: ["id"],
             sortDesc: [true],
           },
-          drillcore_box_images: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["drillcore_box__depth_start"],
-            sortDesc: [false],
-          },
           drillcore_study: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
-            sortDesc: [true],
-          },
-          attachment_link: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["original_filename"],
             sortDesc: [true],
           },
         },
@@ -555,11 +596,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "drillcore", singleFileMetadata);
-    },
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.drillcore, singleFileMetadata);
     },
   },
 };

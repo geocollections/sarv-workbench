@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -50,94 +49,34 @@
       </template>
 
       <template v-slot:item.stratigraphy_base="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy_base }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy_base__stratigraphy,
-                en: item.stratigraphy_base__stratigraphy_en,
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.stratigraphy_base"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy_base.id }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy_base.stratigraphy,
-                en: item.stratigraphy_base.stratigraphy_en,
-              }"
-            />
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/stratigraphy/' + item.stratigraphy_base }"
+          v-if="item.stratigraphy_base"
+          :to="{ path: '/stratigraphy/' + item.stratigraphy_base.id }"
           :title="$t('editStratigraphy.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.stratigraphy_base__stratigraphy,
-              en: item.stratigraphy_base__stratigraphy_en,
+              et: item.stratigraphy_base.stratigraphy,
+              en: item.stratigraphy_base.stratigraphy_en,
             }"
           />
         </router-link>
       </template>
 
       <template v-slot:item.stratigraphy_top="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy_top }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy_top__stratigraphy,
-                en: item.stratigraphy_top__stratigraphy_en,
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.stratigraphy_top"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy_top.id }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy_top.stratigraphy,
-                en: item.stratigraphy_top.stratigraphy_en,
-              }"
-            />
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/stratigraphy/' + item.stratigraphy_top }"
+          v-if="item.stratigraphy_top"
+          :to="{ path: '/stratigraphy/' + item.stratigraphy_top.id }"
           :title="$t('editStratigraphy.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.stratigraphy_top__stratigraphy,
-              en: item.stratigraphy_top__stratigraphy_en,
+              et: item.stratigraphy_top.stratigraphy,
+              en: item.stratigraphy_top.stratigraphy_en,
             }"
           />
         </router-link>
@@ -269,6 +208,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -277,16 +222,19 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
-  name: "DrillcoreStudyTable",
+  name: "DrillcoreBoxTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -315,11 +263,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
   },
 
@@ -365,24 +308,13 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return this.item.number !== null && this.item.number.length > 0;
     },
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         number: "",
         depth_start: "",
@@ -396,58 +328,15 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "drillcore_box",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "drillcore_box",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (
-        typeof item.stratigraphy_base !== "object" &&
-        item.stratigraphy_base !== null
-      ) {
-        this.item.stratigraphy_base = {
-          id: item.stratigraphy_base,
-          stratigraphy: item.stratigraphy_base__stratigraphy,
-          stratigraphy_en: item.stratigraphy_base__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy_base.push(this.item.stratigraphy_base);
-      } else if (item.stratigraphy_base !== null) {
+      if (item.stratigraphy_base) {
         this.item.stratigraphy_base = item.stratigraphy_base;
         this.autocomplete.stratigraphy_base.push(this.item.stratigraphy_base);
       }
 
-      if (
-        typeof item.stratigraphy_top !== "object" &&
-        item.stratigraphy_top !== null
-      ) {
-        this.item.stratigraphy_top = {
-          id: item.stratigraphy_top,
-          stratigraphy: item.stratigraphy_top__stratigraphy,
-          stratigraphy_en: item.stratigraphy_top__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy_top.push(this.item.stratigraphy_top);
-      } else if (item.stratigraphy_top !== null) {
+      if (item.stratigraphy_top) {
         this.item.stratigraphy_top = item.stratigraphy_top;
         this.autocomplete.stratigraphy_top.push(this.item.stratigraphy_top);
       }
@@ -462,28 +351,6 @@ export default {
 
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "drillcore_box",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        } else if (typeof item[key] === "string" && item[key].length === 0) {
-          item[key] = null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped />

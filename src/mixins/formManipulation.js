@@ -236,12 +236,7 @@ const formManipulation = {
       }
     },
 
-    async addFilesAsNewObjects(
-      files,
-      relatedObject,
-      singleFileMetadata,
-      totalAttachmentCount
-    ) {
+    async addFilesAsNewObjects(files, relatedObject, singleFileMetadata) {
       let formData = new FormData();
 
       let notYetUploadedFiles = files.filter((file) => !file.isAlreadyUploaded);
@@ -263,8 +258,7 @@ const formManipulation = {
         formData.set("is_private", true);
         formData.set(
           "is_preferred",
-          this.$route.meta.object === "drillcore_box" &&
-            totalAttachmentCount === 0
+          this.$route.meta.object === "drillcore_box" && files.length === 0
         );
         formData.set("is_locked", this.$route.meta.object === "doi");
         formData.set("specimen_image_attachment", 3);

@@ -197,87 +197,50 @@
       </transition>
     </v-card>
 
-    <!-- RELATED DATA TABS -->
+    <!-- RELATED FILES -->
     <v-card
-      v-if="$route.meta.isEdit"
-      class="related-tabs mt-2"
+      class="mt-2"
+      id="block-files"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
-      <v-tabs
-        :background-color="bodyColor.split('n-')[0] + 'n-3'"
-        show-arrows
-        grow
-        prev-icon="fas fa-angle-left"
-        next-icon="fas fa-angle-right"
-        :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
-        hide-slider
-      >
-        <v-tab
-          v-for="tab in relatedTabs"
-          :key="tab.name"
-          @click.prevent="setTab(tab.name)"
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
         >
-          <span>{{ $t("drillcore_box.relatedTables." + tab.name) }}</span>
-          <span class="ml-1">
-            <v-icon small>{{ tab.iconClass }}</v-icon>
-          </span>
-          <span
-            v-if="relatedData[tab.name].count > 0"
-            class="font-weight-bold ml-2"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ relatedData[tab.name].count }}
-          </span>
-        </v-tab>
-      </v-tabs>
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <v-tabs-items>
-        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <div v-show="activeTab === 'attachment'">
-            <file-input
-              show-existing
-              :show-existing-previews="!$route.meta.isEdit"
-              :files-from-object="relatedData.attachment.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-
-            <drillcore-box-attachment-table
-              class="mt-2"
-              v-if="$route.meta.isEdit"
-              :response="relatedData.attachment"
-              :search-parameters="relatedData.searchParameters.attachment"
-              :body-color="bodyColor"
-              :body-active-color="bodyActiveColor"
-              v-on:related:edit="editRelatedItem"
-              v-on:toggle-preferred-state="handleChangeObjectsState"
-              v-on:toggle-privacy-state="handleChangeObjectsState"
-            />
-          </div>
-
-          <!-- PAGINATION -->
-          <pagination
-            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
-            class="pa-1"
-            :body-active-color="bodyActiveColor"
-            :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
-            :options="paginateByOptionsTranslated"
-            :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
-          />
-        </v-card>
-      </v-tabs-items>
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="drillcore_box.attachments"
+                @update:existing-files="drillcore_box.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
     </v-card>
   </div>
 </template>
@@ -289,18 +252,12 @@ import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper
 import InputWrapper from "@/components/partial/inputs/InputWrapper";
 import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import FileInput from "@/components/partial/inputs/FileInput";
-import DrillcoreBoxAttachmentTable from "@/components/drillcore_box/related_tables/DrillcoreBoxAttachmentTable";
-import { mapActions } from "vuex";
-import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
-import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "DrillcoreBox",
 
   components: {
-    Pagination,
-    DrillcoreBoxAttachmentTable,
     FileInput,
     TextareaWrapper,
     InputWrapper,
@@ -325,12 +282,7 @@ export default {
     },
   },
 
-  mixins: [
-    formManipulation,
-    autocompleteMixin,
-    detailViewUtilsMixin,
-    globalUtilsMixin,
-  ],
+  mixins: [formManipulation, autocompleteMixin, detailViewUtilsMixin],
 
   data() {
     return this.setInitialData();
@@ -340,46 +292,22 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
-  },
-
   methods: {
-    ...mapActions("search", ["updateActiveTab"]),
-
-    setTab(type) {
-      if (type) {
-        this.updateActiveTab({
-          tab: type,
-          object: this.$route.meta.object,
-        });
-        this.activeTab = type;
-      }
-    },
-
     setInitialData() {
       return {
-        relatedTabs: [{ name: "attachment", iconClass: "fas fa-image" }],
-        activeTab: "attachment",
-        relatedData: this.setDefaultRelatedData(),
         autocomplete: {
           loaders: {
             drillcore: false,
             storage: false,
             stratigraphy_base: false,
             stratigraphy_top: false,
+            attachments: false,
           },
           drillcore: [],
           storage: [],
           stratigraphy_base: [],
           stratigraphy_top: [],
+          attachments: [],
         },
         requiredFields: ["drillcore", "number"],
         drillcore_box: {
@@ -398,44 +326,17 @@ export default {
           depth_other: null,
           stratigraphy_free: null,
           remarks: null,
+          attachments: [],
         },
         block: {
           info: true,
-        },
-      };
-    },
-
-    setDefaultRelatedData() {
-      return {
-        attachment: { count: 0, results: [] },
-        searchParameters: {
-          attachment: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["is_preferred"],
-            sortDesc: [true],
-          },
+          files: true,
         },
       };
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(
-        files,
-        "drillcore_box",
-        singleFileMetadata,
-        this.relatedData.attachment.count
-      );
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment.count = files.length;
-      this.relatedData.attachment.results = files;
-    },
-
-    handleChangeObjectsState(data) {
-      this.changeObjectsState({ table: "attachment", ...data });
-      // this.loadRelatedData("attachment");
+      this.addFilesAsNewObjects(files, this.drillcore_box, singleFileMetadata);
     },
   },
 };
