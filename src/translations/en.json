@@ -368,7 +368,7 @@
       "location": "Location",
       "description": "Description | Remarks",
       "files": "Files",
-      "samples": "Linked samples",
+      "sample": "Linked samples",
       "groundwater": "Groundwater extension"
     },
     "imageset": {
@@ -1396,7 +1396,7 @@
     "groundwater": "Groundwater extension",
     "relatedTables": {
       "attachment_link": "Files",
-      "samples": "Related samples",
+      "sample": "Related samples",
       "locality_description": "Description",
       "locality_reference": "Related reference",
       "sites": "Linked sites"

@@ -426,6 +426,52 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="site.attachments"
+                @update:existing-files="site.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -463,20 +509,7 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :record-options="$route.meta.isEdit"
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
-
-          <div v-show="activeTab === 'samples'" class="pa-1">
+          <div v-show="activeTab === 'sample'" class="pa-1">
             <!-- ADD NEW and EXPORT -->
             <v-card
               class="d-flex flex-row justify-start mb-3"
@@ -501,11 +534,11 @@
                 flat
                 tile
                 class="mx-1"
-                v-if="relatedData.samples.count > 0"
+                v-if="relatedData.sample.count > 0"
               >
                 <export-buttons
                   filename="sample"
-                  :table-data="relatedData.samples.results"
+                  :table-data="relatedData.sample.results"
                   clipboard-class="sample-table"
                   :body-active-color="bodyActiveColor"
                 />
@@ -515,16 +548,12 @@
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
                 <sample-table
-                  ref="table"
-                  :response="relatedData.samples"
-                  :search-parameters="relatedData.searchParameters.samples"
-                  v-if="relatedData.samples.count > 0"
+                  :response="relatedData.sample"
+                  :search-parameters="relatedData.searchParameters.sample"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
-                  v-on:update:sorting="
-                    relatedData.searchParameters[activeTab][$event.key] =
-                      $event.value
-                  "
+                  :headers="sampleTranslatedHeaders"
+                  @update:options="updateOptions"
                 />
               </v-col>
             </v-row>
@@ -846,6 +875,21 @@ export default {
 
     ...mapGetters("user", ["isUserAllowedTo"]),
 
+    ...mapState({
+      sampleHeaders(state) {
+        return state.sample.headers;
+      },
+    }),
+
+    sampleTranslatedHeaders() {
+      return this.sampleHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
+
     myShowMap: {
       get() {
         return this.showMap;
@@ -906,14 +950,6 @@ export default {
   watch: {
     sidebarUserAction(newVal) {
       this.handleUserAction(newVal, "site", this.site);
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
     },
   },
 
@@ -986,18 +1022,18 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "attachment_link", iconClass: "fas fa-folder-open" },
-          { name: "samples", iconClass: "fas fa-vial" },
+          { name: "sample", iconClass: "fas fa-vial" },
           { name: "locality_description", iconClass: "fas fa-align-left" },
           { name: "locality_reference", iconClass: "fas fa-book" },
         ],
-        activeTab: "attachment_link",
+        activeTab: "sample",
         relatedData: this.setDefaultRelatedData(),
         listOfAutocompleteTables: ["list_coordinate_method", "site_type"],
         autocomplete: {
           loaders: {
             project: false,
             attachment: false,
+            attachments: false,
             list_coordinate_method: false,
             locality: false,
             area: false,
@@ -1005,6 +1041,7 @@ export default {
           },
           project: [],
           attachment: [],
+          attachments: [],
           list_coordinate_method: [],
           locality: [],
           area: [],
@@ -1038,6 +1075,7 @@ export default {
           remarks: null,
           area: null,
           is_private: null,
+          attachments: [],
         },
         site_groundwater: {
           id: null,
@@ -1061,16 +1099,8 @@ export default {
           location: this.$route.meta.isEdit,
           description: false,
           groundwater: false,
+          files: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
     },
 
@@ -1081,11 +1111,7 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        attachment_link: {
-          count: 0,
-          results: [],
-        },
-        samples: {
+        sample: {
           count: 0,
           results: [],
         },
@@ -1098,14 +1124,9 @@ export default {
           results: [],
         },
         searchParameters: {
-          attachment_link: {
+          sample: {
             page: 1,
-            paginateBy: 25,
-            orderBy: "-id",
-          },
-          samples: {
-            page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -1150,12 +1171,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "site", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.site, singleFileMetadata);
     },
 
     setSiteName(projectId) {
@@ -1176,6 +1192,17 @@ export default {
     updateDateFields(site) {
       site.date_start = this.unformatISOStringToDate(site.date_start);
       site.date_end = this.unformatISOStringToDate(site.date_end);
+    },
+
+    updateOptions(payload) {
+      this.relatedData.searchParameters.sample[payload.key] = payload.value;
+      if (
+        payload.key !== "page" &&
+        this.relatedData.searchParameters.sample.page !== 1
+      )
+        this.relatedData.searchParameters.sample.page = 1;
+
+      this.loadRelatedData(["sample"], "site", this.$route.params.id);
     },
 
     searchRelatedData: debounce(function (

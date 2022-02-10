@@ -221,12 +221,17 @@ function cleanObject(obj) {
     if (isPlainObject(obj[i])) obj[i] = obj[i]?.id;
     else if (Array.isArray(obj[i]) && obj[i].length > 0)
       obj[i] = obj[i].map((item) => item.id);
-    if (
-      obj[i] === null ||
-      obj[i] === undefined ||
-      (Array.isArray(obj[i]) && obj[i].length === 0)
-    )
-      delete obj[i];
+    // Note: Can't delete key because otherwise api doesn't update it (stays the same)
+    // that's why we have to send null value
+    // if (
+    //   obj[i] === null ||
+    //   obj[i] === undefined ||
+    //   (Array.isArray(obj[i]) && obj[i].length === 0)
+    // )
+    //   delete obj[i];
+    if (obj[i] === null || obj[i] === undefined) obj[i] = "";
+    // Todo: How to clear m2m fields
+    if (Array.isArray(obj[i]) && obj[i].length === 0) obj[i] = "[]";
   }
   console.log(obj);
   return obj;

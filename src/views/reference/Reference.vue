@@ -807,6 +807,7 @@
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
                   :headers="taxonTranslatedHeaders"
+                  @update:options="updateOptions"
                 />
               </v-col>
             </v-row>
@@ -1166,7 +1167,7 @@ export default {
           },
           taxon: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -1391,6 +1392,17 @@ export default {
         },
       });
       if (response?.count > 0) this.attachment = response.results;
+    },
+
+    updateOptions(payload) {
+      this.relatedData.searchParameters.taxon[payload.key] = payload.value;
+      if (
+        payload.key !== "page" &&
+        this.relatedData.searchParameters.taxon.page !== 1
+      )
+        this.relatedData.searchParameters.taxon.page = 1;
+
+      this.loadRelatedData(["taxon"], "reference", this.$route.params.id);
     },
   },
 };

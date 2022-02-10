@@ -364,7 +364,7 @@
       "location": "Asukoht",
       "description": "Kirjeldus | Lisainfo",
       "files": "Failid",
-      "samples": "Seotud proovid",
+      "sample": "Seotud proovid",
       "groundwater": "Põhjavee laiendusmoodul"
     },
     "imageset": {
@@ -1392,7 +1392,7 @@
     "groundwater": "Põhjavee laiendusmoodul",
     "relatedTables": {
       "attachment_link": "Failid",
-      "samples": "Seotud proovid",
+      "sample": "Seotud proovid",
       "locality_description": "Kirjeldus",
       "locality_reference": "Seotud kirjandus",
       "sites": "Vaatluspunktid"
