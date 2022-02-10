@@ -249,11 +249,11 @@ const formManipulation = {
       notYetUploadedFiles.forEach((file, index) => {
         formData.set(
           "description",
-          file.type + " for " + relatedObject + ": " + relatedObject.id
+          `${file.type} for ${this.$route.meta.object}: ${relatedObject.id}`
         );
         formData.set(
           "description_en",
-          file.type + " for " + relatedObject + ": " + relatedObject.id
+          `${file.type} for ${this.$route.meta.object}: ${relatedObject.id}`
         );
         formData.set("author", this.getCurrentAgent.id);
         formData.set(

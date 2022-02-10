@@ -472,6 +472,52 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="locality.attachments"
+                @update:existing-files="locality.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="my-2">
       <v-col>
@@ -542,19 +588,6 @@
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
           />
-
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
 
           <locality-stratigraphy-table
             v-show="activeTab === 'locality_stratigraphy'"
@@ -669,15 +702,6 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     ...mapState("map", ["showMap"]),
 
@@ -717,7 +741,6 @@ export default {
         relatedTabs: [
           { name: "locality_reference", iconClass: "fas fa-book" },
           { name: "locality_synonym", iconClass: "fas fa-font" },
-          { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "locality_stratigraphy", iconClass: "fas fa-globe-asia" },
           { name: "locality_description", iconClass: "fas fa-align-left" },
         ],
@@ -747,6 +770,7 @@ export default {
             list_country: false,
             parent: false,
             coord_det_agent: false,
+            attachments: false,
           },
           locality: [],
           reference: [],
@@ -765,6 +789,7 @@ export default {
           list_country: [],
           parent: [],
           coord_det_agent: [],
+          attachments: [],
         },
         requiredFields: ["locality", "locality_en"],
         locality: {
@@ -798,12 +823,14 @@ export default {
           country: null,
           stratigraphy_top: null,
           stratigraphy_base: null,
+          attachments: null,
         },
         block: {
           info: true,
           map: true,
           additionalInfo: true,
           description: true,
+          files: true,
         },
       };
     },
@@ -812,7 +839,6 @@ export default {
       return {
         locality_reference: { count: 0, results: [] },
         locality_synonym: { count: 0, results: [] },
-        attachment_link: { count: 0, results: [] },
         locality_stratigraphy: { count: 0, results: [] },
         locality_description: {
           count: 0,
@@ -829,12 +855,6 @@ export default {
             page: 1,
             paginateBy: 25,
             sortBy: ["synonym"],
-            sortDesc: [true],
-          },
-          attachment_link: {
-            page: 1,
-            paginateBy: 25,
-            sortBy: ["id"],
             sortDesc: [true],
           },
           locality_stratigraphy: {
@@ -859,12 +879,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "locality", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.locality, singleFileMetadata);
     },
   },
 };
@@ -884,10 +899,6 @@ export default {
 /* Map height */
 #collapseMap {
   height: 50vh;
-}
-
-.leaflet-container {
-  /*cursor: pointer;*/
 }
 
 label {
