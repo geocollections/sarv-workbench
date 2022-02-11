@@ -279,14 +279,14 @@
                 <autocomplete-wrapper
                   v-model="sample.agent_collected"
                   :color="bodyActiveColor"
-                  :items="autocomplete.agent"
-                  :loading="autocomplete.loaders.agent"
+                  :items="autocomplete.agent_collected"
+                  :loading="autocomplete.loaders.agent_collected"
                   item-text="agent"
                   :label="$t('sample.agent_collected')"
                   is-link
                   route-object="agent"
                   is-searchable
-                  v-on:search:items="autocompleteAgentSearch"
+                  v-on:search:items="autocompleteAgentSearch($event, 'agent_collected')"
                 />
               </v-col>
 
@@ -325,12 +325,12 @@
                 <autocomplete-wrapper
                   v-model="sample.classification_rock"
                   :color="bodyActiveColor"
-                  :items="autocomplete.rock"
-                  :loading="autocomplete.loaders.rock"
+                  :items="autocomplete.classification_rock"
+                  :loading="autocomplete.loaders.classification_rock"
                   :item-text="nameLabel"
                   :label="$t('sample.classification_rock')"
                   is-searchable
-                  v-on:search:items="autocompleteRockSearch"
+                  v-on:search:items="autocompleteRockSearch($event, 'classification_rock')"
                 />
               </v-col>
 
@@ -403,14 +403,14 @@
                 <autocomplete-wrapper
                   v-model="sample.owner"
                   :color="bodyActiveColor"
-                  :items="autocomplete.agent"
+                  :items="autocomplete.owner"
                   :loading="autocomplete.loaders.owner"
                   item-text="agent"
                   :label="$t('common.owner')"
                   is-link
                   route-object="agent"
                   is-searchable
-                  v-on:search:items="autocompleteOwnerSearch"
+                  v-on:search:items="autocompleteAgentSearch($event, 'owner')"
                 />
               </v-col>
             </v-row>
@@ -460,7 +460,7 @@
                   is-link
                   route-object="sample"
                   is-searchable
-                  v-on:search:items="autocompleteSampleSearch"
+                  v-on:search:items="autocompleteSampleSearch($event, 'parent_sample')"
                 />
               </v-col>
 
@@ -470,12 +470,12 @@
                   :color="bodyActiveColor"
                   :items="autocomplete.parent_specimen"
                   :loading="autocomplete.loaders.parent_specimen"
-                  item-text="specimen_id"
+                  item-text="specimen_full_number"
                   :label="$t('sample.parent_specimen')"
                   is-link
                   route-object="specimen"
                   is-searchable
-                  v-on:search:items="autocompleteSpecimenSearch"
+                  v-on:search:items="autocompleteSpecimenSearch($event, 'parent_specimen')"
                 />
               </v-col>
             </v-row>
@@ -691,7 +691,9 @@
                   is-link
                   route-object="agent"
                   is-searchable
-                  v-on:search:items="autocompleteAgentSearch($event, 'agent_collected')"
+                  v-on:search:items="
+                    autocompleteAgentSearch($event, 'agent_collected')
+                  "
                 />
               </v-col>
 
@@ -744,12 +746,12 @@
                 <autocomplete-wrapper
                   v-model="sample.classification_rock"
                   :color="bodyActiveColor"
-                  :items="autocomplete.rock"
-                  :loading="autocomplete.loaders.rock"
+                  :items="autocomplete.classification_rock"
+                  :loading="autocomplete.loaders.classification_rock"
                   :item-text="nameLabel"
                   :label="$t('sample.classification_rock')"
                   is-searchable
-                  v-on:search:items="autocompleteRockSearch"
+                  v-on:search:items="autocompleteRockSearch($event, 'classification_rock')"
                 />
               </v-col>
 
@@ -808,14 +810,14 @@
                 <autocomplete-wrapper
                   v-model="sample.parent_sample"
                   :color="bodyActiveColor"
-                  :items="autocomplete.sample"
-                  :loading="autocomplete.loaders.sample"
+                  :items="autocomplete.parent_sample"
+                  :loading="autocomplete.loaders.parent_sample"
                   item-text="number"
                   :label="$t('sample.parent_sample')"
                   is-link
                   route-object="sample"
                   is-searchable
-                  v-on:search:items="autocompleteSampleSearch"
+                  v-on:search:items="autocompleteSampleSearch($event, 'parent_sample')"
                 />
               </v-col>
 
@@ -823,14 +825,14 @@
                 <autocomplete-wrapper
                   v-model="sample.parent_specimen"
                   :color="bodyActiveColor"
-                  :items="autocomplete.specimen"
-                  :loading="autocomplete.loaders.specimen"
-                  item-text="specimen_id"
+                  :items="autocomplete.parent_specimen"
+                  :loading="autocomplete.loaders.parent_specimen"
+                  item-text="specimen_full_number"
                   :label="$t('sample.parent_specimen')"
                   is-link
                   route-object="specimen"
                   is-searchable
-                  v-on:search:items="autocompleteSpecimenSearch"
+                  v-on:search:items="autocompleteSpecimenSearch($event, 'parent_specimen')"
                 />
               </v-col>
             </v-row>
@@ -882,6 +884,56 @@
       </v-card>
     </template>
 
+    <template v-slot:related-files>
+      <v-card
+        class="mt-2"
+        id="block-files"
+        :color="bodyColor.split('n-')[0] + 'n-5'"
+        elevation="4"
+      >
+        <v-card-title class="pt-2 pb-1">
+          <div
+            class="card-title--clickable"
+            @click="block.files = !block.files"
+          >
+            <span>{{ $t("reference.relatedTables.attachment") }}</span>
+            <v-icon right>fas fa-folder-open</v-icon>
+          </div>
+          <v-spacer></v-spacer>
+          <v-btn
+            icon
+            @click="block.files = !block.files"
+            :color="bodyActiveColor"
+          >
+            <v-icon>{{
+              block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <transition>
+          <div v-show="block.files" class="pa-1">
+            <v-row no-gutters>
+              <v-col cols="12" class="pa-1">
+                <file-input
+                  show-existing
+                  :files-from-object="sample.attachments"
+                  @update:existing-files="sample.attachments = $event"
+                  @file-uploaded="addFiles"
+                  accept-multiple
+                  :record-options="$route.meta.isEdit"
+                  open-file
+                  acceptable-format="*/*"
+                  :is-draggable="$route.meta.isEdit"
+                  show-attachment-link
+                />
+              </v-col>
+            </v-row>
+          </div>
+        </transition>
+      </v-card>
+    </template>
+
     <template v-slot:privacy>
       <v-row class="my-2">
         <v-col>
@@ -913,7 +965,7 @@
           <v-tab
             v-for="tab in relatedTabs"
             :key="tab.name"
-            @click.prevent="setTab(tab.name)"
+            @click.prevent="activeTab = tab.name"
           >
             <span>{{ $t("sample.relatedTables." + tab.name) }}</span>
             <span class="ml-1">
@@ -964,19 +1016,6 @@
               v-on:related:delete="deleteRelatedItem"
             />
 
-            <div v-show="activeTab === 'attachment_link'">
-              <file-input
-                show-existing
-                :files-from-object="relatedData.attachment_link.results"
-                v-on:update:existing-files="addExistingFiles"
-                v-on:file-uploaded="addFiles"
-                accept-multiple
-                :record-options="$route.meta.isEdit"
-                :is-draggable="$route.meta.isEdit"
-                show-attachment-link
-              />
-            </div>
-
             <sample-reference-table
               v-show="activeTab === 'sample_reference'"
               :response="relatedData.sample_reference"
@@ -990,7 +1029,7 @@
 
             <!-- PAGINATION -->
             <pagination
-              v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+              v-if="$route.meta.isEdit && activeTab && relatedData[activeTab].count > 10"
               class="pa-1"
               :body-active-color="bodyActiveColor"
               :count="relatedData[activeTab].count"
@@ -1032,6 +1071,7 @@ import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 import Pagination from "@/components/partial/Pagination";
 import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 import globalUtilsMixin from "@/mixins/globalUtilsMixin";
+import { mapFields } from "vuex-map-fields";
 
 export default {
   name: "Sample",
@@ -1101,52 +1141,12 @@ export default {
     next();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
-  },
-
   computed: {
-    ...mapState("search", ["isSampleSimpleView"]),
-
-    isSimpleView: {
-      get() {
-        return this.isSampleSimpleView;
-      },
-
-      set(value) {
-        this.updateIsSampleSimpleView(value);
-      },
-    },
-
-    activeRelatedDataTab() {
-      let tabObject = this.$store.state.activeRelatedDataTab;
-      if (tabObject && tabObject[this.$route.meta.object]) {
-        return tabObject[this.$route.meta.object];
-      } else return null;
-    },
+    ...mapFields("sample", ["isSimpleView", "activeTab"]),
   },
 
   methods: {
-    ...mapActions("search", [
-      "updateActiveTab",
-      "updateIsSampleSimpleView",
-      "setActiveSample",
-    ]),
-
-    setTab(type) {
-      if (type) {
-        this.updateActiveTab({
-          tab: type,
-          object: this.$route.meta.object,
-        });
-        this.activeTab = type;
-      }
-    },
+    ...mapActions("search", ["setActiveSample"]),
 
     setInitialData() {
       return {
@@ -1154,10 +1154,8 @@ export default {
           { name: "analysis", iconClass: "far fa-chart-bar" },
           { name: "preparation", iconClass: "fas fa-vial" },
           { name: "taxon_list", iconClass: "fas fa-list" },
-          { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "sample_reference", iconClass: "fas fa-book" },
         ],
-        activeTab: "analysis",
         relatedData: this.setDefaultRelatedData(),
         simplifiedFormCopyFields: [
           "number",
@@ -1192,6 +1190,7 @@ export default {
             owner: false,
             reference: false,
             attachment: false,
+            attachments: false,
             analysis_method: false,
             fossil_group: false,
             analysis: false,
@@ -1200,6 +1199,7 @@ export default {
             site: false,
             project: false,
             list_sample_purpose: false,
+            classification_rock: false,
           },
           series: [],
           list_sample_purpose: [],
@@ -1216,6 +1216,7 @@ export default {
           owner: [],
           reference: [],
           attachment: [],
+          attachments: [],
           analysis_method: [],
           fossil_group: [],
           analysis: [],
@@ -1225,6 +1226,7 @@ export default {
           samplePreparation: [],
           site: [],
           project: [],
+          classification_rock: [],
         },
         requiredFields: [],
         sample: {
@@ -1263,26 +1265,25 @@ export default {
           is_private: false,
           site: null,
           project: null,
+          attachments: [],
         },
-        block: { info: true, relatedInfo: true, description: true },
+        block: {
+          info: true,
+          relatedInfo: true,
+          description: true,
+          files: true,
+        },
       };
     },
 
     setDefaultRelatedData() {
       return {
         sample_reference: { count: 0, results: [] },
-        attachment_link: { count: 0, results: [] },
         analysis: { count: 0, results: [] },
         preparation: { count: 0, results: [] },
         taxon_list: { count: 0, results: [] },
         searchParameters: {
           sample_reference: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
-          attachment_link: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
@@ -1340,21 +1341,8 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "sample", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.sample, singleFileMetadata);
     },
   },
 };
 </script>
-
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-</style>

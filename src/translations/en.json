@@ -2085,6 +2085,7 @@
     "user_changed": "User changed",
     "number": "Number",
     "preparation_number": "Prep. number",
+    "classification": "Fossil group",
     "fossil_group": "Fossil group",
     "storage": "Storage",
     "sample__locality": "Locality",

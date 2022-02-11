@@ -158,9 +158,6 @@ const autocompleteMixin = {
     autocompleteAgentSearch(value, options = "agent") {
       this.$_autocompleteMixin_search(value, "agent", options);
     },
-    autocompleteOwnerSearch(value, options = "agent") {
-      this.$_autocompleteMixin_search(value, "owner", options);
-    },
     autocompleteOwner2Search(value) {
       this.$_autocompleteMixin_search(value, "owner", "owner");
     },
@@ -206,8 +203,8 @@ const autocompleteMixin = {
     autocompleteSampleSeriesSearch(value) {
       this.$_autocompleteMixin_search(value, "series", "series");
     },
-    autocompleteSampleSearch(value) {
-      this.$_autocompleteMixin_search(value, "sample", "sample", 1);
+    autocompleteSampleSearch(value, options = "sample") {
+      this.$_autocompleteMixin_search(value, "sample", options, 1);
     },
     autocompleteSpecimenSearch(value, options = "specimen") {
       this.$_autocompleteMixin_search(value, "specimen", options);

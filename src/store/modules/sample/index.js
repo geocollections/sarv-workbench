@@ -2,6 +2,8 @@ import { getField, updateField } from "vuex-map-fields";
 
 const getDefaultState = () => {
   return {
+    isSimpleView: false,
+    activeTab: "analysis",
     items: [],
     count: 0,
     options: {

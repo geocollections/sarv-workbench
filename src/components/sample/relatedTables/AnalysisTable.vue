@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -51,14 +50,7 @@
 
       <template v-slot:item.method="{ item }">
         <span
-          v-if="$route.meta.isEdit"
-          v-translate="{
-            et: item.analysis_method__analysis_method,
-            en: item.analysis_method__method_en,
-          }"
-        />
-        <span
-          v-else-if="item.analysis_method"
+          v-if="item.analysis_method"
           v-translate="{
             et: item.analysis_method.analysis_method,
             en: item.analysis_method.method_en,
@@ -68,16 +60,7 @@
 
       <template v-slot:item.agent="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/agent/' + item.agent }"
-          :title="$t('editAgent.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.agent__agent }}
-        </router-link>
-        <router-link
-          v-else-if="item.agent"
+          v-if="item.agent"
           :to="{ path: '/agent/' + item.agent.id }"
           :title="$t('editAgent.editMessage')"
           class="sarv-link"
@@ -217,7 +200,6 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import { fetchAnalysisMethod } from "../../../assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
@@ -316,6 +298,12 @@ export default {
     },
   },
 
+  watch: {
+    dialog() {
+      this.fillListAutocompletes();
+    },
+  },
+
   methods: {
     resetItem() {
       this.item = {
@@ -333,27 +321,15 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent,
-        };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
+      if (item.agent) {
         this.item.agent = item.agent;
         this.autocomplete.agent.push(this.item.agent);
       }
 
-      if (
-        typeof item.analysis_method !== "object" &&
-        item.analysis_method !== null
-      ) {
-        this.item.analysis_method = {
-          id: item.analysis_method,
-          analysis_method: item.analysis_method__analysis_method,
-          method_en: item.analysis_method__method_en,
-        };
-      } else this.item.analysis_method = item.analysis_method;
+      if (item.analysis_method) {
+        this.item.analysis_method = item.analysis_method;
+        this.autocomplete.analysis_method.push(this.item.analysis_method);
+      }
 
       this.item.method_details = item.method_details;
       this.item.mass = item.mass;
@@ -365,20 +341,15 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.analysis_method.length <= 1) {
         this.autocomplete.loaders.analysis_method = true;
-        fetchAnalysisMethod().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.analysis_method =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("analysis_method");
+        if (response?.count > 0)
+          this.autocomplete.analysis_method = response.results;
         this.autocomplete.loaders.analysis_method = false;
       }
     },
   },
 };
 </script>
-
-<style scoped></style>

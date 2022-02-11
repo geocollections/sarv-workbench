@@ -110,7 +110,7 @@
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteOwnerSearch($event, 'owner')"
+                v-on:search:items="autocompleteAgentSearch($event, 'owner')"
               />
             </v-col>
 

@@ -327,14 +327,14 @@
               <autocomplete-wrapper
                 v-model="analysis.owner"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
+                :items="autocomplete.owner"
                 :loading="autocomplete.loaders.owner"
                 item-text="agent"
                 :label="$t('common.owner')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteOwnerSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'owner')"
               />
             </v-col>
           </v-row>

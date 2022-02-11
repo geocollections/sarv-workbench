@@ -823,7 +823,7 @@ export default {
           country: null,
           stratigraphy_top: null,
           stratigraphy_base: null,
-          attachments: null,
+          attachments: [],
         },
         block: {
           info: true,
