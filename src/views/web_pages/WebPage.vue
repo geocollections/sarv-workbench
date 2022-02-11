@@ -153,7 +153,7 @@ export default {
           title_en: null,
           content_en: null,
           content_et: null,
-          public: null,
+          public: false,
         },
         requiredFields: [],
         block: {

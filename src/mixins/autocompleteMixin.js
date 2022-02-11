@@ -304,8 +304,8 @@ const autocompleteMixin = {
     autocompleteRelatedDataSearch(value, type, options) {
       this.$_autocompleteMixin_search(value, type, options, 2);
     },
-    autocompleteInstitutionSearch(value) {
-      this.$_autocompleteMixin_search(value, "institution", "institution", 2);
+    autocompleteInstitutionSearch(value, options = "institution") {
+      this.$_autocompleteMixin_search(value, "institution", options, 2);
     },
     autocompleteStratigraphyParentSearch(value) {
       this.$_autocompleteMixin_search(

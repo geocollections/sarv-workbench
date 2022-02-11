@@ -100,14 +100,14 @@
               <autocomplete-wrapper
                 v-model="visit.visitor_institution"
                 :color="bodyActiveColor"
-                :items="autocomplete.institution"
-                :loading="autocomplete.loaders.institution"
+                :items="autocomplete.visitor_institution"
+                :loading="autocomplete.loaders.visitor_institution"
                 item-text="agent"
                 :label="$t('visit.visitor_institution')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteInstitutionSearch"
+                v-on:search:items="autocompleteInstitutionSearch($event, 'visitor_institution')"
               />
             </v-col>
           </v-row>
