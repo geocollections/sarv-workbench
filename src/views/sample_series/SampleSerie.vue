@@ -173,7 +173,9 @@
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentCollectedSearch"
+                v-on:search:items="
+                  autocompleteAgentSearch($event, 'agent_collected')
+                "
               />
             </v-col>
 
@@ -273,6 +275,52 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="sample_series.attachments"
+                @update:existing-files="sample_series.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -324,19 +372,6 @@
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
           />
-
-          <div v-show="activeTab === 'attachments'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
 
           <!-- PAGINATION -->
           <pagination
@@ -423,15 +458,6 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
-  },
-
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
 
@@ -447,10 +473,7 @@ export default {
 
     setInitialData() {
       return {
-        relatedTabs: [
-          { name: "sample", iconClass: "fas fa-vial" },
-          { name: "attachment", iconClass: "far fa-file" },
-        ],
+        relatedTabs: [{ name: "sample", iconClass: "fas fa-vial" }],
         activeTab: "sample",
         relatedData: this.setDefaultRelatedData(),
         autocomplete: {
@@ -460,12 +483,14 @@ export default {
             agent_collected: false,
             locality: false,
             agent: false,
+            attachments: false,
           },
           stratigraphy_base: [],
           stratigraphy_top: [],
           agent_collected: [],
           locality: [],
           owner: [],
+          attachments: [],
         },
         sample_series: {
           id: null,
@@ -491,10 +516,12 @@ export default {
           remarks: null,
           owner: null,
           is_private: false,
+          attachments: [],
         },
         requiredFields: ["name"],
         block: {
           info: true,
+          files: true,
         },
       };
     },
@@ -502,15 +529,8 @@ export default {
     setDefaultRelatedData() {
       return {
         sample: { count: 0, results: [] },
-        attachment: { count: 0, results: [] },
         searchParameters: {
           sample: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
-          attachment: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
@@ -520,42 +540,9 @@ export default {
       };
     },
 
-    // Overrides loadRelatedData method in detailViewUtilsMixin.js
-    // loadRelatedData(tables, module, moduleId) {
-    //   Promise.all(
-    //     tables.map((table) =>
-    //       this.$api.rw
-    //         .get("selection", {
-    //           defaultParams: {
-    //             selection: moduleId,
-    //             [`${table}__isnull`]: false,
-    //           },
-    //           options: {
-    //             ...this.relatedData.searchParameters[table],
-    //           },
-    //         })
-    //         .then((res) => {
-    //           this.relatedData[table].count = res?.count ?? 0;
-    //           this.relatedData[table].results = res?.results ?? [];
-    //         })
-    //         .catch((err) => {
-    //           this.relatedData[table].count = 0;
-    //           this.relatedData[table].results = [];
-    //         })
-    //     )
-    //   );
-    // },
-
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "sample_series", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachments.count = files.length;
-      this.relatedData.attachment.results = files;
+      this.addFilesAsNewObjects(files, this.sample_series, singleFileMetadata);
     },
   },
 };
 </script>
-
-<style scoped></style>

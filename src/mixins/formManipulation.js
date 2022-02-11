@@ -1,7 +1,6 @@
 import moment from "moment";
 import { mapActions, mapGetters, mapState } from "vuex";
 import {
-  fetchAttachmentForReference,
   fetchChangeRecordState,
   postRequest,
 } from "../assets/js/api/apiCalls";
