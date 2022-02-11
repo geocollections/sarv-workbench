@@ -1260,7 +1260,7 @@ export default {
           locality: null,
           locality_free: null,
           remarks: null,
-          is_private: null,
+          is_private: false,
           site: null,
           project: null,
         },

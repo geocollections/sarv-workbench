@@ -554,7 +554,7 @@ export default {
           direction_lr: null,
           depth: null,
           remarks: null,
-          is_private: null,
+          is_private: false,
           attachments: [],
           drillcore_boxes: [],
         },

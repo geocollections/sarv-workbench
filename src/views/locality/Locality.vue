@@ -813,7 +813,7 @@ export default {
           eelis: null,
           remarks_location: null,
           remarks: null,
-          is_private: null,
+          is_private: false,
           type: null,
           parent: null,
           extent: null,

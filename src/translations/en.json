@@ -1399,7 +1399,7 @@
       "sample": "Related samples",
       "locality_description": "Description",
       "locality_reference": "Related reference",
-      "sites": "Linked sites"
+      "site": "Linked sites"
     }
   },
   "analysis": {

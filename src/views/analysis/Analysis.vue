@@ -660,7 +660,7 @@ export default {
           storage: null,
           location: null,
           remarks: null,
-          is_private: null,
+          is_private: false,
         },
         componentKey: 0,
         block: {

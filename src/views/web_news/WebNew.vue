@@ -141,7 +141,7 @@ export default {
           title_en: null,
           text_en: null,
           text_et: null,
-          is_private: null,
+          is_private: false,
         },
         requiredFields: [],
         block: {

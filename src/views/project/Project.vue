@@ -601,7 +601,7 @@ export default {
           description: null,
           owner: null,
           remarks: null,
-          is_private: null,
+          is_private: false,
           agents: [],
           attachments: [],
         },

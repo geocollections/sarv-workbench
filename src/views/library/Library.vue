@@ -415,7 +415,7 @@ export default {
           keywords: null,
           abstract: null,
           abstract_en: null,
-          is_private: null,
+          is_private: false,
         },
         block: { info: true, description: true, members: true },
       };

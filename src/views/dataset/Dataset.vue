@@ -655,7 +655,7 @@ export default {
           dataset_html: null,
           date: null,
           date_txt: null,
-          is_private: null,
+          is_private: false,
           owner: null,
           owner_txt: null,
           copyright_agent: null,

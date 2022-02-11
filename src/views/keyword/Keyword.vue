@@ -311,7 +311,7 @@ export default {
           description: null,
           is_primary: null,
           is_preferred: null,
-          is_private: null,
+          is_private: false,
         },
         block: {
           info: true,

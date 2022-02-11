@@ -548,7 +548,7 @@ export default {
           identification_date: null,
           identification_remarks: null,
           location: null,
-          is_private: null,
+          is_private: false,
           storage: null,
           owner: null,
           remarks: null,

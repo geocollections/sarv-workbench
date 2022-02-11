@@ -490,7 +490,7 @@ export default {
           locality_free: null,
           remarks: null,
           owner: null,
-          is_private: null,
+          is_private: false,
         },
         requiredFields: ["name"],
         block: {

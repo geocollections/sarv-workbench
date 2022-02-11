@@ -231,7 +231,10 @@ function cleanObject(obj) {
     //   delete obj[i];
     if (obj[i] === null || obj[i] === undefined) obj[i] = "";
     // Todo: How to clear m2m fields
-    if (Array.isArray(obj[i]) && obj[i].length === 0) obj[i] = "[]";
+    if (Array.isArray(obj[i]) && obj[i].length === 0) {
+      delete obj[i];
+      obj[`${i}[]`] = [];
+    }
   }
   console.log(obj);
   return obj;

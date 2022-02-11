@@ -777,7 +777,7 @@ export default {
           sort_within_parent: null,
           approved_ics: null,
           approved_esk: null,
-          is_private: null,
+          is_private: false,
           remarks: null,
           index_old: null,
           maaamet_kood: null,

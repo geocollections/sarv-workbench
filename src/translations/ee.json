@@ -1395,7 +1395,7 @@
       "sample": "Seotud proovid",
       "locality_description": "Kirjeldus",
       "locality_reference": "Seotud kirjandus",
-      "sites": "Vaatluspunktid"
+      "site": "Vaatluspunktid"
     }
   },
   "analysis": {

@@ -816,7 +816,7 @@ export default {
           in_estonia: null,
           in_baltoscandia: null,
           is_fossil: null,
-          is_private: null,
+          is_private: false,
           is_valid: null,
           is_fossil_group: null,
           sort: null,

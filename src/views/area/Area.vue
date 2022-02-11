@@ -245,7 +245,7 @@
             <v-row no-gutters v-show="myShowMap" class="mt-2">
               <v-col cols="12" class="px-1">
                 <map-component
-                  :show-map="myShowMap && block.sites"
+                  :show-map="myShowMap && block.site"
                   :gps-coords="true"
                   mode="multiple"
                   module="area"
@@ -296,11 +296,12 @@
             <v-row no-gutters v-if="relatedData.site.count > 0">
               <v-col cols="12" class="px-1">
                 <site-table
-                  ref="table"
                   :response="relatedData.site"
                   :search-parameters="relatedData.searchParameters.site"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
+                  :headers="siteTranslatedHeaders"
+                  @update:options="updateOptions"
                 />
               </v-col>
             </v-row>
@@ -344,12 +345,10 @@ import formManipulation from "@/mixins/formManipulation";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
 import InputWrapper from "@/components/partial/inputs/InputWrapper";
-import { fetchLinkedAreaSites } from "@/assets/js/api/apiCalls";
 import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import Editor from "@/components/partial/inputs/Editor";
 import MapComponent from "@/components/partial/MapComponent";
 import ExportButtons from "@/components/partial/export/ExportButtons";
-import debounce from "lodash/debounce";
 import { mapActions, mapState } from "vuex";
 import SiteTable from "@/components/site/SiteTable";
 import AreaLocalityReferenceTable from "@/components/area/relatedTables/AreaLocalityReferenceTable";
@@ -406,6 +405,20 @@ export default {
 
   computed: {
     ...mapState("map", ["showMap"]),
+    ...mapState({
+      siteHeaders(state) {
+        return state.site.headers;
+      },
+    }),
+
+    siteTranslatedHeaders() {
+      return this.siteHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
 
     myShowMap: {
       get() {
@@ -418,17 +431,6 @@ export default {
 
     computedRelatedTabs() {
       return this.relatedTabs.filter((tab) => tab.name !== "site");
-    },
-  },
-
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
     },
   },
 
@@ -445,31 +447,6 @@ export default {
         this.activeTab = type;
       }
     },
-
-    fetchLinkedSiteWrapper() {
-      return new Promise((resolve) => {
-        resolve(
-          fetchLinkedAreaSites(
-            this.relatedData.searchParameters.site,
-            this.$route.params.id
-          )
-        );
-      });
-    },
-
-    searchRelatedData: debounce(function (
-      searchParameters,
-      apiCall,
-      relatedObject
-    ) {
-      apiCall().then((response) => {
-        if (response.status === 200) {
-          this.relatedData[relatedObject].count = response.data.count;
-          this.relatedData[relatedObject].results = response.data.results;
-        }
-      });
-    },
-    50),
 
     setInitialData() {
       return {
@@ -506,7 +483,7 @@ export default {
         },
         block: {
           info: true,
-          sites: true,
+          site: true,
         },
         relatedData: this.setDefaultRelatedData(),
       };
@@ -525,7 +502,7 @@ export default {
         searchParameters: {
           site: {
             page: 1,
-            paginateBy: 100,
+            itemsPerPage: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -538,8 +515,17 @@ export default {
         },
       };
     },
+
+    updateOptions(payload) {
+      this.relatedData.searchParameters.site[payload.key] = payload.value;
+      if (
+        payload.key !== "page" &&
+        this.relatedData.searchParameters.site.page !== 1
+      )
+        this.relatedData.searchParameters.site.page = 1;
+
+      this.loadRelatedData(["site"], "area", this.$route.params.id);
+    },
   },
 };
 </script>
-
-<style scoped />

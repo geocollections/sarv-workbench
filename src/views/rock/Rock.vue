@@ -674,7 +674,7 @@ export default {
           formula: null,
           formula_html: null,
           remarks: null,
-          is_private: null,
+          is_private: false,
           in_portal: null,
         },
         block: {
