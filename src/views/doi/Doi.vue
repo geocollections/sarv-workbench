@@ -71,9 +71,7 @@
 
           <!-- CREATORS, YEAR and PUBLISHER -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <!--              <div class="d-flex">-->
-              <!--                <div class="flex-fill">-->
+            <v-col v-if="$route.meta.isEdit" cols="12" md="4" class="pa-1">
               <v-tooltip top z-index="60000">
                 <template v-slot:activator="{ on, attrs }">
                   <input-wrapper
@@ -88,25 +86,9 @@
                 </template>
                 <span>{{ $t("doi.authorTooltip") }}</span>
               </v-tooltip>
-              <!--                </div>-->
-
-              <!--                <div-->
-              <!--                  class="align-self-end pl-2"-->
-              <!--                  v-if="!$route.meta.isEdit && isNotEmpty(doi.creators)"-->
-              <!--                >-->
-              <!--                  <v-btn-->
-              <!--                    icon-->
-              <!--                    :color="bodyActiveColor"-->
-              <!--                    @click="addCreatorsToRelatedData"-->
-              <!--                    :title="$t('doi.addCreators')"-->
-              <!--                  >-->
-              <!--                    <v-icon small>fas fa-user-plus</v-icon>-->
-              <!--                  </v-btn>-->
-              <!--                </div>-->
-              <!--              </div>-->
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" :md="$route.meta.isEdit ? 4 : 6" class="pa-1">
               <input-wrapper
                 v-model="doi.publication_year"
                 :color="bodyActiveColor"
@@ -115,7 +97,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" :md="$route.meta.isEdit ? 4 : 6" class="pa-1">
               <autocomplete-wrapper
                 v-model="doi.publisher"
                 :color="bodyActiveColor"
@@ -126,12 +108,6 @@
                 :label="$t('doi.publisher')"
                 use-state
               />
-              <!--              <input-wrapper-->
-              <!--                v-model="doi.publisher"-->
-              <!--                :color="bodyActiveColor"-->
-              <!--                :label="$t('doi.publisher')"-->
-              <!--                use-state-->
-              <!--              />-->
             </v-col>
           </v-row>
 
@@ -437,6 +413,53 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="doi.attachments"
+                @update:existing-files="doi.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- SHOWING RELATED_DATA -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -484,19 +507,6 @@
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
           />
-
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
 
           <doi-related-identifier-table
             v-show="activeTab === 'doi_related_identifier'"
@@ -623,7 +633,7 @@
     </v-card>
 
     <!-- IS_PRIVATE and IS_LOCKED -->
-    <div class="d-flex flex-wrap mt-2">
+    <div class="d-flex flex-wrap mt-2" v-if="$route.meta.isEdit">
       <checkbox-wrapper
         class="mr-1"
         v-model="doi.is_private"
@@ -942,12 +952,6 @@ export default {
   },
 
   watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
     "relatedData.doi_agent.results": {
       handler(newVal) {
         if (newVal && newVal.length > 0) this.updateDoiCreatorsField(newVal);
@@ -984,7 +988,7 @@ export default {
       // return true;
       // Does not apply to egf #516
       if (this.doi.egf) return true;
-      else return this.relatedData.attachment_link.count > 0;
+      else return this.doi.attachments.length > 0;
     },
   },
 
@@ -1005,7 +1009,6 @@ export default {
       return {
         relatedTabs: [
           { name: "doi_agent", iconClass: "fas fa-user-friends" },
-          { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "doi_geolocation", iconClass: "fas fa-globe-americas" },
           {
             name: "doi_related_identifier",
@@ -1040,6 +1043,7 @@ export default {
             locality: false,
             doi_date_type: false,
             attachment_public: false,
+            attachments: false,
           },
           doi_resource_type: [],
           list_language: [],
@@ -1058,15 +1062,24 @@ export default {
           locality: [],
           doi_date_type: [],
           attachment: [],
+          attachments: [],
         },
-        requiredFields: [
-          "resource_type",
-          "resource",
-          // "creators",
-          "publication_year",
-          "publisher",
-          "title",
-        ],
+        requiredFields: this.$route.meta.isEdit
+          ? [
+              "resource_type",
+              "resource",
+              "creators",
+              "publication_year",
+              "publisher",
+              "title",
+            ]
+          : [
+              "resource_type",
+              "resource",
+              "publication_year",
+              "publisher",
+              "title",
+            ],
         doi: {
           id: null,
           identifier: null,
@@ -1090,19 +1103,21 @@ export default {
           licence: null,
           remarks: null,
           owner: null,
-          is_private: false,
+          is_private: true,
           is_locked: false,
           datacite_created: null,
           datacite_updated: null,
           egf: null,
           reference: null,
           dataset: null,
+          attachments: [],
         },
         block: {
           requiredFields: true,
           info: true,
           referenceAndDataset: false,
           description: true,
+          files: true,
           datacite: true,
           dataciteDiff: false,
           dataciteUrlDiff: false,
@@ -1120,18 +1135,11 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        attachment_link: { count: 0, results: [] },
         doi_agent: { count: 0, results: [] },
         doi_related_identifier: { count: 0, results: [] },
         doi_geolocation: { count: 0, results: [] },
         doi_date: { count: 0, results: [] },
         searchParameters: {
-          attachment_link: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
           doi_related_identifier: {
             page: 1,
             paginateBy: 10,
@@ -1157,131 +1165,7 @@ export default {
             sortDesc: [true],
           },
         },
-        count: {
-          reference: 0,
-          dataset: 0,
-        },
       };
-    },
-
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      if (uploadableObject.egf) delete uploadableObject.egf;
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      if (this.isNotEmpty(this.relatedData.reference)) {
-        uploadableObject.reference = this.relatedData.reference.id;
-      } else uploadableObject.reference = null;
-
-      if (this.isNotEmpty(this.relatedData.dataset)) {
-        uploadableObject.dataset = this.relatedData.dataset.id;
-      } else uploadableObject.dataset = null;
-
-      if (this.$route.meta.isEGF) uploadableObject.egf = this.$route.params.id;
-
-      // Adding related data
-      uploadableObject.related_data = {};
-      if (this.relatedData.attachment_link.results.length > 0) {
-        uploadableObject.related_data.attachment =
-          this.relatedData.attachment_link.results.map((item) => {
-            return {
-              // ...item,
-              id: item.id,
-              is_locked: true,
-            };
-          });
-      } else uploadableObject.related_data.attachment = null;
-
-      if (!this.$route.meta.isEdit) {
-        if (this.relatedData.doi_agent.results.length > 0) {
-          let clonedData = cloneDeep(this.relatedData.doi_agent.results);
-          uploadableObject.related_data.doi_agent = clonedData
-            .filter((entity) => this.isNotEmpty(entity.name))
-            .map((entity) => {
-              return {
-                affiliation: entity?.affiliation || null,
-                agent: entity?.agent?.id || null,
-                agent_type: entity?.agent_type?.id || null,
-                name: entity?.name || null,
-                orcid: entity?.orcid || null,
-                sort: entity?.sort || null,
-              };
-            });
-          if (uploadableObject.related_data.doi_agent.length === 0)
-            uploadableObject.related_data.doi_agent = null;
-        } else uploadableObject.related_data.doi_agent = null;
-
-        if (this.relatedData.doi_geolocation.results.length > 0) {
-          let clonedData = cloneDeep(this.relatedData.doi_geolocation.results);
-          uploadableObject.related_data.doi_geolocation = clonedData
-            // .filter(entity => this.isNotEmpty(entity.locality))
-            .map((entity) => {
-              return {
-                polygon: entity?.polygon || null,
-                locality: entity?.locality?.id || null,
-                place: entity?.place || null,
-                point_latitude: entity?.point_latitude || null,
-                point_longitude: entity?.point_longitude || null,
-              };
-            });
-          if (uploadableObject.related_data.doi_geolocation.length === 0)
-            uploadableObject.related_data.doi_geolocation = null;
-        } else uploadableObject.related_data.doi_geolocation = null;
-
-        if (this.relatedData.doi_related_identifier.results.length > 0) {
-          let clonedData = cloneDeep(
-            this.relatedData.doi_related_identifier.results
-          );
-          uploadableObject.related_data.doi_related_identifier = clonedData
-            .filter((entity) => this.isNotEmpty(entity.identifier_type))
-            .map((entity) => {
-              return {
-                identifier_type: entity?.identifier_type?.id || null,
-                relation_type: entity?.relation_type?.id || null,
-                remarks: entity?.remarks || null,
-                value: entity?.value || null,
-              };
-            });
-          if (uploadableObject.related_data.doi_related_identifier.length === 0)
-            uploadableObject.related_data.doi_related_identifier = null;
-        } else uploadableObject.related_data.doi_related_identifier = null;
-
-        if (this.relatedData.doi_date.results.length > 0) {
-          let clonedData = cloneDeep(this.relatedData.doi_date.results);
-          uploadableObject.related_data.doi_date = clonedData
-            // .filter(entity => this.isNotEmpty(entity.date))
-            .map((entity) => {
-              return {
-                date: entity?.date || null,
-                date_type: entity?.date_type?.id || null,
-                remarks: entity?.remarks || null,
-              };
-            });
-          if (uploadableObject.related_data.doi_date.length === 0)
-            uploadableObject.related_data.doi_date = null;
-        } else uploadableObject.related_data.doi_date = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     //check required fields for related data
@@ -1943,12 +1827,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "doi", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.doi, singleFileMetadata);
     },
   },
 };
