@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -38,61 +37,36 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.method="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.analysis_method__analysis_method,
-              en: item.analysis_method__method_en,
-            }"
-          />
-          <span
-            v-else-if="item.analysis_method"
-            v-translate="{
-              et: item.analysis_method.analysis_method,
-              en: item.analysis_method.method_en,
-            }"
-          />
-        </div>
+      <template v-slot:item.analysis_method="{ item }">
         <div
-          v-else
+          v-if="item.analysis_method"
           v-translate="{
-            et: item.analysis_method__analysis_method,
-            en: item.analysis_method__method_en,
+            et: item.analysis_method.analysis_method,
+            en: item.analysis_method.method_en,
           }"
-        ></div>
+        />
       </template>
 
       <template v-slot:item.agent="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent.agent }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/agent/' + item.agent }"
+          v-if="item.agent"
+          :to="{ path: '/agent/' + item.agent.id }"
           :title="$t('editAgent.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.agent__agent }}
+          {{ item.agent.agent }}
+        </router-link>
+      </template>
+
+      <template v-slot:item.storage="{ item }">
+        <router-link
+          v-if="item.storage"
+          :to="{ path: '/location/' + item.storage.id }"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.storage.location }}
         </router-link>
       </template>
 
@@ -244,6 +218,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -254,18 +234,21 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import DateWrapper from "../../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
-  name: "SpecimenAnalysisTable",
+  name: "AnalysisTable",
 
   components: {
+    RelatedDataDeleteDialog,
     CheckboxWrapper,
     DateWrapper,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -295,16 +278,10 @@ export default {
       required: false,
       default: "deep-orange",
     },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
   },
 
   data: () => ({
     headers: [
-      { text: "analysis.analysis_method", value: "analysis_method" },
       { text: "analysis.analysis_method", value: "analysis_method" },
       { text: "analysis.mass", value: "mass" },
       { text: "common.date", value: "date" },
@@ -347,15 +324,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.analysis_method !== "undefined" &&
@@ -365,9 +333,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         analysis_method: null,
         method_details: "",
@@ -382,65 +348,20 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "analysis",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "analysis",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (
-        typeof item.analysis_method !== "object" &&
-        item.analysis_method !== null
-      ) {
-        this.item.analysis_method = {
-          id: item.analysis_method,
-          analysis_method: item.analysis_method__analysis_method,
-          method_en: item.analysis_method__method_en,
-        };
-        this.autocomplete.analysis_method.push(this.item.analysis_method);
-      } else if (item.analysis_method !== null) {
+      if (item.analysis_method) {
         this.item.analysis_method = item.analysis_method;
         this.autocomplete.analysis_method.push(this.item.analysis_method);
       }
 
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent,
-        };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
+      if (item.agent) {
         this.item.agent = item.agent;
         this.autocomplete.agent.push(this.item.agent);
       }
 
-      if (typeof item.storage !== "object" && item.storage !== null) {
-        this.item.storage = {
-          id: item.storage,
-          location: item.storage__location,
-        };
-        this.autocomplete.storage.push(this.item.storage);
-      } else if (item.storage !== null) {
+      if (item.storage) {
         this.item.storage = item.storage;
         this.autocomplete.storage.push(this.item.storage);
       }
@@ -455,34 +376,6 @@ export default {
 
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "analysis",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
-
-    updateUserInputtedDate(fieldToBeUpdated, date) {
-      if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
-          this.item[fieldToBeUpdated] = date;
-        }
-      }
-    },
   },
 };
 </script>
-
-<style scoped></style>

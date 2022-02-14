@@ -540,6 +540,53 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+              block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="specimen.attachments"
+                @update:existing-files="specimen.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -628,19 +675,6 @@
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
           />
-
-          <div v-show="activeTab === 'attachment'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
 
           <specimen-location-table
             v-show="activeTab === 'specimen_location'"
@@ -853,16 +887,6 @@ export default {
   },
 
   watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(
-          [this.activeTab],
-          "specimen",
-          this.$route.params.id
-        );
-      },
-      deep: true,
-    },
     "specimen.specimen_id"(newVal) {
       this.updateSpecimenFullName({
         specimen_id: newVal,
@@ -920,7 +944,6 @@ export default {
           { name: "specimen_identification_geology", iconClass: "far fa-gem" },
           { name: "specimen_reference", iconClass: "fas fa-book" },
           { name: "specimen_description", iconClass: "fas fa-info" },
-          { name: "attachment", iconClass: "far fa-folder-open" },
           { name: "specimen_location", iconClass: "fas fa-globe-europe" },
           { name: "specimen_history", iconClass: "fas fa-history" },
           { name: "analysis", iconClass: "far fa-chart-bar" },
@@ -969,6 +992,7 @@ export default {
             analysis_method: false,
             parent: false,
             fossil: false,
+            attachments: false,
           },
           list_specimen_kind: [],
           list_specimen_original_status: [],
@@ -998,6 +1022,7 @@ export default {
           analysis_method: [],
           parent: [],
           fossil: [],
+          attachments: [],
         },
         requiredFields: ["fossil"],
         specimen: {
@@ -1040,7 +1065,6 @@ export default {
           storage: null,
           status: null,
           original_status: null,
-          database: null,
           accession: null,
           deaccession: null,
         },
@@ -1050,16 +1074,9 @@ export default {
           details: true,
           images: true,
           description: true,
+          files: true,
         },
       };
-    },
-
-    loadSpecimenImages(specimenId) {
-      this.specimenImages = this.$api.rw.get("attachment", {
-        defaultParams: {
-          specimen: specimenId,
-        },
-      });
     },
 
     setDefaultRelatedData() {
@@ -1068,7 +1085,6 @@ export default {
         specimen_identification_geology: { count: 0, results: [] },
         specimen_reference: { count: 0, results: [] },
         specimen_description: { count: 0, results: [] },
-        attachment: { count: 0, results: [] },
         specimen_location: { count: 0, results: [] },
         specimen_history: { count: 0, results: [] },
         analysis: { count: 0, results: [] },
@@ -1097,12 +1113,6 @@ export default {
             sortBy: ["length"],
             sortDesc: [true],
           },
-          attachment: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
           specimen_location: {
             page: 1,
             paginateBy: 10,
@@ -1126,14 +1136,8 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "specimen", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      this.relatedData.attachment.results = files;
+      this.addFilesAsNewObjects(files, this.specimen, singleFileMetadata);
     },
   },
 };
 </script>
-
-<style scoped></style>
