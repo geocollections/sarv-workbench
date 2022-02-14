@@ -69,7 +69,7 @@
 
           <!-- CREATORS, YEAR and PUBLISHER -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1" v-if="$route.meta.isEdit">
               <v-tooltip top z-index="60000">
                 <template v-slot:activator="{ on, attrs }">
                   <input-wrapper
@@ -86,7 +86,7 @@
               </v-tooltip>
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" :md="$route.meta.isEdit ? 4 : 6" class="pa-1">
               <input-wrapper
                 v-model="dataset.publication_year"
                 :color="bodyActiveColor"
@@ -95,7 +95,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" :md="$route.meta.isEdit ? 4 : 6" class="pa-1">
               <autocomplete-wrapper
                 v-model="dataset.publisher"
                 :color="bodyActiveColor"
@@ -455,6 +455,9 @@
             :search-parameters="relatedData.searchParameters.dataset_analysis"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <dataset-geolocation-table
@@ -491,7 +494,7 @@
     </v-card>
 
     <!-- IS_PRIVATE -->
-    <v-row no-gutters class="mt-2">
+    <v-row no-gutters class="mt-2" v-if="$route.meta.isEdit">
       <v-col>
         <checkbox-wrapper
           v-model="dataset.is_private"
@@ -574,12 +577,6 @@ export default {
   },
 
   watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
     "relatedData.dataset_author.results": {
       handler(newVal) {
         if (newVal && newVal.length > 0) this.updateCreatorsField(newVal);
@@ -620,12 +617,10 @@ export default {
         listOfAutocompleteTables: [
           "list_language",
           "list_licence",
-          "doi_resource_type",
           "doi_publisher",
         ],
         autocomplete: {
           loaders: {
-            doi_resource_type: false,
             doi_publisher: false,
             copyright_agent: false,
             owner: false,
@@ -633,7 +628,6 @@ export default {
             reference: false,
             locality: false,
           },
-          doi_resource_type: [],
           doi_publisher: [],
           copyright_agent: [],
           list_language: [],
@@ -643,19 +637,15 @@ export default {
           reference: [],
           locality: [],
         },
-        requiredFields: [
-          "resource",
-          // "creators",
-          "publication_year",
-          "publisher",
-          "title",
-        ],
+        requiredFields: this.$route.meta.isEdit
+          ? ["resource", "publication_year", "publisher", "title", "creators"]
+          : ["resource", "publication_year", "publisher", "title"],
         dataset: {
           id: null,
           dataset_html: null,
           date: null,
           date_txt: null,
-          is_private: false,
+          is_private: true,
           owner: null,
           owner_txt: null,
           copyright_agent: null,
@@ -669,7 +659,7 @@ export default {
           title_translated: null,
           title_translated_language: null,
           abstract: null,
-          resource_type: null,
+          resource_type: 3,
           resource: null,
           methods: null,
           version: null,
@@ -737,29 +727,15 @@ export default {
         orderBy(datasetAuthor, ["sort", "id"], ["asc", "asc"]).forEach(
           (agent) => {
             // Only Creators are added (agent_type 1 === Creator)
-            if (this.$route.meta.isEdit) {
-              if (agent?.agent_type === 1) {
-                if (agent?.agent__surename && agent?.agent__forename) {
-                  creatorsLong += `${
-                    agent.agent__surename
-                  }, ${agent.agent__forename.charAt(0)}., `;
-                  creators += `${agent.agent__surename}, ${agent.agent__forename}; `;
-                } else if (agent?.name) {
-                  creatorsLong += `${agent.name}; `;
-                  creators += `${agent.name}; `;
-                }
-              }
-            } else {
-              if (agent?.agent_type?.id === 1) {
-                if (agent?.agent?.surename && agent?.agent?.forename) {
-                  creatorsLong += `${
-                    agent.agent.surename
-                  }, ${agent.agent.forename.charAt(0)}., `;
-                  creators += `${agent.agent.surename}, ${agent.agent.forename}; `;
-                } else if (agent?.name) {
-                  creators += `${agent.name}; `;
-                  creatorsLong += `${agent.name}; `;
-                }
+            if (agent?.agent_type?.id === 1) {
+              if (agent?.agent?.surename && agent?.agent?.forename) {
+                creatorsLong += `${
+                  agent.agent.surename
+                }, ${agent.agent.forename.charAt(0)}., `;
+                creators += `${agent.agent.surename}, ${agent.agent.forename}; `;
+              } else if (agent?.name) {
+                creators += `${agent.name}; `;
+                creatorsLong += `${agent.name}; `;
               }
             }
           }
@@ -780,5 +756,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

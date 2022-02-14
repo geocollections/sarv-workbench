@@ -240,6 +240,7 @@
     "dataset_author": "Andmeseti autor",
     "dataset_reference": "Andmeseti kirjandus",
     "dataset_geolocation": "Andmeseti lokaliteet",
+    "dataset_analysis": "Andmeseti analüüs",
     "locality_stratigraphy": "Stratigraafilised piirid",
     "doi_agent": "Doi isik/asutus",
     "doi_date": "Doi kuupäev",

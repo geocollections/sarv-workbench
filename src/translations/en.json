@@ -244,6 +244,7 @@
     "dataset_author": "Dataset author",
     "dataset_reference": "Dataset reference",
     "dataset_geolocation": "Dataset geolocation",
+    "dataset_analysis": "Dataset analysis",
     "locality_stratigraphy": "Stratigraphic boundaries",
     "doi_agent": "Doi agent",
     "doi_date": "Doi date",
