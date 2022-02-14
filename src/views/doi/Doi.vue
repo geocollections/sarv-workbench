@@ -1197,29 +1197,15 @@ export default {
 
         orderBy(doiAgent, ["sort", "id"], ["asc", "asc"]).forEach((agent) => {
           // Only Creators are added (agent_type 1 === Creator)
-          if (this.$route.meta.isEdit) {
-            if (agent?.agent_type === 1) {
-              if (agent?.agent__surename && agent?.agent__forename) {
-                creatorsLong += `${
-                  agent.agent__surename
-                }, ${agent.agent__forename.charAt(0)}., `;
-                creators += `${agent.agent__surename}, ${agent.agent__forename}; `;
-              } else if (agent?.name) {
-                creatorsLong += `${agent.name}; `;
-                creators += `${agent.name}; `;
-              }
-            }
-          } else {
-            if (agent?.agent_type?.id === 1) {
-              if (agent?.agent?.surename && agent?.agent?.forename) {
-                creatorsLong += `${
-                  agent.agent.surename
-                }, ${agent.agent.forename.charAt(0)}., `;
-                creators += `${agent.agent.surename}, ${agent.agent.forename}; `;
-              } else if (agent?.name) {
-                creators += `${agent.name}; `;
-                creatorsLong += `${agent.name}; `;
-              }
+          if (agent?.agent_type?.id === 1) {
+            if (agent?.agent?.surename && agent?.agent?.forename) {
+              creatorsLong += `${
+                agent.agent.surename
+              }, ${agent.agent.forename.charAt(0)}., `;
+              creators += `${agent.agent.surename}, ${agent.agent.forename}; `;
+            } else if (agent?.name) {
+              creators += `${agent.name}; `;
+              creatorsLong += `${agent.name}; `;
             }
           }
         });
