@@ -408,6 +408,53 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="analysis.attachments"
+                @update:existing-files="analysis.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS  -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -455,19 +502,6 @@
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
           />
-
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :record-options="$route.meta.isEdit"
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
 
           <!-- PAGINATION -->
           <pagination
@@ -567,15 +601,6 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -602,7 +627,6 @@ export default {
       return {
         relatedTabs: [
           { name: "analysis_results", iconClass: "far fa-chart-bar" },
-          { name: "attachment_link", iconClass: "fas fa-folder-open" },
         ],
         activeTab: "analysis_results",
         relatedData: this.setDefaultRelatedData(),
@@ -620,6 +644,7 @@ export default {
             lab_instrument: false,
             reference: false,
             attachment: false,
+            attachments: false,
           },
           agent: [],
           owner: [],
@@ -632,6 +657,7 @@ export default {
           reference: [],
           analysis_method: [],
           attachment: [],
+          attachments: [],
         },
         requiredFields: ["analysis_method"],
         analysis: {
@@ -661,6 +687,7 @@ export default {
           location: null,
           remarks: null,
           is_private: false,
+          attachments: [],
         },
         componentKey: 0,
         block: {
@@ -668,26 +695,18 @@ export default {
           labInfo: true,
           otherInfo: false,
           description: true,
+          files: true,
         },
       };
     },
 
     setDefaultRelatedData() {
       return {
-        attachment_link: {
-          count: 0,
-          results: [],
-        },
         analysis_results: {
           count: 0,
           results: [],
         },
         searchParameters: {
-          attachment_link: {
-            page: 1,
-            paginateBy: 10,
-            orderBy: "id",
-          },
           analysis_results: {
             page: 1,
             paginateBy: 10,
@@ -699,12 +718,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "analysis", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.analysis, singleFileMetadata);
     },
   },
 };

@@ -277,6 +277,7 @@
 
     <!-- RELATED FILES -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="mt-2"
       id="block-files"
       :color="bodyColor.split('n-')[0] + 'n-5'"

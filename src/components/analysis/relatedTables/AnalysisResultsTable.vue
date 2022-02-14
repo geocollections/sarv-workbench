@@ -26,7 +26,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -38,42 +37,18 @@
       </template>
 
       <template v-slot:item.parameter="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div v-if="$route.meta.isEdit">
-            <div
-              v-if="item.parameter__parameter_html"
-              v-html="item.parameter__parameter_html"
-            />
-          </div>
-          <div v-else-if="item.parameter">
-            <div
-              v-if="item.parameter.parameter_html"
-              v-html="item.parameter.parameter_html"
-            />
-          </div>
-        </div>
-        <div v-else>
+        <div v-if="item.parameter">
           <div
-            v-if="item.parameter__parameter_html"
-            v-html="item.parameter__parameter_html"
+            v-if="item.parameter.parameter_html"
+            v-html="item.parameter.parameter_html"
           />
         </div>
       </template>
 
       <template v-slot:item.unit="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div
-            v-if="$route.meta.isEdit"
-            v-translate="{ et: item.unit__value, en: item.unit__value_en }"
-          />
-          <div
-            v-else-if="item.unit"
-            v-translate="{ et: item.unit.value, en: item.unit.value_en }"
-          />
-        </div>
         <div
-          v-else
-          v-translate="{ et: item.unit__value, en: item.unit__value_en }"
+          v-if="item.unit"
+          v-translate="{ et: item.unit.value, en: item.unit.value_en }"
         />
       </template>
     </v-data-table>
@@ -267,11 +242,6 @@ export default {
       required: false,
       default: "deep-orange",
     },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
   },
 
   data: () => ({
@@ -304,6 +274,7 @@ export default {
       value_min: "",
       value_bin: false,
       value_txt: "",
+      value_error: "",
       remarks: "",
     },
     isNewItem: true,
@@ -318,15 +289,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return this.item.name.length > 0;
     },
@@ -349,6 +311,7 @@ export default {
         value_min: "",
         value_bin: false,
         value_txt: "",
+        value_error: "",
         remarks: "",
       };
     },
@@ -356,26 +319,12 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.parameter !== "object" && item.parameter !== null) {
-        this.item.parameter = {
-          id: item.parameter,
-          parameter: item.parameter__parameter,
-          parameter_html: item.parameter__parameter_html,
-        };
-        this.autocomplete.analysis_parameter.push(this.item.parameter);
-      } else if (item.parameter !== null) {
+      if (item.parameter) {
         this.item.parameter = item.parameter;
         this.autocomplete.analysis_parameter.push(this.item.parameter);
       }
 
-      if (typeof item.unit !== "object" && item.unit !== null) {
-        this.item.unit = {
-          id: item.unit,
-          value: item.unit__value,
-          value_en: item.unit_value_en,
-        };
-        this.autocomplete.list_unit.push(this.item.unit);
-      } else if (item.unit !== null) {
+      if (item.unit) {
         this.item.unit = item.unit;
         this.autocomplete.list_unit.push(this.item.unit);
       }
@@ -386,6 +335,7 @@ export default {
       this.item.value_min = item.value_min;
       this.item.value_bin = item.value_bin;
       this.item.value_txt = item.value_txt;
+      this.item.value_error = item.value_error;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -406,5 +356,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
