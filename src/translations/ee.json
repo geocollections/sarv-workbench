@@ -289,8 +289,6 @@
     "sample_serie": "Lisa prooviseeria",
     "editSiteGroundwater": "Hüdrogeoloogia",
     "site_groundwater": "Hüdrogeoloogia",
-    "sarv_issue": "Saada sõnum",
-    "sarv_issues": "Minu sõnumid",
     "admin": "Admin",
     "analysis_parameter": "Analüüsi parameetrid",
     "analysis_method": "Analüüsi meetodid",
@@ -734,10 +732,6 @@
     "heading": "Hüdrogeoloogia proovipunktid",
     "editMessage": "Muuda hüdrogeoloogia proovipunkti",
     "viewMessage": "Ava VEKA link"
-  },
-  "editSarvIssue": {
-    "heading": "Sõnum",
-    "editMessage": "Vaata sõnumit"
   },
   "editAnalysisParameter": {
     "heading": "Analüüsi parameetrid",
@@ -2899,25 +2893,6 @@
     "url_veka_short": "VEKA",
     "save": "Salvesta põhjavee andmestik",
     "dataMissing": "Täida mõni väli Põhjavee lisamoodulist"
-  },
-  "sarv_issue": {
-    "date_changed": "date_changed",
-    "from_user__username": "from_user__username",
-    "id": "id",
-    "to_user__username": "to_user__username",
-    "my_messages": "Minu sõnumid",
-    "title": "Sõnumi pealkiri",
-    "description": "Sõnumi sisu",
-    "date_added": "Saadetud",
-    "from_user": "Saatja",
-    "to_user": "Saaja",
-    "url": "Probleemne URL",
-    "response": "Vastus sõnumile",
-    "replied": "Vastatud",
-    "message_answered": "Sa oled juba sõnumile vastanud!",
-    "unanswered": "Vastamata",
-    "activeIssues": "Aktiivsed sõnumid / probleemid",
-    "answer": "Vasta"
   },
   "analysis_parameter": {
     "id": "ID",

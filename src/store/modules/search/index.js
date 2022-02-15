@@ -15,7 +15,6 @@ const state = {
   activeRelatedDataTab: {},
   activeSearchParams: null,
   activeSearchParametersFilters: [],
-  activeSarvIssues: null,
   lookUpTypes: [
     { text: "main.iexact", value: "iexact", symbol: "=" },
     { text: "main.icontains", value: "icontains", symbol: "*" },

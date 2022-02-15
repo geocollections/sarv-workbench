@@ -1,8 +1,6 @@
 import {
   fetchActiveLibraryList,
-  fetchActiveSarvIssues,
   fetchActiveSelectionSeriesList,
-  fetchSarvIssues,
   fetchSpecimens,
 } from "@/assets/js/api/apiCalls";
 
@@ -37,29 +35,8 @@ const actions = {
     );
   },
 
-  FETCH_SARV_ISSUES({ commit, state, rootGetters }) {
-    return fetchSarvIssues(
-      state.activeSearchParams.search,
-      rootGetters["user/getUserId"]
-    ).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  fetchActiveSarvIssues({ commit, rootGetters }) {
-    return fetchActiveSarvIssues(rootGetters["user/getUserId"]).then((resp) => {
-      commit("SET_ACTIVE_SARV_ISSUES", resp);
-    });
-  },
-
   setSidebarList({ commit }, payload) {
     commit("SET_SIDEBAR_LIST", payload);
-  },
-
-  setActiveSarvIssues({ commit }, issues) {
-    // Todo: Pointless line (should be removed after new api service is implemented)
-    const data = issues?.data ?? issues;
-    commit("SET_ACTIVE_SARV_ISSUES", data);
   },
 
   updateIsSampleSimpleView({ commit }, boolVal) {

@@ -113,19 +113,6 @@ const formManipulation = {
       return !!(isValid && isValidOptional);
     },
 
-    /**
-     *
-     * @param {string} object - Current object which is being checked e.g., 'attachemnt', 'reference'.
-     * @returns {boolean} 'true' if is_locked field is true and 'false' if it is false.
-     */
-    isObjectLocked(object) {
-      if (this.$route.meta.isEdit && object === "attachment") {
-        return !!this.isAttachmentLocked;
-      } else if (this.$route.meta.isEdit && object === "sarv_issue") {
-        return this.isNotEmpty(this.initialResponse);
-      } else return false;
-    },
-
     async save(module, saveAndLeave = false, saveAsNew = false) {
       if (this.validate(module)) {
         const data = this.formatDataForUpload(this[module]);

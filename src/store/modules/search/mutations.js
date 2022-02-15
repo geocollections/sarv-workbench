@@ -67,10 +67,6 @@ const mutations = {
     }
   },
 
-  SET_ACTIVE_SARV_ISSUES(state, payload) {
-    state.activeSarvIssues = payload;
-  },
-
   SET_ACTIVE_SEARCH_PARAMETERS(state, payload) {
     state.activeSearchParams = payload;
   },

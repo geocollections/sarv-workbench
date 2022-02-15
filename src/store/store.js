@@ -48,7 +48,6 @@ import deaccession from "./modules/deaccession";
 import web_news from "./modules/web_news";
 import web_pages from "./modules/web_pages";
 import taxon_page from "./modules/taxon_page";
-import sarv_issue from "./modules/sarv_issue";
 
 Vue.use(Vuex);
 
@@ -121,7 +120,6 @@ export default createStore(Vuex.Store, {
     web_news,
     web_pages,
     taxon_page,
-    sarv_issue,
   },
   actions,
   state,

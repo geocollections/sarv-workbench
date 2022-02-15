@@ -125,17 +125,6 @@
             </v-list-item>
           </v-list>
         </v-menu>
-
-        <v-btn icon to="/sarv_issue" :title="$t('sarv_issue.my_messages')">
-          <v-badge
-            :content="getActiveSarvIssuesCount()"
-            :value="getActiveSarvIssuesCount()"
-            color="red"
-            overlap
-          >
-            <v-icon>far fa-envelope</v-icon>
-          </v-badge>
-        </v-btn>
       </v-toolbar-items>
 
       <v-app-bar-nav-icon
@@ -199,18 +188,12 @@ export default {
     ]),
     ...mapGetters("user", ["getCurrentAgent", "isUserSuperuser"]),
   },
-  created() {
-    this.fetchActiveSarvIssues();
-  },
   methods: {
     ...mapActions("settings", [
       "updateDrawerState",
       "updateDrawerRightState",
       "updateLang",
     ]),
-    ...mapGetters("search", ["getActiveSarvIssuesCount"]),
-
-    ...mapActions("search", ["fetchActiveSarvIssues"]),
 
     ...mapActions("user", ["removeAuthUser"]),
 

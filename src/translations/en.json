@@ -293,8 +293,6 @@
     "sample_serie": "Add sample series",
     "editSiteGroundwater": "Hydrogeology",
     "site_groundwater": "Hydrogeology",
-    "sarv_issue": "Send a message",
-    "sarv_issues": "My messages",
     "admin": "Admin",
     "analysis_parameter": "Analysis parameters",
     "analysis_method": "Analysis methods",
@@ -738,10 +736,6 @@
     "heading": "Hydrogeology sites",
     "editMessage": "Edit Hydrogeology site",
     "viewMessage": "Open VEKA link"
-  },
-  "editSarvIssue": {
-    "heading": "Message",
-    "editMessage": "View message"
   },
   "editAnalysisParameter": {
     "heading": "Analysis parameters",
@@ -2903,25 +2897,6 @@
     "url_veka_short": "VEKA",
     "save": "Save groundwater data",
     "dataMissing": "Add some data to groundwater extension"
-  },
-  "sarv_issue": {
-    "date_changed": "date_changed",
-    "from_user__username": "from_user__username",
-    "id": "id",
-    "to_user__username": "to_user__username",
-    "my_messages": "My messages",
-    "title": "Message title",
-    "description": "Message content",
-    "date_added": "Sent",
-    "from_user": "Sender",
-    "to_user": "Receiver",
-    "url": "Problematic URL",
-    "response": "Response to a message",
-    "replied": "Replied",
-    "message_answered": "You have already replied to the message!",
-    "unanswered": "Unanswered",
-    "activeIssues": "Active messages / issues",
-    "answer": "Reply"
   },
   "analysis_parameter": {
     "id": "ID",

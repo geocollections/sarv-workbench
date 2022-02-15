@@ -39,17 +39,6 @@
       </v-col>
     </v-row>
 
-    <!-- MESSAGES -->
-    <v-row v-if="activeSarvIssues !== null && activeSarvIssues.count > 0">
-      <v-col>
-        <messages
-          :sarv-issues="activeSarvIssues"
-          :body-color="bodyColor"
-          :body-active-color="bodyActiveColor"
-        />
-      </v-col>
-    </v-row>
-
     <!-- MAP -->
     <v-row
       class="mt-0"
@@ -218,11 +207,9 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
 import SitesMap from "./SitesMap";
 import ImageViewWrapper from "../partial/image_view/ImageViewWrapper";
-import Messages from "./Messages";
 
 export default {
   components: {
-    Messages,
     ImageViewWrapper,
     RecentActivity,
     SitesMap,
@@ -238,7 +225,6 @@ export default {
 
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
-    ...mapState("search", ["activeSarvIssues"]),
     ...mapGetters("user", [
       "getCurrentAgent",
       "getLastLoginDate",
@@ -256,23 +242,7 @@ export default {
     },
   },
 
-  async created() {
-    const response = await this.$api.rw.get("sarv_issue", {
-      defaultParams: {
-        to_user: this.getUserId,
-        or_search: "response__isnull:true OR response: ",
-      },
-      options: {
-        sortBy: ["id"],
-        sortDesc: [true],
-      },
-    });
-    this.setActiveSarvIssues(response);
-  },
-
   methods: {
-    ...mapActions("search", ["setActiveSarvIssues"]),
-
     async getRecentFiles(paginateBy) {
       const response = await this.$api.rw.get("attachment", {
         defaultParams: {
