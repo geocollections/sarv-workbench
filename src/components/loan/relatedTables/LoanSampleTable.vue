@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -40,16 +39,7 @@
 
       <template v-slot:item.sample="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/sample/' + item.sample }"
-          :title="$t('editSample.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.sample__number }}
-        </router-link>
-        <router-link
-          v-else-if="item.sample"
+          v-if="item.sample"
           :to="{ path: '/sample/' + item.sample.id }"
           :title="$t('editSample.editMessage')"
           class="sarv-link"
@@ -217,13 +207,7 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.sample !== "object" && item.sample !== null) {
-        this.item.sample = {
-          id: item.sample,
-          number: item.sample__number,
-        };
-        this.autocomplete.sample.push(this.item.sample);
-      } else {
+      if (item.sample) {
         this.item.sample = item.sample;
         this.autocomplete.sample.push(this.item.sample);
       }
@@ -232,5 +216,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

@@ -483,19 +483,6 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(
-          [this.activeTab],
-          "specimen",
-          this.$route.params.id
-        );
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     ...mapGetters("user", ["getDatabaseId"]),
   },
@@ -665,5 +652,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

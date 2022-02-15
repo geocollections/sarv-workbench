@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -40,16 +39,7 @@
 
       <template v-slot:item.specimen="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/specimen/' + item.specimen }"
-          :title="$t('editSpecimen.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.specimen__specimen_id }}
-        </router-link>
-        <router-link
-          v-else-if="item.specimen"
+          v-if="item.specimen"
           :to="{ path: '/specimen/' + item.specimen.id }"
           :title="$t('editSpecimen.editMessage')"
           class="sarv-link"
@@ -81,7 +71,7 @@
                     :color="bodyActiveColor"
                     :items="autocomplete.specimen"
                     :loading="autocomplete.loaders.specimen"
-                    :item-text="customSpecimenLabel"
+                    item-text="specimen_full_number"
                     :label="$t('loan.specimen')"
                     use-state
                     is-link
@@ -218,31 +208,12 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.specimen !== "object" && item.specimen !== null) {
-        this.item.specimen = {
-          id: item.specimen,
-          specimen_id: item.specimen__specimen_id,
-          coll__number: item.specimen__coll__number,
-        };
-        this.autocomplete.specimen.push(this.item.specimen);
-      } else {
+      if (item.specimen) {
         this.item.specimen = item.specimen;
         this.autocomplete.specimen.push(this.item.specimen);
       }
       this.item.remarks = item.remarks;
     },
-
-    customSpecimenLabel(option) {
-      if (option.coll__number) {
-        return `${option.coll__number.split(" ")[0]} ${
-          option.specimen_id
-        } (ID: ${option.id})`;
-      } else {
-        return `${option.specimen_id} (ID: ${option.id})`;
-      }
-    },
   },
 };
 </script>
-
-<style scoped></style>
