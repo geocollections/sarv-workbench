@@ -40,11 +40,15 @@ const detailViewUtilsMixin = {
           let urlTable = table;
           if (urlTable === "library_reference_list")
             urlTable = "library_reference";
+          if (urlTable === "rock_classification") urlTable = "rock_tree";
           return this.$api.rw
             .get(urlTable, {
               defaultParams: {
                 // Exception for taxon in order to get taxon subclasses
-                [urlTable === "taxon" ? "parent" : module]: moduleId,
+                // Exception for rock in order to get rock classifications from rock_tree table
+                [urlTable === "taxon" || table === "rock_classification"
+                  ? "parent"
+                  : module]: moduleId,
                 nest: 1, // Todo: Should drop nest for performance issues
               },
               options: {
@@ -121,6 +125,7 @@ const detailViewUtilsMixin = {
       let table = payload.table;
 
       let url = `${table}`;
+      if (url === "rock_classification") url = "rock_tree";
       let formData = new FormData();
       let uploadableObject = this.formatDataForUpload(payload.item);
 
@@ -132,6 +137,8 @@ const detailViewUtilsMixin = {
       }
 
       uploadableObject[mainObjectKey] = this[this.$route.meta.object].id;
+
+      console.log(uploadableObject);
 
       Object.keys(uploadableObject).forEach((key) =>
         formData.set(key, uploadableObject[key])
@@ -148,26 +155,29 @@ const detailViewUtilsMixin = {
       }
     },
 
-    async editRelatedItem(payload) {
+    async editRelatedItem(payload, connectionField = null) {
       let table = payload.table;
 
+      let url = `${table}`;
+      if (url === "rock_classification") url = "rock_tree";
       let formData = new FormData();
       let uploadableObject = this.formatDataForUpload(payload.item);
       delete uploadableObject.id;
 
+      let mainObjectKey = this.$route.meta.object;
+      if (connectionField) mainObjectKey = connectionField;
       if (table === "taxon") {
         uploadableObject.parent = this[this.$route.meta.object].id;
         uploadableObject.taxon = payload.rawItem.taxon;
-      } else {
-        uploadableObject[this.$route.meta.object] =
-          this[this.$route.meta.object].id;
       }
+
+      uploadableObject[mainObjectKey] = this[this.$route.meta.object].id;
 
       Object.keys(uploadableObject).forEach((key) =>
         formData.set(key, uploadableObject[key])
       );
 
-      const response = await this.$api.rw.put(table, payload.item.id, formData);
+      const response = await this.$api.rw.put(url, payload.item.id, formData);
 
       if (response?.id && this?.[this.$route.meta.object]?.id) {
         this.loadRelatedData(
@@ -179,10 +189,12 @@ const detailViewUtilsMixin = {
     },
 
     async deleteRelatedItem(payload) {
-      console.log(payload);
       let table = payload.table;
 
-      const response = await this.$api.rw.delete(table, payload.item.id);
+      let url = `${table}`;
+      if (url === "rock_classification") url = "rock_tree";
+
+      const response = await this.$api.rw.delete(url, payload.item.id);
 
       if (response && this?.[this.$route.meta.object]?.id) {
         this.loadRelatedData(

@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,27 +38,11 @@
       </template>
 
       <template v-slot:item.property_type="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.property_type__property,
-              en: item.property_type__property_en,
-            }"
-          />
-          <div
-            v-else-if="item.property_type"
-            v-translate="{
-              et: item.property_type.property,
-              en: item.property_type.property_en,
-            }"
-          />
-        </div>
         <div
-          v-else
+          v-if="item.property_type"
           v-translate="{
-            et: item.property_type__property,
-            en: item.property_type__property_en,
+            et: item.property_type.property,
+            en: item.property_type.property_en,
           }"
         />
       </template>
@@ -159,6 +142,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -169,17 +158,20 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import { fetchListRockPropertyType } from "../../../assets/js/api/apiCalls";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "RockPropertyTable",
 
   components: {
+    RelatedDataDeleteDialog,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -208,11 +200,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
   },
 
@@ -250,15 +237,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.property_type !== "undefined" &&
@@ -274,9 +252,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         property_type: null,
         value_txt: "",
@@ -287,43 +263,10 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "rock_property",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "rock_property",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (
-        typeof item.property_type !== "object" &&
-        item.property_type !== null
-      ) {
-        this.item.property_type = {
-          id: item.property_type,
-          property: item.property_type__property,
-          property_en: item.property_type__property_en,
-        };
-        this.autocomplete.property_type.push(this.item.property_type);
-      } else if (item.property_type !== null) {
+      if (item.property_type) {
         this.item.property_type = item.property_type;
         this.autocomplete.property_type.push(this.item.property_type);
       }
@@ -335,14 +278,6 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "rock_property",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
     },
 
     fillListAutocompletes() {
@@ -357,18 +292,6 @@ export default {
         this.autocomplete.loaders.property_type = false;
       }
     },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped></style>

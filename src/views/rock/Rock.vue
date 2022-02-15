@@ -473,8 +473,8 @@
             "
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
-            v-on:related:add="addRelatedItem"
-            v-on:related:edit="editRelatedItem"
+            v-on:related:add="addRelatedItem($event, 'parent')"
+            v-on:related:edit="editRelatedItem($event, 'parent')"
             v-on:related:delete="deleteRelatedItem"
           />
 
@@ -586,17 +586,6 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
-  },
-
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
 
@@ -662,8 +651,8 @@ export default {
           description_usage_en: null,
           description_usage_ru: null,
           description_author: null,
-          in_estonia: null,
-          is_resource: null,
+          in_estonia: false,
+          is_resource: false,
           stratigraphy: null,
           lithostratigraphy: null,
           mindat_id: null,
@@ -675,7 +664,7 @@ export default {
           formula_html: null,
           remarks: null,
           is_private: false,
-          in_portal: null,
+          in_portal: false,
         },
         block: {
           info: true,
@@ -782,5 +771,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

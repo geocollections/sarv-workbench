@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,16 +38,8 @@
       </template>
 
       <template v-slot:item.element__element="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div v-if="$route.meta.isEdit">
-            {{ item.element__element }}
-          </div>
-          <div v-else-if="item.element">
-            {{ item.element.element }}
-          </div>
-        </div>
-        <div v-else>
-          {{ item.element__element }}
+        <div v-if="item.element">
+          {{ item.element.element }}
         </div>
       </template>
     </v-data-table>
@@ -155,6 +146,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -164,16 +161,19 @@ import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import { fetchListElement } from "../../../assets/js/api/apiCalls";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "RockElementTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -246,15 +246,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.element !== "undefined" && this.item.element !== null
@@ -269,9 +260,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         element: null,
         content: "",
@@ -283,39 +272,10 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "rock_element",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "rock_element",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (typeof item.element !== "object" && item.element !== null) {
-        this.item.element = {
-          id: item.element,
-          element: item.element__element,
-        };
-        this.autocomplete.element.push(this.item.element);
-      } else if (item.element !== null) {
+      if (item.element) {
         this.item.element = item.element;
         this.autocomplete.element.push(this.item.element);
       }
@@ -330,14 +290,6 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "rock_element",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
     fillListAutocompletes() {
       if (this.autocomplete.element.length <= 1) {
         this.autocomplete.loaders.element = true;
@@ -350,18 +302,6 @@ export default {
         this.autocomplete.loaders.element = false;
       }
     },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped></style>

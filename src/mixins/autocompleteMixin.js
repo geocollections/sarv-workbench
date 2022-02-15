@@ -365,18 +365,11 @@ const autocompleteMixin = {
         if (value.length < minLength) {
           if (clearAutocomplete) this.autocomplete[options] = [];
         } else if (value.length >= minLength) {
-          let query = buildAutocompleteQuery(
-            type,
-            value,
-            this.getCurrentAgent
-          );
+          let query = buildAutocompleteQuery(type, value, this.getCurrentAgent);
           if (query.length === 0) return;
 
           this.autocomplete.loaders[options] = true;
           autocompleteSearch(query).then((response) => {
-            console.log(response);
-            console.log(options);
-            console.log(handleResponse(response));
             this.autocomplete.loaders[options] = false;
             this.autocomplete[options] = handleResponse(response);
           });

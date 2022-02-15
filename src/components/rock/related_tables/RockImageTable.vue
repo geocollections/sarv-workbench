@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,79 +38,29 @@
       </template>
 
       <template v-slot:item.attachment="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/attachment/' + item.attachment }"
-            :title="$t('editAttachment.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.attachment }}
-          </router-link>
-          <router-link
-            v-else-if="item.attachment"
-            :to="{ path: '/attachment/' + item.attachment.id }"
-            :title="$t('editAttachment.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.attachment.id }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/attachment/' + item.attachment }"
+          v-if="item.attachment"
+          :to="{ path: '/attachment/' + item.attachment.id }"
           :title="$t('editAttachment.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.attachment }}
+          {{ item.attachment.id }}
         </router-link>
       </template>
 
       <template v-slot:item.link="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/rock/' + item.link }"
-            :title="$t('editRock.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <div
-              v-translate="{
-                et: item.link__name,
-                en: item.link__name_en,
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.link"
-            :to="{ path: '/rock/' + item.link.id }"
-            :title="$t('editRock.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <div
-              v-translate="{
-                et: item.link.name,
-                en: item.link.name_en,
-              }"
-            />
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/rock/' + item.link }"
+          v-if="item.link"
+          :to="{ path: '/rock/' + item.link.id }"
           :title="$t('editRock.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <div
             v-translate="{
-              et: item.link__name,
-              en: item.link__name_en,
+              et: item.link.name,
+              en: item.link.name_en,
             }"
           />
         </router-link>
@@ -225,6 +174,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -234,17 +189,20 @@ import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "RockImageTable",
 
   components: {
+    RelatedDataDeleteDialog,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -273,11 +231,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
   },
 
@@ -319,15 +272,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.attachment !== "undefined" &&
@@ -337,9 +281,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         attachment: null,
         link: null,
@@ -351,51 +293,15 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "rock_image",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "rock_image",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (typeof item.attachment !== "object" && item.attachment !== null) {
-        this.item.attachment = {
-          id: item.attachment,
-          original_filename: item.attachment__original_filename,
-        };
-        this.autocomplete.attachment.push(this.item.attachment);
-      } else if (item.attachment !== null) {
+      if (item.attachment) {
         this.item.attachment = item.attachment;
         this.autocomplete.attachment.push(this.item.attachment);
       }
 
-      if (typeof item.link !== "object" && item.link !== null) {
-        this.item.link = {
-          id: item.link,
-          name: item.link__name,
-          name_en: item.link__name_en,
-        };
-        this.autocomplete.rock.push(this.item.link);
-      } else if (item.link !== null) {
+      if (item.link) {
         this.item.link = item.link;
         this.autocomplete.rock.push(this.item.link);
       }
@@ -409,29 +315,9 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "rock_image",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
-
     customLabelForAttachment(option) {
       return `${option.id} - (${option.original_filename})`;
     },
   },
 };
 </script>
-
-<style scoped></style>

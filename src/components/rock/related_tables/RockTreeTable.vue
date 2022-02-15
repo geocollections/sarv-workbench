@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,73 +38,27 @@
       </template>
 
       <template v-slot:item.rock_classification="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.rock_classification__name,
-              en: item.rock_classification__name_en,
-            }"
-          />
-          <div
-            v-else-if="item.rock_classification"
-            v-translate="{
-              et: item.rock_classification.name,
-              en: item.rock_classification.name_en,
-            }"
-          />
-        </div>
         <div
-          v-else
+          v-if="item.rock_classification"
           v-translate="{
-            et: item.rock_classification__name,
-            en: item.rock_classification__name_en,
+            et: item.rock_classification.name,
+            en: item.rock_classification.name_en,
           }"
         />
       </template>
 
       <template v-slot:item.parent="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/rock/' + item.parent }"
-            :title="$t('editRock.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <div
-              v-translate="{
-                et: item.parent__name,
-                en: item.parent__name_en,
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.parent"
-            :to="{ path: '/rock/' + item.parent.id }"
-            :title="$t('editRock.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <div
-              v-translate="{
-                et: item.parent.name,
-                en: item.parent.name_en,
-              }"
-            />
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/rock/' + item.parent }"
+          v-if="item.parent"
+          :to="{ path: '/rock/' + item.parent.id }"
           :title="$t('editRock.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <div
             v-translate="{
-              et: item.parent__name,
-              en: item.parent__name_en,
+              et: item.parent.name,
+              en: item.parent.name_en,
             }"
           />
         </router-link>
@@ -205,6 +158,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -212,19 +171,21 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "RockTreeTable",
 
   components: {
+    RelatedDataDeleteDialog,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -253,11 +214,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
   },
 
@@ -295,15 +251,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.rock_classification !== "undefined" &&
@@ -313,9 +260,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         rock_classification: null,
         parent: null,
@@ -325,59 +270,17 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "rock_tree",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "rock_tree",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (
-        typeof item.rock_classification !== "object" &&
-        item.rock_classification !== null
-      ) {
-        this.item.rock_classification = {
-          id: item.rock_classification,
-          name: item.rock_classification__name,
-          name_en: item.rock_classification__name_en,
-        };
-        this.autocomplete.rock_classification.push(
-          this.item.rock_classification
-        );
-      } else if (item.rock_classification !== null) {
+      if (item.rock_classification) {
         this.item.rock_classification = item.rock_classification;
         this.autocomplete.rock_classification.push(
           this.item.rock_classification
         );
       }
 
-      if (typeof item.parent !== "object" && item.parent !== null) {
-        this.item.parent = {
-          id: item.parent,
-          name: item.parent__name,
-          name_en: item.parent__name_en,
-        };
-        this.autocomplete.rock.push(this.item.parent);
-      } else if (item.parent !== null) {
+      if (item.parent) {
         this.item.parent = item.parent;
         this.autocomplete.rock.push(this.item.parent);
       }
@@ -388,26 +291,6 @@ export default {
 
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "rock_tree",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped></style>

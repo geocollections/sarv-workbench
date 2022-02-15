@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,47 +38,17 @@
       </template>
 
       <template v-slot:item.locality="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/locality/' + item.locality }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality__locality,
-                en: item.locality__locality_en,
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.locality"
-            :to="{ path: '/locality/' + item.locality.id }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality.locality,
-                en: item.locality.locality_en,
-              }"
-            />
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/locality/' + item.locality }"
+          v-if="item.locality"
+          :to="{ path: '/locality/' + item.locality.id }"
           :title="$t('editLocality.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.locality__locality,
-              en: item.locality__locality_en,
+              et: item.locality.locality,
+              en: item.locality.locality_en,
             }"
           />
         </router-link>
@@ -183,6 +152,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -193,18 +168,21 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "RockLocalityTable",
 
   components: {
+    RelatedDataDeleteDialog,
     TextareaWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -233,11 +211,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
   },
 
@@ -275,15 +248,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.locality !== "undefined" && this.item.locality !== null
@@ -292,9 +256,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         locality: null,
         description: "",
@@ -305,40 +267,10 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "rock_locality",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "rock_locality",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (typeof item.locality !== "object" && item.locality !== null) {
-        this.item.locality = {
-          id: item.locality,
-          locality: item.locality__locality,
-          locality_en: item.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.item.locality);
-      } else if (item.locality !== null) {
+      if (item.locality) {
         this.item.locality = item.locality;
         this.autocomplete.locality.push(this.item.locality);
       }
@@ -351,26 +283,6 @@ export default {
 
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "rock_locality",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped></style>
