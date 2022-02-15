@@ -279,7 +279,7 @@
       id="block-specimen"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
-      v-if="$route.meta.isEdit && specimens.count > 0"
+      v-if="$route.meta.isEdit && relatedData.specimen.count > 0"
     >
       <v-card-title class="pt-2 pb-1">
         <div
@@ -302,87 +302,19 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.specimen" class="pb-1">
-          <!-- PAGINATION -->
-          <div
-            v-if="specimens.count > 10"
-            class="
-              d-flex
-              flex-column
-              justify-space-around
-              flex-md-row
-              justify-md-space-between
-              mt-3
-              d-print-none
-              pa-1
-              mt-2
-            "
-          >
-            <div class="mr-3 mb-3">
-              <v-select
-                v-model="specimenSearchParameters.paginateBy"
-                :color="bodyActiveColor"
-                dense
-                :items="paginateByOptionsTranslated"
-                :item-color="bodyActiveColor"
-                label="Paginate by"
-                hide-details
-              />
-            </div>
-
-            <div>
-              <v-pagination
-                v-model="specimenSearchParameters.page"
-                :color="bodyActiveColor"
-                circle
-                prev-icon="fas fa-angle-left"
-                next-icon="fas fa-angle-right"
-                :length="
-                  Math.ceil(
-                    specimens.count / specimenSearchParameters.paginateBy
-                  )
-                "
-                :total-visible="5"
-              />
-            </div>
-          </div>
-
+        <div v-show="block.specimen">
           <v-card
             class="table-card my-1"
             flat
             :color="bodyColor.split('n-')[0] + 'n-5'"
           >
-            <!--            <v-card-title class="d-print-none">-->
-            <!--              <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>-->
-            <!--              <span id="table-title" class="text-uppercase">-->
-            <!--                {{ $t("collection.specimen") }}-->
-            <!--                <sup>-->
-            <!--                  <v-chip-->
-            <!--                      :color="bodyActiveColor"-->
-            <!--                      small-->
-            <!--                      text-color="#ffffff"-->
-            <!--                      class="font-weight-bold"-->
-            <!--                  >{{ specimens.count }}</v-chip-->
-            <!--                  >-->
-            <!--                </sup>-->
-            <!--              </span>-->
-            <!--              <div class="flex-grow-1"></div>-->
-            <!--              <v-text-field-->
-            <!--                  v-model="filterSpecimens"-->
-            <!--                  append-outer-icon="fas fa-search"-->
-            <!--                  label="Filter records"-->
-            <!--                  clear-icon="fas fa-times"-->
-            <!--                  clearable-->
-            <!--                  :color="bodyActiveColor"-->
-            <!--              ></v-text-field>-->
-            <!--            </v-card-title>-->
-
             <specimen-table
-              :response="specimens"
-              :search-parameters="specimenSearchParameters"
-              :filter="filterSpecimens"
+              :headers="specimenTranslatedHeaders"
+              :response="relatedData.specimen"
+              :search-parameters="relatedData.searchParameters.specimen"
               :body-color="bodyColor"
               :body-active-color="bodyActiveColor"
+              @update:options="updateOptions"
             />
           </v-card>
         </div>
@@ -395,7 +327,6 @@
 import formManipulation from "@/mixins/formManipulation";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import formSectionsMixin from "@/mixins/formSectionsMixin";
-import { fetchSpecimens } from "@/assets/js/api/apiCalls";
 import { cloneDeep } from "lodash";
 import SpecimenTable from "@/components/specimen/SpecimenTable";
 import { mapActions, mapState } from "vuex";
@@ -442,6 +373,21 @@ export default {
 
   computed: {
     ...mapState("detail", ["collectionDetail"]),
+
+    ...mapState({
+      specimenHeaders(state) {
+        return state.specimen.headers;
+      },
+    }),
+
+    specimenTranslatedHeaders() {
+      return this.specimenHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
   },
 
   created() {
@@ -456,20 +402,13 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    specimenSearchParameters: {
-      handler() {
-        this.getSpecimensBelongingToCollection();
-      },
-      deep: true,
-    },
-  },
-
   methods: {
     ...mapActions("detail", ["saveFields"]),
 
     setInitialData() {
       return {
+        relatedTabs: [{ name: "specimen", iconClass: "fas fa-fish" }],
+        relatedData: this.setDefaultRelatedData(),
         listOfAutocompleteTables: ["list_collection_type"],
         autocomplete: {
           loaders: {
@@ -514,62 +453,36 @@ export default {
           description: true,
           specimen: true,
         },
-        filterSpecimens: "",
-        databaseAcronym: "",
-        specimens: {
+      };
+    },
+
+    setDefaultRelatedData() {
+      return {
+        specimen: {
           count: 0,
           results: [],
         },
-        specimenSearchParameters: {
-          idSpecimen: null,
-          collNumber: null,
-          fossil: null,
-          mineralRock: null,
-          locality: null,
-          stratigraphy: null,
-          agent_collected: null,
-          page: 1,
-          paginateBy: 25,
-          orderBy: "-id",
+        searchParameters: {
+          specimen: {
+            page: 1,
+            itemsPerPage: 25,
+            sortBy: ["id"],
+            sortDesc: [true],
+          },
         },
       };
     },
 
-    getSpecimensBelongingToCollection() {
-      fetchSpecimens(this.specimenSearchParameters).then((response) => {
-        if (response.status === 200) {
-          this.specimens.count = response.data.count;
-          this.specimens.results = response.data.results;
-        }
-      });
-    },
+    updateOptions(payload) {
+      this.relatedData.searchParameters.specimen[payload.key] = payload.value;
+      if (
+        payload.key !== "page" &&
+        this.relatedData.searchParameters.specimen.page !== 1
+      )
+        this.relatedData.searchParameters.specimen.page = 1;
 
-    // formatDataForUpload(objectToUpload) {
-    //   let uploadableObject = cloneDeep(objectToUpload);
-    //
-    //   if (!this.$route.meta.isEdit) {
-    //     this.saveFields({ key: "collectionDetail", value: objectToUpload });
-    //   }
-    //
-    //   Object.keys(uploadableObject).forEach((key) => {
-    //     if (
-    //       typeof uploadableObject[key] === "object" &&
-    //       uploadableObject[key] !== null
-    //     ) {
-    //       uploadableObject[key] = uploadableObject[key].id
-    //         ? uploadableObject[key].id
-    //         : null;
-    //     } else if (typeof uploadableObject[key] === "undefined") {
-    //       uploadableObject[key] = null;
-    //     }
-    //   });
-    //
-    //   console.log("This object is sent in string format:");
-    //   console.log(uploadableObject);
-    //   return JSON.stringify(uploadableObject);
-    // },
+      this.loadRelatedData(["specimen"], "collection", this.$route.params.id);
+    },
   },
 };
 </script>
-
-<style scoped></style>
