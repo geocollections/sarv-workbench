@@ -105,6 +105,7 @@
                   />
 
                   <autocomplete-wrapper
+                    v-if="$route.meta.object !== 'stratigraphy'"
                     v-model="item.stratigraphy"
                     :color="bodyActiveColor"
                     :items="autocomplete.stratigraphy"

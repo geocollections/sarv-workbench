@@ -196,14 +196,16 @@
               <autocomplete-wrapper
                 v-model="stratigraphy.parent"
                 :color="bodyActiveColor"
-                :items="autocomplete.parent_stratigraphy"
-                :loading="autocomplete.loaders.parent_stratigraphy"
+                :items="autocomplete.parent"
+                :loading="autocomplete.loaders.parent"
                 :item-text="stratigraphyLabel"
                 :label="$t('stratigraphy.parent')"
                 is-link
                 route-object="stratigraphy"
                 is-searchable
-                v-on:search:items="autocompleteStratigraphyParentSearch"
+                v-on:search:items="
+                  autocompleteStratigraphySearch($event, 'parent')
+                "
                 @input="updateHierarchyString"
               />
             </v-col>
@@ -228,6 +230,7 @@
                 v-model="stratigraphy.hierarchy_string"
                 :color="bodyActiveColor"
                 :label="$t('stratigraphy.hierarchy_string')"
+                :disabled="!$route.meta.isEdit"
               />
             </v-col>
           </v-row>
@@ -671,17 +674,6 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
-  },
-
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
 
@@ -724,6 +716,7 @@ export default {
             age_chronostratigraphy: false,
             locality: false,
             list_language: false,
+            parent: false,
           },
           parent_stratigraphy: [],
           list_stratigraphy_type: [],
@@ -735,6 +728,7 @@ export default {
           age_chronostratigraphy: [],
           locality: [],
           list_language: [],
+          parent: [],
         },
         requiredFields: ["stratigraphy", "stratigraphy_en"],
         stratigraphy: {
@@ -818,13 +812,12 @@ export default {
     },
 
     updateHierarchyString(parent) {
-      if (this.$route.meta.isEdit && parent?.hierarchy_string) {
-        this.stratigraphy.hierarchy_string =
-          parent.hierarchy_string + "-" + this.$route.params.id;
+      if (parent?.hierarchy_string) {
+        this.stratigraphy.hierarchy_string = `${parent.hierarchy_string}-${
+          this.$route.meta.isEdit ? this.$route.params.id : "placeholder"
+        }`;
       }
     },
   },
 };
 </script>
-
-<style scoped />
