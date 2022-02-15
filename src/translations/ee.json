@@ -3059,7 +3059,7 @@
     "delete": "Kustuta",
     "close": "Sulge",
     "add_new": "Lisa uus",
-    "is_fossil": "<b>'LISA UUS'</b> ei ole saadaval! Eksemplari 'olemus' ei tohi olla 'fossiil' või 'retsentne organism'. Kasutage 'TAKSONI NIMED' vahekaarti, et identifitseerida fossiilseid eksemplare. ",
+    "is_fossil": "'LISA UUS' ei ole saadaval! Eksemplari 'olemus' ei tohi olla 'fossiil' või 'retsentne organism'. Kasutage 'TAKSONI NIMED' vahekaarti, et identifitseerida fossiilseid eksemplare. ",
     "is_non_fossil": "'LISA UUS' ei ole saadaval! Eksemplari 'olemus' peab olema 'fossiil' või 'retsentne organism'. Kasutage 'KIVI NIMED' vahekaarti, et identifitseerida mittefossiilseid eksemplare.",
     "next": "Järgmine",
     "previous": "Eelmine",

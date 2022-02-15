@@ -26,7 +26,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,16 +38,7 @@
 
       <template v-slot:item.taxon="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/taxon/' + item.taxon }"
-          :title="$t('editTaxon.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.taxon__taxon }}
-        </router-link>
-        <router-link
-          v-else-if="item.taxon"
+          v-if="item.taxon"
           :to="{ path: '/taxon/' + item.taxon.id }"
           :title="$t('editTaxon.editMessage')"
           class="sarv-link"
@@ -60,16 +50,7 @@
 
       <template v-slot:item.agent="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/agent/' + item.agent }"
-          :title="$t('editAgent.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.agent__agent }}
-        </router-link>
-        <router-link
-          v-else-if="item.agent"
+          v-if="item.agent"
           :to="{ path: '/agent/' + item.agent.id }"
           :title="$t('editAgent.editMessage')"
           class="sarv-link"
@@ -81,16 +62,7 @@
 
       <template v-slot:item.reference="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/reference/' + item.reference }"
-          :title="$t('editReference.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.reference__reference }}
-        </router-link>
-        <router-link
-          v-else-if="item.reference"
+          v-if="item.reference"
           :to="{ path: '/reference/' + item.reference.id }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
@@ -102,14 +74,7 @@
 
       <template v-slot:item.identification_type="{ item }">
         <span
-          v-if="$route.meta.isEdit"
-          v-translate="{
-            et: item.identification_type__value,
-            en: item.identification_type__value_en,
-          }"
-        />
-        <span
-          v-else-if="item.identification_type"
+          v-if="item.identification_type"
           v-translate="{
             et: item.identification_type.value,
             en: item.identification_type.value_en,
@@ -405,24 +370,12 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.taxon !== "object" && item.taxon !== null) {
-        this.item.taxon = {
-          id: item.taxon,
-          taxon: item.taxon__taxon,
-        };
-        this.autocomplete.taxon.push(this.item.taxon);
-      } else if (item.taxon !== null) {
+      if (item.taxon) {
         this.item.taxon = item.taxon;
         this.autocomplete.taxon.push(this.item.taxon);
       }
 
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent,
-        };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
+      if (item.agent) {
         this.item.agent = item.agent;
         this.autocomplete.agent.push(this.item.agent);
       }
@@ -438,13 +391,9 @@ export default {
         };
       }
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference,
-        };
-        this.autocomplete.reference.push(this.item.reference);
-      } else if (item.reference !== null) {
+      this.item.identification_type = item.identification_type;
+
+      if (item.reference) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
       }
@@ -469,5 +418,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
