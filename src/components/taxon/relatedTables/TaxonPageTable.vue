@@ -169,10 +169,8 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 
@@ -298,17 +296,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.language.length <= 1) {
         this.autocomplete.loaders.language = true;
-        fetchListLanguages().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.language =
-              response.data.count > 0
-                ? response.data.results.map((item) => item.iso1)
-                : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_language");
+        this.autocomplete.language = response?.results ?? [];
         this.autocomplete.loaders.language = false;
       }
     },

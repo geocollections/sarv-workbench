@@ -30,12 +30,6 @@
       :is-body-active-color-dark="bodyActiveColorDark"
     />
 
-    <object-permissions
-      v-if="false"
-      :body-color="bodyColor"
-      :body-active-color="bodyActiveColor"
-    />
-
     <bottom-options
       :body-color="bodyColor"
       :is-navbar-dark="navbarDark"
@@ -48,12 +42,11 @@
 <script>
 import BottomOptions from "../components/partial/BottomOptions";
 import { mapState } from "vuex";
-import ObjectPermissions from "../components/partial/ObjectPermissions";
 import SpinnerWrapper from "../components/partial/SpinnerWrapper";
 
 export default {
   name: "AddForm",
-  components: { SpinnerWrapper, ObjectPermissions, BottomOptions },
+  components: { SpinnerWrapper, BottomOptions },
   computed: {
     ...mapState("settings", [
       "bodyColor",

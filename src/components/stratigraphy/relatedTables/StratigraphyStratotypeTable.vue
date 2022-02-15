@@ -188,8 +188,6 @@
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import { cloneDeep } from "lodash";
-import { fetchListStratotypeType } from "../../../assets/js/api/apiCalls";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 
@@ -319,15 +317,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.stratotype_type.length <= 1) {
         this.autocomplete.loaders.stratotype_type = true;
-        fetchListStratotypeType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.stratotype_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_stratotype_type");
+        this.autocomplete.stratotype_type = response?.results ?? [];
         this.autocomplete.loaders.stratotype_type = false;
       }
     },

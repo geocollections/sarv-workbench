@@ -1,16 +1,11 @@
 import {
   fetchActiveLibraryList,
   fetchActiveSelectionSeriesList,
-  fetchSpecimens,
 } from "@/assets/js/api/apiCalls";
 
 const actions = {
   updateViewType({ commit }, payload) {
     commit("UPDATE_VIEW_TYPE", payload);
-  },
-
-  updateSearchParameters({ commit }, payload) {
-    commit("UPDATE_SEARCH_PARAMETERS", payload);
   },
 
   updateSearchParametersByField({ commit }, payload) {
@@ -21,22 +16,8 @@ const actions = {
     commit("RESET_SEARCH_PARAMETERS", module);
   },
 
-  setActiveSearchParametersFilters({ commit }, filters) {
-    commit("SET_ACTIVE_SEARCH_PARAMETERS_FILTERS", filters);
-  },
-
   setLoadingState({ commit }, boolVal) {
     commit("SET_LOADING_STATE", boolVal);
-  },
-
-  FETCH_SPECIMENS({ commit, state }) {
-    return fetchSpecimens(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  setSidebarList({ commit }, payload) {
-    commit("SET_SIDEBAR_LIST", payload);
   },
 
   updateIsSampleSimpleView({ commit }, boolVal) {

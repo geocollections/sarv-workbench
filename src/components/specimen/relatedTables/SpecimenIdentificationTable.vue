@@ -242,10 +242,8 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import DateWrapper from "../../partial/inputs/DateWrapper";
-import { fetchListIdentificationType } from "../../../assets/js/api/apiCalls";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 
@@ -403,15 +401,11 @@ export default {
       this.item.current = item.current === true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.identification_type.length <= 1) {
         this.autocomplete.loaders.identification_type = true;
-        fetchListIdentificationType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.identification_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_identification_type");
+        this.autocomplete.identification_type = response?.results ?? [];
         this.autocomplete.loaders.identification_type = false;
       }
     },

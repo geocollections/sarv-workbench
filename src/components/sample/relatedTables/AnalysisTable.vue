@@ -201,7 +201,6 @@
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchAnalysisMethod } from "../../../assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import DateWrapper from "../../partial/inputs/DateWrapper";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
@@ -345,8 +344,7 @@ export default {
       if (this.autocomplete.analysis_method.length <= 1) {
         this.autocomplete.loaders.analysis_method = true;
         const response = await this.$api.rw.get("analysis_method");
-        if (response?.count > 0)
-          this.autocomplete.analysis_method = response.results;
+        this.autocomplete.analysis_method = response?.results ?? [];
         this.autocomplete.loaders.analysis_method = false;
       }
     },

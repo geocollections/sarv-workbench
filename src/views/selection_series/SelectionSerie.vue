@@ -292,7 +292,7 @@ import {
 
 import InputWrapper from "@/components/partial/inputs/InputWrapper";
 import SelectionSeriesDataTable from "@/components/selection_series/relatedTables/SelectionSeriesDataTable";
-import { mapActions, mapState } from "vuex";
+import { mapActions } from "vuex";
 import {
   fetchAllSelections,
   fetchMultiChangeSpecimen,

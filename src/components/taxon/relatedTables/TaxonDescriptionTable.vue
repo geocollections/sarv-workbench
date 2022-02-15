@@ -195,7 +195,6 @@
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchListLanguages } from "@/assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import Editor from "@/components/partial/inputs/Editor";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
@@ -329,15 +328,11 @@ export default {
       this.item.remarks = item.remarks;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.language.length <= 1) {
         this.autocomplete.loaders.language = true;
-        fetchListLanguages().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.language =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_language");
+        this.autocomplete.language = response?.results ?? [];
         this.autocomplete.loaders.language = false;
       }
     },

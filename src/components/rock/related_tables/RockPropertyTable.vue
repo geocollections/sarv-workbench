@@ -155,8 +155,6 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
-import { fetchListRockPropertyType } from "../../../assets/js/api/apiCalls";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
@@ -280,15 +278,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.property_type.length <= 1) {
         this.autocomplete.loaders.property_type = true;
-        fetchListRockPropertyType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.property_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("rock_property_type");
+        this.autocomplete.property_type = response?.results ?? [];
         this.autocomplete.loaders.property_type = false;
       }
     },

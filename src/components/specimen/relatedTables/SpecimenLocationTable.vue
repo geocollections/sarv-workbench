@@ -157,8 +157,6 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
-import { fetchListSpecimenType } from "../../../assets/js/api/apiCalls";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 
@@ -278,15 +276,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.type.length <= 1) {
         this.autocomplete.loaders.type = true;
-        fetchListSpecimenType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_specimen_type");
+        this.autocomplete.type = response?.results ?? [];
         this.autocomplete.loaders.type = false;
       }
     },

@@ -206,7 +206,6 @@
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchTaxonOpinionType } from "@/assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
@@ -344,15 +343,11 @@ export default {
       this.item.remarks = item.remarks;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.opinion_type.length <= 1) {
         this.autocomplete.loaders.opinion_type = true;
-        fetchTaxonOpinionType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.opinion_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("taxon_opinion_type");
+        this.autocomplete.opinion_type = response?.results ?? [];
         this.autocomplete.loaders.opinion_type = false;
       }
     },

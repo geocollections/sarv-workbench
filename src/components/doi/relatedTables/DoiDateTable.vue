@@ -115,9 +115,7 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchDoiDateType } from "../../../assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
@@ -224,15 +222,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.date_type.length <= 1) {
         this.autocomplete.loaders.date_type = true;
-        fetchDoiDateType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.date_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("doi_date_type");
+        this.autocomplete.date_type = response?.results ?? [];
         this.autocomplete.loaders.date_type = false;
       }
     },

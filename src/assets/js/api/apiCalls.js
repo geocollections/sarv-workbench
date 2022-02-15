@@ -5,12 +5,7 @@ const axios = require("axios");
 const api = {
   url: "http://localhost:7000/api/",
   checkDoiUrl: "https://api.crossref.org/works/",
-  solrUrl: "https://api.geocollections.info/solr/",
-  publicApi: "https://api.geocollections.info/",
 };
-
-const attachmentFields =
-  "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number";
 
 async function get(child = "", customUrl) {
   let url = api.url + child;
@@ -115,122 +110,6 @@ export function postRequest(url, data, customUrl = "", method = "post") {
   return post(url, data, customUrl, method);
 }
 
-export function fetchAttachmentKeyword(id) {
-  return get(`attachment_keyword/?attachment=${id}&format=json`);
-}
-
-export function fetchAttachmentLinkCollections(id) {
-  return get(
-    `attachment_link/?attachment=${id}&collection__isnull=false&fields=collection,collection__name,collection__name_en&format=json`
-  );
-}
-
-export function fetchAttachmentLinkSpecimens(id) {
-  return get(
-    `attachment_link/?attachment=${id}&specimen__isnull=false&fields=specimen,specimen_id,specimen__coll__number&format=json`
-  );
-}
-
-export function fetchAttachmentLinkSamples(id) {
-  return get(
-    `attachment_link/?attachment=${id}&sample__isnull=false&fields=sample,sample__number&format=json`
-  );
-}
-
-export function fetchAttachmentLinkSampleSeries(id) {
-  return get(
-    `attachment_link/?attachment=${id}&sample_series__isnull=false&fields=sample_series,sample_series__name&format=json`
-  );
-}
-
-export function fetchAttachmentLinkAnalyses(id) {
-  return get(
-    `attachment_link/?attachment=${id}&analysis__isnull=false&fields=analysis,analysis__sample__number&format=json`
-  );
-}
-
-export function fetchAttachmentLinkDatasets(id) {
-  return get(
-    `attachment_link/?attachment=${id}&dataset__isnull=false&fields=dataset,dataset__name,dataset__name_en&format=json`
-  );
-}
-
-export function fetchAttachmentLinkDois(id) {
-  return get(
-    `attachment_link/?attachment=${id}&doi__isnull=false&fields=doi,doi__identifier&format=json`
-  );
-}
-
-export function fetchAttachmentLinkLocalities(id) {
-  return get(
-    `attachment_link/?attachment=${id}&locality__isnull=false&fields=locality,locality__locality,locality__locality_en&format=json`
-  );
-}
-
-export function fetchAttachmentLinkDrillcores(id) {
-  return get(
-    `attachment_link/?attachment=${id}&drillcore__isnull=false&fields=drillcore,drillcore__drillcore,drillcore__drillcore_en&format=json`
-  );
-}
-
-export function fetchAttachmentLinkDrillcoreBoxes(id) {
-  return get(
-    `attachment_link/?attachment=${id}&drillcore_box__isnull=false&fields=drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en&format=json`
-  );
-}
-
-export function fetchAttachmentLinkPreparations(id) {
-  return get(
-    `attachment_link/?attachment=${id}&preparation__isnull=false&fields=preparation,preparation__preparation_number&format=json`
-  );
-}
-
-export function fetchAttachmentLinkReferences(id) {
-  return get(
-    `attachment_link/?attachment=${id}&reference__isnull=false&fields=reference,reference__reference&format=json`
-  );
-}
-
-export function fetchAttachmentLinkStorages(id) {
-  return get(
-    `attachment_link/?attachment=${id}&storage__isnull=false&fields=storage,storage__location,storage__contents&format=json`
-  );
-}
-
-export function fetchAttachmentLinkProjects(id) {
-  return get(
-    `attachment_link/?attachment=${id}&project__isnull=false&fields=project,project__name,project__name_en&format=json`
-  );
-}
-
-export function fetchAttachmentLinkSites(id) {
-  return get(
-    `attachment_link/?attachment=${id}&site__isnull=false&fields=site,site__name,site__name_en&format=json`
-  );
-}
-
-export function fetchAttachmentLinkLocalityDescriptions(id) {
-  return get(
-    `attachment_link/?attachment=${id}&locality_description__isnull=false&fields=locality_description,locality_description__description&format=json`
-  );
-}
-
-export function fetchAttachmentLinkTaxa(id) {
-  return get(
-    `attachment_link/?attachment=${id}&taxon__isnull=false&fields=taxon,taxon__taxon,taxon__author_year&format=json`
-  );
-}
-
-export function fetchListLanguages() {
-  return get(`list_language/?format=json`);
-}
-
-export function fetchAttachmentForReference(id) {
-  return get(
-    `attachment/?reference=${id}&fields=${attachmentFields}&format=json`
-  );
-}
-
 export function fetchAddReferenceToLibrary(data) {
   return post(`add/library_reference/`, data);
 }
@@ -243,10 +122,6 @@ export function fetchSpecificLogs(data) {
 
 export function autocompleteSearch(query) {
   return get(`${query}&format=json`);
-}
-
-export function fetchAnalysisMethod() {
-  return get(`analysis_method/?order_by=analysis_method&format=json`);
 }
 
 export function fetchLatestSampleInSite(siteId) {
@@ -281,22 +156,6 @@ export function fetchDoiCheck(doi) {
   return get(doi, api.checkDoiUrl);
 }
 
-export function fetchDoiAgentType() {
-  return get(`doi_agent_type/?format=json`);
-}
-
-export function fetchDoiRelatedIdentifierType() {
-  return get(`doi_related_identifier_type/?format=json`);
-}
-
-export function fetchDoiRelationType() {
-  return get(`doi_relation_type/?format=json`);
-}
-
-export function fetchDoiDateType() {
-  return get(`doi_date_type/?format=json`);
-}
-
 export function fetchAddDoi(data) {
   return post(`add/doi/`, data);
 }
@@ -317,16 +176,6 @@ export function fetchRegisterDoiUrlToDataCite(id) {
   return get(`datacite/register_doi/${id}`);
 }
 
-export function fetchLinkedSite(data, projectId) {
-  let fields =
-    "id,name,name_en,number,project,project__name,project__name_en,date_start,date_end,latitude,longitude";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  return get(
-    `site/?project=${projectId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-  );
-}
-
 export function fetchLastSiteName(projectId) {
   return get(
     `site/?project=${projectId}&fields=name&order_by=-id&paginate_by=1&format=json`
@@ -341,143 +190,6 @@ export function fetchJournalForReference(name) {
 
 export function fetchIsImagesetNumberInImageset(imagesetNumber) {
   return get(`imageset/?imageset_number=${imagesetNumber}&format=json`);
-}
-
-export function fetchSpecimens(data, dynamicSearch) {
-  const fields =
-    "specimen_id,collection,coll,coll__number,specimen_nr,number_field,type,type__value,type__value_en,subtype_id,subtype_id__value,subtype_id__value_en,fossil,fossil__value,fossil__value_en,kind,kind,kind,classification,classification__class_field,part,number_pieces,locality,locality__locality,locality__locality_en,locality_free,locality_free_en,locality_is_private,depth,depth_interval,sample_number,sample,sample__number,parent,parent__specimen_id,remarks_collecting,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,remarks,remarks_internal,tags,presence,presence__value,presence__value_en,storage,storage__location,location,status,status__value,status__value_en,original_status,original_status__value,original_status__value_en,is_private,accession,accession__number,deaccession,deaccession__number,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
-    searchFields += `&id__${data.idSpecimen__lookuptype || "icontains"}=${
-      data.idSpecimen
-    }`;
-  }
-
-  if (data.specimenNr && data.specimenNr.trim().length > 0) {
-    searchFields += `multi_search=value:${
-      data.specimenNr
-    };fields:specimen_id,specimen_nr;lookuptype:${
-      data.specimenNr__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.collNumber && data.collNumber.trim().length > 0) {
-    searchFields += `&coll__number__${
-      data.collNumber__lookuptype || "icontains"
-    }=${data.collNumber}`;
-  }
-
-  if (data.fossil && data.fossil.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.fossil
-    };fields:specimenidentification__name,specimenidentification__taxon__taxon;lookuptype:${
-      data.fossil__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.mineralRock && data.mineralRock.trim().length > 0) {
-    // Todo: Duplicate records issue, but distinct makes it slow
-    if (data.fossil && data.fossil.trim().length > 0)
-      searchFields += "&distinct=true";
-    searchFields += `&multi_search=value:${
-      data.mineralRock
-    };fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:${
-      data.mineralRock__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.locality
-    };fields:locality__locality,locality__locality_en,locality_free;lookuptype:${
-      data.locality__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.stratigraphy
-    };fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:${
-      data.stratigraphy__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.agent_collected && data.agent_collected.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.agent_collected
-    };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:${
-      data.agent_collected__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&storage__location__${
-      data.storage__lookuptype || "icontains"
-    }=${data.storage}`;
-  }
-
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${
-      data.selectionId__lookuptype || "icontains"
-    }=${data.selectionId}`;
-  }
-
-  if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${
-      data.selection__lookuptype || "icontains"
-    }=${data.selection}`;
-  }
-
-  if (data.loan && data.loan.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.loan
-    };fields:loanspecimen__loan__id,loanspecimen__loan__loan_number;lookuptype:${
-      data.loan__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.reference && data.reference.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.reference
-    };fields:specimenreference__reference__reference,specimenreference__reference__id;lookuptype:${
-      data.reference__lookuptype || "icontains"
-    }`;
-  }
-
-  if (data.classification && data.classification.trim().length > 0) {
-    searchFields += `&multi_search=value:${
-      data.classification
-    };fields:classification__class_field,classification__class_en,classification__class_lat,classification__class_en_synonym,classification__class_synonym;lookuptype:${
-      data.classification__lookuptype || "icontains"
-    }`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) return `?${searchFields}`;
-  else return "";
-  //
-  // if (searchFields.length > 0) {
-  //   return get(
-  //     `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-  //   );
-  // } else {
-  //   return get(
-  //     `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-  //   );
-  // }
-}
-
-export function fetchListSpecimenType() {
-  return get(`list_specimen_type/?format=json`);
-}
-
-export function fetchListHistoryType() {
-  return get(`list_history_type/?format=json`);
 }
 
 export function fetchSpecimenIdentificationsList(listOfIds) {
@@ -495,28 +207,8 @@ export function fetchSpecimenIdentificationGeologiesList(listOfIds) {
   );
 }
 
-export function fetchListIdentificationType() {
-  return get(`list_identification_type/?format=json`);
-}
-
-export function fetchListUnit() {
-  return get(`list_unit/?format=json`);
-}
-
 export function fetchMultiChangeSpecimen(data) {
   return post(`change_multi/specimen/`, data);
-}
-
-export function fetchTaxonTypeType() {
-  return get(`taxon_type_type/?format=json`);
-}
-
-export function fetchTaxonOpinionType() {
-  return get(`taxon_opinion_type/?format=json`);
-}
-
-export function fetchKeywordRelationType() {
-  return get(`keyword_relation_type/?format=json`);
 }
 
 export function fetchAgentUsingName(name) {
@@ -571,53 +263,6 @@ export function fetchRelatedDrillcoreBoxImages(drillcoreId, searchParameters) {
   );
 }
 
-export function fetchLinkedTaxa(data, prepId) {
-  const fields =
-    "id,taxon,taxon__taxon,taxon__author_year,taxon__taxon_epithet,taxon__parent_id,taxon__parent__taxon,taxon__fossil_group__taxon,taxon__reference";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id=${data.id}`;
-  }
-
-  if (data.taxon && data.taxon.trim().length > 0) {
-    searchFields += `&taxon__icontains=${data.taxon}`;
-  }
-
-  if (data.author_year && data.author_year.trim().length > 0) {
-    searchFields += `&author_year__icontains=${data.author_year}`;
-  }
-
-  if (data.parent__taxon && data.parent__taxon.trim().length > 0) {
-    searchFields += `&parent__taxon__icontains=${data.parent__taxon}`;
-  }
-
-  if (data.taxon_epithet && data.taxon_epithet.trim().length > 0) {
-    searchFields += `&taxon_epithet__icontains=${data.taxon_epithet}`;
-  }
-
-  if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__icontains=${data.user_added}`;
-  }
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `taxon_list/?preparation=${prepId}${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return get(
-      `taxon_list/?preparation=${prepId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
-export function fetchListStratotypeType() {
-  return get(`list_stratotype_type/?format=json`);
-}
-
 export function fetchStratigraphyCatalogue(data) {
   let orSearch = `or_search=hierarchy_string__icontains:${data.stringLito};hierarchy_string__icontains:${data.string};parent__hierarchy_string__icontains:${data.string};age_chronostratigraphy__hierarchy_string__icontains:${data.string}`;
   let fields =
@@ -642,30 +287,8 @@ export function fetchStratigraphyCatalogueReferences(listOfIds) {
   );
 }
 
-export function fetchLinkedAreaSites(data, areaId) {
-  let fields =
-    "id,name,name_en,number,project,project__name,project__name_en,date_start,date_end,latitude,longitude";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  return get(
-    `site/?area=${areaId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-  );
-}
-
 export function fetchMultiChangeLocation(table, data) {
   return post(`change_multi/${table}/`, data);
-}
-
-export function fetchListRockMineralType() {
-  return get(`rock_mineral_type/?format=json`);
-}
-
-export function fetchListElement() {
-  return get(`list_element/?format=json`);
-}
-
-export function fetchListRockPropertyType() {
-  return get(`rock_property_type/?format=json`);
 }
 
 export function fetchLoan(id) {
@@ -720,14 +343,6 @@ export function fetchCurrentlyActiveUsers() {
 
 export function fetchChangeRecordState(table, id, stateData) {
   return post("change/" + table + "/" + id, stateData);
-}
-
-export function fetchGroups() {
-  return get(`group/?format=json`);
-}
-
-export function fetchUsers() {
-  return get(`user/?format=json`);
 }
 
 function buildOrderBy(sortBy, sortDesc) {

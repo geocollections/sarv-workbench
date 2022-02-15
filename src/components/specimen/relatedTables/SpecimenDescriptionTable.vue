@@ -199,7 +199,6 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import DateWrapper from "../../partial/inputs/DateWrapper";
-import { fetchListUnit } from "../../../assets/js/api/apiCalls";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 
@@ -333,15 +332,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.unit.length <= 1) {
         this.autocomplete.loaders.unit = true;
-        fetchListUnit().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.unit =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_unit");
+        this.autocomplete.unit = response?.results ?? [];
         this.autocomplete.loaders.unit = false;
       }
     },

@@ -194,9 +194,7 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
-import { fetchListUnit } from "../../../assets/js/api/apiCalls";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
@@ -341,15 +339,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.list_unit.length <= 1) {
         this.autocomplete.loaders.list_unit = true;
-        fetchListUnit().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.list_unit =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_unit");
+        this.autocomplete.list_unit = response?.results ?? [];
         this.autocomplete.loaders.list_unit = false;
       }
     },

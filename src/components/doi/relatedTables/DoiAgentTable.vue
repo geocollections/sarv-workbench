@@ -159,9 +159,7 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchDoiAgentType } from "../../../assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
@@ -300,15 +298,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.agent_type.length <= 1) {
         this.autocomplete.loaders.agent_type = true;
-        fetchDoiAgentType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.agent_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("doi_agent_type");
+        this.autocomplete.agent_type = response?.results ?? [];
         this.autocomplete.loaders.agent_type = false;
       }
     },

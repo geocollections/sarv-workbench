@@ -874,7 +874,6 @@
 <script>
 import formManipulation from "@/mixins/formManipulation";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
-import cloneDeep from "lodash/cloneDeep";
 import {
   fetchCheckMetadataInDataCite,
   fetchCheckDoiUrlInDataCite,

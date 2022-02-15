@@ -186,13 +186,8 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
-import {
-  fetchListIdentificationType,
-  fetchListRockMineralType,
-} from "../../../assets/js/api/apiCalls";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 
@@ -325,15 +320,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.mineral_type.length <= 1) {
         this.autocomplete.loaders.mineral_type = true;
-        fetchListRockMineralType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.mineral_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("rock_mineral_type");
+        this.autocomplete.mineral_type = response?.results ?? [];
         this.autocomplete.loaders.mineral_type = false;
       }
     },

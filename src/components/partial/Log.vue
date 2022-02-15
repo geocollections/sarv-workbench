@@ -116,9 +116,6 @@ import { fetchSpecificLogs } from "@/assets/js/api/apiCalls";
 
 export default {
   props: {
-    table: {
-      type: String,
-    },
     objectData: {
       type: Object,
     },
@@ -139,6 +136,12 @@ export default {
       block: { logs: false },
       logs: [],
     };
+  },
+
+  computed: {
+    table() {
+      return this.$route.meta.object;
+    },
   },
   watch: {
     objectData: {

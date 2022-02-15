@@ -159,8 +159,6 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
-import { fetchListElement } from "../../../assets/js/api/apiCalls";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 
@@ -290,15 +288,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.element.length <= 1) {
         this.autocomplete.loaders.element = true;
-        fetchListElement().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.element =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_element");
+        this.autocomplete.element = response?.results ?? [];
         this.autocomplete.loaders.element = false;
       }
     },

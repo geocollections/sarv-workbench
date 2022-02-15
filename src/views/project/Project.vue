@@ -459,13 +459,10 @@ import formManipulation from "@/mixins/formManipulation";
 import sidebarMixin from "@/mixins/sidebarMixin";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import formSectionsMixin from "@/mixins/formSectionsMixin";
-import cloneDeep from "lodash/cloneDeep";
-import { fetchLinkedSite } from "@/assets/js/api/apiCalls";
 import MapComponent from "@/components/partial/MapComponent";
 import { mapActions, mapState } from "vuex";
 import ExportButtons from "@/components/partial/export/ExportButtons";
 import SiteTable from "@/components/site/SiteTable";
-import debounce from "lodash/debounce";
 import InputWrapper from "@/components/partial/inputs/InputWrapper";
 import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import DateWrapper from "@/components/partial/inputs/DateWrapper";
@@ -551,17 +548,6 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveProject"]),
     ...mapActions("map", ["updateShowMap"]),
-
-    fetchLinkedSiteWrapper() {
-      return new Promise((resolve) => {
-        resolve(
-          fetchLinkedSite(
-            this.relatedData.searchParameters.site,
-            this.$route.params.id
-          )
-        );
-      });
-    },
 
     setActiveProject(switchValue) {
       if (switchValue) this.setActiveProject(this.project);

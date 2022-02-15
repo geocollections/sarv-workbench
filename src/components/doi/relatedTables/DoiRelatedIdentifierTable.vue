@@ -133,13 +133,8 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import {
-  fetchDoiRelatedIdentifierType,
-  fetchDoiRelationType,
-} from "../../../assets/js/api/apiCalls";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 
@@ -253,25 +248,17 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.identifier_type.length <= 1) {
         this.autocomplete.loaders.identifier_type = true;
-        fetchDoiRelatedIdentifierType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.identifier_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("doi_related_identifier_type");
+        this.autocomplete.identifier_type = response?.results ?? [];
         this.autocomplete.loaders.identifier_type = false;
       }
       if (this.autocomplete.relation_type.length === 0) {
         this.autocomplete.loaders.relation_type = true;
-        fetchDoiRelationType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.relation_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("doi_relation_type");
+        this.autocomplete.relation_type = response?.results ?? [];
         this.autocomplete.loaders.relation_type = false;
       }
     },

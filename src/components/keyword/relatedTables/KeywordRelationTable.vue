@@ -138,7 +138,6 @@
 <script>
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
-import { fetchKeywordRelationType } from "@/assets/js/api/apiCalls";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 
@@ -259,15 +258,11 @@ export default {
       this.dialog = true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.keyword_relation_type.length <= 1) {
         this.autocomplete.loaders.keyword_relation_type = true;
-        fetchKeywordRelationType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.keyword_relation_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("keyword_relation_type");
+        this.autocomplete.keyword_relation_type = response?.results ?? [];
         this.autocomplete.loaders.keyword_relation_type = false;
       }
     },

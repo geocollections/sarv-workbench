@@ -248,7 +248,6 @@
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchTaxonTypeType } from "@/assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
@@ -401,15 +400,11 @@ export default {
       this.item.remarks = item.remarks;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.type_type.length <= 1) {
         this.autocomplete.loaders.type_type = true;
-        fetchTaxonTypeType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.type_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("taxon_type_type");
+        this.autocomplete.type_type = response?.results ?? [];
         this.autocomplete.loaders.type_type = false;
       }
     },
