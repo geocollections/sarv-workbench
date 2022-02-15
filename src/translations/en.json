@@ -1610,7 +1610,7 @@
     "attachment": "Image",
     "attachment_filename": "Filename",
     "relatedTables": {
-      "taxon_subclass": "Subtaxa",
+      "taxon": "Subtaxa",
       "taxon_synonym": "Synonymy",
       "taxon_type_specimen": "Type specimens",
       "taxon_occurrence": "Occurences",

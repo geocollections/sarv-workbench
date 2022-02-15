@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,93 +38,41 @@
       </template>
 
       <template v-slot:item.reference="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/reference/' + item.reference }"
+          v-if="item.reference"
+          :to="{ path: '/reference/' + item.reference.id }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.reference__reference }}
+          {{ item.reference.reference }}
         </router-link>
       </template>
 
       <template v-slot:item.agent="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent.agent }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/agent/' + item.agent }"
+          v-if="item.agent"
+          :to="{ path: '/agent/' + item.agent.id }"
           :title="$t('editAgent.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.agent__agent }}
+          {{ item.agent.agent }}
         </router-link>
       </template>
 
       <template v-slot:item.language="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.language__value,
-              en: item.language__value_en,
-            }"
-          />
-          <span
-            v-else-if="item.language"
-            v-translate="{
-              et: item.language.value,
-              en: item.language.value_en,
-            }"
-          />
-        </div>
-        <div
-          v-else
+        <span
+          v-if="item.language"
           v-translate="{
-            et: item.language__value,
-            en: item.language__value_en,
+            et: item.language.value,
+            en: item.language.value_en,
           }"
-        ></div>
+        />
+      </template>
+
+      <template v-slot:item.description="{ item }">
+        <div v-html="item.description" />
       </template>
     </v-data-table>
 
@@ -364,35 +311,17 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference,
-        };
-        this.autocomplete.reference.push(this.item.reference);
-      } else if (item.reference !== null) {
+      if (item.reference) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
       }
 
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent,
-        };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
+      if (item.agent) {
         this.item.agent = item.agent;
         this.autocomplete.agent.push(this.item.agent);
       }
 
-      if (typeof item.language !== "object" && item.language !== null) {
-        this.item.language = {
-          id: item.language,
-          value: item.language__value,
-          value_en: item.language__value_en,
-        };
-      } else this.item.language = item.language;
+      this.item.language = item.language;
 
       this.item.author_free = item.author_free;
       this.item.date_free = item.date_free;
@@ -415,5 +344,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

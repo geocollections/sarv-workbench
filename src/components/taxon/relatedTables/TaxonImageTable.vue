@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,122 +38,55 @@
       </template>
 
       <template v-slot:item.attachment_image="{ item }">
-        <div v-if="$route.meta.isEdit">
-          <router-link
-            v-if="item.attachment__uuid_filename"
-            :title="$t('edit.editMessage')"
-            :to="{ path: '/attachment/' + item.attachment }"
+        <router-link
+          v-if="item.attachment && item.attachment.uuid_filename"
+          :title="$t('edit.editMessage')"
+          :to="{ path: '/attachment/' + item.attachment.id }"
+        >
+          <!-- 1 is jpg and 2 is png -->
+          <v-img
+            v-if="
+              item.attachment.attachment_format &&
+              item.attachment.attachment_format.value <= 2
+            "
+            :src="getFileUrl(item.attachment.uuid_filename, 'small')"
+            :lazy-src="getFileUrl(item.attachment.uuid_filename, 'small')"
+            class="grey lighten-2 attachment-table-image-preview my-1"
           >
-            <v-img
-              v-if="
-                !!item.attachment__attachment_format__value.includes('image')
-              "
-              :src="getFileUrl(item.attachment__uuid_filename, 'small')"
-              :lazy-src="getFileUrl(item.attachment__uuid_filename, 'small')"
-              class="grey lighten-2 attachment-table-image-preview my-1"
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5" />
-                </v-row>
-              </template>
-            </v-img>
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="grey lighten-5" />
+              </v-row>
+            </template>
+          </v-img>
 
-            <v-icon v-else class="my-1" style="font-size: 3rem"
-              >far fa-file</v-icon
-            >
-          </router-link>
-        </div>
-
-        <div v-else>
-          <router-link
-            v-if="item.attachment && item.attachment.uuid_filename"
-            :title="$t('edit.editMessage')"
-            :to="{ path: '/attachment/' + item.attachment }"
+          <v-icon v-else class="my-1" style="font-size: 3rem"
+            >far fa-file</v-icon
           >
-            <v-img
-              v-if="
-                !!item.attachment.attachment_format__value.includes('image')
-              "
-              :src="getFileUrl(item.attachment.uuid_filename, 'small')"
-              :lazy-src="getFileUrl(item.attachment.uuid_filename, 'small')"
-              class="grey lighten-2 attachment-table-image-preview my-1"
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5" />
-                </v-row>
-              </template>
-            </v-img>
-
-            <v-icon v-else class="my-1" style="font-size: 3rem"
-              >far fa-file</v-icon
-            >
-          </router-link>
-        </div>
+        </router-link>
       </template>
 
       <template v-slot:item.attachment="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/attachment/' + item.attachment }"
-            :title="$t('editAttachment.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.attachment__original_filename }}
-          </router-link>
-          <router-link
-            v-else-if="item.attachment"
-            :to="{ path: '/attachment/' + item.attachment.id }"
-            :title="$t('editAttachment.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.attachment.original_filename }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/attachment/' + item.attachment }"
+          v-if="item.attachment"
+          :to="{ path: '/attachment/' + item.attachment.id }"
           :title="$t('editAttachment.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.attachment__original_filename }}
+          {{ item.attachment.original_filename }}
         </router-link>
       </template>
 
       <template v-slot:item.link="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.link }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.link__taxon }}
-          </router-link>
-          <router-link
-            v-else-if="item.link"
-            :to="{ path: '/taxon/' + item.link.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.link.taxon }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/taxon/' + item.link }"
+          v-if="item.link"
+          :to="{ path: '/taxon/' + item.link.id }"
           :title="$t('editTaxon.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.link__taxon }}
+          {{ item.link.taxon }}
         </router-link>
       </template>
     </v-data-table>
@@ -248,6 +180,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -256,16 +194,19 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 
 export default {
   name: "TaxonImageTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -294,11 +235,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
   },
 
@@ -337,15 +273,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.attachment !== "undefined" &&
@@ -367,52 +294,15 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "taxon_image",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "taxon_image",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (typeof item.attachment !== "object" && item.attachment !== null) {
-        this.item.attachment = {
-          id: item.attachment,
-          original_filename: item.attachment__original_filename,
-          uuid_filename: item.attachment__uuid_filename,
-          attachment_format__value: item.attachment__attachment_format__value,
-        };
-        this.autocomplete.attachment.push(this.item.attachment);
-      } else if (item.attachment !== null) {
+      if (item.attachment) {
         this.item.attachment = item.attachment;
         this.autocomplete.attachment.push(this.item.attachment);
       }
 
-      if (typeof item.link !== "object" && item.link !== null) {
-        this.item.link = {
-          id: item.link,
-          taxon: item.link__taxon,
-        };
-        this.autocomplete.taxon.push(this.item.link);
-      } else if (item.link !== null) {
+      if (item.link) {
         this.item.link = item.link;
         this.autocomplete.taxon.push(this.item.link);
       }
@@ -422,24 +312,6 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "taxon_image",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     },
 
     getFileUrl(uuid, size = null) {

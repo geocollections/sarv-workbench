@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -233,7 +232,7 @@ export default {
     },
 
     setItemFields(item) {
-      if (this.$route.meta.isEdit) this.item.id = item.id;
+      this.item.id = item.id;
 
       this.item.taxon_synonym = item.taxon_synonym;
       this.item.author = item.author;
@@ -247,5 +246,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

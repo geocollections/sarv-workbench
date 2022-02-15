@@ -1604,7 +1604,7 @@
     "attachment": "Pilt",
     "attachment_filename": "Failinimi",
     "relatedTables": {
-      "taxon_subclass": "Alamtaksonid",
+      "taxon": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",
       "taxon_type_specimen": "Tüüpeksemplarid",
       "taxon_occurrence": "Levik ja viited",

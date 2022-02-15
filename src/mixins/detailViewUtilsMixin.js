@@ -43,7 +43,8 @@ const detailViewUtilsMixin = {
           return this.$api.rw
             .get(urlTable, {
               defaultParams: {
-                [module]: moduleId,
+                // Exception for taxon in order to get taxon subclasses
+                [urlTable === "taxon" ? "parent" : module]: moduleId,
                 nest: 1, // Todo: Should drop nest for performance issues
               },
               options: {
@@ -118,7 +119,6 @@ const detailViewUtilsMixin = {
     // RELATED DATA
     async addRelatedItem(payload, connectionField = null) {
       let table = payload.table;
-      if (table === "taxon_subclass") table = "taxon";
 
       let url = `${table}`;
       let formData = new FormData();
@@ -126,7 +126,7 @@ const detailViewUtilsMixin = {
 
       let mainObjectKey = this.$route.meta.object;
       if (connectionField) mainObjectKey = connectionField;
-      if (payload.table === "taxon_subclass" && table === "taxon") {
+      if (table === "taxon") {
         mainObjectKey = "parent";
         uploadableObject.taxon = payload.rawItem.taxon;
       }
@@ -149,15 +149,13 @@ const detailViewUtilsMixin = {
     },
 
     async editRelatedItem(payload) {
-      console.log(payload);
       let table = payload.table;
-      if (table === "taxon_subclass") table = "taxon";
 
       let formData = new FormData();
       let uploadableObject = this.formatDataForUpload(payload.item);
       delete uploadableObject.id;
 
-      if (payload.table === "taxon_subclass" && table === "taxon") {
+      if (table === "taxon") {
         uploadableObject.parent = this[this.$route.meta.object].id;
         uploadableObject.taxon = payload.rawItem.taxon;
       } else {

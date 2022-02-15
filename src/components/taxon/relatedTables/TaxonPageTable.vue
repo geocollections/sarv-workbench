@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -36,6 +35,25 @@
         >
           <v-icon small>far fa-trash-alt</v-icon>
         </v-btn>
+      </template>
+
+      <template v-slot:item.author="{ item }">
+        <router-link
+          v-if="item.author"
+          :to="{ path: '/agent/' + item.author.id }"
+          :title="$t('editAgent.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.author.agent }}
+        </router-link>
+      </template>
+
+      <template v-slot:item.language="{ item }">
+        <div
+          v-if="item.language"
+          v-translate="{ et: item.language.value, en: item.language.value_en }"
+        />
       </template>
     </v-data-table>
 
@@ -140,6 +158,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -149,16 +173,19 @@ import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "TaxonPageTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -187,11 +214,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
   },
 
@@ -233,15 +255,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return this.item.frontpage !== null && this.item.frontpage.length > 0;
     },
@@ -254,9 +267,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         language: "",
         frontpage: "",
@@ -268,39 +279,10 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "taxon_page",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "taxon_page",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (typeof item.author !== "object" && item.author !== null) {
-        this.item.author = {
-          id: item.author,
-          agent: item.author__agent,
-        };
-        this.autocomplete.agent.push(this.item.author);
-      } else if (item.author !== null) {
+      if (item.author) {
         this.item.author = item.author;
         this.autocomplete.agent.push(this.item.author);
       }
@@ -314,14 +296,6 @@ export default {
       this.item.date_txt = item.date_txt;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "taxon_page",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
     },
 
     fillListAutocompletes() {
@@ -338,18 +312,6 @@ export default {
         this.autocomplete.loaders.language = false;
       }
     },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped></style>

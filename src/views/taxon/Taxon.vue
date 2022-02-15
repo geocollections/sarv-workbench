@@ -180,8 +180,8 @@
               <autocomplete-wrapper
                 v-model="taxon.rank_original"
                 :color="bodyActiveColor"
-                :items="autocomplete.rank_original"
-                :loading="autocomplete.loaders.rank_original"
+                :items="autocomplete.taxon_rank"
+                :loading="autocomplete.loaders.taxon_rank"
                 :item-text="rankLabel"
                 :label="$t('taxon.rank_original')"
               />
@@ -440,6 +440,53 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+              block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="taxon.attachments"
+                @update:existing-files="taxon.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS  -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -479,9 +526,9 @@
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <taxon-subclass-table
             v-if="$route.meta.isEdit"
-            v-show="activeTab === 'taxon_subclass'"
-            :response="relatedData.taxon_subclass"
-            :search-parameters="relatedData.searchParameters.taxon_subclass"
+            v-show="activeTab === 'taxon'"
+            :response="relatedData.taxon"
+            :search-parameters="relatedData.searchParameters.taxon"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -567,19 +614,6 @@
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
           />
-
-          <div v-show="activeTab === 'attachment'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
 
           <taxon-image-table
             v-show="activeTab === 'taxon_image'"
@@ -699,15 +733,6 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "relatedData.searchParameters": {
-      handler() {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -719,7 +744,7 @@ export default {
     filteredRelatedTabs() {
       return this.relatedTabs.filter((tab) => {
         if (!this.$route.meta.isEdit) {
-          if (tab.name !== "taxon_subclass") return tab;
+          if (tab.name !== "taxon") return tab;
         } else return tab;
       });
     },
@@ -742,7 +767,7 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "taxon_subclass", iconClass: "fas fa-pastafarianism" },
+          { name: "taxon", iconClass: "fas fa-pastafarianism" },
           { name: "taxon_synonym", iconClass: "far fa-clone" },
           { name: "taxon_type_specimen", iconClass: "fas fa-fish" },
           { name: "taxon_occurrence", iconClass: "fas fa-mountain" },
@@ -750,10 +775,9 @@ export default {
           { name: "taxon_common_name", iconClass: "fas fa-signature" },
           { name: "taxon_description", iconClass: "far fa-comment-dots" },
           { name: "taxon_page", iconClass: "fas fa-pager" },
-          { name: "attachment", iconClass: "far fa-file" },
           { name: "taxon_image", iconClass: "far fa-image" },
         ],
-        activeTab: this.$route.meta.isEdit ? "taxon_subclass" : "taxon_synonym",
+        activeTab: "taxon",
         relatedData: this.setDefaultRelatedData(),
         listOfAutocompleteTables: ["taxon_rank"],
         autocomplete: {
@@ -774,7 +798,7 @@ export default {
             opinion_type: false,
             taxon: false,
             language: false,
-            attachment: false,
+            attachments: false,
             taxon_rank: false,
           },
           reference: [],
@@ -793,7 +817,7 @@ export default {
           opinion_type: [],
           taxon: [],
           language: [],
-          attachment: [],
+          attachments: [],
           taxon_rank: [],
         },
         requiredFields: ["taxon"],
@@ -813,12 +837,12 @@ export default {
           type_taxon_txt: null,
           stratigraphy_base: null,
           stratigraphy_top: null,
-          in_estonia: null,
-          in_baltoscandia: null,
-          is_fossil: null,
+          in_estonia: false,
+          in_baltoscandia: false,
+          is_fossil: false,
           is_private: false,
-          is_valid: null,
-          is_fossil_group: null,
+          is_valid: false,
+          is_fossil_group: false,
           sort: null,
           taxon_id_pbdb: null,
           taxon_id_plutof: null,
@@ -827,21 +851,23 @@ export default {
           taxon_id_nrm: null,
           remarks: null,
           owner: null,
-          is_authorized: null,
+          is_authorized: false,
           user_authorized: null,
+          attachments: [],
         },
         block: {
           info: true,
           details: true,
           additionalInfo: true,
           description: true,
+          files: true,
         },
       };
     },
 
     setDefaultRelatedData() {
       return {
-        taxon_subclass: { count: 0, results: [] },
+        taxon: { count: 0, results: [] },
         taxon_synonym: { count: 0, results: [] },
         taxon_type_specimen: { count: 0, results: [] },
         taxon_occurrence: { count: 0, results: [] },
@@ -849,10 +875,9 @@ export default {
         taxon_common_name: { count: 0, results: [] },
         taxon_description: { count: 0, results: [] },
         taxon_page: { count: 0, results: [] },
-        attachment: { count: 0, results: [] },
         taxon_image: { count: 0, results: [] },
         searchParameters: {
-          taxon_subclass: {
+          taxon: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
@@ -900,12 +925,6 @@ export default {
             sortBy: ["id"],
             sortDesc: [true],
           },
-          attachment: {
-            page: 1,
-            paginateBy: 100,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
           taxon_image: {
             page: 1,
             paginateBy: 100,
@@ -917,12 +936,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "taxon", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment.count = files.length;
-      this.relatedData.attachment.results = files;
+      this.addFilesAsNewObjects(files, this.taxon, singleFileMetadata);
     },
 
     updateHierarchyString(parentTaxon) {

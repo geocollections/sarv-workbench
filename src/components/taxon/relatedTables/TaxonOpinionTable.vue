@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,92 +38,36 @@
       </template>
 
       <template v-slot:item.opinion_type="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.opinion_type__value,
-              en: item.opinion_type__value_en,
-            }"
-          />
-          <span
-            v-else-if="item.opinion_type"
-            v-translate="{
-              et: item.opinion_type.value,
-              en: item.opinion_type.value_en,
-            }"
-          />
-        </div>
-        <div
-          v-else
+        <span
+          v-if="item.opinion_type"
           v-translate="{
-            et: item.opinion_type__value,
-            en: item.opinion_type__value_en,
+            et: item.opinion_type.value,
+            en: item.opinion_type.value_en,
           }"
-        ></div>
+        />
       </template>
 
       <template v-slot:item.other_taxon="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.other_taxon }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.other_taxon__taxon }}
-          </router-link>
-          <router-link
-            v-else-if="item.other_taxon"
-            :to="{ path: '/taxon/' + item.other_taxon.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.other_taxon.taxon }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/taxon/' + item.other_taxon }"
+          v-if="item.other_taxon"
+          :to="{ path: '/taxon/' + item.other_taxon.id }"
           :title="$t('editTaxon.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.other_taxon__taxon }}
+          {{ item.other_taxon.taxon }}
         </router-link>
       </template>
 
       <template v-slot:item.reference="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/reference/' + item.reference }"
+          v-if="item.reference"
+          :to="{ path: '/reference/' + item.reference.id }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.reference__reference }}
+          {{ item.reference.reference }}
         </router-link>
       </template>
 
@@ -309,11 +252,6 @@ export default {
       required: false,
       default: "deep-orange",
     },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
   },
 
   data: () => ({
@@ -385,38 +323,19 @@ export default {
     },
 
     setItemFields(item) {
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
+      this.item.id = item.id;
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference,
-        };
-        this.autocomplete.reference.push(this.item.reference);
-      } else if (item.reference !== null) {
+      if (item.reference) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
       }
 
-      if (typeof item.other_taxon !== "object" && item.other_taxon !== null) {
-        this.item.other_taxon = {
-          id: item.other_taxon,
-          taxon: item.other_taxon__taxon,
-        };
-        this.autocomplete.taxon.push(this.item.other_taxon);
-      } else if (item.other_taxon !== null) {
+      if (item.other_taxon) {
         this.item.other_taxon = item.other_taxon;
         this.autocomplete.taxon.push(this.item.other_taxon);
       }
 
-      if (typeof item.opinion_type !== "object" && item.opinion_type !== null) {
-        this.item.opinion_type = {
-          id: item.opinion_type,
-          value: item.opinion_type__value,
-          value_en: item.opinion_type__value_en,
-        };
-      } else this.item.opinion_type = item.opinion_type;
+      this.item.opinion_type = item.opinion_type;
 
       this.item.pages = item.pages;
       this.item.author = item.author;
@@ -440,5 +359,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
