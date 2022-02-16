@@ -32,7 +32,7 @@ Vue.use(api, {
   rwapi_url: process.env.VUE_APP_RWAPI_URL,
   auth_url: process.env.VUE_APP_AUTH_URL,
 });
-Vue.use(formatDate)
+Vue.use(formatDate);
 
 Vue.config.productionTip = false;
 
