@@ -28,7 +28,7 @@ const tableViewMixin = {
       },
     }),
 
-    $_tableHeaderMixin_translatedHeaders() {
+    $_tableViewMixin_translatedHeaders() {
       return this.$_tableViewMixin_headers.map((item) => {
         return {
           ...item,
@@ -37,10 +37,18 @@ const tableViewMixin = {
       });
     },
 
-    $_tableHeaderMixin_shownHeaders() {
-      return this.$_tableHeaderMixin_translatedHeaders.filter(
+    $_tableViewMixin_shownHeaders() {
+      return this.$_tableViewMixin_translatedHeaders.filter(
         (item) => item.show
       );
+    },
+
+    $_tableViewMixin_filteredSearchFields() {
+      const extraIds = this.$_tableViewMixin_searchFields.extraIds.filter(
+        (id) => !this.$_tableViewMixin_searchFields.mainIds.includes(id)
+      );
+
+      return { ...this.$_tableViewMixin_searchFields, extraIds };
     },
   },
 

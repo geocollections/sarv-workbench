@@ -2,13 +2,9 @@
   <div class="datasets">
     <table-view-title title="header.datasets" />
 
-    <table-view-search
-    />
+    <table-view-search />
 
-    <list-module-core
-      :module="$route.meta.object"
-      :api-call="apiCall"
-    />
+    <list-module-core :api-call="apiCall" />
   </div>
 </template>
 
@@ -41,5 +37,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

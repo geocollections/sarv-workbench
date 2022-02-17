@@ -230,10 +230,7 @@ export default {
     ...mapActions("detail", ["setInitialEditViewDataHasChangedState"]),
 
     async handleClick(action) {
-      await this.$parent.$emit(
-        "button-clicked",
-        action
-      );
+      await this.$parent.$emit("button-clicked", action);
     },
 
     nextPage() {

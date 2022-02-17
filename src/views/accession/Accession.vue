@@ -75,7 +75,9 @@
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch($event, 'agent_andis')"
+                v-on:search:items="
+                  autocompleteAgentSearch($event, 'agent_andis')
+                "
               />
             </v-col>
 
@@ -90,7 +92,9 @@
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch($event, 'agent_vottis')"
+                v-on:search:items="
+                  autocompleteAgentSearch($event, 'agent_vottis')
+                "
               />
             </v-col>
 
@@ -105,7 +109,9 @@
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch($event, 'agent_kinnitas')"
+                v-on:search:items="
+                  autocompleteAgentSearch($event, 'agent_kinnitas')
+                "
               />
             </v-col>
           </v-row>
@@ -231,5 +237,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

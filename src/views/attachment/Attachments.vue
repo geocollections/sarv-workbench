@@ -8,7 +8,6 @@
     <table-view-search :col-size="4" />
 
     <list-module-core
-      :module="$route.meta.object"
       :api-call="$_tableViewMixin_apiCall"
       :use-image-view="true"
     />
@@ -32,5 +31,3 @@ export default {
   mixins: [tableViewMixin],
 };
 </script>
-
-<style scoped></style>

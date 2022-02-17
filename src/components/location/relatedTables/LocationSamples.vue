@@ -7,5 +7,3 @@ export default {
   name: "LocationSamples",
 };
 </script>
-
-<style scoped></style>

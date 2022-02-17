@@ -48,7 +48,6 @@ export default {
       if (confirm(this.$t(this.object + ".doiConfirmation"))) {
         this.setLoadingState(true);
 
-
         let doi = this.buildDoiObject(this.object);
         if (typeof doi !== "undefined") {
           let doiFormData = new FormData();
@@ -186,5 +185,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

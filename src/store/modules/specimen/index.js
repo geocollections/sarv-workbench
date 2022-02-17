@@ -219,7 +219,7 @@ const getDefaultState = () => {
           lookUpType: "icontains",
           title: "specimen.specimen_id",
           value: null,
-          fields: ["specimen_id", "specimen_nr"],
+          fields: ["specimen_id", "specimen_nr", "specimen_full_number"],
           type: "multi",
         },
         specimen_nr: {

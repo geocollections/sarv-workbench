@@ -122,9 +122,7 @@
                 :item-text="classLabel"
                 :label="$t('preparation.classification')"
                 is-searchable
-                v-on:search:items="
-                  autocompleteClassificationSearch
-                "
+                v-on:search:items="autocompleteClassificationSearch"
               />
             </v-col>
           </v-row>

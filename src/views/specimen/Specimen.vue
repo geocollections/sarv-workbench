@@ -560,8 +560,8 @@
           :color="bodyActiveColor"
         >
           <v-icon>{{
-              block.files ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 

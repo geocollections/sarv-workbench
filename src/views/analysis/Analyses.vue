@@ -5,7 +5,7 @@
     <table-view-search :col-size="4" />
 
     <!-- SEARCH FIELDS END -->
-    <list-module-core :module="$route.meta.object" :api-call="apiCall" />
+    <list-module-core :api-call="apiCall" />
   </div>
 </template>
 
@@ -39,5 +39,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

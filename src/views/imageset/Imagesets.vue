@@ -4,7 +4,7 @@
 
     <table-view-search />
 
-    <list-module-core :module="$route.meta.object" :api-call="apiCall" />
+    <list-module-core :api-call="apiCall" />
   </div>
 </template>
 

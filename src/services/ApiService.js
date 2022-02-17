@@ -50,7 +50,12 @@ class ApiService {
             const or_search = fields.map(
               (field) => `${field}__${lookUpType}:${value}`
             );
-            prev["or_search"] = or_search.join(" OR ");
+            if (prev.or_search) {
+              if (Array.isArray(prev.or_search))
+                prev.or_search.push(or_search.join(" OR "));
+              else
+                prev["or_search"] = [prev["or_search"], or_search.join(" OR ")];
+            } else prev["or_search"] = or_search.join(" OR ");
           } else if (type === "datetime") {
             fields.forEach(
               (field) =>
@@ -80,7 +85,9 @@ class ApiService {
     const outputMessage = `${detail} URL: ${url}`;
     // Todo: Beautify error message
     if (status === 400)
-      return `<b>Bad Request!</b> ${JSON.stringify(error?.response?.data)} URL: ${url}`;
+      return `<b>Bad Request!</b> ${JSON.stringify(
+        error?.response?.data
+      )} URL: ${url}`;
     if (status === 403) return `<b>Forbidden!</b> ${outputMessage}`;
     if (status === 404) return `<b>Page not Found!</b> ${outputMessage}`;
     if (status === 405) return `<b>Method not Allowed!</b> ${outputMessage}`;

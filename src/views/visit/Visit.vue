@@ -107,7 +107,9 @@
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteInstitutionSearch($event, 'visitor_institution')"
+                v-on:search:items="
+                  autocompleteInstitutionSearch($event, 'visitor_institution')
+                "
               />
             </v-col>
           </v-row>
@@ -280,5 +282,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import ApiService from "@/services/ApiService";
+import qs from "qs";
 
 class RWApiService extends ApiService {
   constructor({ axios, url }) {
@@ -31,8 +32,14 @@ class RWApiService extends ApiService {
       ...this.getSortByParams(options),
       ...this.getPaginationParams(options),
     };
+    console.log(params)
     try {
-      const res = await this.service.get(url, { params });
+      const res = await this.service.get(url, {
+        params,
+        paramsSerializer: (par) => {
+          return qs.stringify(par, { indices: false });
+        },
+      });
       return res.data;
     } catch (err) {
       this.toastError(err, url);

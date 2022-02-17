@@ -59,11 +59,7 @@
       </template>
     </v-data-table>
 
-    <v-toolbar
-      dense
-      flat
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-    >
+    <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
       <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000">
         <template v-slot:activator="{ on }">
           <v-btn :color="bodyActiveColor" small dark v-on="on">{{
@@ -103,7 +99,9 @@
                     is-link
                     route-object="keyword"
                     is-searchable
-                    v-on:search:items="autocompleteKeywordSearch($event, 'keyword')"
+                    v-on:search:items="
+                      autocompleteKeywordSearch($event, 'keyword')
+                    "
                   />
                 </v-col>
               </v-row>
@@ -269,5 +267,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

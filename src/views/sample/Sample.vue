@@ -286,7 +286,9 @@
                   is-link
                   route-object="agent"
                   is-searchable
-                  v-on:search:items="autocompleteAgentSearch($event, 'agent_collected')"
+                  v-on:search:items="
+                    autocompleteAgentSearch($event, 'agent_collected')
+                  "
                 />
               </v-col>
 
@@ -330,7 +332,9 @@
                   :item-text="nameLabel"
                   :label="$t('sample.classification_rock')"
                   is-searchable
-                  v-on:search:items="autocompleteRockSearch($event, 'classification_rock')"
+                  v-on:search:items="
+                    autocompleteRockSearch($event, 'classification_rock')
+                  "
                 />
               </v-col>
 
@@ -460,7 +464,9 @@
                   is-link
                   route-object="sample"
                   is-searchable
-                  v-on:search:items="autocompleteSampleSearch($event, 'parent_sample')"
+                  v-on:search:items="
+                    autocompleteSampleSearch($event, 'parent_sample')
+                  "
                 />
               </v-col>
 
@@ -475,7 +481,9 @@
                   is-link
                   route-object="specimen"
                   is-searchable
-                  v-on:search:items="autocompleteSpecimenSearch($event, 'parent_specimen')"
+                  v-on:search:items="
+                    autocompleteSpecimenSearch($event, 'parent_specimen')
+                  "
                 />
               </v-col>
             </v-row>
@@ -751,7 +759,9 @@
                   :item-text="nameLabel"
                   :label="$t('sample.classification_rock')"
                   is-searchable
-                  v-on:search:items="autocompleteRockSearch($event, 'classification_rock')"
+                  v-on:search:items="
+                    autocompleteRockSearch($event, 'classification_rock')
+                  "
                 />
               </v-col>
 
@@ -817,7 +827,9 @@
                   is-link
                   route-object="sample"
                   is-searchable
-                  v-on:search:items="autocompleteSampleSearch($event, 'parent_sample')"
+                  v-on:search:items="
+                    autocompleteSampleSearch($event, 'parent_sample')
+                  "
                 />
               </v-col>
 
@@ -832,7 +844,9 @@
                   is-link
                   route-object="specimen"
                   is-searchable
-                  v-on:search:items="autocompleteSpecimenSearch($event, 'parent_specimen')"
+                  v-on:search:items="
+                    autocompleteSpecimenSearch($event, 'parent_specimen')
+                  "
                 />
               </v-col>
             </v-row>
@@ -1029,7 +1043,11 @@
 
             <!-- PAGINATION -->
             <pagination
-              v-if="$route.meta.isEdit && activeTab && relatedData[activeTab].count > 10"
+              v-if="
+                $route.meta.isEdit &&
+                activeTab &&
+                relatedData[activeTab].count > 10
+              "
               class="pa-1"
               :body-active-color="bodyActiveColor"
               :count="relatedData[activeTab].count"

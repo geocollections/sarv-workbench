@@ -1,6 +1,5 @@
 const mutations = {
   UPDATE_SEARCH_FIELDS(state, payload) {
-    console.log(payload);
     state[payload.module].searchFields.byIds[payload.field][payload.key] =
       payload.value;
   },

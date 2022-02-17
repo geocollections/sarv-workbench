@@ -5,7 +5,6 @@
     <table-view-search />
 
     <list-module-core
-      :module="$route.meta.object"
       :api-call="apiCall"
       :use-image-view="true"
       :use-list-view="true"

@@ -262,7 +262,7 @@ const getDefaultState = () => {
           lookUpType: "icontains",
           title: "attachment.specimen",
           value: null,
-          fields: ["specimen__specimen_id"],
+          fields: ["specimen__specimen_id", "specimen__specimen_full_number"],
           type: "multi",
         },
         specimen_image_attachment: {

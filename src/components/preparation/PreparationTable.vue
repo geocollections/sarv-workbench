@@ -1,5 +1,4 @@
 <template>
-
   <table-wrapper
     v-bind="$attrs"
     :headers="headers"

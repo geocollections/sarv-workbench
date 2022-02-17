@@ -262,24 +262,31 @@
               :body-color="bodyColor"
               :body-active-color="bodyActiveColor"
               :look-up-types="translatedLookUpTypes"
-              :search-fields="$_tableViewMixin_searchFields"
+              :search-fields="$_tableViewMixin_filteredSearchFields"
               :col-size="3"
               @update:searchFields="updateSearchFieldsDebounced($event)"
             />
 
             <!-- RESET SEARCH PREFERENCES -->
-            <v-row no-gutters>
-              <v-col cols="12">
+            <div class="d-flex flex-column flex-sm-row align-center">
+              <div class="mr-2 mb-2 mb-sm-0">
                 <v-btn
-                  @click="$_tableViewMixin_resetState"
+                  @click="handleResetButton"
                   :color="bodyActiveColor"
                   dark
+                  outlined
                 >
                   <v-icon left>fas fa-eraser</v-icon>
-                  {{ $t("buttons.resetSearch") }}
+                  {{ $t("buttons.clear") }}
                 </v-btn>
-              </v-col>
-            </v-row>
+              </div>
+              <div>
+                <v-btn @click="$root.$emit('table-search')" color="green" dark>
+                  <v-icon left>fas fa-search</v-icon>
+                  {{ $t("buttons.search") }}
+                </v-btn>
+              </div>
+            </div>
           </div>
         </v-card-text>
       </v-card>
@@ -321,9 +328,14 @@ export default {
     showSearch: true,
   }),
   methods: {
-    updateSearchFieldsDebounced: debounce(function (payload) {
+    updateSearchFieldsDebounced(payload) {
       this.$_tableViewMixin_updateSearchFields(payload);
-    }, 400),
+    },
+
+    handleResetButton() {
+      this.$_tableViewMixin_resetState();
+      this.$root.$emit("table-search");
+    },
   },
 };
 </script>

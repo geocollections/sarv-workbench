@@ -130,7 +130,9 @@
                     is-link
                     route-object="agent"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch($event, 'agent_identified')"
+                    v-on:search:items="
+                      autocompleteAgentSearch($event, 'agent_identified')
+                    "
                   />
                 </v-col>
 
@@ -180,12 +182,9 @@
             <v-btn color="red" text @click="cancel">{{
               $t("buttons.cancel")
             }}</v-btn>
-            <v-btn
-              color="green"
-              text
-              @click="addItem"
-              >{{ isNewItem ? $t("buttons.add") : $t("buttons.edit") }}</v-btn
-            >
+            <v-btn color="green" text @click="addItem">{{
+              isNewItem ? $t("buttons.add") : $t("buttons.edit")
+            }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>

@@ -80,6 +80,15 @@
         <div class="flex-grow-1"></div>
       </v-card-title>
 
+      <Pagination
+        v-if="!isTableView && response.count > 10"
+        :count="response.count"
+        :page="$_tableViewMixin_options.page"
+        :paginate-by="$_tableViewMixin_options.itemsPerPage"
+        :body-active-color="bodyActiveColor"
+        @update:options="$_tableViewMixin_updateOptions"
+      />
+
       <!-- LIST VIEW -->
       <list-view
         v-if="isListView && response.count > 0"
@@ -104,7 +113,7 @@
         :response="response"
         :filter="filterTable"
         :search-parameters="$_tableViewMixin_options"
-        :headers="$_tableHeaderMixin_translatedHeaders"
+        :headers="$_tableViewMixin_translatedHeaders"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:toggle-reference-in-active-library="toggleReferenceInActiveLibrary"
         v-on:toggle-item-in-selection-series="toggleItemInSelectionSeries"
@@ -129,11 +138,12 @@ import { mapActions, mapState } from "vuex";
 import ScrollToTop from "./partial/ScrollToTop";
 import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
-import { fetchChangeRecordState } from "@/assets/js/api/apiCalls";
 import tableViewMixin from "@/mixins/tableViewMixin";
+import Pagination from "@/components/partial/Pagination";
 
 export default {
   components: {
+    Pagination,
     ScrollToTop,
     ExportButtons,
     ListView,
@@ -143,10 +153,6 @@ export default {
     apiCall: {
       type: Function,
       required: true,
-    },
-    module: {
-      type: String,
-      default: null,
     },
     exportButtons: {
       type: Boolean,
@@ -199,21 +205,22 @@ export default {
     isListView() {
       return this.$_tableViewMixin_viewType === "list";
     },
+
+    module() {
+      return this.$route.meta.object;
+    },
   },
+  created() {
+    window.addEventListener("keyup", this.handleKeyUp);
+    this.$root.$on("table-search", this.search);
+    this.search();
+  },
+  beforeDestroy() {
+    window.removeEventListener("keyup", this.handleKeyUp);
+    this.$root.$off("table-search", this.search);
+  },
+
   watch: {
-    $_tableViewMixin_options: {
-      handler() {
-        this.search();
-      },
-      immediate: true,
-      deep: true,
-    },
-    $_tableViewMixin_searchFields: {
-      handler() {
-        this.search();
-      },
-      deep: true,
-    },
     $_tableViewMixin_viewType() {
       this.search();
     },
@@ -241,7 +248,7 @@ export default {
   methods: {
     ...mapActions("search", ["setSidebarList"]),
 
-    search: debounce(async function () {
+    async search() {
       this.isLoading = true;
 
       const response = await this.apiCall();
@@ -250,32 +257,20 @@ export default {
 
       this.noResults = response?.count === 0;
 
-      if (response?.status === 200) {
-        // Todo: Old rwapi (should be replaced)
-        if (response?.data?.count === 0) this.noResults = true;
-        if (response?.data?.count > 0) this.noResults = false;
-        this.response.count = response.data.count ?? 0;
-        this.response.results = response.data.results ?? [];
-      } else {
-        // Todo: New rwapi, this should be the only one (for now)
-        this.response.count = response?.count ?? 0;
-        this.response.results = response?.results ?? [];
-        this.noResults = this.response.count === 0;
-
-        // this.setSidebarList({
-        //   module: this.module,
-        //   response,
-        //   page: this.$_tableViewMixin_options.page,
-        //   paginateBy: this.$_tableViewMixin_options.paginateBy,
-        // });
-      }
-    }, 500),
+      this.response.count = response?.count ?? 0;
+      this.response.results = response?.results ?? [];
+      this.noResults = this.response.count === 0;
+    },
 
     changeObjectsPrivacyState(state, id) {
       let formData = new FormData();
       formData.set("is_private", state);
 
       this.$api.rw.put(this.module, id, formData);
+    },
+
+    handleKeyUp(event) {
+      if (event.key === "Enter" || event.keyCode === 13) this.search();
     },
   },
 };

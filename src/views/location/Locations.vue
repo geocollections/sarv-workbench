@@ -5,7 +5,6 @@
     <table-view-search :col-size="4" />
 
     <list-module-core
-      :module="$route.meta.object"
       :api-call="apiCall"
       :use-list-view="true"
       :use-image-view="true"
@@ -43,5 +42,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

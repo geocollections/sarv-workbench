@@ -1,9 +1,6 @@
 import moment from "moment";
 import { mapActions, mapGetters, mapState } from "vuex";
-import {
-  fetchChangeRecordState,
-  postRequest,
-} from "../assets/js/api/apiCalls";
+import { fetchChangeRecordState, postRequest } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
 
 const formManipulation = {
