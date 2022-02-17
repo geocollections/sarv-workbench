@@ -56,7 +56,7 @@
                           :color="bodyActiveColor"
                           clearable
                           @click:clear="
-                            updateSearchFieldsDebounced({
+                            $_tableViewMixin_updateSearchFields({
                               field,
                               key: 'value',
                               value: null,
@@ -73,7 +73,7 @@
                           $_tableViewMixin_searchFields.byIds[field].value
                         "
                         @input="
-                          updateSearchFieldsDebounced({
+                          $_tableViewMixin_updateSearchFields({
                             field,
                             key: 'value',
                             value: $event,
@@ -107,7 +107,7 @@
                       :color="bodyActiveColor"
                       hide-details
                       @change="
-                        updateSearchFieldsDebounced({
+                        $_tableViewMixin_updateSearchFields({
                           field,
                           key: 'value',
                           value: $event,
@@ -131,7 +131,7 @@
                       :items="translatedLookUpTypes"
                       :label="$t('main.lookUpType')"
                       @input="
-                        updateSearchFieldsDebounced({
+                        $_tableViewMixin_updateSearchFields({
                           field,
                           key: 'lookUpType',
                           value: $event,
@@ -156,7 +156,7 @@
                       hide-details
                       :class="bodyActiveColor + '--text'"
                       @input="
-                        updateSearchFieldsDebounced({
+                        $_tableViewMixin_updateSearchFields({
                           field,
                           key: 'value',
                           value: $event,
@@ -188,7 +188,7 @@
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      updateSearchFieldsDebounced({
+                      $_tableViewMixin_updateSearchFields({
                         field: 'specimen_image_attachment',
                         key: 'value',
                         value: $event,
@@ -207,7 +207,7 @@
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      updateSearchFieldsDebounced({
+                      $_tableViewMixin_updateSearchFields({
                         field: 'specimen_image_attachment',
                         key: 'value',
                         value: $event,
@@ -226,7 +226,7 @@
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      updateSearchFieldsDebounced({
+                      $_tableViewMixin_updateSearchFields({
                         field: 'specimen_image_attachment',
                         key: 'value',
                         value: $event,
@@ -245,7 +245,7 @@
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      updateSearchFieldsDebounced({
+                      $_tableViewMixin_updateSearchFields({
                         field: 'specimen_image_attachment',
                         key: 'value',
                         value: $event,
@@ -264,7 +264,7 @@
               :look-up-types="translatedLookUpTypes"
               :search-fields="$_tableViewMixin_filteredSearchFields"
               :col-size="3"
-              @update:searchFields="updateSearchFieldsDebounced($event)"
+              @update:searchFields="$_tableViewMixin_updateSearchFields($event)"
             />
 
             <!-- RESET SEARCH PREFERENCES -->
@@ -328,10 +328,6 @@ export default {
     showSearch: true,
   }),
   methods: {
-    updateSearchFieldsDebounced(payload) {
-      this.$_tableViewMixin_updateSearchFields(payload);
-    },
-
     handleResetButton() {
       this.$_tableViewMixin_resetState();
       this.$root.$emit("table-search");

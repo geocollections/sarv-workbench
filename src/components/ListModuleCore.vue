@@ -123,7 +123,7 @@
         :body-active-color="bodyActiveColor"
         @change:headers="$_tableViewMixin_updateHeaders"
         @reset:headers="$_tableViewMixin_resetHeaders"
-        @update:options="$_tableViewMixin_updateOptions"
+        @update:options="handleUpdateOptions"
       />
     </v-card>
   </div>
@@ -271,6 +271,12 @@ export default {
 
     handleKeyUp(event) {
       if (event.key === "Enter" || event.keyCode === 13) this.search();
+    },
+
+    // Todo: Debounce that!!! because of page change
+    handleUpdateOptions(payload) {
+      this.$_tableViewMixin_updateOptions(payload);
+      this.search();
     },
   },
 };
