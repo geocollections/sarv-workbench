@@ -93,29 +93,24 @@ const getDefaultState = () => {
           value: null,
         },
         is_estonian_author: {
-          lookUpType: "icontains",
           title: "reference.is_estonian_author",
           value: null,
           isCheckbox: true,
         },
         is_estonian_reference: {
-          lookUpType: "icontains",
           title: "reference.is_estonian_reference",
           value: null,
           isCheckbox: true,
         },
         is_locked: {
-          lookUpType: "icontains",
           title: "reference.is_locked",
           value: null,
         },
         is_oa: {
-          lookUpType: "icontains",
           title: "reference.is_oa",
           value: null,
         },
         is_private: {
-          lookUpType: "icontains",
           title: "reference.is_private",
           value: null,
         },

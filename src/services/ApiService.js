@@ -37,18 +37,17 @@ class ApiService {
         let value = searchFields.byIds[curr].value;
         if (value) {
           // Todo: Review iexact lookuptype not working properly
-          const lookUpType =
-            searchFields.byIds[curr]?.lookUpType ?? "icontains";
+          const lookUpType = searchFields.byIds[curr]?.lookUpType
+            ? `__${searchFields.byIds[curr]?.lookUpType}`
+            : "";
           const type = searchFields.byIds[curr]?.type ?? "text";
           const fields = searchFields.byIds[curr]?.fields ?? [curr];
 
           if (type === "text")
-            fields.forEach(
-              (field) => (prev[`${field}__${lookUpType}`] = value)
-            );
+            fields.forEach((field) => (prev[`${field}${lookUpType}`] = value));
           else if (type === "multi") {
             const or_search = fields.map(
-              (field) => `${field}__${lookUpType}:${value}`
+              (field) => `${field}${lookUpType}:${value}`
             );
             if (prev.or_search) {
               if (Array.isArray(prev.or_search))
@@ -59,14 +58,14 @@ class ApiService {
           } else if (type === "datetime") {
             fields.forEach(
               (field) =>
-                (prev[`${field}__${lookUpType}`] = `${value} ${
+                (prev[`${field}${lookUpType}`] = `${value} ${
                   lookUpType === "lt" ? "23:59" : "00:00"
                 }`)
             );
           } else if (type === "multi_checkbox") {
             fields.forEach(
               (field) =>
-                (prev[`${field}__${lookUpType}`] = `${
+                (prev[`${field}${lookUpType}`] = `${
                   value.length > 0 ? value : 0
                 }`)
             );
