@@ -260,6 +260,11 @@ export default {
       this.response.count = response?.count ?? 0;
       this.response.results = response?.results ?? [];
       this.noResults = this.response.count === 0;
+
+      this.$_tableViewMixin_setItems({
+        items: this.response.results,
+        count: this.response.count,
+      });
     }, 400),
 
     changeObjectsPrivacyState(state, id) {

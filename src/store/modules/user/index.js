@@ -25,6 +25,10 @@ const getters = {
     return state.authUser?.user_id;
   },
 
+  getUserName: (state) => {
+    return state.authUser?.username;
+  },
+
   isUserAllowedTo: (state, getters) => (action, table) => {
     if (getters.isUserSuperuser) return true;
     else

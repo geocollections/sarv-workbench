@@ -87,6 +87,7 @@
       :body-color="bodyColor"
       :is-navbar-dark="navbarDark"
       :navbar-color="navbarColor"
+      :object-data="data"
     />
 
     <ConfirmationDialog

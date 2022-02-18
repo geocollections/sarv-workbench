@@ -89,6 +89,24 @@
     "doesnotcontain": "!* ei sisalda",
     "doesnotequal": "!= ei võrdu",
     "hierarchy": "-·= hierarhiline",
+    "exact": "'=' võrdne",
+    "contains": "'*' sisaldab",
+    "startswith": "'=*' algab",
+    "endswith": "'*=' lõpeb",
+    "isnull": "tühi",
+    "in": "in",
+    "year": "aasta",
+    "iso_year": "iso aasta",
+    "month": "kuu",
+    "day": "päev",
+    "week": "nädal",
+    "week_day": "nädalapäev",
+    "iso_week_day": "iso nädalapäev",
+    "quarter": "kvartal",
+    "time": "aeg",
+    "hour": "tund",
+    "minute": "minut",
+    "second": "sekund",
     "lookUpType": "Filter"
   },
   "login": {
@@ -351,6 +369,7 @@
   },
   "sidebar": {
     "recentUrls": "Ajalugu",
+    "currentSearch": "Otsingutulemused",
     "project": {
       "info": "Üldinfo",
       "description": "Kirjeldus | Lisainfo",

@@ -4,6 +4,7 @@ const getDefaultState = () => {
   return {
     items: [],
     count: 0,
+    mainField: "specimen_full_number",
     options: {
       page: 1,
       itemsPerPage: 50,
@@ -294,7 +295,6 @@ const getDefaultState = () => {
           type: "multi",
         },
         selection_id: {
-          lookUpType: "exact",
           title: "specimen.selectionId",
           value: null,
           fields: ["selection__selection"],

@@ -40,6 +40,10 @@ const actions = {
       },
     });
   },
+
+  setItems({ commit }, payload) {
+    commit("SET_ITEMS", payload)
+  },
 };
 
 export default actions;

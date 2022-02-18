@@ -129,6 +129,14 @@ const mutations = {
   SET_ACTIVE_LIBRARY_LIST(state, payload) {
     state.activeLibraryList = payload || null;
   },
+
+  SET_USER_LIBRARIES(state, payload) {
+    state.userLibraries = payload;
+  },
+
+  SET_USER_SELECTION_SERIES(state, payload) {
+    state.userSelectionSeries = payload;
+  },
 };
 
 export default mutations;

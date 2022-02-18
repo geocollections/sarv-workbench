@@ -3,6 +3,8 @@ import {
   fetchActiveSelectionSeriesList,
 } from "@/assets/js/api/apiCalls";
 
+import Vue from "vue";
+
 const actions = {
   updateViewType({ commit }, payload) {
     commit("UPDATE_VIEW_TYPE", payload);
@@ -97,6 +99,36 @@ const actions = {
 
   resetActiveLibraryList({ commit }) {
     commit("RESET_ACTIVE_LIBRARY_LIST");
+  },
+
+  async getUserLibraries({ commit }, payload) {
+    const response = await Vue.prototype.$api.rw.get("library", {
+      defaultParams: {
+        or_search: `agents__id: ${payload.agent.id} OR author: ${payload.agent.id}`,
+      },
+      options: {
+        itemsPerPage: 1000,
+      },
+    });
+    commit("SET_USER_LIBRARIES", {
+      count: response?.count ?? 0,
+      items: response?.results ?? [],
+    });
+  },
+
+  async getUserSelectionSeries({ commit }, payload) {
+    const response = await Vue.prototype.$api.rw.get("selection_series", {
+      defaultParams: {
+        user_added: payload.username,
+      },
+      options: {
+        itemsPerPage: 1000,
+      },
+    });
+    commit("SET_USER_SELECTION_SERIES", {
+      count: response?.count ?? 0,
+      items: response?.results ?? [],
+    });
   },
 };
 

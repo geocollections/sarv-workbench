@@ -26,6 +26,11 @@ const mutations = {
   UPDATE_VIEW_TYPE(state, payload) {
     state[payload.module].viewType = payload.value;
   },
+
+  SET_ITEMS(state, payload) {
+    state[payload.module].count = payload.count;
+    state[payload.module].items = payload.items;
+  },
 };
 
 export default mutations;

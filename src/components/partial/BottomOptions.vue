@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "BottomOptions",
@@ -187,11 +187,12 @@ export default {
       required: false,
       default: "grey lighten-4",
     },
+    objectData: {
+      type: Object,
+    },
   },
   data() {
     return {
-      previousId: null,
-      nextId: null,
       listOfIDs: [],
       bottomNav: "recent",
     };
@@ -200,78 +201,28 @@ export default {
     ...mapState("search", ["sidebarList", "loadingState"]),
 
     ...mapState("settings", ["drawerState", "drawerRightState"]),
-  },
-  watch: {
-    sidebarList: {
-      handler: function (newVal) {
-        if (
-          newVal &&
-          newVal.results &&
-          newVal.results.length > 0 &&
-          this.$route.meta.isEdit
-        ) {
-          this.initNavigationButtons(newVal.results);
-        }
-      },
-      deep: true,
-      immediate: true,
+
+    previousId() {
+      return this?.objectData?.ids?.prev_id ?? null;
     },
-    "$route.params.id": {
-      handler: function (newVal) {
-        if (newVal && this.$route.meta.isEdit) {
-          this.previousId = this.calculatePreviousId(this.listOfIDs, newVal);
-          this.nextId = this.calculateNextId(this.listOfIDs, newVal);
-        }
-      },
-      deep: true,
+
+    nextId() {
+      return this?.objectData?.ids?.next_id ?? null;
     },
   },
   methods: {
-    ...mapActions("detail", ["setInitialEditViewDataHasChangedState"]),
-
     async handleClick(action) {
       await this.$parent.$emit("button-clicked", action);
     },
 
     nextPage() {
-      this.setInitialEditViewDataHasChangedState(false);
       this.$router.push({ path: `/${this.$route.meta.object}/${this.nextId}` });
     },
 
     previousPage() {
-      this.setInitialEditViewDataHasChangedState(false);
       this.$router.push({
         path: `/${this.$route.meta.object}/${this.previousId}`,
       });
-    },
-
-    initNavigationButtons(list) {
-      this.listOfIDs = list.map((item) => item.id);
-      this.previousId = this.calculatePreviousId(
-        this.listOfIDs,
-        this.$route.params.id
-      );
-      this.nextId = this.calculateNextId(this.listOfIDs, this.$route.params.id);
-    },
-
-    calculatePreviousId(records, currentId) {
-      if (records && records.length > 0 && currentId) {
-        let currentIndex = records.indexOf(parseInt(currentId));
-        let previousIndex = currentIndex - 1;
-
-        if (previousIndex >= 0) return records[previousIndex];
-        else return null;
-      }
-    },
-
-    calculateNextId(records, currentId) {
-      if (records && records.length > 0 && currentId) {
-        let currentIndex = records.indexOf(parseInt(currentId));
-        let nextIndex = currentIndex + 1;
-
-        if (nextIndex >= 0) return records[nextIndex];
-        else return null;
-      }
     },
   },
 };

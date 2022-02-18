@@ -88,6 +88,12 @@ const tableViewMixin = {
           module: this.$_tableViewMixin_tableName,
         });
       },
+      $_tableViewMixin_setItems(dispatch, payload) {
+        return dispatch("setItems", {
+          ...payload,
+          module: this.$_tableViewMixin_tableName,
+        });
+      },
     }),
 
     // Note: In case of extra params, override the method in Vue component

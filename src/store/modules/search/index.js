@@ -18,7 +18,7 @@ const state = {
   lookUpTypes: [
     { text: "main.iexact", value: "iexact", symbol: "=" },
     { text: "main.icontains", value: "icontains", symbol: "*" },
-    { text: "main.istartswith", value: "istartswith", symbol: "*=" },
+    { text: "main.istartswith", value: "istartswith", symbol: "=*" },
     { text: "main.iendswith", value: "iendswith", symbol: "*=" },
     { text: "main.gte", value: "gte", symbol: ">=" },
     { text: "main.gt", value: "gt", symbol: ">" },
@@ -27,7 +27,28 @@ const state = {
     { text: "main.between", value: "range", symbol: "<>" },
     { text: "main.doesnotequal", value: "iexact!", symbol: "!=" },
     { text: "main.doesnotcontain", value: "icontains!", symbol: "!*" },
-    { text: "main.hierarchy", value: "hierarchy", symbol: "-·=" },
+    // { text: "main.exact", value: "exact", symbol: "'='" },
+    // { text: "main.contains", value: "contains", symbol: "'*'" },
+    // { text: "main.startswith", value: "startswith", symbol: "'*='" },
+    // { text: "main.endswith", value: "endswith", symbol: "'*='" },
+    { text: "main.isnull", value: "isnull", symbol: "isnull" },
+    { text: "main.in", value: "in", symbol: "in" },
+    { text: "main.year", value: "year", symbol: "year" },
+    // { text: "main.iso_year", value: "iso_year", symbol: "iso_year" },
+    { text: "main.month", value: "month", symbol: "month" },
+    { text: "main.day", value: "day", symbol: "day" },
+    { text: "main.week", value: "week", symbol: "week" },
+    // { text: "main.week_day", value: "week_day", symbol: "week_day" },
+    // {
+    //   text: "main.iso_week_day",
+    //   value: "iso_week_day",
+    //   symbol: "iso_week_day",
+    // },
+    { text: "main.quarter", value: "quarter", symbol: "quarter" },
+    { text: "main.time", value: "time", symbol: "time" },
+    { text: "main.hour", value: "hour", symbol: "hour" },
+    { text: "main.minute", value: "minute", symbol: "minute" },
+    { text: "main.second", value: "second", symbol: "second" },
   ],
   paginateByOptions: [
     { text: "main.pagination", value: 10 },
@@ -40,6 +61,16 @@ const state = {
   ],
   activeSelectionSeriesList: null,
   activeLibraryList: null,
+  userLibraries: {
+    count: 0,
+    items: [],
+    mainField: "title",
+  },
+  userSelectionSeries: {
+    count: 0,
+    items: [],
+    mainField: "name",
+  },
 };
 
 export default {
