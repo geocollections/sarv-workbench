@@ -221,9 +221,9 @@ export default {
   },
 
   watch: {
-    $_tableViewMixin_viewType() {
-      this.search();
-    },
+    // $_tableViewMixin_viewType() {
+    //   this.search();
+    // },
     currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
       if (
@@ -248,7 +248,7 @@ export default {
   methods: {
     ...mapActions("search", ["setSidebarList"]),
 
-    async search() {
+    search: debounce(async function () {
       this.isLoading = true;
 
       const response = await this.apiCall();
@@ -260,7 +260,7 @@ export default {
       this.response.count = response?.count ?? 0;
       this.response.results = response?.results ?? [];
       this.noResults = this.response.count === 0;
-    },
+    }, 400),
 
     changeObjectsPrivacyState(state, id) {
       let formData = new FormData();
@@ -273,7 +273,6 @@ export default {
       if (event.key === "Enter" || event.keyCode === 13) this.search();
     },
 
-    // Todo: Debounce that!!! because of page change
     handleUpdateOptions(payload) {
       this.$_tableViewMixin_updateOptions(payload);
       this.search();
