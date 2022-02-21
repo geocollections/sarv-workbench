@@ -73,6 +73,8 @@ const activeListMixin = {
         { specimen_id: "test_upload 2", remarks: "test multi" },
       ];
 
+      // Todo: Build object and send + backend support for library_reference and selection tables (currently missing)
+
       const response = await this.$api.rw.post("specimen", testObj);
       console.log(response)
     },
