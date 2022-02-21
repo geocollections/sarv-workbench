@@ -197,6 +197,28 @@ export default {
       });
   },
 
+  watch: {
+    "$route.meta.object"(newVal) {
+      if (newVal === "reference" && this.activeLibrary)
+        this.getActiveList({
+          table: "library_reference",
+          connectionField: "library",
+          id: this.activeLibrary.id,
+          module: newVal,
+        });
+      else if (
+        this.availableObjectsInSelectionSeries.includes(newVal) &&
+        this.activeSelectionSeries
+      )
+        this.getActiveList({
+          table: "selection",
+          connectionField: "selection",
+          id: this.activeSelectionSeries.id,
+          module: this.$route.meta.object,
+        });
+    },
+  },
+
   computed: {
     ...mapState({
       sidebarList(state) {

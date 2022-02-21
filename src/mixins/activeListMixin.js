@@ -49,7 +49,7 @@ const activeListMixin = {
           await this.$api.rw.post(table, formData);
         } else {
           const itemFromActiveList = this.activeList.find(
-            (item) => item[payload.module].id === payload.item.id
+            (item) => item?.[payload.module]?.id === payload.item.id
           );
           if (itemFromActiveList?.id)
             await this.$api.rw.delete(table, itemFromActiveList.id);
@@ -64,9 +64,17 @@ const activeListMixin = {
       }
     },
 
-    toggleSelectAll(payload) {
+    async toggleSelectAll(payload) {
       console.log("toggleSelectAll");
       console.log(payload);
+
+      let testObj = [
+        { specimen_id: "test_upload 1", remarks: "test multi" },
+        { specimen_id: "test_upload 2", remarks: "test multi" },
+      ];
+
+      const response = await this.$api.rw.post("specimen", testObj);
+      console.log(response)
     },
 
     // toggleSelectAll(selection, relation) {

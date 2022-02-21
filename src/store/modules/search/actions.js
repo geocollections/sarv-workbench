@@ -101,6 +101,7 @@ const actions = {
         [payload.connectionField]: payload.id,
         fields: `id,${payload.module}`,
         nest: 1,
+        [`${payload.module}__isnull`]: false,
       },
       options: {
         itemsPerPage: 1000,
