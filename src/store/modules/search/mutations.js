@@ -131,11 +131,31 @@ const mutations = {
   },
 
   SET_USER_LIBRARIES(state, payload) {
-    state.userLibraries = payload;
+    state.userLibraries = { ...state.userLibraries, ...payload };
   },
 
   SET_USER_SELECTION_SERIES(state, payload) {
-    state.userSelectionSeries = payload;
+    state.userSelectionSeries = { ...state.userSelectionSeries, ...payload };
+  },
+
+  TOGGLE_ACTIVE(state, payload) {
+    if (payload.module === "reference") {
+      if (state.activeLibrary?.id === payload.active?.id)
+        state.activeLibrary = null;
+      else state.activeLibrary = payload.active;
+    } else {
+      if (state.activeSelectionSeries?.id === payload.active?.id)
+        state.activeSelectionSeries = null;
+      else state.activeSelectionSeries = payload.active;
+    }
+  },
+
+  SET_ACTIVE_LIST(state, payload) {
+    state.activeList = payload.items;
+  },
+
+  SET_SELECTED_LIST(state, payload) {
+    state.selectedList = payload.items;
   },
 };
 

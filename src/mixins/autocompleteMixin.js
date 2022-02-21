@@ -457,7 +457,7 @@ function buildAutocompleteQuery(type, value, currentUser) {
     case "taxon":
       return `taxon/?search=${value}&search_fields=taxon&fields=id,taxon,hierarchy_string`;
     case "library":
-      return `library/?or_search=id__icontains:${value} OR title__icontains:${value} OR title_en__icontains:${value}&author=${currentUser.id}&fields=id,title,title_en`;
+      return `library/?or_search=id__icontains:${value} OR title__icontains:${value} OR title_en__icontains:${value} OR &author=${currentUser.id}&fields=id,title,title_en`;
     case "journal":
       return `journal/?or_search=id__icontains:${value} OR journal_name__icontains:${value} OR journal_short__icontains:${value}`;
     case "library_agent_search": // Todo: This should be done through library not library_agent

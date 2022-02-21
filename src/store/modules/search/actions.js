@@ -93,6 +93,41 @@ const actions = {
     });
   },
 
+  async getActiveList({ state, commit }, payload) {
+    console.log("getActiveList");
+    console.log(payload);
+    const response = await Vue.prototype.$api.rw.get(payload.table, {
+      defaultParams: {
+        [payload.connectionField]: payload.id,
+        fields: `id,${payload.module}`,
+        nest: 1,
+      },
+      options: {
+        itemsPerPage: 1000,
+      },
+    });
+
+    if (payload.table === "library_reference") {
+      if (state.activeLibrary && state.activeLibrary.id === payload.id)
+        commit("SET_ACTIVE_LIST", { items: response?.results ?? [] });
+      else commit("SET_ACTIVE_LIST", { items: [] });
+    } else if (payload.table === "selection") {
+      if (
+        state.activeSelectionSeries &&
+        state.activeSelectionSeries.id === payload.id
+      )
+        commit("SET_ACTIVE_LIST", { items: response?.results ?? [] });
+      else commit("SET_ACTIVE_LIST", { items: [] });
+    }
+
+    console.log(state.activeList);
+
+    if (state?.activeList?.length > 0) {
+      const selectedList = state.activeList.map((item) => item[payload.module]);
+      commit("SET_SELECTED_LIST", { items: selectedList });
+    } else commit("SET_SELECTED_LIST", { items: [] });
+  },
+
   resetActiveSelectionSeriesList({ commit }) {
     commit("RESET_ACTIVE_SELECTION_SERIES_LIST");
   },
@@ -104,7 +139,7 @@ const actions = {
   async getUserLibraries({ commit }, payload) {
     const response = await Vue.prototype.$api.rw.get("library", {
       defaultParams: {
-        or_search: `agents__id: ${payload.agent.id} OR author: ${payload.agent.id}`,
+        or_search: `agents__id: ${payload.agent.id}`,
       },
       options: {
         itemsPerPage: 1000,
@@ -129,6 +164,11 @@ const actions = {
       count: response?.count ?? 0,
       items: response?.results ?? [],
     });
+  },
+
+  toggleActive({ commit, state }, payload) {
+    console.log(payload);
+    commit("TOGGLE_ACTIVE", payload);
   },
 };
 

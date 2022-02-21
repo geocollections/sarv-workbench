@@ -7,12 +7,12 @@
     :options="searchParameters"
     :show-search="false"
     :show-select="!!activeLibrary"
-    @item-selected="$emit('toggle-reference-in-active-library', $event)"
-    @toggle-select-all="$emit('toggle-select-all', $event, 'reference')"
-    :value="selected"
+    :value="selectedList"
     @change:headers="$emit('change:headers', $event)"
     @reset:headers="$emit('reset:headers')"
     @update:options="$emit('update:options', $event)"
+    @item-selected="itemSelected"
+    @toggle-select-all="toggleSelectAll"
   >
     <template v-slot:header.is_estonian_author="{ item }">
       <span> EE <v-icon x-small>fas fa-user</v-icon> </span>
@@ -109,6 +109,7 @@
 import activeListMixin from "../../mixins/activeListMixin";
 import tableViewMixin from "@/mixins/tableViewMixin";
 import TableWrapper from "@/components/tables/TableWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "ReferenceTable",
@@ -149,9 +150,17 @@ export default {
     },
   },
 
+  computed: {
+    ...mapState("search", ["activeLibrary"]),
+  },
+
   methods: {
     getGeoloogiaUrl(id) {
       return `https://kirjandus.geoloogia.info/reference/${id}`;
+    },
+
+    test(test) {
+      console.log(test);
     },
 
     getDoiUrl(doi) {

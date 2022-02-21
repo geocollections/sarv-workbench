@@ -6,9 +6,13 @@
     :count="response.count"
     :options="searchParameters"
     :show-search="false"
+    :show-select="!!activeSelectionSeries"
+    :value="selectedList"
     @change:headers="$emit('change:headers', $event)"
     @reset:headers="$emit('reset:headers')"
     @update:options="$emit('update:options', $event)"
+    @item-selected="itemSelected"
+    @toggle-select-all="toggleSelectAll"
   >
     <template v-slot:item.id="{ item }">
       <router-link
@@ -68,6 +72,7 @@
 import activeListMixin from "../../mixins/activeListMixin";
 import tableViewMixin from "@/mixins/tableViewMixin";
 import TableWrapper from "@/components/tables/TableWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "AnalysisTable",
@@ -106,6 +111,9 @@ export default {
       required: false,
       default: "deep-orange",
     },
+  },
+  computed: {
+    ...mapState("search", ["activeSelectionSeries"]),
   },
   methods: {
     getEmaUrl(params) {

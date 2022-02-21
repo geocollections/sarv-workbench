@@ -6,17 +6,14 @@
     :count="response.count"
     :options="searchParameters"
     :show-search="false"
-    expandable
-    :show-select="!!activeSelectionSeries"
-    @item-selected="
-      $emit('toggle-item-in-selection-series', $event, 'attachment')
-    "
-    @toggle-select-all="$emit('toggle-select-all', $event, 'attachment')"
     expand-icon="fas fa-caret-down"
-    :value="selected"
+    :show-select="!!activeSelectionSeries"
+    :value="selectedList"
     @change:headers="$emit('change:headers', $event)"
     @reset:headers="$emit('reset:headers')"
     @update:options="$emit('update:options', $event)"
+    @item-selected="itemSelected"
+    @toggle-select-all="toggleSelectAll"
   >
     <template v-slot:item.uuid_filename="{ item }">
       <div style="max-width: 200px; max-height: 200px" class="text-center">
@@ -145,6 +142,7 @@
 import activeListMixin from "../../mixins/activeListMixin";
 import tableViewMixin from "@/mixins/tableViewMixin";
 import TableWrapper from "@/components/tables/TableWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "AttachmentTable",
@@ -183,6 +181,10 @@ export default {
       required: false,
       default: "deep-orange",
     },
+  },
+
+  computed: {
+    ...mapState("search", ["activeSelectionSeries"]),
   },
 
   methods: {

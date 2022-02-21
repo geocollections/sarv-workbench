@@ -32,7 +32,6 @@ class RWApiService extends ApiService {
       ...this.getSortByParams(options),
       ...this.getPaginationParams(options),
     };
-    console.log(params)
     try {
       const res = await this.service.get(url, {
         params,

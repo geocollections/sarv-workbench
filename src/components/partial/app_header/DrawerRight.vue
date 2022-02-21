@@ -60,7 +60,6 @@
           </v-list-item-title>
         </template>
 
-        <!-- LIST ITEMS -->
         <v-list-item
           v-for="(entity, key) in userLibraries.items"
           :key="key"
@@ -68,6 +67,11 @@
           :title="entity[userLibraries.mainField]"
           dense
           exact
+          @click="handleToggleActive(entity)"
+          :class="{
+            'v-list-item--active':
+              activeLibrary && activeLibrary.id === entity.id,
+          }"
         >
           <v-list-item-content>
             <v-list-item-title style="white-space: unset">
@@ -97,7 +101,6 @@
           </v-list-item-title>
         </template>
 
-        <!-- LIST ITEMS -->
         <v-list-item
           v-for="(entity, key) in userSelectionSeries.items"
           :key="key"
@@ -105,6 +108,11 @@
           :title="entity[userSelectionSeries.mainField]"
           dense
           exact
+          @click="handleToggleActive(entity)"
+          :class="{
+            'v-list-item--active':
+              activeSelectionSeries && activeSelectionSeries.id === entity.id,
+          }"
         >
           <v-list-item-content>
             <v-list-item-title style="white-space: unset">
@@ -120,8 +128,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import searchParametersMixin from "../../../mixins/searchParametersMixin";
-import toastMixin from "../../../mixins/toastMixin";
+import toastMixin from "@/mixins/toastMixin";
 
 export default {
   name: "DrawerRight",
@@ -147,19 +154,47 @@ export default {
     },
   },
 
-  mixins: [searchParametersMixin, toastMixin],
+  mixins: [toastMixin],
 
-  data: () => ({
-    date_start: false,
-    date_end: false,
-    calendarMenus: ["date_start", "date_end"],
-  }),
+  data() {
+    return {
+      availableObjectsInSelectionSeries: [
+        "specimen",
+        "sample",
+        "attachment",
+        "locality",
+        // "reference",
+        "taxon",
+        "analysis",
+      ],
+    };
+  },
 
+  // Fetching all available libraries and selections for user
+  // after that if library or selection is active then fetch all the active records
   created() {
-    if (this.userLibraries.count === 0)
-      this.getUserLibraries({ agent: this.getCurrentAgent });
-    if (this.userSelectionSeries.count === 0)
-      this.getUserSelectionSeries({ username: this.getUserName });
+    this.getUserLibraries({ agent: this.getCurrentAgent });
+    this.getUserSelectionSeries({ username: this.getUserName });
+
+    if (this.$route.meta.object === "reference" && this.activeLibrary)
+      this.getActiveList({
+        table: "library_reference",
+        connectionField: "library",
+        id: this.activeLibrary.id,
+        module: this.$route.meta.object,
+      });
+    else if (
+      this.availableObjectsInSelectionSeries.includes(
+        this.$route.meta.object
+      ) &&
+      this.activeSelectionSeries
+    )
+      this.getActiveList({
+        table: "selection",
+        connectionField: "selection",
+        id: this.activeSelectionSeries.id,
+        module: this.$route.meta.object,
+      });
   },
 
   computed: {
@@ -172,13 +207,12 @@ export default {
         };
       },
     }),
-    ...mapState("search", ["userLibraries", "userSelectionSeries"]),
-
-    ...mapState("search", {
-      searchParameters: function (state) {
-        return state[`${this.$route.meta.object}SearchParameters`];
-      },
-    }),
+    ...mapState("search", [
+      "userLibraries",
+      "userSelectionSeries",
+      "activeLibrary",
+      "activeSelectionSeries",
+    ]),
 
     ...mapGetters("user", ["getCurrentAgent", "getUserName"]),
 
@@ -189,115 +223,61 @@ export default {
     },
 
     isSelectionSeriesAvailable() {
-      const AVAILABLE_OBJECTS_IN_SELECTION_SERIES = [
-        "specimen",
-        "sample",
-        "attachment",
-        "locality",
-        // "reference",
-        "taxon",
-        "analysis",
-      ];
       return (
         this.$route.meta.isTableView &&
-        AVAILABLE_OBJECTS_IN_SELECTION_SERIES.includes(this.$route.meta.object)
+        this.availableObjectsInSelectionSeries.includes(this.$route.meta.object)
       );
     },
   },
 
   methods: {
     ...mapActions("search", [
-      "activeSearchParamsNextPage",
-      "activeSearchParamsPreviousPage",
-      "setSidebarUserAction",
-      "getActiveSelectionSeriesList",
-      "getActiveLibraryList",
-      "resetActiveSelectionSeriesList",
-      "resetActiveLibraryList",
       "getUserLibraries",
       "getUserSelectionSeries",
+      "toggleActive",
+      "getActiveList",
     ]),
 
     changeDrawerState(drawerState) {
       this.$emit("update:drawerState", drawerState);
     },
 
-    nextPage() {
-      this.activeSearchParamsNextPage();
-    },
+    // Toggles active library / selection on and off, after each toggle active records are updated
+    handleToggleActive(item) {
+      const module = this.$route.meta.object;
+      this.toggleActive({ module, active: item });
 
-    previousPage() {
-      this.activeSearchParamsPreviousPage();
-    },
-
-    toggleActive(entity, activeObject) {
-      let makeActive = true;
-
-      if (
-        activeObject === "setActiveLibrary" &&
-        this.activeLibrary &&
-        this.activeLibrary.id === entity.id
-      ) {
-        makeActive = false;
-      } else if (
-        activeObject === "setActiveSelectionSeries" &&
-        this.activeSelectionSeries &&
-        this.activeSelectionSeries.id === entity.id
-      ) {
-        makeActive = false;
-      }
-
-      if (makeActive) {
-        this.$store.dispatch(`search/${activeObject}`, entity);
-        if (activeObject === "setActiveLibrary") {
-          this.getActiveLibraryList({ libraryId: entity.id });
-          this.toastInfo({
-            text: `Library ${entity.id} is active!`,
-            timeout: 1000,
+      if (module === "reference") {
+        this.toastInfo({
+          text: `Library ${item.id} is ${
+            this.activeLibrary ? "active" : "inactive"
+          }`,
+          timeout: 1000,
+        });
+        if (this.activeLibrary)
+          this.getActiveList({
+            table: "library_reference",
+            connectionField: "library",
+            id: item.id,
+            module,
           });
-        } else if (activeObject === "setActiveSelectionSeries") {
-          this.getActiveSelectionSeriesList({
-            routeObject: this.$route.meta.object,
-            selectionSeriesId: entity.id,
-          });
-          this.toastInfo({
-            text: `Selection series ${entity.id} is active!`,
-            timeout: 1000,
-          });
-        } else this.toastInfo({ text: "Object is active!", timeout: 1000 });
       } else {
-        this.$store.dispatch(`search/${activeObject}`, null);
-        if (activeObject === "setActiveLibrary") {
-          this.resetActiveLibraryList();
-          this.toastInfo({
-            text: `Library ${entity.id} is inactive!`,
-            timeout: 1000,
-          });
-        } else if (activeObject === "setActiveSelectionSeries") {
-          this.resetActiveSelectionSeriesList();
-          this.toastInfo({
-            text: `Selection series ${entity.id} is inactive!`,
-            timeout: 1000,
-          });
-        } else this.toastInfo({ text: "Object is inactive!", timeout: 1000 });
-      }
-    },
+        this.toastInfo({
+          text: `Selection ${item.id} is ${
+            this.activeSelectionSeries ? "active" : "inactive"
+          }`,
+          timeout: 1000,
+        });
 
-    searchRecords() {
-      this.$router.push({ path: "/" + this.$route.meta.object });
+        if (this.activeSelectionSeries)
+          this.getActiveList({
+            table: "selection",
+            connectionField: "selection",
+            id: item.id,
+            module,
+          });
+      }
     },
   },
 };
 </script>
-
-<style scoped>
-/* Have to use class instead of prop */
-.replaces-inactive-prop {
-  color: rgba(0, 0, 0, 0.87) !important;
-}
-
-/* Have to use class instead of prop */
-.replaces-inactive-prop:before {
-  opacity: 0;
-}
-</style>

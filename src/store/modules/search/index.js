@@ -59,8 +59,6 @@ const state = {
     { text: "main.pagination", value: 500 },
     { text: "main.pagination", value: 1000 },
   ],
-  activeSelectionSeriesList: null,
-  activeLibraryList: null,
   userLibraries: {
     count: 0,
     items: [],
@@ -71,6 +69,10 @@ const state = {
     items: [],
     mainField: "name",
   },
+  activeSelectionSeriesList: null,
+  activeLibraryList: null,
+  activeList: null,
+  selectedList: null,
 };
 
 export default {

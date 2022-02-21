@@ -26,6 +26,14 @@
       :show-expand="expandable"
       :single-expand="singleExpand"
       :expanded.sync="expanded"
+      :show-select="$attrs['show-select']"
+      :value="$attrs['value']"
+      @item-selected="
+        $emit('item-selected', { ...$event, module: $route.meta.object })
+      "
+      @toggle-select-all="
+        $emit('toggle-select-all', { ...$event, module: $route.meta.object })
+      "
       @click:row="handleRowClick"
       @update:options="updateTableOptions"
     >
@@ -96,7 +104,6 @@
         #item.data-table-expand="{ expand, isExpanded, item }"
       >
         <v-btn
-          v-if="item.canExpand"
           icon
           :class="{ active: isExpanded }"
           @click.stop="expand(!isExpanded)"
@@ -120,7 +127,6 @@
 </template>
 
 <script>
-import { debounce } from "lodash";
 import HeaderControls from "./HeaderControls.vue";
 import PaginationControls from "./PaginationControls.vue";
 import ExportControls from "@/components/tables/ExportControls";
