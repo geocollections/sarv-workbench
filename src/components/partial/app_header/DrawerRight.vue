@@ -20,7 +20,7 @@
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
-            {{ $t("sidebar.current_search") }}
+            {{ $t("sidebar.currentSearch") }}
             <v-icon small>far fa-list-alt</v-icon>
           </v-list-item-title>
         </template>
@@ -225,7 +225,7 @@ export default {
         return {
           count: state[this.$route.meta.object].count,
           items: state[this.$route.meta.object].items,
-          mainField: state[this.$route.meta.object].mainField,
+          mainField: state[this.$route.meta.object]?.mainField ?? "id",
         };
       },
     }),

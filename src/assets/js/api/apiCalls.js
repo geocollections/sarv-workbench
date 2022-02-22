@@ -94,24 +94,8 @@ async function post(child, data, customUrl, method) {
   }
 }
 
-async function post_delete(child, returnErrorResponse = false) {
-  let url = `${api.url}delete/${child}`;
-
-  try {
-    return await axios.delete(url);
-  } catch (error) {
-    // console.log(error.response);
-    if (returnErrorResponse) return error.response;
-    else return error.request();
-  }
-}
-
 export function postRequest(url, data, customUrl = "", method = "post") {
   return post(url, data, customUrl, method);
-}
-
-export function fetchAddReferenceToLibrary(data) {
-  return post(`add/library_reference/`, data);
 }
 
 export function fetchSpecificLogs(data) {
@@ -134,18 +118,6 @@ export function fetchActiveLibraryList(libraryId) {
   return get(
     `library_reference/?library=${libraryId}&fields=reference,id&reference__isnull=false&format=json`
   );
-}
-
-export function fetchRemoveReferenceFromLibrary(id) {
-  return post_delete(`library_reference/${id}`);
-}
-
-export function fetchMultiRemoveReferencesFromLibrary(data) {
-  return post(`delete_multi/library_reference/`, data);
-}
-
-export function fetchMultiAddReferencesToLibrary(data) {
-  return post(`add_multi/library_reference/`, data);
 }
 
 export function fetchDoiUsingEGF(id) {
@@ -217,10 +189,6 @@ export function fetchAgentUsingName(name) {
   );
 }
 
-export function fetchAddItemToSelection(data) {
-  return post(`add/selection/`, data);
-}
-
 export function fetchSelectedSpecimens(selectionSeriesId, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -237,16 +205,8 @@ export function fetchActiveSelectionSeriesList(table, selectionSeriesId) {
   );
 }
 
-export function fetchRemoveRecordFromSelection(id) {
-  return post_delete(`selection/${id}`);
-}
-
 export function fetchMultiRemoveRecordFromSelection(data) {
   return post(`delete_multi/selection/`, data);
-}
-
-export function fetchMultiAddRecordToSelection(data) {
-  return post(`add_multi/selection/`, data);
 }
 
 export function fetchAllSelections(id) {
@@ -358,15 +318,4 @@ function buildOrderBy(sortBy, sortDesc) {
 
     return orderBy;
   } else return "-id";
-}
-
-function buildDynamicSearch(data, prefix = "") {
-  let result = "";
-  if (data?.length > 0) {
-    data.forEach((item) => {
-      if (item.value)
-        result += `&${prefix}${item.id}__${item.lookUpType}=${item.value}`;
-    });
-  }
-  return result;
 }

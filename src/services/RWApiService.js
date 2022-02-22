@@ -73,12 +73,13 @@ class RWApiService extends ApiService {
     try {
       const res = await this.service.post(url, formData);
 
-      // Special use case for attachment, becuase response is a little bit different
+      // Special use case for attachment, because response is a bit different
       if (table === "attachment") {
         if (res?.data?.uploaded_ids?.length > 0)
           this.toastSuccess("Record(s) added!");
         else this.toastInfo("Something went wrong!");
-      } else this.toastSuccess("Record added!");
+      } else if (res?.data?.length > 1) this.toastSuccess("Record(s) added!");
+      else this.toastSuccess("Record added!");
 
       return res.data;
     } catch (err) {
@@ -130,6 +131,19 @@ class RWApiService extends ApiService {
     try {
       const res = await this.service.delete(url);
       this.toastSuccess("Record deleted!");
+      // Successful delete is 204 No Content
+      return res?.status === 204 ? res.status : false;
+    } catch (err) {
+      this.toastError(err, url);
+      return this.handleError(err, url);
+    }
+  }
+
+  async deleteMulti(table, ids) {
+    const url = `${this.baseURL}/${table}/`;
+    try {
+      const res = await this.service.delete(url, { data: ids });
+      this.toastSuccess("Record(s) deleted!");
       // Successful delete is 204 No Content
       return res?.status === 204 ? res.status : false;
     } catch (err) {
