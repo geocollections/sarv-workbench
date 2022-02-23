@@ -479,15 +479,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
-            :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            :page="reattachment_llatedData.searchParameters[activeTab].page"
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -687,25 +682,25 @@ export default {
         searchParameters: {
           dataset_author: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["sort", "id"],
             sortDesc: [false, false],
           },
           dataset_reference: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },
           dataset_analysis: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["analysis"],
             sortDesc: [true],
           },
           dataset_geolocation: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },

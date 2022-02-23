@@ -301,7 +301,7 @@
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
                   :headers="siteTranslatedHeaders"
-                  @update:options="updateOptions"
+                  @update:options="handleUpdateOptions({...$event, activeTab: 'site'})"
                 />
               </v-col>
             </v-row>
@@ -320,19 +320,14 @@
 
           <!-- PAGINATION -->
           <pagination
-            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+            v-if="$route.meta.isEdit && activeTab !== 'site' && relatedData[activeTab].count > 10"
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -508,23 +503,12 @@ export default {
           },
           locality_reference: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["reference"],
             sortDesc: [true],
           },
         },
       };
-    },
-
-    updateOptions(payload) {
-      this.relatedData.searchParameters.site[payload.key] = payload.value;
-      if (
-        payload.key !== "page" &&
-        this.relatedData.searchParameters.site.page !== 1
-      )
-        this.relatedData.searchParameters.site.page = 1;
-
-      this.loadRelatedData(["site"], "area", this.$route.params.id);
     },
   },
 };

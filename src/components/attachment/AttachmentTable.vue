@@ -7,13 +7,13 @@
     :options="searchParameters"
     :show-search="false"
     expand-icon="fas fa-caret-down"
-    :show-select="!!activeSelectionSeries"
+    :show-select="$_activeListMixin_isShowSelect"
     :value="selectedList"
     @change:headers="$emit('change:headers', $event)"
     @reset:headers="$emit('reset:headers')"
     @update:options="$emit('update:options', $event)"
-    @item-selected="itemSelected"
-    @toggle-select-all="toggleSelectAll"
+    @item-selected="$_activeListMixin_itemSelected"
+    @toggle-select-all="$_activeListMixin_toggleSelectAll"
   >
     <template v-slot:item.uuid_filename="{ item }">
       <div style="max-width: 200px; max-height: 200px" class="text-center">
@@ -162,7 +162,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },

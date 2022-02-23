@@ -314,7 +314,7 @@
               :search-parameters="relatedData.searchParameters.specimen"
               :body-color="bodyColor"
               :body-active-color="bodyActiveColor"
-              @update:options="updateOptions"
+              @update:options="handleUpdateOptions({ ...$event, activeTab: 'specimen' })"
             />
           </v-card>
         </div>
@@ -471,17 +471,6 @@ export default {
           },
         },
       };
-    },
-
-    updateOptions(payload) {
-      this.relatedData.searchParameters.specimen[payload.key] = payload.value;
-      if (
-        payload.key !== "page" &&
-        this.relatedData.searchParameters.specimen.page !== 1
-      )
-        this.relatedData.searchParameters.specimen.page = 1;
-
-      this.loadRelatedData(["specimen"], "collection", this.$route.params.id);
     },
   },
 };

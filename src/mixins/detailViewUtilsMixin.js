@@ -204,6 +204,16 @@ const detailViewUtilsMixin = {
         );
       }
     },
+
+    handleUpdateOptions(payload) {
+      this.relatedData.searchParameters[payload.activeTab][payload.key] =
+        payload.value;
+      if (
+        payload.key !== "page" &&
+        this.relatedData.searchParameters[payload.activeTab].page !== 1
+      )
+        this.relatedData.searchParameters[payload.activeTab].page = 1;
+    },
   },
 
   watch: {

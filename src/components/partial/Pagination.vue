@@ -14,12 +14,12 @@
   >
     <div class="my-1 my-md-0">
       <v-select
-        :value="paginateBy"
+        :value="itemsPerPage"
         :color="bodyActiveColor"
         dense
         :items="paginateByOptionsTranslated"
         :item-color="bodyActiveColor"
-        label="Paginate by"
+        label="Items per page"
         hide-details
         @change="
           $emit('update:options', { value: $event, key: 'itemsPerPage' })
@@ -52,7 +52,7 @@ export default {
     count: {
       type: Number,
     },
-    paginateBy: {
+    itemsPerPage: {
       type: Number,
     },
     page: {
@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     paginationLength() {
-      return Math.ceil(this.count / this.paginateBy);
+      return Math.ceil(this.count / this.itemsPerPage);
     },
   },
 };

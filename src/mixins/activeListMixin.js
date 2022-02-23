@@ -11,12 +11,20 @@ const activeListMixin = {
       "activeList",
       "selectedList",
     ]),
+
+    $_activeListMixin_isShowSelect() {
+      if (this.$route.meta.isTableView) {
+        if (this.$route.meta.object === "reference")
+          return !!this.activeLibrary;
+        else return !!this.activeSelectionSeries;
+      } else return false;
+    },
   },
 
   methods: {
     ...mapActions("search", ["getActiveList"]),
 
-    async itemSelected(payload) {
+    async $_activeListMixin_itemSelected(payload) {
       if (payload?.item?.id) {
         const table =
           payload.module === "reference" ? "library_reference" : "selection";
@@ -52,7 +60,7 @@ const activeListMixin = {
       }
     },
 
-    async toggleSelectAll(payload) {
+    async $_activeListMixin_toggleSelectAll(payload) {
       const table =
         payload.module === "reference" ? "library_reference" : "selection";
       const connectionField =

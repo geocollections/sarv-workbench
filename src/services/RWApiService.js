@@ -100,6 +100,18 @@ class RWApiService extends ApiService {
     }
   }
 
+  async putMulti(table, data) {
+    const url = `${this.baseURL}/${table}/`;
+    try {
+      const res = await this.service.put(url, data);
+      this.toastSuccess("Record(s) updated!");
+      return res.data;
+    } catch (err) {
+      this.toastError(err, url);
+      return this.handleError(err, url);
+    }
+  }
+
   async getObjectPermissions(table, id) {
     const url = `${this.baseURL}/${table}/${id}/permissions/`;
     try {

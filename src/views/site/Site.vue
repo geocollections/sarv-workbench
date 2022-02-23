@@ -554,7 +554,7 @@
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
                   :headers="sampleTranslatedHeaders"
-                  @update:options="updateOptions"
+                  @update:options="handleUpdateOptions({ ...$event, activeTab: 'sample' })"
                 />
               </v-col>
             </v-row>
@@ -590,15 +590,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -880,13 +875,13 @@ export default {
           },
           locality_description: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["id"],
             sortDesc: [true],
           },
           locality_reference: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["reference"],
             sortDesc: [true],
           },
@@ -940,17 +935,6 @@ export default {
     updateDateFields(site) {
       site.date_start = this.unformatISOStringToDate(site.date_start);
       site.date_end = this.unformatISOStringToDate(site.date_end);
-    },
-
-    updateOptions(payload) {
-      this.relatedData.searchParameters.sample[payload.key] = payload.value;
-      if (
-        payload.key !== "page" &&
-        this.relatedData.searchParameters.sample.page !== 1
-      )
-        this.relatedData.searchParameters.sample.page = 1;
-
-      this.loadRelatedData(["sample"], "site", this.$route.params.id);
     },
   },
 };

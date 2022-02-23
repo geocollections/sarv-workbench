@@ -314,15 +314,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -568,13 +563,13 @@ export default {
         searchParameters: {
           loan_specimen: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["specimen"],
             sortDesc: [true],
           },
           loan_sample: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["sample"],
             sortDesc: [true],
           },

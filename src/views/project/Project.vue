@@ -432,7 +432,7 @@
                 :body-active-color="bodyActiveColor"
                 :body-color="bodyColor"
                 :headers="siteTranslatedHeaders"
-                @update:options="updateOptions"
+                @update:options="handleUpdateOptions({ ...$event, activeTab: 'site' })"
               />
             </v-col>
           </v-row>
@@ -647,17 +647,6 @@ export default {
 
     addFiles(files, singleFileMetadata) {
       this.addFilesAsNewObjects(files, this.project, singleFileMetadata);
-    },
-
-    updateOptions(payload) {
-      this.relatedData.searchParameters.site[payload.key] = payload.value;
-      if (
-        payload.key !== "page" &&
-        this.relatedData.searchParameters.site.page !== 1
-      )
-        this.relatedData.searchParameters.site.page = 1;
-
-      this.loadRelatedData(["site"], "project", this.$route.params.id);
     },
   },
 };

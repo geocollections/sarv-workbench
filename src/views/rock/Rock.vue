@@ -484,15 +484,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -713,55 +708,55 @@ export default {
         searchParameters: {
           rock_tree: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["rock_classification"],
             sortDesc: [true],
           },
           rock_mineral: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["sort"],
             sortDesc: [true],
           },
           rock_element: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["element__element"],
             sortDesc: [true],
           },
           rock_property: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["property_type"],
             sortDesc: [true],
           },
           rock_image: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["attachment"],
             sortDesc: [true],
           },
           rock_locality: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["locality"],
             sortDesc: [true],
           },
           rock_synonym: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["name"],
             sortDesc: [true],
           },
           rock_reference: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["reference"],
             sortDesc: [true],
           },
           rock_classification: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },

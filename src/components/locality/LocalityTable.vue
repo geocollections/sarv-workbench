@@ -6,13 +6,13 @@
     :count="response.count"
     :options="searchParameters"
     :show-search="false"
-    :show-select="!!activeSelectionSeries"
+    :show-select="$_activeListMixin_isShowSelect"
     :value="selectedList"
     @change:headers="$emit('change:headers', $event)"
     @reset:headers="$emit('reset:headers')"
     @update:options="$emit('update:options', $event)"
-    @item-selected="itemSelected"
-    @toggle-select-all="toggleSelectAll"
+    @item-selected="$_activeListMixin_itemSelected"
+    @toggle-select-all="$_activeListMixin_toggleSelectAll"
   >
     <template v-slot:item.id="{ item }">
       <router-link
@@ -85,7 +85,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },

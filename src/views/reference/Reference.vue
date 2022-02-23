@@ -808,7 +808,7 @@
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
                   :headers="taxonTranslatedHeaders"
-                  @update:options="updateOptions"
+                  @update:options="handleUpdateOptions({ ...$event, activeTab: 'taxon' })"
                 />
               </v-col>
             </v-row>
@@ -850,23 +850,14 @@
 
           <!-- PAGINATION -->
           <pagination
-            v-if="
-              $route.meta.isEdit &&
-              (activeTab === 'locality_reference' || activeTab === 'library') &&
-              relatedData[activeTab].count > 10
-            "
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -1156,13 +1147,13 @@ export default {
         searchParameters: {
           locality_reference: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["locality"],
             sortDesc: [true],
           },
           stratigraphy_reference: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["stratigraphy"],
             sortDesc: [true],
           },
@@ -1393,17 +1384,6 @@ export default {
         },
       });
       if (response?.count > 0) this.attachment = response.results;
-    },
-
-    updateOptions(payload) {
-      this.relatedData.searchParameters.taxon[payload.key] = payload.value;
-      if (
-        payload.key !== "page" &&
-        this.relatedData.searchParameters.taxon.page !== 1
-      )
-        this.relatedData.searchParameters.taxon.page = 1;
-
-      this.loadRelatedData(["taxon"], "reference", this.$route.params.id);
     },
   },
 };

@@ -715,15 +715,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -1091,43 +1086,43 @@ export default {
         searchParameters: {
           specimen_identification: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["taxon", "current"],
             sortDesc: [true, true],
           },
           specimen_identification_geology: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["rock", "current"],
             sortDesc: [true, true],
           },
           specimen_reference: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["reference"],
             sortDesc: [true],
           },
           specimen_description: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["length"],
             sortDesc: [true],
           },
           specimen_location: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["number"],
             sortDesc: [true],
           },
           specimen_history: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["type"],
             sortDesc: [true],
           },
           analysis: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },

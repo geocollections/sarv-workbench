@@ -622,15 +622,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -848,25 +843,25 @@ export default {
         searchParameters: {
           locality_reference: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["reference"],
             sortDesc: [true],
           },
           locality_synonym: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["synonym"],
             sortDesc: [true],
           },
           locality_stratigraphy: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["depth_base", "depth_top"],
             sortDesc: [false, false],
           },
           locality_description: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["id"],
             sortDesc: [true],
           },

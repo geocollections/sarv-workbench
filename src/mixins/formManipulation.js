@@ -544,6 +544,7 @@ function getPluralModuleName(module) {
   else if (module === "locality") pluralName = "localities";
   else if (module === "sample_series") pluralName = "sample_series_set";
   else if (module === "taxon") pluralName = "taxa";
+  else if (module === "location") pluralName = "storages";
   else pluralName = `${pluralName}s`;
   return pluralName;
 }

@@ -84,7 +84,7 @@
         v-if="!isTableView && response.count > 10"
         :count="response.count"
         :page="$_tableViewMixin_options.page"
-        :paginate-by="$_tableViewMixin_options.itemsPerPage"
+        :items-per-page="$_tableViewMixin_options.itemsPerPage"
         :body-active-color="bodyActiveColor"
         @update:options="$_tableViewMixin_updateOptions"
       />

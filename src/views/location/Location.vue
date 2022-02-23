@@ -68,6 +68,7 @@
                 v-model="itemsRegistered"
                 :color="bodyActiveColor"
                 :label="$t('location.number_items_registered')"
+                disabled
                 readonly
               />
             </v-col>
@@ -129,6 +130,53 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="location.attachments"
+                @update:existing-files="location.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- SHOWING RELATED_DATA -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -167,19 +215,6 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
-
           <div v-show="activeTab === 'specimen'" class="pa-1">
             <!-- ADD NEW and EXPORT -->
             <v-card
@@ -250,10 +285,7 @@
                   "
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
-                  v-on:update:sorting="
-                    relatedData.searchParameters[activeTab][$event.key] =
-                      $event.value
-                  "
+                  @update:options="handleUpdateOptions({ ...$event, activeTab: 'specimen' })"
                 />
                 <list-view
                   v-show="
@@ -337,10 +369,7 @@
                   "
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
-                  v-on:update:sorting="
-                    relatedData.searchParameters[activeTab][$event.key] =
-                      $event.value
-                  "
+                  @update:options="handleUpdateOptions({ ...$event, activeTab: 'sample' })"
                 />
 
                 <list-view
@@ -362,15 +391,12 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="
+              relatedData.searchParameters[activeTab].itemsPerPage
+            "
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -543,12 +569,6 @@ export default {
   },
 
   watch: {
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
     itemsRegistered: {
       handler: function () {
         this.location.number_items_registered = this.itemsRegistered;
@@ -670,20 +690,21 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "specimen", iconClass: "fas fa-fish" },
           { name: "sample", iconClass: "fas fa-vial" },
         ],
         relatedData: this.setDefaultRelatedData(),
-        activeTab: "attachment_link",
+        activeTab: "specimen",
         currentViewType: "table",
         autocomplete: {
           loaders: {
             agent: false,
             storage: false,
+            attachments: false,
           },
           agent: [],
           storage: [],
+          attachments: [],
         },
         location: {
           id: null,
@@ -696,11 +717,13 @@ export default {
           date_collected_free: null,
           contents: null,
           remarks: null,
+          attachments: [],
         },
         requiredFields: ["location"],
         block: {
           info: true,
           storage: true,
+          files: true,
         },
         new_storage: null,
         changeStorageDialog: false,
@@ -718,25 +741,18 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        attachment_link: { count: 0, results: [] },
         specimen: { count: 0, results: [] },
         sample: { count: 0, results: [] },
         searchParameters: {
-          attachment_link: {
-            page: 1,
-            paginateBy: 25,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
           specimen: {
             page: 1,
-            paginateBy: 100,
+            itemsPerPage: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
           sample: {
             page: 1,
-            paginateBy: 100,
+            itemsPerPage: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -745,12 +761,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFilesAsNewObjects(files, "storage", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.location, singleFileMetadata);
     },
   },
 };
