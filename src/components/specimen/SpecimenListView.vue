@@ -8,7 +8,7 @@
       :title="$t('editSpecimen.editMessage')"
     >
       <div class="label2_head">
-        <div style="float: left; font-size: 84%">
+        <div style="float: left; font-size: 84%" v-if="entity.database">
           {{ entity.database.name_label }}
         </div>
 

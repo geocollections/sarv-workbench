@@ -8,23 +8,11 @@
       :title="$t('editSample.editMessage')"
     >
       <div class="label2_head">
-        <div
-          style="float: left; font-size: 90%"
-          v-translate="{
-            et: entity.database__name,
-            en: entity.database__name_en,
-          }"
-        ></div>
+        <div style="float: left; font-size: 84%" v-if="entity.database">
+          {{ entity.database.name_label }}
+        </div>
 
-        <div
-          style="
-            float: right;
-            text-align: right;
-            padding-right: 1mm;
-            margin-top: -0.5mm;
-            font-size: 1em;
-          "
-        >
+        <div style="float: right; text-align: right; font-size: 95%">
           ID: {{ entity.id }}
         </div>
       </div>
@@ -46,11 +34,11 @@
         >
           <b>Loc. </b>
           <span
-            v-if="entity.locality__locality || entity.locality__locality_en"
+            v-if="entity.locality"
             :style="{ 'font-size': getFontSizeUsingLength(entity) }"
             v-translate="{
-              et: entity.locality__locality,
-              en: entity.locality__locality_en,
+              et: entity.locality.locality,
+              en: entity.locality.locality_en,
             }"
           />
           <span
@@ -59,10 +47,10 @@
             >{{ entity.locality_free }}</span
           >
           <span
-            v-if="entity.site__name || entity.site__name_en"
+            v-if="entity.site"
             v-translate="{
-              et: entity.site__name,
-              en: entity.site__name_en,
+              et: entity.site.name,
+              en: entity.site.name_en,
             }"
           />
         </div>
@@ -87,25 +75,19 @@
       <div class="label2_row">
         <b>Strat. </b>
         <span
-          v-if="
-            entity.stratigraphy__stratigraphy ||
-            entity.stratigraphy__stratigraphy_en
-          "
+          v-if="entity.stratigraphy"
           style="font-size: 1.1em"
           v-translate="{
-            et: entity.stratigraphy__stratigraphy,
-            en: entity.stratigraphy__stratigraphy_en,
+            et: entity.stratigraphy.stratigraphy,
+            en: entity.stratigraphy.stratigraphy_en,
           }"
         ></span>
         <span
-          v-else-if="
-            entity.lithostratigraphy__stratigraphy ||
-            entity.lithostratigraphy__stratigraphy_en
-          "
+          v-else-if="entity.lithostratigraphy"
           style="font-size: 1.1em"
           v-translate="{
-            et: entity.lithostratigraphy__stratigraphy,
-            en: entity.lithostratigraphy__stratigraphy_en,
+            et: entity.lithostratigraphy.stratigraphy,
+            en: entity.lithostratigraphy.stratigraphy_en,
           }"
         ></span>
         <span v-else style="font-size: 1.1em">{{
@@ -116,8 +98,8 @@
       <div class="label2_row3" style="margin-right: 13mm">
         <span style="float: left">
           <b>Coll. </b>
-          <span style="font-size: 1.1em">{{
-            entity.agent_collected__agent
+          <span style="font-size: 1.1em" v-if="entity.agent_collected">{{
+            entity.agent_collected.agent
           }}</span>
 
           <span style="float: right">
@@ -166,12 +148,8 @@ export default {
   methods: {
     getFontSizeUsingLength(item) {
       if (item) {
-        let nameLength = item.locality__locality
-          ? item.locality__locality.length
-          : 0;
-        let nameLengthEn = item.locality__locality_en
-          ? item.locality__locality_en.length
-          : 0;
+        let nameLength = item?.locality?.locality?.length ?? 0;
+        let nameLengthEn = item?.locality?.locality_en?.length ?? 0;
 
         if (this.$i18n.locale === "ee") {
           if (nameLength > 75) return "0.9em";
@@ -224,7 +202,7 @@ export default {
   padding-right: 1mm;
   border-bottom: solid 0.5pt #000;
   margin-bottom: 0.5mm;
-  font-size: 8pt;
+  font-size: 10pt;
   font-weight: bold;
 }
 
