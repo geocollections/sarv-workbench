@@ -357,6 +357,8 @@
               </v-radio-group>
             </v-card>
 
+<!--            TODO: LOCATION review-->
+
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
                 <sample-table
