@@ -8,16 +8,12 @@
       :title="$t('editSpecimen.editMessage')"
     >
       <div class="label2_head">
-        <div
-          style="float: left; font-size: 84%"
-          v-translate="{
-            et: entity.database__name,
-            en: entity.database__name_en,
-          }"
-        ></div>
+        <div style="float: left; font-size: 84%">
+          {{ entity.database.name_label }}
+        </div>
 
         <div style="float: right; text-align: right; font-size: 95%">
-          {{ entity.database__acronym }} {{ entity.specimen_id }}
+          {{ entity.database.acronym }} {{ entity.specimen_id }}
         </div>
       </div>
 
@@ -28,19 +24,40 @@
         <span
           :style="{
             'font-size': getFontSizeUsingLength(
-              names.find((item) => item.id === entity.id)
+              entity.specimen_identification[0]
             ),
           }"
           v-if="
-            names &&
-            names.length > 0 &&
-            names.find((item) => item.id === entity.id)
+            entity.specimen_identification &&
+            entity.specimen_identification.length > 0
           "
         >
           <span
+            v-for="(item, key) in entity.specimen_identification"
+            :key="key"
             v-translate="{
-              et: names.find((item) => item.id === entity.id).name,
-              en: names.find((item) => item.id === entity.id).name_en,
+              et: item.name,
+              en: item.name_en,
+            }"
+          ></span>
+        </span>
+        <span
+          :style="{
+            'font-size': getFontSizeUsingLength(
+              entity.specimen_identification_geology[0]
+            ),
+          }"
+          v-else-if="
+            entity.specimen_identification_geology &&
+            entity.specimen_identification_geology.length > 0
+          "
+        >
+          <span
+            v-for="(item, key) in entity.specimen_identification_geology"
+            :key="key"
+            v-translate="{
+              et: item.rock.name,
+              en: item.rock.name_en,
             }"
           ></span>
         </span>
@@ -50,11 +67,11 @@
         <div>
           <b>Loc. </b>
           <span
-            v-if="entity.locality__locality || entity.locality__locality_en"
+            v-if="entity.locality"
             style="font-size: 1.1em"
             v-translate="{
-              et: entity.locality__locality,
-              en: entity.locality__locality_en,
+              et: entity.locality.locality,
+              en: entity.locality.locality_en,
             }"
           ></span>
           <span v-else style="font-size: 1.1em">{{
@@ -75,25 +92,19 @@
       <div class="label2_row">
         <b>Strat. </b>
         <span
-          v-if="
-            entity.stratigraphy__stratigraphy ||
-            entity.stratigraphy__stratigraphy_en
-          "
+          v-if="entity.stratigraphy"
           style="font-size: 1.1em"
           v-translate="{
-            et: entity.stratigraphy__stratigraphy,
-            en: entity.stratigraphy__stratigraphy_en,
+            et: entity.stratigraphy.stratigraphy,
+            en: entity.stratigraphy.stratigraphy_en,
           }"
         ></span>
         <span
-          v-else-if="
-            entity.lithostratigraphy__stratigraphy ||
-            entity.lithostratigraphy__stratigraphy_en
-          "
+          v-else-if="entity.lithostratigraphy"
           style="font-size: 1.1em"
           v-translate="{
-            et: entity.lithostratigraphy__stratigraphy,
-            en: entity.lithostratigraphy__stratigraphy_en,
+            et: entity.lithostratigraphy.stratigraphy,
+            en: entity.lithostratigraphy.stratigraphy_en,
           }"
         ></span>
         <span v-else style="font-size: 1.1em">{{
@@ -104,8 +115,8 @@
       <div class="label2_row3" style="margin-right: 13mm">
         <div style="float: left">
           <b>Coll. </b>
-          <span style="font-size: 1em">{{
-            entity.agent_collected__agent
+          <span style="font-size: 1em" v-if="entity.agent_collected">{{
+            entity.agent_collected.agent
           }}</span>
         </div>
 
@@ -137,10 +148,6 @@
 
 <script>
 import VueQRCodeComponent from "vue-qrcode-component";
-import {
-  fetchSpecimenIdentificationGeologiesList,
-  fetchSpecimenIdentificationsList,
-} from "../../assets/js/api/apiCalls";
 
 export default {
   name: "SpecimenListView",
@@ -152,102 +159,7 @@ export default {
   components: {
     VueQRCodeComponent,
   },
-  data: () => ({
-    names: [],
-  }),
-  watch: {
-    data: {
-      handler(newVal) {
-        this.getNames(newVal);
-      },
-      immediate: true,
-    },
-  },
   methods: {
-    async getNames(listOfSpecimens) {
-      if (listOfSpecimens && listOfSpecimens.length > 0) {
-        let listOfIds = listOfSpecimens.map((specimen) => specimen.id);
-
-        const taxonResponse = await fetchSpecimenIdentificationsList(listOfIds);
-        const rockResponse = await fetchSpecimenIdentificationGeologiesList(
-          listOfIds
-        );
-
-        if (taxonResponse.status === 200 && rockResponse.status === 200) {
-          let taxonList = [];
-          let rockList = [];
-
-          if (taxonResponse.data.count > 0) {
-            taxonList = taxonResponse.data.results.map((entity) => {
-              return {
-                id: entity.specimen_id,
-                name: entity.taxon__taxon ? entity.taxon__taxon : entity.name,
-                name_en: entity.taxon__taxon
-                  ? entity.taxon__taxon
-                  : entity.name,
-                taxonId: entity.taxon_id,
-              };
-            });
-          }
-
-          if (rockResponse.data.count > 0) {
-            rockList = rockResponse.data.results.map((entity) => {
-              let name = "";
-              let name_en = "";
-
-              if (entity.rock__name && !entity.name) name = entity.rock__name;
-              else if (
-                entity.rock__name &&
-                entity.name &&
-                entity.rock__name !== entity.name
-              )
-                name = entity.name + " | " + entity.rock__name;
-              else name = entity.name;
-
-              if (entity.rock__name_en && !entity.name_en)
-                name_en = entity.rock__name_en;
-              else if (
-                entity.rock__name_en &&
-                entity.name_en &&
-                entity.rock__name_en !== entity.name_en
-              )
-                name_en = entity.name_en + " | " + entity.rock__name_en;
-              else name_en = entity.name_en;
-
-              if (entity.rock__formula_html) {
-                name += " | " + entity.rock__formula_html;
-                name_en += " | " + entity.rock__formula_html;
-              }
-
-              return {
-                id: entity.specimen_id,
-                name: name,
-                name_en: name_en,
-                rockId: entity.rock_id,
-              };
-            });
-          }
-
-          if (taxonList.length > 0 && rockList.length > 0) {
-            rockList.forEach((rock) => {
-              let item = taxonList.find((taxon) => rock.id === taxon.id);
-              item ? this.names.push(item) : this.names.push(rock);
-            });
-
-            taxonList.forEach((taxonItem) => {
-              let secondItem = rockList.find(
-                (rockItem) => taxonItem.id === rockItem.id
-              );
-              secondItem
-                ? this.names.push(secondItem)
-                : this.names.push(taxonItem);
-            });
-          } else if (taxonList.length > 0) this.names = taxonList;
-          else if (rockList.length > 0) this.names = rockList;
-        }
-      }
-    },
-
     getFontSizeUsingLength(specimenName) {
       if (specimenName) {
         let nameLength = specimenName.name ? specimenName.name.length : 0;

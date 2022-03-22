@@ -86,7 +86,7 @@
         :page="$_tableViewMixin_options.page"
         :items-per-page="$_tableViewMixin_options.itemsPerPage"
         :body-active-color="bodyActiveColor"
-        @update:options="$_tableViewMixin_updateOptions"
+        @update:options="handleUpdateOptions"
       />
 
       <!-- LIST VIEW -->
