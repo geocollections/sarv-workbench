@@ -13,6 +13,8 @@
         <v-col sm="10" md="8" lg="6" xl="4" style="margin: 48px 0">
           <div class="sarv-title">{{ $t("header.title") }}</div>
 
+          <v-btn style="z-index: 2" @click="doLogin">Login</v-btn>
+
           <GlobalAlertNotification />
 
           <DevNotification />
@@ -244,6 +246,16 @@ export default {
 
   methods: {
     ...mapActions("user", ["setAuthUser", "removeAuthUser"]),
+
+    doLogin() {
+      let loginUrl = "https://rwapi.geoloogia.info/accounts/login/";
+      if (location.origin.includes("localhost"))
+        loginUrl = "http://localhost:7000/accounts/login/";
+      if (location.origin.includes("-dev"))
+        loginUrl = "https://rwapi-dev.geoloogia.info/accounts/login/";
+
+      location.href = `${loginUrl}?from=${location.origin}`;
+    },
 
     async login(type) {
       if (this.isValid && !this.loggingIn) {

@@ -44,8 +44,9 @@ class AuthService {
 
   async loginIDCard() {
     // const url = `${this.baseURL}/idcard/`;
-    // const url = `https://idcard.geoloogia.info/?redirect_uri=${location.origin}/accounts/idcard/`;
-    const url = `https://idcard.geoloogia.info/accounts/idcard/?format=json`;
+    const url = `https://idcard.geoloogia.info/?redirect_uri=${location.origin}/accounts/idcard/`;
+    // const url = `https://idcard.geoloogia.info/accounts/idcard/?format=json`;
+    // const url = `http://localhost:7000/accounts/idcard/`;
     try {
       const res = await this.service.get(url);
       return res.data;
