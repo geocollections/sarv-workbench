@@ -1,17 +1,16 @@
 class AuthService {
   constructor({ axios, url }) {
-    // this.csrftoken = getCookie('csrftoken')
     this.baseURL = url || process.env.VUE_APP_AUTH_URL;
+    this.idCardUrl = "https://idcard.geoloogia.info";
     this.service = axios.create({
       withCredentials: true,
-      // headers: { "X-CSRFToken": 'bWQHFsONDUaTVgmPqBGmyqWoR6bvC6Fnobrqc2Tk4F7ZHkg10VDqilLbXjzszZqH' },
       xsrfCookieName: "csrftoken",
       xsrfHeaderName: "X-CSRFToken",
     });
   }
 
   async login(formData) {
-    const url = `${this.baseURL}/login/`;
+    const url = `${this.baseURL}/login_pass/`;
     try {
       const res = await this.service({
         method: "post",
@@ -43,10 +42,13 @@ class AuthService {
   }
 
   async loginIDCard() {
-    // const url = `${this.baseURL}/idcard/`;
-    const url = `https://idcard.geoloogia.info/?redirect_uri=https://rwapi-dev.geoloogia.info/accounts/idcard/`;
-    // const url = `https://idcard.geoloogia.info/accounts/idcard/?format=json`;
-    // const url = `http://localhost:7000/accounts/idcard/`;
+    let redirectUri = "https://rwapi.geoloogia.info";
+    if (location.origin.includes("localhost"))
+      redirectUri = "http://localhost:7000";
+    if (location.origin.includes("-dev"))
+      redirectUri = "https://rwapi-dev.geoloogia.info";
+
+    const url = `${this.idCardUrl}?redirect_uri=${redirectUri}/accounts/idcard/`;
     try {
       const res = await this.service.get(url);
       return res.data;
