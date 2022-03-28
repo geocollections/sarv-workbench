@@ -3,8 +3,8 @@ import mutations from "./mutations";
 import getters from "./getters";
 
 const state = {
-  drawerState: null,
-  drawerRightState: null,
+  drawerState: true,
+  drawerRightState: false,
   bodyColor: "grey lighten-5",
   bodyDark: false,
   bodyActiveColor: "deep-orange",

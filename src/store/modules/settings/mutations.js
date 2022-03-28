@@ -1,12 +1,15 @@
 import Vue from "vue";
+import { updateField } from "vuex-map-fields";
 
 const mutations = {
-  UPDATE_DRAWER_STATE(state, payload) {
-    state.drawerState = payload;
+  updateField,
+
+  TOGGLE_DRAWER_STATE(state) {
+    state.drawerState = !state.drawerState;
   },
 
-  UPDATE_DRAWER_RIGHT_STATE(state, payload) {
-    state.drawerRightState = payload;
+  TOGGLE_DRAWER_RIGHT_STATE(state) {
+    state.drawerRightState = !state.drawerRightState;
   },
 
   UPDATE_BODY_COLOR(state, payload) {

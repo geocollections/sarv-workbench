@@ -1,10 +1,9 @@
 <template>
   <v-navigation-drawer
-    :value="drawerState"
+    v-model="drawerRightState"
     app
     clipped
     right
-    @input="changeDrawerState"
     :dark="isDrawerDark"
     :color="drawerColor"
     disable-resize-watcher
@@ -129,14 +128,12 @@
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import toastMixin from "@/mixins/toastMixin";
+import { mapFields } from "vuex-map-fields";
 
 export default {
   name: "DrawerRight",
 
   props: {
-    drawerState: {
-      required: true,
-    },
     isDrawerDark: {
       type: Boolean,
       required: false,
@@ -220,6 +217,8 @@ export default {
   },
 
   computed: {
+    ...mapFields("settings", ["drawerRightState"]),
+
     ...mapState({
       sidebarList(state) {
         return {
@@ -259,10 +258,6 @@ export default {
       "toggleActive",
       "getActiveList",
     ]),
-
-    changeDrawerState(drawerState) {
-      this.$emit("update:drawerState", drawerState);
-    },
 
     // Toggles active library / selection on and off, after each toggle active records are updated
     handleToggleActive(item) {

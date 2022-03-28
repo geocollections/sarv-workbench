@@ -3,11 +3,9 @@
     <drawer-left
       :current-user="getCurrentAgent"
       :user-shortcuts="shortcuts"
-      :drawerState="drawerState"
       :drawer-color="drawerLeftColor"
       :is-drawer-dark="drawerLeftDark"
       :drawer-active-color="drawerLeftActiveColor"
-      v-on:update:drawerState="updateDrawerState($event)"
     />
 
     <v-app-bar
@@ -19,7 +17,7 @@
       :dark="navbarDark"
       dense
     >
-      <v-app-bar-nav-icon @click.stop="updateDrawerState(!drawerState)" />
+      <v-app-bar-nav-icon @click.stop="toggleDrawerState" />
 
       <v-toolbar-items>
         <v-btn
@@ -128,16 +126,14 @@
       </v-toolbar-items>
 
       <v-app-bar-nav-icon
-        @click.stop="updateDrawerRightState(!drawerRightState)"
+        @click.stop="toggleDrawerRightState"
       />
     </v-app-bar>
 
     <drawer-right
-      :drawerState="drawerRightState"
       :drawer-color="drawerRightColor"
       :is-drawer-dark="drawerRightDark"
       :drawer-active-color="drawerRightActiveColor"
-      v-on:update:drawerState="updateDrawerRightState($event)"
     />
   </v-card>
 </template>
@@ -181,8 +177,6 @@ export default {
       "drawerRightColor",
       "drawerRightDark",
       "drawerRightActiveColor",
-      "drawerState",
-      "drawerRightState",
       "shortcuts",
       "lang",
     ]),
@@ -190,8 +184,8 @@ export default {
   },
   methods: {
     ...mapActions("settings", [
-      "updateDrawerState",
-      "updateDrawerRightState",
+      "toggleDrawerState",
+      "toggleDrawerRightState",
       "updateLang",
     ]),
 

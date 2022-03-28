@@ -1,9 +1,8 @@
 <template>
   <v-navigation-drawer
-    :value="drawerState"
+    v-model="drawerState"
     app
     clipped
-    @input="changeDrawerState"
     mobile-breakpoint="992"
     :dark="isDrawerDark"
     :color="drawerColor"
@@ -159,13 +158,11 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import { mapFields } from "vuex-map-fields";
 
 export default {
   name: "DrawerLeft",
   props: {
-    drawerState: {
-      required: true,
-    },
     currentUser: {
       type: Object,
       required: true,
@@ -488,6 +485,8 @@ export default {
     };
   },
   computed: {
+    ...mapFields("settings", ["drawerState"]),
+
     ...mapGetters("user", ["isUserSuperuser"]),
 
     allowedRouteLinks() {
@@ -547,15 +546,8 @@ export default {
       );
     },
 
-    ...mapState(["activeProject", "activeSite", "activeSample"]),
+    ...mapState("search", ["activeProject", "activeSite", "activeSample"]),
     ...mapGetters("user", ["isUserAllowedTo"]),
-  },
-  methods: {
-    changeDrawerState(drawerState) {
-      this.$emit("update:drawerState", drawerState);
-    },
   },
 };
 </script>
-
-<style scoped />
