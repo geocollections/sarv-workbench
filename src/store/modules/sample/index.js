@@ -383,8 +383,8 @@ const getDefaultState = () => {
         show: true,
       },
       {
-        value: "locality__id",
-        text: "sample.locality__id",
+        value: "locality",
+        text: "sample.locality",
         show: true,
       },
       {
@@ -393,13 +393,13 @@ const getDefaultState = () => {
         show: true,
       },
       {
-        value: "stratigraphy__id",
-        text: "sample.stratigraphy__id",
+        value: "stratigraphy",
+        text: "sample.stratigraphy",
         show: true,
       },
       {
-        value: "lithostratigraphy__id",
-        text: "sample.lithostratigraphy__id",
+        value: "lithostratigraphy",
+        text: "sample.lithostratigraphy",
         show: true,
       },
       {
@@ -408,8 +408,8 @@ const getDefaultState = () => {
         show: true,
       },
       {
-        value: "storage__location",
-        text: "sample.storage__location",
+        value: "storage",
+        text: "sample.storage",
         show: true,
       },
       {
@@ -434,48 +434,23 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "series__id",
-        text: "sample.series__id",
+        value: "series",
+        text: "sample.series",
         show: false,
       },
       {
-        value: "series__name",
-        text: "sample.series__name",
+        value: "parent_sample",
+        text: "sample.parent_sample",
         show: false,
       },
       {
-        value: "parent_sample__id",
-        text: "sample.parent_sample__id",
+        value: "parent_specimen",
+        text: "sample.parent_specimen",
         show: false,
       },
       {
-        value: "parent_sample__number",
-        text: "sample.parent_sample__number",
-        show: false,
-      },
-      {
-        value: "parent_specimen__id",
-        text: "sample.parent_specimen__id",
-        show: false,
-      },
-      {
-        value: "parent_specimen__specimen_id",
-        text: "sample.parent_specimen__specimen_id",
-        show: false,
-      },
-      {
-        value: "sample_purpose__id",
-        text: "sample.sample_purpose__id",
-        show: false,
-      },
-      {
-        value: "sample_purpose__value",
-        text: "sample.sample_purpose__value",
-        show: false,
-      },
-      {
-        value: "sample_purpose__value_en",
-        text: "sample.sample_purpose__value_en",
+        value: "sample_purpose",
+        text: "sample.sample_purpose",
         show: false,
       },
       {
@@ -484,28 +459,13 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "locality__locality",
-        text: "sample.locality__locality",
+        value: "locality",
+        text: "sample.locality",
         show: false,
       },
       {
-        value: "locality__locality_en",
-        text: "sample.locality__locality_en",
-        show: false,
-      },
-      {
-        value: "site__id",
-        text: "sample.site__id",
-        show: false,
-      },
-      {
-        value: "site__name",
-        text: "sample.site__name",
-        show: false,
-      },
-      {
-        value: "site__name_en",
-        text: "sample.site__name_en",
+        value: "site",
+        text: "sample.site",
         show: false,
       },
       {
@@ -514,18 +474,8 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "soil_site__id",
-        text: "sample.soil_site__id",
-        show: false,
-      },
-      {
-        value: "soil_site__site",
-        text: "sample.soil_site__site",
-        show: false,
-      },
-      {
-        value: "soil_site__site_en",
-        text: "sample.soil_site__site_en",
+        value: "soil_site",
+        text: "sample.soil_site",
         show: false,
       },
       {
@@ -564,23 +514,13 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "stratigraphy__stratigraphy",
-        text: "sample.stratigraphy__stratigraphy",
+        value: "stratigraphy",
+        text: "sample.stratigraphy",
         show: false,
       },
       {
-        value: "stratigraphy__stratigraphy_en",
-        text: "sample.stratigraphy__stratigraphy_en",
-        show: false,
-      },
-      {
-        value: "lithostratigraphy__stratigraphy",
-        text: "sample.lithostratigraphy__stratigraphy",
-        show: false,
-      },
-      {
-        value: "lithostratigraphy__stratigraphy_en",
-        text: "sample.lithostratigraphy__stratigraphy_en",
+        value: "lithostratigraphy",
+        text: "sample.lithostratigraphy",
         show: false,
       },
       {
@@ -599,8 +539,8 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "agent_collected__id",
-        text: "sample.agent_collected__id",
+        value: "agent_collected",
+        text: "sample.agent_collected",
         show: false,
       },
       {
@@ -619,18 +559,8 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "classification_rock__id",
-        text: "sample.classification_rock__id",
-        show: false,
-      },
-      {
-        value: "classification_rock__name",
-        text: "sample.classification_rock__name",
-        show: false,
-      },
-      {
-        value: "classification_rock__name_en",
-        text: "sample.classification_rock__name_en",
+        value: "classification_rock",
+        text: "sample.classification_rock",
         show: false,
       },
       {
@@ -674,18 +604,8 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "storage__id",
-        text: "sample.storage__id",
-        show: false,
-      },
-      {
-        value: "storage_additional__id",
-        text: "sample.storage_additional__id",
-        show: false,
-      },
-      {
-        value: "storage_additional__location",
-        text: "sample.storage_additional__location",
+        value: "storage_additional",
+        text: "sample.storage_additional",
         show: false,
       },
       {
@@ -714,13 +634,8 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "owner__id",
-        text: "sample.owner__id",
-        show: false,
-      },
-      {
-        value: "owner__agent",
-        text: "sample.owner__agent",
+        value: "owner",
+        text: "sample.owner",
         show: false,
       },
       {
@@ -729,13 +644,8 @@ const getDefaultState = () => {
         show: false,
       },
       {
-        value: "database__id",
-        text: "sample.database__id",
-        show: false,
-      },
-      {
-        value: "database__acronym",
-        text: "sample.database__acronym",
+        value: "database",
+        text: "sample.database",
         show: false,
       },
     ],

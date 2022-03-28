@@ -12,15 +12,16 @@
   >
     <template v-slot:item.drillcore="{ item }">
       <router-link
-        :to="{ path: '/drillcore/' + item.drillcore }"
+        v-if="item.drillcore"
+        :to="{ path: '/drillcore/' + item.drillcore.id }"
         :title="$t('editDrillcore.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
         <span
           v-translate="{
-            et: item.drillcore__drillcore,
-            en: item.drillcore__drillcore_en,
+            et: item.drillcore.drillcore,
+            en: item.drillcore.drillcore_en,
           }"
         />
       </router-link>

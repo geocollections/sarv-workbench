@@ -26,18 +26,18 @@
       </router-link>
     </template>
 
-    <template v-slot:item.locality__id="{ item }">
+    <template v-slot:item.locality="{ item }">
       <router-link
-        :to="{ path: '/locality/' + item.locality }"
+        :to="{ path: '/locality/' + item.locality.id }"
         :title="$t('editLocality.viewMessage')"
-        v-if="item.locality__locality || item.locality__locality_en"
+        v-if="item.locality"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
         <span
           v-translate="{
-            et: item.locality__locality,
-            en: item.locality__locality_en,
+            et: item.locality.locality,
+            en: item.locality.locality_en,
           }"
         />
       </router-link>
@@ -46,38 +46,19 @@
 
       <span v-else-if="item.site">
         <router-link
-          :to="{ path: '/site/' + item.site }"
+          :to="{ path: '/site/' + item.site.id }"
           :title="$t('editSite.viewMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
-            v-if="item.site__name || item.site__name_en"
             v-translate="{
-              et: item.site__name,
-              en: item.site__name_en,
+              et: item.site.name,
+              en: item.site.name_en,
             }"
           />
-          <span v-else>{{ item.site }}</span>
         </router-link>
       </span>
-    </template>
-
-    <template v-slot:item.locality__locality="{ item }">
-      <router-link
-        :to="{ path: '/locality/' + item.locality }"
-        :title="$t('editLocality.editMessage')"
-        class="sarv-link"
-        :class="`${bodyActiveColor}--text`"
-        v-if="item.locality"
-      >
-        <span
-          v-translate="{
-            et: item.locality__locality,
-            en: item.locality__locality_en,
-          }"
-        />
-      </router-link>
     </template>
 
     <template v-slot:item.depth="{ item }">
@@ -87,9 +68,9 @@
       <span v-else>{{ item.depth }}</span>
     </template>
 
-    <template v-slot:item.stratigraphy__id="{ item }">
+    <template v-slot:item.stratigraphy="{ item }">
       <router-link
-        :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+        :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
         :title="$t('editStratigraphy.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
@@ -97,16 +78,16 @@
       >
         <span
           v-translate="{
-            et: item.stratigraphy__stratigraphy,
-            en: item.stratigraphy__stratigraphy_en,
+            et: item.stratigraphy.stratigraphy,
+            en: item.stratigraphy.stratigraphy_en,
           }"
         />
       </router-link>
     </template>
 
-    <template v-slot:item.lithostratigraphy__id="{ item }">
+    <template v-slot:item.lithostratigraphy="{ item }">
       <router-link
-        :to="{ path: '/stratigraphy/' + item.lithostratigraphy }"
+        :to="{ path: '/stratigraphy/' + item.lithostratigraphy.id }"
         :title="$t('editStratigraphy.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
@@ -114,27 +95,22 @@
       >
         <span
           v-translate="{
-            et: item.lithostratigraphy__stratigraphy,
-            en: item.lithostratigraphy__stratigraphy_en,
+            et: item.lithostratigraphy.stratigraphy,
+            en: item.lithostratigraphy.stratigraphy_en,
           }"
         />
       </router-link>
     </template>
 
-    <template v-slot:item.storage__location="{ item }">
+    <template v-slot:item.storage="{ item }">
       <router-link
-        :to="{ path: '/location/' + item.storage }"
+        :to="{ path: '/location/' + item.storage.id }"
         :title="$t('editLocation.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
         v-if="item.storage"
       >
-        <span
-          v-translate="{
-            et: item.storage__location,
-            en: item.storage__location,
-          }"
-        />
+        {{ item.storage.location }}
       </router-link>
     </template>
 

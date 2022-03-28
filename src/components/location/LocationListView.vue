@@ -10,11 +10,12 @@
       <div class="p-2 pl-3 h-100">
         <div class="float-left pr-1" style="width: 64% !important">
           <div
+            v-if="entity.database"
             class="mb-2"
             style="font-size: 90%"
             v-translate="{
-              et: entity.database__name,
-              en: entity.database__name_en,
+              et: entity.database.name,
+              en: entity.database.name_en,
             }"
           ></div>
           <div>
@@ -59,14 +60,6 @@ export default {
   },
   components: {
     VueQRCodeComponent,
-  },
-  data: () => ({
-    names: [],
-  }),
-  watch: {
-    data: {
-      immediate: true,
-    },
   },
   methods: {
     labelType(code) {
