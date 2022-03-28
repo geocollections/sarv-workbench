@@ -48,7 +48,6 @@ import deaccession from "./modules/deaccession";
 import web_news from "./modules/web_news";
 import web_pages from "./modules/web_pages";
 import taxon_page from "./modules/taxon_page";
-import sarv_issue from "./modules/sarv_issue";
 
 Vue.use(Vuex);
 
@@ -56,7 +55,7 @@ function buildLocalStorageKey() {
   const hostname = window?.location?.hostname;
   const devVersion = "_v2.0.0";
   const liveVersion = "_v2.0.0";
-  const localVersion = "_v2.0.0";
+  const localVersion = "_v2.0.2";
 
   if (hostname) {
     if (hostname.startsWith("edit2.") || hostname.startsWith("edit3.")) {
@@ -121,7 +120,6 @@ export default createStore(Vuex.Store, {
     web_news,
     web_pages,
     taxon_page,
-    sarv_issue,
   },
   actions,
   state,

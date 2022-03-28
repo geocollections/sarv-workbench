@@ -1,26 +1,18 @@
 <template>
-  <v-data-table
-    :headers="$_tableHeaderMixin_shownHeaders"
-    dense
-    hide-default-footer
+  <table-wrapper
+    v-bind="$attrs"
+    :headers="headers"
     :items="response.results"
-    :items-per-page="searchParameters.paginateBy"
-    multi-sort
-    :page="searchParameters.page"
-    :search="filter"
-    :show-select="!!activeSelectionSeries"
-    @item-selected="$emit('toggle-item-in-selection-series', $event, 'sample')"
-    @toggle-select-all="$emit('toggle-select-all', $event, 'sample')"
-    expand-icon="fas fa-caret-down"
-    :value="selected"
-    :sort-by="searchParameters.sortBy"
-    :sort-desc="searchParameters.sortDesc"
-    @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
-    @update:sort-desc="
-      $emit('update:sorting', { value: $event, key: 'sortDesc' })
-    "
-    :server-items-length="response.count"
-    :class="bodyColor.split('n-')[0] + 'n-5'"
+    :count="response.count"
+    :options="searchParameters"
+    :show-search="false"
+    :show-select="$_activeListMixin_isShowSelect"
+    :value="selectedList"
+    @change:headers="$emit('change:headers', $event)"
+    @reset:headers="$emit('reset:headers')"
+    @update:options="$emit('update:options', $event)"
+    @item-selected="$_activeListMixin_itemSelected"
+    @toggle-select-all="$_activeListMixin_toggleSelectAll"
   >
     <template v-slot:item.number="{ item }">
       <router-link
@@ -34,18 +26,18 @@
       </router-link>
     </template>
 
-    <template v-slot:item.locality__id="{ item }">
+    <template v-slot:item.locality="{ item }">
       <router-link
-        :to="{ path: '/locality/' + item.locality }"
+        :to="{ path: '/locality/' + item.locality.id }"
         :title="$t('editLocality.viewMessage')"
-        v-if="item.locality__locality || item.locality__locality_en"
+        v-if="item.locality"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
         <span
           v-translate="{
-            et: item.locality__locality,
-            en: item.locality__locality_en,
+            et: item.locality.locality,
+            en: item.locality.locality_en,
           }"
         />
       </router-link>
@@ -54,38 +46,19 @@
 
       <span v-else-if="item.site">
         <router-link
-          :to="{ path: '/site/' + item.site }"
+          :to="{ path: '/site/' + item.site.id }"
           :title="$t('editSite.viewMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
-            v-if="item.site__name || item.site__name_en"
             v-translate="{
-              et: item.site__name,
-              en: item.site__name_en,
+              et: item.site.name,
+              en: item.site.name_en,
             }"
           />
-          <span v-else>{{ item.site }}</span>
         </router-link>
       </span>
-    </template>
-
-    <template v-slot:item.locality__locality="{ item }">
-      <router-link
-        :to="{ path: '/locality/' + item.locality }"
-        :title="$t('editLocality.editMessage')"
-        class="sarv-link"
-        :class="`${bodyActiveColor}--text`"
-        v-if="item.locality"
-      >
-        <span
-          v-translate="{
-            et: item.locality__locality,
-            en: item.locality__locality_en,
-          }"
-        />
-      </router-link>
     </template>
 
     <template v-slot:item.depth="{ item }">
@@ -95,9 +68,9 @@
       <span v-else>{{ item.depth }}</span>
     </template>
 
-    <template v-slot:item.stratigraphy__id="{ item }">
+    <template v-slot:item.stratigraphy="{ item }">
       <router-link
-        :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+        :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
         :title="$t('editStratigraphy.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
@@ -105,16 +78,16 @@
       >
         <span
           v-translate="{
-            et: item.stratigraphy__stratigraphy,
-            en: item.stratigraphy__stratigraphy_en,
+            et: item.stratigraphy.stratigraphy,
+            en: item.stratigraphy.stratigraphy_en,
           }"
         />
       </router-link>
     </template>
 
-    <template v-slot:item.lithostratigraphy__id="{ item }">
+    <template v-slot:item.lithostratigraphy="{ item }">
       <router-link
-        :to="{ path: '/stratigraphy/' + item.lithostratigraphy }"
+        :to="{ path: '/stratigraphy/' + item.lithostratigraphy.id }"
         :title="$t('editStratigraphy.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
@@ -122,27 +95,22 @@
       >
         <span
           v-translate="{
-            et: item.lithostratigraphy__stratigraphy,
-            en: item.lithostratigraphy__stratigraphy_en,
+            et: item.lithostratigraphy.stratigraphy,
+            en: item.lithostratigraphy.stratigraphy_en,
           }"
         />
       </router-link>
     </template>
 
-    <template v-slot:item.storage__location="{ item }">
+    <template v-slot:item.storage="{ item }">
       <router-link
-        :to="{ path: '/location/' + item.storage }"
+        :to="{ path: '/location/' + item.storage.id }"
         :title="$t('editLocation.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
         v-if="item.storage"
       >
-        <span
-          v-translate="{
-            et: item.storage__location,
-            en: item.storage__location,
-          }"
-        />
+        {{ item.storage.location }}
       </router-link>
     </template>
 
@@ -158,15 +126,18 @@
         <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
 import tableViewMixin from "@/mixins/tableViewMixin";
+import TableWrapper from "@/components/tables/TableWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "SampleTable",
+  components: { TableWrapper },
   mixins: [activeListMixin, tableViewMixin],
   props: {
     response: {
@@ -182,9 +153,14 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
+    },
+    headers: {
+      type: Array,
+      required: true,
+      default: () => [],
     },
     bodyColor: {
       type: String,
@@ -196,6 +172,9 @@ export default {
       required: false,
       default: "deep-orange",
     },
+  },
+  computed: {
+    ...mapState("search", ["activeSelectionSeries"]),
   },
   methods: {
     getEmaUrl(params) {

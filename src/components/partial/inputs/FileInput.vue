@@ -26,34 +26,6 @@
       </v-col>
     </v-row>
 
-    <!-- This is special use case for reference digital version (pdf). -->
-    <div
-      class="ma-2"
-      v-if="
-        showResetFilesButton &&
-        $route.meta.object === 'reference' &&
-        !acceptMultiple &&
-        userHasInsertedFiles &&
-        !isExistingFilesValid
-      "
-    >
-      <v-alert
-        class="mb-3"
-        border="left"
-        :color="bodyColor.split('n-')[0] + 'n-2'"
-        elevation="3"
-        icon="fas fa-info"
-        >{{ $t("messages.reference_file_upload_failed") }}</v-alert
-      >
-      <v-btn
-        @click="files = null"
-        :dark="bodyActiveColorDark"
-        :color="bodyActiveColor"
-        >{{ $t("buttons.reset_files") }}
-        <v-icon right>far fa-trash-alt</v-icon></v-btn
-      >
-    </div>
-
     <!-- BUTTONS -->
     <div class="d-flex flex-wrap">
       <div class="ma-1" v-if="recordOptions && recordImage">
@@ -176,7 +148,7 @@
     <v-row no-gutters v-if="useExisting" class="mt-1">
       <v-col cols="12" class="pa-1">
         <autocomplete-wrapper
-          v-model="existingFiles"
+          :value="existingFiles"
           :color="bodyActiveColor"
           :items="autocomplete.attachment"
           :loading="autocomplete.loaders.attachment"
@@ -185,11 +157,10 @@
           :is-link="!isDisabled"
           route-object="attachment"
           is-searchable
-          v-on:search:items="autocompleteAttachmentSearch"
+          @search:items="autocompleteAttachmentSearch"
           :multiple="acceptMultiple"
-          v-on:chip:close="
-            existingFiles.splice(existingFiles.indexOf($event), 1)
-          "
+          @chip:close="existingFiles.splice(existingFiles.indexOf($event), 1)"
+          @change="$emit('update:existing-files', $event)"
           :disabled="isDisabled"
         />
       </v-col>
@@ -373,7 +344,7 @@ export default {
     },
 
     isExistingFilesValid() {
-      return !!this.existingFiles;
+      return this.existingFiles?.length > 0;
     },
 
     userHasInsertedFiles() {
@@ -405,24 +376,19 @@ export default {
       this.resetData();
       this.$emit("files-cleared");
     },
-    files(newVal) {
-      this.readFile(newVal);
-    },
-    filesFromObject: {
+    files: {
       handler(newVal) {
-        if (newVal && newVal.length > 0) {
-          this.existingFiles = newVal;
-          this.autocomplete.attachment = newVal;
-          if (this.showExisting) this.useExisting = true;
-        }
+        this.readFile(newVal);
       },
       deep: true,
     },
-    existingFiles(newVal) {
-      if (newVal) {
-        if (this.acceptMultiple) this.$emit("update:existing-files", newVal);
-        else this.$emit("update:existing-files", [newVal]);
-      } else this.$emit("update:existing-files", []);
+    filesFromObject: {
+      handler(newVal) {
+        this.existingFiles = newVal;
+        this.autocomplete.attachment = newVal;
+        if (this.showExisting) this.useExisting = true;
+      },
+      deep: true,
     },
     isDraggable: {
       handler() {
@@ -574,7 +540,7 @@ export default {
 
     clearFile() {
       this.files = null;
-      this.existingFiles = null;
+      this.$emit("update:existing-files", []);
       this.sourceList = [];
       this.$emit("files-cleared");
     },
@@ -588,7 +554,7 @@ export default {
       this.useExisting = false;
       this.isDragging = false;
       this.files = null;
-      this.existingFiles = null;
+      this.$emit("update:existing-files", []);
       this.autocomplete = {
         attachment: [],
         loaders: { attachment: false },

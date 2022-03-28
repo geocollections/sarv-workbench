@@ -120,7 +120,6 @@ export default {
       if (this.response[this.activeCatalogue.title].count === 0) {
         this.setLoadingState(true);
 
-
         const responseFromApi = await fetchStratigraphyCatalogue(
           this.activeCatalogue
         );
@@ -157,5 +156,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

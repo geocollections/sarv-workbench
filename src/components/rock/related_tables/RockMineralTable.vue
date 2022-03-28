@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,76 +38,30 @@
       </template>
 
       <template v-slot:item.mineral="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/rock/' + item.mineral }"
-            :title="$t('editRock.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <div
-              v-translate="{
-                et: item.mineral__name,
-                en: item.mineral__name_en,
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.mineral"
-            :to="{ path: '/rock/' + item.mineral.id }"
-            :title="$t('editRock.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <div
-              v-translate="{
-                et: item.mineral.name,
-                en: item.mineral.name_en,
-              }"
-            />
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/rock/' + item.mineral }"
+          v-if="item.mineral"
+          :to="{ path: '/rock/' + item.mineral.id }"
           :title="$t('editRock.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <div
             v-translate="{
-              et: item.mineral__name,
-              en: item.mineral__name_en,
+              et: item.mineral.name,
+              en: item.mineral.name_en,
             }"
           />
         </router-link>
       </template>
 
       <template v-slot:item.mineral_type="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.mineral_type__name,
-              en: item.mineral_type__name_en,
-            }"
-          />
-          <span
-            v-else-if="item.mineral_type"
-            v-translate="{
-              et: item.mineral_type.name,
-              en: item.mineral_type.name_en,
-            }"
-          />
-        </div>
-        <div
-          v-else
+        <span
+          v-if="item.mineral_type"
           v-translate="{
-            et: item.mineral_type__name,
-            en: item.mineral_type__name_en,
+            et: item.mineral_type.name,
+            en: item.mineral_type.name_en,
           }"
-        ></div>
+        />
       </template>
 
       <template v-slot:item.is_primary="{ item }">
@@ -220,6 +173,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -227,25 +186,23 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
-import {
-  fetchListIdentificationType,
-  fetchListRockMineralType,
-} from "../../../assets/js/api/apiCalls";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "RockMineralTable",
 
   components: {
+    RelatedDataDeleteDialog,
     TextareaWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -261,7 +218,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -274,11 +231,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
   },
 
@@ -320,15 +272,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.mineral !== "undefined" && this.item.mineral !== null
@@ -343,9 +286,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         mineral: null,
         mineral_type: null,
@@ -357,52 +298,15 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "rock_mineral",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "rock_mineral",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (typeof item.mineral !== "object" && item.mineral !== null) {
-        this.item.mineral = {
-          id: item.mineral,
-          name: item.mineral__name,
-          name_en: item.mineral__name_en,
-        };
-        this.autocomplete.rock.push(this.item.mineral);
-      } else if (item.mineral !== null) {
+      if (item.mineral) {
         this.item.mineral = item.mineral;
         this.autocomplete.rock.push(this.item.mineral);
       }
 
-      if (typeof item.mineral_type !== "object" && item.mineral_type !== null) {
-        this.item.mineral_type = {
-          id: item.mineral_type,
-          name: item.mineral_type__name,
-          name_en: item.mineral_type__name_en,
-        };
-        this.autocomplete.mineral_type.push(this.item.mineral_type);
-      } else if (item.mineral_type !== null) {
+      if (item.mineral_type) {
         this.item.mineral_type = item.mineral_type;
         this.autocomplete.mineral_type.push(this.item.mineral_type);
       }
@@ -416,38 +320,14 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "rock_mineral",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.mineral_type.length <= 1) {
         this.autocomplete.loaders.mineral_type = true;
-        fetchListRockMineralType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.mineral_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("rock_mineral_type");
+        this.autocomplete.mineral_type = response?.results ?? [];
         this.autocomplete.loaders.mineral_type = false;
       }
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     },
   },
 };
 </script>
-
-<style scoped></style>

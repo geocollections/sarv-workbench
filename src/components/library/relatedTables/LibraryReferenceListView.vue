@@ -14,51 +14,51 @@
           </router-link>
         </span>-->
 
-          <span v-if="entity.reference__author">
-            {{ entity.reference__author }},
+          <span v-if="entity.reference.author">
+            {{ entity.reference.author }},
           </span>
 
-          <span v-if="entity.reference__year">
-            {{ entity.reference__year }}.
+          <span v-if="entity.reference.year">
+            {{ entity.reference.year }}.
           </span>
 
-          <span v-if="entity.reference__title">
-            {{ entity.reference__title }}.
+          <span v-if="entity.reference.title">
+            {{ entity.reference.title }}.
           </span>
 
-          <span v-if="entity.reference__book">
-            {{ entity.reference__book }},
+          <span v-if="entity.reference.book">
+            {{ entity.reference.book }},
           </span>
 
-          <span v-if="entity.reference__publisher">
-            {{ entity.reference__publisher }}.
+          <span v-if="entity.reference.publisher">
+            {{ entity.reference.publisher }}.
           </span>
 
-          <span v-if="entity.reference__publisher_place">
-            {{ entity.reference__publisher_place }}.
+          <span v-if="entity.reference.publisher_place">
+            {{ entity.reference.publisher_place }}.
           </span>
 
-          <span v-if="entity.reference__journal__journal_name">
-            <i>{{ entity.reference__journal__journal_name }}</i
+          <span v-if="entity.reference.journal">
+            <i>{{ entity.reference.journal.journal_name }}</i
             >,
           </span>
 
-          <span v-if="entity.reference__volume">
-            <b>{{ entity.reference__volume }}</b
+          <span v-if="entity.reference.volume">
+            <b>{{ entity.reference.volume }}</b
             >,
           </span>
 
-          <span v-if="entity.reference__number">
-            {{ entity.reference__number }},
+          <span v-if="entity.reference.number">
+            {{ entity.reference.number }},
           </span>
 
-          <span v-if="entity.reference__pages">
-            {{ entity.reference__pages }}.
+          <span v-if="entity.reference.pages">
+            {{ entity.reference.pages }}.
           </span>
 
-          <span v-if="entity.reference__doi">
-            <a :href="'https://doi.org/' + entity.reference__doi"
-              >https://doi.org/ {{ entity.reference__doi }}</a
+          <span v-if="entity.reference.doi">
+            <a :href="'https://doi.org/' + entity.reference.doi"
+              >https://doi.org/ {{ entity.reference.doi }}</a
             >
           </span>
         </div>

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import ApiService from "@/services/ApiService";
+import qs from "qs";
 
 class RWApiService extends ApiService {
   constructor({ axios, url }) {
@@ -32,7 +33,12 @@ class RWApiService extends ApiService {
       ...this.getPaginationParams(options),
     };
     try {
-      const res = await this.service.get(url, { params });
+      const res = await this.service.get(url, {
+        params,
+        paramsSerializer: (par) => {
+          return qs.stringify(par, { indices: false });
+        },
+      });
       return res.data;
     } catch (err) {
       this.toastError(err, url);
@@ -66,8 +72,15 @@ class RWApiService extends ApiService {
     const url = `${this.baseURL}/${table}/`;
     try {
       const res = await this.service.post(url, formData);
-      // Todo: handle attachment resonse (maybe clean/format it in backend side)
-      this.toastSuccess("Record added!");
+
+      // Special use case for attachment, because response is a bit different
+      if (table === "attachment") {
+        if (res?.data?.uploaded_ids?.length > 0)
+          this.toastSuccess("Record(s) added!");
+        else this.toastInfo("Something went wrong!");
+      } else if (res?.data?.length > 1) this.toastSuccess("Record(s) added!");
+      else this.toastSuccess("Record added!");
+
       return res.data;
     } catch (err) {
       this.toastError(err, url);
@@ -87,6 +100,18 @@ class RWApiService extends ApiService {
     }
   }
 
+  async putMulti(table, data) {
+    const url = `${this.baseURL}/${table}/`;
+    try {
+      const res = await this.service.put(url, data);
+      this.toastSuccess("Record(s) updated!");
+      return res.data;
+    } catch (err) {
+      this.toastError(err, url);
+      return this.handleError(err, url);
+    }
+  }
+
   async getObjectPermissions(table, id) {
     const url = `${this.baseURL}/${table}/${id}/permissions/`;
     try {
@@ -99,7 +124,10 @@ class RWApiService extends ApiService {
   }
 
   async rotateImages(data) {
-    const baseUrlWithoutApiPath = this.baseURL.substring(0, this.baseURL.length - 3)
+    const baseUrlWithoutApiPath = this.baseURL.substring(
+      0,
+      this.baseURL.length - 3
+    );
     const url = `${baseUrlWithoutApiPath}image_processor/rotate/`;
     try {
       const res = await this.service.post(url, data);
@@ -110,8 +138,30 @@ class RWApiService extends ApiService {
     }
   }
 
-  static async delete(table, id) {
-    // Todo
+  async delete(table, id) {
+    const url = `${this.baseURL}/${table}/${id}/`;
+    try {
+      const res = await this.service.delete(url);
+      this.toastSuccess("Record deleted!");
+      // Successful delete is 204 No Content
+      return res?.status === 204 ? res.status : false;
+    } catch (err) {
+      this.toastError(err, url);
+      return this.handleError(err, url);
+    }
+  }
+
+  async deleteMulti(table, ids) {
+    const url = `${this.baseURL}/${table}/`;
+    try {
+      const res = await this.service.delete(url, { data: ids });
+      this.toastSuccess("Record(s) deleted!");
+      // Successful delete is 204 No Content
+      return res?.status === 204 ? res.status : false;
+    } catch (err) {
+      this.toastError(err, url);
+      return this.handleError(err, url);
+    }
   }
 }
 

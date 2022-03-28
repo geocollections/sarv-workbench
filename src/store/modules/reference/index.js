@@ -6,7 +6,7 @@ const getDefaultState = () => {
     count: 0,
     options: {
       page: 1,
-      paginateBy: 50,
+      itemsPerPage: 50,
       sortBy: ["id"],
       sortDesc: [true],
     },
@@ -93,29 +93,24 @@ const getDefaultState = () => {
           value: null,
         },
         is_estonian_author: {
-          lookUpType: "icontains",
           title: "reference.is_estonian_author",
           value: null,
           isCheckbox: true,
         },
         is_estonian_reference: {
-          lookUpType: "icontains",
           title: "reference.is_estonian_reference",
           value: null,
           isCheckbox: true,
         },
         is_locked: {
-          lookUpType: "icontains",
           title: "reference.is_locked",
           value: null,
         },
         is_oa: {
-          lookUpType: "icontains",
           title: "reference.is_oa",
           value: null,
         },
         is_private: {
-          lookUpType: "icontains",
           title: "reference.is_private",
           value: null,
         },
@@ -271,10 +266,10 @@ const getDefaultState = () => {
           title: "reference.libraryAuthorIdTitle",
           value: null,
           fields: [
-            "library_reference__library__author__agent",
-            "library_reference__library__author_txt",
-            "library_reference__library__title",
-            "library_reference__library__title_en",
+            "libraryreference__library__author__agent",
+            "libraryreference__library__author_txt",
+            "libraryreference__library__title",
+            "libraryreference__library__title_en",
           ],
           type: "multi",
         },
@@ -685,4 +680,5 @@ export default {
   getters,
   actions,
   mutations,
+  getDefaultState,
 };

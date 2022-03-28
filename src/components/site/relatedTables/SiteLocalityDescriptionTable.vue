@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,73 +38,34 @@
       </template>
 
       <template v-slot:item.rock="{ item }">
-        <div v-if="isUsedAsRelatedData">
+        <router-link
+          v-if="item.rock"
+          :to="{ path: '/rock/' + item.rock.id }"
+          :title="$t('editRock.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
           <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.rock__name,
-              en: item.rock__name_en,
-            }"
-          />
-          <span
-            v-else-if="item.rock"
             v-translate="{
               et: item.rock.name,
               en: item.rock.name_en,
             }"
-          />
-        </div>
-        <div
-          v-else
-          v-translate="{
-            et: item.rock__name,
-            en: item.rock__name_en,
-          }"
-        ></div>
+          ></span>
+        </router-link>
       </template>
 
       <template v-slot:item.stratigraphy="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy__stratigraphy,
-                en: item.stratigraphy__stratigraphy_en,
-              }"
-            ></span>
-          </router-link>
-          <router-link
-            v-else-if="item.stratigraphy"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy.stratigraphy,
-                en: item.stratigraphy.stratigraphy_en,
-              }"
-            ></span>
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+          v-if="item.stratigraphy"
+          :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
           :title="$t('editStratigraphy.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.stratigraphy__stratigraphy,
-              en: item.stratigraphy__stratigraphy_en,
+              et: item.stratigraphy.stratigraphy,
+              en: item.stratigraphy.stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -319,6 +279,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -330,18 +296,21 @@ import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import { cloneDeep } from "lodash";
 import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
 import { mapGetters } from "vuex";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
-  name: "SiteLocalityDescriptionTable",
+  name: "LocalityDescriptionTable",
 
   components: {
+    RelatedDataDeleteDialog,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
     CheckboxWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -357,7 +326,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -371,28 +340,15 @@ export default {
       required: false,
       default: "deep-orange",
     },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
   },
 
   data: () => ({
     headers: [
-      // { text: "common.id", value: "id" },
-      // { text: "site.locality", value: "locality" },
       { text: "site.depth_base", value: "depth_base" },
       { text: "site.depth_top", value: "depth_top" },
       { text: "site.rock", value: "rock" },
-      // { text: "site.rock_name", value: "rock_name" },
       { text: "common.stratigraphy", value: "stratigraphy" },
-      // { text: "common.reference", value: "reference" },
-      // { text: "common.author", value: "agent" },
       { text: "common.description", value: "description" },
-      // { text: "common.year", value: "year" },
-      // { text: "common.remarks", value: "remarks" },
-      // { text: "common.is_preferred", value: "is_preferred" },
       {
         text: "common.actions",
         value: "action",
@@ -436,41 +392,8 @@ export default {
     },
   }),
 
-  computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
-    ...mapGetters("user", ["getCurrentAgent"]),
-  },
-
-  watch: {
-    getCurrentAgent: {
-      handler(newVal) {
-        if (newVal) {
-          this.item.agent = {
-            id: newVal.id,
-            agent: newVal.agent,
-            forename: newVal.forename,
-            surename: newVal.surename,
-          };
-          this.autocomplete.agent.push(this.item.agent);
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-  },
-
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         depth_top: "",
         depth_top_interval: "",
@@ -493,74 +416,25 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "locality_description",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "locality_description",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.rock !== "object" && item.rock !== null) {
-        this.item.rock = {
-          id: item.rock,
-          name: item.rock__name,
-          name_ne: item.rock__name_en,
-        };
-        this.autocomplete.rock.push(this.item.rock);
-      } else if (item.rock !== null) {
+      if (item.rock) {
         this.item.rock = item.rock;
         this.autocomplete.rock.push(this.item.rock);
       }
 
-      if (typeof item.stratigraphy !== "object" && item.stratigraphy !== null) {
-        this.item.stratigraphy = {
-          id: item.stratigraphy,
-          stratigraphy: item.stratigraphy__stratigraphy,
-          stratigraphy_en: item.stratigraphy__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy.push(this.item.stratigraphy);
-      } else if (item.stratigraphy !== null) {
+      if (item.stratigraphy) {
         this.item.stratigraphy = item.stratigraphy;
         this.autocomplete.stratigraphy.push(this.item.stratigraphy);
       }
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference,
-        };
-        this.autocomplete.reference.push(this.item.reference);
-      } else if (item.reference !== null) {
+      if (item.reference) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
       }
 
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent,
-        };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
+      if (item.agent) {
         this.item.agent = item.agent;
         this.autocomplete.agent.push(this.item.agent);
       }
@@ -582,26 +456,6 @@ export default {
 
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "locality_description",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped />

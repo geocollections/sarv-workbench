@@ -25,5 +25,3 @@ export default {
   name: "ObjectDoesNotExist",
 };
 </script>
-
-<style scoped></style>

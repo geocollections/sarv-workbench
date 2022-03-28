@@ -550,7 +550,7 @@ import {
   fetchLoanSpecimens,
   fetchSpecimenIdentificationGeologiesList,
   fetchSpecimenIdentificationsList,
-} from "../../assets/js/api/apiCalls";
+} from "@/assets/js/api/apiCalls";
 import LangButtons from "../partial/LangButtons";
 
 export default {

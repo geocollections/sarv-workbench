@@ -33,35 +33,39 @@ class ApiService {
 
   buildSearchFields = (searchFields) => {
     if (searchFields?.byIds) {
-      console.log(Object.keys(searchFields.byIds));
       const query = Object.keys(searchFields.byIds).reduce((prev, curr) => {
         let value = searchFields.byIds[curr].value;
         if (value) {
-          const lookUpType =
-            searchFields.byIds[curr]?.lookUpType ?? "icontains";
+          // Todo: Review iexact lookuptype not working properly
+          const lookUpType = searchFields.byIds[curr]?.lookUpType
+            ? `__${searchFields.byIds[curr]?.lookUpType}`
+            : "";
           const type = searchFields.byIds[curr]?.type ?? "text";
           const fields = searchFields.byIds[curr]?.fields ?? [curr];
 
           if (type === "text")
-            fields.forEach(
-              (field) => (prev[`${field}__${lookUpType}`] = value)
-            );
+            fields.forEach((field) => (prev[`${field}${lookUpType}`] = value));
           else if (type === "multi") {
             const or_search = fields.map(
-              (field) => `${field}__${lookUpType}:${value}`
+              (field) => `${field}${lookUpType}:${value}`
             );
-            prev["or_search"] = or_search.join(" OR ");
+            if (prev.or_search) {
+              if (Array.isArray(prev.or_search))
+                prev.or_search.push(or_search.join(" OR "));
+              else
+                prev["or_search"] = [prev["or_search"], or_search.join(" OR ")];
+            } else prev["or_search"] = or_search.join(" OR ");
           } else if (type === "datetime") {
             fields.forEach(
               (field) =>
-                (prev[`${field}__${lookUpType}`] = `${value} ${
+                (prev[`${field}${lookUpType}`] = `${value} ${
                   lookUpType === "lt" ? "23:59" : "00:00"
                 }`)
             );
           } else if (type === "multi_checkbox") {
             fields.forEach(
               (field) =>
-                (prev[`${field}__${lookUpType}`] = `${
+                (prev[`${field}${lookUpType}`] = `${
                   value.length > 0 ? value : 0
                 }`)
             );
@@ -69,9 +73,6 @@ class ApiService {
         }
         return prev;
       }, {});
-
-      console.log(query);
-
       return query;
     }
     return null;
@@ -81,6 +82,11 @@ class ApiService {
     const status = error.response.status;
     const detail = error?.response?.data?.detail ?? "";
     const outputMessage = `${detail} URL: ${url}`;
+    // Todo: Beautify error message
+    if (status === 400)
+      return `<b>Bad Request!</b> ${JSON.stringify(
+        error?.response?.data
+      )} URL: ${url}`;
     if (status === 403) return `<b>Forbidden!</b> ${outputMessage}`;
     if (status === 404) return `<b>Page not Found!</b> ${outputMessage}`;
     if (status === 405) return `<b>Method not Allowed!</b> ${outputMessage}`;
@@ -101,6 +107,16 @@ class ApiService {
 
   toastSuccess(text) {
     Vue.prototype.toast.success(text, "OK", {
+      position: "topCenter",
+      timeout: 3000,
+      closeOnEscape: true,
+      pauseOnHover: false,
+      displayMode: "replace",
+    });
+  }
+
+  toastInfo(text) {
+    Vue.prototype.toast.info(text, "Info", {
       position: "topCenter",
       timeout: 3000,
       closeOnEscape: true,

@@ -81,9 +81,9 @@
                 {{ image.date_created_free }}
                 <br />
               </span>
-              <span v-if="image.author__agent">
+              <span v-if="image.author">
                 <b>Author:</b>
-                {{ image.author__agent }}
+                {{ image.author.agent }}
                 <br />
               </span>
               <span v-if="image.image_number">
@@ -98,14 +98,8 @@
               </span>
             </span>
             <span v-else-if="object === 'specimen'">
-              <span
-                v-if="
-                  image.specimen__database__acronym &&
-                  image.specimen__specimen_id
-                "
-              >
-                {{ image.specimen__database__acronym }}
-                {{ image.specimen__specimen_id }}
+              <span v-if="image.specimen">
+                {{ image.specimen.specimen_full_number }}
               </span>
             </span>
             <span v-else-if="object === 'location'">
@@ -169,32 +163,6 @@
             <span>{{ $t(editMessage) }}</span>
           </v-tooltip>
         </div>
-
-        <!--        <v-row no-gutters class="pr-2" style="max-width: 50px;">-->
-        <!--          <v-col cols="12" class="pa-1 align-self-center">-->
-        <!--            <v-btn-->
-        <!--              :title="$t(viewMessage)"-->
-        <!--              icon-->
-        <!--              color="blue"-->
-        <!--              @click="openFileInNewWindow(image)"-->
-        <!--              :small="$vuetify.breakpoint.xsOnly"-->
-        <!--            >-->
-        <!--              <v-icon :small="$vuetify.breakpoint.xsOnly">fas fa-eye</v-icon>-->
-        <!--            </v-btn>-->
-        <!--          </v-col>-->
-        <!--          <v-col cols="12" class="pa-1 align-self-center">-->
-        <!--            <v-btn-->
-        <!--              color="green"-->
-        <!--              :title="$t(editMessage)"-->
-        <!--              icon-->
-        <!--              @click="openInNewTab(object, image[idField])"-->
-        <!--              :small="$vuetify.breakpoint.xsOnly"-->
-        <!--              ><v-icon :small="$vuetify.breakpoint.xsOnly"-->
-        <!--                >fas fa-edit</v-icon-->
-        <!--              ></v-btn-->
-        <!--            >-->
-        <!--          </v-col>-->
-        <!--        </v-row>-->
       </v-col>
     </v-row>
   </div>

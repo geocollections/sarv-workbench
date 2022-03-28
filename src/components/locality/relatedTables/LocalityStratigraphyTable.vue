@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,118 +38,48 @@
       </template>
 
       <template v-slot:item.stratigraphy="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy__stratigraphy,
-                en: item.stratigraphy__stratigraphy_en,
-              }"
-            ></span>
-          </router-link>
-          <router-link
-            v-else-if="item.stratigraphy"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy.stratigraphy,
-                en: item.stratigraphy.stratigraphy_en,
-              }"
-            ></span>
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+          v-if="item.stratigraphy"
+          :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
           :title="$t('editStratigraphy.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.stratigraphy__stratigraphy,
-              en: item.stratigraphy__stratigraphy_en,
+              et: item.stratigraphy.stratigraphy,
+              en: item.stratigraphy.stratigraphy_en,
             }"
           ></span>
         </router-link>
       </template>
 
       <template v-slot:item.reference="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/reference/' + item.reference }"
+          v-if="item.reference"
+          :to="{ path: '/reference/' + item.reference.id }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.reference__reference }}
+          {{ item.reference.reference }}
         </router-link>
       </template>
 
       <template v-slot:item.agent="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent.agent }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/agent/' + item.agent }"
+          v-if="item.agent"
+          :to="{ path: '/agent/' + item.agent.id }"
           :title="$t('editAgent.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.agent__agent }}
+          {{ item.agent.agent }}
         </router-link>
       </template>
 
-      <template v-slot:item.is_preferred="{ item }">
-        <v-icon v-if="item.is_preferred" small>fas fa-check</v-icon>
+      <template v-slot:item.is_private="{ item }">
+        <v-icon v-if="item.is_private" small>fas fa-check</v-icon>
         <v-icon v-else small>fas fa-minus</v-icon>
       </template>
     </v-data-table>
@@ -297,15 +226,6 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <checkbox-wrapper
-                    v-model="item.is_preferred"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy.is_preferred')"
-                    @change="item.is_preferred = !item.is_preferred"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
@@ -341,6 +261,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -350,17 +276,20 @@ import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 
 export default {
   name: "LocalityStratigraphyTable",
 
   components: {
+    RelatedDataDeleteDialog,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -376,7 +305,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -390,11 +319,6 @@ export default {
       required: false,
       default: "deep-orange",
     },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
   },
 
   data: () => ({
@@ -405,7 +329,7 @@ export default {
       { text: "common.reference", value: "reference" },
       { text: "stratigraphy.author", value: "agent" },
       { text: "common.year", value: "year" },
-      { text: "stratigraphy.is_preferred", value: "is_preferred" },
+      { text: "common.is_private", value: "is_private" },
       {
         text: "common.actions",
         value: "action",
@@ -427,7 +351,6 @@ export default {
       agent: null,
       author_free: "",
       year: "",
-      is_preferred: false,
       remarks: "",
       is_private: false,
     },
@@ -445,15 +368,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.stratigraphy === "object" &&
@@ -463,9 +377,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         stratigraphy: null,
         depth_base: "",
@@ -479,68 +391,26 @@ export default {
         agent: null,
         author_free: "",
         year: "",
-        is_preferred: false,
         remarks: "",
         is_private: false,
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "locality_description",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "locality_description",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.stratigraphy !== "object" && item.stratigraphy !== null) {
-        this.item.stratigraphy = {
-          id: item.stratigraphy_id,
-          stratigraphy: item.stratigraphy__stratigraphy,
-          stratigraphy_en: item.stratigraphy__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy.push(this.item.stratigraphy);
-      } else if (item.stratigraphy !== null) {
+      if (item.stratigraphy) {
         this.item.stratigraphy = item.stratigraphy;
         this.autocomplete.stratigraphy.push(this.item.stratigraphy);
       }
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference,
-        };
-        this.autocomplete.reference.push(this.item.reference);
-      } else if (item.reference !== null) {
+      if (item.reference) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
       }
 
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent,
-        };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
+      if (item.agent) {
         this.item.agent = item.agent;
         this.autocomplete.agent.push(this.item.agent);
       }
@@ -554,34 +424,11 @@ export default {
       this.item.thickness = item.thickness;
       this.item.author_free = item.author_free;
       this.item.year = item.year;
-      this.item.is_preferred = item.is_preferred === true;
       this.item.remarks = item.remarks;
       this.item.is_private = item.is_private === true;
 
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "locality_description",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        } else if (typeof item[key] === "string" && item[key].length === 0) {
-          item[key] = null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped></style>

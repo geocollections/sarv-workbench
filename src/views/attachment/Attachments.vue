@@ -8,8 +8,7 @@
     <table-view-search :col-size="4" />
 
     <list-module-core
-      :module="$route.meta.object"
-      :api-call="apiCall"
+      :api-call="$_tableViewMixin_apiCall"
       :use-image-view="true"
     />
   </div>
@@ -30,19 +29,5 @@ export default {
   name: "Attachments",
 
   mixins: [tableViewMixin],
-
-  methods: {
-    apiCall() {
-      return this.$api.rw.get("attachment", {
-        defaultParams: {
-          nest: 1, // Todo: Too slow by default, should edit backend or set nest 0
-        },
-        options: this.$_tableViewMixin_options,
-        searchFields: this.$_tableViewMixin_searchFields,
-      });
-    },
-  },
 };
 </script>
-
-<style scoped></style>

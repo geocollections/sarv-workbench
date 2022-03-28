@@ -16,16 +16,18 @@
     >
       <template v-slot:item="data">
         <div class="v-list-item__content">
-          <div class="v-list-item__title">
+          <div class="v-list-item__title" v-if="translationPrefix">
             {{ $t(translationPrefix + data.item[$attrs["item-text"]]) }}
           </div>
+          <div class="v-list-item__title" v-else>{{ data.item }}</div>
         </div>
       </template>
 
       <template v-slot:selection="data">
-        <div class="v-select__selection">
+        <div class="v-select__selection" v-if="translationPrefix">
           {{ $t(translationPrefix + data.item[$attrs["item-text"]]) }}
         </div>
+        <div v-else>{{ data.item }}</div>
       </template>
     </v-select>
   </div>

@@ -1,156 +1,56 @@
 <template>
   <v-navigation-drawer
-    :value="drawerState"
+    v-model="drawerRightState"
     app
     clipped
     right
-    @input="changeDrawerState"
     :dark="isDrawerDark"
     :color="drawerColor"
     disable-resize-watcher
     style="z-index: 1100"
   >
+    <!-- CURRENT SEARCH (shown on detail views) -->
     <v-list expand dense>
-      <!-- LIST OF OBJECTS -->
       <v-list-group
         :value="true"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="
-          $route.meta.isEdit &&
-          activeSearchParams &&
-          activeSearchParams.title &&
-          sidebarList &&
-          sidebarList.results &&
-          sidebarList.results.length > 0
-        "
+        v-if="$route.meta.isEdit && sidebarList.items.length > 0"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
-            {{ $t(activeSearchParams.title) }}
+            {{ $t("sidebar.currentSearch") }}
             <v-icon small>far fa-list-alt</v-icon>
           </v-list-item-title>
         </template>
 
-        <!-- PAGINATION -->
         <v-list-item
-          class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList.totalPages"
-        >
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="previousPage"
-              v-if="
-                activeSearchParams.search && activeSearchParams.search.page > 1
-              "
-            >
-              <v-icon>fas fa-angle-double-left</v-icon>
-            </v-btn>
-          </div>
-
-          <div class="align-self-center">
-            {{ sidebarList.page }}
-          </div>
-
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="nextPage"
-              v-if="
-                activeSearchParams.search &&
-                activeSearchParams.search.page < sidebarList.totalPages
-              "
-            >
-              <v-icon>fas fa-angle-double-right</v-icon>
-            </v-btn>
-          </div>
-        </v-list-item>
-
-        <!-- LIST ITEMS -->
-        <v-list-item
-          v-for="entity in sidebarList.results"
-          :key="entity.id"
+          v-for="(entity, key) in sidebarList.items"
+          :key="key"
           :to="{
-            path: `/${$route.meta.table}/${entity.id}`,
+            path: `/${$route.meta.object}/${entity.id}`,
           }"
           :color="drawerActiveColor"
-          :title="entity[activeSearchParams.field]"
+          :title="entity[sidebarList.mainField]"
           dense
           exact
         >
           <v-list-item-content>
             <v-list-item-title style="white-space: unset">
               <span class="font-weight-bold">{{ entity.id }}</span>
-              <span> - {{ entity[activeSearchParams.field] }}</span>
+              <span> - {{ entity[sidebarList.mainField] }}</span>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <!-- PAGINATION -->
-        <v-list-item
-          class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList.totalPages"
-        >
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="previousPage"
-              v-if="
-                sidebarList.totalPages &&
-                activeSearchParams.search &&
-                activeSearchParams.search.page > 1
-              "
-            >
-              <v-icon>fas fa-angle-double-left</v-icon>
-            </v-btn>
-          </div>
-
-          <div class="align-self-center">
-            {{ sidebarList.page }}
-          </div>
-
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="nextPage"
-              v-if="
-                sidebarList.totalPages &&
-                activeSearchParams.search &&
-                activeSearchParams.search.page < sidebarList.totalPages
-              "
-            >
-              <v-icon>fas fa-angle-double-right</v-icon>
-            </v-btn>
-          </div>
-        </v-list-item>
       </v-list-group>
+    </v-list>
 
-      <!-- SAMPLES only for Site -->
-      <v-list-item
-        v-if="$route.meta.isEdit && $route.meta.table === 'site'"
-        :to="{
-          name: 'Sample add',
-          query: { site: JSON.stringify(this.activeSite) },
-        }"
-        dense
-      >
-        <v-list-item-title class="text-uppercase">
-          {{ $t("header.addSample") }}
-          <v-icon small>far fa-plus-square</v-icon>
-        </v-list-item-title>
-      </v-list-item>
-
-      <!-- LIBRARIES only for Reference -->
+    <!-- LIBRARIES -->
+    <v-list v-if="isLibraryAvailable && userLibraries.count > 0" expand dense>
       <v-list-group
         :value="true"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="isLibraryAvailable"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -159,55 +59,14 @@
           </v-list-item-title>
         </template>
 
-        <!-- PAGINATION -->
         <v-list-item
-          class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList && sidebarList.totalPages"
-        >
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="previousPage"
-              v-if="
-                activeSearchParams.search && activeSearchParams.search.page > 1
-              "
-            >
-              <v-icon>fas fa-angle-double-left</v-icon>
-            </v-btn>
-          </div>
-
-          <div class="align-self-center">
-            {{ sidebarList.page }}
-          </div>
-
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="nextPage"
-              v-if="
-                activeSearchParams.search &&
-                activeSearchParams.search.page < sidebarList.totalPages
-              "
-            >
-              <v-icon>fas fa-angle-double-right</v-icon>
-            </v-btn>
-          </div>
-        </v-list-item>
-
-        <!-- LIST ITEMS -->
-        <v-list-item
-          v-for="entity in sidebarList.results"
-          :key="entity.id"
+          v-for="(entity, key) in userLibraries.items"
+          :key="key"
           :color="drawerActiveColor"
-          :title="
-            activeLibrary && activeLibrary.id === entity.id
-              ? $t('sidebar.library.inactiveTitle')
-              : $t('sidebar.library.activeTitle')
-          "
+          :title="entity[userLibraries.mainField]"
           dense
-          @click="toggleActive(entity, 'setActiveLibrary')"
+          exact
+          @click="handleToggleActive(entity)"
           :class="{
             'v-list-item--active':
               activeLibrary && activeLibrary.id === entity.id,
@@ -216,55 +75,23 @@
           <v-list-item-content>
             <v-list-item-title style="white-space: unset">
               <span class="font-weight-bold">{{ entity.id }}</span>
-              <span> - {{ entity[activeSearchParams.field] }}</span>
+              <span> - {{ entity[userLibraries.mainField] }}</span>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <!-- PAGINATION -->
-        <v-list-item
-          class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList && sidebarList.totalPages"
-        >
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="previousPage"
-              v-if="
-                activeSearchParams.search && activeSearchParams.search.page > 1
-              "
-            >
-              <v-icon>fas fa-angle-double-left</v-icon>
-            </v-btn>
-          </div>
-
-          <div class="align-self-center">
-            {{ sidebarList.page }}
-          </div>
-
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="nextPage"
-              v-if="
-                activeSearchParams.search &&
-                activeSearchParams.search.page < sidebarList.totalPages
-              "
-            >
-              <v-icon>fas fa-angle-double-right</v-icon>
-            </v-btn>
-          </div>
-        </v-list-item>
       </v-list-group>
+    </v-list>
 
-      <!-- SELECTION SERIES -->
+    <!-- SELECTION SERIES -->
+    <v-list
+      v-if="isSelectionSeriesAvailable && userSelectionSeries.count > 0"
+      expand
+      dense
+    >
       <v-list-group
         :value="true"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="isSelectionSeriesAvailable"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -273,55 +100,14 @@
           </v-list-item-title>
         </template>
 
-        <!-- PAGINATION -->
         <v-list-item
-          class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList && sidebarList.totalPages"
-        >
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="previousPage"
-              v-if="
-                activeSearchParams.search && activeSearchParams.search.page > 1
-              "
-            >
-              <v-icon>fas fa-angle-double-left</v-icon>
-            </v-btn>
-          </div>
-
-          <div class="align-self-center">
-            {{ sidebarList.page }}
-          </div>
-
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="nextPage"
-              v-if="
-                activeSearchParams.search &&
-                activeSearchParams.search.page < sidebarList.totalPages
-              "
-            >
-              <v-icon>fas fa-angle-double-right</v-icon>
-            </v-btn>
-          </div>
-        </v-list-item>
-
-        <!-- LIST ITEMS -->
-        <v-list-item
-          v-for="entity in sidebarList.results"
-          :key="entity.id"
+          v-for="(entity, key) in userSelectionSeries.items"
+          :key="key"
           :color="drawerActiveColor"
-          :title="
-            activeSelectionSeries && activeSelectionSeries.id === entity.id
-              ? $t('sidebar.selection_series.inactiveTitle')
-              : $t('sidebar.selection_series.activeTitle')
-          "
+          :title="entity[userSelectionSeries.mainField]"
           dense
-          @click="toggleActive(entity, 'setActiveSelectionSeries')"
+          exact
+          @click="handleToggleActive(entity)"
           :class="{
             'v-list-item--active':
               activeSelectionSeries && activeSelectionSeries.id === entity.id,
@@ -330,82 +116,7 @@
           <v-list-item-content>
             <v-list-item-title style="white-space: unset">
               <span class="font-weight-bold">{{ entity.id }}</span>
-              <span>
-                -
-                {{ entity[activeSearchParams.field] }}</span
-              >
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!-- PAGINATION -->
-        <v-list-item
-          class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList && sidebarList.totalPages"
-        >
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="previousPage"
-              v-if="
-                activeSearchParams.search && activeSearchParams.search.page > 1
-              "
-            >
-              <v-icon>fas fa-angle-double-left</v-icon>
-            </v-btn>
-          </div>
-
-          <div class="align-self-center">
-            {{ sidebarList.page }}
-          </div>
-
-          <div>
-            <v-btn
-              icon
-              :color="drawerActiveColor"
-              @click="nextPage"
-              v-if="
-                activeSearchParams.search &&
-                activeSearchParams.search.page < sidebarList.totalPages
-              "
-            >
-              <v-icon>fas fa-angle-double-right</v-icon>
-            </v-btn>
-          </div>
-        </v-list-item>
-      </v-list-group>
-
-      <!-- RECENT URLS -->
-      <v-list-group
-        :value="true"
-        :color="drawerActiveColor"
-        append-icon="fas fa-angle-down"
-        v-if="
-          recentUrls.length > 0 &&
-          ($route.meta.object === 'dashboard' ||
-            $route.meta.object === 'settings')
-        "
-      >
-        <template v-slot:activator>
-          <v-list-item-title class="text-uppercase">
-            {{ $t("sidebar.recentUrls") }}
-            <v-icon small>far fa-list-alt</v-icon>
-          </v-list-item-title>
-        </template>
-
-        <!-- LIST ITEMS -->
-        <!-- Todo: Don't want to use 'inactive' prop yet, because of https://github.com/vuetifyjs/vuetify/issues/9999 -->
-        <v-list-item
-          v-for="(entity, index) in reversedRecentUrls"
-          :key="index"
-          :to="{ path: entity.href }"
-          dense
-          exact-active-class="replaces-inactive-prop"
-        >
-          <v-list-item-content>
-            <v-list-item-title style="white-space: unset">
-              {{ entity.text }}
+              <span> - {{ entity[userSelectionSeries.mainField] }}</span>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -415,17 +126,14 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
-import searchParametersMixin from "../../../mixins/searchParametersMixin";
-import toastMixin from "../../../mixins/toastMixin";
+import { mapActions, mapGetters, mapState } from "vuex";
+import toastMixin from "@/mixins/toastMixin";
+import { mapFields } from "vuex-map-fields";
 
 export default {
   name: "DrawerRight",
 
   props: {
-    drawerState: {
-      required: true,
-    },
     isDrawerDark: {
       type: Boolean,
       required: false,
@@ -443,173 +151,150 @@ export default {
     },
   },
 
-  mixins: [searchParametersMixin, toastMixin],
+  mixins: [toastMixin],
 
-  data: () => ({
-    date_start: false,
-    date_end: false,
-    calendarMenus: ["date_start", "date_end"],
-  }),
+  data() {
+    return {
+      availableObjectsInSelectionSeries: [
+        "specimen",
+        "sample",
+        "attachment",
+        "locality",
+        // "reference",
+        "taxon",
+        "analysis",
+      ],
+    };
+  },
+
+  // Fetching all available libraries and selections for user
+  // after that if library or selection is active then fetch all the active records
+  created() {
+    this.getUserLibraries({ agent: this.getCurrentAgent });
+    this.getUserSelectionSeries({ username: this.getUserName });
+
+    if (this.$route.meta.object === "reference" && this.activeLibrary)
+      this.getActiveList({
+        table: "library_reference",
+        connectionField: "library",
+        id: this.activeLibrary.id,
+        module: this.$route.meta.object,
+      });
+    else if (
+      this.availableObjectsInSelectionSeries.includes(
+        this.$route.meta.object
+      ) &&
+      this.activeSelectionSeries
+    )
+      this.getActiveList({
+        table: "selection",
+        connectionField: "selection",
+        id: this.activeSelectionSeries.id,
+        module: this.$route.meta.object,
+      });
+  },
+
+  watch: {
+    "$route.meta.object"(newVal) {
+      if (newVal === "reference" && this.activeLibrary)
+        this.getActiveList({
+          table: "library_reference",
+          connectionField: "library",
+          id: this.activeLibrary.id,
+          module: newVal,
+        });
+      else if (
+        this.availableObjectsInSelectionSeries.includes(newVal) &&
+        this.activeSelectionSeries
+      )
+        this.getActiveList({
+          table: "selection",
+          connectionField: "selection",
+          id: this.activeSelectionSeries.id,
+          module: this.$route.meta.object,
+        });
+    },
+  },
 
   computed: {
+    ...mapFields("settings", ["drawerRightState"]),
+
+    ...mapState({
+      sidebarList(state) {
+        return {
+          count: state[this.$route.meta.object].count,
+          items: state[this.$route.meta.object].items,
+          mainField: state[this.$route.meta.object]?.mainField ?? "id",
+        };
+      },
+    }),
     ...mapState("search", [
-      "activeSearchParametersFilters",
-      "activeSearchParams",
-      "sidebarList",
+      "userLibraries",
+      "userSelectionSeries",
       "activeLibrary",
-      "activeSite",
       "activeSelectionSeries",
     ]),
 
-    ...mapState("settings", ["recentUrls"]),
+    ...mapGetters("user", ["getCurrentAgent", "getUserName"]),
 
-    ...mapState("search", {
-      searchParameters: function (state) {
-        return state[`${this.$route.meta.object}SearchParameters`];
-      },
-    }),
-
-    reversedRecentUrls() {
-      return this.recentUrls.slice(0).reverse();
+    isLibraryAvailable() {
+      return (
+        this.$route.meta.isTableView && this.$route.meta.object === "reference"
+      );
     },
 
     isSelectionSeriesAvailable() {
       return (
         this.$route.meta.isTableView &&
-        (this.$route.meta.object === "specimen" ||
-          this.$route.meta.object === "sample" ||
-          this.$route.meta.object === "attachment" ||
-          this.$route.meta.object === "locality" ||
-          this.$route.meta.object === "taxon" ||
-          this.$route.meta.object === "analysis") &&
-        this?.activeSearchParams?.search
+        this.availableObjectsInSelectionSeries.includes(this.$route.meta.object)
       );
-    },
-
-    isLibraryAvailable() {
-      return (
-        this.$route.meta.isTableView &&
-        this.$route.meta.object === "reference" &&
-        this?.activeSearchParams?.search
-      );
-    },
-  },
-
-  watch: {
-    searchParameters: {
-      handler() {
-        this.resetActiveObject();
-      },
-      deep: true,
     },
   },
 
   methods: {
     ...mapActions("search", [
-      "activeSearchParamsNextPage",
-      "activeSearchParamsPreviousPage",
-      "setSidebarUserAction",
-      "getActiveSelectionSeriesList",
-      "getActiveLibraryList",
-      "resetActiveSelectionSeriesList",
-      "resetActiveLibraryList",
+      "getUserLibraries",
+      "getUserSelectionSeries",
+      "toggleActive",
+      "getActiveList",
     ]),
 
-    resetActiveObject() {
-      if (this.isSelectionSeriesAvailable && this.activeSelectionSeries) {
-        this.$store.dispatch(`search/setActiveSelectionSeries`, null);
-        this.resetActiveSelectionSeriesList();
-      } else if (this.isLibraryAvailable && this.activeLibrary) {
-        this.$store.dispatch(`search/setActiveLibrary`, null);
-        this.resetActiveLibraryList();
-      }
-    },
+    // Toggles active library / selection on and off, after each toggle active records are updated
+    handleToggleActive(item) {
+      const module = this.$route.meta.object;
+      this.toggleActive({ module, active: item });
 
-    updateDate(event, fieldId) {
-      this.updateSearchParamsByField(event, fieldId);
-      this.calendarMenus[fieldId] = false;
-    },
-
-    changeDrawerState(drawerState) {
-      this.$emit("update:drawerState", drawerState);
-    },
-
-    nextPage() {
-      this.activeSearchParamsNextPage();
-    },
-
-    previousPage() {
-      this.activeSearchParamsPreviousPage();
-    },
-
-    toggleActive(entity, activeObject) {
-      let makeActive = true;
-
-      if (
-        activeObject === "setActiveLibrary" &&
-        this.activeLibrary &&
-        this.activeLibrary.id === entity.id
-      ) {
-        makeActive = false;
-      } else if (
-        activeObject === "setActiveSelectionSeries" &&
-        this.activeSelectionSeries &&
-        this.activeSelectionSeries.id === entity.id
-      ) {
-        makeActive = false;
-      }
-
-      if (makeActive) {
-        this.$store.dispatch(`search/${activeObject}`, entity);
-        if (activeObject === "setActiveLibrary") {
-          this.getActiveLibraryList({ libraryId: entity.id });
-          this.toastInfo({
-            text: `Library ${entity.id} is active!`,
-            timeout: 1000,
+      if (module === "reference") {
+        this.toastInfo({
+          text: `Library ${item.id} is ${
+            this.activeLibrary ? "active" : "inactive"
+          }`,
+          timeout: 1000,
+        });
+        if (this.activeLibrary)
+          this.getActiveList({
+            table: "library_reference",
+            connectionField: "library",
+            id: item.id,
+            module,
           });
-        } else if (activeObject === "setActiveSelectionSeries") {
-          this.getActiveSelectionSeriesList({
-            routeObject: this.$route.meta.object,
-            selectionSeriesId: entity.id,
-          });
-          this.toastInfo({
-            text: `Selection series ${entity.id} is active!`,
-            timeout: 1000,
-          });
-        } else this.toastInfo({ text: "Object is active!", timeout: 1000 });
       } else {
-        this.$store.dispatch(`search/${activeObject}`, null);
-        if (activeObject === "setActiveLibrary") {
-          this.resetActiveLibraryList();
-          this.toastInfo({
-            text: `Library ${entity.id} is inactive!`,
-            timeout: 1000,
-          });
-        } else if (activeObject === "setActiveSelectionSeries") {
-          this.resetActiveSelectionSeriesList();
-          this.toastInfo({
-            text: `Selection series ${entity.id} is inactive!`,
-            timeout: 1000,
-          });
-        } else this.toastInfo({ text: "Object is inactive!", timeout: 1000 });
-      }
-    },
+        this.toastInfo({
+          text: `Selection ${item.id} is ${
+            this.activeSelectionSeries ? "active" : "inactive"
+          }`,
+          timeout: 1000,
+        });
 
-    searchRecords() {
-      this.$router.push({ path: "/" + this.$route.meta.object });
+        if (this.activeSelectionSeries)
+          this.getActiveList({
+            table: "selection",
+            connectionField: "selection",
+            id: item.id,
+            module,
+          });
+      }
     },
   },
 };
 </script>
-
-<style scoped>
-/* Have to use class instead of prop */
-.replaces-inactive-prop {
-  color: rgba(0, 0, 0, 0.87) !important;
-}
-
-/* Have to use class instead of prop */
-.replaces-inactive-prop:before {
-  opacity: 0;
-}
-</style>

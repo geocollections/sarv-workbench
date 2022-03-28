@@ -1,65 +1,71 @@
 <template>
   <div
-    v-if="count > 0"
     class="
       d-flex
       flex-column
       justify-space-around
       flex-md-row
       justify-md-space-between
-      mt-3
+      px-4
+      pt-2
+      pb-1
       d-print-none
     "
   >
-    <div class="mr-3 mb-md-0 mb-3 align-self-center">
+    <div class="my-1 my-md-0">
       <v-select
-        :value="paginateBy"
+        :value="itemsPerPage"
         :color="bodyActiveColor"
         dense
-        :items="options"
+        :items="paginateByOptionsTranslated"
         :item-color="bodyActiveColor"
-        label="Paginate by"
+        label="Items per page"
         hide-details
-        @change="$emit('update:paginateBy', $event)"
+        @change="
+          $emit('update:options', { value: $event, key: 'itemsPerPage' })
+        "
       />
     </div>
 
-    <div>
+    <div class="my-1 my-md-0">
       <v-pagination
         :value="page"
         :color="bodyActiveColor"
         circle
         prev-icon="fas fa-angle-left"
         next-icon="fas fa-angle-right"
-        :length="Math.ceil(count / paginateBy)"
-        :total-visible="5"
-        @input="$emit('update:page', $event)"
+        :length="paginationLength"
+        total-visible="5"
+        @input="$emit('update:options', { value: $event, key: 'page' })"
       />
     </div>
   </div>
 </template>
 
 <script>
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
+
 export default {
   name: "Pagination",
+  mixins: [globalUtilsMixin],
   props: {
     count: {
       type: Number,
     },
-    paginateBy: {
+    itemsPerPage: {
+      type: Number,
+    },
+    page: {
       type: Number,
     },
     bodyActiveColor: {
       type: String,
     },
-    options: {
-      type: Array,
-    },
-    page: {
-      type: Number,
+  },
+  computed: {
+    paginationLength() {
+      return Math.ceil(this.count / this.itemsPerPage);
     },
   },
 };
 </script>
-
-<style scoped></style>

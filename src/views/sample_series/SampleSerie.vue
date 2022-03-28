@@ -173,7 +173,9 @@
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentCollectedSearch"
+                v-on:search:items="
+                  autocompleteAgentSearch($event, 'agent_collected')
+                "
               />
             </v-col>
 
@@ -273,6 +275,53 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="sample_series.attachments"
+                @update:existing-files="sample_series.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -315,9 +364,9 @@
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
           <sample-series-samples-table
-            v-show="activeTab === 'samples'"
-            :response="relatedData.samples"
-            :search-parameters="relatedData.searchParameters.samples"
+            v-show="activeTab === 'sample'"
+            :response="relatedData.sample"
+            :search-parameters="relatedData.searchParameters.sample"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem($event, 'series')"
@@ -325,34 +374,16 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <div v-show="activeTab === 'attachments'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachments.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
-
           <!-- PAGINATION -->
           <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -361,25 +392,20 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {
-  fetchSampleSeriesAttachments,
-  fetchSampleSeriesDetail,
-  fetchSampleSeriesSamples,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
 
-import DateWrapper from "../partial/inputs/DateWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import requestsMixin from "../../mixins/requestsMixin";
-import SampleSeriesSamplesTable from "./relatedTables/SampleSeriesSamplesTable";
-import FileInput from "../partial/inputs/FileInput";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import SampleSeriesSamplesTable from "@/components/sample_series/relatedTables/SampleSeriesSamplesTable";
+import FileInput from "@/components/partial/inputs/FileInput";
 import { mapActions, mapState } from "vuex";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "SampleSeries",
@@ -413,53 +439,19 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.sample_seriesSearchParameters,
-        request: "FETCH_SAMPLE_SERIES",
-        title: "header.sample_series",
-        object: "sample_series",
-        field: "name",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    ...mapState("search", ["sample_seriesSearchParameters"]),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
 
   methods: {
@@ -477,37 +469,9 @@ export default {
 
     setInitialData() {
       return {
-        relatedTabs: [
-          { name: "samples", iconClass: "fas fa-vial" },
-          { name: "attachments", iconClass: "far fa-file" },
-        ],
-        activeTab: "samples",
+        relatedTabs: [{ name: "sample", iconClass: "fas fa-vial" }],
+        activeTab: "sample",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "name",
-          "sampling_purpose",
-          "sample_count",
-          "sample_numbers",
-          "number_prefix",
-          "number_start",
-          "zero_level",
-          "depth_top",
-          "depth_base",
-          "stratigraphy_base",
-          "stratigraphy_base_free",
-          "stratigraphy_top",
-          "stratigraphy_top_free",
-          "agent_collected",
-          "date_collected",
-          "date_collected_free",
-          "location",
-          "locality",
-          "locality_free",
-          "remarks",
-          "owner",
-          "is_private",
-        ],
         autocomplete: {
           loaders: {
             stratigraphy_base: false,
@@ -515,76 +479,56 @@ export default {
             agent_collected: false,
             locality: false,
             agent: false,
+            attachments: false,
           },
           stratigraphy_base: [],
           stratigraphy_top: [],
           agent_collected: [],
           locality: [],
           owner: [],
+          attachments: [],
         },
-        sample_series: {},
+        sample_series: {
+          id: null,
+          name: null,
+          sampling_purpose: null,
+          sample_count: null,
+          sample_numbers: null,
+          number_prefix: null,
+          number_start: null,
+          zero_level: null,
+          depth_top: null,
+          depth_base: null,
+          stratigraphy_base: null,
+          stratigraphy_base_free: null,
+          stratigraphy_top: null,
+          stratigraphy_top_free: null,
+          agent_collected: null,
+          date_collected: null,
+          date_collected_free: null,
+          location: null,
+          locality: null,
+          locality_free: null,
+          remarks: null,
+          owner: null,
+          is_private: false,
+          attachments: [],
+        },
         requiredFields: ["name"],
         block: {
           info: true,
+          files: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchSampleSeriesDetail(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "sample_series", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.sample_series);
-            this.removeUnnecessaryFields(this.sample_series, this.copyFields);
-
-            this.$emit("data-loaded", this.sample_series);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
     },
 
     setDefaultRelatedData() {
       return {
-        samples: { count: 0, results: [] },
-        attachments: { count: 0, results: [] },
+        sample: { count: 0, results: [] },
         searchParameters: {
-          samples: {
+          sample: {
             page: 1,
-            paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
-          attachments: {
-            page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -592,131 +536,9 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (
-            tab.name === "attachments" &&
-            this.relatedData[tab.name].count > 0
-          ) {
-            uploadableObject.related_data.attachment =
-              this.relatedData.attachments.results.map((item) => {
-                return { id: item.id };
-              });
-          }
-        });
-      } else {
-        if (this.relatedData.attachments.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachments.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.stratigraphy_base)) {
-        this.sample_series.stratigraphy_base = {
-          id: obj.stratigraphy_base,
-          stratigraphy: obj.stratigraphy_base__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy_base.push(
-          this.sample_series.stratigraphy_base
-        );
-      }
-      if (this.isNotEmpty(obj.stratigraphy_top)) {
-        this.sample_series.stratigraphy_top = {
-          id: obj.stratigraphy_top,
-          stratigraphy: obj.stratigraphy_top__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy_top.push(
-          this.sample_series.stratigraphy_top
-        );
-      }
-      if (this.isNotEmpty(obj.agent_collected)) {
-        this.sample_series.agent_collected = {
-          id: obj.agent_collected,
-          agent: obj.agent_collected__agent,
-        };
-        this.autocomplete.agent_collected.push(
-          this.sample_series.agent_collected
-        );
-      }
-      if (this.isNotEmpty(obj.locality)) {
-        this.sample_series.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.sample_series.locality);
-      }
-      if (this.isNotEmpty(obj.owner)) {
-        this.sample_series.owner = { id: obj.owner, agent: obj.owner__agent };
-        this.autocomplete.owner.push(this.sample_series.owner);
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "samples") {
-        query = fetchSampleSeriesSamples(
-          this.$route.params.id,
-          this.relatedData.searchParameters.samples
-        );
-      } else if (object === "attachments") {
-        query = fetchSampleSeriesAttachments(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachments
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
-    },
-
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "sample_series", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachments.count = files.length;
-      this.relatedData.attachments.results = files;
+      this.addFilesAsNewObjects(files, this.sample_series, singleFileMetadata);
     },
   },
 };
 </script>
-
-<style scoped></style>

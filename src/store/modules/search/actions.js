@@ -1,18 +1,13 @@
 import {
   fetchActiveLibraryList,
-  fetchActiveSarvIssues,
   fetchActiveSelectionSeriesList,
-  fetchSarvIssues,
-  fetchSpecimens,
 } from "@/assets/js/api/apiCalls";
+
+import Vue from "vue";
 
 const actions = {
   updateViewType({ commit }, payload) {
     commit("UPDATE_VIEW_TYPE", payload);
-  },
-
-  updateSearchParameters({ commit }, payload) {
-    commit("UPDATE_SEARCH_PARAMETERS", payload);
   },
 
   updateSearchParametersByField({ commit }, payload) {
@@ -23,43 +18,8 @@ const actions = {
     commit("RESET_SEARCH_PARAMETERS", module);
   },
 
-  setActiveSearchParametersFilters({ commit }, filters) {
-    commit("SET_ACTIVE_SEARCH_PARAMETERS_FILTERS", filters);
-  },
-
   setLoadingState({ commit }, boolVal) {
     commit("SET_LOADING_STATE", boolVal);
-  },
-
-  FETCH_SPECIMENS({ commit, state }) {
-    return fetchSpecimens(state.activeSearchParams.search).then((resp) =>
-      commit("SET_SIDEBAR_LIST", resp)
-    );
-  },
-
-  FETCH_SARV_ISSUES({ commit, state, rootGetters }) {
-    return fetchSarvIssues(
-      state.activeSearchParams.search,
-      rootGetters["user/getUserId"]
-    ).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  fetchActiveSarvIssues({ commit, rootGetters }) {
-    return fetchActiveSarvIssues(rootGetters["user/getUserId"]).then((resp) => {
-      commit("SET_ACTIVE_SARV_ISSUES", resp);
-    });
-  },
-
-  setSidebarList({ commit }, payload) {
-    commit("SET_SIDEBAR_LIST", payload);
-  },
-
-  setActiveSarvIssues({ commit }, issues) {
-    // Todo: Pointless line (should be removed after new api service is implemented)
-    const data = issues?.data ?? issues;
-    commit("SET_ACTIVE_SARV_ISSUES", data);
   },
 
   updateIsSampleSimpleView({ commit }, boolVal) {
@@ -133,12 +93,83 @@ const actions = {
     });
   },
 
+  async getActiveList({ state, commit }, payload) {
+    console.log("getActiveList");
+    console.log(payload);
+    const response = await Vue.prototype.$api.rw.get(payload.table, {
+      defaultParams: {
+        [payload.connectionField]: payload.id,
+        fields: `id,${payload.module}`,
+        nest: 1,
+        [`${payload.module}__isnull`]: false,
+      },
+      options: {
+        itemsPerPage: 1000,
+      },
+    });
+
+    if (payload.table === "library_reference") {
+      if (state.activeLibrary && state.activeLibrary.id === payload.id)
+        commit("SET_ACTIVE_LIST", { items: response?.results ?? [] });
+      else commit("SET_ACTIVE_LIST", { items: [] });
+    } else if (payload.table === "selection") {
+      if (
+        state.activeSelectionSeries &&
+        state.activeSelectionSeries.id === payload.id
+      )
+        commit("SET_ACTIVE_LIST", { items: response?.results ?? [] });
+      else commit("SET_ACTIVE_LIST", { items: [] });
+    }
+
+    console.log(state.activeList);
+
+    if (state?.activeList?.length > 0) {
+      const selectedList = state.activeList.map((item) => item[payload.module]);
+      commit("SET_SELECTED_LIST", { items: selectedList });
+    } else commit("SET_SELECTED_LIST", { items: [] });
+  },
+
   resetActiveSelectionSeriesList({ commit }) {
     commit("RESET_ACTIVE_SELECTION_SERIES_LIST");
   },
 
   resetActiveLibraryList({ commit }) {
     commit("RESET_ACTIVE_LIBRARY_LIST");
+  },
+
+  async getUserLibraries({ commit }, payload) {
+    const response = await Vue.prototype.$api.rw.get("library", {
+      defaultParams: {
+        or_search: `agents__id: ${payload.agent.id}`,
+      },
+      options: {
+        itemsPerPage: 1000,
+      },
+    });
+    commit("SET_USER_LIBRARIES", {
+      count: response?.count ?? 0,
+      items: response?.results ?? [],
+    });
+  },
+
+  async getUserSelectionSeries({ commit }, payload) {
+    const response = await Vue.prototype.$api.rw.get("selection_series", {
+      defaultParams: {
+        user_added: payload.username,
+      },
+      options: {
+        itemsPerPage: 1000,
+      },
+    });
+    commit("SET_USER_SELECTION_SERIES", {
+      count: response?.count ?? 0,
+      items: response?.results ?? [],
+    });
+  },
+
+  toggleActive({ commit, state }, payload) {
+    console.log(payload);
+    commit("TOGGLE_ACTIVE", payload);
   },
 };
 

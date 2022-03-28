@@ -69,14 +69,16 @@
               <autocomplete-wrapper
                 v-model="deaccession.agent_kandis"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.agent_kandis"
+                :loading="autocomplete.loaders.agent_kandis"
                 item-text="agent"
                 :label="$t('deaccession.agent_kandis')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="
+                  autocompleteAgentSearch($event, 'agent_kandis')
+                "
               />
             </v-col>
 
@@ -84,14 +86,16 @@
               <autocomplete-wrapper
                 v-model="deaccession.agent_kinnitas"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.agent_kinnitas"
+                :loading="autocomplete.loaders.agent_kinnitas"
                 item-text="agent"
                 :label="$t('deaccession.agent_kinnitas')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="
+                  autocompleteAgentSearch($event, 'agent_kinnitas')
+                "
               />
             </v-col>
           </v-row>
@@ -136,15 +140,13 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import { fetchDeaccessionDetail } from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import DateWrapper from "../partial/inputs/DateWrapper";
-import { mapState } from "vuex";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "Deaccession",
@@ -174,136 +176,44 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin],
+  mixins: [formManipulation, autocompleteMixin, detailViewUtilsMixin],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.deaccessionSearchParameters,
-        request: "FETCH_DEACCESSIONS",
-        title: "header.deaccessions",
-        object: "deaccession",
-        field: "number",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    ...mapState("search", ["deaccessionSearchParameters"]),
   },
 
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "number",
-          "date_signed",
-          "date_confirmed",
-          "agent_kandis",
-          "agent_kinnitas",
-          "number_items",
-          "description",
-          "remarks",
-        ],
         autocomplete: {
           loaders: {
-            agent: false,
+            agent_kandis: false,
+            agent_kinnitas: false,
           },
-          agent: [],
+          agent_kandis: [],
+          agent_kinnitas: [],
         },
-        deaccession: {},
+        deaccession: {
+          id: null,
+          number: null,
+          date_signed: null,
+          date_confirmed: null,
+          agent_kandis: null,
+          agent_kinnitas: null,
+          number_items: null,
+          description: null,
+          remarks: null,
+        },
         requiredFields: ["number"],
         block: {
           info: true,
         },
       };
     },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchDeaccessionDetail(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "deaccession", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.deaccession);
-            this.removeUnnecessaryFields(this.deaccession, this.copyFields);
-
-            this.$emit("data-loaded", this.deaccession);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.agent_kandis)) {
-        this.deaccession.agent_kandis = {
-          id: obj.agent_kandis,
-          agent: obj.agent_kandis__agent,
-        };
-        this.autocomplete.agent.push(this.deaccession.agent_kandis);
-      }
-      if (this.isNotEmpty(obj.agent_kinnitas)) {
-        this.deaccession.agent_kinnitas = {
-          id: obj.agent_kinnitas,
-          agent: obj.agent_kinnitas__agent,
-        };
-        this.autocomplete.agent.push(this.deaccession.agent_kinnitas);
-      }
-    },
   },
 };
 </script>
-
-<style scoped></style>

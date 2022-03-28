@@ -82,7 +82,13 @@
           <div v-for="tab in relatedTabs" :key="tab.name">
             <selection-series-data-table
               v-show="activeTab === tab.name"
-              :headers="[{ text: 'ID', value: tab.name, align: 'center' }]"
+              :headers="[
+                {
+                  text: 'Name',
+                  value: tab.name,
+                  align: 'center',
+                },
+              ]"
               :response="relatedData[tab.name]"
               :object="tab.name"
               :search-parameters="relatedData.searchParameters[tab.name]"
@@ -94,18 +100,15 @@
           <!-- PAGINATION -->
           <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
-            class="pa-1"
+            class="pa-1 mt-2"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="
+              relatedData.searchParameters[activeTab].itemsPerPage
+            "
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -138,7 +141,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
-                v-model="new_specimen_storage"
+                v-model="newSpecimenStorage"
                 :color="bodyActiveColor"
                 :items="autocomplete.storage"
                 :loading="autocomplete.loaders.storage"
@@ -163,7 +166,7 @@
                     v-on="on"
                     v-bind="attrs"
                     @click="changeStorageDialog = true"
-                    :disabled="!new_specimen_storage"
+                    :disabled="!newSpecimenStorage"
                     color="red"
                     class="white--text"
                     ><v-icon left small>fas fa-exclamation-triangle</v-icon
@@ -183,7 +186,7 @@
                       {{
                         relatedData.specimen.results
                           .slice(0, 5)
-                          .map((item) => item.specimen)
+                          .map((item) => item.specimen.id)
                           .join(", ")
                       }}, ...
                     </div>
@@ -191,7 +194,7 @@
                     <div v-else class="font-weight-bold">
                       {{
                         relatedData.specimen.results
-                          .map((item) => item.specimen)
+                          .map((item) => item.specimen.id)
                           .join(", ")
                       }}
                     </div>
@@ -283,31 +286,19 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {
-  fetchMultiRemoveRecordFromSelection,
-  fetchSelectedAnalyses,
-  fetchSelectedAttachments,
-  fetchSelectedLocalities,
-  fetchSelectedReferences,
-  fetchSelectedSamples,
-  fetchSelectedSpecimens,
-  fetchSelectedTaxa,
-  fetchSelectionSerie,
-} from "../../assets/js/api/apiCalls";
+import formManipulation from "@/mixins/formManipulation";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import { fetchSelectedSpecimens } from "@/assets/js/api/apiCalls";
 
-import InputWrapper from "../partial/inputs/InputWrapper";
-import requestsMixin from "../../mixins/requestsMixin";
-import SelectionSeriesDataTable from "./relatedTables/SelectionSeriesDataTable";
-import { mapActions, mapState } from "vuex";
-import {
-  fetchAllSelections,
-  fetchMultiChangeSpecimen,
-} from "@/assets/js/api/apiCalls";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import SelectionSeriesDataTable from "@/components/selection_series/relatedTables/SelectionSeriesDataTable";
+import { mapActions } from "vuex";
+import { fetchMultiChangeSpecimen } from "@/assets/js/api/apiCalls";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "SelectionSeries",
@@ -340,8 +331,9 @@ export default {
   mixins: [
     formManipulation,
     formSectionsMixin,
-    requestsMixin,
     autocompleteMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -349,50 +341,10 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.selection_seriesSearchParameters,
-        request: "FETCH_SELECTION_SERIES",
-        title: "header.selectionSeries",
-        object: "selection_series",
-        field: "name",
-      });
-    }
-
     this.loadFullInfo();
   },
 
-  watch: {
-    "$route.params.id": {
-      handler() {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
-  },
-
   computed: {
-    ...mapState("search", ["selection_seriesSearchParameters"]),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
-
     isRelatedDataFilled() {
       let result = Object.keys(this.relatedData).find(
         (item) => this.relatedData[item]?.count > 0
@@ -409,92 +361,44 @@ export default {
     ...mapActions("search", ["updateActiveTab"]),
 
     async clearSelection() {
-      let allSelections = await fetchAllSelections(this.$route.params.id);
+      const response = await this.$api.rw.get("selection", {
+        defaultParams: {
+          id: this.$route.params.id,
+          fields: "id",
+        },
+        options: {
+          limit: 10000,
+        },
+      });
+      const listOfIds = response?.results ?? [];
 
-      if (
-        allSelections &&
-        allSelections.status === 200 &&
-        allSelections?.data?.results
-      ) {
-        let listOfIds = allSelections.data.results.map((item) => item.id);
+      // Todo: Could make a dedicated endpoint in api for clearing whole selection
+      if (listOfIds.length > 0)
+        await this.$api.rw.deleteMulti("selection", listOfIds);
 
-        let formData = new FormData();
-        formData.append(
-          "data",
-          JSON.stringify({
-            delete: listOfIds,
-          })
-        );
-
-        let multiRemoveResponse = await fetchMultiRemoveRecordFromSelection(
-          formData
-        ).then(
-          (response) => response,
-          (errResponse) => errResponse
-        );
-
-        if (multiRemoveResponse) {
-          this.handleResponseMessages(
-            multiRemoveResponse,
-            multiRemoveResponse.status === 200,
-            true
-          );
-
-          if (multiRemoveResponse.status === 200)
-            this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-        }
-      }
+      this.loadRelatedData(
+        this.relatedTabs.map((tab) => tab.name),
+        this.$route.meta.object,
+        this.selection_series.id
+      );
 
       this.clearSelectionModal = false;
     },
 
     async changeSpecimenStorage() {
-      let specimenSelectionResponse = await fetchSelectedSpecimens(
-        this.$route.params.id,
-        {
-          page: 1,
-          paginateBy: 1000,
-          sortBy: ["specimen"],
-          sortDesc: [true],
-        }
-      );
+      const specimens = this.relatedData?.specimen?.results ?? [];
 
-      if (
-        specimenSelectionResponse &&
-        specimenSelectionResponse?.data?.results
-      ) {
-        let updatedSpecimenObjects = specimenSelectionResponse.data.results.map(
-          (specimen) => {
-            return {
-              id: specimen.specimen,
-              storage: this.new_specimen_storage.id,
-            };
-          }
+      if (specimens.length > 0) {
+        const updatedSpecimenObjects = specimens.map((item) => {
+          return { id: item.specimen.id, storage: this.newSpecimenStorage.id };
+        });
+        await this.$api.rw.putMulti("specimen", updatedSpecimenObjects);
+
+        this.loadRelatedData(
+          this.relatedTabs.map((tab) => tab.name),
+          this.$route.meta.object,
+          this.selection_series.id
         );
-        console.log(updatedSpecimenObjects);
-
-        let formData = new FormData();
-        formData.append(
-          "data",
-          JSON.stringify({
-            change: updatedSpecimenObjects,
-          })
-        );
-
-        let multiChangeResponse = await fetchMultiChangeSpecimen(formData).then(
-          (response) => response,
-          (errResponse) => errResponse
-        );
-
-        if (multiChangeResponse) {
-          this.handleResponseMessages(
-            multiChangeResponse,
-            multiChangeResponse.status === 200
-          );
-
-          if (multiChangeResponse.status === 200)
-            this.loadRelatedData("specimen");
-        }
       }
 
       this.changeStorageDialog = false;
@@ -517,16 +421,19 @@ export default {
           { name: "sample", iconClass: "fas fa-vial" },
           { name: "attachment", iconClass: "fas fa-file" },
           { name: "locality", iconClass: "fas fa-map-marked-alt" },
-          { name: "reference", iconClass: "fas fa-book" },
+          // { name: "reference", iconClass: "fas fa-book" },
           { name: "taxon", iconClass: "fas fa-pastafarianism" },
           { name: "analysis", iconClass: "fas fa-chart-bar" },
         ],
         activeTab: "specimen",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: ["id", "name", "remarks"],
         requiredFields: ["name"],
-        selection_series: {},
-        new_specimen_storage: null,
+        selection_series: {
+          id: null,
+          name: null,
+          remarks: null,
+        },
+        newSpecimenStorage: null,
         autocomplete: {
           loaders: {
             storage: false,
@@ -536,62 +443,7 @@ export default {
         clearSelectionModal: false,
         changeStorageDialog: false,
         block: { info: true, storage: true },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "selection_series");
-        fetchSelectionSerie(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(
-              this,
-              "selection_series",
-              this.handleResponse(response)[0]
-            );
-            // this.selection_series = this.handleResponse(response)[0];
-
-            this.removeUnnecessaryFields(
-              this.selection_series,
-              this.copyFields
-            );
-            this.$emit("data-loaded", this.selection_series);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      console.log("This object is sent in string format:");
-      console.log(objectToUpload);
-      return JSON.stringify(objectToUpload);
     },
 
     setDefaultRelatedData() {
@@ -600,49 +452,49 @@ export default {
         sample: { count: 0, results: [] },
         attachment: { count: 0, results: [] },
         locality: { count: 0, results: [] },
-        reference: { count: 0, results: [] },
+        // reference: { count: 0, results: [] },
         taxon: { count: 0, results: [] },
         analysis: { count: 0, results: [] },
         searchParameters: {
           specimen: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 100,
             sortBy: ["specimen"],
             sortDesc: [true],
           },
           sample: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 100,
             sortBy: ["sample"],
             sortDesc: [true],
           },
           attachment: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 100,
             sortBy: ["attachment"],
             sortDesc: [true],
           },
           locality: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 100,
             sortBy: ["locality"],
             sortDesc: [true],
           },
-          reference: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["reference"],
-            sortDesc: [true],
-          },
+          // reference: {
+          //   page: 1,
+          //   itemsPerPage: 100,
+          //   sortBy: ["reference"],
+          //   sortDesc: [true],
+          // },
           taxon: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 100,
             sortBy: ["taxon"],
             sortDesc: [true],
           },
           analysis: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 100,
             sortBy: ["analysis"],
             sortDesc: [true],
           },
@@ -650,54 +502,31 @@ export default {
       };
     },
 
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "specimen") {
-        query = fetchSelectedSpecimens(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen
-        );
-      } else if (object === "sample") {
-        query = fetchSelectedSamples(
-          this.$route.params.id,
-          this.relatedData.searchParameters.sample
-        );
-      } else if (object === "attachment") {
-        query = fetchSelectedAttachments(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment
-        );
-      } else if (object === "locality") {
-        query = fetchSelectedLocalities(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality
-        );
-      } else if (object === "reference") {
-        query = fetchSelectedReferences(
-          this.$route.params.id,
-          this.relatedData.searchParameters.reference
-        );
-      } else if (object === "taxon") {
-        query = fetchSelectedTaxa(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon
-        );
-      } else if (object === "analysis") {
-        query = fetchSelectedAnalyses(
-          this.$route.params.id,
-          this.relatedData.searchParameters.analysis
-        );
-      }
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
+    // Overrides loadRelatedData method in detailViewUtilsMixin.js
+    loadRelatedData(tables, module, moduleId) {
+      Promise.all(
+        tables.map((table) =>
+          this.$api.rw
+            .get("selection", {
+              defaultParams: {
+                selection: moduleId,
+                [`${table}__isnull`]: false,
+              },
+              options: {
+                ...this.relatedData.searchParameters[table],
+              },
+            })
+            .then((res) => {
+              this.relatedData[table].count = res?.count ?? 0;
+              this.relatedData[table].results = res?.results ?? [];
+            })
+            .catch((err) => {
+              this.relatedData[table].count = 0;
+              this.relatedData[table].results = [];
+            })
+        )
+      );
     },
   },
 };
 </script>
-
-<style scoped />

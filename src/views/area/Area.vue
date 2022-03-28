@@ -114,8 +114,8 @@
               <autocomplete-wrapper
                 v-model="area.maakond"
                 :color="bodyActiveColor"
-                :items="autocomplete.maakond"
-                :loading="autocomplete.loaders.maakond"
+                :items="autocomplete.list_maakond"
+                :loading="autocomplete.loaders.list_maakond"
                 :item-text="maakondLabel"
                 :label="$t('area.maakond')"
               />
@@ -204,7 +204,7 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <div v-if="activeTab === 'sites'">
+          <div v-if="activeTab === 'site'">
             <!-- MAP SWITCH -->
             <v-card
               class="d-flex flex-row justify-start mt-1 mx-3"
@@ -245,12 +245,12 @@
             <v-row no-gutters v-show="myShowMap" class="mt-2">
               <v-col cols="12" class="px-1">
                 <map-component
-                  :show-map="myShowMap && block.sites"
+                  :show-map="myShowMap && block.site"
                   :gps-coords="true"
                   mode="multiple"
                   module="area"
                   v-bind:location="{ lat: null, lng: null }"
-                  :locations="relatedData.sites.results"
+                  :locations="relatedData.site.results"
                 />
               </v-col>
             </v-row>
@@ -288,19 +288,20 @@
               >
                 <export-buttons
                   filename="site"
-                  :table-data="relatedData.sites.results"
+                  :table-data="relatedData.site.results"
                 ></export-buttons>
               </v-card>
             </v-card>
 
-            <v-row no-gutters v-if="relatedData.sites.count > 0">
+            <v-row no-gutters v-if="relatedData.site.count > 0">
               <v-col cols="12" class="px-1">
                 <site-table
-                  ref="table"
-                  :response="relatedData.sites"
-                  :search-parameters="relatedData.searchParameters.sites"
+                  :response="relatedData.site"
+                  :search-parameters="relatedData.searchParameters.site"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
+                  :headers="siteTranslatedHeaders"
+                  @update:options="handleUpdateOptions({...$event, activeTab: 'site'})"
                 />
               </v-col>
             </v-row>
@@ -319,19 +320,14 @@
 
           <!-- PAGINATION -->
           <pagination
-            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+            v-if="$route.meta.isEdit && activeTab !== 'site' && relatedData[activeTab].count > 10"
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -340,28 +336,20 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import cloneDeep from "lodash/cloneDeep";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import {
-  fetchArea,
-  fetchAreaLocalityReferences,
-  fetchLinkedAreaSites,
-  fetchListAreaTypes,
-  fetchListMaakond,
-} from "../../assets/js/api/apiCalls";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import Editor from "../../components/partial/inputs/Editor";
-import MapComponent from "../../components/partial/MapComponent";
-import ExportButtons from "../../components/partial/export/ExportButtons";
-import debounce from "lodash/debounce";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import Editor from "@/components/partial/inputs/Editor";
+import MapComponent from "@/components/partial/MapComponent";
+import ExportButtons from "@/components/partial/export/ExportButtons";
 import { mapActions, mapState } from "vuex";
-import SiteTable from "../../components/site/SiteTable";
-import AreaLocalityReferenceTable from "../../components/area/relatedTables/AreaLocalityReferenceTable";
-import requestsMixin from "../../mixins/requestsMixin";
+import SiteTable from "@/components/site/SiteTable";
+import AreaLocalityReferenceTable from "@/components/area/relatedTables/AreaLocalityReferenceTable";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 export default {
   name: "Area",
 
@@ -395,30 +383,37 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.areaSearchParameters,
-        request: "FETCH_AREAS",
-        title: "header.areas",
-        object: "area",
-        field: "name",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   computed: {
     ...mapState("map", ["showMap"]),
-    ...mapState("search", ["areaSearchParameters"]),
+    ...mapState({
+      siteHeaders(state) {
+        return state.site.headers;
+      },
+    }),
+
+    siteTranslatedHeaders() {
+      return this.siteHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
 
     myShowMap: {
       get() {
@@ -429,50 +424,14 @@ export default {
       },
     },
 
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
-
     computedRelatedTabs() {
-      return this.relatedTabs.filter((tab) => tab.name !== "sites");
-    },
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters.sites": {
-      handler(newVal) {
-        // if (this.$route.meta.isEdit) {
-        //   this.searchRelatedData(newVal, this.fetchLinkedSiteWrapper, "sites");
-        // }
-      },
-      immediate: true,
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
+      return this.relatedTabs.filter((tab) => tab.name !== "site");
     },
   },
 
   methods: {
     ...mapActions("map", ["updateShowMap"]),
-    ...mapActions("search", ["setActiveSearchParameters", "updateActiveTab"]),
+    ...mapActions("search", ["updateActiveTab"]),
 
     setTab(type) {
       if (type) {
@@ -484,125 +443,50 @@ export default {
       }
     },
 
-    fetchLinkedSiteWrapper() {
-      return new Promise((resolve) => {
-        resolve(
-          fetchLinkedAreaSites(
-            this.relatedData.searchParameters.sites,
-            this.$route.params.id
-          )
-        );
-      });
-    },
-
-    searchRelatedData: debounce(function (
-      searchParameters,
-      apiCall,
-      relatedObject
-    ) {
-      apiCall().then((response) => {
-        if (response.status === 200) {
-          this.relatedData[relatedObject].count = response.data.count;
-          this.relatedData[relatedObject].results = response.data.results;
-        }
-      });
-    },
-    50),
-
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "sites", iconClass: "fas fa-globe-americas" },
+          { name: "site", iconClass: "fas fa-globe-americas" },
           { name: "locality_reference", iconClass: "fas fa-book" },
         ],
-        activeTab: "sites",
-        copyFields: [
-          "id",
-          "name",
-          "name_en",
-          "area_type",
-          "maardla",
-          "eelis",
-          "egf",
-          "area_ha",
-          "deposit_area_ha",
-          "maakond",
-          "description",
-          "description_en",
-          "remarks",
-          // "polygon"
-        ],
+        activeTab: "site",
+        listOfAutocompleteTables: ["area_type", "list_maakond"],
         autocomplete: {
           loaders: {
             area_type: false,
-            maakond: false,
+            list_maakond: false,
           },
           language: [],
           area_type: [],
-          maakond: [],
+          list_maakond: [],
         },
         requiredFields: ["name"],
-        area: {},
+        area: {
+          id: null,
+          name: null,
+          name_en: null,
+          area_type: null,
+          maardla: null,
+          eelis: null,
+          egf: null,
+          area_ha: null,
+          deposit_area_ha: null,
+          maakond: null,
+          description: null,
+          description_en: null,
+          remarks: null,
+        },
         block: {
           info: true,
-          sites: true,
+          site: true,
         },
-        relatedData: this.setDefaultRalatedData(),
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
+        relatedData: this.setDefaultRelatedData(),
       };
     },
 
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      fetchListAreaTypes().then((response) => {
-        this.autocomplete.area_type = this.handleResponse(response);
-      });
-
-      fetchListMaakond().then((response) => {
-        this.autocomplete.maakond = this.handleResponse(response);
-      });
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchArea(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "area", this.handleResponse(response)[0]);
-            // this.area = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.area);
-            this.removeUnnecessaryFields(this.area, this.copyFields);
-
-            this.$emit("data-loaded", this.area);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    setDefaultRalatedData() {
+    setDefaultRelatedData() {
       return {
-        sites: {
+        site: {
           count: 0,
           results: [],
         },
@@ -611,103 +495,21 @@ export default {
           results: [],
         },
         searchParameters: {
-          sites: {
+          site: {
             page: 1,
-            paginateBy: 100,
+            itemsPerPage: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
           locality_reference: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["reference"],
             sortDesc: [true],
           },
         },
       };
     },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0) {
-            uploadableObject.related_data[tab.name] =
-              this.relatedData[tab.name].results;
-
-            uploadableObject.related_data[tab.name].forEach((item) => {
-              Object.keys(item).forEach((key) => {
-                if (typeof item[key] === "object" && item[key] !== null) {
-                  item[key] = item[key].id ? item[key].id : null;
-                }
-              });
-            });
-          }
-        });
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      this.area.area_type = {
-        id: obj.area_type,
-        name: obj.area_type__name,
-        name_en: obj.area_type__name_en,
-      };
-      this.area.maakond = {
-        id: obj.maakond,
-        maakond: obj.maakond__maakond,
-        maakond_en: obj.maakond__maakond_en,
-      };
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "sites") {
-        query = fetchLinkedAreaSites(
-          this.relatedData.searchParameters.sites,
-          this.$route.params.id
-        );
-      } else if (object === "locality_reference") {
-        query = fetchAreaLocalityReferences(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_reference
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
-    },
   },
 };
 </script>
-
-<style scoped />

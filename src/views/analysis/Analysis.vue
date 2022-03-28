@@ -61,8 +61,8 @@
               <autocomplete-wrapper
                 v-model="analysis.analysis_method"
                 :color="bodyActiveColor"
-                :items="autocomplete.analysis_methods"
-                :loading="autocomplete.loaders.analysis_methods"
+                :items="autocomplete.analysis_method"
+                :loading="autocomplete.loaders.analysis_method"
                 :item-text="analysisMethodLabel"
                 :label="$t('analysis.method')"
                 use-state
@@ -179,8 +179,8 @@
               <autocomplete-wrapper
                 v-model="analysis.lab"
                 :color="bodyActiveColor"
-                :items="autocomplete.labs"
-                :loading="autocomplete.loaders.labs"
+                :items="autocomplete.lab"
+                :loading="autocomplete.loaders.lab"
                 :item-text="labLabel"
                 :label="$t('analysis.labor')"
               />
@@ -220,8 +220,8 @@
               <autocomplete-wrapper
                 v-model="analysis.instrument"
                 :color="bodyActiveColor"
-                :items="autocomplete.instruments"
-                :loading="autocomplete.loaders.instruments"
+                :items="autocomplete.lab_instrument"
+                :loading="autocomplete.loaders.lab_instrument"
                 :item-text="instrumentLabel"
                 :label="$t('analysis.tool')"
               />
@@ -327,14 +327,14 @@
               <autocomplete-wrapper
                 v-model="analysis.owner"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
+                :items="autocomplete.owner"
                 :loading="autocomplete.loaders.owner"
                 item-text="agent"
                 :label="$t('common.owner')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteOwnerSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'owner')"
               />
             </v-col>
           </v-row>
@@ -408,8 +408,56 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="analysis.attachments"
+                @update:existing-files="analysis.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS  -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -455,34 +503,16 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :record-options="$route.meta.isEdit"
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
-
           <!-- PAGINATION -->
           <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -503,28 +533,20 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import cloneDeep from "lodash/cloneDeep";
-import {
-  fetchAnalysis,
-  fetchLabs,
-  fetchInstruments,
-  fetchAnalysisAttachment,
-  fetchAnalysisResults,
-  fetchAnalysisMethod,
-} from "../../assets/js/api/apiCalls";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapGetters, mapState } from "vuex";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import DateWrapper from "../partial/inputs/DateWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileInput from "../partial/inputs/FileInput";
-import AnalysisResultsTable from "./relatedTables/AnalysisResultsTable";
-import requestsMixin from "../../mixins/requestsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import { mapActions } from "vuex";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import AnalysisResultsTable from "@/components/analysis/relatedTables/AnalysisResultsTable";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   components: {
@@ -555,7 +577,8 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   name: "Analysis",
@@ -565,60 +588,20 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.analysisSearchParameters,
-        request: "FETCH_ANALYSES",
-        title: "header.analyses",
-        object: "analysis",
-        field: "sample__number",
-      });
-    }
-
     // Getting sample (only from sample view when user presses 'add analysis button')
-    if (
-      typeof this.$route.params.sample !== "undefined" &&
-      this.$route.params.sample !== null
-    ) {
+    if (this?.$route?.params?.sample) {
       this.analysis.sample = this.$route.params.sample;
     }
 
     this.loadFullInfo();
   },
 
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
-  },
-
   computed: {
-    ...mapState("search", ["analysisSearchParameters"]),
-
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
       if (tabObject && tabObject[this.$route.meta.object]) {
         return tabObject[this.$route.meta.object];
       } else return null;
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
     },
   },
 
@@ -639,38 +622,10 @@ export default {
       return {
         relatedTabs: [
           { name: "analysis_results", iconClass: "far fa-chart-bar" },
-          { name: "attachment_link", iconClass: "fas fa-folder-open" },
         ],
         activeTab: "analysis_results",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "sample",
-          "specimen",
-          "analysis_method",
-          "mass",
-          "method_details",
-          "method_details_en",
-          "material",
-          "date",
-          "date_end",
-          "date_free",
-          "lab",
-          "lab_txt",
-          "lab_analysis_number",
-          "lab_sample_number",
-          "instrument",
-          "instrument_txt",
-          "agent",
-          "agent_txt",
-          "owner",
-          "dataset",
-          "reference",
-          "storage",
-          "location",
-          "remarks",
-          "is_private",
-        ],
+        listOfAutocompleteTables: ["lab", "lab_instrument", "analysis_method"],
         autocomplete: {
           loaders: {
             agent: false,
@@ -678,12 +633,13 @@ export default {
             sample: false,
             specimen: false,
             storage: false,
-            analysis_methods: false,
+            analysis_method: false,
             dataset: false,
-            labs: false,
-            instruments: false,
+            lab: false,
+            lab_instrument: false,
             reference: false,
             attachment: false,
+            attachments: false,
           },
           agent: [],
           owner: [],
@@ -691,106 +647,64 @@ export default {
           specimen: [],
           storage: [],
           dataset: [],
-          labs: [],
-          instruments: [],
+          lab: [],
+          lab_instrument: [],
           reference: [],
-          analysis_methods: [],
+          analysis_method: [],
           attachment: [],
+          attachments: [],
         },
         requiredFields: ["analysis_method"],
-        analysis: {},
+        analysis: {
+          id: null,
+          sample: null,
+          specimen: null,
+          analysis_method: null,
+          mass: null,
+          method_details: null,
+          method_details_en: null,
+          material: null,
+          date: null,
+          date_end: null,
+          date_free: null,
+          lab: null,
+          lab_txt: null,
+          lab_analysis_number: null,
+          lab_sample_number: null,
+          instrument: null,
+          instrument_txt: null,
+          agent: null,
+          agent_txt: null,
+          owner: null,
+          dataset: null,
+          reference: null,
+          storage: null,
+          location: null,
+          remarks: null,
+          is_private: false,
+          attachments: [],
+        },
         componentKey: 0,
         block: {
           info: true,
           labInfo: true,
           otherInfo: false,
           description: true,
+          files: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchAnalysis(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "analysis", this.handleResponse(response)[0]);
-            // this.analysis = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.analysis);
-
-            this.removeUnnecessaryFields(this.analysis, this.copyFields);
-            this.$emit("data-loaded", this.analysis);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-
-      if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
-      else this.setTab("analysis_results");
-    },
-
-    loadAutocompleteFields(regularAutocompleteFields = true) {
-      if (regularAutocompleteFields) {
-        fetchLabs().then(
-          (response) => (this.autocomplete.labs = this.handleResponse(response))
-        );
-        fetchInstruments().then(
-          (response) =>
-            (this.autocomplete.instruments = this.handleResponse(response))
-        );
-        fetchAnalysisMethod().then(
-          (response) =>
-            (this.autocomplete.analysis_methods = this.handleResponse(response))
-        );
-      }
     },
 
     setDefaultRelatedData() {
       return {
-        attachment_link: {
-          count: 0,
-          results: [],
-        },
         analysis_results: {
           count: 0,
           results: [],
         },
         searchParameters: {
-          attachment_link: {
-            page: 1,
-            paginateBy: 10,
-            orderBy: "id",
-          },
           analysis_results: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["name"],
             sortDesc: [true],
           },
@@ -798,157 +712,9 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      if (!this.isNotEmpty(uploadableObject.mass)) uploadableObject.mass = null;
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0)
-            if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment =
-                this.relatedData.attachment_link.results.map((item) => {
-                  return { id: item.id };
-                });
-            } else {
-              uploadableObject.related_data[tab.name] =
-                this.relatedData[tab.name].results;
-
-              uploadableObject.related_data[tab.name].forEach((item) => {
-                Object.keys(item).forEach((key) => {
-                  if (typeof item[key] === "object" && item[key] !== null) {
-                    item[key] = item[key].id ? item[key].id : null;
-                  }
-                });
-              });
-            }
-        });
-      } else {
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment_link.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.sample)) {
-        this.analysis.sample = { id: obj.sample, number: obj.sample__number };
-        this.autocomplete.sample.push(this.analysis.sample);
-      }
-      if (this.isNotEmpty(obj.agent)) {
-        this.analysis.agent = { id: obj.agent, agent: obj.agent__agent };
-        this.autocomplete.agent.push(this.analysis.agent);
-      }
-      if (this.isNotEmpty(obj.owner)) {
-        this.analysis.owner = { id: obj.owner, agent: obj.owner__agent };
-        this.autocomplete.owner.push(this.analysis.owner);
-      }
-      this.analysis.analysis_method = {
-        id: obj.analysis_method,
-        analysis_method: obj.analysis_method__analysis_method,
-        method_en: obj.analysis_method__method_en,
-      };
-      if (this.isNotEmpty(obj.dataset)) {
-        this.analysis.dataset = {
-          id: obj.dataset,
-          name: obj.dataset__name,
-          name_en: obj.dataset__name_en,
-        };
-        this.autocomplete.dataset.push(this.analysis.dataset);
-      }
-      if (this.isNotEmpty(obj.specimen)) {
-        this.analysis.specimen = {
-          id: obj.specimen,
-          specimen_id: obj.specimen__specimen_id,
-        };
-        this.autocomplete.specimen.push(this.analysis.specimen);
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        this.analysis.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference,
-        };
-        this.autocomplete.reference.push(this.analysis.reference);
-      }
-      if (this.isNotEmpty(obj.storage)) {
-        this.analysis.storage = {
-          location: obj.storage__location,
-          id: obj.storage,
-        };
-        this.autocomplete.storage.push(this.analysis.storage);
-      }
-      this.analysis.lab = {
-        id: obj.lab,
-        lab: obj.lab__lab,
-        lab_en: obj.lab__lab_en,
-      };
-      this.analysis.instrument = {
-        id: obj.instrument,
-        instrument: obj.instrument__instrument,
-        instrument_en: obj.instrument__instrument_en,
-      };
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "attachment_link") {
-        query = fetchAnalysisAttachment(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      } else if (object === "analysis_results") {
-        query = fetchAnalysisResults(
-          this.$route.params.id,
-          this.relatedData.searchParameters.analysis_results
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
-    },
-
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "analysis", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.analysis, singleFileMetadata);
     },
   },
 };
 </script>
-
-<style scoped></style>

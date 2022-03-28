@@ -53,8 +53,8 @@
               <autocomplete-wrapper
                 v-model="collection.type"
                 :color="bodyActiveColor"
-                :items="autocomplete.type"
-                :loading="autocomplete.loaders.type"
+                :items="autocomplete.list_collection_type"
+                :loading="autocomplete.loaders.list_collection_type"
                 :item-text="commonLabel"
                 :label="$t('common.type')"
               />
@@ -279,7 +279,7 @@
       id="block-specimen"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
-      v-if="$route.meta.isEdit && specimens.count > 0"
+      v-if="$route.meta.isEdit && relatedData.specimen.count > 0"
     >
       <v-card-title class="pt-2 pb-1">
         <div
@@ -302,87 +302,19 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.specimen" class="pb-1">
-          <!-- PAGINATION -->
-          <div
-            v-if="specimens.count > 10"
-            class="
-              d-flex
-              flex-column
-              justify-space-around
-              flex-md-row
-              justify-md-space-between
-              mt-3
-              d-print-none
-              pa-1
-              mt-2
-            "
-          >
-            <div class="mr-3 mb-3">
-              <v-select
-                v-model="specimenSearchParameters.paginateBy"
-                :color="bodyActiveColor"
-                dense
-                :items="paginateByOptionsTranslated"
-                :item-color="bodyActiveColor"
-                label="Paginate by"
-                hide-details
-              />
-            </div>
-
-            <div>
-              <v-pagination
-                v-model="specimenSearchParameters.page"
-                :color="bodyActiveColor"
-                circle
-                prev-icon="fas fa-angle-left"
-                next-icon="fas fa-angle-right"
-                :length="
-                  Math.ceil(
-                    specimens.count / specimenSearchParameters.paginateBy
-                  )
-                "
-                :total-visible="5"
-              />
-            </div>
-          </div>
-
+        <div v-show="block.specimen">
           <v-card
             class="table-card my-1"
             flat
             :color="bodyColor.split('n-')[0] + 'n-5'"
           >
-            <!--            <v-card-title class="d-print-none">-->
-            <!--              <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>-->
-            <!--              <span id="table-title" class="text-uppercase">-->
-            <!--                {{ $t("collection.specimen") }}-->
-            <!--                <sup>-->
-            <!--                  <v-chip-->
-            <!--                      :color="bodyActiveColor"-->
-            <!--                      small-->
-            <!--                      text-color="#ffffff"-->
-            <!--                      class="font-weight-bold"-->
-            <!--                  >{{ specimens.count }}</v-chip-->
-            <!--                  >-->
-            <!--                </sup>-->
-            <!--              </span>-->
-            <!--              <div class="flex-grow-1"></div>-->
-            <!--              <v-text-field-->
-            <!--                  v-model="filterSpecimens"-->
-            <!--                  append-outer-icon="fas fa-search"-->
-            <!--                  label="Filter records"-->
-            <!--                  clear-icon="fas fa-times"-->
-            <!--                  clearable-->
-            <!--                  :color="bodyActiveColor"-->
-            <!--              ></v-text-field>-->
-            <!--            </v-card-title>-->
-
             <specimen-table
-              :response="specimens"
-              :search-parameters="specimenSearchParameters"
-              :filter="filterSpecimens"
+              :headers="specimenTranslatedHeaders"
+              :response="relatedData.specimen"
+              :search-parameters="relatedData.searchParameters.specimen"
               :body-color="bodyColor"
               :body-active-color="bodyActiveColor"
+              @update:options="handleUpdateOptions({ ...$event, activeTab: 'specimen' })"
             />
           </v-card>
         </div>
@@ -392,20 +324,17 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {
-  fetchCollection,
-  fetchListCollectionType,
-  fetchSpecimens,
-} from "../../assets/js/api/apiCalls";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import { cloneDeep } from "lodash";
-import SpecimenTable from "../specimen/SpecimenTable";
+import SpecimenTable from "@/components/specimen/SpecimenTable";
 import { mapActions, mapState } from "vuex";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Collection",
@@ -430,37 +359,39 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
   },
 
   computed: {
-    ...mapState("search", ["collectionSearchParameters"]),
     ...mapState("detail", ["collectionDetail"]),
 
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
+    ...mapState({
+      specimenHeaders(state) {
+        return state.specimen.headers;
+      },
+    }),
+
+    specimenTranslatedHeaders() {
+      return this.specimenHeaders.map((item) => {
         return {
           ...item,
-          text: this.$t(item.text, { num: item.value }),
+          text: this.$t(item.text),
         };
       });
     },
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.collectionSearchParameters,
-        request: "FETCH_COLLECTIONS",
-        title: "header.collections",
-        object: "collection",
-        field: "number",
-      });
-    } else {
+    if (!this.$route.meta.isEdit) {
       // Adding collection default values from local storage
       const collectionHistory = cloneDeep(this.collectionDetail);
       if (collectionHistory) {
@@ -471,46 +402,14 @@ export default {
     this.loadFullInfo();
   },
 
-  watch: {
-    "$route.params.id": {
-      handler() {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
-
-    specimenSearchParameters: {
-      handler() {
-        this.getSpecimensBelongingToCollection();
-      },
-      deep: true,
-    },
-  },
-
   methods: {
     ...mapActions("detail", ["saveFields"]),
 
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "number",
-          "collection_id",
-          "type",
-          "name",
-          "name_long",
-          "name_en",
-          "name_long_en",
-          "classification",
-          "agent",
-          "locality",
-          "stratigraphy",
-          "reference",
-          "remarks",
-          "number_objects",
-          "number_types",
-        ],
+        relatedTabs: [{ name: "specimen", iconClass: "fas fa-fish" }],
+        relatedData: this.setDefaultRelatedData(),
+        listOfAutocompleteTables: ["list_collection_type"],
         autocomplete: {
           loaders: {
             type: false,
@@ -519,6 +418,7 @@ export default {
             locality: false,
             stratigraphy: false,
             reference: false,
+            list_collection_type: false,
           },
           type: [],
           classification: [],
@@ -526,170 +426,52 @@ export default {
           locality: [],
           stratigraphy: [],
           reference: [],
+          list_collection_type: [],
         },
         requiredFields: ["collection_id", "number"],
-        collection: {},
+        collection: {
+          id: null,
+          number: null,
+          collection_id: null,
+          type: null,
+          name: null,
+          name_long: null,
+          name_en: null,
+          name_long_en: null,
+          classification: null,
+          agent: null,
+          locality: null,
+          stratigraphy: null,
+          reference: null,
+          remarks: null,
+          number_objects: null,
+          number_types: null,
+        },
         block: {
           info: true,
           relatedInfo: true,
           description: true,
           specimen: true,
         },
-        filterSpecimens: "",
-        databaseAcronym: "",
-        specimens: {
-          count: 0,
-          results: [],
-        },
-        specimenSearchParameters: {
-          idSpecimen: null,
-          collNumber: null,
-          fossil: null,
-          mineralRock: null,
-          locality: null,
-          stratigraphy: null,
-          agent_collected: null,
-          page: 1,
-          paginateBy: 25,
-          orderBy: "-id",
-        },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
     },
 
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "collection");
-        fetchCollection(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "collection", this.handleResponse(response)[0]);
-            // this.collection = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.collection);
-
-            // Needs to be before fields are removed
-            this.specimenSearchParameters.collNumber = this.collection.number;
-
-            this.removeUnnecessaryFields(this.collection, this.copyFields);
-            this.$emit("data-loaded", this.collection);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    getSpecimensBelongingToCollection() {
-      fetchSpecimens(this.specimenSearchParameters).then((response) => {
-        if (response.status === 200) {
-          this.specimens.count = response.data.count;
-          this.specimens.results = response.data.results;
-        }
-      });
-    },
-
-    loadAutocompleteFields(regularAutocompleteFields = true) {
-      if (regularAutocompleteFields) {
-        fetchListCollectionType().then(
-          (response) => (this.autocomplete.type = this.handleResponse(response))
-        );
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      if (!this.$route.meta.isEdit) {
-        this.saveFields({ key: "collectionDetail", value: objectToUpload });
-      }
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.type)) {
-        this.collection.type = {
-          id: obj.type,
-          value: obj.type__value,
-          value_en: obj.type__value_en,
-        };
-      }
-      if (this.isNotEmpty(obj.classification)) {
-        this.collection.classification = {
-          id: obj.classification,
-          class_field: obj.classification__class_field,
-          class_en: obj.classification__class_en,
-        };
-        this.autocomplete.classification.push(this.collection.classification);
-      }
-      if (this.isNotEmpty(obj.agent)) {
-        this.collection.agent = { id: obj.agent, agent: obj.agent__agent };
-        this.autocomplete.agent.push(this.collection.agent);
-      }
-      if (this.isNotEmpty(obj.locality)) {
-        this.collection.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.collection.locality);
-      }
-      if (this.isNotEmpty(obj.stratigraphy)) {
-        this.collection.stratigraphy = {
-          id: obj.stratigraphy,
-          stratigraphy: obj.stratigraphy__stratigraphy,
-          stratigraphy_en: obj.stratigraphy__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy.push(this.collection.stratigraphy);
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        this.collection.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference,
-        };
-        this.autocomplete.reference.push(this.collection.reference);
-      }
+    setDefaultRelatedData() {
+      return {
+        specimen: {
+          count: 0,
+          results: [],
+        },
+        searchParameters: {
+          specimen: {
+            page: 1,
+            itemsPerPage: 25,
+            sortBy: ["id"],
+            sortDesc: [true],
+          },
+        },
+      };
     },
   },
 };
 </script>
-
-<style scoped></style>

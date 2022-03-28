@@ -40,16 +40,7 @@
 
       <template v-slot:item.reference="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/reference/' + item.reference }"
-          :title="$t('editReference.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.reference__reference }}
-        </router-link>
-        <router-link
-          v-else-if="item.reference"
+          v-if="item.reference"
           :to="{ path: '/reference/' + item.reference.id }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
@@ -175,7 +166,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -241,13 +232,7 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference,
-        };
-        this.autocomplete.reference.push(this.item.reference);
-      } else if (item.reference !== null) {
+      if (item.reference) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
       }
@@ -261,5 +246,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

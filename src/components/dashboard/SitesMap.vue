@@ -6,8 +6,10 @@
 
 <script>
 import * as L from "leaflet";
+import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
+import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
@@ -17,131 +19,145 @@ export default {
     showMap: {
       type: Boolean,
     },
+    gestureHandling: {
+      type: Boolean,
+      default: true,
+    },
   },
 
-  data: () => ({
-    map: null,
-    sites: [],
-    samples: [],
-    specimens: [],
-    images: [],
-    response: {
-      site: null,
-      sample: null,
-      specimen: null,
-      attachment: null,
-    },
-    sitesIcon: new L.DivIcon({
-      html: "<i class='far fa-circle' style='color: #FF3D00; background-color: #FFAB91; border-radius: 100%;' />",
-      className: "map-marker",
-    }),
-    samplesIcon: new L.DivIcon({
-      html: "<i class='far fa-circle' style='color: #FFC107; background-color: #FFE082; border-radius: 100%;' />",
-      className: "map-marker",
-    }),
-    specimensIcon: new L.DivIcon({
-      html: "<i class='far fa-circle' style='color: #673AB7; background-color: #B39DDB; border-radius: 100%;'/>",
-      className: "map-marker",
-    }),
-    imagesIcon: new L.DivIcon({
-      html: "<i class='far fa-circle' style='color: #009688; background-color: #80CBC4; border-radius: 100%;'/>",
-      className: "map-marker",
-    }),
-    baseMaps: [
-      {
-        name: "CartoDB",
-        leafletObject: L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-          {
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-          }
-        ),
-        minZoom: 1,
-        maxZoom: 18,
+  data() {
+    return {
+      map: null,
+      sites: [],
+      samples: [],
+      specimens: [],
+      images: [],
+      response: {
+        site: null,
+        sample: null,
+        specimen: null,
+        attachment: null,
       },
-      {
-        name: "OpenStreetMap",
-        leafletObject: L.tileLayer(
-          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          {
-            attribution:
-              '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          }
-        ),
-        minZoom: 1,
-        maxZoom: 18,
+      sitesIcon: new L.DivIcon({
+        html: "<i class='far fa-circle' style='color: #FF3D00; background-color: #FFAB91; border-radius: 100%;' />",
+        className: "map-marker",
+      }),
+      samplesIcon: new L.DivIcon({
+        html: "<i class='far fa-circle' style='color: #FFC107; background-color: #FFE082; border-radius: 100%;' />",
+        className: "map-marker",
+      }),
+      specimensIcon: new L.DivIcon({
+        html: "<i class='far fa-circle' style='color: #673AB7; background-color: #B39DDB; border-radius: 100%;'/>",
+        className: "map-marker",
+      }),
+      imagesIcon: new L.DivIcon({
+        html: "<i class='far fa-circle' style='color: #009688; background-color: #80CBC4; border-radius: 100%;'/>",
+        className: "map-marker",
+      }),
+      baseMaps: [
+        {
+          name: "CartoDB",
+          leafletObject: L.tileLayer(
+            "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+            {
+              attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            }
+          ),
+          minZoom: 1,
+          maxZoom: 18,
+        },
+        {
+          name: "OpenStreetMap",
+          leafletObject: L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+              attribution:
+                '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            }
+          ),
+          minZoom: 1,
+          maxZoom: 18,
+        },
+        {
+          name: "OpenTopoMap",
+          leafletObject: L.tileLayer(
+            "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+            {
+              attribution:
+                'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+            }
+          ),
+          minZoom: 1,
+          maxZoom: 18,
+        },
+        {
+          name: "Maaameti fotokaart",
+          leafletObject: L.tileLayer(
+            "https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+            {
+              attribution:
+                "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+              tms: true,
+              worldCopyJump: true,
+              detectRetina: true,
+              zIndex: 1,
+              updateWhenIdle: true,
+              continuousWorld: true,
+            }
+          ),
+          minZoom: 6,
+          maxZoom: 18,
+        },
+        {
+          name: "Maaameti kaart",
+          leafletObject: L.tileLayer(
+            "https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+            {
+              attribution:
+                "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+              tms: true,
+              worldCopyJump: true,
+              detectRetina: true,
+              zIndex: 1,
+              updateWhenIdle: true,
+              continuousWorld: true,
+            }
+          ),
+          minZoom: 6,
+          maxZoom: 18,
+        },
+      ],
+      overlayMaps: [
+        {
+          name: "Maaameti hübriidkaart",
+          leafletObject: L.tileLayer(
+            "https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+            {
+              attribution:
+                "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+              tms: true,
+              worldCopyJump: true,
+              detectRetina: true,
+              zIndex: 2,
+              updateWhenIdle: true,
+              continuousWorld: true,
+            }
+          ),
+          minZoom: 6,
+          maxZoom: 18,
+        },
+      ],
+      gestureHandlingOptions: {
+        text: {
+          touch: this.$t("gestureHandling.touch"),
+          scroll: this.$t("gestureHandling.scroll"),
+          scrollMac: this.$t("gestureHandling.scrollMac"),
+        },
+        duration: 1000,
       },
-      {
-        name: "OpenTopoMap",
-        leafletObject: L.tileLayer(
-          "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-          {
-            attribution:
-              'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-          }
-        ),
-        minZoom: 1,
-        maxZoom: 18,
-      },
-      {
-        name: "Maaameti fotokaart",
-        leafletObject: L.tileLayer(
-          "https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
-          {
-            attribution:
-              "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
-            tms: true,
-            worldCopyJump: true,
-            detectRetina: true,
-            zIndex: 1,
-            updateWhenIdle: true,
-            continuousWorld: true,
-          }
-        ),
-        minZoom: 6,
-        maxZoom: 18,
-      },
-      {
-        name: "Maaameti kaart",
-        leafletObject: L.tileLayer(
-          "https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
-          {
-            attribution:
-              "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
-            tms: true,
-            worldCopyJump: true,
-            detectRetina: true,
-            zIndex: 1,
-            updateWhenIdle: true,
-            continuousWorld: true,
-          }
-        ),
-        minZoom: 6,
-        maxZoom: 18,
-      },
-    ],
-    overlayMaps: [
-      {
-        name: "Maaameti hübriidkaart",
-        leafletObject: L.tileLayer(
-          "https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
-          {
-            attribution:
-              "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
-            tms: true,
-            worldCopyJump: true,
-            detectRetina: true,
-            zIndex: 2,
-            updateWhenIdle: true,
-            continuousWorld: true,
-          }
-        ),
-        minZoom: 6,
-        maxZoom: 18,
-      },
-    ],
-  }),
+    };
+  },
 
   computed: {
     ...mapState("map", ["defaultLayer"]),
@@ -200,7 +216,6 @@ export default {
             locality__isnull: false,
             locality__latitude__isnull: false,
             locality__longitude__isnull: false,
-            nest: 1,
             fields: "locality",
           },
         },
@@ -211,7 +226,6 @@ export default {
             locality__isnull: false,
             locality__latitude__isnull: false,
             locality__longitude__isnull: false,
-            nest: 1,
             fields: "locality",
           },
         },
@@ -221,7 +235,6 @@ export default {
             author: userId,
             image_latitude__isnull: false,
             image_longitude__isnull: false,
-            nest: 1,
             fields: "image_latitude,image_longitude,id,image_place",
           },
         },
@@ -244,9 +257,13 @@ export default {
     },
 
     initMap(recentData) {
+      L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
+
       this.map = L.map("map", {
         layers: [this.baseMaps[0].leafletObject],
-        scrollWheelZoom: false,
+        // scrollWheelZoom: false,
+        gestureHandling: this.gestureHandling,
+        gestureHandlingOptions: this.gestureHandlingOptions,
       }).setView(L.latLng(58.5, 25.5), 6);
 
       let baseMaps = {};
@@ -409,7 +426,7 @@ export default {
         ...this.specimens,
         ...this.images,
       ];
-      console.log(listOfDifferentItems);
+      // console.log(listOfDifferentItems);
       if (listOfDifferentItems.length > 0) {
         let bounds = new L.featureGroup(listOfDifferentItems).getBounds();
         this.map.fitBounds(bounds, { maxZoom: 10 });

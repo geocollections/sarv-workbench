@@ -56,7 +56,11 @@
     "medium": "Keskmine",
     "large": "Suur",
     "original": "Originaal",
-    "fields": "Tabeli päised"
+    "fields": "Tabeli päised",
+    "pageSelect": "{current} / {count}",
+    "itemsPerPage": "Ridade arv:",
+    "goTo": "Leheküljele",
+    "goToBtn": "Mine"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -85,6 +89,24 @@
     "doesnotcontain": "!* ei sisalda",
     "doesnotequal": "!= ei võrdu",
     "hierarchy": "-·= hierarhiline",
+    "exact": "'=' võrdne",
+    "contains": "'*' sisaldab",
+    "startswith": "'=*' algab",
+    "endswith": "'*=' lõpeb",
+    "isnull": "tühi",
+    "in": "in",
+    "year": "aasta",
+    "iso_year": "iso aasta",
+    "month": "kuu",
+    "day": "päev",
+    "week": "nädal",
+    "week_day": "nädalapäev",
+    "iso_week_day": "iso nädalapäev",
+    "quarter": "kvartal",
+    "time": "aeg",
+    "hour": "tund",
+    "minute": "minut",
+    "second": "sekund",
     "lookUpType": "Filter"
   },
   "login": {
@@ -236,6 +258,7 @@
     "dataset_author": "Andmeseti autor",
     "dataset_reference": "Andmeseti kirjandus",
     "dataset_geolocation": "Andmeseti lokaliteet",
+    "dataset_analysis": "Andmeseti analüüs",
     "locality_stratigraphy": "Stratigraafilised piirid",
     "doi_agent": "Doi isik/asutus",
     "doi_date": "Doi kuupäev",
@@ -284,8 +307,6 @@
     "sample_serie": "Lisa prooviseeria",
     "editSiteGroundwater": "Hüdrogeoloogia",
     "site_groundwater": "Hüdrogeoloogia",
-    "sarv_issue": "Saada sõnum",
-    "sarv_issues": "Minu sõnumid",
     "admin": "Admin",
     "analysis_parameter": "Analüüsi parameetrid",
     "analysis_method": "Analüüsi meetodid",
@@ -348,6 +369,7 @@
   },
   "sidebar": {
     "recentUrls": "Ajalugu",
+    "currentSearch": "Otsingutulemused",
     "project": {
       "info": "Üldinfo",
       "description": "Kirjeldus | Lisainfo",
@@ -360,7 +382,7 @@
       "location": "Asukoht",
       "description": "Kirjeldus | Lisainfo",
       "files": "Failid",
-      "samples": "Seotud proovid",
+      "sample": "Seotud proovid",
       "groundwater": "Põhjavee laiendusmoodul"
     },
     "imageset": {
@@ -730,10 +752,6 @@
     "editMessage": "Muuda hüdrogeoloogia proovipunkti",
     "viewMessage": "Ava VEKA link"
   },
-  "editSarvIssue": {
-    "heading": "Sõnum",
-    "editMessage": "Vaata sõnumit"
-  },
   "editAnalysisParameter": {
     "heading": "Analüüsi parameetrid",
     "editMessage": "Muuda analüüsi parameetrit"
@@ -887,24 +905,24 @@
     "storage": "Hoiukoht",
     "storage__id": "Hoiukoht ID",
     "relatedTables": {
-      "collection": "Kollektsioon",
-      "specimen": "Eksemplar",
-      "sample": "Proov",
-      "sample_series": "Proovi seeria",
-      "analysis": "Analüüs",
-      "dataset": "Andmestik",
-      "doi": "DOI",
-      "locality": "Lokaliteet",
-      "drillcore": "Puursüdamik",
-      "drillcore_box": "Puursüdamiku kast",
-      "preparation": "Preparaat",
-      "reference": "Kirjandus",
-      "storage": "Hoiukoht",
-      "attachment": "Fail",
-      "project": "Projekt",
-      "site": "Vaatluspunkt",
-      "locality_description": "Geoloogiline kirjeldus",
-      "taxon": "Takson"
+      "collections": "Kollektsioon",
+      "specimens": "Eksemplar",
+      "samples": "Proov",
+      "sample_series_set": "Proovi seeria",
+      "analyses": "Analüüs",
+      "datasets": "Andmestik",
+      "dois": "DOI",
+      "localities": "Lokaliteet",
+      "drillcores": "Puursüdamik",
+      "drillcore_boxes": "Puursüdamiku kast",
+      "preparations": "Preparaat",
+      "references": "Kirjandus",
+      "storages": "Hoiukoht",
+      "attachments": "Fail",
+      "projects": "Projekt",
+      "sites": "Vaatluspunkt",
+      "locality_descriptions": "Geoloogiline kirjeldus",
+      "taxa": "Takson"
     },
     "imagesetId": "Pildiseeria ID",
     "imagePlace": "Pildi koht",
@@ -1113,6 +1131,9 @@
     "number_pieces": "Tükkide arv",
     "save_as_new_sample": "Salvesta uue proovina",
     "specimenImages": "Pildid",
+    "specimen_full_number": "Eksemplar",
+    "identification": "Nimi",
+    "nameTooltip": "Nimi täidetakse automaatselt 'kollektsiooni' ja 'number' väljade abil",
     "relatedTables": {
       "specimen_identification": "Taksoni nimed",
       "specimen_identification_geology": "Kivi nimed",
@@ -1385,10 +1406,10 @@
     "groundwater": "Põhjavee laiendusmoodul",
     "relatedTables": {
       "attachment_link": "Failid",
-      "samples": "Seotud proovid",
+      "sample": "Seotud proovid",
       "locality_description": "Kirjeldus",
       "locality_reference": "Seotud kirjandus",
-      "sites": "Vaatluspunktid"
+      "site": "Vaatluspunktid"
     }
   },
   "analysis": {
@@ -1596,7 +1617,7 @@
     "attachment": "Pilt",
     "attachment_filename": "Failinimi",
     "relatedTables": {
-      "taxon_subclass": "Alamtaksonid",
+      "taxon": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",
       "taxon_type_specimen": "Tüüpeksemplarid",
       "taxon_occurrence": "Levik ja viited",
@@ -1610,8 +1631,6 @@
   },
   "dataset": {
     "creators": "Author",
-    "title": "Title",
-    "title_en": "Title EN",
     "title_alternative": "Title, alt",
     "title_translated": "Title, translated",
     "title_translated_language__id": "Trans, title lang",
@@ -1627,7 +1646,6 @@
     "abstract": "Abstract",
     "locality__id": "Lokaliteet ID",
     "reference__id": "Reference ID",
-
     "copyright_agent": "Autoriõigus",
     "copyright_agent__id": "Autoriõigus ID",
     "copyright_agent__agent": "Autoriõigus",
@@ -2075,6 +2093,7 @@
     "user_changed": "Muutis",
     "number": "Number",
     "preparation_number": "Prep. number",
+    "classification": "Fossilrühm",
     "fossil_group": "Fossilrühm",
     "storage": "Hoiukoht",
     "sample__locality": "Lokaliteet",
@@ -2209,9 +2228,9 @@
       "locality": "Lokaliteet",
       "reference_keyword": "Kasutaja märksõnad",
       "locality_reference": "Kirjeldatud lokaliteedid",
-      "library": "Seotud kogumikud",
+      "library_reference": "Seotud kogumikud",
       "taxon": "Taksonid",
-      "stratigraphy": "Stratigraafia"
+      "stratigraphy_reference": "Stratigraafia"
     },
     "translation_of": "Tõlge teosest"
   },
@@ -2858,8 +2877,8 @@
     "location": "Hoiukoht",
     "locality_free": "Lokaliteet (txt)",
     "relatedTables": {
-      "samples": "Proovid",
-      "attachments": "Failid"
+      "sample": "Proovid",
+      "attachment": "Failid"
     }
   },
   "site_groundwater": {
@@ -2893,25 +2912,6 @@
     "url_veka_short": "VEKA",
     "save": "Salvesta põhjavee andmestik",
     "dataMissing": "Täida mõni väli Põhjavee lisamoodulist"
-  },
-  "sarv_issue": {
-    "date_changed": "date_changed",
-    "from_user__username": "from_user__username",
-    "id": "id",
-    "to_user__username": "to_user__username",
-    "my_messages": "Minu sõnumid",
-    "title": "Sõnumi pealkiri",
-    "description": "Sõnumi sisu",
-    "date_added": "Saadetud",
-    "from_user": "Saatja",
-    "to_user": "Saaja",
-    "url": "Probleemne URL",
-    "response": "Vastus sõnumile",
-    "replied": "Vastatud",
-    "message_answered": "Sa oled juba sõnumile vastanud!",
-    "unanswered": "Vastamata",
-    "activeIssues": "Aktiivsed sõnumid / probleemid",
-    "answer": "Vasta"
   },
   "analysis_parameter": {
     "id": "ID",
@@ -2991,7 +2991,7 @@
     "group": "Grupp",
     "user": "Kasutaja",
     "view_perms_title": "Vaatamise õigus:",
-    "change_perms_title": "Vaatamise ja muutmise õigus:",
+    "change_perms_title": "Muutmise õigus:",
     "update": "Uuenda õiguseid",
     "update_message": "NB! Enda juurdepääsuõiguste eemaldamisel kaotate võimaluse kirje nägemiseks / muutmiseks."
   },
@@ -3046,14 +3046,14 @@
     "oldValue": "Vana väärtus"
   },
   "buttons": {
-    "resetSearch": "Taasta otsing",
+    "resetSearch": "Tühjenda otsing",
     "cancel": "Katkesta",
     "edit": "Muuda",
     "add": "Lisa",
     "delete": "Kustuta",
     "close": "Sulge",
     "add_new": "Lisa uus",
-    "is_fossil": "<b>'LISA UUS'</b> ei ole saadaval! Eksemplari 'olemus' ei tohi olla 'fossiil' või 'retsentne organism'. Kasutage 'TAKSONI NIMED' vahekaarti, et identifitseerida fossiilseid eksemplare. ",
+    "is_fossil": "'LISA UUS' ei ole saadaval! Eksemplari 'olemus' ei tohi olla 'fossiil' või 'retsentne organism'. Kasutage 'TAKSONI NIMED' vahekaarti, et identifitseerida fossiilseid eksemplare. ",
     "is_non_fossil": "'LISA UUS' ei ole saadaval! Eksemplari 'olemus' peab olema 'fossiil' või 'retsentne organism'. Kasutage 'KIVI NIMED' vahekaarti, et identifitseerida mittefossiilseid eksemplare.",
     "next": "Järgmine",
     "previous": "Eelmine",
@@ -3083,5 +3083,23 @@
     "date_changed": "Muutis",
     "user_added": "Lisatud",
     "user_changed": "Muudetud"
+  },
+  "headers": {
+    "tooltipConfig": "Tabeli konfiguratsioon",
+    "tooltipResetHeaders": "Lähtesta päised",
+    "tooltipShowActiveHeaders": "Vaata aktiveeritud päiseid",
+    "tooltipShowAllHeaders": "Vaata kõiki päiseid",
+    "headerFilter": "Filter",
+    "headers": "Päised",
+    "headerSelectDisabled": "Veergu sorteeritakse"
+  },
+  "table": {
+    "noData": "Andmeid ei leitud",
+    "loading": "Andmeid laetakse..."
+  },
+  "gestureHandling": {
+    "touch": "Kasuta kahte näppu kaardi liigutamiseks",
+    "scroll": "Kasuta ctrl + scroll kaardi suumimiseks",
+    "scrollMac": "Kasuta \u2318 + scroll kaardi suumimiseks"
   }
 }

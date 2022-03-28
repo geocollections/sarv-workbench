@@ -103,14 +103,14 @@
               <autocomplete-wrapper
                 v-model="project.owner"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
+                :items="autocomplete.owner"
                 :loading="autocomplete.loaders.owner"
                 item-text="agent"
                 :label="$t('common.owner')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteOwnerSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'owner')"
               />
             </v-col>
 
@@ -250,22 +250,19 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <autocomplete-wrapper
-                v-model="relatedData.projectagent"
+                v-model="project.agents"
                 :color="bodyActiveColor"
-                :items="autocomplete.projectagent"
-                :loading="autocomplete.loaders.projectagent"
+                :items="autocomplete.agents"
+                :loading="autocomplete.loaders.agents"
                 item-text="agent"
                 :label="$t('site.project')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteProjectAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'agents')"
                 :multiple="true"
                 v-on:chip:close="
-                  relatedData.projectagent.splice(
-                    relatedData.projectagent.indexOf($event),
-                    1
-                  )
+                  project.agents.splice(project.agents.indexOf($event), 1)
                 "
               />
             </v-col>
@@ -303,8 +300,8 @@
         <div v-show="block.files" class="px-1 pt-1 pb-2">
           <file-input
             show-existing
-            :files-from-object="relatedData.attachment_link"
-            v-on:update:existing-files="addExistingFiles"
+            :files-from-object="project.attachments"
+            @update:existing-files="project.attachments = $event"
             v-on:file-uploaded="addFiles"
             :record-options="$route.meta.isEdit"
             accept-multiple
@@ -384,7 +381,7 @@
                 mode="multiple"
                 module="project"
                 v-bind:location="{ lat: null, lng: null }"
-                :locations="relatedData.sites.results"
+                :locations="relatedData.site.results"
               />
             </v-col>
           </v-row>
@@ -422,63 +419,20 @@
             >
               <export-buttons
                 filename="site"
-                :table-data="relatedData.sites.results"
+                :table-data="relatedData.site.results"
               ></export-buttons>
             </v-card>
           </v-card>
 
-          <!-- PAGINATION -->
-          <div
-            v-if="relatedData.sites.count > 10"
-            class="
-              d-flex
-              flex-column
-              justify-space-around
-              flex-md-row
-              justify-md-space-between
-              pa-1
-              mt-2
-            "
-          >
-            <div class="mr-3 mb-3">
-              <v-select
-                v-model="relatedData.searchParameters.site.paginateBy"
-                color="blue"
-                dense
-                :items="paginateByOptionsTranslated"
-                item-color="blue"
-                label="Paginate by"
-                hide-details
-              />
-            </div>
-
-            <div>
-              <v-pagination
-                v-model="relatedData.searchParameters.site.page"
-                color="blue"
-                circle
-                prev-icon="fas fa-angle-left"
-                next-icon="fas fa-angle-right"
-                :length="
-                  Math.ceil(
-                    relatedData.sites.count /
-                      relatedData.searchParameters.site.paginateBy
-                  )
-                "
-                :total-visible="5"
-              />
-            </div>
-          </div>
-
-          <v-row no-gutters>
+          <v-row no-gutters v-if="relatedData.site.count > 0">
             <v-col cols="12" class="px-1">
               <site-table
-                ref="table"
-                :response="relatedData.sites"
+                :response="relatedData.site"
                 :search-parameters="relatedData.searchParameters.site"
-                v-if="relatedData.sites.count > 0"
                 :body-active-color="bodyActiveColor"
                 :body-color="bodyColor"
+                :headers="siteTranslatedHeaders"
+                @update:options="handleUpdateOptions({ ...$event, activeTab: 'site' })"
               />
             </v-col>
           </v-row>
@@ -501,31 +455,21 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import sidebarMixin from "../../mixins/sidebarMixin";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import cloneDeep from "lodash/cloneDeep";
-import {
-  fetchProject,
-  fetchProjectType,
-  fetchProjectAgent,
-  fetchProjectAttachment,
-  fetchLinkedSite,
-} from "../../assets/js/api/apiCalls";
-
-import MapComponent from "../../components/partial/MapComponent";
-
+import formManipulation from "@/mixins/formManipulation";
+import sidebarMixin from "@/mixins/sidebarMixin";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import MapComponent from "@/components/partial/MapComponent";
 import { mapActions, mapState } from "vuex";
-import ExportButtons from "../../components/partial/export/ExportButtons";
-import SiteTable from "../../components/site/SiteTable";
-import debounce from "lodash/debounce";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import DateWrapper from "../../components/partial/inputs/DateWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
+import ExportButtons from "@/components/partial/export/ExportButtons";
+import SiteTable from "@/components/site/SiteTable";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "Project",
@@ -562,6 +506,7 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     sidebarMixin,
+    detailViewUtilsMixin,
   ],
 
   data() {
@@ -569,12 +514,23 @@ export default {
   },
 
   computed: {
-    ...mapState("search", [
-      "projectSearchParameters",
-      "activeProject",
-      "sidebarUserAction",
-    ]),
+    ...mapState("search", ["activeProject"]),
     ...mapState("map", ["showMap"]),
+
+    ...mapState({
+      siteHeaders(state) {
+        return state.site.headers;
+      },
+    }),
+
+    siteTranslatedHeaders() {
+      return this.siteHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
 
     myShowMap: {
       get() {
@@ -584,66 +540,14 @@ export default {
         this.updateShowMap(value);
       },
     },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.projectSearchParameters,
-        request: "FETCH_PROJECTS",
-        title: "header.projects",
-        object: "project",
-        field: "name",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-    sidebarUserAction(newVal) {
-      this.handleUserAction(newVal, "project", this.project);
-    },
-    "relatedData.searchParameters.site": {
-      handler(newVal) {
-        if (this.$route.meta.isEdit) {
-          this.searchRelatedData(newVal, this.fetchLinkedSiteWrapper, "sites");
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
   },
 
   methods: {
     ...mapActions("search", ["setActiveProject"]),
     ...mapActions("map", ["updateShowMap"]),
-
-    fetchLinkedSiteWrapper() {
-      return new Promise((resolve) => {
-        resolve(
-          fetchLinkedSite(
-            this.relatedData.searchParameters.site,
-            this.$route.params.id
-          )
-        );
-      });
-    },
 
     setActiveProject(switchValue) {
       if (switchValue) this.setActiveProject(this.project);
@@ -652,42 +556,41 @@ export default {
 
     setInitialData() {
       return {
-        window: {
-          width: 0,
-          height: 0,
-        },
-        relatedData: this.setDefaultRalatedData(),
-        copyFields: [
-          "id",
-          "name",
-          "name_en",
-          "project_type",
-          "parent_project",
-          "date_start",
-          "date_end",
-          "date_free",
-          "description",
-          "owner",
-          "remarks",
-          "is_private",
-          "projectagent",
-        ],
+        relatedTabs: [{ name: "site", iconClass: "fas fa-map-pin" }],
+        relatedData: this.setDefaultRelatedData(),
+        listOfAutocompleteTables: ["project_type"],
         autocomplete: {
           loaders: {
             project_type: false,
             parent_project: false,
             owner: false,
-            projectagent: false,
             attachment: false,
+            agents: false,
           },
           project_type: [],
           parent_project: [],
           agent: [],
-          projectagent: [],
+          owner: [],
           attachment: [],
+          agents: [],
         },
         requiredFields: ["name"],
-        project: {},
+        project: {
+          id: null,
+          name: null,
+          name_en: null,
+          project_type: null,
+          parent_project: null,
+          date_start: null,
+          date_end: null,
+          date_free: null,
+          description: null,
+          owner: null,
+          remarks: null,
+          is_private: false,
+          agents: [],
+          attachments: [],
+        },
         previousRecord: {},
         nextRecord: {},
         columns: [
@@ -722,245 +625,29 @@ export default {
           files: true,
           sites: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
     },
 
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      fetchProjectType().then((response) => {
-        this.autocomplete.project_type = this.handleResponse(response);
-      });
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "project");
-        fetchProject(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "project", this.handleResponse(response)[0]);
-            // this.project = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.project);
-            this.removeUnnecessaryFields(this.project, this.copyFields);
-            this.project.related_data = {};
-            // this.$set(this,'activeProject', this.checkIfProjectIsActive());
-            this.$emit("data-loaded", this.project);
-            this.setLoadingState(false);
-            // this.getListRecords('project')
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-        this.loadRelatedData("projectagent");
-        this.loadRelatedData("attachment_link");
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-
-        //set default user
-        this.project.owner = {
-          agent: this.getCurrentAgent.user,
-          id: this.getCurrentAgent.id,
-        };
-        this.autocomplete.agent.push(this.project.owner);
-      }
-    },
-
-    setDefaultRalatedData() {
+    setDefaultRelatedData() {
       return {
-        projectagent: [],
-        attachment_link: [],
-        sites: {
+        site: {
           count: 0,
           results: [],
         },
         searchParameters: {
           site: {
             page: 1,
-            paginateBy: 100,
+            itemsPerPage: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },
         },
-        page: { projectagent: 1, attachment_link: 1 },
-        paginateBy: { projectagent: 25, attachment_link: 25 },
-        count: { projectagent: 0, attachment_link: 0 },
       };
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      //add related data
-      uploadableObject.related_data = {};
-      if (this.relatedData.projectagent.length > 0) {
-        uploadableObject.related_data.agent = this.relatedData.projectagent;
-      } else uploadableObject.related_data.agent = null;
-      if (this.relatedData.attachment_link.length > 0) {
-        uploadableObject.related_data.attachment =
-          this.relatedData.attachment_link.map((item) => {
-            return { id: item.id };
-          });
-      } else uploadableObject.related_data.attachment = null;
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      this.project.project_type = {
-        name: obj.project_type__name,
-        name_en: obj.project_type__name_en,
-        id: obj.project_type,
-      };
-
-      //set current user as default owner
-
-      // this.project.owner = this.isNotEmpty(this.project.owner) ? {agent:obj.owner__agent,id:obj.owner} : {agent:this.currentUser.user,id:this.currentUser.id}
-      if (this.isNotEmpty(obj.owner)) {
-        this.project.owner = { agent: obj.owner__agent, id: obj.owner };
-        this.autocomplete.agent.push(this.project.owner);
-      }
-      if (this.isNotEmpty(obj.parent_project)) {
-        this.project.parent_project = {
-          name: obj.parent_project__name,
-          name_en: obj.parent_project__name_en,
-          id: obj.parent_project,
-        };
-        this.autocomplete.parent_project.push(this.project.parent_project);
-      }
-    },
-
-    fillRelatedDataAutocompleteFields(obj, type) {
-      let relatedData = cloneDeep(obj);
-      obj = [];
-      relatedData.forEach((entity) => {
-        if (type === "projectagent") {
-          let item = {
-            agent: entity.projectagent__agent__agent,
-            id: entity.projectagent__agent,
-          };
-          obj.push(item);
-        } else obj.push(entity);
-      });
-      return obj;
-    },
-
-    loadRelatedData(object) {
-      let query;
-      if (object === "projectagent") {
-        query = fetchProjectAgent(
-          this.$route.params.id,
-          this.relatedData.page.projectagent
-        );
-      } else if (object === "attachment_link") {
-        query = fetchProjectAttachment(
-          this.$route.params.id,
-          this.relatedData.page.attachment_link
-        );
-      }
-      if (query) {
-        return new Promise(() => {
-          //resolve it for my sites table
-          // if(object === 'site') resolve(query);
-
-          query.then((response) => {
-            //projectagent do not have count value
-            if (response.status === 200)
-              this.relatedData[object] = response.data.results
-                ? response.data.results
-                : [];
-
-            this.relatedData.count[object] = response.data.count;
-            this.relatedData[object] = this.fillRelatedDataAutocompleteFields(
-              this.relatedData[object],
-              object
-            );
-
-            if (object === "projectagent") {
-              this.autocomplete.projectagent = this.relatedData[object];
-            }
-            if (object === "attachment_link") {
-              this.autocomplete.attachment = this.relatedData[object];
-            }
-            // if(object === 'site')  this.forceMapRerender()
-            this.setBlockVisibility(object, this.relatedData[object].length);
-          });
-        });
-      }
-    },
-    setBlockVisibility(object, count) {
-      if (object === "projectagent") this.block.members = count > 0;
-      if (object === "attachment_link") this.block.files = count > 0;
-      if (object === "site") this.block.sites = count > 0;
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.project = this.project.id;
-
-      // console.log(JSON.stringify(uploadableObject));
-      return JSON.stringify(uploadableObject);
-    },
-
-    customLabelForAttachment(option) {
-      return this.$i18n.locale === "ee"
-        ? `${option.id} - (${option.description}) (${option.author__agent})`
-        : `${option.id} - (${option.description_en}) (${option.author__agent})`;
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "project", singleFileMetadata);
+      this.addFilesAsNewObjects(files, this.project, singleFileMetadata);
     },
-
-    addExistingFiles(files) {
-      this.relatedData.attachment_link = files;
-    },
-
-    searchRelatedData: debounce(function (
-      searchParameters,
-      apiCall,
-      relatedObject
-    ) {
-      apiCall().then((response) => {
-        if (response.status === 200) {
-          this.relatedData[relatedObject].count = response.data.count;
-          this.relatedData[relatedObject].results = response.data.results;
-        }
-      });
-    },
-    50),
   },
 };
 </script>

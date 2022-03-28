@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,37 +38,24 @@
       </template>
 
       <template v-slot:item.type="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.type__value,
-              en: item.type__value_en,
-            }"
-          />
-          <span
-            v-else-if="item.type"
-            v-translate="{
-              et: item.type.value,
-              en: item.type.value_en,
-            }"
-          />
-        </div>
-        <div
-          v-else
+        <span
+          v-if="item.type"
           v-translate="{
-            et: item.type__value,
-            en: item.type__value_en,
+            et: item.type.value,
+            en: item.type.value_en,
           }"
-        ></div>
+        />
       </template>
 
       <template v-slot:item.storage="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div v-if="$route.meta.isEdit">{{ item.storage__location }}</div>
-          <div v-else-if="item.storage">{{ item.storage.location }}</div>
-        </div>
-        <div v-else>{{ item.storage__location }}</div>
+        <router-link
+          v-if="item.storage"
+          :to="{ path: '/location/' + item.storage.id }"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.storage.location }}
+        </router-link>
       </template>
     </v-data-table>
 
@@ -158,6 +144,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -165,18 +157,19 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
-import { fetchListSpecimenType } from "../../../assets/js/api/apiCalls";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "SpecimenLocationTable",
 
   components: {
+    RelatedDataDeleteDialog,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -192,7 +185,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -205,11 +198,6 @@ export default {
       type: String,
       required: false,
       default: "deep-orange",
-    },
-    isUsedAsRelatedData: {
-      type: Boolean,
-      required: false,
-      default: true,
     },
   },
 
@@ -247,15 +235,6 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return (
         typeof this.item.storage === "object" && this.item.storage !== null
@@ -270,9 +249,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         number: "",
         type: null,
@@ -282,50 +259,15 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
+    setItemFields(item) {
+      this.item.id = item.id;
 
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "specimen_location",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "specimen_location",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (typeof item.storage !== "object" && item.storage !== null) {
-        this.item.storage = {
-          id: item.storage,
-          location: item.storage__location,
-        };
-        this.autocomplete.storage.push(this.item.storage);
-      } else if (item.storage !== null) {
+      if (item.storage) {
         this.item.storage = item.storage;
         this.autocomplete.storage.push(this.item.storage);
       }
 
-      if (typeof item.type !== "object" && item.type !== null) {
-        this.item.type = {
-          id: item.type,
-          value: item.type__value,
-          value_en: item.type__value_en,
-        };
-      }
+      this.item.type = item.type;
 
       this.item.number = item.number;
       this.item.part = item.part;
@@ -334,38 +276,14 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "specimen_location",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.type.length <= 1) {
         this.autocomplete.loaders.type = true;
-        fetchListSpecimenType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_specimen_type");
+        this.autocomplete.type = response?.results ?? [];
         this.autocomplete.loaders.type = false;
       }
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     },
   },
 };
 </script>
-
-<style scoped></style>

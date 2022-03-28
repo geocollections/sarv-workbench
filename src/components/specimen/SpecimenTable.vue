@@ -1,28 +1,19 @@
 <template>
-  <v-data-table
-    :headers="$_tableHeaderMixin_shownHeaders"
-    dense
-    hide-default-footer
+  <table-wrapper
+    v-bind="$attrs"
+    :headers="headers"
     :items="response.results"
-    :items-per-page="searchParameters.paginateBy"
-    multi-sort
-    :page="searchParameters.page"
-    :search="filter"
-    :show-select="!!activeSelectionSeries"
-    @item-selected="
-      $emit('toggle-item-in-selection-series', $event, 'specimen')
-    "
-    @toggle-select-all="$emit('toggle-select-all', $event, 'specimen')"
-    expand-icon="fas fa-caret-down"
-    :value="selected"
-    :sort-by="searchParameters.sortBy"
-    :sort-desc="searchParameters.sortDesc"
-    @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
-    @update:sort-desc="
-      $emit('update:sorting', { value: $event, key: 'sortDesc' })
-    "
-    :server-items-length="response.count"
-    :class="bodyColor.split('n-')[0] + 'n-5'"
+    :count="response.count"
+    :options="searchParameters"
+    :show-search="false"
+    :show-select="$_activeListMixin_isShowSelect"
+    :is-loading="isLoading"
+    :value="selectedList"
+    @change:headers="$emit('change:headers', $event)"
+    @reset:headers="$emit('reset:headers')"
+    @update:options="$emit('update:options', $event)"
+    @item-selected="$_activeListMixin_itemSelected"
+    @toggle-select-all="$_activeListMixin_toggleSelectAll"
   >
     <template v-slot:item.id="{ item }">
       <router-link
@@ -33,45 +24,66 @@
         >{{ item.id }}</router-link
       >
     </template>
-
-    <template v-slot:item.name="{ item }">
+    <template v-slot:item.identification="{ item }">
       <div
         v-if="
-          names &&
-          names.length > 0 &&
-          names.find((specimen) => specimen.id === item.id)
+          item.specimen_identification &&
+          item.specimen_identification.length > 0
         "
       >
-        <div v-if="names.find((specimen) => specimen.id === item.id).taxonId">
-          <i
-            v-translate="{
-              et: names.find((specimen) => specimen.id === item.id).name,
-              en: names.find((specimen) => specimen.id === item.id).name_en,
-            }"
-          />
-        </div>
-
-        <div
-          v-else-if="names.find((specimen) => specimen.id === item.id).rockId"
-        >
-          <i
-            v-translate="{
-              et: names.find((specimen) => specimen.id === item.id).name,
-              en: names.find((specimen) => specimen.id === item.id).name_en,
-            }"
-          />
-        </div>
-
-        <i
-          v-else
-          v-translate="{
-            et: names.find((specimen) => specimen.id === item.id).name,
-            en: names.find((specimen) => specimen.id === item.id).name_en,
-          }"
-        />
+        <ul class="pl-0" style="list-style-type: none">
+          <li
+            v-for="(item, index) in item.specimen_identification"
+            :key="index"
+          >
+            <router-link
+              :to="{ path: `/taxon/${item.taxon.id}` }"
+              class="sarv-link"
+              :class="`${bodyActiveColor}--text`"
+              >{{ item.name || item.taxon.taxon }}</router-link
+            >
+            <v-icon v-if="item.current" color="green" x-small right
+              >fas fa-check</v-icon
+            >
+            <v-icon v-else color="red" x-small right>fas fa-times</v-icon>
+          </li>
+        </ul>
+      </div>
+      <div
+        v-else-if="
+          item.specimen_identification_geology &&
+          item.specimen_identification_geology.length > 0
+        "
+      >
+        <ul class="pl-0" style="list-style-type: none">
+          <li
+            v-for="(item, index) in item.specimen_identification_geology"
+            :key="index"
+          >
+            <router-link
+              :to="{ path: `/rock/${item.rock.id}` }"
+              class="sarv-link"
+              :class="`${bodyActiveColor}--text`"
+              ><span
+                v-translate="{
+                  et: item.rock.name,
+                  en: item.rock.name_en,
+                }"
+              ></span>
+            </router-link>
+            <span
+              class="ml-1"
+              v-if="item.rock.formula_html"
+              v-html="item.rock.formula_html"
+            />
+            <v-icon v-if="item.current" color="green" x-small right
+              >fas fa-check</v-icon
+            >
+            <v-icon v-else color="red" x-small right>fas fa-times</v-icon>
+          </li>
+        </ul>
       </div>
     </template>
-
     <template v-slot:item.locality="{ item }">
       <router-link
         :to="{ path: '/locality/' + item.locality.id }"
@@ -88,14 +100,12 @@
         />
       </router-link>
     </template>
-
     <template v-slot:item.depth="{ item }">
       <span v-if="item.depth && item.depth_interval"
-        >{{ item.depth }} - {{ item.depth_interval }} m</span
+        >{{ item.depth }} ... {{ item.depth_interval }} m</span
       >
       <span v-else>{{ item.depth }}</span>
     </template>
-
     <template v-slot:item.stratigraphy="{ item }">
       <div>
         <span
@@ -113,7 +123,6 @@
         />
       </div>
     </template>
-
     <template v-slot:item.storage="{ item }">
       <router-link
         :to="{ path: '/location/' + item.storage.id }"
@@ -130,7 +139,6 @@
         />
       </router-link>
     </template>
-
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
@@ -143,15 +151,18 @@
         <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
 import tableViewMixin from "@/mixins/tableViewMixin";
+import TableWrapper from "@/components/tables/TableWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "SpecimenTable",
+  components: { TableWrapper },
   mixins: [activeListMixin, tableViewMixin],
   props: {
     response: {
@@ -164,12 +175,12 @@ export default {
     searchParameters: {
       type: Object,
       required: true,
-      default: function () {
-        return {
-          page: 1,
-          paginateBy: 25,
-        };
-      },
+      default: () => {},
+    },
+    headers: {
+      type: Array,
+      required: true,
+      default: () => [],
     },
     bodyColor: {
       type: String,
@@ -181,17 +192,13 @@ export default {
       required: false,
       default: "deep-orange",
     },
-  },
-  data: () => ({
-    names: [],
-  }),
-  watch: {
-    "response.results": {
-      handler(newVal) {
-        this.getNames(newVal);
-      },
-      immediate: true,
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
+  },
+  computed: {
+    ...mapState("search", ["activeSelectionSeries"]),
   },
   methods: {
     getGeoDetailUrl(params) {
@@ -204,105 +211,6 @@ export default {
 
     getRockUrl(id) {
       return "https://kivid.info/" + id;
-    },
-
-    async getNames(listOfSpecimens) {
-      if (listOfSpecimens && listOfSpecimens.length > 0) {
-        let listOfIds = listOfSpecimens.map((specimen) => specimen.id);
-
-        const taxonResponse = await this.$api.rw.get(
-          "specimen_identification",
-          {
-            defaultParams: {
-              specimen__in: listOfIds.toString(),
-              current: true,
-            },
-            options: {
-              sortBy: ["name"],
-              sortDesc: [false],
-            },
-          }
-        );
-        const rockResponse = await this.$api.rw.get(
-          "specimen_identification_geology",
-          {
-            defaultParams: {
-              specimen__in: listOfIds.toString(),
-              current: true,
-            },
-            options: {
-              sortBy: ["name"],
-              sortDesc: [false],
-            },
-          }
-        );
-        console.log(taxonResponse);
-        console.log(rockResponse);
-
-        if (taxonResponse?.count > 0 && rockResponse?.count > 0) {
-          const taxonList = taxonResponse.results.map((entity) => {
-            return {
-              id: entity.specimen,
-              name: entity?.taxon?.taxon ?? entity?.name,
-              name_en: entity?.taxon?.taxon ?? entity?.name,
-              taxonId: entity?.taxon?.id,
-            };
-          });
-
-          const rockList = rockResponse.results.map((entity) => {
-            let name = "";
-            let name_en = "";
-
-            if (entity?.rock?.name && !entity?.name) name = entity.rock.name;
-            else if (
-              entity?.rock?.name &&
-              entity?.name &&
-              entity?.rock?.name !== entity?.name
-            )
-              name = entity.name + " | " + entity.rock.name;
-            else name = entity?.name;
-
-            if (entity?.rock?.name_en && !entity?.name_en)
-              name_en = entity.rock.name_en;
-            else if (
-              entity?.rock?.name_en &&
-              entity?.name_en &&
-              entity?.rock?.name_en !== entity?.name_en
-            )
-              name_en = entity.name_en + " | " + entity.rock.name_en;
-            else name_en = entity?.name_en;
-
-            if (entity?.rock?.formula_html) {
-              name += " | " + entity?.rock?.formula_html;
-              name_en += " | " + entity?.rock?.formula_html;
-            }
-
-            return {
-              id: entity.specimen,
-              name: name,
-              name_en: name_en,
-              rockId: entity?.rock?.id,
-            };
-          });
-
-          if (taxonList.length > 0 && rockList.length > 0) {
-            rockList.forEach((rock) => {
-              let item = taxonList.find((taxon) => rock.id === taxon.id);
-              item ? this.names.push(item) : this.names.push(rock);
-            });
-
-            taxonList.forEach((taxonItem) => {
-              let secondItem = rockList.find(
-                (rockItem) => taxonItem.id === rockItem.id
-              );
-              secondItem
-                ? this.names.push(secondItem)
-                : this.names.push(taxonItem);
-            });
-          } else if (taxonList.length > 0) this.names = taxonList;
-          else if (rockList.length > 0) this.names = rockList;
-        }
-      }
     },
   },
 };

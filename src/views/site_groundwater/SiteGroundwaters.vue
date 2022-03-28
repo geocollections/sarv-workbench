@@ -1,10 +1,10 @@
 <template>
   <div class="site-groundwaters">
-    <table-view-title title="header.site_groundwater" buttonPath="/site/add" />
+    <table-view-title title="header.site_groundwater" />
 
     <table-view-search :col-size="4" />
 
-    <list-module-core :module="$route.meta.object" :api-call="apiCall" />
+    <list-module-core :api-call="apiCall" />
   </div>
 </template>
 
@@ -37,5 +37,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

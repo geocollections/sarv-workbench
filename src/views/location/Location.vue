@@ -68,6 +68,7 @@
                 v-model="itemsRegistered"
                 :color="bodyActiveColor"
                 :label="$t('location.number_items_registered')"
+                disabled
                 readonly
               />
             </v-col>
@@ -129,8 +130,56 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="location.attachments"
+                @update:existing-files="location.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- SHOWING RELATED_DATA -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -166,19 +215,6 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
-
           <div v-show="activeTab === 'specimen'" class="pa-1">
             <!-- ADD NEW and EXPORT -->
             <v-card
@@ -239,6 +275,7 @@
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
                 <specimen-table
+                  :headers="specimenHeadersTranslated"
                   ref="table"
                   :response="relatedData.specimen"
                   :search-parameters="relatedData.searchParameters.specimen"
@@ -248,10 +285,7 @@
                   "
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
-                  v-on:update:sorting="
-                    relatedData.searchParameters[activeTab][$event.key] =
-                      $event.value
-                  "
+                  @update:options="handleUpdateOptions({ ...$event, activeTab: 'specimen' })"
                 />
                 <list-view
                   v-show="
@@ -323,9 +357,12 @@
               </v-radio-group>
             </v-card>
 
+<!--            TODO: LOCATION review-->
+
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
                 <sample-table
+                  :headers="sampleHeadersTranslated"
                   ref="table"
                   :response="relatedData.sample"
                   :search-parameters="relatedData.searchParameters.sample"
@@ -334,10 +371,7 @@
                   "
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
-                  v-on:update:sorting="
-                    relatedData.searchParameters[activeTab][$event.key] =
-                      $event.value
-                  "
+                  @update:options="handleUpdateOptions({ ...$event, activeTab: 'sample' })"
                 />
 
                 <list-view
@@ -359,15 +393,12 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="
+              relatedData.searchParameters[activeTab].itemsPerPage
+            "
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -475,28 +506,21 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {
-  fetchLocation,
-  fetchLocationAttachment,
-  fetchLocationSamples,
-  fetchLocationSpecimens,
-  fetchMultiChangeSpecimen,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
 import { mapActions, mapState } from "vuex";
-import FileInput from "../partial/inputs/FileInput";
-import requestsMixin from "../../mixins/requestsMixin";
-import SpecimenTable from "../specimen/SpecimenTable";
-import SampleTable from "../sample/SampleTable";
-import ExportButtons from "../partial/export/ExportButtons";
+import FileInput from "@/components/partial/inputs/FileInput";
+import SpecimenTable from "@/components/specimen/SpecimenTable";
+import SampleTable from "@/components/sample/SampleTable";
+import ExportButtons from "@/components/partial/export/ExportButtons";
 import { fetchMultiChangeLocation } from "@/assets/js/api/apiCalls";
 import ListView from "@/components/partial/ListView";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Location",
@@ -531,40 +555,22 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.locationSearchParameters,
-        request: "FETCH_LOCATIONS",
-        title: "header.locations",
-        object: "location",
-        field: "location",
-      });
-    }
-
     this.loadFullInfo();
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
     itemsRegistered: {
       handler: function () {
         this.location.number_items_registered = this.itemsRegistered;
@@ -573,22 +579,32 @@ export default {
   },
 
   computed: {
-    ...mapState("search", ["locationSearchParameters"]),
+    ...mapState("specimen", { specimenHeaders: (state) => state.headers }),
+    ...mapState("sample", { sampleHeaders: (state) => state.headers }),
+
+    specimenHeadersTranslated() {
+      return this.specimenHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
+
+    sampleHeadersTranslated() {
+      return this.sampleHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
       if (tabObject && tabObject[this.$route.meta.object]) {
         return tabObject[this.$route.meta.object];
       } else return null;
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
     },
 
     // Returns objects which are valid for location change
@@ -676,38 +692,40 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "specimen", iconClass: "fas fa-fish" },
           { name: "sample", iconClass: "fas fa-vial" },
         ],
         relatedData: this.setDefaultRelatedData(),
-        activeTab: "attachment_link",
+        activeTab: "specimen",
         currentViewType: "table",
-        copyFields: [
-          "id",
-          "location",
-          "parent_location",
-          "number_items",
-          "number_items_registered",
-          "agent",
-          "stratigraphy_free",
-          "date_collected_free",
-          "contents",
-          "remarks",
-        ],
         autocomplete: {
           loaders: {
             agent: false,
             storage: false,
+            attachments: false,
           },
           agent: [],
           storage: [],
+          attachments: [],
         },
-        location: {},
+        location: {
+          id: null,
+          location: null,
+          parent_location: null,
+          number_items: null,
+          number_items_registered: null,
+          agent: null,
+          stratigraphy_free: null,
+          date_collected_free: null,
+          contents: null,
+          remarks: null,
+          attachments: [],
+        },
         requiredFields: ["location"],
         block: {
           info: true,
           storage: true,
+          files: true,
         },
         new_storage: null,
         changeStorageDialog: false,
@@ -723,62 +741,20 @@ export default {
       };
     },
 
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchLocation(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "location", this.handleResponse(response)[0]);
-            // this.location = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.location);
-            this.removeUnnecessaryFields(this.location, this.copyFields);
-
-            this.$emit("data-loaded", this.location);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => {
-          this.loadRelatedData(tab.name);
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
     setDefaultRelatedData() {
       return {
-        attachment_link: { count: 0, results: [] },
         specimen: { count: 0, results: [] },
         sample: { count: 0, results: [] },
         searchParameters: {
-          attachment_link: {
-            page: 1,
-            paginateBy: 25,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
           specimen: {
             page: 1,
-            paginateBy: 100,
+            itemsPerPage: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
           sample: {
             page: 1,
-            paginateBy: 100,
+            itemsPerPage: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -786,118 +762,9 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0)
-            if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment =
-                this.relatedData.attachment_link.results.map((item) => {
-                  return { id: item.id };
-                });
-            } else {
-              uploadableObject.related_data[tab.name] =
-                this.relatedData[tab.name].results;
-
-              uploadableObject.related_data[tab.name].forEach((item) => {
-                Object.keys(item).forEach((key) => {
-                  if (typeof item[key] === "object" && item[key] !== null) {
-                    item[key] = item[key].id ? item[key].id : null;
-                  }
-                });
-              });
-            }
-        });
-      } else {
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment_link.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.agent)) {
-        this.location.agent = {
-          id: obj.agent,
-          agent: obj.agent__agent,
-        };
-        this.autocomplete.agent.push(this.location.agent);
-      }
-      if (this.isNotEmpty(obj.parent_location)) {
-        this.location.parent_location = {
-          id: obj.parent_location,
-          location: obj.parent_location__location,
-        };
-        this.autocomplete.storage.push(this.location.parent_location);
-      }
-    },
-
-    loadRelatedData(type) {
-      let query;
-
-      if (type === "attachment_link") {
-        query = fetchLocationAttachment(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      } else if (type === "specimen") {
-        query = fetchLocationSpecimens(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen
-        );
-      } else if (type === "sample") {
-        query = fetchLocationSamples(
-          this.$route.params.id,
-          this.relatedData.searchParameters.sample
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[type].count = response.data.count;
-          this.relatedData[type].results = this.handleResponse(response);
-        });
-      }
-    },
-
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "location", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.location, singleFileMetadata);
     },
   },
 };
 </script>
-
-<style scoped></style>

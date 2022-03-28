@@ -1,36 +1,20 @@
 <template>
   <div class="list-row" v-if="data.length > 0">
-    <v-row v-if="title">
-      <v-col>
-        <h1 class="text-center py-4" v-translate="title" />
-      </v-col>
-    </v-row>
-    <v-row v-for="(box, index) in data" :key="index">
+    <v-row no-gutters v-for="(box, index) in data" :key="index">
       <v-col cols="12" class="box">
-        <v-divider v-if="index > 0" class="d-print-none" />
+        <v-divider v-if="index > 0" class="d-print-none pa-0 ma-0" />
         <div class="py-2 d-flex align-center flex-column">
+          <slot name="itemTitle" :item="box"></slot>
           <img
-            @click="openFileInNewWindow(box)"
+            v-for="(image, imageKey) in box.attachments"
+            :key="imageKey"
+            :alt="image.original_filename"
+            @click="openFileInNewWindow(image)"
             style="max-width: 800px; max-height: 500px"
-            class="elevation-4"
-            :src="getFileUrl(box.attachment__uuid_filename, 'medium')"
-            :title="getFileUrl(box.attachment__uuid_filename, 'medium')"
+            class="rounded elevation-2 my-2"
+            :src="getFileUrl(image.uuid_filename, 'medium')"
+            :title="getFileUrl(image.uuid_filename, 'medium')"
           />
-
-          <!--          <v-img-->
-          <!--            max-width="700"-->
-          <!--            max-height="500"-->
-          <!--            contain-->
-          <!--            :lazy-src="getFileUrl(box.attachment__uuid_filename, 'small')"-->
-          <!--            :src="getFileUrl(box.attachment__uuid_filename, 'medium')"-->
-          <!--          >-->
-          <!--            <template v-slot:placeholder>-->
-          <!--              <v-row class="fill-height ma-0" align="center" justify="center">-->
-          <!--                <v-progress-circular indeterminate color="grey lighten-5" />-->
-          <!--              </v-row>-->
-          <!--            </template>-->
-          <!--          </v-img>-->
-          <slot name="itemTitle" v-bind:item="box"></slot>
         </div>
       </v-col>
     </v-row>
@@ -55,25 +39,21 @@ export default {
       required: false,
       default: "deep-orange",
     },
-    title: {
-      type: Object,
-    },
   },
   methods: {
     openFileInNewWindow(file) {
-      if (typeof file !== "undefined" && file !== null) {
+      if (file) {
         let url = "";
         if (this.isImageFile(file)) {
-          url = this.getFileUrl(file.attachment__uuid_filename, "large");
+          url = this.getFileUrl(file.uuid_filename, "large");
         } else {
-          url = this.getFileUrl(file.attachment__uuid_filename);
+          url = this.getFileUrl(file.uuid_filename);
         }
 
         window.open(url, "FileWindow", "width=800,height=750");
       }
     },
     getFileUrl(uuid, size = null) {
-      console.log(this.vueAppImageUrl);
       if (uuid) {
         if (size) {
           return `${this.$constants.IMAGE_URL}${size}/${uuid.substring(
@@ -89,13 +69,12 @@ export default {
       }
     },
     isImageFile(image) {
-      if (image.attachment_format__value) {
-        return !!image.attachment_format__value.includes("image");
-      } else {
-        let fileType = image.attachment__uuid_filename.split(".")[1];
+      if (image.uuid_filename) {
+        let fileType = image.uuid_filename.split(".")[1];
         // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
         return !!(fileType.includes("jpg") || fileType.includes("png"));
       }
+      return false;
     },
   },
 };

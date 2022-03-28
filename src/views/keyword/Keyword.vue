@@ -43,8 +43,8 @@
               <autocomplete-wrapper
                 v-model="keyword.language"
                 :color="bodyActiveColor"
-                :items="autocomplete.language"
-                :loading="autocomplete.loaders.language"
+                :items="autocomplete.list_language"
+                :loading="autocomplete.loaders.list_language"
                 :item-text="commonLabel"
                 :label="$t('keyword.language')"
                 use-state
@@ -123,7 +123,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
-      v-if="$route.meta.isEdit && computedRelatedTabs.length > 0"
+      v-if="$route.meta.isEdit && relatedTabs.length > 0"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -138,7 +138,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in computedRelatedTabs"
+          v-for="tab in relatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -167,21 +167,6 @@
             v-on:related:add="addRelatedItem"
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
-            :is-keyword-base-term="!!keyword.is_primary"
-          />
-
-          <keyword-relation-reverse-table
-            v-show="
-              activeTab === 'keyword_relation' &&
-              $route.meta.isEdit &&
-              relatedData.keyword_relation_reverse.count > 0
-            "
-            :response="relatedData.keyword_relation_reverse"
-            :search-parameters="
-              relatedData.searchParameters.keyword_relation_reverse
-            "
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
           />
 
           <!-- PAGINATION -->
@@ -190,15 +175,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -229,30 +209,22 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {
-  fetchListLanguages,
-  fetchKeyword,
-  fetchKeywordRelation,
-  fetchKeywordRelationReverse,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import Editor from "../../components/partial/inputs/Editor";
-import KeywordRelationTable from "../../components/keyword/relatedTables/KeywordRelationTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import KeywordRelationReverseTable from "../../components/keyword/relatedTables/KeywordRelationReverseTable";
-import { mapActions, mapState } from "vuex";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import Editor from "@/components/partial/inputs/Editor";
+import KeywordRelationTable from "@/components/keyword/relatedTables/KeywordRelationTable";
+import KeywordRelationReverseTable from "@/components/keyword/relatedTables/KeywordRelationReverseTable";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Keyword",
   components: {
     Pagination,
-    KeywordRelationReverseTable,
     KeywordRelationTable,
     Editor,
     InputWrapper,
@@ -276,72 +248,19 @@ export default {
       default: "deep-orange",
     },
   },
-  mixins: [formManipulation, autocompleteMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
   },
 
-  computed: {
-    ...mapState("search", ["keywordSearchParameters"]),
-
-    computedRelatedTabs() {
-      // return this.relatedTabs.filter(tabs => {
-      //   if (this.keyword.is_primary) {
-      //     return (
-      //       tabs.name !== "keyword_relation" &&
-      //       this.relatedData.keyword_relation_reverse.count > 0
-      //     );
-      //   } else {
-      //     return tabs.name !== "keyword_relation_reverse";
-      //   }
-      // });
-
-      return this.relatedTabs.filter(
-        (tabs) => tabs.name !== "keyword_relation_reverse"
-      );
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
-  },
-
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.keywordSearchParameters,
-        request: "FETCH_KEYWORDS",
-        title: "header.keywords",
-        object: "keyword",
-        field: "keyword",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
   },
 
   methods: {
@@ -365,88 +284,35 @@ export default {
       return {
         relatedTabs: [
           { name: "keyword_relation", iconClass: "fas fa-book-open" },
-          { name: "keyword_relation_reverse", iconClass: "fas fa-book-open" },
         ],
         activeTab: "keyword_relation",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "keyword",
-          "language",
-          "keyword_category",
-          "remarks",
-          "description",
-          "is_primary",
-          "is_preferred",
-          "is_private",
-        ],
+        listOfAutocompleteTables: ["list_language"],
         autocomplete: {
           loaders: {
+            list_language: false,
             keyword_category: false,
           },
-          language: [],
+          list_language: [],
           keyword_category: [],
         },
         requiredFields: ["keyword", "language"],
         keyword: {
-          language: {
-            id: 1,
-            value: "inglise",
-            value_en: "English",
-          },
-          is_primary: false,
-          is_preferred: true,
+          id: null,
+          keyword: null,
+          language: null,
+          keyword_category: null,
+          remarks: null,
+          description: null,
+          is_primary: null,
+          is_preferred: null,
+          is_private: false,
         },
         block: {
           info: true,
           description: false,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      fetchListLanguages().then((response) => {
-        this.autocomplete.language = this.handleResponse(response);
-      });
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchKeyword(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "keyword", this.handleResponse(response)[0]);
-            // this.keyword = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.keyword);
-            this.removeUnnecessaryFields(this.keyword, this.copyFields);
-
-            this.$emit("data-loaded", this.keyword);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
     },
 
     setDefaultRelatedData() {
@@ -455,107 +321,16 @@ export default {
           count: 0,
           results: [],
         },
-        keyword_relation_reverse: {
-          count: 0,
-          results: [],
-        },
         searchParameters: {
           keyword_relation: {
             page: 1,
-            paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true],
-          },
-          keyword_relation_reverse: {
-            page: 1,
-            paginateBy: 100,
+            itemsPerPage: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // if (uploadableObject.is_primary) {
-      //   uploadableObject.related_data = {};
-      //   uploadableObject.related_data.keyword_relation = {};
-      // }
-
-      // Adding related data only on add view
-      // if (!this.$route.meta.isEdit) {
-      //   uploadableObject.related_data = {};
-      //   this.relatedTabs.forEach(tab => {
-      //     if (tab.name !== "keyword_relation_reverse") {
-      //       if (this.isNotEmpty(this.relatedData[tab.name])) {
-      //         uploadableObject.related_data[tab.name] = this.relatedData[
-      //           tab.name
-      //         ].results;
-      //       }
-      //     }
-      //   });
-      // }
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      this.keyword.language = {
-        id: obj.language,
-        value: obj.language__value,
-        value_en: obj.language__value_en,
-      };
-      if (this.isNotEmpty(obj.keyword_category)) {
-        this.keyword.keyword_category = {
-          id: obj.keyword_category,
-          name: obj.keyword_category__name,
-          name_en: obj.keyword_category__name_en,
-        };
-        this.autocomplete.keyword_category.push(this.keyword.keyword_category);
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "keyword_relation") {
-        query = fetchKeywordRelation(
-          this.$route.params.id,
-          this.relatedData.searchParameters.keyword_relation
-        );
-      } else if (object === "keyword_relation_reverse") {
-        query = fetchKeywordRelationReverse(
-          this.$route.params.id,
-          this.relatedData.searchParameters.keyword_relation_reverse
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
     },
   },
 };
 </script>
-
-<style scoped></style>

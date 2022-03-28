@@ -150,22 +150,22 @@
                   <v-card-text
                     class="d-flex flex-column justify-center align-center"
                   >
-                    <v-btn
-                      class="my-1 white--text text-none"
-                      width="250"
-                      color="#ea4335"
-                      @click="login('google')"
-                      ><v-icon small left light>fab fa-google</v-icon
-                      >{{ $t("login.signInWithGoogle") }}</v-btn
-                    >
-                    <v-btn
-                      class="my-1 white--text text-none"
-                      width="250"
-                      color="#3b5998"
-                      @click="login('facebook')"
-                      ><v-icon small left light>fab fa-facebook-f</v-icon
-                      >{{ $t("login.signInWithFacebook") }}</v-btn
-                    >
+<!--                    <v-btn-->
+<!--                      class="my-1 white&#45;&#45;text text-none"-->
+<!--                      width="250"-->
+<!--                      color="#ea4335"-->
+<!--                      @click="login('google')"-->
+<!--                      ><v-icon small left light>fab fa-google</v-icon-->
+<!--                      >{{ $t("login.signInWithGoogle") }}</v-btn-->
+<!--                    >-->
+<!--                    <v-btn-->
+<!--                      class="my-1 white&#45;&#45;text text-none"-->
+<!--                      width="250"-->
+<!--                      color="#3b5998"-->
+<!--                      @click="login('facebook')"-->
+<!--                      ><v-icon small left light>fab fa-facebook-f</v-icon-->
+<!--                      >{{ $t("login.signInWithFacebook") }}</v-btn-->
+<!--                    >-->
                     <v-btn
                       class="my-1 white--text text-none"
                       width="250"
@@ -251,10 +251,24 @@ export default {
         const AVAILABLE_LOGIN_TYPES = [
           "password",
           "idcard",
+          // "google",
+          // "facebook",
+          // "orcid",
+        ];
+        const UNAVAILABLE_LOGIN_TYPES = [
+          // "password",
+          // "idcard",
           "google",
           "facebook",
           "orcid",
         ];
+        if (UNAVAILABLE_LOGIN_TYPES.includes(type)) {
+          this.toastInfo({
+            text: "Logging in using socials is still in progress!",
+          });
+          return;
+        }
+
         if (AVAILABLE_LOGIN_TYPES.includes(type)) {
           if (type === "password") {
             const formData = new FormData();

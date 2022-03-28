@@ -1,7 +1,7 @@
 <template>
   <div class="keyword-relation-table">
     <v-data-table
-      :headers="translatedAndFilteredHeaders"
+      :headers="translatedHeaders"
       hide-default-footer
       dense
       :items="response.results"
@@ -26,7 +26,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -37,69 +36,30 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.keyword_relation_type="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.keyword_relation_type__name,
-              en: item.keyword_relation_type__name_en,
-            }"
-          ></div>
-          <div
-            v-else-if="item.keyword_relation_type"
-            v-translate="{
-              et: item.keyword_relation_type.name,
-              en: item.keyword_relation_type.name_en,
-            }"
-          ></div>
-        </div>
+      <template #item.keyword_relation_type="{ item }">
         <div
-          v-else
+          v-if="item.keyword_relation_type"
           v-translate="{
-            et: item.keyword_relation_type__name,
-            en: item.keyword_relation_type__name_en,
+            et: item.keyword_relation_type.name,
+            en: item.keyword_relation_type.name_en,
           }"
-        ></div>
+        />
       </template>
 
-      <template v-slot:item.related_keyword="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/keyword/' + item.related_keyword }"
-            :title="$t('editKeyword.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.related_keyword__keyword }}
-          </router-link>
-          <router-link
-            v-else-if="item.related_keyword"
-            :to="{ path: '/keyword/' + item.related_keyword.id }"
-            :title="$t('editKeyword.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-            >{{ item.related_keyword.keyword }}
-          </router-link>
-        </div>
+      <template #item.related_keyword="{ item }">
         <router-link
-          v-else
-          :to="{ path: '/keyword/' + item.related_keyword }"
+          v-if="item.related_keyword"
+          :to="{ path: '/keyword/' + item.related_keyword.id }"
           :title="$t('editKeyword.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
-          >{{ item.related_keyword__keyword }}
+        >
+          {{ item.related_keyword.keyword }}
         </router-link>
       </template>
     </v-data-table>
 
-    <v-toolbar
-      dense
-      flat
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-      v-if="!isKeywordBaseTerm"
-    >
+    <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
       <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000">
         <template v-slot:activator="{ on }">
           <v-btn :color="bodyActiveColor" small dark v-on="on">{{
@@ -139,7 +99,9 @@
                     is-link
                     route-object="keyword"
                     is-searchable
-                    v-on:search:items="autocompleteKeywordSearch"
+                    v-on:search:items="
+                      autocompleteKeywordSearch($event, 'keyword')
+                    "
                   />
                 </v-col>
               </v-row>
@@ -162,21 +124,27 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { cloneDeep } from "lodash";
-import { fetchKeywordRelationType } from "../../../assets/js/api/apiCalls";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 
 export default {
   name: "KeywordRelationTable",
 
-  components: { AutocompleteWrapper },
+  components: { RelatedDataDeleteDialog, AutocompleteWrapper },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -192,7 +160,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -211,8 +179,10 @@ export default {
       required: false,
       default: true,
     },
-    isKeywordBaseTerm: {
-      type: Boolean,
+    baseTerm: {
+      type: Object,
+      required: false,
+      default: null,
     },
   },
 
@@ -244,21 +214,6 @@ export default {
   }),
 
   computed: {
-    translatedAndFilteredHeaders() {
-      return this.headers
-        .map((header) => {
-          return {
-            ...header,
-            text: this.$t(header.text),
-          };
-        })
-        .filter((header) => {
-          if (this.isKeywordBaseTerm) {
-            return header.value !== "action";
-          } else return header;
-        });
-    },
-
     isItemValid() {
       return (
         typeof this.item.keyword_relation_type === "object" &&
@@ -276,70 +231,24 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         keyword_relation_type: null,
         related_keyword: null,
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "keyword_relation",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "keyword_relation",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (
-        typeof item.keyword_relation_type !== "object" &&
-        item.keyword_relation_type !== null
-      ) {
-        this.item.keyword_relation_type = {
-          id: item.keyword_relation_type,
-          name: item.keyword_relation_type__name,
-          name_en: item.keyword_relation_type__name_en,
-        };
-        this.autocomplete.keyword_relation_type.push(
-          this.item.keyword_relation_type
-        );
-      } else {
+      if (item.keyword_relation_type) {
         this.item.keyword_relation_type = item.keyword_relation_type;
         this.autocomplete.keyword_relation_type.push(
           this.item.keyword_relation_type
         );
       }
 
-      if (
-        typeof item.related_keyword !== "object" &&
-        item.related_keyword !== null
-      ) {
-        this.item.related_keyword = {
-          id: item.related_keyword,
-          keyword: item.related_keyword__keyword,
-        };
-        this.autocomplete.keyword.push(this.item.related_keyword);
-      } else {
+      if (item.related_keyword) {
         this.item.related_keyword = item.related_keyword;
         this.autocomplete.keyword.push(this.item.related_keyword);
       }
@@ -347,38 +256,14 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "keyword_relation",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
-
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.keyword_relation_type.length <= 1) {
         this.autocomplete.loaders.keyword_relation_type = true;
-        fetchKeywordRelationType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.keyword_relation_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("keyword_relation_type");
+        this.autocomplete.keyword_relation_type = response?.results ?? [];
         this.autocomplete.loaders.keyword_relation_type = false;
       }
     },
   },
 };
 </script>
-
-<style scoped></style>

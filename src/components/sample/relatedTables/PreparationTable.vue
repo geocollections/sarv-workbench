@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -38,30 +37,32 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.taxon="{ item }">
+      <template v-slot:item.preparation_number="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/taxon/' + item.taxon }"
-          :title="$t('editTaxon.editMessage')"
+          v-if="item.id"
+          :to="{ path: '/preparation/' + item.id }"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.taxon__taxon }}
-        </router-link>
-        <router-link
-          v-else-if="item.taxon"
-          :to="{ path: '/taxon/' + item.taxon.id }"
-          :title="$t('editTaxon.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.taxon.taxon }}
+          {{ item.preparation_number }}
         </router-link>
       </template>
 
+      <template v-slot:item.classification="{ item }">
+        <div v-if="item.classification">
+          {{ item.classification.class_en }}
+        </div>
+      </template>
+
       <template v-slot:item.storage="{ item }">
-        <div v-if="$route.meta.isEdit">{{ item.storage__location }}</div>
-        <div v-else-if="item.storage">{{ item.storage.location }}</div>
+        <router-link
+          v-if="item.storage"
+          :to="{ path: '/location/' + item.storage.id }"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.storage.location }}
+        </router-link>
       </template>
     </v-data-table>
 
@@ -91,16 +92,14 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.taxon"
+                    v-model="item.classification"
                     :color="bodyActiveColor"
-                    :items="autocomplete.taxon"
-                    :loading="autocomplete.loaders.taxon"
-                    item-text="taxon"
-                    :label="$t('preparation.fossil_group')"
-                    is-link
-                    route-object="taxon"
+                    :items="autocomplete.classification"
+                    :loading="autocomplete.loaders.classification"
+                    item-text="class_en"
+                    :label="$t('preparation.classification')"
                     is-searchable
-                    v-on:search:items="autocompleteTaxonSearch"
+                    v-on:search:items="autocompleteClassificationSearch"
                   />
                 </v-col>
 
@@ -186,7 +185,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -205,7 +204,7 @@ export default {
   data: () => ({
     headers: [
       { text: "preparation.preparation_number", value: "preparation_number" },
-      { text: "preparation.fossil_group", value: "taxon" },
+      { text: "preparation.classification", value: "classification" },
       { text: "preparation.storage", value: "storage" },
       { text: "common.remarks", value: "remarks" },
       {
@@ -218,16 +217,16 @@ export default {
     dialog: false,
     item: {
       preparation_number: "",
-      taxon: null,
+      classification: null,
       storage: null,
       remarks: "",
     },
     isNewItem: true,
     autocomplete: {
-      taxon: [],
+      classification: [],
       storage: [],
       loaders: {
-        taxon: false,
+        classification: false,
         storage: false,
       },
     },
@@ -246,7 +245,7 @@ export default {
     resetItem() {
       this.item = {
         preparation_number: "",
-        taxon: null,
+        classification: null,
         storage: null,
         remarks: "",
       };
@@ -255,24 +254,12 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.taxon !== "object" && item.taxon !== null) {
-        this.item.taxon = {
-          id: item.taxon,
-          taxon: item.taxon__taxon,
-        };
-        this.autocomplete.taxon.push(this.item.taxon);
-      } else if (item.taxon !== null) {
-        this.item.taxon = item.taxon;
-        this.autocomplete.taxon.push(this.item.taxon);
+      if (item.classification) {
+        this.item.classification = item.classification;
+        this.autocomplete.classification.push(this.item.classification);
       }
 
-      if (typeof item.storage !== "object" && item.storage !== null) {
-        this.item.storage = {
-          id: item.storage,
-          location: item.storage__location,
-        };
-        this.autocomplete.storage.push(this.item.storage);
-      } else if (item.storage !== null) {
+      if (item.storage) {
         this.item.storage = item.storage;
         this.autocomplete.storage.push(this.item.storage);
       }
@@ -285,5 +272,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

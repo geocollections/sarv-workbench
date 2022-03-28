@@ -35,8 +35,8 @@
               <autocomplete-wrapper
                 v-model="visit.visitor"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.visitor"
+                :loading="autocomplete.loaders.visitor"
                 item-text="agent"
                 :label="$t('visit.visitor')"
                 use-custom-state
@@ -49,7 +49,7 @@
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'visitor')"
               />
             </v-col>
 
@@ -100,14 +100,16 @@
               <autocomplete-wrapper
                 v-model="visit.visitor_institution"
                 :color="bodyActiveColor"
-                :items="autocomplete.institution"
-                :loading="autocomplete.loaders.institution"
+                :items="autocomplete.visitor_institution"
+                :loading="autocomplete.loaders.visitor_institution"
                 item-text="agent"
                 :label="$t('visit.visitor_institution')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteInstitutionSearch"
+                v-on:search:items="
+                  autocompleteInstitutionSearch($event, 'visitor_institution')
+                "
               />
             </v-col>
           </v-row>
@@ -132,14 +134,14 @@
               <autocomplete-wrapper
                 v-model="visit.host"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.host"
+                :loading="autocomplete.loaders.host"
                 item-text="agent"
                 :label="$t('visit.host')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'host')"
               />
             </v-col>
           </v-row>
@@ -192,20 +194,13 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {
-  fetchListAgentType,
-  fetchListCountry,
-  fetchVisit,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-
-import DateWrapper from "../partial/inputs/DateWrapper";
-import { mapState } from "vuex";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "Visit",
@@ -235,68 +230,46 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin],
+  mixins: [formManipulation, autocompleteMixin, detailViewUtilsMixin],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.visitSearchParameters,
-        request: "FETCH_VISITS",
-        title: "header.visits",
-        object: "visit",
-        field: "visitor__agent",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    ...mapState("search", ["visitSearchParameters"]),
   },
 
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "visitor",
-          "visitor_free",
-          "date_arrived",
-          "date_left",
-          "visitor_institution",
-          "visitor_country",
-          "host",
-          "purpose",
-          "collections_studied",
-          "items_studied",
-          "remarks",
-        ],
+        listOfAutocompleteTables: ["list_country"],
         autocomplete: {
           loaders: {
-            agent: false,
+            visitor: false,
+            host: false,
             institution: false,
             list_country: false,
           },
-          agent: [],
+          visitor: [],
+          host: [],
           institution: [],
           list_country: [],
         },
-        visit: {},
+        visit: {
+          id: null,
+          visitor: null,
+          visitor_free: null,
+          date_arrived: null,
+          date_left: null,
+          visitor_institution: null,
+          visitor_country: null,
+          host: null,
+          purpose: null,
+          collections_studied: null,
+          items_studied: null,
+          remarks: null,
+        },
         requiredFields: [],
         optionalFields: {
           visit: ["visitor", "visitor_free"],
@@ -306,96 +279,6 @@ export default {
         },
       };
     },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchVisit(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "visit", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.visit);
-            this.removeUnnecessaryFields(this.visit, this.copyFields);
-
-            this.$emit("data-loaded", this.visit);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    loadAutocompleteFields() {
-      fetchListCountry().then(
-        (response) =>
-          (this.autocomplete.list_country = this.handleResponse(response))
-      );
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.visitor)) {
-        this.visit.visitor = {
-          id: obj.visitor,
-          agent: obj.visitor__agent,
-        };
-        this.autocomplete.agent.push(this.visit.visitor);
-      }
-      if (this.isNotEmpty(obj.visitor_institution)) {
-        this.visit.visitor_institution = {
-          id: obj.visitor_institution,
-          agent: obj.visitor_institution__agent,
-        };
-        this.autocomplete.institution.push(this.visit.visitor_institution);
-      }
-      if (this.isNotEmpty(obj.host)) {
-        this.visit.host = {
-          id: obj.host,
-          agent: obj.host__agent,
-        };
-        this.autocomplete.agent.push(this.visit.host);
-      }
-      this.visit.country = {
-        id: obj.country,
-        value: obj.visitor_country__value,
-        value_en: obj.visitor_country__value_en,
-      };
-    },
   },
 };
 </script>
-
-<style scoped></style>

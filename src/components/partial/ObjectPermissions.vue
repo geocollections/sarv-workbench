@@ -186,25 +186,13 @@
 
 <script>
 import AutocompleteWrapper from "./inputs/AutocompleteWrapper";
-import {
-  fetchGroups,
-  fetchObjectGroupPermissions,
-  fetchObjectPermissions,
-  fetchObjectUserPermissions,
-  fetchUsers,
-  postRequest,
-} from "../../assets/js/api/apiCalls";
-import toastMixin from "../../mixins/toastMixin";
+import toastMixin from "@/mixins/toastMixin";
 
 export default {
   name: "ObjectPermissions",
   components: { AutocompleteWrapper },
   mixins: [toastMixin],
   props: {
-    table: {
-      type: String,
-      required: true,
-    },
     objectData: {
       type: Object,
       required: true,
@@ -239,6 +227,12 @@ export default {
     },
   }),
 
+  computed: {
+    table() {
+      return this.$route.meta.object;
+    },
+  },
+
   watch: {
     objectData: {
       handler: function (newVal) {
@@ -265,7 +259,7 @@ export default {
       }
     },
 
-    // Todo: Refactor + add delete perms
+    // Todo: Review (rethink logic how it would be easiest for the users) + Add delete perms
     assignPerms(arrayOfPerms, identifier) {
       if (arrayOfPerms && arrayOfPerms.length > 0) {
         arrayOfPerms.forEach((perm) => {
@@ -277,7 +271,7 @@ export default {
 
             if (perm.permission__codename.includes("change")) {
               this.object_permissions.change_user.push(object);
-            } else if (perm.permission__codename.includes("add")) {
+            } else if (perm.permission__codename.includes("view")) {
               this.object_permissions.view_user.push(object);
             }
           } else {
@@ -286,7 +280,7 @@ export default {
 
             if (perm.permission__codename.includes("change")) {
               this.object_permissions.change_group.push(object);
-            } else if (perm.permission__codename.includes("add")) {
+            } else if (perm.permission__codename.includes("view")) {
               this.object_permissions.view_group.push(object);
             }
           }
@@ -294,44 +288,28 @@ export default {
       }
     },
 
-    updatePermissions() {
+    async updatePermissions() {
       let perms_data = this.buildPermissionData();
 
-      let url = `${this.table}/${this.objectData.id}/setpermissions`;
+      let url = `${this.table}/${this.objectData.id}/permissions`;
       let formData = new FormData();
-      formData.append("data", JSON.stringify(perms_data));
+      formData.set("user_perms", JSON.stringify(perms_data.user_perms));
+      formData.set("group_perms", JSON.stringify(perms_data.group_perms));
 
-      postRequest(url, formData).then(
-        (response) => {
-          if (response.status === 200) {
-            if (response.data) {
-              if (response.data.error) {
-                this.toastError({ text: response.data.error });
-              } else {
-                if (this.$i18n.locale === "ee") {
-                  this.toastSuccess({ text: response.data.message_et });
-                } else {
-                  this.toastSuccess({ text: response.data.message });
-                }
-              }
-            }
-          }
-        },
-        (errResponse) => {
-          console.log("ERROR: " + JSON.stringify(errResponse));
-          this.toastError({ text: this.$t("messages.uploadError") });
-        }
-      );
+      const response = await this.$api.rw.post(url, formData);
     },
 
     buildPermissionData() {
-      let permission_data = [];
+      let permission_data = {
+        user_perms: [],
+        group_perms: [],
+      };
       let table = this.table;
       if (table.includes("_")) table = table.replace("_", "");
 
       Object.keys(this.object_permissions).forEach((key) => {
         if (this.object_permissions[key].length > 0) {
-          let object = key.includes("group") ? "group" : "user";
+          let object = key.includes("group") ? "group_id" : "user_id";
           let perm = key.includes("view") ? `view_${table}` : `change_${table}`;
 
           this.object_permissions[key].forEach((entity) => {
@@ -339,7 +317,9 @@ export default {
               [object]: entity.id,
               perm: perm,
             };
-            permission_data.push(perm_object);
+            if (key.includes("group"))
+              permission_data.group_perms.push(perm_object);
+            else permission_data.user_perms.push(perm_object);
           });
         }
       });
@@ -347,14 +327,20 @@ export default {
       return permission_data;
     },
 
-    getAutocompletes() {
-      fetchGroups().then((response) => {
-        this.autocomplete.groups = this.handleResponse(response);
+    async getAutocompletes() {
+      const groups = await this.$api.rw.get("group", {
+        options: {
+          itemsPerPage: 1000,
+        },
+      });
+      const users = await this.$api.rw.get("user", {
+        options: {
+          itemsPerPage: 1000,
+        },
       });
 
-      fetchUsers().then((response) => {
-        this.autocomplete.users = this.handleResponse(response);
-      });
+      this.autocomplete.groups = groups?.results;
+      this.autocomplete.users = users?.results;
     },
 
     handleResponse(response) {
@@ -365,5 +351,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

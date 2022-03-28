@@ -13,5 +13,3 @@ export default {
   name: "HierarchyUpdate",
 };
 </script>
-
-<style scoped></style>

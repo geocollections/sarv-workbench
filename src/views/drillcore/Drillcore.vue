@@ -132,7 +132,7 @@
         <div v-show="block.details" class="pa-1">
           <!-- DEPOSITORY, LOCATION and STORAGE -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
                 v-model="drillcore.depository"
                 :color="bodyActiveColor"
@@ -143,15 +143,15 @@
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="drillcore.location"
-                :color="bodyActiveColor"
-                :label="$t('common.location')"
-              />
-            </v-col>
+            <!--            <v-col cols="12" md="4" class="pa-1">-->
+            <!--              <input-wrapper-->
+            <!--                v-model="drillcore.location"-->
+            <!--                :color="bodyActiveColor"-->
+            <!--                :label="$t('common.location')"-->
+            <!--              />-->
+            <!--            </v-col>-->
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
                 v-model="drillcore.storage"
                 :color="bodyActiveColor"
@@ -208,8 +208,119 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="drillcore.attachments"
+                @update:existing-files="drillcore.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- DRILLCORE BOX IMAGES -->
+    <v-card
+      v-if="$route.meta.isEdit && drillcore.drillcore_boxes.length > 0"
+      class="mt-2"
+      id="block-drillcore_boxes"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.drillcore_boxes = !block.drillcore_boxes"
+        >
+          <span>{{ $t("drillcore.relatedTables.drillcore_box_images") }}</span>
+          <v-icon right>fas fa-images</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.drillcore_boxes = !block.drillcore_boxes"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.drillcore_boxes ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.drillcore_boxes">
+          <v-btn
+            class="my-3 mx-2"
+            v-if="drillcore.drillcore_boxes.count > 0"
+            :color="bodyActiveColor"
+            dark
+            @click="openDrillcorePrintView($route.params.id)"
+          >
+            <v-icon small class="pr-1">fas fa-print</v-icon>
+            {{ $t("common.print") }}
+          </v-btn>
+          <v-divider class="mt-0" />
+          <drillcore-box-list-view :data="drillcore.drillcore_boxes">
+            <template v-slot:itemTitle="{ item }">
+              <router-link
+                v-if="item && item.id"
+                :to="{ path: '/drillcore_box/' + item.id }"
+                :title="$t('editDrillcoreBox.editMessage')"
+                class="sarv-link ma-0"
+                :class="`${bodyActiveColor}--text`"
+              >
+                <h5
+                  v-translate="{
+                    et: `Kast nr. ${item.number} ${boxRange(item)}`,
+                    en: `Box nr. ${item.number} ${boxRange(item)}`,
+                  }"
+                ></h5>
+              </router-link>
+            </template>
+          </drillcore-box-list-view>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -266,70 +377,16 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
-          <div v-show="activeTab === 'drillcore_box_images'">
-            <v-btn
-              class="my-3 mx-2"
-              v-if="relatedData.drillcore_box_images.count > 0"
-              :color="bodyActiveColor"
-              dark
-              @click="openDrillcorePrintView($route.params.id)"
-            >
-              <v-icon small class="pr-1">fas fa-print</v-icon>
-              {{ $t("common.print") }}
-            </v-btn>
-            <v-divider class="mt-0" />
-            <drillcore-box-list-view
-              :data="relatedData.drillcore_box_images.results"
-            >
-              <template v-slot:itemTitle="{ item }">
-                <router-link
-                  :to="{ path: '/drillcore_box/' + item.drillcore_box }"
-                  :title="$t('editDrillcoreBox.editMessage')"
-                  class="sarv-link pt-3 ma-0"
-                  :class="`${bodyActiveColor}--text`"
-                >
-                  <h5
-                    v-translate="{
-                      et: `Kast nr. ${item.drillcore_box__number} ${boxRange(
-                        item
-                      )}`,
-                      en: `Box nr. ${item.drillcore_box__number} ${boxRange(
-                        item
-                      )}`,
-                    }"
-                  ></h5>
-                </router-link>
-              </template>
-            </drillcore-box-list-view>
-          </div>
-
           <!-- PAGINATION -->
           <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -355,29 +412,21 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {
-  fetchDrillcore,
-  fetchDrillcoreAttachments,
-  fetchDrillcoreStudies,
-  fetchListDrillcoreStorage,
-  fetchRelatedDrillcoreBoxes,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
-import DrillcoreBoxTable from "../../components/drillcore/relatedTables/DrillcoreBoxTable";
-import DrillcoreStudyTable from "../../components/drillcore/relatedTables/DrillcoreStudyTable";
-import requestsMixin from "../../mixins/requestsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import DrillcoreBoxTable from "@/components/drillcore/relatedTables/DrillcoreBoxTable";
+import DrillcoreStudyTable from "@/components/drillcore/relatedTables/DrillcoreStudyTable";
 import { mapActions, mapState } from "vuex";
-import { fetchRelatedDrillcoreBoxImages } from "@/assets/js/api/apiCalls";
 import DrillcoreBoxListView from "@/components/drillcore_box/DrillcoreBoxListView";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Drillcore",
@@ -416,7 +465,8 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -424,62 +474,23 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.drillcoreSearchParameters,
-        request: "FETCH_DRILLCORES",
-        title: "header.drillcores",
-        object: "drillcore",
-        field: "drillcore",
-      });
-    }
-
     this.loadFullInfo();
   },
 
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
-  },
-
   computed: {
-    ...mapState("search", ["drillcoreSearchParameters"]),
     ...mapState("search", {
       activeRelatedDataTab: (state) => state.activeRelatedDataTab.drillcore,
     }),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
     boxRange(item) {
-      if (!item.drillcore_box__depth_start && !item.drillcore_box__depth_end) {
+      if (!item?.depth_start && !item?.depth_end) {
         return "";
       }
 
-      return `(${item.drillcore_box__depth_start ?? ""} - ${
-        item.drillcore_box__depth_end ?? ""
-      } m)`;
+      return `(${item?.depth_start ?? ""} - ${item?.depth_end ?? ""} m)`;
     },
     setTab(type) {
       if (type) {
@@ -495,30 +506,11 @@ export default {
       return {
         relatedTabs: [
           { name: "drillcore_box", iconClass: "fas fa-box" },
-          { name: "drillcore_box_images", iconClass: "fas fa-camera-retro" },
           { name: "drillcore_study", iconClass: "fas fa-school" },
-          { name: "attachment_link", iconClass: "far fa-folder-open" },
         ],
         activeTab: "drillcore_box",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "drillcore",
-          "drillcore_en",
-          "locality",
-          "year",
-          "agent",
-          "depository",
-          "location",
-          "storage",
-          "boxes",
-          "box_numbers",
-          "number_meters",
-          "direction_lr",
-          "depth",
-          "remarks",
-          "is_private",
-        ],
+        listOfAutocompleteTables: ["list_drillcore_storage"],
         autocomplete: {
           loaders: {
             locality: false,
@@ -526,6 +518,8 @@ export default {
             list_drillcore_storage: false,
             storage: false,
             attachment: false,
+            attachments: false,
+            drillcore_boxes: false,
             stratigraphy_base: false,
             stratigraphy_top: false,
           },
@@ -534,232 +528,60 @@ export default {
           list_drillcore_storage: [],
           storage: [],
           attachment: [],
+          attachments: [],
+          drillcore_boxes: [],
           stratigraphy_base: [],
           stratigraphy_top: [],
         },
         requiredFields: ["drillcore", "drillcore_en"],
-        drillcore: {},
+        drillcore: {
+          id: null,
+          drillcore: null,
+          drillcore_en: null,
+          locality: null,
+          year: null,
+          agent: null,
+          depository: null,
+          // location: null,
+          storage: null,
+          boxes: null,
+          box_numbers: null,
+          number_meters: null,
+          direction_lr: null,
+          depth: null,
+          remarks: null,
+          is_private: false,
+          attachments: [],
+          drillcore_boxes: [],
+        },
         block: {
           info: true,
           details: true,
+          files: true,
+          drillcore_boxes: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        this.$emit("set-object", "drillcore");
-        fetchDrillcore(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "drillcore", this.handleResponse(response)[0]);
-            // this.drillcore = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.drillcore);
-
-            this.removeUnnecessaryFields(this.drillcore, this.copyFields);
-            this.$emit("data-loaded", this.drillcore);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-
-        this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map((tab) => tab.name)
-        );
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    loadAutocompleteFields() {
-      fetchListDrillcoreStorage().then(
-        (response) =>
-          (this.autocomplete.list_drillcore_storage =
-            this.handleResponse(response))
-      );
     },
 
     setDefaultRelatedData() {
       return {
         drillcore_box: { count: 0, results: [] },
-        drillcore_box_images: { count: 0, results: [] },
         drillcore_study: { count: 0, results: [] },
-        attachment_link: { count: 0, results: [] },
         searchParameters: {
           drillcore_box: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["id"],
             sortDesc: [true],
-          },
-          drillcore_box_images: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["drillcore_box__depth_start"],
-            sortDesc: [false],
           },
           drillcore_study: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["id"],
-            sortDesc: [true],
-          },
-          attachment_link: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["original_filename"],
             sortDesc: [true],
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.relatedData[tab.name].count > 0)
-            if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment =
-                this.relatedData.attachment_link.results.map((item) => {
-                  return { id: item.id };
-                });
-            } else {
-              uploadableObject.related_data[tab.name] =
-                this.relatedData[tab.name].results;
-
-              uploadableObject.related_data[tab.name].forEach((item) => {
-                Object.keys(item).forEach((key) => {
-                  if (typeof item[key] === "object" && item[key] !== null) {
-                    item[key] = item[key].id ? item[key].id : null;
-                  }
-                });
-              });
-            }
-        });
-      } else {
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment_link.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.locality)) {
-        this.drillcore.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.drillcore.locality);
-      }
-      if (this.isNotEmpty(obj.agent)) {
-        this.drillcore.agent = {
-          id: obj.agent,
-          agent: obj.agent__agent,
-        };
-        this.autocomplete.agent.push(this.drillcore.agent);
-      }
-      this.drillcore.depository = {
-        id: obj.depository,
-        value: obj.depository__value,
-        value_en: obj.depository__value_en,
-      };
-      if (this.isNotEmpty(obj.storage)) {
-        this.drillcore.storage = {
-          id: obj.storage,
-          location: obj.storage__location,
-        };
-        this.autocomplete.storage.push(this.drillcore.storage);
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "drillcore_box") {
-        query = fetchRelatedDrillcoreBoxes(
-          this.$route.params.id,
-          this.relatedData.searchParameters.drillcore_box
-        );
-      } else if (object === "drillcore_box_images") {
-        query = fetchRelatedDrillcoreBoxImages(
-          this.$route.params.id,
-          this.relatedData.searchParameters.drillcore_box_images
-        );
-      } else if (object === "drillcore_study") {
-        query = fetchDrillcoreStudies(
-          this.$route.params.id,
-          this.relatedData.searchParameters.drillcore_study
-        );
-      } else if (object === "attachment_link") {
-        query = fetchDrillcoreAttachments(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
     },
 
     openDrillcorePrintView(id) {
@@ -770,14 +592,8 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "drillcore", singleFileMetadata);
-    },
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.drillcore, singleFileMetadata);
     },
   },
 };
 </script>
-
-<style scoped></style>

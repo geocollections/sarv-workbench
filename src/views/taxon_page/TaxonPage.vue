@@ -49,10 +49,13 @@
           <v-row no-gutters>
             <!-- LANGUAGE -->
             <v-col cols="6" class="pa-1">
-              <input-wrapper
+              <select-wrapper
+                :value="taxon_page.language"
                 v-model="taxon_page.language"
                 :color="bodyActiveColor"
                 :label="$t('common.language')"
+                :items="languageIso"
+                :clearable="false"
               />
             </v-col>
             <!-- TITLE -->
@@ -90,14 +93,14 @@
               <autocomplete-wrapper
                 v-model="taxon_page.author"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.author"
+                :loading="autocomplete.loaders.author"
                 item-text="agent"
                 :label="$t('common.author')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'author')"
               />
             </v-col>
           </v-row>
@@ -131,21 +134,20 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import { fetchTaxonPagesDetail } from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import Editor from "../partial/inputs/Editor";
-import { mapState } from "vuex";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import Editor from "@/components/partial/inputs/Editor";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import SelectWrapper from "@/components/partial/inputs/SelectWrapper";
 
 export default {
   name: "TaxonPage",
 
   components: {
+    SelectWrapper,
     InputWrapper,
     CheckboxWrapper,
     Editor,
@@ -170,135 +172,60 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin],
+  mixins: [formManipulation, autocompleteMixin, detailViewUtilsMixin],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.taxon_pagesSearchParameters,
-        request: "FETCH_TAXON_PAGES",
-        title: "header.taxon_pages",
-        object: "taxon_page",
-        field: "title",
-      });
-    }
-
     this.loadFullInfo();
   },
 
+  // Note: Kinda dirty solution but this is the only that kind of exception in whole db
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
+    "taxon_page.language"(newVal) {
+      if (newVal?.id && newVal?.iso1) this.taxon_page.language = newVal.iso1;
     },
   },
 
   computed: {
-    ...mapState("search", ["taxon_pagesSearchParameters"]),
+    languageIso() {
+      return this.autocomplete.list_language.map((item) => item.iso1);
+    },
   },
 
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "frontpage",
-          "language",
-          "frontpage_title",
-          "title",
-          "on_frontpage",
-          "taxon",
-          "content",
-          "author",
-        ],
         autocomplete: {
           loaders: {
             taxon: false,
-            agent: false,
+            author: false,
+            list_language: false,
           },
           taxon: [],
-          agent: [],
+          author: [],
+          list_language: [],
         },
-        taxon_page: {},
+        listOfAutocompleteTables: ["list_language"],
+        taxon_page: {
+          id: null,
+          frontpage: null,
+          language: null,
+          frontpage_title: null,
+          title: null,
+          on_frontpage: false,
+          taxon: null,
+          content: null,
+          author: null,
+        },
         requiredFields: ["taxon"],
         block: {
           info: true,
         },
       };
     },
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.taxon)) {
-        this.taxon_page.taxon = {
-          id: obj.taxon,
-          taxon: obj.taxon__taxon,
-        };
-        this.autocomplete.taxon.push(this.taxon_page.taxon);
-      }
-      if (this.isNotEmpty(obj.author)) {
-        this.taxon_page.author = {
-          id: obj.agent,
-          agent: obj.author__agent,
-        };
-        this.autocomplete.agent.push(this.taxon_page.author);
-      }
-    },
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchTaxonPagesDetail(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "taxon_page", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.taxon_page);
-            this.removeUnnecessaryFields(this.taxon_page, this.copyFields);
-            this.$emit("data-loaded", this.taxon_page);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
   },
 };
 </script>
-
-<style scoped></style>

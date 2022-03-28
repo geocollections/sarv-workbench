@@ -6,7 +6,7 @@ const getDefaultState = () => {
     count: 0,
     options: {
       page: 1,
-      paginateBy: 10,
+      itemsPerPage: 10,
       sortBy: ["id"],
       sortDesc: [true],
     },
@@ -202,4 +202,5 @@ export default {
   getters,
   actions,
   mutations,
+  getDefaultState,
 };

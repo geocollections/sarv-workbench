@@ -9,7 +9,7 @@
     <!-- EXPORT and OPTIONS -->
     <v-row align="center" justify="start" class="px-4 mt-4 mb-1 d-print-none">
       <!-- EXPORT -->
-      <div class="mr-4 mb-2" v-if="exportButtons">
+      <div class="mb-2 mr-4" v-if="exportButtons">
         <export-buttons
           :filename="module"
           :table-data="response.results"
@@ -20,7 +20,7 @@
       <!-- OPTIONS -->
       <div v-if="useListView || useImageView" class="mb-2">
         <v-radio-group
-          class="radio-buttons mt-0"
+          class="mt-0 radio-buttons"
           :value="$_tableViewMixin_viewType"
           @change="$_tableViewMixin_updateViewType({ value: $event })"
           row
@@ -56,26 +56,11 @@
       </div>
     </v-row>
 
-    <pagination
-      class="pb-2"
-      :body-active-color="bodyActiveColor"
-      :count="response.count"
-      :paginate-by="$_tableViewMixin_options.paginateBy"
-      :options="paginateByOptionsTranslated"
-      :page="$_tableViewMixin_options.page"
-      v-on:update:page="
-        $_tableViewMixin_updateOptions({ value: $event, key: 'page' })
-      "
-      v-on:update:paginateBy="
-        $_tableViewMixin_updateOptions({ value: $event, key: 'paginateBy' })
-      "
-    />
-
     <!-- DATA TABLE -->
     <v-card
       elevation="4"
       :color="bodyColor.split('n-')[0] + 'n-3'"
-      class="table-card my-1"
+      class="my-1 table-card"
       :loading="isLoading"
     >
       <template v-slot:progress>
@@ -94,6 +79,15 @@
         </span>
         <div class="flex-grow-1"></div>
       </v-card-title>
+
+      <Pagination
+        v-if="!isTableView && response.count > 10"
+        :count="response.count"
+        :page="$_tableViewMixin_options.page"
+        :items-per-page="$_tableViewMixin_options.itemsPerPage"
+        :body-active-color="bodyActiveColor"
+        @update:options="handleUpdateOptions"
+      />
 
       <!-- LIST VIEW -->
       <list-view
@@ -114,40 +108,21 @@
       />
 
       <router-view
+        v-if="isTableView"
         ref="table"
         :response="response"
         :filter="filterTable"
         :search-parameters="$_tableViewMixin_options"
-        v-if="isTableView && response.count > 0"
+        :headers="$_tableViewMixin_translatedHeaders"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
-        v-on:toggle-reference-in-active-library="toggleReferenceInActiveLibrary"
-        v-on:toggle-item-in-selection-series="toggleItemInSelectionSeries"
-        v-on:toggle-select-all="toggleSelectAll"
         :body-color="bodyColor"
+        :is-loading="isLoading"
         :body-active-color="bodyActiveColor"
-        v-on:update:sorting="
-          $_tableViewMixin_updateOptions({
-            value: $event.value,
-            key: $event.key,
-          })
-        "
+        @change:headers="$_tableViewMixin_updateHeaders"
+        @reset:headers="$_tableViewMixin_resetHeaders"
+        @update:options="handleUpdateOptions"
       />
     </v-card>
-
-    <pagination
-      class="pt-2 pt-md-0 pb-0 pb-md-5"
-      :body-active-color="bodyActiveColor"
-      :count="response.count"
-      :paginate-by="$_tableViewMixin_options.paginateBy"
-      :options="paginateByOptionsTranslated"
-      :page="$_tableViewMixin_options.page"
-      v-on:update:page="
-        $_tableViewMixin_updateOptions({ value: $event, key: 'page' })
-      "
-      v-on:update:paginateBy="
-        $_tableViewMixin_updateOptions({ value: $event, key: 'paginateBy' })
-      "
-    />
   </div>
 </template>
 
@@ -160,9 +135,8 @@ import { mapActions, mapState } from "vuex";
 import ScrollToTop from "./partial/ScrollToTop";
 import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
-import Pagination from "@/components/partial/Pagination";
-import { fetchChangeRecordState } from "@/assets/js/api/apiCalls";
 import tableViewMixin from "@/mixins/tableViewMixin";
+import Pagination from "@/components/partial/Pagination";
 
 export default {
   components: {
@@ -176,10 +150,6 @@ export default {
     apiCall: {
       type: Function,
       required: true,
-    },
-    module: {
-      type: String,
-      default: null,
     },
     exportButtons: {
       type: Boolean,
@@ -232,24 +202,25 @@ export default {
     isListView() {
       return this.$_tableViewMixin_viewType === "list";
     },
+
+    module() {
+      return this.$route.meta.object;
+    },
   },
+  created() {
+    window.addEventListener("keyup", this.handleKeyUp);
+    this.$root.$on("table-search", this.search);
+    this.search();
+  },
+  beforeDestroy() {
+    window.removeEventListener("keyup", this.handleKeyUp);
+    this.$root.$off("table-search", this.search);
+  },
+
   watch: {
-    $_tableViewMixin_options: {
-      handler() {
-        this.search();
-      },
-      immediate: true,
-      deep: true,
-    },
-    $_tableViewMixin_searchFields: {
-      handler() {
-        this.search();
-      },
-      deep: true,
-    },
-    $_tableViewMixin_viewType(newVal, oldVal) {
-      this.search();
-    },
+    // $_tableViewMixin_viewType() {
+    //   this.search();
+    // },
     currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
       if (
@@ -278,38 +249,35 @@ export default {
       this.isLoading = true;
 
       const response = await this.apiCall();
-      console.log(response);
 
       this.isLoading = false;
 
       this.noResults = response?.count === 0;
 
-      if (response?.status === 200) {
-        // Todo: Old rwapi (should be replaced)
-        if (response?.data?.count === 0) this.noResults = true;
-        if (response?.data?.count > 0) this.noResults = false;
-        this.response.count = response.data.count ?? 0;
-        this.response.results = response.data.results ?? [];
-      } else {
-        // Todo: New rwapi, this should be the only one (for now)
-        this.response.count = response?.count ?? 0;
-        this.response.results = response?.results ?? [];
-        this.noResults = this.response.count === 0;
+      this.response.count = response?.count ?? 0;
+      this.response.results = response?.results ?? [];
+      this.noResults = this.response.count === 0;
 
-        this.setSidebarList({
-          module: this.module,
-          response,
-          page: this.$_tableViewMixin_options.page,
-          paginateBy: this.$_tableViewMixin_options.paginateBy,
-        });
-      }
-    }, 500),
+      this.$_tableViewMixin_setItems({
+        items: this.response.results,
+        count: this.response.count,
+      });
+    }, 400),
 
     changeObjectsPrivacyState(state, id) {
       let formData = new FormData();
       formData.set("is_private", state);
 
       this.$api.rw.put(this.module, id, formData);
+    },
+
+    handleKeyUp(event) {
+      if (event.key === "Enter" || event.keyCode === 13) this.search();
+    },
+
+    handleUpdateOptions(payload) {
+      this.$_tableViewMixin_updateOptions(payload);
+      this.search();
     },
   },
 };

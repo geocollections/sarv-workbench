@@ -99,15 +99,12 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import { fetchWebPagesDetail } from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import Editor from "../partial/inputs/Editor";
-import { mapState } from "vuex";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import Editor from "@/components/partial/inputs/Editor";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
 
 export default {
   name: "WebPages",
@@ -136,110 +133,34 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin],
+  mixins: [formManipulation, autocompleteMixin, detailViewUtilsMixin],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.web_pagesSearchParameters,
-        request: "FETCH_WEB_PAGES",
-        title: "header.web_pages",
-        object: "web_pages",
-        field: "title_en",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    ...mapState("search", ["web_pagesSearchParameters"]),
   },
 
   methods: {
     setInitialData() {
       return {
-        copyFields: [
-          "id",
-          "site",
-          "title_et",
-          "title_en",
-          "content_en",
-          "content_et",
-          "public",
-        ],
-        web_pages: {},
+        web_pages: {
+          id: null,
+          site: null,
+          title_et: null,
+          title_en: null,
+          content_en: null,
+          content_et: null,
+          public: false,
+        },
         requiredFields: [],
         block: {
           info: true,
         },
       };
     },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchWebPagesDetail(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "web_pages", this.handleResponse(response)[0]);
-            this.removeUnnecessaryFields(this.web_pages, this.copyFields);
-
-            this.$emit("data-loaded", this.web_pages);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
   },
 };
 </script>
-
-<style scoped></style>

@@ -1,28 +1,18 @@
 <template>
-  <v-data-table
-    :headers="$_tableHeaderMixin_shownHeaders"
-    dense
-    hide-default-footer
+  <table-wrapper
+    v-bind="$attrs"
+    :headers="headers"
     :items="response.results"
-    :items-per-page="searchParameters.paginateBy"
-    multi-sort
-    :page="searchParameters.page"
-    :search="filter"
-    :show-select="!!activeSelectionSeries"
-    @item-selected="
-      $emit('toggle-item-in-selection-series', $event, 'analysis')
-    "
-    @toggle-select-all="$emit('toggle-select-all', $event, 'analysis')"
-    expand-icon="fas fa-caret-down"
-    :value="selected"
-    :sort-by="searchParameters.sortBy"
-    :sort-desc="searchParameters.sortDesc"
-    @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
-    @update:sort-desc="
-      $emit('update:sorting', { value: $event, key: 'sortDesc' })
-    "
-    :server-items-length="response.count"
-    :class="bodyColor.split('n-')[0] + 'n-5'"
+    :count="response.count"
+    :options="searchParameters"
+    :show-search="false"
+    :show-select="$_activeListMixin_isShowSelect"
+    :value="selectedList"
+    @change:headers="$emit('change:headers', $event)"
+    @reset:headers="$emit('reset:headers')"
+    @update:options="$emit('update:options', $event)"
+    @item-selected="$_activeListMixin_itemSelected"
+    @toggle-select-all="$_activeListMixin_toggleSelectAll"
   >
     <template v-slot:item.id="{ item }">
       <router-link
@@ -75,15 +65,18 @@
         <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
 import tableViewMixin from "@/mixins/tableViewMixin";
+import TableWrapper from "@/components/tables/TableWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "AnalysisTable",
+  components: { TableWrapper },
   mixins: [activeListMixin, tableViewMixin],
   props: {
     response: {
@@ -99,9 +92,14 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
+    },
+    headers: {
+      type: Array,
+      required: true,
+      default: () => [],
     },
     bodyColor: {
       type: String,
@@ -113,6 +111,9 @@ export default {
       required: false,
       default: "deep-orange",
     },
+  },
+  computed: {
+    ...mapState("search", ["activeSelectionSeries"]),
   },
   methods: {
     getEmaUrl(params) {

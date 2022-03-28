@@ -83,7 +83,7 @@
 </template>
 <script>
 export default {
-  name: 'PaginationControls',
+  name: "PaginationControls",
   props: {
     options: {
       type: Object,
@@ -97,7 +97,7 @@ export default {
           groupDesc: [],
           multiSort: false,
           mustSort: false,
-        }
+        };
       },
     },
     pagination: {
@@ -110,7 +110,7 @@ export default {
           pageCount: 1,
           pageStart: 0,
           pageStop: 0,
-        }
+        };
       },
     },
     itemsPerPageOptions: {
@@ -119,7 +119,7 @@ export default {
     },
     itemsPerPageText: {
       type: String,
-      default: 'Rows per page',
+      default: "Rows per page",
     },
     pageSelectText: {
       type: String,
@@ -127,80 +127,80 @@ export default {
     },
     goToText: {
       type: String,
-      default: 'Go to page',
+      default: "Go to page",
     },
     goToButtonText: {
       type: String,
-      default: 'Go',
+      default: "Go",
     },
     selectPageId: {
       type: String,
-      default: 'page-select-btn',
+      default: "page-select-btn",
     },
   },
   data() {
     return {
       goToValue: NaN,
-    }
+    };
   },
   computed: {
     pages() {
-      return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     },
   },
   methods: {
     setGoToValue(e) {
-      if (isNaN(e)) this.goToValue = e
-      else this.goToValue = parseInt(e)
+      if (isNaN(e)) this.goToValue = e;
+      else this.goToValue = parseInt(e);
     },
     selectPage() {
-      if (this.$refs['go-to-field'].validate(true)) {
-        this.$emit('update:options', {
+      if (this.$refs["go-to-field"].validate(true)) {
+        this.$emit("update:options", {
           ...this.options,
           page: this.goToValue,
-        })
-        this.goToValue = NaN
+        });
+        this.goToValue = NaN;
       }
     },
     next() {
-      this.$emit('update:options', {
+      this.$emit("update:options", {
         ...this.options,
         page: this.options.page + 1,
-      })
+      });
     },
     previous() {
-      this.$emit('update:options', {
+      this.$emit("update:options", {
         ...this.options,
         page: this.options.page - 1,
-      })
+      });
     },
     first() {
-      this.$emit('update:options', {
+      this.$emit("update:options", {
         ...this.options,
         page: 1,
-      })
+      });
     },
     last() {
-      this.$emit('update:options', {
+      this.$emit("update:options", {
         ...this.options,
         page: this.pagination.pageCount,
-      })
+      });
     },
     changeRowsPerPage(e) {
-      this.$emit('update:options', {
+      this.$emit("update:options", {
         ...this.options,
         itemsPerPage: e,
         page: 1,
-      })
+      });
     },
     pageLimitRule(value) {
-      if (isNaN(value)) return false
-      if (parseInt(value) < 1) return false
-      if (parseInt(value) > this.pagination.pageCount) return false
-      return true
+      if (isNaN(value)) return false;
+      if (parseInt(value) < 1) return false;
+      if (parseInt(value) > this.pagination.pageCount) return false;
+      return true;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -213,7 +213,7 @@ export default {
 }
 
 /* Firefox */
-::v-deep input[type='number'] {
+::v-deep input[type="number"] {
   -moz-appearance: textfield;
 }
 </style>

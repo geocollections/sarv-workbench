@@ -5,8 +5,7 @@
     <table-view-search :col-size="4" />
 
     <list-module-core
-      :module="$route.meta.object"
-      :api-call="apiCall"
+      :api-call="$_tableViewMixin_apiCall"
       :use-list-view="true"
       :use-image-view="true"
     />
@@ -29,19 +28,5 @@ export default {
   name: "Specimens",
 
   mixins: [tableViewMixin],
-
-  methods: {
-    apiCall() {
-      return this.$api.rw.get("specimen", {
-        defaultParams: {
-          nest: 1,
-        },
-        options: this.$_tableViewMixin_options,
-        searchFields: this.$_tableViewMixin_searchFields,
-      });
-    },
-  },
 };
 </script>
-
-<style scoped></style>

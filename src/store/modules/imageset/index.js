@@ -6,7 +6,7 @@ const getDefaultState = () => {
     count: 0,
     options: {
       page: 1,
-      paginateBy: 50,
+      itemsPerPage: 50,
       sortBy: ["id"],
       sortDesc: [true],
     },
@@ -16,123 +16,123 @@ const getDefaultState = () => {
         agent_digitised: {
           lookUpType: "icontains",
           title: "imageset.agent_digitised__id",
-          value: null
+          value: null,
         },
         author: {
           lookUpType: "icontains",
           title: "imageset.author__id",
-          value: null
+          value: null,
         },
         author_free: {
           lookUpType: "icontains",
           title: "imageset.author_free",
-          value: null
+          value: null,
         },
         database: {
           lookUpType: "icontains",
           title: "imageset.database__id",
-          value: null
+          value: null,
         },
         date_added: {
           lookUpType: "icontains",
           title: "imageset.date_added",
-          value: null
+          value: null,
         },
         date_changed: {
           lookUpType: "icontains",
           title: "imageset.date_changed",
-          value: null
+          value: null,
         },
         date_digitised: {
           lookUpType: "icontains",
           title: "imageset.date_digitised",
-          value: null
+          value: null,
         },
         date_digitised_free: {
           lookUpType: "icontains",
           title: "imageset.date_digitised_free",
-          value: null
+          value: null,
         },
         date_end: {
           lookUpType: "icontains",
           title: "imageset.date_end",
-          value: null
+          value: null,
         },
         date_free: {
           lookUpType: "icontains",
           title: "imageset.date_free",
-          value: null
+          value: null,
         },
         date_start: {
           lookUpType: "icontains",
           title: "imageset.date_start",
-          value: null
+          value: null,
         },
         description: {
           lookUpType: "icontains",
           title: "imageset.description",
-          value: null
+          value: null,
         },
         device: {
           lookUpType: "icontains",
           title: "imageset.device__id",
-          value: null
+          value: null,
         },
         device_digitised: {
           lookUpType: "icontains",
           title: "imageset.device_digitised__id",
-          value: null
+          value: null,
         },
         id: {
           lookUpType: "icontains",
           title: "imageset.id",
-          value: null
+          value: null,
         },
         imageset_number: {
           lookUpType: "icontains",
           title: "imageset.imageset_number",
-          value: null
+          value: null,
         },
         imageset_series: {
           lookUpType: "icontains",
           title: "imageset.imageset_series",
-          value: null
+          value: null,
         },
         is_private: {
           lookUpType: "icontains",
           title: "imageset.is_private",
-          value: null
+          value: null,
         },
         keywords: {
           lookUpType: "icontains",
           title: "imageset.keywords",
-          value: null
+          value: null,
         },
         object: {
           lookUpType: "icontains",
           title: "imageset.object",
-          value: null
+          value: null,
         },
         place: {
           lookUpType: "icontains",
           title: "imageset.place",
-          value: null
+          value: null,
         },
         remarks: {
           lookUpType: "icontains",
           title: "imageset.remarks",
-          value: null
+          value: null,
         },
         user_added: {
           lookUpType: "icontains",
           title: "imageset.user_added",
-          value: null
+          value: null,
         },
         user_changed: {
           lookUpType: "icontains",
           title: "imageset.user_changed",
-          value: null
-        }
+          value: null,
+        },
       },
       mainIds: ["imageset_number", "description"],
       extraIds: [
@@ -159,7 +159,7 @@ const getDefaultState = () => {
         "place",
         "remarks",
         "user_added",
-        "user_changed"
+        "user_changed",
       ],
     },
     headers: [
@@ -330,4 +330,5 @@ export default {
   getters,
   actions,
   mutations,
+  getDefaultState,
 };

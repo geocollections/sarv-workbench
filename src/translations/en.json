@@ -56,7 +56,11 @@
     "medium": "Medium",
     "large": "large",
     "original": "Original",
-    "fields": "Table headers"
+    "fields": "Table headers",
+    "pageSelect": "{current} / {count}",
+    "itemsPerPage": "Rows per page:",
+    "goTo": "Go to page",
+    "goToBtn": "Go"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -85,7 +89,29 @@
     "doesnotcontain": "!* does not contain",
     "doesnotequal": "!= does not equal",
     "hierarchy": "-·= hierarchy",
-    "lookUpType": "Filter"
+    "exact": "'=' exact",
+    "contains": "'*' contains",
+    "startswith": "'=*' starts with",
+    "endswith": "'*=' ends with",
+    "isnull": "empty",
+    "in": "in",
+    "year": "year",
+    "iso_year": "iso year",
+    "month": "month",
+    "day": "day",
+    "week": "week",
+    "week_day": "weekday",
+    "iso_week_day": "iso weekday",
+    "quarter": "quarter",
+    "time": "time",
+    "hour": "hour",
+    "minute": "minute",
+    "second": "second",
+    "lookUpType": "Filter",
+    "pageSelect": "{current} / {count}",
+    "itemsPerPage": "Rows per page:",
+    "goTo": "Go to page",
+    "goToBtn": "Go"
   },
   "login": {
     "password": "Password",
@@ -236,6 +262,7 @@
     "dataset_author": "Dataset author",
     "dataset_reference": "Dataset reference",
     "dataset_geolocation": "Dataset geolocation",
+    "dataset_analysis": "Dataset analysis",
     "locality_stratigraphy": "Stratigraphic boundaries",
     "doi_agent": "Doi agent",
     "doi_date": "Doi date",
@@ -284,8 +311,6 @@
     "sample_serie": "Add sample series",
     "editSiteGroundwater": "Hydrogeology",
     "site_groundwater": "Hydrogeology",
-    "sarv_issue": "Send a message",
-    "sarv_issues": "My messages",
     "admin": "Admin",
     "analysis_parameter": "Analysis parameters",
     "analysis_method": "Analysis methods",
@@ -348,6 +373,7 @@
   },
   "sidebar": {
     "recentUrls": "History",
+    "currentSearch": "Search results",
     "project": {
       "info": "General info",
       "description": "Description | Remarks",
@@ -360,7 +386,7 @@
       "location": "Location",
       "description": "Description | Remarks",
       "files": "Files",
-      "samples": "Linked samples",
+      "sample": "Linked samples",
       "groundwater": "Groundwater extension"
     },
     "imageset": {
@@ -730,10 +756,6 @@
     "editMessage": "Edit Hydrogeology site",
     "viewMessage": "Open VEKA link"
   },
-  "editSarvIssue": {
-    "heading": "Message",
-    "editMessage": "View message"
-  },
   "editAnalysisParameter": {
     "heading": "Analysis parameters",
     "editMessage": "Edit analysis parameter"
@@ -887,24 +909,24 @@
     "uuid_filename": "Uuid filename",
     "link": "Link",
     "relatedTables": {
-      "collection": "Collection",
-      "specimen": "Specimen",
-      "sample": "Sample",
-      "sample_series": "Sample series",
-      "analysis": "Analysis",
-      "dataset": "Dataset",
-      "doi": "DOI",
-      "locality": "Locality",
-      "drillcore": "Drill core",
-      "drillcore_box": "Drill core box",
-      "preparation": "Preparation",
-      "reference": "Reference",
-      "storage": "Storage",
-      "attachment": "Attachment",
-      "project": "Project",
-      "site": "Site",
-      "locality_description": "Geological description",
-      "taxon": "Taxon"
+      "collections": "Collection",
+      "specimens": "Specimen",
+      "samples": "Sample",
+      "sample_series_set": "Sample series",
+      "analyses": "Analysis",
+      "datasets": "Dataset",
+      "dois": "DOI",
+      "localities": "Locality",
+      "drillcores": "Drill core",
+      "drillcore_boxes": "Drill core box",
+      "preparations": "Preparation",
+      "references": "Reference",
+      "storages": "Storage",
+      "attachments": "Attachment",
+      "projects": "Project",
+      "sites": "Site",
+      "locality_descriptions": "Geological description",
+      "taxa": "Taxon"
     },
     "imagesetId": "Imageset ID",
     "imagePlace": "Image place",
@@ -1114,6 +1136,9 @@
     "number_pieces": "Number of pieces",
     "save_as_new_sample": "Save as new sample",
     "specimenImages": "Images",
+    "specimen_full_number": "Specimen",
+    "identification": "Name",
+    "nameTooltip": "Name will be filled automatically using 'collection' ja 'number' fields",
     "relatedTables": {
       "specimen_identification": "Taxon names",
       "specimen_identification_geology": "Rock names",
@@ -1385,10 +1410,10 @@
     "groundwater": "Groundwater extension",
     "relatedTables": {
       "attachment_link": "Files",
-      "samples": "Related samples",
+      "sample": "Related samples",
       "locality_description": "Description",
       "locality_reference": "Related reference",
-      "sites": "Linked sites"
+      "site": "Linked sites"
     }
   },
   "analysis": {
@@ -1598,7 +1623,7 @@
     "attachment": "Image",
     "attachment_filename": "Filename",
     "relatedTables": {
-      "taxon_subclass": "Subtaxa",
+      "taxon": "Subtaxa",
       "taxon_synonym": "Synonymy",
       "taxon_type_specimen": "Type specimens",
       "taxon_occurrence": "Occurences",
@@ -1629,7 +1654,6 @@
     "abstract": "Abstract",
     "locality__id": "Lokaliteet ID",
     "reference__id": "Reference ID",
-
     "copyright_agent": "Copyright agent",
     "copyright_agent__id": "Copyright agent ID",
     "copyright_agent__agent": "Copyright agent",
@@ -1665,8 +1689,6 @@
     "referenceAndLocality": "Reference and Locality",
     "resourceTypePlaceholder": "Dataset",
     "reference": "Reference",
-    "title": "Title",
-    "title_en": "Title EN",
     "relatedTables": {
       "dataset_author": "Authors",
       "dataset_reference": "References",
@@ -2077,6 +2099,7 @@
     "user_changed": "User changed",
     "number": "Number",
     "preparation_number": "Prep. number",
+    "classification": "Fossil group",
     "fossil_group": "Fossil group",
     "storage": "Storage",
     "sample__locality": "Locality",
@@ -2209,9 +2232,9 @@
       "locality": "Locality",
       "reference_keyword": "User keywords",
       "locality_reference": "Locality references",
-      "library": "Related libraries",
+      "library_reference": "Related libraries",
       "taxon": "Taxon",
-      "stratigraphy": "Stratigraphy"
+      "stratigraphy_reference": "Stratigraphy"
     },
     "translation_of": "Translation of"
   },
@@ -2858,8 +2881,8 @@
     "location": "Location",
     "locality_free": "Locality (txt)",
     "relatedTables": {
-      "samples": "Samples",
-      "attachments": "Attachments"
+      "sample": "Samples",
+      "attachment": "Attachments"
     }
   },
   "site_groundwater": {
@@ -2893,25 +2916,6 @@
     "url_veka_short": "VEKA",
     "save": "Save groundwater data",
     "dataMissing": "Add some data to groundwater extension"
-  },
-  "sarv_issue": {
-    "date_changed": "date_changed",
-    "from_user__username": "from_user__username",
-    "id": "id",
-    "to_user__username": "to_user__username",
-    "my_messages": "My messages",
-    "title": "Message title",
-    "description": "Message content",
-    "date_added": "Sent",
-    "from_user": "Sender",
-    "to_user": "Receiver",
-    "url": "Problematic URL",
-    "response": "Response to a message",
-    "replied": "Replied",
-    "message_answered": "You have already replied to the message!",
-    "unanswered": "Unanswered",
-    "activeIssues": "Active messages / issues",
-    "answer": "Reply"
   },
   "analysis_parameter": {
     "id": "ID",
@@ -2990,7 +2994,7 @@
     "group": "Group",
     "user": "User",
     "view_perms_title": "View only:",
-    "change_perms_title": "View and edit:",
+    "change_perms_title": "Edit only:",
     "update": "Update permissions",
     "update_message": "Note that removing your own permissions will result in losing access to the record."
   },
@@ -3045,7 +3049,7 @@
     "oldValue": "Old value"
   },
   "buttons": {
-    "resetSearch": "Reset search",
+    "resetSearch": "Clear search",
     "cancel": "Cancel",
     "edit": "Edit",
     "add": "Add",
@@ -3082,5 +3086,23 @@
     "date_changed": "Date changed",
     "user_added": "User added",
     "user_changed": "User changed"
+  },
+  "headers": {
+    "tooltipConfig": "Table configuration",
+    "tooltipResetHeaders": "Reset headers",
+    "tooltipShowActiveHeaders": "Show active headers",
+    "tooltipShowAllHeaders": "Show all headers",
+    "headerSelectDisabled": "Sorting enabled",
+    "headerFilter": "Filter",
+    "headers": "Headers"
+  },
+  "table": {
+    "noData": "No data found",
+    "loading": "Loading items..."
+  },
+  "gestureHandling": {
+    "touch": "Use two fingers to move the map",
+    "scroll": "Use ctrl + scroll to zoom the map",
+    "scrollMac": "Use \u2318 + scroll to zoom the map"
   }
 }

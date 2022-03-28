@@ -56,7 +56,7 @@
                           :color="bodyActiveColor"
                           clearable
                           @click:clear="
-                            updateSearchFieldsDebounced({
+                            $_tableViewMixin_updateSearchFields({
                               field,
                               key: 'value',
                               value: null,
@@ -73,7 +73,7 @@
                           $_tableViewMixin_searchFields.byIds[field].value
                         "
                         @input="
-                          updateSearchFieldsDebounced({
+                          $_tableViewMixin_updateSearchFields({
                             field,
                             key: 'value',
                             value: $event,
@@ -107,7 +107,7 @@
                       :color="bodyActiveColor"
                       hide-details
                       @change="
-                        updateSearchFieldsDebounced({
+                        $_tableViewMixin_updateSearchFields({
                           field,
                           key: 'value',
                           value: $event,
@@ -131,7 +131,7 @@
                       :items="translatedLookUpTypes"
                       :label="$t('main.lookUpType')"
                       @input="
-                        updateSearchFieldsDebounced({
+                        $_tableViewMixin_updateSearchFields({
                           field,
                           key: 'lookUpType',
                           value: $event,
@@ -156,7 +156,7 @@
                       hide-details
                       :class="bodyActiveColor + '--text'"
                       @input="
-                        updateSearchFieldsDebounced({
+                        $_tableViewMixin_updateSearchFields({
                           field,
                           key: 'value',
                           value: $event,
@@ -188,7 +188,7 @@
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      updateSearchFieldsDebounced({
+                      $_tableViewMixin_updateSearchFields({
                         field: 'specimen_image_attachment',
                         key: 'value',
                         value: $event,
@@ -207,7 +207,7 @@
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      updateSearchFieldsDebounced({
+                      $_tableViewMixin_updateSearchFields({
                         field: 'specimen_image_attachment',
                         key: 'value',
                         value: $event,
@@ -226,7 +226,7 @@
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      updateSearchFieldsDebounced({
+                      $_tableViewMixin_updateSearchFields({
                         field: 'specimen_image_attachment',
                         key: 'value',
                         value: $event,
@@ -245,7 +245,7 @@
                     :color="bodyActiveColor"
                     hide-details
                     @change="
-                      updateSearchFieldsDebounced({
+                      $_tableViewMixin_updateSearchFields({
                         field: 'specimen_image_attachment',
                         key: 'value',
                         value: $event,
@@ -258,55 +258,35 @@
 
             <!-- DYNAMIC SEARCH -->
             <dynamic-search
-              class="mt-4 mb-2"
+              class="my-4"
               :body-color="bodyColor"
               :body-active-color="bodyActiveColor"
               :look-up-types="translatedLookUpTypes"
-              :search-fields="$_tableViewMixin_searchFields"
+              :search-fields="$_tableViewMixin_filteredSearchFields"
               :col-size="3"
-              @update:searchFields="updateSearchFieldsDebounced($event)"
+              @update:searchFields="$_tableViewMixin_updateSearchFields($event)"
             />
 
-            <!-- TABLE HEADERS SELECT BOX -->
-            <v-row no-gutters class="mt-6 mb-4">
-              <v-col cols="12">
-                <v-select
-                  :items="$_tableHeaderMixin_translatedHeaders"
-                  :value="$_tableHeaderMixin_shownHeaders"
-                  chips
-                  small-chips
-                  deletable-chips
-                  multiple
-                  :color="bodyActiveColor"
-                  :label="$t('common.fields')"
-                  clearable
-                  clear-icon="fas fa-times"
-                  @change="
-                    $_tableViewMixin_updateHeaders({
-                      value: $event,
-                    })
-                  "
-                  class="chips-select"
-                  hide-details
-                  dense
-                />
-              </v-col>
-            </v-row>
-
             <!-- RESET SEARCH PREFERENCES -->
-            <v-row no-gutters>
-              <v-col cols="12">
+            <div class="d-flex flex-column flex-sm-row align-center">
+              <div class="mr-2 mb-2 mb-sm-0">
                 <v-btn
-                  @click="$_tableViewMixin_resetState"
+                  @click="handleResetButton"
                   :color="bodyActiveColor"
                   dark
+                  outlined
                 >
-                  <v-icon left>fas fa-filter</v-icon>
-                  <!-- TODO: Rename to tühjenda/clear -->
-                  {{ $t("buttons.resetSearch") }}
+                  <v-icon left>fas fa-eraser</v-icon>
+                  {{ $t("buttons.clear") }}
                 </v-btn>
-              </v-col>
-            </v-row>
+              </div>
+              <div>
+                <v-btn @click="$root.$emit('table-search')" color="green" dark>
+                  <v-icon left>fas fa-search</v-icon>
+                  {{ $t("buttons.search") }}
+                </v-btn>
+              </div>
+            </div>
           </div>
         </v-card-text>
       </v-card>
@@ -348,9 +328,10 @@ export default {
     showSearch: true,
   }),
   methods: {
-    updateSearchFieldsDebounced: debounce(function (payload) {
-      this.$_tableViewMixin_updateSearchFields(payload);
-    }, 400),
+    handleResetButton() {
+      this.$_tableViewMixin_resetState();
+      this.$root.$emit("table-search");
+    },
   },
 };
 </script>

@@ -6,7 +6,7 @@ const getDefaultState = () => {
     count: 0,
     options: {
       page: 1,
-      paginateBy: 50,
+      itemsPerPage: 50,
       sortBy: ["id"],
       sortDesc: [true],
     },
@@ -262,7 +262,7 @@ const getDefaultState = () => {
           lookUpType: "icontains",
           title: "attachment.specimen",
           value: null,
-          fields: ["specimen__specimen_id"],
+          fields: ["specimen__specimen_id", "specimen__specimen_full_number"],
           type: "multi",
         },
         specimen_image_attachment: {
@@ -884,4 +884,5 @@ export default {
   getters,
   actions,
   mutations,
+  getDefaultState,
 };

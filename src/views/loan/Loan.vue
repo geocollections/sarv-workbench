@@ -90,14 +90,14 @@
               <autocomplete-wrapper
                 v-model="loan.borrower"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.borrower"
+                :loading="autocomplete.loaders.borrower"
                 item-text="agent"
                 :label="$t('loan.borrower')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'borrower')"
               />
             </v-col>
           </v-row>
@@ -120,14 +120,16 @@
               <autocomplete-wrapper
                 v-model="loan.borrower_institution"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.borrower_institution"
+                :loading="autocomplete.loaders.borrower_institution"
                 item-text="agent"
                 :label="$t('loan.borrower_institution')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="
+                  autocompleteAgentSearch($event, 'borrower_institution')
+                "
               />
             </v-col>
           </v-row>
@@ -138,14 +140,14 @@
               <autocomplete-wrapper
                 v-model="loan.loaner"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.loaner"
+                :loading="autocomplete.loaders.loaner"
                 item-text="agent"
                 :label="$t('loan.loaner')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'loaner')"
               />
             </v-col>
           </v-row>
@@ -170,14 +172,14 @@
               <autocomplete-wrapper
                 v-model="loan.deliverer"
                 :color="bodyActiveColor"
-                :items="autocomplete.agent"
-                :loading="autocomplete.loaders.agent"
+                :items="autocomplete.deliverer"
+                :loading="autocomplete.loaders.deliverer"
                 item-text="agent"
                 :label="$t('loan.deliverer')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'deliverer')"
               />
             </v-col>
           </v-row>
@@ -312,15 +314,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -418,32 +415,21 @@
 </template>
 
 <script>
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {
-  fetchListLoanDeliveryMethod,
-  fetchListLoanType,
-  fetchLoan,
-  fetchLoanSamples,
-  fetchLoanSpecimens,
-  fetchSelectedSpecimens,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
 
-import DateWrapper from "../partial/inputs/DateWrapper";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import { mapActions, mapGetters, mapState } from "vuex";
-import LoanSampleTable from "./relatedTables/LoanSampleTable";
-import LoanSpecimenTable from "./relatedTables/LoanSpecimenTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import {
-  fetchIdsUsingSelection,
-  fetchMultiAddLoanLists,
-} from "@/assets/js/api/apiCalls";
+import DateWrapper from "@/components/partial/inputs/DateWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import { mapActions, mapGetters } from "vuex";
+import LoanSampleTable from "@/components/loan/relatedTables/LoanSampleTable";
+import LoanSpecimenTable from "@/components/loan/relatedTables/LoanSpecimenTable";
+import { fetchMultiAddLoanLists } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Loan",
@@ -477,54 +463,23 @@ export default {
     },
   },
 
-  mixins: [formManipulation, autocompleteMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
+  ],
 
   data() {
     return this.setInitialData();
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.loanSearchParameters,
-        request: "FETCH_LOANS",
-        title: "header.loans",
-        object: "loan",
-        field: "loan_number",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true,
-    },
   },
 
   computed: {
     ...mapGetters("user", ["getDatabaseId"]),
-    ...mapState("search", ["loanSearchParameters"]),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
 
   methods: {
@@ -548,24 +503,9 @@ export default {
         ],
         activeTab: "loan_specimen",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "loan_number",
-          "date_start",
-          "date_end",
-          "type",
-          "project",
-          "borrower",
-          "returned",
-          "borrower_institution",
-          "loaner",
-          "delivery_method",
-          "deliverer",
-          "delivery_remarks",
-          "special",
-          "date_signed",
-          "date_returned",
-          "remarks",
+        listOfAutocompleteTables: [
+          "list_loan_type",
+          "list_loan_delivery_method",
         ],
         autocomplete: {
           loaders: {
@@ -573,13 +513,39 @@ export default {
             list_loan_type: false,
             list_loan_delivery_method: false,
             selection_series: false,
+            borrower: false,
+            borrower_institution: false,
+            loaner: false,
+            deliverer: false,
           },
           agent: [],
           list_loan_type: [],
           list_loan_delivery_method: [],
           selection_series: [],
+          borrower: [],
+          borrower_institution: [],
+          loaner: [],
+          deliverer: [],
         },
-        loan: {},
+        loan: {
+          id: null,
+          loan_number: null,
+          date_start: null,
+          date_end: null,
+          type: null,
+          project: null,
+          borrower: null,
+          returned: null,
+          borrower_institution: null,
+          loaner: null,
+          delivery_method: null,
+          deliverer: null,
+          delivery_remarks: null,
+          special: null,
+          date_signed: null,
+          date_returned: null,
+          remarks: null,
+        },
         requiredFields: ["loan_number", "date_start"],
         block: {
           info: true,
@@ -587,50 +553,7 @@ export default {
         },
         selection_series: null,
         selectionSeriesDialog: false,
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchLoan(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "loan", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.loan);
-            this.removeUnnecessaryFields(this.loan, this.copyFields);
-
-            this.$emit("data-loaded", this.loan);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
     },
 
     setDefaultRelatedData() {
@@ -640,116 +563,18 @@ export default {
         searchParameters: {
           loan_specimen: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["specimen"],
             sortDesc: [true],
           },
           loan_sample: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["sample"],
             sortDesc: [true],
           },
         },
       };
-    },
-
-    loadAutocompleteFields() {
-      fetchListLoanType().then(
-        (response) =>
-          (this.autocomplete.list_loan_type = this.handleResponse(response))
-      );
-
-      fetchListLoanDeliveryMethod().then(
-        (response) =>
-          (this.autocomplete.list_loan_delivery_method =
-            this.handleResponse(response))
-      );
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.borrower)) {
-        this.loan.borrower = {
-          id: obj.borrower,
-          agent: obj.borrower__agent,
-        };
-        this.autocomplete.agent.push(this.loan.borrower);
-      }
-      if (this.isNotEmpty(obj.borrower_institution)) {
-        this.loan.borrower_institution = {
-          id: obj.borrower_institution,
-          agent: obj.borrower_institution__agent,
-        };
-        this.autocomplete.agent.push(this.loan.borrower_institution);
-      }
-      if (this.isNotEmpty(obj.loaner)) {
-        this.loan.loaner = {
-          id: obj.loaner,
-          agent: obj.loaner__agent,
-        };
-        this.autocomplete.agent.push(this.loan.loaner);
-      }
-      if (this.isNotEmpty(obj.deliverer)) {
-        this.loan.deliverer = {
-          id: obj.deliverer,
-          agent: obj.deliverer__agent,
-        };
-        this.autocomplete.agent.push(this.loan.deliverer);
-      }
-      this.loan.delivery_method = {
-        id: obj.delivery_method,
-        value: obj.delivery_method__value,
-        value_en: obj.delivery_method__value_en,
-      };
-      this.loan.type = {
-        id: obj.type,
-        value: obj.type__value,
-        value_en: obj.type__value_en,
-      };
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "loan_specimen") {
-        query = fetchLoanSpecimens(
-          this.$route.params.id,
-          this.relatedData.searchParameters.loan_specimen
-        );
-      } else if (object === "loan_sample") {
-        query = fetchLoanSamples(
-          this.$route.params.id,
-          this.relatedData.searchParameters.loan_sample
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
     },
 
     // Fill Specimens and Samples using selection_series
@@ -765,13 +590,18 @@ export default {
     },
 
     async fillLists(table) {
-      let response = await fetchIdsUsingSelection(
-        this.selection_series.id,
-        table
-      );
+      let response = await this.$api.rw.get("selection", {
+        defaultParams: {
+          selection: this.selection_series.id,
+          fields: table,
+          or_search: `${table}__isnull:false`,
+        },
+      });
 
-      if (response?.data?.results) {
-        let listOfObjects = response.data.results.map((item) => {
+      console.log(response);
+
+      if (response?.results) {
+        let listOfObjects = response.results.map((item) => {
           return {
             [table]: item[table],
             loan: this.$route.params.id,
@@ -817,5 +647,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

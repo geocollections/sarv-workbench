@@ -284,8 +284,8 @@
               <autocomplete-wrapper
                 v-model="site.coord_det_method"
                 :color="bodyActiveColor"
-                :items="autocomplete.coordMethod"
-                :loading="autocomplete.loaders.coordMethod"
+                :items="autocomplete.list_coordinate_method"
+                :loading="autocomplete.loaders.list_coordinate_method"
                 :item-text="commonLabel"
                 :label="$t('site.coord_det_method')"
               />
@@ -426,8 +426,56 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="site.attachments"
+                @update:existing-files="site.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -462,20 +510,7 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <div v-show="activeTab === 'attachment_link'">
-            <file-input
-              show-existing
-              :record-options="$route.meta.isEdit"
-              :files-from-object="relatedData.attachment_link.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
-
-          <div v-show="activeTab === 'samples'" class="pa-1">
+          <div v-show="activeTab === 'sample'" class="pa-1">
             <!-- ADD NEW and EXPORT -->
             <v-card
               class="d-flex flex-row justify-start mb-3"
@@ -500,11 +535,11 @@
                 flat
                 tile
                 class="mx-1"
-                v-if="relatedData.samples.count > 0"
+                v-if="relatedData.sample.count > 0"
               >
                 <export-buttons
                   filename="sample"
-                  :table-data="relatedData.samples.results"
+                  :table-data="relatedData.sample.results"
                   clipboard-class="sample-table"
                   :body-active-color="bodyActiveColor"
                 />
@@ -514,16 +549,12 @@
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
                 <sample-table
-                  ref="table"
-                  :response="relatedData.samples"
-                  :search-parameters="relatedData.searchParameters.samples"
-                  v-if="relatedData.samples.count > 0"
+                  :response="relatedData.sample"
+                  :search-parameters="relatedData.searchParameters.sample"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
-                  v-on:update:sorting="
-                    relatedData.searchParameters[activeTab][$event.key] =
-                      $event.value
-                  "
+                  :headers="sampleTranslatedHeaders"
+                  @update:options="handleUpdateOptions({ ...$event, activeTab: 'sample' })"
                 />
               </v-col>
             </v-row>
@@ -559,201 +590,13 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
-    </v-card>
-
-    <!-- SITE_GROUNDWATER -->
-    <v-card
-      v-if="$route.meta.isEdit && isUserAllowedTo('add', 'site_groundwater')"
-      class="mt-2"
-      id="block-groundwater"
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-      elevation="4"
-    >
-      <v-card-title class="pt-2 pb-1">
-        <div
-          class="card-title--clickable"
-          @click="block.groundwater = !block.groundwater"
-        >
-          <span>{{ $t("site.groundwater") }}</span>
-          <v-icon right>fas fa-water</v-icon>
-        </div>
-        <v-spacer />
-        <v-btn
-          icon
-          @click="block.groundwater = !block.groundwater"
-          :color="bodyActiveColor"
-        >
-          <v-icon>{{
-            block.groundwater ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
-        </v-btn>
-      </v-card-title>
-
-      <transition>
-        <div v-show="block.groundwater" class="pa-1">
-          <!-- TYPE_TXT, AQUIFER_STSTEM and AQUIFER -->
-          <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.type_txt"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.type_txt')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.aquifer_system"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.aquifer_system')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.aquifer"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.aquifer')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- WELL_DEPTH and FILTER_TYPE -->
-          <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.well_depth"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.well_depth')"
-                type="number"
-                step="0.01"
-              />
-            </v-col>
-
-            <v-col cols="12" md="6" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.filter_type"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.filter_type')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- FILTER_TOP, FILTER_BOTTOM, FILTER_TOP_Z, FILTER_BOTTOM_Z -->
-          <v-row no-gutters>
-            <v-col cols="12" md="3" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.filter_top"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.filter_top')"
-                type="number"
-                step="0.01"
-              />
-            </v-col>
-
-            <v-col cols="12" md="3" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.filter_bottom"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.filter_bottom')"
-                type="number"
-                step="0.01"
-              />
-            </v-col>
-
-            <v-col cols="12" md="3" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.filter_top_z"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.filter_top_z')"
-                type="number"
-                step="0.01"
-              />
-            </v-col>
-
-            <v-col cols="12" md="3" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.filter_bottom_z"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.filter_bottom_z')"
-                type="number"
-                step="0.01"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- KATASTER_ID, KESKONNAREGISTER_ID and URL_VEKA -->
-          <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.kataster_id"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.kataster_id')"
-                type="number"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.keskkonnaregister_id"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.keskkonnaregister_id')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.url_veka"
-                :color="bodyActiveColor"
-                :label="$t('site_groundwater.url_veka')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- REMARKS -->
-          <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
-              <input-wrapper
-                v-model="site_groundwater.remarks"
-                :color="bodyActiveColor"
-                :label="$t('common.remarks')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- SAVE GROUNDWATER DATA -->
-          <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
-              <v-btn
-                :color="!isNotEmpty(this.site_groundwater) ? 'red' : 'green'"
-                dark
-                @click="saveGroundwater"
-                :title="$t('site_groundwater.save')"
-                retain-focus-on-click
-                :small="$vuetify.breakpoint.smAndDown"
-                class="text-none"
-              >
-                <v-icon :small="$vuetify.breakpoint.smAndDown" left
-                  >fas fa-save</v-icon
-                >
-                <span>{{ $t("site_groundwater.save") }}</span>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </div>
-      </transition>
     </v-card>
 
     <!-- IS_PRIVATE -->
@@ -771,38 +614,28 @@
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import cloneDeep from "lodash/cloneDeep";
-import {
-  fetchSite,
-  fetchListCoordinateMethod,
-  fetchSiteAttachment,
-  fetchLinkedSamples,
-  fetchLastSiteName,
-  fetchSiteLocalityDescriptions,
-  fetchSiteLocalityReferences,
-  fetchSiteGroundwaterUsingSite,
-  postRequest,
-  fetchListSiteType,
-} from "../../assets/js/api/apiCalls";
-import MapComponent from "../../components/partial/MapComponent";
-import sidebarMixin from "../../mixins/sidebarMixin";
-import SampleTable from "../../components/sample/SampleTable";
-import ExportButtons from "../../components/partial/export/ExportButtons";
+import { fetchLastSiteName, postRequest } from "@/assets/js/api/apiCalls";
+import MapComponent from "@/components/partial/MapComponent";
+import sidebarMixin from "@/mixins/sidebarMixin";
+import SampleTable from "@/components/sample/SampleTable";
+import ExportButtons from "@/components/partial/export/ExportButtons";
 import debounce from "lodash/debounce";
 import { mapActions, mapGetters, mapState } from "vuex";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import FileInput from "../../components/partial/inputs/FileInput";
-import requestsMixin from "../../mixins/requestsMixin";
-import SiteLocalityDescriptionTable from "../../components/site/relatedTables/SiteLocalityDescriptionTable";
-import SiteLocalityReferenceTable from "../../components/site/relatedTables/SiteLocalityReferenceTable";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import FileInput from "@/components/partial/inputs/FileInput";
+import SiteLocalityDescriptionTable from "@/components/site/relatedTables/SiteLocalityDescriptionTable";
+import SiteLocalityReferenceTable from "@/components/site/relatedTables/SiteLocalityReferenceTable";
 import toastMixin from "@/mixins/toastMixin";
 import Pagination from "@/components/partial/Pagination";
 import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Site",
@@ -841,22 +674,34 @@ export default {
     autocompleteMixin,
     formSectionsMixin,
     sidebarMixin,
-    requestsMixin,
     toastMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
   data() {
     return this.setInitialData();
   },
   computed: {
-    ...mapState("search", [
-      "siteSearchParameters",
-      "sidebarUserAction",
-      "activeProject",
-    ]),
+    ...mapState("search", ["sidebarUserAction", "activeProject"]),
 
     ...mapState("map", ["showMap"]),
 
     ...mapGetters("user", ["isUserAllowedTo"]),
+
+    ...mapState({
+      sampleHeaders(state) {
+        return state.sample.headers;
+      },
+    }),
+
+    sampleTranslatedHeaders() {
+      return this.sampleHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
 
     myShowMap: {
       get() {
@@ -866,27 +711,10 @@ export default {
         this.updateShowMap(value);
       },
     },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
   },
   created() {
     // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.siteSearchParameters,
-        request: "FETCH_SITES",
-        title: "header.sites",
-        object: "site",
-        field: "name",
-      });
-    } else {
+    if (!this.$route.meta.isEdit) {
       // Add view
       this.$set(this.site, "date_start", this.getCurrentFormattedDate());
 
@@ -933,79 +761,14 @@ export default {
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-    },
     sidebarUserAction(newVal) {
       this.handleUserAction(newVal, "site", this.site);
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
     },
   },
 
   methods: {
     ...mapActions("search", ["setActiveSite", "updateActiveTab"]),
     ...mapActions("map", ["updateShowMap"]),
-
-    saveGroundwater() {
-      if (this.isNotEmpty(this.site_groundwater)) {
-        let uploadableObject = cloneDeep(this.site_groundwater);
-
-        if (this.$route.params.id)
-          uploadableObject.site = this.$route.params.id;
-
-        let url = "";
-        if (uploadableObject.id) {
-          url = "change/site_groundwater/" + uploadableObject.id;
-        } else url = "add/site_groundwater/";
-
-        delete uploadableObject.id;
-
-        Object.keys(uploadableObject).forEach((key) => {
-          if (typeof uploadableObject[key] === "undefined")
-            uploadableObject[key] = null;
-          else if (
-            typeof uploadableObject[key] === "string" &&
-            uploadableObject[key].length === 0
-          ) {
-            uploadableObject[key] = null;
-          }
-        });
-
-        let formData = new FormData();
-        formData.append("data", JSON.stringify(uploadableObject));
-
-        postRequest(url, formData)
-          .then((response) => {
-            if (response.status === 200) {
-              if (response.data) {
-                if (response.data.error) {
-                  this.toastError({ text: response.data.error });
-                } else {
-                  if (this.$i18n.locale === "ee") {
-                    this.toastSuccess({ text: response.data.message_et });
-                  } else {
-                    this.toastSuccess({ text: response.data.message });
-                  }
-                }
-              }
-            }
-          })
-          .catch((err) => {
-            this.toastError({ text: this.$t("messages.uploadError") });
-          });
-      } else {
-        this.toastInfo({ text: this.$t("site_groundwater.dataMissing") });
-      }
-    },
 
     setTab(type) {
       if (type) {
@@ -1020,92 +783,67 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "attachment_link", iconClass: "fas fa-folder-open" },
-          { name: "samples", iconClass: "fas fa-vial" },
+          { name: "sample", iconClass: "fas fa-vial" },
           { name: "locality_description", iconClass: "fas fa-align-left" },
           { name: "locality_reference", iconClass: "fas fa-book" },
         ],
-        activeTab: "attachment_link",
+        activeTab: "sample",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "name",
-          "name_en",
-          "site_type",
-          "number",
-          "project",
-          "date_start",
-          "date_end",
-          "date_free",
-          "coord_det_method",
-          "locality",
-          "coordx",
-          "coordy",
-          "epsg",
-          "latitude",
-          "longitude",
-          "location_accuracy",
-          "elevation",
-          "elevation_accuracy",
-          "extent",
-          "depth",
-          "remarks_location",
-          "description",
-          "remarks",
-          "area",
-          "is_private",
-        ],
-        siteGroundwaterCopyFields: [
-          "id",
-          "site",
-          "aquifer_system",
-          "aquifer",
-          "well_depth",
-          "type_txt",
-          "filter_type",
-          "filter_top",
-          "filter_top_z",
-          "filter_bottom",
-          "filter_bottom_z",
-          "url_veka",
-          "remarks",
-          "kataster_id",
-          "keskkonnaregister_id",
-        ],
+        listOfAutocompleteTables: ["list_coordinate_method", "site_type"],
         autocomplete: {
           loaders: {
             project: false,
             attachment: false,
-            coordMethod: false,
+            attachments: false,
+            list_coordinate_method: false,
             locality: false,
             area: false,
             site_type: false,
           },
           project: [],
           attachment: [],
-          coordMethod: [],
+          attachments: [],
+          list_coordinate_method: [],
           locality: [],
           area: [],
           site_type: [],
         },
         requiredFields: ["latitude", "longitude"],
-        site: {},
-        site_groundwater: {},
+        site: {
+          id: null,
+          name: null,
+          name_en: null,
+          site_type: null,
+          number: null,
+          project: null,
+          date_start: null,
+          date_end: null,
+          date_free: null,
+          coord_det_method: null,
+          locality: null,
+          coordx: null,
+          coordy: null,
+          epsg: null,
+          latitude: null,
+          longitude: null,
+          location_accuracy: null,
+          elevation: null,
+          elevation_accuracy: null,
+          extent: null,
+          depth: null,
+          remarks_location: null,
+          description: null,
+          remarks: null,
+          area: null,
+          is_private: false,
+          attachments: [],
+        },
         block: {
           info: !this.$route.meta.isEdit,
           location: this.$route.meta.isEdit,
           description: false,
-          groundwater: false,
+          files: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
     },
 
@@ -1114,67 +852,9 @@ export default {
       this.loadFullInfo();
     },
 
-    loadFullInfo() {
-      fetchListCoordinateMethod().then((response) => {
-        this.autocomplete.coordMethod = this.handleResponse(response);
-      });
-
-      fetchListSiteType().then((response) => {
-        this.autocomplete.site_type = this.handleResponse(response);
-      });
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-        this.$emit("set-object", "site");
-
-        fetchSite(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "site", this.handleResponse(response)[0]);
-            this.fillAutocompleteFields(this.site);
-            this.removeUnnecessaryFields(this.site, this.copyFields);
-
-            this.updateDateFields(this.site);
-
-            this.$emit("data-loaded", this.site);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        fetchSiteGroundwaterUsingSite(this.$route.params.id).then(
-          (response) => {
-            let handledResponse = this.handleResponse(response);
-            if (handledResponse.length > 0) {
-              this.$set(
-                this,
-                "site_groundwater",
-                this.handleResponse(response)[0]
-              );
-              this.removeUnnecessaryFields(
-                this.site_groundwater,
-                this.siteGroundwaterCopyFields
-              );
-            }
-          }
-        );
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
     setDefaultRelatedData() {
       return {
-        attachment_link: {
-          count: 0,
-          results: [],
-        },
-        samples: {
+        sample: {
           count: 0,
           results: [],
         },
@@ -1187,209 +867,26 @@ export default {
           results: [],
         },
         searchParameters: {
-          attachment_link: {
+          sample: {
             page: 1,
-            paginateBy: 25,
-            orderBy: "-id",
-          },
-          samples: {
-            page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["id"],
             sortDesc: [true],
           },
           locality_description: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["id"],
             sortDesc: [true],
           },
           locality_reference: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["reference"],
             sortDesc: [true],
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      if (this.isNotEmpty(uploadableObject.date_start)) {
-        if (this.isValidDateTime(uploadableObject.date_start)) {
-          uploadableObject.date_start = this.formatDateForUpload(
-            uploadableObject.date_start
-          );
-        } else {
-          this.site.date_start = null;
-          uploadableObject.date_start = null;
-          this.toastInfo({ text: "Field 'Date start' is invalid" });
-        }
-      }
-      if (this.isNotEmpty(uploadableObject.date_end)) {
-        if (this.isValidDateTime(uploadableObject.date_end)) {
-          uploadableObject.date_end = this.formatDateForUpload(
-            uploadableObject.date_end
-          );
-        } else {
-          this.site.date_end = null;
-          uploadableObject.date_end = null;
-          this.toastInfo({ text: "Field 'Date end' is invalid" });
-        }
-      }
-
-      if (this.isNotEmpty(objectToUpload.location_accuracy))
-        uploadableObject.location_accuracy =
-          typeof uploadableObject.location_accuracy === "string"
-            ? parseFloat(objectToUpload.location_accuracy).toFixed(2)
-            : objectToUpload.location_accuracy.toFixed(2);
-      else uploadableObject.location_accuracy = null;
-
-      if (this.isNotEmpty(objectToUpload.elevation_accuracy))
-        uploadableObject.elevation_accuracy =
-          typeof uploadableObject.elevation_accuracy === "string"
-            ? parseFloat(objectToUpload.elevation_accuracy).toFixed(2)
-            : objectToUpload.elevation_accuracy.toFixed(2);
-      else uploadableObject.elevation_accuracy = null;
-
-      if (this.isNotEmpty(objectToUpload.latitude))
-        uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(
-          6
-        );
-      else uploadableObject.latitude = null;
-
-      if (this.isNotEmpty(objectToUpload.longitude))
-        uploadableObject.longitude = parseFloat(
-          objectToUpload.longitude
-        ).toFixed(6);
-      else uploadableObject.longitude = null;
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data only on add view
-      uploadableObject.related_data = {};
-      if (!this.$route.meta.isEdit) {
-        this.relatedTabs.forEach((tab) => {
-          if (this.isNotEmpty(this.relatedData[tab.name]))
-            if (tab.name !== "samples") {
-              if (tab.name === "attachment_link") {
-                uploadableObject.related_data.attachment =
-                  this.relatedData.attachment_link.results.map((item) => {
-                    return { id: item.id };
-                  });
-              } else {
-                uploadableObject.related_data[tab.name] =
-                  this.relatedData[tab.name].results;
-
-                uploadableObject.related_data[tab.name].forEach((item) => {
-                  Object.keys(item).forEach((key) => {
-                    if (typeof item[key] === "object" && item[key] !== null) {
-                      item[key] = item[key].id ? item[key].id : null;
-                    }
-                  });
-                });
-              }
-            }
-        });
-      } else {
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment =
-            this.relatedData.attachment_link.results.map((item) => {
-              return { id: item.id };
-            });
-        } else uploadableObject.related_data.attachment = null;
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-      if (saveAsNew) delete uploadableObject.related_data;
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.area)) {
-        this.site.area = {
-          name: obj.area__name,
-          name_en: obj.area__name_en,
-          id: obj.area,
-        };
-        this.autocomplete.area.push(this.site.area);
-      }
-      if (this.isNotEmpty(obj.project)) {
-        this.site.project = {
-          name: obj.project__name,
-          name_en: obj.project__name_en,
-          id: obj.project,
-        };
-        this.autocomplete.project.push(this.site.project);
-      }
-      this.site.coord_det_method = {
-        value: obj.coord_det_method__value,
-        value_en: obj.coord_det_method__value_en,
-        id: obj.coord_det_method,
-      };
-      this.site.site_type = {
-        value: obj.site_type__value,
-        value_en: obj.site_type__value_en,
-        id: obj.site_type,
-      };
-      if (this.isNotEmpty(obj.locality__id)) {
-        this.site.locality = {
-          id: obj.locality__id,
-          locality_en: obj.locality__locality_en,
-          locality: obj.locality__locality,
-        };
-        this.autocomplete.locality.push(this.site.locality);
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "attachment_link") {
-        query = fetchSiteAttachment(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment_link
-        );
-      } else if (object === "samples") {
-        query = fetchLinkedSamples(
-          this.relatedData.searchParameters.samples,
-          this.$route.params.id
-        );
-      } else if (object === "locality_description") {
-        query = fetchSiteLocalityDescriptions(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_description
-        );
-      } else if (object === "locality_reference") {
-        query = fetchSiteLocalityReferences(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_reference
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
     },
 
     customLabelForAttachment(option) {
@@ -1417,12 +914,7 @@ export default {
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "site", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      // this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.results = files;
+      this.addFilesAsNewObjects(files, this.site, singleFileMetadata);
     },
 
     setSiteName(projectId) {
@@ -1432,17 +924,6 @@ export default {
           this.site.name = newName;
         }
       });
-    },
-
-    handleUserChoiceFromModal(choice) {
-      let vm = this;
-      if (choice === "SAVE_AND_LEAVE") {
-        this.save("site", true).then(() => {
-          vm.$root.$emit("close-new-site-modal");
-        });
-      } else if (choice === "SAVE") {
-        this.save("site");
-      }
     },
 
     // Resetting accuracy and coord det method because user changed coordinates manually
@@ -1455,29 +936,11 @@ export default {
       site.date_start = this.unformatISOStringToDate(site.date_start);
       site.date_end = this.unformatISOStringToDate(site.date_end);
     },
-
-    searchRelatedData: debounce(function (
-      searchParameters,
-      apiCall,
-      relatedObject
-    ) {
-      apiCall().then((response) => {
-        if (response.status === 200) {
-          this.relatedData[relatedObject].count = response.data.count;
-          this.relatedData[relatedObject].results = response.data.results;
-        }
-      });
-    },
-    50),
   },
 };
 </script>
 
 <style scoped>
-.tooltip .fade {
-  background-color: red !important;
-}
-
 label {
   margin: 0;
   color: rgba(0, 0, 0, 0.54);

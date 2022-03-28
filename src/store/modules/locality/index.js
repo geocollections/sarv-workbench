@@ -6,7 +6,7 @@ const getDefaultState = () => {
     count: 0,
     options: {
       page: 1,
-      paginateBy: 50,
+      itemsPerPage: 50,
       sortBy: ["id"],
       sortDesc: [true],
     },
@@ -210,7 +210,7 @@ const getDefaultState = () => {
           title: "specimen.selectionId",
           value: null,
           lookUpType: "icontains",
-          fields: ["selection__selection"],
+          fields: ["selection__selection__id"],
         },
         selection: {
           title: "specimen.selection",
@@ -588,4 +588,5 @@ export default {
   getters,
   actions,
   mutations,
+  getDefaultState,
 };

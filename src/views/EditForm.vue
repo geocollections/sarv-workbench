@@ -64,14 +64,8 @@
 
     <!-- PERMISSIONS -->
     <object-permissions
-      v-if="
-        typeof data === 'object' &&
-        data !== null &&
-        objectExists &&
-        enablePermissions
-      "
+      v-if="data && objectExists && enablePermissions"
       class="d-print-none"
-      :table="$route.meta.table"
       :object-data="data"
       :key="permissionsComponentKey"
       :body-color="bodyColor"
@@ -80,9 +74,8 @@
 
     <!-- LOGS -->
     <log
-      v-if="typeof data === 'object' && data !== null && objectExists"
+      v-if="data && objectExists"
       class="d-print-none"
-      :table="$route.meta.table"
       :object-data="data"
       :key="logComponentKey"
       :body-color="bodyColor"
@@ -94,6 +87,7 @@
       :body-color="bodyColor"
       :is-navbar-dark="navbarDark"
       :navbar-color="navbarColor"
+      :object-data="data"
     />
 
     <ConfirmationDialog
@@ -150,7 +144,7 @@ export default {
     ...mapState("detail", ["initialEditViewDataHasChangedState"]),
 
     enablePermissions() {
-      let table = this.$route.meta.table;
+      let table = this.$route.meta.object;
       let availableTables = [
         "analysis",
         "attachment",
@@ -174,6 +168,7 @@ export default {
     },
   },
 
+  // Todo: Fix dataHasChanges check
   async beforeRouteUpdate(to, from, next) {
     if (this.initialEditViewDataHasChangedState) {
       const dialogResponse = await this.openConfirmationDialog();
@@ -194,10 +189,7 @@ export default {
       if (dialogResponse === "close") next();
       else if (dialogResponse === "continue") next(false);
       else if (dialogResponse === "save") {
-        await this.$emit(
-          "button-clicked",
-          "SAVE_AND_LEAVE"
-        );
+        await this.$emit("button-clicked", "SAVE_AND_LEAVE");
         next();
       } else next();
     } else next();

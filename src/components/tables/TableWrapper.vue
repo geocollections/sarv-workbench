@@ -14,6 +14,8 @@
       dense
       calculate-widths
       multi-sort
+      :loading-text="$t('table.loading')"
+      :loader-height="0"
       :loading="isLoading"
       :headers="visibleHeaders"
       :items="items"
@@ -24,30 +26,21 @@
       :show-expand="expandable"
       :single-expand="singleExpand"
       :expanded.sync="expanded"
-      @click:row="handleRowClick"
-      @update:options="
-        isLoading = !onlyTable;
-        handleChange($event);
+      :show-select="$attrs['show-select']"
+      :value="$attrs['value']"
+      @item-selected="
+        $emit('item-selected', { ...$event, module: $route.meta.object })
       "
+      @toggle-select-all="
+        $emit('toggle-select-all', { ...$event, module: $route.meta.object })
+      "
+      @click:row="handleRowClick"
+      @update:options="updateTableOptions"
     >
       <template #no-data>{{ $t("table.noData") }}</template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
-      <template v-if="!onlyTable" #top="{ pagination, updateOptions, options }">
-        <div>
-          <v-row no-gutters>
-            <v-col v-if="showSearch" cols="12" sm="4" class="px-3 py-0">
-              <v-text-field
-                v-model="search"
-                color="primary darken-2"
-                append-icon="mdi-magnify"
-                :label="$t('common.search')"
-                hide-details
-                clearable
-                @input="handleSearch($event)"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-
+      <template v-if="!onlyTable" #top="{ pagination, options }">
+        <div class="table-top">
           <v-row no-gutters>
             <v-col
               cols="12"
@@ -55,13 +48,14 @@
               class="px-3 my-1 my-sm-3"
               align-self="center"
             >
-              <export-controls />
+              <!-- Currently using other export component -->
+              <export-controls v-if="false" />
               <header-controls
                 v-if="dynamicHeaders"
                 :headers="headers"
                 :visible-headers="visibleHeaders"
                 :sort-by="options.sortBy"
-                @change="handleHeadersChange"
+                @change="$emit('change:headers', { value: $event.value })"
                 @reset="$emit('reset:headers')"
               />
             </v-col>
@@ -80,7 +74,7 @@
                 :go-to-text="$t('common.goTo')"
                 :go-to-button-text="$t('common.goToBtn')"
                 select-page-id="header-select-btn"
-                @update:options="updateOptions"
+                @update:options="updateTableOptions($event)"
               />
             </v-col>
           </v-row>
@@ -102,10 +96,7 @@
           :go-to-text="$t('common.goTo')"
           :go-to-button-text="$t('common.goToBtn')"
           select-page-id="footer-select-btn"
-          @update:options="
-            isLoading = !onlyTable;
-            handleChange($event);
-          "
+          @update:options="updateTableOptions($event)"
         />
       </template>
       <template
@@ -113,7 +104,6 @@
         #item.data-table-expand="{ expand, isExpanded, item }"
       >
         <v-btn
-          v-if="item.canExpand"
           icon
           :class="{ active: isExpanded }"
           @click.stop="expand(!isExpanded)"
@@ -137,13 +127,12 @@
 </template>
 
 <script>
-import { debounce } from "lodash";
-import HeaderControls from "./controls/HeaderControls.vue";
-import ExportControls from "./controls/ExportControls.vue";
-import PaginationControls from "~/components/tables/controls/PaginationControls.vue";
+import HeaderControls from "./HeaderControls.vue";
+import PaginationControls from "./PaginationControls.vue";
+import ExportControls from "@/components/tables/ExportControls";
 export default {
   name: "TableWrapper",
-  components: { PaginationControls, HeaderControls, ExportControls },
+  components: { ExportControls, PaginationControls, HeaderControls },
   props: {
     onlyTable: {
       type: Boolean,
@@ -181,6 +170,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -188,10 +181,9 @@ export default {
       footerProps: {
         showFirstLastPage: true,
         "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
-        "items-per-page-text": this.$t("table.itemsPerPage"),
+        "items-per-page-text": this.$t("common.itemsPerPage"),
       },
       expanded: [],
-      isLoading: false,
     };
   },
   computed: {
@@ -199,25 +191,28 @@ export default {
       return this.headers.filter((header) => header.show);
     },
   },
-  watch: {
-    items() {
-      this.isLoading = false;
-    },
-  },
   methods: {
-    handleChange: debounce(function (options) {
-      this.$emit("update", { options, search: this.search });
-    }, 500),
-    handleSearch: debounce(function () {
-      const options = { ...this.options, page: 1 };
-      this.isLoading = true;
-      this.$emit("update", {
-        options,
-        search: this.search,
-      });
-    }, 500),
-    handleHeadersChange(e) {
-      this.$emit("change:headers", e.value);
+    updateTableOptions(options) {
+      if (this.options.page !== options.page)
+        this.$emit("update:options", {
+          value: options.page,
+          key: "page",
+        });
+      if (this.options.itemsPerPage !== options.itemsPerPage)
+        this.$emit("update:options", {
+          value: options.itemsPerPage,
+          key: "itemsPerPage",
+        });
+      if (this.options.sortBy !== options.sortBy)
+        this.$emit("update:options", {
+          value: options.sortBy,
+          key: "sortBy",
+        });
+      if (this.options.sortDesc !== options.sortDesc)
+        this.$emit("update:options", {
+          value: options.sortDesc,
+          key: "sortDesc",
+        });
     },
     handleRowClick(item, slot) {
       // HACK: This is added to handle propagation,

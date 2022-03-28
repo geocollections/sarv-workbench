@@ -6,7 +6,7 @@ const getDefaultState = () => {
     count: 0,
     options: {
       page: 1,
-      paginateBy: 50,
+      itemsPerPage: 50,
       sortBy: ["id"],
       sortDesc: [true],
     },
@@ -20,7 +20,7 @@ const getDefaultState = () => {
         },
         area_type: {
           lookUpType: "icontains",
-          title: "area.area_type__id",
+          title: "area.area_type",
           value: null,
           fields: ["area_type__name", "area_type__name_en"],
           type: "multi",
@@ -67,7 +67,7 @@ const getDefaultState = () => {
         },
         maakond: {
           lookUpType: "icontains",
-          title: "area.maakond__id",
+          title: "area.maakond",
           value: null,
           fields: ["maakond__maakond", "maakond__maakond_en"],
           type: "multi",
@@ -272,4 +272,5 @@ export default {
   getters,
   actions,
   mutations,
+  getDefaultState,
 };

@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -53,15 +52,15 @@
       <template v-slot:item.locality="{ item }">
         <router-link
           v-if="item.locality"
-          :to="{ path: '/locality/' + item.locality }"
+          :to="{ path: '/locality/' + item.locality.id }"
           :title="$t('editLocality.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.locality__locality,
-              en: item.locality__locality_en,
+              et: item.locality.locality,
+              en: item.locality.locality_en,
             }"
           />
         </router-link>
@@ -71,15 +70,15 @@
       <template v-slot:item.stratigraphy="{ item }">
         <router-link
           v-if="item.stratigraphy"
-          :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+          :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
           :title="$t('editStratigraphy.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.stratigraphy__stratigraphy,
-              en: item.stratigraphy__stratigraphy_en,
+              et: item.stratigraphy.stratigraphy,
+              en: item.stratigraphy.stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -89,15 +88,15 @@
       <template v-slot:item.lithostratigraphy="{ item }">
         <router-link
           v-if="item.lithostratigraphy"
-          :to="{ path: '/stratigraphy/' + item.lithostratigraphy }"
+          :to="{ path: '/stratigraphy/' + item.lithostratigraphy.id }"
           :title="$t('editStratigraphy.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.lithostratigraphy__stratigraphy,
-              en: item.lithostratigraphy__stratigraphy_en,
+              et: item.lithostratigraphy.stratigraphy,
+              en: item.lithostratigraphy.stratigraphy_en,
             }"
           ></span>
         </router-link>
@@ -227,6 +226,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -235,12 +240,14 @@ import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import { cloneDeep } from "lodash";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 export default {
-  name: "SampleSeriesSamplesTable",
+  name: "SampleTable",
 
-  components: { InputWrapper, AutocompleteWrapper },
+  components: { RelatedDataDeleteDialog, InputWrapper, AutocompleteWrapper },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -256,7 +263,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -320,24 +327,13 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        };
-      });
-    },
-
     isItemValid() {
       return this.item.number !== null && this.item.number.length > 0;
     },
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         number: "",
         locality: null,
@@ -350,67 +346,20 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "sample",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "sample",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.locality !== "object" && item.locality !== null) {
-        this.item.locality = {
-          id: item.locality,
-          locality: item.locality__locality,
-          locality_en: item.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.item.locality);
-      } else if (item.locality !== null) {
+      if (item.locality) {
         this.item.locality = item.locality;
         this.autocomplete.locality.push(this.item.locality);
       }
 
-      if (typeof item.stratigraphy !== "object" && item.stratigraphy !== null) {
-        this.item.stratigraphy = {
-          id: item.stratigraphy,
-          stratigraphy: item.stratigraphy__stratigraphy,
-          stratigraphy_en: item.stratigraphy__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy.push(this.item.stratigraphy);
-      } else if (item.stratigraphy !== null) {
+      if (item.stratigraphy) {
         this.item.stratigraphy = item.stratigraphy;
         this.autocomplete.stratigraphy.push(this.item.stratigraphy);
       }
 
-      if (
-        typeof item.lithostratigraphy !== "object" &&
-        item.lithostratigraphy !== null
-      ) {
-        this.item.lithostratigraphy = {
-          id: item.lithostratigraphy,
-          stratigraphy: item.lithostratigraphy__stratigraphy,
-          stratigraphy_en: item.lithostratigraphy__stratigraphy_en,
-        };
-        this.autocomplete.lithostratigraphy.push(this.item.lithostratigraphy);
-      } else if (item.lithostratigraphy !== null) {
+      if (item.lithostratigraphy) {
         this.item.lithostratigraphy = item.lithostratigraphy;
         this.autocomplete.lithostratigraphy.push(this.item.lithostratigraphy);
       }
@@ -423,26 +372,6 @@ export default {
 
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "sample",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
-    },
   },
 };
 </script>
-
-<style scoped />

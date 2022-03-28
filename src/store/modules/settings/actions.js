@@ -1,12 +1,12 @@
 import { cloneDeep } from "lodash";
 
 const actions = {
-  updateDrawerState({ commit }, boolVal) {
-    commit("UPDATE_DRAWER_STATE", boolVal);
+  toggleDrawerState({ commit }) {
+    commit("TOGGLE_DRAWER_STATE");
   },
 
-  updateDrawerRightState({ commit }, boolVal) {
-    commit("UPDATE_DRAWER_RIGHT_STATE", boolVal);
+  toggleDrawerRightState({ commit }) {
+    commit("TOGGLE_DRAWER_RIGHT_STATE");
   },
 
   updateBodyColor({ commit }, color) {

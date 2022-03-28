@@ -1,26 +1,18 @@
 <template>
-  <v-data-table
-    :headers="$_tableHeaderMixin_shownHeaders"
-    dense
-    hide-default-footer
+  <table-wrapper
+    v-bind="$attrs"
+    :headers="headers"
     :items="response.results"
-    :items-per-page="searchParameters.paginateBy"
-    multi-sort
-    :page="searchParameters.page"
-    :search="filter"
-    expand-icon="fas fa-caret-down"
-    :sort-by="searchParameters.sortBy"
-    :sort-desc="searchParameters.sortDesc"
-    :show-select="!!activeLibrary"
-    @item-selected="$emit('toggle-reference-in-active-library', $event)"
-    @toggle-select-all="$emit('toggle-select-all', $event, 'reference')"
-    :value="selected"
-    @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
-    @update:sort-desc="
-      $emit('update:sorting', { value: $event, key: 'sortDesc' })
-    "
-    :server-items-length="response.count"
-    :class="bodyColor.split('n-')[0] + 'n-5'"
+    :count="response.count"
+    :options="searchParameters"
+    :show-search="false"
+    :show-select="$_activeListMixin_isShowSelect"
+    :value="selectedList"
+    @change:headers="$emit('change:headers', $event)"
+    @reset:headers="$emit('reset:headers')"
+    @update:options="$emit('update:options', $event)"
+    @item-selected="$_activeListMixin_itemSelected"
+    @toggle-select-all="$_activeListMixin_toggleSelectAll"
   >
     <template v-slot:header.is_estonian_author="{ item }">
       <span> EE <v-icon x-small>fas fa-user</v-icon> </span>
@@ -110,15 +102,18 @@
         <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
 import tableViewMixin from "@/mixins/tableViewMixin";
+import TableWrapper from "@/components/tables/TableWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "ReferenceTable",
+  components: { TableWrapper },
   mixins: [activeListMixin, tableViewMixin],
   props: {
     response: {
@@ -134,9 +129,14 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
+    },
+    headers: {
+      type: Array,
+      required: true,
+      default: () => [],
     },
     bodyColor: {
       type: String,
@@ -150,9 +150,17 @@ export default {
     },
   },
 
+  computed: {
+    ...mapState("search", ["activeLibrary"]),
+  },
+
   methods: {
     getGeoloogiaUrl(id) {
       return `https://kirjandus.geoloogia.info/reference/${id}`;
+    },
+
+    test(test) {
+      console.log(test);
     },
 
     getDoiUrl(doi) {

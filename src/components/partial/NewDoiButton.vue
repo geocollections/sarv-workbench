@@ -22,9 +22,6 @@ export default {
       type: Object,
       required: true,
     },
-    rawData: {
-      type: Object,
-    },
     relatedData: {
       type: Object,
     },
@@ -50,7 +47,6 @@ export default {
     addNewDoi() {
       if (confirm(this.$t(this.object + ".doiConfirmation"))) {
         this.setLoadingState(true);
-
 
         let doi = this.buildDoiObject(this.object);
         if (typeof doi !== "undefined") {
@@ -138,9 +134,9 @@ export default {
               : null,
           resource_type: 14,
           version: "1.0",
-          formats: this.rawData.attachment_format__value
-            ? this.rawData.attachment_format__value
-            : this.rawData.uuid_filename.split(".")[1],
+          formats: this.data.attachment_format.value
+            ? this.data.attachment_format.value
+            : this.data.uuid_filename.split(".")[1],
           is_private: this.data.is_private,
           licence: this.data.licence ? this.data.licence.id : null,
           copyright_agent: this.data.copyright_agent
@@ -189,5 +185,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

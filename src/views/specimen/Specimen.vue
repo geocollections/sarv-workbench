@@ -40,6 +40,25 @@
 
       <transition>
         <div v-show="block.info" class="pa-1">
+          <!-- SPECIMEN_FULL_NUMBER -->
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="pa-1">
+              <v-tooltip top z-index="60000">
+                <template v-slot:activator="{ on, attrs }">
+                  <input-wrapper
+                    v-on="on"
+                    v-bind="attrs"
+                    v-model="specimen.specimen_full_number"
+                    :color="bodyActiveColor"
+                    :label="$t('specimen.specimen_full_number')"
+                    readonly
+                  />
+                </template>
+                <span>{{ $t("specimen.nameTooltip") }}</span>
+              </v-tooltip>
+            </v-col>
+          </v-row>
+
           <!-- FOSSIL, SPECIMEN_ID, COLL and SPECIMEN_NR  -->
           <v-row no-gutters>
             <v-col cols="12" md="3" class="pa-1">
@@ -370,14 +389,14 @@
               <autocomplete-wrapper
                 v-model="specimen.parent"
                 :color="bodyActiveColor"
-                :items="autocomplete.specimen"
-                :loading="autocomplete.loaders.specimen"
+                :items="autocomplete.parent"
+                :loading="autocomplete.loaders.parent"
                 item-text="specimen_id"
                 :label="$t('specimen.related_specimen')"
                 is-link
                 route-object="specimen"
                 is-searchable
-                v-on:search:items="autocompleteSpecimenSearch"
+                v-on:search:items="autocompleteSpecimenSearch($event, 'parent')"
               />
             </v-col>
           </v-row>
@@ -521,6 +540,53 @@
       </transition>
     </v-card>
 
+    <!-- RELATED FILES -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      id="block-files"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.files" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <file-input
+                show-existing
+                :files-from-object="specimen.attachments"
+                @update:existing-files="specimen.attachments = $event"
+                @file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                open-file
+                acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
+                show-attachment-link
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- RELATED DATA TABS -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -610,19 +676,6 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <div v-show="activeTab === 'attachment'">
-            <file-input
-              show-existing
-              :files-from-object="relatedData.attachment.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
-              show-attachment-link
-            />
-          </div>
-
           <specimen-location-table
             v-show="activeTab === 'specimen_location'"
             :response="relatedData.specimen_location"
@@ -662,15 +715,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -759,7 +807,6 @@ import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
 import DateWrapper from "../../components/partial/inputs/DateWrapper";
 import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
 import FileInput from "../../components/partial/inputs/FileInput";
-import requestsMixin from "../../mixins/requestsMixin";
 import SpecimenIdentificationTable from "../../components/specimen/relatedTables/SpecimenIdentificationTable";
 import SpecimenIdentificationGeologyTable from "../../components/specimen/relatedTables/SpecimenIdentificationGeologyTable";
 import SpecimenReferenceTable from "../../components/specimen/relatedTables/SpecimenReferenceTable";
@@ -816,7 +863,6 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
     saveAsNewMixin,
     globalUtilsMixin,
     detailViewUtilsMixin,
@@ -836,27 +882,21 @@ export default {
   },
 
   watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.setInitialData();
-        this.reloadData();
-      },
-      deep: true,
+    "specimen.specimen_id"(newVal) {
+      this.updateSpecimenFullName({
+        specimen_id: newVal,
+        coll: this.specimen?.coll?.number,
+      });
     },
-    "relatedData.searchParameters": {
-      handler: function () {
-        this.loadRelatedData(
-          [this.activeTab],
-          "specimen",
-          this.$route.params.id
-        );
-      },
-      deep: true,
+    "specimen.coll"(newVal) {
+      this.updateSpecimenFullName({
+        specimen_id: this.specimen?.specimen_id,
+        coll: newVal?.number,
+      });
     },
   },
 
   computed: {
-    ...mapState("search", ["specimenSearchParameters"]),
     ...mapState("search", {
       activeRelatedDataTab: (state) => state.activeRelatedDataTab.specimen,
     }),
@@ -871,6 +911,15 @@ export default {
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
     ...mapActions("detail", ["saveFields"]),
+
+    updateSpecimenFullName(obj) {
+      if (!obj.specimen_id || !obj.coll)
+        this.specimen.specimen_full_number = null;
+      else
+        this.specimen.specimen_full_number = `${obj.coll.split(" ")[0]} ${
+          obj.specimen_id
+        }`;
+    },
 
     setTab(type) {
       if (type) {
@@ -890,7 +939,6 @@ export default {
           { name: "specimen_identification_geology", iconClass: "far fa-gem" },
           { name: "specimen_reference", iconClass: "fas fa-book" },
           { name: "specimen_description", iconClass: "fas fa-info" },
-          { name: "attachment", iconClass: "far fa-folder-open" },
           { name: "specimen_location", iconClass: "fas fa-globe-europe" },
           { name: "specimen_history", iconClass: "fas fa-history" },
           { name: "analysis", iconClass: "far fa-chart-bar" },
@@ -939,6 +987,7 @@ export default {
             analysis_method: false,
             parent: false,
             fossil: false,
+            attachments: false,
           },
           list_specimen_kind: [],
           list_specimen_original_status: [],
@@ -968,6 +1017,7 @@ export default {
           analysis_method: [],
           parent: [],
           fossil: [],
+          attachments: [],
         },
         requiredFields: ["fossil"],
         specimen: {
@@ -1010,7 +1060,6 @@ export default {
           storage: null,
           status: null,
           original_status: null,
-          database: null,
           accession: null,
           deaccession: null,
         },
@@ -1020,51 +1069,9 @@ export default {
           details: true,
           images: true,
           description: true,
+          files: true,
         },
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    async loadFullInfo() {
-      this.loadAutocompleteFields(this.listOfAutocompleteTables);
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        const res = await this.$api.rw.getDetail(
-          "specimen",
-          this.$route.params.id,
-          { nest: 1 }
-        );
-        if (res?.id) {
-          this.$emit("object-exists", true);
-          this.$set(this, "specimen", res);
-
-          this.fillAutocompleteFields(this.specimen);
-          this.$emit("data-loaded", this.specimen);
-
-          this.loadRelatedData(
-            this.relatedTabs.map((tab) => tab.name),
-            "specimen",
-            res.id
-          );
-          this.loadSpecimenImages(this.$route.params.id);
-        } else this.$emit("object-exists", false);
-
-        this.setLoadingState(false);
-      }
-    },
-
-    loadSpecimenImages(specimenId) {
-      this.specimenImages = this.$api.rw.get("attachment", {
-        defaultParams: {
-          specimen: specimenId,
-        },
-      });
     },
 
     setDefaultRelatedData() {
@@ -1073,56 +1080,49 @@ export default {
         specimen_identification_geology: { count: 0, results: [] },
         specimen_reference: { count: 0, results: [] },
         specimen_description: { count: 0, results: [] },
-        attachment: { count: 0, results: [] },
         specimen_location: { count: 0, results: [] },
         specimen_history: { count: 0, results: [] },
         analysis: { count: 0, results: [] },
         searchParameters: {
           specimen_identification: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["taxon", "current"],
             sortDesc: [true, true],
           },
           specimen_identification_geology: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["rock", "current"],
             sortDesc: [true, true],
           },
           specimen_reference: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["reference"],
             sortDesc: [true],
           },
           specimen_description: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["length"],
-            sortDesc: [true],
-          },
-          attachment: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["id"],
             sortDesc: [true],
           },
           specimen_location: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["number"],
             sortDesc: [true],
           },
           specimen_history: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["type"],
             sortDesc: [true],
           },
           analysis: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -1130,21 +1130,9 @@ export default {
       };
     },
 
-    formatDataForUpload(object) {
-      let uploadableObject = { ...object };
-      uploadableObject = this.cleanObject(uploadableObject);
-      return uploadableObject;
-    },
-
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "specimen", singleFileMetadata);
-    },
-
-    addExistingFiles(files) {
-      this.relatedData.attachment.results = files;
+      this.addFilesAsNewObjects(files, this.specimen, singleFileMetadata);
     },
   },
 };
 </script>
-
-<style scoped></style>

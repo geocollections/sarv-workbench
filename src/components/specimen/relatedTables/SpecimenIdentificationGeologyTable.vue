@@ -26,7 +26,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,14 +38,7 @@
 
       <template v-slot:item.rock="{ item }">
         <span
-          v-if="$route.meta.isEdit"
-          v-translate="{
-            et: item.rock__name,
-            en: item.rock__name_en,
-          }"
-        />
-        <span
-          v-else-if="item.rock"
+          v-if="item.rock"
           v-translate="{
             et: item.rock.name,
             en: item.rock.name_en,
@@ -56,16 +48,7 @@
 
       <template v-slot:item.agent="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/agent/' + item.agent }"
-          :title="$t('editAgent.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.agent__agent }}
-        </router-link>
-        <router-link
-          v-else-if="item.agent"
+          v-if="item.agent"
           :to="{ path: '/agent/' + item.agent.id }"
           :title="$t('editAgent.editMessage')"
           class="sarv-link"
@@ -77,16 +60,7 @@
 
       <template v-slot:item.reference="{ item }">
         <router-link
-          v-if="$route.meta.isEdit"
-          :to="{ path: '/reference/' + item.reference }"
-          :title="$t('editReference.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.reference__reference }}
-        </router-link>
-        <router-link
-          v-else-if="item.reference"
+          v-if="item.reference"
           :to="{ path: '/reference/' + item.reference.id }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
@@ -98,14 +72,7 @@
 
       <template v-slot:item.type="{ item }">
         <span
-          v-if="$route.meta.isEdit"
-          v-translate="{
-            et: item.type__value,
-            en: item.type__value_en,
-          }"
-        />
-        <span
-          v-else-if="item.type"
+          v-if="item.type"
           v-translate="{
             et: item.type.value,
             en: item.type.value_en,
@@ -280,10 +247,8 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import DateWrapper from "../../partial/inputs/DateWrapper";
-import { fetchListIdentificationType } from "../../../assets/js/api/apiCalls";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
 
@@ -314,7 +279,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -411,44 +376,19 @@ export default {
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
-      if (typeof item.rock !== "object" && item.rock !== null) {
-        this.item.rock = {
-          id: item.rock,
-          name: item.rock__name,
-          name_en: item.rock__name_en,
-        };
-        this.autocomplete.rock.push(this.item.rock);
-      } else if (item.rock !== null) {
+      if (item.rock) {
         this.item.rock = item.rock;
         this.autocomplete.rock.push(this.item.rock);
       }
 
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent,
-        };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
+      if (item.agent) {
         this.item.agent = item.agent;
         this.autocomplete.agent.push(this.item.agent);
       }
 
-      if (typeof item.type !== "object" && item.type !== null) {
-        this.item.type = {
-          id: item.type,
-          value: item.type__value,
-          value_en: item.type__value_en,
-        };
-      }
+      this.item.type = item.type;
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference,
-        };
-        this.autocomplete.reference.push(this.item.reference);
-      } else if (item.reference !== null) {
+      if (item.reference) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
       }
@@ -459,20 +399,14 @@ export default {
       this.item.current = item.current === true;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.type.length <= 1) {
         this.autocomplete.loaders.type = true;
-        fetchListIdentificationType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("list_identification_type");
+        this.autocomplete.type = response?.results ?? [];
         this.autocomplete.loaders.type = false;
       }
     },
   },
 };
 </script>
-
-<style scoped></style>

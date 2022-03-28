@@ -6,7 +6,7 @@ const getDefaultState = () => {
     count: 0,
     options: {
       page: 1,
-      paginateBy: 50,
+      itemsPerPage: 50,
       sortBy: ["id"],
       sortDesc: [true],
     },
@@ -148,6 +148,11 @@ const getDefaultState = () => {
     },
     headers: [
       {
+        value: "drillcore",
+        text: "drillcore_box.drillcore__drillcore",
+        show: true,
+      },
+      {
         value: "number",
         text: "drillcore_box.number",
         show: true,
@@ -187,21 +192,6 @@ const getDefaultState = () => {
         text: "drillcore_box.link",
         sortable: false,
         show: true,
-      },
-      {
-        value: "drillcore__id",
-        text: "drillcore_box.drillcore__id",
-        show: false,
-      },
-      {
-        value: "drillcore__drillcore",
-        text: "drillcore_box.drillcore__drillcore",
-        show: false,
-      },
-      {
-        value: "drillcore__drillcore_en",
-        text: "drillcore_box.drillcore__drillcore_en",
-        show: false,
       },
       {
         value: "diameter",
@@ -320,4 +310,5 @@ export default {
   getters,
   actions,
   mutations,
+  getDefaultState,
 };

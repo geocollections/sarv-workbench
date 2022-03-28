@@ -27,7 +27,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -39,184 +38,68 @@
       </template>
 
       <template v-slot:item.type_type="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.type_type__value,
-              en: item.type_type__value_en,
-            }"
-          />
-          <span
-            v-else-if="item.type_type"
-            v-translate="{
-              et: item.type_type.value,
-              en: item.type_type.value_en,
-            }"
-          />
-        </div>
-        <div
-          v-else
+        <span
+          v-if="item.type_type"
           v-translate="{
-            et: item.type_type__value,
-            en: item.type_type__value_en,
+            et: item.type_type.value,
+            en: item.type_type.value_en,
           }"
-        ></div>
+        />
       </template>
 
       <template v-slot:item.specimen="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/specimen/' + item.specimen }"
-            :title="$t('editSpecimen.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.specimen__specimen_id }}
-          </router-link>
-          <router-link
-            v-else-if="item.specimen"
-            :to="{ path: '/specimen/' + item.specimen.id }"
-            :title="$t('editSpecimen.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.specimen.specimen_id }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/specimen/' + item.specimen }"
+          v-if="item.specimen"
+          :to="{ path: '/specimen/' + item.specimen.id }"
           :title="$t('editSpecimen.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.specimen__specimen_id }}
+          {{ item.specimen.specimen_id }}
         </router-link>
       </template>
 
       <template v-slot:item.reference="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/reference/' + item.reference }"
+          v-if="item.reference"
+          :to="{ path: '/reference/' + item.reference.id }"
           :title="$t('editReference.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.reference__reference }}
+          {{ item.reference.reference }}
         </router-link>
       </template>
 
       <template v-slot:item.locality="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/locality/' + item.locality }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality__locality,
-                en: item.locality__locality_en,
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.locality"
-            :to="{ path: '/locality/' + item.locality.id }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality.locality,
-                en: item.locality.locality_en,
-              }"
-            />
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/locality/' + item.locality }"
+          v-if="item.locality"
+          :to="{ path: '/locality/' + item.locality.id }"
           :title="$t('editLocality.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.locality__locality,
-              en: item.locality__locality_en,
+              et: item.locality.locality,
+              en: item.locality.locality_en,
             }"
           />
         </router-link>
       </template>
 
       <template v-slot:item.stratigraphy="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy__stratigraphy,
-                en: item.stratigraphy__stratigraphy_en,
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.stratigraphy"
-            :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
-            :title="$t('editStratigraphy.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.stratigraphy.stratigraphy,
-                en: item.stratigraphy.stratigraphy_en,
-              }"
-            />
-          </router-link>
-        </div>
         <router-link
-          v-else
-          :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+          v-if="item.stratigraphy"
+          :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
           :title="$t('editStratigraphy.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <span
             v-translate="{
-              et: item.stratigraphy__stratigraphy,
-              en: item.stratigraphy__stratigraphy_en,
+              et: item.stratigraphy.stratigraphy,
+              en: item.stratigraphy.stratigraphy_en,
             }"
           />
         </router-link>
@@ -365,7 +248,6 @@
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchTaxonTypeType } from "@/assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
@@ -395,7 +277,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          itemsPerPage: 25,
         };
       },
     },
@@ -489,82 +371,43 @@ export default {
     },
 
     setItemFields(item) {
-      if (this.$route.meta.isEdit) this.item.id = item.id;
-      // else this.item.onEditIndex = this.response.results.indexOf(item);
+      this.item.id = item.id;
 
-      if (typeof item.specimen !== "object" && item.specimen !== null) {
-        this.item.specimen = {
-          id: item.specimen,
-          specimen_id: item.specimen__specimen_id,
-        };
-        this.autocomplete.specimen.push(this.item.specimen);
-      } else if (item.specimen !== null) {
+      if (item.specimen) {
         this.item.specimen = item.specimen;
         this.autocomplete.specimen.push(this.item.specimen);
       }
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference,
-        };
-        this.autocomplete.reference.push(this.item.reference);
-      } else if (item.reference !== null) {
+      if (item.reference) {
         this.item.reference = item.reference;
         this.autocomplete.reference.push(this.item.reference);
       }
 
-      if (typeof item.locality !== "object" && item.locality !== null) {
-        this.item.locality = {
-          id: item.locality,
-          locality: item.locality__locality,
-          locality_en: item.locality__locality_en,
-        };
-        this.autocomplete.locality.push(this.item.locality);
-      } else if (item.locality !== null) {
+      if (item.locality) {
         this.item.locality = item.locality;
         this.autocomplete.locality.push(this.item.locality);
       }
 
-      if (typeof item.stratigraphy !== "object" && item.stratigraphy !== null) {
-        this.item.stratigraphy = {
-          id: item.stratigraphy,
-          stratigraphy: item.stratigraphy__stratigraphy,
-          stratigraphy_en: item.stratigraphy__stratigraphy_en,
-        };
-        this.autocomplete.stratigraphy.push(this.item.stratigraphy);
-      } else if (item.stratigraphy !== null) {
+      if (item.stratigraphy) {
         this.item.stratigraphy = item.stratigraphy;
         this.autocomplete.stratigraphy.push(this.item.stratigraphy);
       }
 
-      if (typeof item.type_type !== "object" && item.type_type !== null) {
-        this.item.type_type = {
-          id: item.type_type,
-          value: item.type_type__value,
-          value_en: item.type_type__value_en,
-        };
-      } else this.item.type_type = item.type_type;
+      this.item.type_type = item.type_type;
 
       this.item.repository = item.repository;
       this.item.specimen_number = item.specimen_number;
       this.item.remarks = item.remarks;
     },
 
-    fillListAutocompletes() {
+    async fillListAutocompletes() {
       if (this.autocomplete.type_type.length <= 1) {
         this.autocomplete.loaders.type_type = true;
-        fetchTaxonTypeType().then((response) => {
-          if (response.status === 200) {
-            this.autocomplete.type_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
+        const response = await this.$api.rw.get("taxon_type_type");
+        this.autocomplete.type_type = response?.results ?? [];
         this.autocomplete.loaders.type_type = false;
       }
     },
   },
 };
 </script>
-
-<style scoped></style>

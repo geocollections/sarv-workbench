@@ -203,22 +203,19 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <autocomplete-wrapper
-                v-model="relatedData.library_agent"
+                v-model="library.agents"
                 :color="bodyActiveColor"
-                :items="autocomplete.library_agent"
-                :loading="autocomplete.loaders.library_agent"
+                :items="autocomplete.agents"
+                :loading="autocomplete.loaders.agents"
                 item-text="agent"
                 :label="$t('library.libraryAgent')"
                 is-link
                 route-object="agent"
                 is-searchable
-                v-on:search:items="autocompleteLibraryAgentSearch"
+                v-on:search:items="autocompleteAgentSearch($event, 'agents')"
                 :multiple="true"
                 v-on:chip:close="
-                  relatedData.library_agent.splice(
-                    relatedData.library_agent.indexOf($event),
-                    1
-                  )
+                  library.agents.splice(library.agents.indexOf($event), 1)
                 "
               />
             </v-col>
@@ -229,6 +226,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -243,7 +241,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in computedRelatedTabs"
+          v-for="tab in relatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -290,15 +288,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -319,25 +312,19 @@
 </template>
 
 <script>
-import {
-  fetchLibrary,
-  fetchLibraryReference,
-  fetchLibraryAgent,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import LibraryReferenceListView from "../../components/library/relatedTables/LibraryReferenceListView";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapState } from "vuex";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import LibraryReferenceTable from "../../components/library/relatedTables/LibraryReferenceTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import Editor from "../../components/partial/inputs/Editor";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import LibraryReferenceListView from "@/components/library/relatedTables/LibraryReferenceListView";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import LibraryReferenceTable from "@/components/library/relatedTables/LibraryReferenceTable";
+import Editor from "@/components/partial/inputs/Editor";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
 
 export default {
   name: "Library",
@@ -372,7 +359,8 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -380,64 +368,7 @@ export default {
   },
 
   created() {
-    // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.librarySearchParameters,
-        request: "FETCH_LIBRARIES",
-        title: "header.libraries",
-        object: "library",
-        field: "title_en",
-      });
-    }
-
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
-  },
-
-  computed: {
-    ...mapState("search", ["librarySearchParameters"]),
-
-    filteredRelatedTabs() {
-      return this.relatedTabs.filter((tab) => {
-        if (tab.name === "library_reference_list") {
-          if (this.$route.meta.isEdit) return tab;
-        } else return tab;
-      });
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
-
-    computedRelatedTabs() {
-      return this.relatedTabs.filter((tab) => {
-        if (tab.name === "library_reference_list") {
-          if (this.$route.meta.isEdit) return tab;
-        } else return tab;
-      });
-    },
   },
 
   methods: {
@@ -459,88 +390,30 @@ export default {
         ],
         activeTab: "library_reference",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "author_txt",
-          "year",
-          "title",
-          "title_short",
-          "title_en",
-          "title_short_en",
-          "keywords",
-          "abstract",
-          "abstract_en",
-          "is_private",
-        ],
         autocomplete: {
           loaders: {
             reference: false,
-            library_agent: false,
+            agents: false,
           },
           reference: [],
-          library_agent: [],
+          agents: [],
         },
         requiredFields: ["author_txt"],
-        library: {},
+        library: {
+          id: null,
+          author_txt: null,
+          year: null,
+          title: null,
+          title_short: null,
+          title_en: null,
+          title_short_en: null,
+          keywords: null,
+          abstract: null,
+          abstract_en: null,
+          is_private: false,
+        },
         block: { info: true, description: true, members: true },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchLibrary(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "library", this.handleResponse(response)[0]);
-
-            this.removeUnnecessaryFields(this.library, this.copyFields);
-            this.$emit("data-loaded", this.library);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        this.loadAutocompleteFields();
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    loadAutocompleteFields() {
-      fetchLibraryAgent(this.$route.params.id).then((response) => {
-        let libraryAgent = this.handleResponse(response);
-        this.relatedData.library_agent = libraryAgent.map((entity) => {
-          return {
-            agent: entity.agent__agent,
-            id: entity.agent,
-          };
-        });
-        if (this.isNotEmpty(this.relatedData.library_agent)) {
-          this.autocomplete.library_agent = this.relatedData.library_agent;
-        }
-      });
     },
 
     setDefaultRelatedData() {
@@ -553,94 +426,22 @@ export default {
           count: 0,
           results: [],
         },
-        library_agent: [],
         searchParameters: {
           library_reference: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["sort"],
             sortDesc: [true],
           },
           library_reference_list: {
             page: 1,
-            paginateBy: 1000,
-            orderBy: "-sort,reference__author,-reference__year",
+            itemsPerPage: 1000,
+            sortBy: ["sort", "reference__author", "reference__year"],
+            sortDesc: [true, false, true],
           },
         },
-        count: {
-          library_agent: 0,
-        },
       };
-    },
-
-    formatDataForUpload(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data
-      if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
-        if (this.isNotEmpty(this.relatedData.library_agent))
-          uploadableObject.related_data.agent = this.relatedData.library_agent;
-
-        this.relatedTabs.forEach((tab) => {
-          if (tab.name !== "library_reference_list") {
-            if (this.isNotEmpty(this.relatedData[tab.name].count > 0))
-              uploadableObject.related_data[tab.name] =
-                this.relatedData[tab.name].results;
-          }
-        });
-      } else {
-        // Library agent is not in tab.
-        if (this.isNotEmpty(this.relatedData.library_agent)) {
-          uploadableObject.related_data = {};
-          uploadableObject.related_data.agent = this.relatedData.library_agent;
-        } else uploadableObject.related_data.agent = null;
-      }
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "library_reference") {
-        query = fetchLibraryReference(
-          this.$route.params.id,
-          this.relatedData.searchParameters.library_reference
-        );
-      }
-      if (object === "library_reference_list") {
-        query = fetchLibraryReference(
-          this.$route.params.id,
-          this.relatedData.searchParameters.library_reference_list
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
-        });
-      }
     },
   },
 };
 </script>
-
-<style scoped></style>

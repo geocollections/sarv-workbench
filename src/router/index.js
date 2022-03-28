@@ -99,11 +99,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("../views/attachment/Attachment.vue"),
+              component: () => import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: true,
-                table: "attachment",
                 heading: "editAttachment.heading",
                 requiresAuth: true,
                 object: "attachment",
@@ -122,8 +120,7 @@ const router = new Router({
               path: "",
               redirect: "photo_archive",
               name: "Attachment add",
-              component: () =>
-                import("../views/attachment/Attachment.vue"),
+              component: () => import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -152,8 +149,7 @@ const router = new Router({
             {
               path: "photo_archive",
               name: "photo_archive add",
-              component: () =>
-                import("../views/attachment/Attachment.vue"),
+              component: () => import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -182,8 +178,7 @@ const router = new Router({
             },
             {
               path: "specimen_image",
-              component: () =>
-                import("../views/attachment/Attachment.vue"),
+              component: () => import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -212,8 +207,7 @@ const router = new Router({
             },
             {
               path: "other_file",
-              component: () =>
-                import("../views/attachment/Attachment.vue"),
+              component: () => import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -242,8 +236,7 @@ const router = new Router({
             },
             {
               path: "digitised_reference",
-              component: () =>
-                import("../views/attachment/Attachment.vue"),
+              component: () => import("../views/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAttachment",
@@ -285,7 +278,6 @@ const router = new Router({
                 import("../components/reference/ReferenceTable.vue"),
               meta: {
                 requiresAuth: true,
-                table: "reference",
                 isTableView: true,
                 object: "reference",
               },
@@ -305,7 +297,6 @@ const router = new Router({
               component: () => import("../views/reference/Reference.vue"),
               meta: {
                 isEdit: true,
-                table: "reference",
                 heading: "editReference.heading",
 
                 requiresAuth: true,
@@ -372,7 +363,6 @@ const router = new Router({
               component: () => import("../views/imageset/Imageset.vue"),
               meta: {
                 isEdit: true,
-                table: "imageset",
                 heading: "editImageset.heading",
                 requiresAuth: true,
                 object: "imageset",
@@ -431,7 +421,6 @@ const router = new Router({
               component: () => import("../views/journal/Journal.vue"),
               meta: {
                 isEdit: true,
-                table: "journal",
                 heading: "editJournal.heading",
                 requiresAuth: true,
                 object: "journal",
@@ -491,7 +480,6 @@ const router = new Router({
               component: () => import("../views/locality/Locality.vue"),
               meta: {
                 isEdit: true,
-                table: "locality",
                 heading: "editLocality.heading",
                 requiresAuth: true,
                 object: "locality",
@@ -531,7 +519,6 @@ const router = new Router({
               component: () => import("../components/sample/SampleTable.vue"),
               meta: {
                 requiresAuth: true,
-                table: "sample",
                 object: "sample",
                 isTableView: true,
               },
@@ -552,7 +539,6 @@ const router = new Router({
               component: () => import("../views/sample/Sample.vue"),
               meta: {
                 isEdit: true,
-                table: "sample",
                 heading: "editSample.heading",
                 requiresAuth: true,
                 object: "sample",
@@ -658,9 +644,7 @@ const router = new Router({
                   //belongs to project
                   meta: {
                     isEdit: true,
-                    table: "project",
                     heading: "editProject.heading",
-                    // isSidebarShown: true,
                     requiresAuth: true,
                     object: "project",
                   },
@@ -701,9 +685,7 @@ const router = new Router({
               component: () => import("../views/site/Site.vue"),
               meta: {
                 isEdit: true,
-                table: "site",
                 heading: "editSite.heading",
-                // isSidebarShown: true,
                 requiresAuth: true,
                 object: "site",
               },
@@ -731,15 +713,6 @@ const router = new Router({
             },
           ],
         },
-        // {
-        //   path: "/site/import",
-        //   name: "Site import",
-        //   component: () => import("./views/Import.vue"),
-        //   meta: {
-        //     requiresAuth: true,
-        //     object: "site"
-        //   }
-        // },
         {
           path: "/library",
           component: () => import("../views/library/Libraries.vue"),
@@ -771,7 +744,6 @@ const router = new Router({
               component: () => import("../views/library/Library.vue"),
               meta: {
                 isEdit: true,
-                table: "library",
                 heading: "editLibrary.heading",
                 requiresAuth: true,
                 object: "library",
@@ -827,10 +799,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/doi/Doi.vue"),
+              component: () => import("../views/doi/Doi.vue"),
               meta: {
                 isEdit: true,
-                table: "doi",
                 heading: "editDoi.heading",
                 requiresAuth: true,
                 object: "doi",
@@ -847,7 +818,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/doi/Doi.vue"),
+              component: () => import("../views/doi/Doi.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addDoi",
@@ -858,7 +829,7 @@ const router = new Router({
               children: [
                 {
                   path: "egf/:id(\\d+)",
-                  component: () => import("../components/doi/Doi.vue"),
+                  component: () => import("../views/doi/Doi.vue"),
                   meta: {
                     isEdit: false,
                     isEGF: true,
@@ -901,10 +872,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/analysis/Analysis.vue"),
+              component: () => import("../views/analysis/Analysis.vue"),
               meta: {
                 isEdit: true,
-                table: "analysis",
                 heading: "editAnalysis.heading",
                 requiresAuth: true,
                 object: "analysis",
@@ -922,7 +892,7 @@ const router = new Router({
             {
               path: "",
               name: "Analysis add",
-              component: () => import("../components/analysis/Analysis.vue"),
+              component: () => import("../views/analysis/Analysis.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addAnalysis",
@@ -974,7 +944,6 @@ const router = new Router({
               component: () => import("../views/specimen/Specimen.vue"),
               meta: {
                 isEdit: true,
-                table: "specimen",
                 heading: "editSpecimen.heading",
                 requiresAuth: true,
                 object: "specimen",
@@ -1034,7 +1003,6 @@ const router = new Router({
               component: () => import("../views/keyword/Keyword.vue"),
               meta: {
                 isEdit: true,
-                table: "keyword",
                 heading: "editKeyword.heading",
                 requiresAuth: true,
                 object: "keyword",
@@ -1092,11 +1060,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("../components/collection/Collection.vue"),
+              component: () => import("../views/collection/Collection.vue"),
               meta: {
                 isEdit: true,
-                table: "collection",
                 heading: "editCollection.heading",
                 requiresAuth: true,
                 object: "collection",
@@ -1114,8 +1080,7 @@ const router = new Router({
             {
               path: "",
               name: "Collection add",
-              component: () =>
-                import("../components/collection/Collection.vue"),
+              component: () => import("../views/collection/Collection.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addCollection",
@@ -1156,10 +1121,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/taxon/Taxon.vue"),
+              component: () => import("../views/taxon/Taxon.vue"),
               meta: {
                 isEdit: true,
-                table: "taxon",
                 heading: "editTaxon.heading",
                 requiresAuth: true,
                 object: "taxon",
@@ -1177,7 +1141,7 @@ const router = new Router({
             {
               path: "",
               name: "Taxon add",
-              component: () => import("../components/taxon/Taxon.vue"),
+              component: () => import("../views/taxon/Taxon.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addTaxon",
@@ -1190,7 +1154,8 @@ const router = new Router({
         },
         {
           path: "/selection_series",
-          component: () => import("../views/selection_series/SelectionSeries.vue"),
+          component: () =>
+            import("../views/selection_series/SelectionSeries.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -1220,10 +1185,9 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/selection_series/SelectionSeries.vue"),
+                import("../views/selection_series/SelectionSerie.vue"),
               meta: {
                 isEdit: true,
-                table: "selection_series",
                 heading: "editSelectionSeries.heading",
                 requiresAuth: true,
                 object: "selection_series",
@@ -1242,7 +1206,7 @@ const router = new Router({
               path: "",
               name: "Selection series add",
               component: () =>
-                import("../components/selection_series/SelectionSeries.vue"),
+                import("../views/selection_series/SelectionSerie.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addSelectionSeries",
@@ -1289,7 +1253,6 @@ const router = new Router({
               component: () => import("../views/agent/Agent.vue"),
               meta: {
                 isEdit: true,
-                table: "agent",
                 heading: "editAgent.heading",
                 requiresAuth: true,
                 object: "agent",
@@ -1350,7 +1313,6 @@ const router = new Router({
               component: () => import("../views/drillcore/Drillcore.vue"),
               meta: {
                 isEdit: true,
-                table: "drillcore",
                 heading: "editDrillcore.heading",
                 requiresAuth: true,
                 object: "drillcore",
@@ -1410,11 +1372,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("../components/preparation/Preparation.vue"),
+              component: () => import("../views/preparation/Preparation.vue"),
               meta: {
                 isEdit: true,
-                table: "preparation",
                 heading: "editPreparation.heading",
                 requiresAuth: true,
                 object: "preparation",
@@ -1432,8 +1392,7 @@ const router = new Router({
             {
               path: "",
               name: "Preparation add",
-              component: () =>
-                import("../components/preparation/Preparation.vue"),
+              component: () => import("../views/preparation/Preparation.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addPreparation",
@@ -1474,10 +1433,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/dataset/Dataset.vue"),
+              component: () => import("../views/dataset/Dataset.vue"),
               meta: {
                 isEdit: true,
-                table: "dataset",
                 heading: "editDataset.heading",
                 requiresAuth: true,
                 object: "dataset",
@@ -1495,7 +1453,7 @@ const router = new Router({
             {
               path: "",
               name: "Dataset add",
-              component: () => import("../components/dataset/Dataset.vue"),
+              component: () => import("../views/dataset/Dataset.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addDataset",
@@ -1535,11 +1493,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("../components/stratigraphy/Stratigraphy.vue"),
+              component: () => import("../views/stratigraphy/Stratigraphy.vue"),
               meta: {
                 isEdit: true,
-                table: "stratigraphy",
                 heading: "editStratigraphy.heading",
                 requiresAuth: true,
                 object: "stratigraphy",
@@ -1557,8 +1513,7 @@ const router = new Router({
             {
               path: "",
               name: "Stratigraphy add",
-              component: () =>
-                import("../components/stratigraphy/Stratigraphy.vue"),
+              component: () => import("../views/stratigraphy/Stratigraphy.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.stratigraphy",
@@ -1610,7 +1565,6 @@ const router = new Router({
               component: () => import("../views/area/Area.vue"),
               meta: {
                 isEdit: true,
-                table: "area",
                 heading: "editArea.heading",
                 requiresAuth: true,
                 object: "area",
@@ -1681,7 +1635,6 @@ const router = new Router({
                 import("../views/drillcore_box/DrillcoreBox.vue"),
               meta: {
                 isEdit: true,
-                table: "drillcore_box",
                 heading: "editDrillcoreBox.heading",
                 requiresAuth: true,
                 object: "drillcore_box",
@@ -1742,10 +1695,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/location/Location.vue"),
+              component: () => import("../views/location/Location.vue"),
               meta: {
                 isEdit: true,
-                table: "location",
                 heading: "editLocation.heading",
                 requiresAuth: true,
                 object: "location",
@@ -1763,7 +1715,7 @@ const router = new Router({
             {
               path: "",
               name: "Location add",
-              component: () => import("../components/location/Location.vue"),
+              component: () => import("../views/location/Location.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.location",
@@ -1802,10 +1754,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/rock/Rock.vue"),
+              component: () => import("../views/rock/Rock.vue"),
               meta: {
                 isEdit: true,
-                table: "rock",
                 heading: "editRock.heading",
                 requiresAuth: true,
                 object: "rock",
@@ -1823,7 +1774,7 @@ const router = new Router({
             {
               path: "",
               name: "Rock add",
-              component: () => import("../components/rock/Rock.vue"),
+              component: () => import("../views/rock/Rock.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.rock",
@@ -1863,11 +1814,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("../components/deaccession/Deaccession.vue"),
+              component: () => import("../views/deaccession/Deaccession.vue"),
               meta: {
                 isEdit: true,
-                table: "deaccession",
                 heading: "editDeaccession.heading",
                 requiresAuth: true,
                 object: "deaccession",
@@ -1885,8 +1834,7 @@ const router = new Router({
             {
               path: "",
               name: "Deaccession add",
-              component: () =>
-                import("../components/deaccession/Deaccession.vue"),
+              component: () => import("../views/deaccession/Deaccession.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.deaccession",
@@ -1928,10 +1876,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/accession/Accession.vue"),
+              component: () => import("../views/accession/Accession.vue"),
               meta: {
                 isEdit: true,
-                table: "accession",
                 heading: "editAccession.heading",
                 requiresAuth: true,
                 object: "accession",
@@ -1949,7 +1896,7 @@ const router = new Router({
             {
               path: "",
               name: "Accession add",
-              component: () => import("../components/accession/Accession.vue"),
+              component: () => import("../views/accession/Accession.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.accession",
@@ -1990,10 +1937,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/visit/Visit.vue"),
+              component: () => import("../views/visit/Visit.vue"),
               meta: {
                 isEdit: true,
-                table: "visit",
                 heading: "editVisit.heading",
                 requiresAuth: true,
                 object: "visit",
@@ -2011,7 +1957,7 @@ const router = new Router({
             {
               path: "",
               name: "Visit add",
-              component: () => import("../components/visit/Visit.vue"),
+              component: () => import("../views/visit/Visit.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.visit",
@@ -2050,10 +1996,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/loan/Loan.vue"),
+              component: () => import("../views/loan/Loan.vue"),
               meta: {
                 isEdit: true,
-                table: "loan",
                 heading: "editLoan.heading",
                 requiresAuth: true,
                 object: "loan",
@@ -2071,7 +2016,7 @@ const router = new Router({
             {
               path: "",
               name: "Loan add",
-              component: () => import("../components/loan/Loan.vue"),
+              component: () => import("../views/loan/Loan.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.loan",
@@ -2111,10 +2056,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/web_news/WebNews.vue"),
+              component: () => import("../views/web_news/WebNew.vue"),
               meta: {
                 isEdit: true,
-                table: "web_news",
                 heading: "editWebNews.heading",
                 requiresAuth: true,
                 object: "web_news",
@@ -2132,7 +2076,7 @@ const router = new Router({
             {
               path: "",
               name: "Web news add",
-              component: () => import("../components/web_news/WebNews.vue"),
+              component: () => import("../views/web_news/WebNew.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.web_news",
@@ -2172,10 +2116,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("../components/web_pages/WebPages.vue"),
+              component: () => import("../views/web_pages/WebPage.vue"),
               meta: {
                 isEdit: true,
-                table: "web_pages",
                 heading: "editWebPages.heading",
                 requiresAuth: true,
                 object: "web_pages",
@@ -2193,7 +2136,7 @@ const router = new Router({
             {
               path: "",
               name: "Web pages add",
-              component: () => import("../components/web_pages/WebPages.vue"),
+              component: () => import("../views/web_pages/WebPage.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.web_pages",
@@ -2235,11 +2178,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("../components/taxon_pages/TaxonPage.vue"),
+              component: () => import("../views/taxon_page/TaxonPage.vue"),
               meta: {
                 isEdit: true,
-                table: "taxon_page",
                 heading: "editTaxonPages.heading",
                 requiresAuth: true,
                 object: "taxon_page",
@@ -2257,8 +2198,7 @@ const router = new Router({
             {
               path: "",
               name: "Taxon pages add",
-              component: () =>
-                import("../components/taxon_pages/TaxonPage.vue"),
+              component: () => import("../views/taxon_page/TaxonPage.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.taxon_pages",
@@ -2300,11 +2240,9 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("../components/sample_series/SampleSeries.vue"),
+              component: () => import("../views/sample_series/SampleSerie.vue"),
               meta: {
                 isEdit: true,
-                table: "sample_series",
                 heading: "editSampleSeries.heading",
                 requiresAuth: true,
                 object: "sample_series",
@@ -2322,8 +2260,7 @@ const router = new Router({
             {
               path: "",
               name: "Sample series add",
-              component: () =>
-                import("../components/sample_series/SampleSeries.vue"),
+              component: () => import("../views/sample_series/SampleSerie.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.sample_series",
@@ -2337,71 +2274,9 @@ const router = new Router({
           ],
         },
         {
-          path: "/sarv_issue",
-          component: () => import("../views/sarv_issue/SarvIssues.vue"),
-          meta: {
-            requiresAuth: true,
-          },
-          children: [
-            {
-              path: "",
-              component: () =>
-                import("../components/sarv_issue/SarvIssueTable.vue"),
-              meta: {
-                requiresAuth: true,
-                object: "sarv_issue",
-                isTableView: true,
-              },
-            },
-          ],
-        },
-        {
-          path: "/sarv_issue/:id(\\d+)",
-          props: true,
-          component: () => import("../views/EditForm.vue"),
-          meta: {
-            requiresAuth: true,
-          },
-          children: [
-            {
-              path: "",
-              component: () => import("../components/sarv_issue/SarvIssue.vue"),
-              meta: {
-                isEdit: true,
-                table: "sarv_issue",
-                heading: "editSarvIssue.heading",
-                requiresAuth: true,
-                object: "sarv_issue",
-              },
-            },
-          ],
-        },
-        {
-          path: "/sarv_issue/add",
-          component: () => import("../views/AddForm.vue"),
-          meta: {
-            requiresAuth: true,
-          },
-          children: [
-            {
-              path: "",
-              name: "Sarv issue add",
-              component: () => import("../components/sarv_issue/SarvIssue.vue"),
-              meta: {
-                isEdit: false,
-                addNew: "header.sarv_issue",
-                subForms: [
-                  { path: "/sarv_issue/add", name: "header.sarv_issue" },
-                ],
-                requiresAuth: true,
-                object: "sarv_issue",
-              },
-            },
-          ],
-        },
-        {
           path: "/analysis_parameter",
-          component: () => import("../views/analysis_parameter/AnalysisParameters.vue"),
+          component: () =>
+            import("../views/analysis_parameter/AnalysisParameters.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2431,12 +2306,9 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import(
-                  "../components/analysis_parameter/AnalysisParameter.vue"
-                ),
+                import("../views/analysis_parameter/AnalysisParameter.vue"),
               meta: {
                 isEdit: true,
-                table: "analysis_parameter",
                 heading: "editAnalysisParameter.heading",
                 requiresAuth: true,
                 object: "analysis_parameter",
@@ -2455,9 +2327,7 @@ const router = new Router({
               path: "",
               name: "Analysis parameter add",
               component: () =>
-                import(
-                  "../components/analysis_parameter/AnalysisParameter.vue"
-                ),
+                import("../views/analysis_parameter/AnalysisParameter.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.analysis_parameter",
@@ -2475,7 +2345,8 @@ const router = new Router({
         },
         {
           path: "/analysis_method",
-          component: () => import("../views/analysis_method/AnalysisMethods.vue"),
+          component: () =>
+            import("../views/analysis_method/AnalysisMethods.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2503,10 +2374,9 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("../components/analysis_method/AnalysisMethod.vue"),
+                import("../views/analysis_method/AnalysisMethod.vue"),
               meta: {
                 isEdit: true,
-                table: "analysis_method",
                 heading: "editAnalysisMethod.heading",
                 requiresAuth: true,
                 object: "analysis_method",
@@ -2525,7 +2395,7 @@ const router = new Router({
               path: "",
               name: "Analysis method add",
               component: () =>
-                import("../components/analysis_method/AnalysisMethod.vue"),
+                import("../views/analysis_method/AnalysisMethod.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.analysis_method",
@@ -2543,7 +2413,8 @@ const router = new Router({
         },
         {
           path: "/site_groundwater",
-          component: () => import("../views/site_groundwater/SiteGroundwaters.vue"),
+          component: () =>
+            import("../views/site_groundwater/SiteGroundwaters.vue"),
           meta: {
             requiresAuth: true,
           },
@@ -2558,6 +2429,53 @@ const router = new Router({
                 requiresAuth: true,
                 object: "site_groundwater",
                 isTableView: true,
+              },
+            },
+          ],
+        },
+
+        {
+          path: "/site_groundwater/:id(\\d+)",
+          props: true,
+          component: () => import("../views/EditForm.vue"),
+          meta: {
+            requiresAuth: true,
+          },
+          children: [
+            {
+              path: "",
+              name: "Site groundwater edit",
+              component: () =>
+                import("../views/site_groundwater/SiteGroundwater.vue"),
+              meta: {
+                isEdit: true,
+                heading: "editSite.heading",
+                requiresAuth: true,
+                object: "site_groundwater",
+              },
+            },
+          ],
+        },
+        {
+          path: "/site_groundwater/add",
+          component: () => import("../views/AddForm.vue"),
+          meta: {
+            requiresAuth: true,
+          },
+          children: [
+            {
+              path: "",
+              name: "Site groundwater add",
+              component: () =>
+                import("../views/site_groundwater/SiteGroundwater.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.addSite",
+                subForms: [
+                  { path: "/site_groundwater/add", name: "editSite.heading" },
+                ],
+                requiresAuth: true,
+                object: "site_groundwater",
               },
             },
           ],

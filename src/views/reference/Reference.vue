@@ -110,8 +110,8 @@
               <autocomplete-wrapper
                 v-model="reference.type"
                 :color="bodyActiveColor"
-                :items="autocomplete.types"
-                :loading="autocomplete.loaders.types"
+                :items="autocomplete.list_reference_type"
+                :loading="autocomplete.loaders.list_reference_type"
                 :item-text="commonLabel"
                 :label="$t('common.type')"
               />
@@ -121,8 +121,8 @@
               <autocomplete-wrapper
                 v-model="reference.language"
                 :color="bodyActiveColor"
-                :items="autocomplete.languages"
-                :loading="autocomplete.loaders.languages"
+                :items="autocomplete.list_language"
+                :loading="autocomplete.loaders.list_language"
                 :item-text="commonLabel"
                 :label="$t('reference.language__value')"
               />
@@ -143,8 +143,8 @@
               <autocomplete-wrapper
                 v-model="reference.journal"
                 :color="bodyActiveColor"
-                :items="autocomplete.journals"
-                :loading="autocomplete.loaders.journals"
+                :items="autocomplete.journal"
+                :loading="autocomplete.loaders.journal"
                 item-text="journal_name"
                 :label="$t('reference.journal__journal_name')"
                 is-link
@@ -338,46 +338,45 @@
               <autocomplete-wrapper
                 v-model="reference.licence"
                 :color="bodyActiveColor"
-                :items="autocomplete.licence"
-                :loading="autocomplete.loaders.licence"
+                :items="autocomplete.list_licence"
+                :loading="autocomplete.loaders.list_licence"
                 :item-text="licenceLabel"
                 :label="$t('common.licence')"
               />
             </v-col>
           </v-row>
 
-          <!-- REFERENCE KEYWORDS -->
+          <!-- KEYWORDS -->
           <div class="d-flex justify-start flex-wrap pa-1">
             <div class="mr-3 flex-grow-1">
               <autocomplete-wrapper
-                v-model="relatedData.keyword"
+                v-model="reference.keywords"
                 :color="bodyActiveColor"
-                :items="autocomplete.keyword"
-                :loading="autocomplete.loaders.keyword"
+                :items="autocomplete.keywords"
+                :loading="autocomplete.loaders.keywords"
                 item-text="keyword"
-                :label="$t('reference.referenceKeyword')"
+                :label="$t('attachment.keywords')"
                 is-link
                 route-object="keyword"
                 is-searchable
                 v-on:search:items="autocompleteKeywordSearch"
                 :multiple="true"
                 v-on:chip:close="
-                  relatedData.keyword.splice(
-                    relatedData.keyword.indexOf($event),
+                  reference.keywords.splice(
+                    reference.keywords.indexOf($event),
                     1
                   )
                 "
-                :menu-props="{ maxHeight: 208 }"
               />
             </div>
 
             <div class="mr-2 my-1 align-self-end">
               <v-btn
                 icon
+                color="green"
                 :title="$t('add.new')"
                 @click="windowOpenNewTab('/keyword/add')"
                 target="newKeywordWindow"
-                color="green"
               >
                 <v-icon>fas fa-plus</v-icon>
               </v-btn>
@@ -460,8 +459,8 @@
               <autocomplete-wrapper
                 v-model="reference.title_translated_language"
                 :color="bodyActiveColor"
-                :items="autocomplete.languages"
-                :loading="autocomplete.loaders.languages"
+                :items="autocomplete.list_language"
+                :loading="autocomplete.loaders.list_language"
                 :item-text="commonLabel"
                 :label="$t('reference.titleTranslatedLanguage')"
               />
@@ -490,8 +489,8 @@
               <autocomplete-wrapper
                 v-model="reference.book_translated_language"
                 :color="bodyActiveColor"
-                :items="autocomplete.languages"
-                :loading="autocomplete.loaders.languages"
+                :items="autocomplete.list_language"
+                :loading="autocomplete.loaders.list_language"
                 :item-text="commonLabel"
                 :label="$t('reference.book_translated_language')"
               />
@@ -647,6 +646,7 @@
 
     <!-- RELATED FILES -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="mt-2"
       id="block-files"
       :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -675,9 +675,9 @@
             <v-col cols="12" class="pa-1">
               <file-input
                 show-existing
-                :files-from-object="relatedData.attachment"
-                v-on:update:existing-files="addExistingFiles"
-                v-on:file-uploaded="addFiles"
+                :files-from-object="reference.attachments"
+                @update:existing-files="reference.attachments = $event"
+                @file-uploaded="addFiles"
                 accept-multiple
                 :record-options="$route.meta.isEdit"
                 open-file
@@ -691,8 +691,67 @@
       </transition>
     </v-card>
 
+    <!-- RELATED LIBRARIES -->
+    <v-card
+      class="mt-2"
+      id="block-libraries"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.libraries = !block.libraries"
+        >
+          <span>{{ $t("reference.relatedTables.library_reference") }}</span>
+          <v-icon right>fas fa-book</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.libraries = !block.libraries"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.libraries ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.libraries" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <autocomplete-wrapper
+                v-model="reference.libraries"
+                :color="bodyActiveColor"
+                :items="autocomplete.libraries"
+                :loading="autocomplete.loaders.libraries"
+                :item-text="titleLabel"
+                :label="$t('reference.libraries')"
+                is-link
+                route-object="library"
+                is-searchable
+                v-on:search:items="
+                  autocompleteLibrarySearch($event, 'libraries')
+                "
+                :multiple="true"
+                v-on:chip:close="
+                  reference.libraries.results.splice(
+                    reference.libraries.results.indexOf($event),
+                    1
+                  )
+                "
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- SHOWING RELATED_DATA -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -727,74 +786,29 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <v-row v-show="activeTab === 'library'" no-gutters>
-            <v-col cols="12" class="pa-1">
-              <autocomplete-wrapper
-                v-model="relatedData.library.results"
-                :color="bodyActiveColor"
-                :items="autocomplete.library"
-                :loading="autocomplete.loaders.library"
-                :item-text="libraryTitle"
-                :label="$t('reference.libraries')"
-                is-link
-                route-object="library"
-                is-searchable
-                v-on:search:items="autocompleteLibraryAgentSearch2"
-                :multiple="true"
-                v-on:chip:close="
-                  relatedData.library.results.splice(
-                    relatedData.library.results.indexOf($event),
-                    1
-                  )
-                "
-              />
-            </v-col>
-          </v-row>
-
-          <div v-show="activeTab === 'stratigraphy'">
-            <v-row no-gutters>
-              <v-col cols="12" class="px-1">
-                <stratigraphy-table
-                  :response="stratigraphyList"
-                  :search-parameters="relatedData.searchParameters.stratigraphy"
-                  :body-active-color="bodyActiveColor"
-                  :body-color="bodyColor"
-                />
-              </v-col>
-            </v-row>
-
-            <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
-              <v-btn
-                class="mr-2"
-                small
-                :to="{
-                  name: 'Stratigraphy add',
-                  query: { reference: JSON.stringify(reference) },
-                }"
-                target="newStratigraphyWindow"
-                :color="bodyActiveColor"
-                :dark="isBodyActiveColorDark"
-                >{{ $t("add.new") }}</v-btn
-              >
-              <export-buttons
-                v-if="relatedData.stratigraphy.count > 0"
-                filename="stratigraphy"
-                :table-data="relatedData.stratigraphy.results"
-                clipboard-class="stratigraphy-table"
-                :body-active-color="bodyActiveColor"
-                small
-              />
-            </v-toolbar>
-          </div>
+          <stratigraphy-reference-table
+            v-show="activeTab === 'stratigraphy_reference'"
+            :response="relatedData.stratigraphy_reference"
+            :search-parameters="
+              relatedData.searchParameters.stratigraphy_reference
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <div v-show="activeTab === 'taxon'">
             <v-row no-gutters>
-              <v-col cols="12" class="px-1">
+              <v-col cols="12" class="px-1 pb-1">
                 <taxon-table
                   :response="relatedData.taxon"
                   :search-parameters="relatedData.searchParameters.taxon"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
+                  :headers="taxonTranslatedHeaders"
+                  @update:options="handleUpdateOptions({ ...$event, activeTab: 'taxon' })"
                 />
               </v-col>
             </v-row>
@@ -840,15 +854,10 @@
             class="pa-1"
             :body-active-color="bodyActiveColor"
             :count="relatedData[activeTab].count"
-            :paginate-by="relatedData.searchParameters[activeTab].paginateBy"
+            :items-per-page="relatedData.searchParameters[activeTab].itemsPerPage"
             :options="paginateByOptionsTranslated"
             :page="relatedData.searchParameters[activeTab].page"
-            v-on:update:page="
-              relatedData.searchParameters[activeTab].page = $event
-            "
-            v-on:update:paginateBy="
-              relatedData.searchParameters[activeTab].paginateBy = $event
-            "
+            @update:options="handleUpdateOptions({ ...$event, activeTab })"
           />
         </v-card>
       </v-tabs-items>
@@ -896,47 +905,35 @@
 
 <script>
 import {
-  fetchReference,
-  fetchListReferenceTypes,
-  fetchListLanguages,
   fetchDoiCheck,
-  fetchReferenceKeyword,
-  fetchAttachmentLink,
-  fetchLocalityReferenceForReference,
-  fetchAttachmentForReference,
-  fetchLibrariesForReference,
-  fetchListLocalityReferenceType,
-  fetchListLicences,
   fetchJournalForReference,
-  fetchLinkedTaxonReference,
-  fetchLinkedStratigraphyReference,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
+} from "@/assets/js/api/apiCalls";
+import formManipulation from "@/mixins/formManipulation";
+import autocompleteMixin from "@/mixins/autocompleteMixin";
+import formSectionsMixin from "@/mixins/formSectionsMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
-import NewDoiButton from "../../components/partial/NewDoiButton";
-import InputWrapper from "../../components/partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../components/partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../../components/partial/inputs/TextareaWrapper";
-import CheckboxWrapper from "../../components/partial/inputs/CheckboxWrapper";
-import Editor from "../../components/partial/inputs/Editor";
-import FileInput from "../../components/partial/inputs/FileInput";
-import ExportButtons from "../../components/partial/export/ExportButtons";
-import StratigraphyTable from "../../components/stratigraphy/StratigraphyTable";
-import TaxonTable from "../../components/taxon/TaxonTable";
-import LocalityReferenceTable from "../../components/reference/relatedTables/LocalityReferenceTable";
-import requestsMixin from "../../mixins/requestsMixin";
+import NewDoiButton from "@/components/partial/NewDoiButton";
+import InputWrapper from "@/components/partial/inputs/InputWrapper";
+import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import Editor from "@/components/partial/inputs/Editor";
+import FileInput from "@/components/partial/inputs/FileInput";
+import ExportButtons from "@/components/partial/export/ExportButtons";
+import TaxonTable from "@/components/taxon/TaxonTable";
+import LocalityReferenceTable from "@/components/reference/relatedTables/LocalityReferenceTable";
 import Pagination from "@/components/partial/Pagination";
+import detailViewUtilsMixin from "@/mixins/detailViewUtilsMixin";
+import globalUtilsMixin from "@/mixins/globalUtilsMixin";
+import StratigraphyReferenceTable from "@/components/stratigraphy/relatedTables/StratigraphyReferenceTable";
 
 export default {
   name: "Reference",
   components: {
+    StratigraphyReferenceTable,
     Pagination,
     LocalityReferenceTable,
     TaxonTable,
-    StratigraphyTable,
     ExportButtons,
     FileInput,
     Editor,
@@ -968,7 +965,8 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin,
+    detailViewUtilsMixin,
+    globalUtilsMixin,
   ],
 
   data() {
@@ -976,6 +974,21 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      taxonHeaders(state) {
+        return state.taxon.headers;
+      },
+    }),
+
+    taxonTranslatedHeaders() {
+      return this.taxonHeaders.map((item) => {
+        return {
+          ...item,
+          text: this.$t(item.text),
+        };
+      });
+    },
+
     isValidUrl() {
       if (this.reference.url && this.reference.url.length > 0) {
         let regex = RegExp(
@@ -984,88 +997,17 @@ export default {
         return regex.test(this.reference.url);
       } else return true;
     },
-    ...mapState("search", ["referenceSearchParameters"]),
     ...mapGetters("user", ["isUserAllowedTo"]),
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map((item) => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value }),
-        };
-      });
-    },
-
-    stratigraphyList() {
-      let stratigraphy = this.relatedData.stratigraphy.results;
-      if (stratigraphy && stratigraphy.length > 0) {
-        let mappedList = stratigraphy.map((item) => ({
-          id: item.stratigraphy,
-          stratigraphy: item.stratigraphy__stratigraphy,
-          stratigraphy_en: item.stratigraphy__stratigraphy_en,
-          type: item.stratigraphy__type,
-          type__value: item.stratigraphy__type__value,
-          type__value_en: item.stratigraphy__type__value_en,
-          rank: item.stratigraphy__rank,
-          rank__value: item.stratigraphy__rank__value,
-          rank__value_en: item.stratigraphy__rank__value_en,
-          scope: item.stratigraphy__scope,
-          scope__value: item.stratigraphy__scope__value,
-          scope__value_en: item.stratigraphy__scope__value_en,
-        }));
-        return {
-          count: this.relatedData.stratigraphy.count,
-          results: mappedList,
-        };
-      } else return this.relatedData.stratigraphy;
-    },
   },
 
   created() {
     // USED BY SIDEBAR
-    if (this.$route.meta.isEdit) {
-      this.setActiveSearchParameters({
-        search: this.referenceSearchParameters,
-        request: "FETCH_REFERENCES",
-        title: "header.references",
-        object: "reference",
-        field: "reference",
-      });
-    } else {
-      if (this.$route.params.journal) {
-        this.reference.journal = this.$route.params.journal;
-      }
+    if (!this.$route.meta.isEdit && this.$route.params.journal) {
+      this.reference.journal = this.$route.params.journal;
     }
 
     this.loadFullInfo();
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function () {
-        this.reloadData();
-      },
-      deep: true,
-    },
-    "relatedData.searchParameters": {
-      handler: function () {
-        if (this.$route.meta.isEdit) {
-          this.loadRelatedData(this.activeTab);
-        }
-      },
-      deep: true,
-    },
-    // This value is changed in formManipulation.js when file upload is successful (value will be savedObjectsId)
-    // Do not remember why was it done. Commenting it cause of #382 https://github.com/geocollections/sarv-workbench/issues/382
-    isFileAddedAsObject: {
-      handler: function (newVal) {
-        if (this.isNotEmpty(newVal)) {
-          // fetchAttachmentForReference(this.$route.params.id).then(
-          //   response => (this.attachment = this.handleResponse(response))
-          // );
-        }
-      },
-    },
+    this.loadPDF();
   },
 
   methods: {
@@ -1084,88 +1026,93 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "library", iconClass: "fas fa-book" },
-          { name: "stratigraphy", iconClass: "fas fa-layer-group" },
+          { name: "stratigraphy_reference", iconClass: "fas fa-layer-group" },
           { name: "taxon", iconClass: "fas fa-pastafarianism" },
           { name: "locality_reference", iconClass: "fas fa-globe" },
         ],
-        activeTab: "library",
+        activeTab: "stratigraphy_reference",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: [
-          "id",
-          "reference",
-          "year",
-          "author",
-          "title",
-          "title_original",
-          "title_translated",
-          "type",
-          "language",
-          "journal",
-          "journal_additional",
-          "volume",
-          "number",
-          "pages",
-          "book_editor",
-          "book",
-          "book_original",
-          "publisher",
-          "publisher_place",
-          "doi",
-          "url",
-          "isbn",
-          "issn",
-          "abstract",
-          "author_keywords",
-          "remarks",
-          "remarks_private",
-          "location_txt",
-          "book_editor",
-          "figures",
-          "is_locked",
-          "is_oa",
-          "is_private",
-          "is_estonian_reference",
-          "is_estonian_author",
-          "language",
-          "title_translated_language",
-          "licence",
-          "author_original",
-          "book_translated",
-          "book_translated_language",
-          "parent_reference",
-          "translated_reference",
+        listOfAutocompleteTables: [
+          "list_reference_type",
+          "list_language",
+          "list_locality_reference_type",
+          "list_licence",
         ],
         autocomplete: {
           loaders: {
             types: false,
-            languages: false,
-            journals: false,
-            keyword: false,
+            list_language: false,
+            journal: false,
+            keywords: false,
             locality: false,
             attachment: false,
             attachment3: false, // For #158, regarding p-2
-            library: false,
-            locality_reference_type: false,
-            licence: false,
+            libraries: false,
+            list_locality_reference_type: false,
+            list_reference_type: false,
+            list_licence: false,
             reference: false,
             translated_reference: false,
           },
           types: [],
-          languages: [],
-          journals: [],
-          keyword: [],
+          list_language: [],
+          journal: [],
+          keywords: [],
           locality: [],
           attachment: [],
-          library: [],
-          locality_reference_type: [],
-          licence: [],
+          libraries: [],
+          list_locality_reference_type: [],
+          list_reference_type: [],
+          list_licence: [],
           reference: [],
           translated_reference: [],
         },
         requiredFields: ["reference", "year", "author", "title"],
         reference: {
-          year: "", // Adding it because of reactivity issue
+          id: null,
+          reference: null,
+          year: null,
+          author: null,
+          title: null,
+          title_original: null,
+          title_translated: null,
+          type: null,
+          journal: null,
+          journal_additional: null,
+          volume: null,
+          number: null,
+          pages: null,
+          book: null,
+          book_original: null,
+          publisher: null,
+          publisher_place: null,
+          doi: null,
+          url: null,
+          isbn: null,
+          issn: null,
+          abstract: null,
+          keywords: [],
+          author_keywords: null,
+          remarks: null,
+          remarks_private: null,
+          location_txt: null,
+          book_editor: null,
+          figures: null,
+          is_locked: false,
+          is_oa: false,
+          is_private: false,
+          is_estonian_reference: false,
+          is_estonian_author: false,
+          language: null,
+          title_translated_language: null,
+          licence: null,
+          author_original: null,
+          book_translated: null,
+          book_translated_language: null,
+          parent_reference: null,
+          translated_reference: null,
+          attachments: [],
+          libraries: [],
         },
         previousRecord: {},
         nextRecord: {},
@@ -1178,139 +1125,14 @@ export default {
           abstract: true,
           digital: true,
           files: true,
+          libraries: true,
         },
-        paginateByOptions: [
-          { text: "main.pagination", value: 10 },
-          { text: "main.pagination", value: 25 },
-          { text: "main.pagination", value: 50 },
-          { text: "main.pagination", value: 100 },
-          { text: "main.pagination", value: 250 },
-          { text: "main.pagination", value: 500 },
-          { text: "main.pagination", value: 1000 },
-        ],
       };
-    },
-
-    reloadData() {
-      Object.assign(this.$data, this.setInitialData());
-      this.loadFullInfo();
-    },
-
-    loadFullInfo() {
-      this.loadAutocompleteFields();
-
-      if (this.$route.meta.isEdit) {
-        this.setLoadingState(true);
-
-        fetchReference(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-
-          if (handledResponse.length > 0) {
-            this.$emit("object-exists", true);
-            this.$set(this, "reference", this.handleResponse(response)[0]);
-            // this.reference = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.reference);
-
-            this.removeUnnecessaryFields(this.reference, this.copyFields);
-            this.$emit("data-loaded", this.reference);
-            this.setLoadingState(false);
-          } else {
-            this.setLoadingState(false);
-            this.$emit("object-exists", false);
-          }
-        });
-
-        this.loadAutocompleteFields(false, true);
-
-        this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
-      } else {
-        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
-      }
-    },
-
-    loadAutocompleteFields(
-      regularAutocompleteFields = true,
-      relatedDataAutocompleteFields = false
-    ) {
-      if (regularAutocompleteFields) {
-        fetchListReferenceTypes().then(
-          (response) =>
-            (this.autocomplete.types = this.handleResponse(response))
-        );
-        fetchListLanguages().then(
-          (response) =>
-            (this.autocomplete.languages = this.handleResponse(response))
-        );
-        fetchListLocalityReferenceType().then(
-          (response) =>
-            (this.autocomplete.locality_reference_type =
-              this.handleResponse(response))
-        );
-        fetchListLicences().then(
-          (response) =>
-            (this.autocomplete.licence = this.handleResponse(response))
-        );
-      }
-
-      if (relatedDataAutocompleteFields) {
-        fetchReferenceKeyword(this.$route.params.id).then((response) => {
-          let referenceKeyword = this.handleResponse(response);
-          this.relatedData.keyword = referenceKeyword.map((entity) => {
-            return {
-              keyword: entity.keyword__keyword,
-              id: entity.keyword,
-            };
-          });
-          if (this.isNotEmpty(this.relatedData.keyword)) {
-            this.autocomplete.keyword = this.relatedData.keyword;
-          }
-        });
-
-        fetchAttachmentLink(this.$route.params.id).then((response) => {
-          let attachment = this.handleResponse(response);
-
-          this.relatedData.attachment = attachment.map((entity) => {
-            return {
-              id: entity.attachment,
-              description: entity.attachment__description,
-              description_en: entity.attachment__description_en,
-              author__agent: entity.attachment__author__agent,
-              uuid_filename: entity.attachment__uuid_filename,
-              remarks: entity.attachment__remarks,
-              original_filename: entity.attachment__original_filename,
-            };
-          });
-          if (this.isNotEmpty(this.relatedData.attachment)) {
-            this.autocomplete.attachment = this.relatedData.attachment;
-          }
-        });
-
-        fetchAttachmentForReference(this.$route.params.id).then(
-          (response) => (this.attachment = this.handleResponse(response))
-        );
-        fetchLibrariesForReference(this.$route.params.id).then((response) => {
-          let handledResponse = this.handleResponse(response);
-          this.relatedData.library = {
-            count: handledResponse.length,
-            results: handledResponse,
-          };
-          if (this.relatedData.library.count > 0) {
-            this.autocomplete.library = this.relatedData.library.results;
-          }
-        });
-        // fetchListLocalityReferenceType().then(response => this.autocomplete.locality_reference_type = this.handleResponse(response))
-      }
     },
 
     setDefaultRelatedData() {
       return {
-        attachment: [],
-        keyword: [],
-        library: {
-          count: 0,
-          results: [],
-        },
-        stratigraphy: {
+        stratigraphy_reference: {
           count: 0,
           results: [],
         },
@@ -1325,195 +1147,24 @@ export default {
         searchParameters: {
           locality_reference: {
             page: 1,
-            paginateBy: 10,
+            itemsPerPage: 10,
             sortBy: ["locality"],
             sortDesc: [true],
           },
-          attachment: {
+          stratigraphy_reference: {
             page: 1,
-            paginateBy: 10,
-            orderBy: "id",
-          },
-          keyword: {
-            page: 1,
-            paginateBy: 10,
-            orderBy: "id",
-          },
-          stratigraphy: {
-            page: 1,
-            paginateBy: 25,
-            sortBy: ["id"],
+            itemsPerPage: 25,
+            sortBy: ["stratigraphy"],
             sortDesc: [true],
           },
           taxon: {
             page: 1,
-            paginateBy: 25,
+            itemsPerPage: 25,
             sortBy: ["id"],
             sortDesc: [true],
           },
         },
       };
-    },
-
-    formatDataForUpload(objectToUpload, saveAsNew = false) {
-      let uploadableObject = cloneDeep(objectToUpload);
-
-      Object.keys(uploadableObject).forEach((key) => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        } else if (typeof uploadableObject[key] === "undefined") {
-          uploadableObject[key] = null;
-        }
-      });
-
-      // Adding related data
-      uploadableObject.related_data = {};
-      if (this.isNotEmpty(this.relatedData.keyword))
-        uploadableObject.related_data.keyword = this.relatedData.keyword;
-      else uploadableObject.related_data.keyword = null;
-
-      if (this.isNotEmpty(this.relatedData.attachment))
-        uploadableObject.related_data.attachment = this.relatedData.attachment;
-      else uploadableObject.related_data.attachment = null;
-
-      if (
-        typeof this.relatedData.library.results !== "undefined" &&
-        this.relatedData.library.results !== null &&
-        this.relatedData.library.results.length > 0
-      ) {
-        uploadableObject.related_data.library = cloneDeep(
-          this.relatedData.library.results
-        );
-        uploadableObject.related_data.library.forEach((lib, index) => {
-          uploadableObject.related_data.library[index] = {
-            id: lib.library ? lib.library : lib.id,
-          };
-        });
-      } else uploadableObject.related_data.library = null;
-
-      // Adding related data only on add view
-      if (!this.$route.meta.isEdit) {
-        if (this.relatedData.locality_reference.count > 0) {
-          let clonedLocalities = cloneDeep(
-            this.relatedData.locality_reference.results
-          );
-          uploadableObject.related_data.locality_reference = clonedLocalities
-            .filter((entity) => this.isNotEmpty(entity.locality))
-            .map((loc_ref) => {
-              return {
-                locality: loc_ref.locality.id,
-                pages: loc_ref.pages ? loc_ref.pages : null,
-                figures: loc_ref.figures ? loc_ref.figures : null,
-                remarks: loc_ref.remarks ? loc_ref.remarks : null,
-              };
-            });
-        }
-      }
-
-      if (!this.isNotEmpty(uploadableObject.related_data))
-        delete uploadableObject.related_data;
-
-      if (saveAsNew) {
-        uploadableObject.abstract = null;
-        uploadableObject.author_keywords = null;
-        uploadableObject.related_data = null;
-      }
-
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
-    },
-
-    fillAutocompleteFields(obj) {
-      this.reference.type = {
-        id: obj.type__id,
-        value: obj.type__value,
-        value_en: obj.type__value_en,
-        ris_type: obj.type__ris_type,
-      };
-      this.reference.language = {
-        id: obj.language__id,
-        value: obj.language__value,
-        value_en: obj.language__value_en,
-        iso1: obj.language__iso1,
-      };
-      if (this.isNotEmpty(obj.journal__id)) {
-        this.reference.journal = {
-          id: obj.journal__id,
-          journal_name: obj.journal__journal_name,
-        };
-        this.autocomplete.journals.push(this.reference.journal);
-      }
-      if (this.isNotEmpty(obj.parent_reference)) {
-        this.reference.parent_reference = {
-          id: obj.parent_reference,
-          reference: obj.parent_reference__reference,
-        };
-        this.autocomplete.reference.push(this.reference.parent_reference);
-      }
-      this.reference.title_translated_language = {
-        id: obj.title_translated_language,
-        value: obj.title_translated_language__value,
-        value_en: obj.title_translated_language__value_en,
-      };
-      this.reference.licence = {
-        id: obj.licence,
-        licence: obj.licence__licence,
-        licence_en: obj.licence__licence_en,
-      };
-      if (this.isNotEmpty(obj.translated_reference)) {
-        this.reference.translated_reference = {
-          id: obj.translated_reference,
-          reference: obj.translated_reference__reference,
-        };
-        this.autocomplete.translated_reference.push(
-          this.reference.translated_reference
-        );
-      }
-    },
-
-    loadRelatedData(object) {
-      let query;
-
-      if (object === "library") {
-        query = fetchLibrariesForReference(this.$route.params.id);
-      } else if (object === "stratigraphy") {
-        query = fetchLinkedStratigraphyReference(
-          this.$route.params.id,
-          this.relatedData.searchParameters.stratigraphy
-        );
-      } else if (object === "taxon") {
-        query = fetchLinkedTaxonReference(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon
-        );
-      } else if (object === "locality_reference") {
-        query = fetchLocalityReferenceForReference(
-          this.$route.params.id,
-          this.relatedData.searchParameters.locality_reference
-        );
-      }
-
-      if (query) {
-        query.then((response) => {
-          if (object === "library") {
-            this.relatedData[object].count = response.data.count;
-            this.relatedData[object].results = this.handleResponse(response);
-          } else {
-            this.$set(this.relatedData[object], "count", response.data.count);
-            this.$set(
-              this.relatedData[object],
-              "results",
-              this.handleResponse(response)
-            );
-          }
-        });
-      }
     },
 
     checkDoi() {
@@ -1712,19 +1363,28 @@ export default {
       this.toastInfo({ text: this.$t("reference.doiCheckSuccessful") });
     },
 
-    addPDF(fileData) {
-      this.addFileAsObject(fileData, "reference");
+    async addPDF(file) {
+      if (file && file.length === 1) {
+        const isFileUploaded = await this.addReferencePDF(
+          file[0],
+          this.reference
+        );
+        if (isFileUploaded) this.loadPDF();
+      }
     },
 
     addFiles(files, singleFileMetadata) {
-      this.addFileAsRelatedDataNew(files, "reference", singleFileMetadata);
+      this.addFilesAsNewObjects(files, this.reference, singleFileMetadata);
     },
 
-    addExistingFiles(files) {
-      this.relatedData.attachment = files;
+    async loadPDF() {
+      const response = await this.$api.rw.get("attachment", {
+        defaultParams: {
+          reference: this.$route.params.id,
+        },
+      });
+      if (response?.count > 0) this.attachment = response.results;
     },
   },
 };
 </script>
-
-<style scoped></style>

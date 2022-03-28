@@ -1,7 +1,3 @@
-const getters = {
-  getActiveSarvIssuesCount: (state) => {
-    return state.activeSarvIssues?.count;
-  },
-};
+const getters = {};
 
 export default getters;
