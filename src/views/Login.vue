@@ -150,22 +150,22 @@
                   <v-card-text
                     class="d-flex flex-column justify-center align-center"
                   >
-                    <v-btn
-                      class="my-1 white--text text-none"
-                      width="250"
-                      color="#ea4335"
-                      @click="login('google')"
-                      ><v-icon small left light>fab fa-google</v-icon
-                      >{{ $t("login.signInWithGoogle") }}</v-btn
-                    >
-                    <v-btn
-                      class="my-1 white--text text-none"
-                      width="250"
-                      color="#3b5998"
-                      @click="login('facebook')"
-                      ><v-icon small left light>fab fa-facebook-f</v-icon
-                      >{{ $t("login.signInWithFacebook") }}</v-btn
-                    >
+<!--                    <v-btn-->
+<!--                      class="my-1 white&#45;&#45;text text-none"-->
+<!--                      width="250"-->
+<!--                      color="#ea4335"-->
+<!--                      @click="login('google')"-->
+<!--                      ><v-icon small left light>fab fa-google</v-icon-->
+<!--                      >{{ $t("login.signInWithGoogle") }}</v-btn-->
+<!--                    >-->
+<!--                    <v-btn-->
+<!--                      class="my-1 white&#45;&#45;text text-none"-->
+<!--                      width="250"-->
+<!--                      color="#3b5998"-->
+<!--                      @click="login('facebook')"-->
+<!--                      ><v-icon small left light>fab fa-facebook-f</v-icon-->
+<!--                      >{{ $t("login.signInWithFacebook") }}</v-btn-->
+<!--                    >-->
                     <v-btn
                       class="my-1 white--text text-none"
                       width="250"

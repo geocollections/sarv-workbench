@@ -10,8 +10,7 @@
           v-model="myRecentUrlsState"
         >
           <template v-slot:label>
-            <span class="mr-1">{{ $t("settings.recentUrls") }}:</span>
-            <span class="font-weight-bold">{{ myRecentUrlsState }}</span>
+            <span class="mr-1">{{ $t("settings.recentUrls") }}</span>
           </template>
         </v-checkbox>
       </v-col>
