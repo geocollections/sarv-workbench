@@ -210,7 +210,7 @@ const getDefaultState = () => {
           title: "specimen.selectionId",
           value: null,
           lookUpType: "icontains",
-          fields: ["selection__selection"],
+          fields: ["selection__selection__id"],
         },
         selection: {
           title: "specimen.selection",
