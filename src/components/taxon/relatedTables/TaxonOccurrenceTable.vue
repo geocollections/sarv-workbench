@@ -230,7 +230,7 @@
         </template>
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title>
-            <span class="headline">{{ $t("header.taxon_occurance") }}</span>
+            <span class="headline">{{ $t("header.taxon_occurence") }}</span>
           </v-card-title>
 
           <v-card-text>
