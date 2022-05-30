@@ -892,9 +892,11 @@ export function fetchSamples(data, dynamicSearch) {
   }
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&storage__location__${
+    searchFields += `&multi_search=value:${
+      data.storage
+    };fields:storage__location,storage__id,storage_additional__id,storage_additional__location;lookuptype:${
       data.storage__lookuptype || "icontains"
-    }=${data.storage}`;
+    }`;
   }
 
   if (data.site !== null && data.site.trim().length > 0) {
