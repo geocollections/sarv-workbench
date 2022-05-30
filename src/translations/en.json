@@ -3064,7 +3064,8 @@
     "clearLocalStorageAndFields": "Remove defaults and clear fields",
     "reset_files": "Clear failed file(s)",
     "import": "Import file",
-    "try_again": "Try again"
+    "try_again": "Try again",
+    "print": "Print"
   },
   "selection_series": {
     "database": "Database",

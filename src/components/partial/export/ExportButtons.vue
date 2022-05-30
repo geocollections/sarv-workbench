@@ -1,5 +1,5 @@
 <template>
-  <v-menu offset-y>
+  <v-menu offset-y min-width="180">
     <template v-slot:activator="{ on }">
       <v-btn :color="bodyActiveColor" dark v-on="on" :small="small">
         <span>{{ $t("buttons.export") }}</span>
@@ -17,14 +17,21 @@
       <v-list-item v-if="filename === 'reference'" @click="exportToRIS">
         <v-list-item-title>
           {{ $t("buttons.exportTo") }} RIS &nbsp;
-          <v-icon>fas fa-file-download</v-icon>
+          <v-icon right>fas fa-file-download</v-icon>
+        </v-list-item-title>
+      </v-list-item>
+
+      <v-list-item @click="printPage">
+        <v-list-item-title>
+          {{ $t("buttons.print") }}
+          <v-icon right>fas fa-print</v-icon>
         </v-list-item-title>
       </v-list-item>
 
       <v-list-item @click="copyToClipboard">
         <v-list-item-title>
           {{ $t("buttons.copy") }}
-          <v-icon>far fa-copy</v-icon>
+          <v-icon right>far fa-copy</v-icon>
         </v-list-item-title>
       </v-list-item>
     </v-list>
@@ -143,6 +150,10 @@ export default {
       } else {
         this.toastError({ text: "Copying failed: Nothing to copy!" });
       }
+    },
+
+    printPage() {
+      window.print();
     },
 
     exportToRIS() {

@@ -3065,7 +3065,8 @@
     "clearLocalStorageAndFields": "Eemalda vaikimisi väärtused ja puhasta väljad",
     "reset_files": "Puhasta ebaõnnestunud faili(d)",
     "import": "Impordi fail",
-    "try_again": "Proovi uuesti"
+    "try_again": "Proovi uuesti",
+    "print": "Prindi"
   },
   "selection_series": {
     "database": "Andmebaas",
