@@ -20,12 +20,7 @@
         </div>
 
         <div
-          class="
-            d-flex
-            flex-sm-row flex-wrap flex-column
-            justify-end
-            flex-grow-1
-          "
+          class="d-flex flex-sm-row flex-wrap flex-column justify-end flex-grow-1"
         >
           <v-btn
             class="mr-0 mb-2 mb-sm-0"
