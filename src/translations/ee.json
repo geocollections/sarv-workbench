@@ -287,7 +287,8 @@
     "analysis_import": "Impordi analüüsi fail",
     "taxon_pages": "Taksoni veebilehed",
     "stratigraphy_catalogue": "Kataloog",
-    "selection_series": "Valikud"
+    "selection_series": "Valikud",
+    "geography": "Geograafia"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"

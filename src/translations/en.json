@@ -287,7 +287,8 @@
     "analysis_import": "Import analysis file",
     "taxon_pages": "Taxon pages",
     "stratigraphy_catalogue": "Catalogue",
-    "selection_series": "Selections"
+    "selection_series": "Selections",
+    "geography": "Geography"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
