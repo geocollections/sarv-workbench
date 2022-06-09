@@ -6,8 +6,10 @@
 
 <script>
 import * as L from "leaflet";
+import { GestureHandling } from "leaflet-gesture-handling";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
+import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { mapActions, mapState } from "vuex";
 
 export default {
@@ -24,102 +26,112 @@ export default {
     },
   },
 
-  data: () => ({
-    map: null,
-    center: L.latLng(58.5, 25.5),
-    maxZoom: 13,
-    minZoom: 2,
-    zoom: 7,
-    newPolygon: null,
-    tileProviders: [
-      {
-        name: "CartoDB",
-        leafletObject: L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-          {
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-          }
-        ),
-        minZoom: 1,
-        maxZoom: 18,
+  data() {
+    return {
+      map: null,
+      center: L.latLng(58.5, 25.5),
+      maxZoom: 13,
+      minZoom: 2,
+      zoom: 7,
+      newPolygon: null,
+      tileProviders: [
+        {
+          name: "CartoDB",
+          leafletObject: L.tileLayer(
+            "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+            {
+              attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            }
+          ),
+          minZoom: 1,
+          maxZoom: 18,
+        },
+        {
+          name: "OpenStreetMap",
+          leafletObject: L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+              attribution:
+                '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+              minZoom: 1,
+            }
+          ),
+        },
+        {
+          name: "OpenTopoMap",
+          leafletObject: L.tileLayer(
+            "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+            {
+              attribution:
+                'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+              minZoom: 1,
+            }
+          ),
+        },
+        {
+          name: "Maaameti fotokaart",
+          leafletObject: L.tileLayer(
+            "https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+            {
+              attribution:
+                "<a  href='http://www.maaamet.ee/' target='MapReferenceWindow'>&copy; Maa-amet</a>",
+              tms: true,
+              detectRetina: true,
+              updateWhenIdle: true,
+              zIndex: 1,
+              worldCopyJump: true,
+              continuousWorld: true,
+            }
+          ),
+        },
+        {
+          name: "Maaameti kaart",
+          leafletObject: L.tileLayer(
+            "https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+            {
+              attribution:
+                "<a href='http://www.maaamet.ee/' target='MapReferenceWindow'>&copy; Maa-amet</a>",
+              tms: true,
+              detectRetina: true,
+              updateWhenIdle: true,
+              zIndex: 1,
+              worldCopyJump: true,
+              continuousWorld: true,
+            }
+          ),
+        },
+      ],
+      overlayMaps: [
+        {
+          name: "Maaameti hübriidkaart",
+          leafletObject: L.tileLayer(
+            "https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+            {
+              attribution:
+                "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+              tms: true,
+              worldCopyJump: true,
+              detectRetina: true,
+              zIndex: 2,
+              updateWhenIdle: true,
+              continuousWorld: true,
+            }
+          ),
+          minZoom: 6,
+          maxZoom: 18,
+        },
+      ],
+      gestureHandlingOptions: {
+        text: {
+          touch: this.$t("gestureHandling.touch"),
+          scroll: this.$t("gestureHandling.scroll"),
+          scrollMac: this.$t("gestureHandling.scrollMac"),
+        },
+        duration: 1000,
       },
-      {
-        name: "OpenStreetMap",
-        leafletObject: L.tileLayer(
-          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          {
-            attribution:
-              '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            minZoom: 1,
-          }
-        ),
-      },
-      {
-        name: "OpenTopoMap",
-        leafletObject: L.tileLayer(
-          "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-          {
-            attribution:
-              'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-            minZoom: 1,
-          }
-        ),
-      },
-      {
-        name: "Maaameti fotokaart",
-        leafletObject: L.tileLayer(
-          "https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
-          {
-            attribution:
-              "<a  href='http://www.maaamet.ee/' target='MapReferenceWindow'>&copy; Maa-amet</a>",
-            tms: true,
-            detectRetina: true,
-            updateWhenIdle: true,
-            zIndex: 1,
-            worldCopyJump: true,
-            continuousWorld: true,
-          }
-        ),
-      },
-      {
-        name: "Maaameti kaart",
-        leafletObject: L.tileLayer(
-          "https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
-          {
-            attribution:
-              "<a href='http://www.maaamet.ee/' target='MapReferenceWindow'>&copy; Maa-amet</a>",
-            tms: true,
-            detectRetina: true,
-            updateWhenIdle: true,
-            zIndex: 1,
-            worldCopyJump: true,
-            continuousWorld: true,
-          }
-        ),
-      },
-    ],
-    overlayMaps: [
-      {
-        name: "Maaameti hübriidkaart",
-        leafletObject: L.tileLayer(
-          "https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
-          {
-            attribution:
-              "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
-            tms: true,
-            worldCopyJump: true,
-            detectRetina: true,
-            zIndex: 2,
-            updateWhenIdle: true,
-            continuousWorld: true,
-          }
-        ),
-        minZoom: 6,
-        maxZoom: 18,
-      },
-    ],
-  }),
+    };
+  },
 
   computed: {
     ...mapState("map", ["defaultLayer"]),
@@ -160,9 +172,12 @@ export default {
     ...mapActions("map", ["updateDefaultLayer"]),
 
     initMap() {
+      L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
+
       this.map = L.map("polygon-map", {
         layers: [this.tileProviders[0].leafletObject],
-        scrollWheelZoom: false,
+        gestureHandling: true,
+        gestureHandlingOptions: this.gestureHandlingOptions,
         minZoom: this.minZoom,
         maxZoom: this.maxZoom,
       }).fitBounds([

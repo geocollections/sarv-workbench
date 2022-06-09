@@ -28,10 +28,14 @@
 
 <script>
 import * as L from "leaflet";
+import { GestureHandling } from "leaflet-gesture-handling";
+import "@geoman-io/leaflet-geoman-free";
+import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
 import "leaflet-measure/dist/leaflet-measure.css";
 import "leaflet-measure/dist/leaflet-measure";
+import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { mapActions, mapState } from "vuex";
 import toastMixin from "@/mixins/toastMixin";
 
@@ -61,6 +65,9 @@ export default {
     showMap: {
       type: Boolean,
     },
+    polygon: {
+      type: String,
+    },
   },
 
   data() {
@@ -72,6 +79,7 @@ export default {
       center: L.latLng(58.5, 25.5),
       currentLocation: null,
       tileLayer: null,
+      newPolygon: null,
       tileProviders: [
         {
           name: "CartoDB",
@@ -184,6 +192,17 @@ export default {
         secondaryAreaUnit: "sqmeters",
         thousandsSep: " ",
       },
+      gestureHandlingOptions: {
+        text: {
+          touch: this.$t("gestureHandling.touch"),
+          scroll: this.$t("gestureHandling.scroll"),
+          scrollMac: this.$t("gestureHandling.scrollMac"),
+        },
+        duration: 1000,
+      },
+      initialPolygonRendered: false,
+      cutEventFired: false,
+      cutEventLayer: null,
     };
   },
 
@@ -200,12 +219,17 @@ export default {
       );
     },
 
+    isPolygonSet() {
+      return this.polygon || this.newPolygon;
+    },
+
     ...mapState("map", ["defaultLayer"]),
   },
 
   created() {
     // SETTING DEFAULT ZOOM LEVEL
-    if (this.isLocationSet || this.areLocationsSet) this.zoom = 15;
+    if (this.isLocationSet || this.areLocationsSet || this.isPolygonSet)
+      this.zoom = 15;
     else this.zoom = 6;
   },
 
@@ -216,6 +240,13 @@ export default {
   beforeDestroy() {
     navigator.geolocation.clearWatch(this.gpsID);
     this.map.off("baselayerchange", this.handleLayerChange);
+
+    this.map.off("pm:create", this.handlePmCreate);
+    this.map.off("pm:remove", this.handlePmRemove);
+    if (this.newPolygon) {
+      this.newPolygon.off("pm:edit", this.handlePmEdit);
+      this.newPolygon.off("pm:cut", this.handlePmCut);
+    }
   },
 
   watch: {
@@ -255,17 +286,25 @@ export default {
     },
 
     currentLocation: function (newVal, oldVal) {
-      // Centers map on GPS marker on 1st update and only if there are no other markers
+      // Centers map on GPS marker on 1st update and only if there are no other markers or polygons
       if (newVal && oldVal === null) {
-        if (!this.isLocationSet && !this.areLocationsSet)
+        if (!this.isLocationSet && !this.areLocationsSet && !this.isPolygonSet)
           this.centerMapOnMarker(newVal, 12);
       }
+    },
 
-      // if (newVal !== null && this.marker !== null) {
-      //   this.setZoom()
-      // } else if (newVal === null && this.marker !== null) {
-      //   this.map.setView(this.marker._latlng, this.zoom);
-      // }
+    polygon(newVal) {
+      if (!this.initialPolygonRendered) {
+        this.initialPolygonRendered = true;
+        this.setPolygon(newVal);
+      }
+    },
+
+    newPolygon(newVal) {
+      if (newVal) {
+        this.newPolygon.on("pm:edit", this.handlePmEdit);
+        this.newPolygon.on("pm:cut", this.handlePmCut);
+      }
     },
   },
 
@@ -273,9 +312,12 @@ export default {
     ...mapActions("map", ["updateDefaultLayer"]),
 
     initMap() {
+      L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
+
       this.map = L.map("map", {
         layers: [this.tileProviders[0].leafletObject],
-        scrollWheelZoom: false,
+        gestureHandling: true,
+        gestureHandlingOptions: this.gestureHandlingOptions,
       }).setView(this.center, this.zoom);
 
       let baseLayers = {};
@@ -306,6 +348,20 @@ export default {
         this.map.addControl(new window.L.Control.Measure(this.measureOptions));
 
       if (this.gpsCoords === true) this.trackPosition();
+
+      this.map.pm.addControls({
+        position: "topleft",
+        drawMarker: false,
+        drawCircleMarker: false,
+        drawPolyline: false,
+        drawRectangle: false,
+        drawCircle: false,
+      });
+
+      this.map.on("pm:create", this.handlePmCreate);
+      this.map.on("pm:remove", this.handlePmRemove);
+
+      if (this.polygon) this.setPolygon(this.polygon);
 
       //LAYERS CHANGED
       this.map.on("baselayerchange", this.handleLayerChange);
@@ -397,17 +453,6 @@ export default {
         this.markers = [];
       }
     },
-
-    // Validates if coordinates exist in correct form.
-    // isValidLocation(loc) {
-    //   if (loc !== null) {
-    //     if (loc.lat && loc.lat !== null && loc.lng && loc.lng !== null) {
-    //       return loc.lat.length > 0 && loc.lng.length > 0
-    //     }
-    //     return false
-    //   }
-    //   return false
-    // },
 
     updateCoordinates(coordinates, method, GPSPosition) {
       this.$emit("update-coordinates", coordinates, method, GPSPosition);
@@ -536,6 +581,52 @@ export default {
       e = p * Math.sin(FII) + FE;
 
       return [n, e];
+    },
+
+    handlePmCreate(event) {
+      if (this.newPolygon) this.newPolygon.removeFrom(this.map);
+      this.newPolygon = event.layer;
+      this.$emit(
+        "polygon:updated",
+        JSON.stringify(event?.layer?.toGeoJSON()?.geometry)
+      );
+    },
+
+    handlePmEdit(event) {
+      let newLayer = event?.layer;
+      if (this.cutEventFired && this.cutEventLayer) {
+        this.cutEventFired = false;
+        newLayer = this.cutEventLayer;
+        this.newPolygon = newLayer;
+      }
+      this.$emit(
+        "polygon:updated",
+        JSON.stringify(newLayer?.toGeoJSON()?.geometry)
+      );
+    },
+
+    handlePmRemove() {
+      this.$emit("polygon:updated", null);
+    },
+
+    handlePmCut(event) {
+      this.cutEventFired = true;
+      this.cutEventLayer = event.layer;
+    },
+
+    setPolygon(geoJSONString) {
+      if (geoJSONString) {
+        let geoJSON = JSON.parse(geoJSONString);
+
+        let geoJSONFeature = L.geoJSON(geoJSON).addTo(this.map);
+        this.newPolygon = geoJSONFeature;
+
+        let bounds = geoJSONFeature.getBounds();
+        // nextTick fixes weird zoom issue on first render
+        this.$nextTick(() => {
+          this.map.fitBounds(bounds, { padding: [50, 50] });
+        });
+      }
     },
   },
 };

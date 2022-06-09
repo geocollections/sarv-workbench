@@ -151,18 +151,6 @@
               />
             </v-col>
           </v-row>
-
-          <!-- POLYGON -->
-          <!--          <v-row no-gutters>-->
-          <!--            <v-col cols="12" class="pa-1">-->
-          <!--              <textarea-wrapper-->
-          <!--                v-model="area.polygon"-->
-          <!--                :color="bodyActiveColor"-->
-          <!--                :label="$t('area.polygon')"-->
-          <!--                readonly-->
-          <!--              />-->
-          <!--            </v-col>-->
-          <!--          </v-row>-->
         </div>
       </transition>
     </v-card>
@@ -241,6 +229,19 @@
               </v-card>
             </v-card>
 
+            <!-- POLYGON -->
+            <v-row no-gutters class="mt-1">
+              <v-col cols="12" class="pa-1">
+                <textarea-wrapper
+                  v-model="area.polygon"
+                  :color="bodyActiveColor"
+                  :label="$t('area.polygon')"
+                  disabled
+                  readonly
+                />
+              </v-col>
+            </v-row>
+
             <!-- MAP -->
             <v-row no-gutters v-show="myShowMap" class="mt-2">
               <v-col cols="12" class="px-1">
@@ -251,6 +252,8 @@
                   module="area"
                   v-bind:location="{ lat: null, lng: null }"
                   :locations="relatedData.sites.results"
+                  :polygon="area.polygon"
+                  v-on:polygon:updated="area.polygon = $event"
                 />
               </v-col>
             </v-row>
@@ -530,7 +533,7 @@ export default {
           "description",
           "description_en",
           "remarks",
-          // "polygon"
+          "polygon",
         ],
         autocomplete: {
           loaders: {
