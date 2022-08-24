@@ -1,5 +1,5 @@
-import Vue from "vue";
 import qs from "qs";
+import Vue from "vue";
 import router from "../../../router";
 
 const axios = require("axios");
@@ -3065,6 +3065,16 @@ export function fetchPreparations(data, dynamicSearch) {
       `preparation/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
+}
+
+export function fetchPreparationAttachment(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `attachment/?attach_link__preparation__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+  );
 }
 
 export function fetchLinkedTaxa(data, prepId) {

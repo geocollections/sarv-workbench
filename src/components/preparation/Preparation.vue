@@ -475,6 +475,7 @@ import cloneDeep from "lodash/cloneDeep";
 import {
   fetchLinkedTaxa,
   fetchPreparation,
+  fetchPreparationAttachment,
 } from "../../assets/js/api/apiCalls";
 
 import ExportButtons from "../partial/export/ExportButtons";
@@ -533,7 +534,6 @@ export default {
         field: "preparation_number",
       });
     }
-
     this.loadFullInfo();
   },
 
@@ -558,6 +558,12 @@ export default {
       immediate: true,
       deep: true,
     },
+    "relatedData.searchParameters": {
+      handler: function () {
+        this.loadRelatedData(this.activeTab);
+      },
+      deep: true,
+    },
   },
 
   methods: {
@@ -570,6 +576,16 @@ export default {
           )
         );
       });
+    },
+
+    setTab(type) {
+      if (type) {
+        this.updateActiveTab({
+          tab: type,
+          object: this.$route.meta.object,
+        });
+        this.activeTab = type;
+      }
     },
 
     setInitialData() {
@@ -605,6 +621,7 @@ export default {
             analysis: false,
             taxon: false,
             agent: false,
+            attachment: false,
             identification_agent: false,
             storage: false,
             owner: false,
@@ -613,6 +630,7 @@ export default {
           analysis: [],
           taxon: [],
           agent: [],
+          attachment: [],
           identification_agent: [],
           storage: [],
           owner: [],
@@ -664,6 +682,13 @@ export default {
             this.$emit("object-exists", false);
           }
         });
+
+        // Load Related Data which is in tabs
+        this.relatedTabs.forEach((tab) => {
+          this.loadRelatedData(tab.name);
+        });
+
+        this.$on("tab-changed", this.setTab);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -683,6 +708,12 @@ export default {
           taxon: {
             page: 1,
             paginateBy: 25,
+            sortBy: ["id"],
+            sortDesc: [true],
+          },
+          attachment_link: {
+            page: 1,
+            paginateBy: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -798,7 +829,21 @@ export default {
         this.autocomplete.owner.push(this.preparation.owner);
       }
     },
-
+    loadRelatedData(object) {
+      let query;
+      if (object === "attachment_link") {
+        query = fetchPreparationAttachment(
+          this.$route.params.id,
+          this.relatedData.searchParameters.attachment_link
+        );
+      }
+      if (query) {
+        query.then((response) => {
+          this.relatedData[object].results = this.handleResponse(response);
+          this.relatedData[object].count = response.data.count;
+        });
+      }
+    },
     addFiles(files, singleFileMetadata) {
       this.addFileAsRelatedDataNew(files, "preparation", singleFileMetadata);
     },
