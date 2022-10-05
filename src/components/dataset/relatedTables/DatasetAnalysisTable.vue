@@ -16,6 +16,27 @@
       :class="bodyColor.split('n-')[0] + 'n-5'"
       :disable-sort="!$route.meta.isEdit"
     >
+      <template v-slot:item.action="{ item }">
+        <v-btn
+          icon
+          @click="editItem(item)"
+          color="green"
+          :title="$t('buttons.edit')"
+          small
+        >
+          <v-icon small>far fa-edit</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="!$route.meta.isEdit"
+          icon
+          @click="deleteItem(item)"
+          color="red"
+          :title="$t('buttons.delete')"
+          small
+        >
+          <v-icon small>far fa-trash-alt</v-icon>
+        </v-btn>
+      </template>
       <template v-slot:item.analysis="{ item }">
         <router-link
           :to="{ path: '/analysis/' + item.analysis }"
@@ -177,6 +198,12 @@ export default {
       },
       { text: "analysis.sample", value: "sample" },
       { text: "common.locality", value: "locality" },
+      {
+        text: "common.actions",
+        value: "action",
+        sortable: false,
+        align: "center",
+      },
     ],
     dialog: false,
     item: {
