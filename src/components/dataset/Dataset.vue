@@ -1129,7 +1129,6 @@ export default {
           return {
             [table]: item[table],
             dataset: this.$route.params.id,
-            database: this.getDatabaseId,
           };
         });
 
