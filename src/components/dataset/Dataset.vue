@@ -455,6 +455,9 @@
             :search-parameters="relatedData.searchParameters.dataset_analysis"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <dataset-geolocation-table

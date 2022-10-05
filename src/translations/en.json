@@ -230,6 +230,7 @@
     "dataset_author": "Dataset author",
     "dataset_reference": "Dataset reference",
     "dataset_geolocation": "Dataset geolocation",
+    "dataset_analysis": "Dataset analysis",
     "locality_stratigraphy": "Stratigraphic boundaries",
     "doi_agent": "Doi agent",
     "doi_date": "Doi date",
@@ -1674,6 +1675,9 @@
   },
   "dataset_author": {
     "agent": "Agent"
+  },
+  "dataset_analysis": {
+    "analysis": "Analysis"
   },
   "doi": {
     "copyright_agent__id": "Copyright agent ID",

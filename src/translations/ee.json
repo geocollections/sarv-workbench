@@ -228,6 +228,7 @@
     "specimen_history": "Eksemplari ajalugu",
     "specimen_analysis": "Eksemplari analüüs",
     "dataset_author": "Andmeseti autor",
+    "dataset_analysis": "Andmeseti analüüs",
     "dataset_reference": "Andmeseti kirjandus",
     "dataset_geolocation": "Andmeseti lokaliteet",
     "locality_stratigraphy": "Stratigraafilised piirid",
@@ -1672,6 +1673,9 @@
   },
   "dataset_author": {
     "agent": "Isik/Asutus"
+  },
+  "dataset_analysis": {
+    "analysis": "Analüüs"
   },
   "doi": {
     "copyright_agent__id": "Autoriõigused ID",
