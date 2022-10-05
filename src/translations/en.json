@@ -1663,6 +1663,7 @@
     "reference": "Reference",
     "title": "Title",
     "title_en": "Title EN",
+    "selection_series": "Selection",
     "fill_using_selection": "Fill lists using selection",
     "fill_list": "Fill list",
     "confirm_list_fill": "Are you sure you would like to add all analyses from selection to loan list?",
