@@ -1663,6 +1663,10 @@
     "reference": "Reference",
     "title": "Title",
     "title_en": "Title EN",
+    "fill_using_selection": "Fill lists using selection",
+    "fill_list": "Fill list",
+    "confirm_list_fill": "Are you sure you would like to add all analyses from selection to loan list?",
+    "fill_list_yes": "Yes, fill list",
     "relatedTables": {
       "dataset_author": "Authors",
       "dataset_reference": "References",

@@ -3221,6 +3221,10 @@ export function fetchDatasetGeolocation(id, searchParameters) {
   );
 }
 
+export function fetchMultiAddDatasetLists(table, data) {
+  return post(`add_multi/${table}/`, data);
+}
+
 /*********************
  ***  DATASET END  ***
  *********************/

@@ -1661,6 +1661,11 @@
     "reference": "Kirjandus",
     "title": "Pealkiri",
     "title_en": "Pealkiri EN",
+    
+    "fill_using_selection": "Täida nimekirjad kasutades valikut",
+    "fill_list": "Lisa nimekirja",
+    "confirm_list_fill": "Kas sa oled kindel, et soovid valikus olevad analüüsid lisada laenu nimekirja?",
+    "fill_list_yes": "Jah, lisa nimekirja",
     "relatedTables": {
       "dataset_author": "Autorid",
       "dataset_reference": "Viited",
