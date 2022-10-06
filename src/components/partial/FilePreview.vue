@@ -1,13 +1,6 @@
 <template>
   <div
-    class="
-      file-preview
-      d-flex
-      flex-column
-      align-center
-      justify-center
-      fill-height
-    "
+    class="file-preview d-flex flex-column align-center justify-center fill-height"
     v-if="data"
   >
     <div class="align-center align-end my-2">

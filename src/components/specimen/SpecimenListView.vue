@@ -8,16 +8,17 @@
       :title="$t('editSpecimen.editMessage')"
     >
       <div class="label2_head">
-        <div
-          style="float: left; font-size: 84%"
-          v-translate="{
-            et: entity.database__name,
-            en: entity.database__name_en,
-          }"
-        ></div>
+        <span style="float: left; font-size: 80%">{{
+          entity.database__name_label
+        }}</span>
 
-        <div style="float: right; text-align: right; font-size: 95%">
-          {{ entity.database__acronym }} {{ entity.specimen_id }}
+        <div style="float: right; text-align: right; font-size: 91%">
+          {{
+            entity.database__acronym === "ELM"
+              ? "TAM"
+              : entity.database__acronym
+          }}
+          {{ entity.specimen_id }}
         </div>
       </div>
 

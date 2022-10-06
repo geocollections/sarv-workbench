@@ -356,15 +356,7 @@
           <!-- PAGINATION -->
           <div
             v-if="relatedData.taxa.count > 10"
-            class="
-              d-flex
-              flex-column
-              justify-space-around
-              flex-md-row
-              justify-md-space-between
-              pa-1
-              mt-2
-            "
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -412,6 +404,55 @@
       </transition>
     </v-card>
 
+    <v-card
+      class="related-tabs mt-2"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-tabs
+        :background-color="bodyColor.split('n-')[0] + 'n-3'"
+        show-arrows
+        grow
+        prev-icon="fas fa-angle-left"
+        next-icon="fas fa-angle-right"
+        :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
+        hide-slider
+      >
+        <v-tab
+          v-for="tab in relatedTabs"
+          :key="tab.name"
+          @click.prevent="setTab(tab.name)"
+        >
+          <span>{{ $t("sample.relatedTables." + tab.name) }}</span>
+          <span class="ml-1">
+            <v-icon small>{{ tab.iconClass }}</v-icon>
+          </span>
+          <span
+            v-if="relatedData[tab.name].count > 0"
+            class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text`"
+          >
+            {{ relatedData[tab.name].count }}
+          </span>
+        </v-tab>
+      </v-tabs>
+      <v-tabs-items>
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+          <div v-show="activeTab === 'attachment_link'">
+            <file-input
+              show-existing
+              :files-from-object="relatedData.attachment_link.results"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :record-options="$route.meta.isEdit"
+              :is-draggable="$route.meta.isEdit"
+              show-attachment-link
+            />
+          </div>
+        </v-card>
+      </v-tabs-items>
+    </v-card>
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
       <v-col>
@@ -434,6 +475,7 @@ import cloneDeep from "lodash/cloneDeep";
 import {
   fetchLinkedTaxa,
   fetchPreparation,
+  fetchPreparationAttachment,
 } from "../../assets/js/api/apiCalls";
 
 import ExportButtons from "../partial/export/ExportButtons";
@@ -445,6 +487,7 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import { mapState } from "vuex";
+import FileInput from "../partial/inputs/FileInput";
 
 export default {
   name: "Preparation",
@@ -456,6 +499,7 @@ export default {
     CheckboxWrapper,
     TaxonListTable,
     ExportButtons,
+    FileInput,
   },
   props: {
     isBodyActiveColorDark: {
@@ -490,7 +534,6 @@ export default {
         field: "preparation_number",
       });
     }
-
     this.loadFullInfo();
   },
 
@@ -515,6 +558,12 @@ export default {
       immediate: true,
       deep: true,
     },
+    "relatedData.searchParameters": {
+      handler: function () {
+        this.loadRelatedData(this.activeTab);
+      },
+      deep: true,
+    },
   },
 
   methods: {
@@ -529,8 +578,21 @@ export default {
       });
     },
 
+    setTab(type) {
+      if (type) {
+        this.updateActiveTab({
+          tab: type,
+          object: this.$route.meta.object,
+        });
+        this.activeTab = type;
+      }
+    },
+
     setInitialData() {
       return {
+        relatedTabs: [
+          { name: "attachment_link", iconClass: "fas fa-folder-open" },
+        ],
         relatedData: this.setDefaultRalatedData(),
         copyFields: [
           "id",
@@ -552,12 +614,14 @@ export default {
           "owner",
           "remarks",
         ],
+        activeTab: "attachment_link",
         autocomplete: {
           loaders: {
             sample: false,
             analysis: false,
             taxon: false,
             agent: false,
+            attachment: false,
             identification_agent: false,
             storage: false,
             owner: false,
@@ -566,6 +630,7 @@ export default {
           analysis: [],
           taxon: [],
           agent: [],
+          attachment: [],
           identification_agent: [],
           storage: [],
           owner: [],
@@ -617,6 +682,13 @@ export default {
             this.$emit("object-exists", false);
           }
         });
+
+        // Load Related Data which is in tabs
+        this.relatedTabs.forEach((tab) => {
+          this.loadRelatedData(tab.name);
+        });
+
+        this.$on("tab-changed", this.setTab);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -628,6 +700,7 @@ export default {
           count: 0,
           results: [],
         },
+        attachment_link: { count: 0, results: [] },
         count: {
           sample: 0,
         },
@@ -638,11 +711,17 @@ export default {
             sortBy: ["id"],
             sortDesc: [true],
           },
+          attachment_link: {
+            page: 1,
+            paginateBy: 10,
+            sortBy: ["id"],
+            sortDesc: [true],
+          },
         },
       };
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       Object.keys(uploadableObject).forEach((key) => {
@@ -657,6 +736,43 @@ export default {
           uploadableObject[key] = null;
         }
       });
+
+      // Adding related data only on add view
+      uploadableObject.related_data = {};
+
+      if (!this.$route.meta.isEdit) {
+        this.relatedTabs.forEach((tab) => {
+          if (this.relatedData[tab.name].count > 0)
+            if (tab.name === "attachment_link") {
+              uploadableObject.related_data.attachment =
+                this.relatedData.attachment_link.results.map((item) => {
+                  return { id: item.id };
+                });
+            } else {
+              uploadableObject.related_data[tab.name] =
+                this.relatedData[tab.name].results;
+
+              uploadableObject.related_data[tab.name].forEach((item) => {
+                Object.keys(item).forEach((key) => {
+                  if (typeof item[key] === "object" && item[key] !== null) {
+                    item[key] = item[key].id ? item[key].id : null;
+                  }
+                });
+              });
+            }
+        });
+      } else {
+        if (this.relatedData.attachment_link.results.length > 0) {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment_link.results.map((item) => {
+              return { id: item.id };
+            });
+        } else uploadableObject.related_data.attachment = null;
+      }
+
+      if (!this.isNotEmpty(uploadableObject.related_data))
+        delete uploadableObject.related_data;
+      if (saveAsNew) delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -712,6 +828,29 @@ export default {
         };
         this.autocomplete.owner.push(this.preparation.owner);
       }
+    },
+    loadRelatedData(object) {
+      let query;
+      if (object === "attachment_link") {
+        query = fetchPreparationAttachment(
+          this.$route.params.id,
+          this.relatedData.searchParameters.attachment_link
+        );
+      }
+      if (query) {
+        query.then((response) => {
+          this.relatedData[object].results = this.handleResponse(response);
+          this.relatedData[object].count = response.data.count;
+        });
+      }
+    },
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "preparation", singleFileMetadata);
+    },
+
+    addExistingFiles(files) {
+      // this.relatedData.attachment_link.count = files.length;
+      this.relatedData.attachment_link.results = files;
     },
 
     searchRelatedData: debounce(function (

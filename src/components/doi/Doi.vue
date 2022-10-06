@@ -819,12 +819,7 @@
                 DataCite URL ({{ $t("doi.currentUrl") }}):
                 <a
                   :href="dataciteURL"
-                  class="
-                    font-weight-bold
-                    red--text
-                    text-decoration-underline
-                    url-link
-                  "
+                  class="font-weight-bold red--text text-decoration-underline url-link"
                   target="OldDoi"
                   :title="$t('doi.currentUrl')"
                   >{{ dataciteURL }}</a
@@ -835,12 +830,7 @@
                 SARV URL ({{ $t("doi.newUrl") }}):
                 <a
                   :href="doiURL"
-                  class="
-                    font-weight-bold
-                    green--text
-                    text-decoration-underline
-                    url-link
-                  "
+                  class="font-weight-bold green--text text-decoration-underline url-link"
                   target="NewDoi"
                   :title="$t('doi.newUrl')"
                   >{{ doiURL }}</a

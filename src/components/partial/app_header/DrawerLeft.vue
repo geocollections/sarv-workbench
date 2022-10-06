@@ -240,12 +240,23 @@ export default {
         },
         {
           name: "locality",
-          title: "localities",
+          title: "geography",
           links: [
             {
               title: "localities",
               path: "/locality",
               icon: "fas fa-map-marked-alt",
+            },
+            {
+              title: "areas",
+              path: "/area",
+              icon: "fas fa-chart-area",
+            },
+            { title: "editSite", path: "/site", icon: "fas fa-globe" },
+            {
+              title: "editSiteGroundwater",
+              path: "/site_groundwater",
+              icon: "fas fa-water",
             },
           ],
         },
@@ -262,23 +273,6 @@ export default {
               title: "drillcoreBoxes",
               path: "/drillcore_box",
               icon: "fas fa-boxes",
-            },
-          ],
-        },
-        {
-          name: "site",
-          title: "sites",
-          links: [
-            { title: "editSite", path: "/site", icon: "fas fa-globe" },
-            {
-              title: "editSiteGroundwater",
-              path: "/site_groundwater",
-              icon: "fas fa-water",
-            },
-            {
-              title: "areas",
-              path: "/area",
-              icon: "fas fa-chart-area",
             },
           ],
         },
@@ -360,12 +354,6 @@ export default {
           links: [
             { title: "taxa", path: "/taxon", icon: "fas fa-pastafarianism" },
             { title: "rocks", path: "/rock", icon: "far fa-gem" },
-          ],
-        },
-        {
-          name: "stratigraphy",
-          title: "stratigraphies",
-          links: [
             {
               title: "stratigraphies",
               path: "/stratigraphy",

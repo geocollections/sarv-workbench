@@ -587,8 +587,10 @@ export default {
       if (this.loan.loaner__forename && this.loan.loaner__surename)
         signature += `${this.loan.loaner__forename} ${this.loan.loaner__surename}`;
       else signature += `${this.loan.loaner__agent}`;
-      if (this.loan.loaner__profession)
+      if (this.$i18n.locale === "ee" && this.loan.loaner__profession)
         signature += `, ${this.loan.loaner__profession}`;
+      else if (this.loan.loaner__profession_en)
+        signature += `, ${this.loan.loaner__profession_en}`;
       return signature;
     },
   },
@@ -622,7 +624,35 @@ export default {
       if (loanSamplesResponse?.data?.results)
         this.loanSamples = loanSamplesResponse?.data?.results;
 
+      this.loanSpecimens.sort(this.compareSpecimens);
+
       this.isLoading = false;
+    },
+
+    // Currently, only supports specimen_id-s which are in the form of '123-123'
+    // There could be some other forms like '123-123-123' or 'G1:123:123'
+    compareSpecimens(a, b) {
+      const firstColl = parseInt(a?.specimen__specimen_id?.split("-")?.[0]);
+      const firstNr = parseInt(a?.specimen__specimen_id?.split("-")?.[1]);
+      const secondColl = parseInt(b?.specimen__specimen_id?.split("-")?.[0]);
+      const secondNr = parseInt(b?.specimen__specimen_id?.split("-")?.[1]);
+
+      if (firstColl > secondColl) {
+        return 1;
+      }
+      if (firstColl < secondColl) {
+        return -1;
+      }
+      if (firstColl === secondColl) {
+        if (firstNr > secondNr) {
+          return 1;
+        }
+        if (firstNr < secondNr) {
+          return -1;
+        }
+        return 0;
+      }
+      return 0;
     },
 
     async getNames(listOfSpecimens) {
@@ -693,6 +723,14 @@ export default {
             rockList.forEach((taxon) => {
               let item = taxonList.find((rock) => taxon.id === rock.id);
               item ? this.names.push(item) : this.names.push(taxon);
+            });
+            taxonList.forEach((taxonItem) => {
+              let secondItem = rockList.find(
+                (rockItem) => taxonItem.id === rockItem.id
+              );
+              secondItem
+                ? this.names.push(secondItem)
+                : this.names.push(taxonItem);
             });
           } else if (taxonList.length > 0) this.names = taxonList;
           else if (rockList.length > 0) this.names = rockList;

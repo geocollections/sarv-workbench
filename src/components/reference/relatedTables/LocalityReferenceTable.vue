@@ -67,6 +67,68 @@
           ></span>
         </router-link>
       </template>
+
+      <template v-slot:item.area__name="{ item }">
+        <router-link
+          v-if="$route.meta.isEdit"
+          :to="{ path: '/area/' + item.area }"
+          :title="$t('editArea.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-translate="{
+              et: item.area__name,
+              en: item.area__name_en,
+            }"
+          ></span>
+        </router-link>
+        <router-link
+          v-else-if="item.area"
+          :to="{ path: '/area/' + item.area.id }"
+          :title="$t('editArea.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-translate="{
+              et: item.area.name,
+              en: item.area.name_en,
+            }"
+          ></span>
+        </router-link>
+      </template>
+
+      <template v-slot:item.site__name="{ item }">
+        <router-link
+          v-if="$route.meta.isEdit"
+          :to="{ path: '/site/' + item.site }"
+          :title="$t('editSite.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-translate="{
+              et: item.site__name,
+              en: item.site__name_en,
+            }"
+          ></span>
+        </router-link>
+        <router-link
+          v-else-if="item.site"
+          :to="{ path: '/site/' + item.site.id }"
+          :title="$t('editSite.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-translate="{
+              et: item.site.name,
+              en: item.site.name_en,
+            }"
+          ></span>
+        </router-link>
+      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
@@ -94,11 +156,40 @@
                     :loading="autocomplete.loaders.locality"
                     :item-text="localityLabel"
                     :label="$t('locality.locality')"
-                    use-state
                     is-link
                     route-object="locality"
                     is-searchable
                     v-on:search:items="autocompleteLocalitySearch"
+                  />
+                </v-col>
+
+                <v-col cols="12" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.area"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.area"
+                    :loading="autocomplete.loaders.area"
+                    :item-text="nameLabel"
+                    :label="$t('site.area')"
+                    is-link
+                    route-object="area"
+                    is-searchable
+                    v-on:search:items="autocompleteAreaSearch"
+                  />
+                </v-col>
+
+                <v-col cols="12" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.site"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.site"
+                    :loading="autocomplete.loaders.site"
+                    :item-text="nameLabel"
+                    :label="$t('sample.site')"
+                    is-link
+                    route-object="site"
+                    is-searchable
+                    v-on:search:items="autocompleteSiteSearch"
                   />
                 </v-col>
 
@@ -201,6 +292,8 @@ export default {
   data: () => ({
     headers: [
       { text: "locality.locality", value: "locality" },
+      { text: "site.area", value: "area__name" },
+      { text: "sample.site", value: "site__name" },
       { text: "reference.pages", value: "pages" },
       { text: "reference.figures", value: "figures" },
       { text: "common.remarks", value: "remarks" },
@@ -214,6 +307,8 @@ export default {
     dialog: false,
     item: {
       locality: null,
+      area: null,
+      site: null,
       pages: "",
       figures: "",
       remarks: "",
@@ -221,8 +316,12 @@ export default {
     isNewItem: true,
     autocomplete: {
       locality: [],
+      area: [],
+      site: [],
       loaders: {
         locality: false,
+        area: false,
+        site: false,
       },
     },
   }),
@@ -230,7 +329,10 @@ export default {
   computed: {
     isItemValid() {
       return (
-        typeof this.item.locality === "object" && this.item.locality !== null
+        (typeof this.item.locality === "object" &&
+          this.item.locality !== null) ||
+        (typeof this.item.area === "object" && this.item.area !== null) ||
+        (typeof this.item.site === "object" && this.item.site !== null)
       );
     },
   },
@@ -239,6 +341,8 @@ export default {
     resetItem() {
       this.item = {
         locality: null,
+        area: null,
+        site: null,
         pages: "",
         figures: "",
         remarks: "",
@@ -258,6 +362,28 @@ export default {
       } else {
         this.item.locality = item.locality;
         this.autocomplete.locality.push(this.item.locality);
+      }
+      if (typeof item.area !== "object" && item.area !== null) {
+        this.item.area = {
+          id: item.area,
+          name: item.area__name,
+          name_en: item.area__name_en,
+        };
+        this.autocomplete.area.push(this.item.area);
+      } else {
+        this.item.area = item.area;
+        this.autocomplete.area.push(this.item.area);
+      }
+      if (typeof item.site !== "object" && item.site !== null) {
+        this.item.site = {
+          id: item.site,
+          name: item.site__name,
+          name_en: item.site__name_en,
+        };
+        this.autocomplete.site.push(this.item.site);
+      } else {
+        this.item.site = item.site;
+        this.autocomplete.site.push(this.item.site);
       }
 
       this.item.pages = item.pages;

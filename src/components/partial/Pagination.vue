@@ -1,15 +1,7 @@
 <template>
   <div
     v-if="count > 0"
-    class="
-      d-flex
-      flex-column
-      justify-space-around
-      flex-md-row
-      justify-md-space-between
-      mt-3
-      d-print-none
-    "
+    class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none"
   >
     <div class="mr-3 mb-md-0 mb-3 align-self-center">
       <v-select

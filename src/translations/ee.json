@@ -228,6 +228,7 @@
     "specimen_history": "Eksemplari ajalugu",
     "specimen_analysis": "Eksemplari analüüs",
     "dataset_author": "Andmeseti autor",
+    "dataset_analysis": "Andmeseti analüüs",
     "dataset_reference": "Andmeseti kirjandus",
     "dataset_geolocation": "Andmeseti lokaliteet",
     "locality_stratigraphy": "Stratigraafilised piirid",
@@ -262,7 +263,7 @@
     "loan_sample": "Laenatud proov",
     "taxon_common_name": "Tavanimi",
     "taxon_description": "Kirjeldus",
-    "taxon_occurance": "Levik/Viide",
+    "taxon_occurence": "Levik/Viide",
     "taxon_opinion": "Arvamus",
     "taxon_page": "Veebileht",
     "taxon_subclass": "Alamtakson",
@@ -287,7 +288,8 @@
     "analysis_import": "Impordi analüüsi fail",
     "taxon_pages": "Taksoni veebilehed",
     "stratigraphy_catalogue": "Kataloog",
-    "selection_series": "Valikud"
+    "selection_series": "Valikud",
+    "geography": "Geograafia"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1659,6 +1661,11 @@
     "reference": "Kirjandus",
     "title": "Pealkiri",
     "title_en": "Pealkiri EN",
+    "selection_series": "Valik",    
+    "fill_using_selection": "Täida nimekirjad kasutades valikut",
+    "fill_list": "Lisa nimekirja",
+    "confirm_list_fill": "Kas sa oled kindel, et soovid valikus olevad analüüsid lisada laenu nimekirja?",
+    "fill_list_yes": "Jah, lisa nimekirja",
     "relatedTables": {
       "dataset_author": "Autorid",
       "dataset_reference": "Viited",
@@ -1671,6 +1678,9 @@
   },
   "dataset_author": {
     "agent": "Isik/Asutus"
+  },
+  "dataset_analysis": {
+    "analysis": "Analüüs"
   },
   "doi": {
     "copyright_agent__id": "Autoriõigused ID",
@@ -3065,7 +3075,8 @@
     "clearLocalStorageAndFields": "Eemalda vaikimisi väärtused ja puhasta väljad",
     "reset_files": "Puhasta ebaõnnestunud faili(d)",
     "import": "Impordi fail",
-    "try_again": "Proovi uuesti"
+    "try_again": "Proovi uuesti",
+    "print": "Prindi"
   },
   "selection_series": {
     "database": "Andmebaas",
@@ -3079,5 +3090,10 @@
     "date_changed": "Muutis",
     "user_added": "Lisatud",
     "user_changed": "Muudetud"
+  },
+  "gestureHandling": {
+    "touch": "Kasuta kahte näppu kaardi liigutamiseks",
+    "scroll": "Kasuta ctrl + scroll kaardi suumimiseks",
+    "scrollMac": "Kasuta \u2318 + scroll kaardi suumimiseks"
   }
 }

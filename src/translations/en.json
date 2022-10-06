@@ -230,6 +230,7 @@
     "dataset_author": "Dataset author",
     "dataset_reference": "Dataset reference",
     "dataset_geolocation": "Dataset geolocation",
+    "dataset_analysis": "Dataset analysis",
     "locality_stratigraphy": "Stratigraphic boundaries",
     "doi_agent": "Doi agent",
     "doi_date": "Doi date",
@@ -262,7 +263,7 @@
     "loan_sample": "Loan sample",
     "taxon_common_name": "Common name",
     "taxon_description": "Description",
-    "taxon_occurance": "Occurance",
+    "taxon_occurence": "Occurence",
     "taxon_opinion": "Opinion",
     "taxon_page": "Taxon page",
     "taxon_subclass": "Subtaxa",
@@ -287,7 +288,8 @@
     "analysis_import": "Import analysis file",
     "taxon_pages": "Taxon pages",
     "stratigraphy_catalogue": "Catalogue",
-    "selection_series": "Selections"
+    "selection_series": "Selections",
+    "geography": "Geography"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1661,6 +1663,11 @@
     "reference": "Reference",
     "title": "Title",
     "title_en": "Title EN",
+    "selection_series": "Selection",
+    "fill_using_selection": "Fill lists using selection",
+    "fill_list": "Fill list",
+    "confirm_list_fill": "Are you sure you would like to add all analyses from selection to loan list?",
+    "fill_list_yes": "Yes, fill list",
     "relatedTables": {
       "dataset_author": "Authors",
       "dataset_reference": "References",
@@ -1673,6 +1680,9 @@
   },
   "dataset_author": {
     "agent": "Agent"
+  },
+  "dataset_analysis": {
+    "analysis": "Analysis"
   },
   "doi": {
     "copyright_agent__id": "Copyright agent ID",
@@ -3064,7 +3074,8 @@
     "clearLocalStorageAndFields": "Remove defaults and clear fields",
     "reset_files": "Clear failed file(s)",
     "import": "Import file",
-    "try_again": "Try again"
+    "try_again": "Try again",
+    "print": "Print"
   },
   "selection_series": {
     "database": "Database",
@@ -3078,5 +3089,10 @@
     "date_changed": "Date changed",
     "user_added": "User added",
     "user_changed": "User changed"
+  },
+  "gestureHandling": {
+    "touch": "Use two fingers to move the map",
+    "scroll": "Use ctrl + scroll to zoom the map",
+    "scrollMac": "Use \u2318 + scroll to zoom the map"
   }
 }
