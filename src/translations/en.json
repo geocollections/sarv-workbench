@@ -1625,7 +1625,6 @@
     "abstract": "Abstract",
     "locality__id": "Lokaliteet ID",
     "reference__id": "Reference ID",
-
     "copyright_agent": "Copyright agent",
     "copyright_agent__id": "Copyright agent ID",
     "copyright_agent__agent": "Copyright agent",
@@ -2100,7 +2099,9 @@
     "location": "Location txt",
     "details": "Other info",
     "taxa": "Taxa",
-    "link": "Link"
+    "link": "Link",
+    "sample__locality__locality": "Locality",
+    "sample__old_number": "Old sample number"
   },
   "reference": {
     "attachment__filename": "Filename",

@@ -3051,6 +3051,38 @@ export function fetchPreparations(data, dynamicSearch) {
       data.preparation_number__lookuptype || "icontains"
     }=${data.preparation_number}`;
   }
+  if (
+    data.sample__locality__locality &&
+    data.sample__locality__locality.trim().length > 0
+  ) {
+    searchFields += `sample__locality__locality__${
+      data.sample__locality__locality__lookuptype || "icontains"
+    }=${data.sample__locality__locality}`;
+  }
+  if (
+    data.sample__number_additional &&
+    data.sample__number_additional.trim().length > 0
+  ) {
+    searchFields += `sample__number_additional__${
+      data.sample__number_additional__lookuptype || "icontains"
+    }=${data.sample__number_additional}`;
+  }
+
+  if (data.stratigraphy !== null && data.stratigraphy.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+      data.stratigraphy
+    };fields:sample__stratigraphy__stratigraphy_en,sample__stratigraphy__stratigraphy,sample__lithostratigraphy__stratigraphy,sample__lithostratigraphy__stratigraphy_en;lookuptype:${
+      data.stratigraphy__lookuptype || "icontains"
+    }`;
+  }
+  if (data.sample__depth !== null && data.sample__depth.trim().length > 0) {
+    //searchFields += '&depth__exact='+data.depth
+    searchFields += `&multi_search=value:${
+      data.sample__depth
+    };fields:sample__depth,sample__depth_interval;lookuptype:${
+      data.sample__depth__lookuptype || "icontains"
+    }`;
+  }
 
   searchFields += buildDynamicSearch(dynamicSearch);
 
