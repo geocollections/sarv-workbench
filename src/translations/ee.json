@@ -1170,7 +1170,7 @@
     "database__name_en": "Andmebaas EN",
     "date_added": "Lisatud",
     "date_changed": "Muudetud",
-    "depth": "Sügavus",
+    "depth": "Sügavus (m)",
     "depth_interval": "Sügavus (kuni)",
     "id": "ID",
     "igsn": "IGSN",
