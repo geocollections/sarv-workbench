@@ -37,7 +37,16 @@
           <v-icon small>far fa-trash-alt</v-icon>
         </v-btn>
       </template>
-
+      <template v-slot:item.preparation_number="{ item }">
+        <router-link
+          :to="{ path: '/preparation/' + item.id }"
+          :title="$t('editPreparation.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.preparation_number }}
+        </router-link>
+      </template>
       <template v-slot:item.taxon="{ item }">
         <router-link
           v-if="$route.meta.isEdit"
@@ -154,12 +163,11 @@
 </template>
 
 <script>
-import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../../partial/inputs/InputWrapper";
 
 export default {
   name: "PreparationTable",

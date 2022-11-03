@@ -985,7 +985,11 @@
 
             <!-- PAGINATION -->
             <pagination
-              v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+              v-if="
+                $route.meta.isEdit &&
+                relatedData[activeTab].count > 10 &&
+                activeTab !== 'attachment_link'
+              "
               class="pa-1"
               :body-active-color="bodyActiveColor"
               :count="relatedData[activeTab].count"
@@ -1007,35 +1011,29 @@
 </template>
 
 <script>
-import {
-  fetchSample,
-  fetchSamplePurpose,
-  fetchLSampleAttachment,
-  fetchSampleReference,
-  fetchSampleAnalysis,
-  fetchSamplePreparation,
-  fetchTaxonList,
-  fetchLatestSampleInSite,
-} from "../../assets/js/api/apiCalls";
-import cloneDeep from "lodash/cloneDeep";
-import formManipulation from "../../mixins/formManipulation";
-import autocompleteMixin from "../../mixins/autocompleteMixin";
-import SampleWrapper from "./SampleWrapper";
-import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapState } from "vuex";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import InputWrapper from "../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import DateWrapper from "../partial/inputs/DateWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import FileInput from "../partial/inputs/FileInput";
-import AnalysisTable from "./relatedTables/AnalysisTable";
-import requestsMixin from "../../mixins/requestsMixin";
-import PreparationTable from "./relatedTables/PreparationTable";
-import TaxonListTable from "./relatedTables/TaxonListTable";
-import SampleReferenceTable from "./relatedTables/SampleReferenceTable";
-import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 import Pagination from "@/components/partial/Pagination";
+import saveAsNewMixin from "@/mixins/saveAsNewMixin";
+import cloneDeep from "lodash/cloneDeep";
+import { mapActions, mapState } from "vuex";
+import {
+fetchLatestSampleInSite, fetchLSampleAttachment, fetchSample, fetchSampleAnalysis,
+fetchSamplePreparation, fetchSamplePurpose, fetchSampleReference, fetchTaxonList
+} from "../../assets/js/api/apiCalls";
+import autocompleteMixin from "../../mixins/autocompleteMixin";
+import formManipulation from "../../mixins/formManipulation";
+import formSectionsMixin from "../../mixins/formSectionsMixin";
+import requestsMixin from "../../mixins/requestsMixin";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import DateWrapper from "../partial/inputs/DateWrapper";
+import FileInput from "../partial/inputs/FileInput";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import AnalysisTable from "./relatedTables/AnalysisTable";
+import PreparationTable from "./relatedTables/PreparationTable";
+import SampleReferenceTable from "./relatedTables/SampleReferenceTable";
+import TaxonListTable from "./relatedTables/TaxonListTable";
+import SampleWrapper from "./SampleWrapper";
 
 export default {
   name: "Sample",
@@ -1379,7 +1377,7 @@ export default {
           },
           attachment_link: {
             page: 1,
-            paginateBy: 10,
+            paginateBy: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },

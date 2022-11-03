@@ -89,10 +89,7 @@
     </template>
 
     <template v-slot:item.depth="{ item }">
-      <span v-if="item.depth && item.depth_interval"
-        >{{ item.depth }} - {{ item.depth_interval }} m</span
-      >
-      <span v-else>{{ item.depth }}</span>
+      <span>{{ item.depth }}</span>
     </template>
 
     <template v-slot:item.stratigraphy__id="{ item }">
@@ -162,8 +159,8 @@
 </template>
 
 <script>
-import activeListMixin from "../../mixins/activeListMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import activeListMixin from "../../mixins/activeListMixin";
 
 export default {
   name: "SampleTable",

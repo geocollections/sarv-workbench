@@ -27,7 +27,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -135,21 +135,29 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
 <script>
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper.vue";
 import InputWrapper from "../../partial/inputs/InputWrapper";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 import { cloneDeep } from "lodash";
 export default {
   name: "DatasetAnalysisTable",
   components: {
     AutocompleteWrapper,
     InputWrapper,
+    RelatedDataDeleteDialog,
   },
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
   props: {
     response: {
       type: Object,
@@ -283,14 +291,6 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "dataset_analysis",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
     },
 
     formatItem(item) {

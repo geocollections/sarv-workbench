@@ -27,12 +27,12 @@
 </template>
 
 <script>
-import ListModuleCore from "./ListModuleCore";
-import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchPreparations } from "@/assets/js/api/apiCalls";
-import searchParametersMixin from "../mixins/searchParametersMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import TableViewTitle from "../components/partial/table_view/TableViewTitle";
+import searchParametersMixin from "../mixins/searchParametersMixin";
+import ListModuleCore from "./ListModuleCore";
 
 export default {
   components: {
@@ -59,11 +59,28 @@ export default {
         title: "preparation.preparation_number",
         type: "text",
       },
+      {
+        id: "sample__locality__locality",
+        title: "preparation.sample__locality__locality",
+        type: "text",
+      },
+      {
+        id: "stratigraphy",
+        title: "common.stratigraphy",
+        type: "text",
+      },
+      { id: "sample__depth", title: "common.depth", type: "text" },
+      {
+        id: "sample__number_additional",
+        title: "preparation.sample__old_number",
+        type: "text",
+      },
     ]);
   },
 
   methods: {
     apiCall() {
+      console.log(this.searchParameters);
       return fetchPreparations(
         this.searchParameters,
         this.$_tableHeaderMixin_searchFields

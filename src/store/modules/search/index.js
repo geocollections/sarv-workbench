@@ -1,6 +1,6 @@
 import actions from "./actions";
-import mutations from "./mutations";
 import getters from "./getters";
+import mutations from "./mutations";
 
 const state = {
   loadingState: false,
@@ -264,6 +264,10 @@ const state = {
   analysisViewType: "table",
   preparationSearchParameters: {
     preparation_number: null,
+    sample__locality__locality: null,
+    stratigraphy: null,
+    sample__depth: null,
+    sample__number_additional: null,
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],

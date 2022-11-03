@@ -1170,7 +1170,7 @@
     "database__name_en": "Andmebaas EN",
     "date_added": "Lisatud",
     "date_changed": "Muudetud",
-    "depth": "Sügavus",
+    "depth": "Sügavus (m)",
     "depth_interval": "Sügavus (kuni)",
     "id": "ID",
     "igsn": "IGSN",
@@ -1623,7 +1623,6 @@
     "abstract": "Abstract",
     "locality__id": "Lokaliteet ID",
     "reference__id": "Reference ID",
-
     "copyright_agent": "Autoriõigus",
     "copyright_agent__id": "Autoriõigus ID",
     "copyright_agent__agent": "Autoriõigus",
@@ -1661,7 +1660,7 @@
     "reference": "Kirjandus",
     "title": "Pealkiri",
     "title_en": "Pealkiri EN",
-    "selection_series": "Valik",    
+    "selection_series": "Valik",
     "fill_using_selection": "Täida nimekirjad kasutades valikut",
     "fill_list": "Lisa nimekirja",
     "confirm_list_fill": "Kas sa oled kindel, et soovid valikus olevad analüüsid lisada laenu nimekirja?",
@@ -2099,7 +2098,9 @@
     "location": "Hoiukoht txt",
     "details": "Muu info",
     "taxa": "Taksonid",
-    "link": "Link"
+    "link": "Link",
+    "sample__locality__locality": "Lokaliteet",
+    "sample__old_number": "Vana proovi number"
   },
   "reference": {
     "attachment__filename": "Failinimi",
