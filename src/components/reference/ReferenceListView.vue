@@ -51,7 +51,7 @@
           <a
             :href="getDoiUrl(entity.doi)"
             :title="getDoiUrl(entity.doi)"
-            target="DoiWindow"
+            target="_blank"
             :class="`${bodyActiveColor}--text`"
             >https://doi.org/{{ entity.doi }}
           </a>
@@ -60,9 +60,8 @@
         <span>
           <a
             v-if="entity.attachment__filename"
-            :href="getFileUrl(entity.attachment__filename)"
             :title="getFileUrl(entity.attachment__filename)"
-            target="FileWindow"
+            @click="openWindow(getFileUrl(entity.attachment__filename))"
             class="green-link"
           >
             <b>PDF</b>
@@ -73,9 +72,8 @@
               entity.url &&
               getUrl(entity.url)
             "
-            :href="getUrl(entity.url)"
             :title="getUrl(entity.url)"
-            target="UrlWindow"
+            @click="openWindow(getUrl(entity.url))"
             rel="noopener noreferrer"
             class="red-link"
           >
@@ -119,7 +117,9 @@ export default {
         return "http://" + url.substring(url.indexOf("www."));
       else return false;
     },
-
+    openWindow(url) {
+      window.open(url, "", "width=1000,height=900");
+    },
     openDOI(params) {
       // TODO: Check for correct doi address
       window.open("https://doi.org/" + params.doi, "", "width=1000,height=900");
