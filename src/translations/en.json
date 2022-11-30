@@ -2160,7 +2160,7 @@
     "book_editor": "Editor(s)",
     "publisher": "Publisher",
     "publisherPlace": "Publisher place",
-    "checkDoi": "Check",
+    "checkDoi": "Populate using DOI",
     "journalAdditional": "Journal (Add'l)",
     "volume": "Volume",
     "number": "Number",

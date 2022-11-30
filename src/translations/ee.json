@@ -56,7 +56,8 @@
     "medium": "Keskmine",
     "large": "Suur",
     "original": "Originaal",
-    "fields": "Tabeli päised"
+    "fields": "Tabeli päised",
+    "fillUsingDoi": "Täida DOI abil"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -2159,7 +2160,7 @@
     "book_editor": "Toimetaja(d)",
     "publisher": "Kirjastus",
     "publisherPlace": "Kirjastuse asukoht",
-    "checkDoi": "Kontrolli",
+    "checkDoi": "Täida DOI abil",
     "journalAdditional": "Ajakirja lisainfo",
     "volume": "Köide",
     "number": "Number",

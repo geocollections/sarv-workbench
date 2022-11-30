@@ -1,5 +1,54 @@
 <template>
   <div class="reference">
+    <v-card
+      class="mt-2"
+      id="block-requiredFields"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <!-- <v-card-title class="pt-2 pb-1">
+        <div>
+          {{ $t("common.fillUsingDoi") }}
+        </div>
+      </v-card-title> -->
+      <div class="pa-1">
+        <div class="flex-grow-1">
+          <div class="d-flex flex-wrap">
+            <div class="flex-grow-1 pa-1">
+              <input-wrapper
+                v-model="reference.doi"
+                :color="bodyActiveColor"
+                label="DOI"
+              />
+            </div>
+
+            <div class="pa-1" v-if="reference.doi">
+              <v-btn
+                icon
+                :href="getDoiUrl(reference.doi)"
+                :title="getDoiUrl(reference.doi)"
+                target="DoiWindow"
+                :color="bodyActiveColor"
+              >
+                <v-icon>fas fa-external-link-alt</v-icon>
+              </v-btn>
+            </div>
+
+            <div class="pa-1 align-self-center">
+              <v-btn
+                id="check-doi"
+                :disabled="!isNotEmpty(reference.doi)"
+                @click="checkDoi"
+                :color="bodyActiveColor"
+                class="white--text"
+              >
+                {{ $t("reference.checkDoi") }}
+              </v-btn>
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-card>
     <!-- REQUIRED INFO -->
     <v-card
       class="mt-2"
@@ -232,52 +281,14 @@
             </v-col>
           </v-row>
 
-          <!-- DOI and URL-->
+          <!-- URL-->
           <div class="d-flex flex-wrap">
-            <!-- DOI -->
-            <div class="flex-grow-1">
-              <div class="d-flex flex-wrap">
-                <div class="flex-grow-1 pa-1">
-                  <input-wrapper
-                    v-model="reference.doi"
-                    :color="bodyActiveColor"
-                    label="DOI:"
-                  />
-                </div>
-
-                <div class="pa-1" v-if="reference.doi">
-                  <v-btn
-                    icon
-                    :href="getDoiUrl(reference.doi)"
-                    :title="getDoiUrl(reference.doi)"
-                    target="DoiWindow"
-                    :color="bodyActiveColor"
-                  >
-                    <v-icon>fas fa-external-link-alt</v-icon>
-                  </v-btn>
-                </div>
-
-                <div class="pa-1 align-self-center">
-                  <v-btn
-                    id="check-doi"
-                    :disabled="!isNotEmpty(reference.doi)"
-                    @click="checkDoi"
-                    class="text-none"
-                    :color="bodyActiveColor"
-                    dark
-                  >
-                    {{ $t("reference.checkDoi") }}
-                  </v-btn>
-                </div>
-              </div>
-            </div>
-
             <!-- URL -->
             <div class="flex-grow-1 pa-1">
               <input-wrapper
                 v-model="reference.url"
                 :color="bodyActiveColor"
-                label="URL:"
+                label="URL"
                 use-custom-state
                 :error="!isValidUrl"
               />
@@ -1708,7 +1719,9 @@ export default {
           value_en: "article in journal",
         };
       }
-
+      // NOTE: the abstract comes with weird HTML tags and simply setting it breaks them
+      // Ex. https://api.crossref.org/works/10.1017/S0016756809990185 contains `<jats:title>` and `<jats:p>`
+      //if (data.abstract) this.reference.abstract = data.abstract;
       this.toastInfo({ text: this.$t("reference.doiCheckSuccessful") });
     },
 
