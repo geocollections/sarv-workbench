@@ -250,10 +250,10 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <autocomplete-wrapper
-                v-model="relatedData.projectagent"
+                v-model="relatedData.project_agent"
                 :color="bodyActiveColor"
-                :items="autocomplete.projectagent"
-                :loading="autocomplete.loaders.projectagent"
+                :items="autocomplete.project_agent"
+                :loading="autocomplete.loaders.project_agent"
                 item-text="agent"
                 :label="$t('site.project')"
                 is-link
@@ -262,8 +262,8 @@
                 v-on:search:items="autocompleteProjectAgentSearch"
                 :multiple="true"
                 v-on:chip:close="
-                  relatedData.projectagent.splice(
-                    relatedData.projectagent.indexOf($event),
+                  relatedData.project_agent.splice(
+                    relatedData.project_agent.indexOf($event),
                     1
                   )
                 "
@@ -662,20 +662,20 @@ export default {
           "owner",
           "remarks",
           "is_private",
-          "projectagent",
+          "project_agent",
         ],
         autocomplete: {
           loaders: {
             project_type: false,
             parent_project: false,
             owner: false,
-            projectagent: false,
+            project_agent: false,
             attachment: false,
           },
           project_type: [],
           parent_project: [],
           agent: [],
-          projectagent: [],
+          project_agent: [],
           attachment: [],
         },
         requiredFields: ["name"],
@@ -758,7 +758,7 @@ export default {
             this.$emit("object-exists", false);
           }
         });
-        this.loadRelatedData("projectagent");
+        this.loadRelatedData("project_agent");
         this.loadRelatedData("attachment_link");
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
@@ -774,7 +774,7 @@ export default {
 
     setDefaultRalatedData() {
       return {
-        projectagent: [],
+        project_agent: [],
         attachment_link: [],
         sites: {
           count: 0,
@@ -788,9 +788,9 @@ export default {
             sortDesc: [true],
           },
         },
-        page: { projectagent: 1, attachment_link: 1 },
-        paginateBy: { projectagent: 25, attachment_link: 25 },
-        count: { projectagent: 0, attachment_link: 0 },
+        page: { project_agent: 1, attachment_link: 1 },
+        paginateBy: { project_agent: 25, attachment_link: 25 },
+        count: { project_agent: 0, attachment_link: 0 },
       };
     },
 
@@ -812,8 +812,8 @@ export default {
 
       //add related data
       uploadableObject.related_data = {};
-      if (this.relatedData.projectagent.length > 0) {
-        uploadableObject.related_data.agent = this.relatedData.projectagent;
+      if (this.relatedData.project_agent.length > 0) {
+        uploadableObject.related_data.agent = this.relatedData.project_agent;
       } else uploadableObject.related_data.agent = null;
       if (this.relatedData.attachment_link.length > 0) {
         uploadableObject.related_data.attachment =
@@ -858,7 +858,7 @@ export default {
       let relatedData = cloneDeep(obj);
       obj = [];
       relatedData.forEach((entity) => {
-        if (type === "projectagent") {
+        if (type === "project_agent") {
           let item = {
             agent: entity.projectagent__agent__agent,
             id: entity.projectagent__agent,
@@ -871,10 +871,10 @@ export default {
 
     loadRelatedData(object) {
       let query;
-      if (object === "projectagent") {
+      if (object === "project_agent") {
         query = fetchProjectAgent(
           this.$route.params.id,
-          this.relatedData.page.projectagent
+          this.relatedData.page.project_agent
         );
       } else if (object === "attachment_link") {
         query = fetchProjectAttachment(
@@ -888,7 +888,7 @@ export default {
           // if(object === 'site') resolve(query);
 
           query.then((response) => {
-            //projectagent do not have count value
+            //project_agent do not have count value
             if (response.status === 200)
               this.relatedData[object] = response.data.results
                 ? response.data.results
@@ -900,8 +900,8 @@ export default {
               object
             );
 
-            if (object === "projectagent") {
-              this.autocomplete.projectagent = this.relatedData[object];
+            if (object === "project_agent") {
+              this.autocomplete.project_agent = this.relatedData[object];
             }
             if (object === "attachment_link") {
               this.autocomplete.attachment = this.relatedData[object];
@@ -913,7 +913,7 @@ export default {
       }
     },
     setBlockVisibility(object, count) {
-      if (object === "projectagent") this.block.members = count > 0;
+      if (object === "project_agent") this.block.members = count > 0;
       if (object === "attachment_link") this.block.files = count > 0;
       if (object === "site") this.block.sites = count > 0;
     },

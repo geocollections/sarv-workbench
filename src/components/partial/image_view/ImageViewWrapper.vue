@@ -109,8 +109,8 @@
               </span>
             </span>
             <span v-else-if="object === 'location'">
-              <span v-if="image.attach_link__storage__location">
-                {{ image.attach_link__storage__location }}
+              <span v-if="image.attachment_link__storage__location">
+                {{ image.attachment_link__storage__location }}
               </span>
             </span>
             <span v-else-if="object === 'drillcore_box'">

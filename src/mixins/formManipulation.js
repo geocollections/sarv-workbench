@@ -397,7 +397,7 @@ const formManipulation = {
       console.log(files);
       console.log(totalAttachmentCount);
       console.log(singleFileMetadata);
-      let attach_link = `attach_link__${
+      let attachment_link = `attachment_link__${
         relatedObject === "location" ? "storage" : relatedObject
       }`;
 
@@ -428,7 +428,9 @@ const formManipulation = {
                 ? true
                 : false,
             is_locked: relatedObject === "doi",
-            related_data: { [attach_link]: [{ id: this[relatedObject].id }] },
+            related_data: {
+              [attachment_link]: [{ id: this[relatedObject].id }],
+            },
           };
 
           if (singleFileMetadata)

@@ -795,7 +795,7 @@ export function fetchLocalityAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -993,7 +993,7 @@ export function fetchLSampleAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1270,7 +1270,7 @@ export function fetchDoiAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__doi__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__doi__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1390,7 +1390,7 @@ export function fetchProjectAgent(id) {
 
 export function fetchProjectAttachment(id, page = 1) {
   return get(
-    `attachment/?attach_link__project__id=${id}&page=${page}&paginate_by=100&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__project__id=${id}&page=${page}&paginate_by=100&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1540,7 +1540,7 @@ export function fetchSiteAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__site__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__site__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1592,7 +1592,7 @@ export function fetchLastSiteName(projectId) {
 
 export function fetchRecentSites(currentUserId) {
   return get(
-    `site/?project__projectagent__agent=${currentUserId}&order_by=-id&paginate_by=30&fields=name,latitude,longitude,id`
+    `site/?project__project_agent__agent=${currentUserId}&order_by=-id&paginate_by=30&fields=name,latitude,longitude,id`
   );
 }
 
@@ -1715,7 +1715,7 @@ export function fetchAnalysisAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__analysis__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__analysis__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -2160,7 +2160,7 @@ export function fetchSpecimenAttachments(specimenId, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__specimen__id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__specimen__id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -2469,7 +2469,7 @@ export function fetchTaxonAttachments(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__taxon=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__taxon=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -2929,7 +2929,7 @@ export function fetchDrillcoreAttachments(drillcoreId, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__drillcore__id=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__drillcore__id=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -3031,7 +3031,7 @@ export function fetchDrillcoreBoxAttachments(drillcoreBoxId, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__drillcore_box__id=${drillcoreBoxId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    `attachment/?attachment_link__drillcore_box__id=${drillcoreBoxId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
   );
 }
 
@@ -3112,7 +3112,7 @@ export function fetchPreparationAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__preparation__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__preparation__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -3660,7 +3660,7 @@ export function fetchLocationAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__storage__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+    `attachment/?attachment_link__storage__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -4536,7 +4536,7 @@ export function fetchSampleSeriesAttachments(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__sample_series=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+    `attachment/?attachment_link__sample_series=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

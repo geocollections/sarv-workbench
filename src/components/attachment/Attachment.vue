@@ -663,7 +663,7 @@
                     :label="$t('attachment.relatedData')"
                     :items="relatedTabs"
                     item-text="name_short"
-                    translation-prefix="attachment.relatedTables.attach_link__"
+                    translation-prefix="attachment.relatedTables.attachment_link__"
                   />
                 </v-col>
 
@@ -675,21 +675,21 @@
                 >
                   <autocomplete-wrapper
                     v-model="
-                      relatedData['attach_link__' + selectedRelatedTable]
+                      relatedData['attachment_link__' + selectedRelatedTable]
                     "
                     :color="bodyActiveColor"
                     :items="
-                      autocomplete['attach_link__' + selectedRelatedTable]
+                      autocomplete['attachment_link__' + selectedRelatedTable]
                     "
                     :loading="
                       autocomplete.loaders[
-                        'attach_link__' + selectedRelatedTable
+                        'attachment_link__' + selectedRelatedTable
                       ]
                     "
                     :item-text="customLabelForRelatedData"
                     :label="
                       $t(
-                        'attachment.relatedTables.attach_link__' +
+                        'attachment.relatedTables.attachment_link__' +
                           selectedRelatedTable
                       )
                     "
@@ -706,10 +706,10 @@
                     :multiple="true"
                     v-on:chip:close="
                       relatedData[
-                        'attach_link__' + selectedRelatedTable
+                        'attachment_link__' + selectedRelatedTable
                       ].splice(
                         relatedData[
-                          'attach_link__' + selectedRelatedTable
+                          'attachment_link__' + selectedRelatedTable
                         ].indexOf($event),
                         1
                       )
@@ -724,12 +724,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__collection &&
-                    relatedData.attach_link__collection.length > 0
+                    relatedData.attachment_link__collection &&
+                    relatedData.attachment_link__collection.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__collection") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__collection")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -746,7 +748,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__collection"
+                          ) in relatedData.attachment_link__collection"
                           :key="index"
                         >
                           <td>
@@ -774,7 +776,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__collection.splice(
+                              relatedData.attachment_link__collection.splice(
                                 index,
                                 1
                               )
@@ -792,12 +794,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__specimen &&
-                    relatedData.attach_link__specimen.length > 0
+                    relatedData.attachment_link__specimen &&
+                    relatedData.attachment_link__specimen.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__specimen") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__specimen")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -814,7 +818,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__specimen"
+                          ) in relatedData.attachment_link__specimen"
                           :key="index"
                         >
                           <td>
@@ -842,7 +846,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__specimen.splice(index, 1)
+                              relatedData.attachment_link__specimen.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -857,12 +864,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__sample &&
-                    relatedData.attach_link__sample.length > 0
+                    relatedData.attachment_link__sample &&
+                    relatedData.attachment_link__sample.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__sample") }}
+                    {{ $t("attachment.relatedTables.attachment_link__sample") }}
                   </p>
 
                   <div class="table-responsive">
@@ -879,7 +886,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__sample"
+                          ) in relatedData.attachment_link__sample"
                           :key="index"
                         >
                           <td>
@@ -901,7 +908,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__sample.splice(index, 1)
+                              relatedData.attachment_link__sample.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -916,13 +926,15 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__sample_series &&
-                    relatedData.attach_link__sample_series.length > 0
+                    relatedData.attachment_link__sample_series &&
+                    relatedData.attachment_link__sample_series.length > 0
                   "
                 >
                   <p class="h4">
                     {{
-                      $t("attachment.relatedTables.attach_link__sample_series")
+                      $t(
+                        "attachment.relatedTables.attachment_link__sample_series"
+                      )
                     }}
                   </p>
 
@@ -940,7 +952,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__sample_series"
+                          ) in relatedData.attachment_link__sample_series"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -950,7 +962,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__sample_series.splice(
+                              relatedData.attachment_link__sample_series.splice(
                                 index,
                                 1
                               )
@@ -968,12 +980,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__analysis &&
-                    relatedData.attach_link__analysis.length > 0
+                    relatedData.attachment_link__analysis &&
+                    relatedData.attachment_link__analysis.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__analysis") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__analysis")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -990,7 +1004,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__analysis"
+                          ) in relatedData.attachment_link__analysis"
                           :key="index"
                         >
                           <td>
@@ -1021,7 +1035,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__analysis.splice(index, 1)
+                              relatedData.attachment_link__analysis.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -1036,12 +1053,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__dataset &&
-                    relatedData.attach_link__dataset.length > 0
+                    relatedData.attachment_link__dataset &&
+                    relatedData.attachment_link__dataset.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__dataset") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__dataset")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -1058,7 +1077,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__dataset"
+                          ) in relatedData.attachment_link__dataset"
                           :key="index"
                         >
                           <td>
@@ -1086,7 +1105,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__dataset.splice(index, 1)
+                              relatedData.attachment_link__dataset.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -1101,12 +1123,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__doi &&
-                    relatedData.attach_link__doi.length > 0
+                    relatedData.attachment_link__doi &&
+                    relatedData.attachment_link__doi.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__doi") }}
+                    {{ $t("attachment.relatedTables.attachment_link__doi") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1123,7 +1145,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__doi"
+                          ) in relatedData.attachment_link__doi"
                           :key="index"
                         >
                           <td>
@@ -1145,7 +1167,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__doi.splice(index, 1)
+                              relatedData.attachment_link__doi.splice(index, 1)
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -1160,12 +1182,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__locality &&
-                    relatedData.attach_link__locality.length > 0
+                    relatedData.attachment_link__locality &&
+                    relatedData.attachment_link__locality.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__locality") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__locality")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -1182,7 +1206,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__locality"
+                          ) in relatedData.attachment_link__locality"
                           :key="index"
                         >
                           <td>
@@ -1210,7 +1234,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__locality.splice(index, 1)
+                              relatedData.attachment_link__locality.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -1225,12 +1252,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__drillcore &&
-                    relatedData.attach_link__drillcore.length > 0
+                    relatedData.attachment_link__drillcore &&
+                    relatedData.attachment_link__drillcore.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__drillcore") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__drillcore")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -1247,7 +1276,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__drillcore"
+                          ) in relatedData.attachment_link__drillcore"
                           :key="index"
                         >
                           <td>
@@ -1275,7 +1304,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__drillcore.splice(
+                              relatedData.attachment_link__drillcore.splice(
                                 index,
                                 1
                               )
@@ -1293,13 +1322,15 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__drillcore_box &&
-                    relatedData.attach_link__drillcore_box.length > 0
+                    relatedData.attachment_link__drillcore_box &&
+                    relatedData.attachment_link__drillcore_box.length > 0
                   "
                 >
                   <p class="h4">
                     {{
-                      $t("attachment.relatedTables.attach_link__drillcore_box")
+                      $t(
+                        "attachment.relatedTables.attachment_link__drillcore_box"
+                      )
                     }}
                   </p>
 
@@ -1317,7 +1348,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__drillcore_box"
+                          ) in relatedData.attachment_link__drillcore_box"
                           :key="index"
                         >
                           <td>
@@ -1346,7 +1377,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__drillcore_box.splice(
+                              relatedData.attachment_link__drillcore_box.splice(
                                 index,
                                 1
                               )
@@ -1364,13 +1395,15 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__preparation !== null &&
-                    relatedData.attach_link__preparation.length > 0
+                    relatedData.attachment_link__preparation !== null &&
+                    relatedData.attachment_link__preparation.length > 0
                   "
                 >
                   <p class="h4">
                     {{
-                      $t("attachment.relatedTables.attach_link__preparation")
+                      $t(
+                        "attachment.relatedTables.attachment_link__preparation"
+                      )
                     }}
                   </p>
 
@@ -1388,7 +1421,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__preparation"
+                          ) in relatedData.attachment_link__preparation"
                           :key="index"
                         >
                           <td>
@@ -1410,7 +1443,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__preparation.splice(
+                              relatedData.attachment_link__preparation.splice(
                                 index,
                                 1
                               )
@@ -1428,8 +1461,8 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__reference !== null &&
-                    relatedData.attach_link__reference.length > 0
+                    relatedData.attachment_link__reference !== null &&
+                    relatedData.attachment_link__reference.length > 0
                   "
                 >
                   <p class="h4">
@@ -1450,7 +1483,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__reference"
+                          ) in relatedData.attachment_link__reference"
                           :key="index"
                         >
                           <td>
@@ -1472,7 +1505,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__reference.splice(
+                              relatedData.attachment_link__reference.splice(
                                 index,
                                 1
                               )
@@ -1490,12 +1523,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__storage !== null &&
-                    relatedData.attach_link__storage.length > 0
+                    relatedData.attachment_link__storage !== null &&
+                    relatedData.attachment_link__storage.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__storage") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__storage")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -1512,7 +1547,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__storage"
+                          ) in relatedData.attachment_link__storage"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -1528,7 +1563,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__storage.splice(index, 1)
+                              relatedData.attachment_link__storage.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -1543,12 +1581,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__project !== null &&
-                    relatedData.attach_link__project.length > 0
+                    relatedData.attachment_link__project !== null &&
+                    relatedData.attachment_link__project.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__project") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__project")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -1565,7 +1605,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__project"
+                          ) in relatedData.attachment_link__project"
                           :key="index"
                         >
                           <td>
@@ -1586,7 +1626,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__project.splice(index, 1)
+                              relatedData.attachment_link__project.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -1601,12 +1644,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__site !== null &&
-                    relatedData.attach_link__site.length > 0
+                    relatedData.attachment_link__site !== null &&
+                    relatedData.attachment_link__site.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__site") }}
+                    {{ $t("attachment.relatedTables.attachment_link__site") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1623,7 +1666,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__site"
+                          ) in relatedData.attachment_link__site"
                           :key="index"
                         >
                           <td>
@@ -1643,7 +1686,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__site.splice(index, 1)
+                              relatedData.attachment_link__site.splice(index, 1)
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -2461,7 +2504,7 @@
                     :label="$t('attachment.relatedData')"
                     :items="relatedTabs"
                     item-text="name_short"
-                    translation-prefix="attachment.relatedTables.attach_link__"
+                    translation-prefix="attachment.relatedTables.attachment_link__"
                   />
                 </v-col>
 
@@ -2473,21 +2516,21 @@
                 >
                   <autocomplete-wrapper
                     v-model="
-                      relatedData['attach_link__' + selectedRelatedTable]
+                      relatedData['attachment_link__' + selectedRelatedTable]
                     "
                     :color="bodyActiveColor"
                     :items="
-                      autocomplete['attach_link__' + selectedRelatedTable]
+                      autocomplete['attachment_link__' + selectedRelatedTable]
                     "
                     :loading="
                       autocomplete.loaders[
-                        'attach_link__' + selectedRelatedTable
+                        'attachment_link__' + selectedRelatedTable
                       ]
                     "
                     :item-text="customLabelForRelatedData"
                     :label="
                       $t(
-                        'attachment.relatedTables.attach_link__' +
+                        'attachment.relatedTables.attachment_link__' +
                           selectedRelatedTable
                       )
                     "
@@ -2504,10 +2547,10 @@
                     :multiple="true"
                     v-on:chip:close="
                       relatedData[
-                        'attach_link__' + selectedRelatedTable
+                        'attachment_link__' + selectedRelatedTable
                       ].splice(
                         relatedData[
-                          'attach_link__' + selectedRelatedTable
+                          'attachment_link__' + selectedRelatedTable
                         ].indexOf($event),
                         1
                       )
@@ -2522,12 +2565,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__collection &&
-                    relatedData.attach_link__collection.length > 0
+                    relatedData.attachment_link__collection &&
+                    relatedData.attachment_link__collection.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__collection") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__collection")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -2544,7 +2589,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__collection"
+                          ) in relatedData.attachment_link__collection"
                           :key="index"
                         >
                           <td>
@@ -2572,7 +2617,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__collection.splice(
+                              relatedData.attachment_link__collection.splice(
                                 index,
                                 1
                               )
@@ -2590,12 +2635,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__specimen &&
-                    relatedData.attach_link__specimen.length > 0
+                    relatedData.attachment_link__specimen &&
+                    relatedData.attachment_link__specimen.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__specimen") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__specimen")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -2612,7 +2659,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__specimen"
+                          ) in relatedData.attachment_link__specimen"
                           :key="index"
                         >
                           <td>
@@ -2640,7 +2687,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__specimen.splice(index, 1)
+                              relatedData.attachment_link__specimen.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -2655,12 +2705,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__sample &&
-                    relatedData.attach_link__sample.length > 0
+                    relatedData.attachment_link__sample &&
+                    relatedData.attachment_link__sample.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__sample") }}
+                    {{ $t("attachment.relatedTables.attachment_link__sample") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2677,7 +2727,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__sample"
+                          ) in relatedData.attachment_link__sample"
                           :key="index"
                         >
                           <td>
@@ -2699,7 +2749,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__sample.splice(index, 1)
+                              relatedData.attachment_link__sample.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -2714,13 +2767,15 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__sample_series &&
-                    relatedData.attach_link__sample_series.length > 0
+                    relatedData.attachment_link__sample_series &&
+                    relatedData.attachment_link__sample_series.length > 0
                   "
                 >
                   <p class="h4">
                     {{
-                      $t("attachment.relatedTables.attach_link__sample_series")
+                      $t(
+                        "attachment.relatedTables.attachment_link__sample_series"
+                      )
                     }}
                   </p>
 
@@ -2738,7 +2793,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__sample_series"
+                          ) in relatedData.attachment_link__sample_series"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -2748,7 +2803,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__sample_series.splice(
+                              relatedData.attachment_link__sample_series.splice(
                                 index,
                                 1
                               )
@@ -2766,12 +2821,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__analysis &&
-                    relatedData.attach_link__analysis.length > 0
+                    relatedData.attachment_link__analysis &&
+                    relatedData.attachment_link__analysis.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__analysis") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__analysis")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -2788,7 +2845,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__analysis"
+                          ) in relatedData.attachment_link__analysis"
                           :key="index"
                         >
                           <td>
@@ -2819,7 +2876,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__analysis.splice(index, 1)
+                              relatedData.attachment_link__analysis.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -2834,12 +2894,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__dataset &&
-                    relatedData.attach_link__dataset.length > 0
+                    relatedData.attachment_link__dataset &&
+                    relatedData.attachment_link__dataset.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__dataset") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__dataset")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -2856,7 +2918,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__dataset"
+                          ) in relatedData.attachment_link__dataset"
                           :key="index"
                         >
                           <td>
@@ -2884,7 +2946,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__dataset.splice(index, 1)
+                              relatedData.attachment_link__dataset.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -2899,12 +2964,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__doi &&
-                    relatedData.attach_link__doi.length > 0
+                    relatedData.attachment_link__doi &&
+                    relatedData.attachment_link__doi.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__doi") }}
+                    {{ $t("attachment.relatedTables.attachment_link__doi") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2921,7 +2986,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__doi"
+                          ) in relatedData.attachment_link__doi"
                           :key="index"
                         >
                           <td>
@@ -2943,7 +3008,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__doi.splice(index, 1)
+                              relatedData.attachment_link__doi.splice(index, 1)
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -2958,12 +3023,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__locality &&
-                    relatedData.attach_link__locality.length > 0
+                    relatedData.attachment_link__locality &&
+                    relatedData.attachment_link__locality.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__locality") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__locality")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -2980,7 +3047,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__locality"
+                          ) in relatedData.attachment_link__locality"
                           :key="index"
                         >
                           <td>
@@ -3008,7 +3075,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__locality.splice(index, 1)
+                              relatedData.attachment_link__locality.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -3023,12 +3093,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__drillcore &&
-                    relatedData.attach_link__drillcore.length > 0
+                    relatedData.attachment_link__drillcore &&
+                    relatedData.attachment_link__drillcore.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__drillcore") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__drillcore")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -3045,7 +3117,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__drillcore"
+                          ) in relatedData.attachment_link__drillcore"
                           :key="index"
                         >
                           <td>
@@ -3073,7 +3145,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__drillcore.splice(
+                              relatedData.attachment_link__drillcore.splice(
                                 index,
                                 1
                               )
@@ -3091,13 +3163,15 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__drillcore_box &&
-                    relatedData.attach_link__drillcore_box.length > 0
+                    relatedData.attachment_link__drillcore_box &&
+                    relatedData.attachment_link__drillcore_box.length > 0
                   "
                 >
                   <p class="h4">
                     {{
-                      $t("attachment.relatedTables.attach_link__drillcore_box")
+                      $t(
+                        "attachment.relatedTables.attachment_link__drillcore_box"
+                      )
                     }}
                   </p>
 
@@ -3115,7 +3189,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__drillcore_box"
+                          ) in relatedData.attachment_link__drillcore_box"
                           :key="index"
                         >
                           <td>
@@ -3144,7 +3218,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__drillcore_box.splice(
+                              relatedData.attachment_link__drillcore_box.splice(
                                 index,
                                 1
                               )
@@ -3162,13 +3236,15 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__preparation !== null &&
-                    relatedData.attach_link__preparation.length > 0
+                    relatedData.attachment_link__preparation !== null &&
+                    relatedData.attachment_link__preparation.length > 0
                   "
                 >
                   <p class="h4">
                     {{
-                      $t("attachment.relatedTables.attach_link__preparation")
+                      $t(
+                        "attachment.relatedTables.attachment_link__preparation"
+                      )
                     }}
                   </p>
 
@@ -3186,7 +3262,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__preparation"
+                          ) in relatedData.attachment_link__preparation"
                           :key="index"
                         >
                           <td>
@@ -3208,7 +3284,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__preparation.splice(
+                              relatedData.attachment_link__preparation.splice(
                                 index,
                                 1
                               )
@@ -3226,8 +3302,8 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__reference !== null &&
-                    relatedData.attach_link__reference.length > 0
+                    relatedData.attachment_link__reference !== null &&
+                    relatedData.attachment_link__reference.length > 0
                   "
                 >
                   <p class="h4">
@@ -3248,7 +3324,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__reference"
+                          ) in relatedData.attachment_link__reference"
                           :key="index"
                         >
                           <td>
@@ -3270,7 +3346,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__reference.splice(
+                              relatedData.attachment_link__reference.splice(
                                 index,
                                 1
                               )
@@ -3288,12 +3364,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__storage !== null &&
-                    relatedData.attach_link__storage.length > 0
+                    relatedData.attachment_link__storage !== null &&
+                    relatedData.attachment_link__storage.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__storage") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__storage")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -3310,7 +3388,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__storage"
+                          ) in relatedData.attachment_link__storage"
                           :key="index"
                         >
                           <td>
@@ -3331,7 +3409,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__storage.splice(index, 1)
+                              relatedData.attachment_link__storage.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -3346,12 +3427,14 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__project !== null &&
-                    relatedData.attach_link__project.length > 0
+                    relatedData.attachment_link__project !== null &&
+                    relatedData.attachment_link__project.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__project") }}
+                    {{
+                      $t("attachment.relatedTables.attachment_link__project")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -3368,7 +3451,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__project"
+                          ) in relatedData.attachment_link__project"
                           :key="index"
                         >
                           <td>
@@ -3389,7 +3472,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__project.splice(index, 1)
+                              relatedData.attachment_link__project.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -3404,12 +3490,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__site !== null &&
-                    relatedData.attach_link__site.length > 0
+                    relatedData.attachment_link__site !== null &&
+                    relatedData.attachment_link__site.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__site") }}
+                    {{ $t("attachment.relatedTables.attachment_link__site") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3426,7 +3512,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__site"
+                          ) in relatedData.attachment_link__site"
                           :key="index"
                         >
                           <td>
@@ -3446,7 +3532,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__site.splice(index, 1)
+                              relatedData.attachment_link__site.splice(index, 1)
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -3461,14 +3547,15 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__locality_description !== null &&
-                    relatedData.attach_link__locality_description.length > 0
+                    relatedData.attachment_link__locality_description !==
+                      null &&
+                    relatedData.attachment_link__locality_description.length > 0
                   "
                 >
                   <p class="h4">
                     {{
                       $t(
-                        "attachment.relatedTables.attach_link__locality_description"
+                        "attachment.relatedTables.attachment_link__locality_description"
                       )
                     }}
                   </p>
@@ -3487,7 +3574,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__locality_description"
+                          ) in relatedData.attachment_link__locality_description"
                           :key="index"
                         >
                           <td>{{ entity.id }}</td>
@@ -3499,7 +3586,7 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__locality_description.splice(
+                              relatedData.attachment_link__locality_description.splice(
                                 index,
                                 1
                               )
@@ -3517,12 +3604,12 @@
                 <div
                   class="col-sm-6 pa-1"
                   v-if="
-                    relatedData.attach_link__taxon !== null &&
-                    relatedData.attach_link__taxon.length > 0
+                    relatedData.attachment_link__taxon !== null &&
+                    relatedData.attachment_link__taxon.length > 0
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__taxon") }}
+                    {{ $t("attachment.relatedTables.attachment_link__taxon") }}
                   </p>
 
                   <div class="table-responsive">
@@ -3540,7 +3627,7 @@
                         <tr
                           v-for="(
                             entity, index
-                          ) in relatedData.attach_link__taxon"
+                          ) in relatedData.attachment_link__taxon"
                           :key="index"
                         >
                           <td>
@@ -3561,7 +3648,10 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__taxon.splice(index, 1)
+                              relatedData.attachment_link__taxon.splice(
+                                index,
+                                1
+                              )
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -4215,87 +4305,87 @@ export default {
         filePreviewKey: Date.now(),
         relatedTabs: [
           {
-            name: "attach_link__collection",
+            name: "attachment_link__collection",
             name_short: "collection",
             iconClass: "fas fa-server",
           },
           {
-            name: "attach_link__specimen",
+            name: "attachment_link__specimen",
             name_short: "specimen",
             iconClass: "fas fa-flask",
           },
           {
-            name: "attach_link__sample",
+            name: "attachment_link__sample",
             name_short: "sample",
             iconClass: "fas fa-vial",
           },
           {
-            name: "attach_link__sample_series",
+            name: "attachment_link__sample_series",
             name_short: "sample_series",
             iconClass: "fas fa-vials",
           },
           {
-            name: "attach_link__analysis",
+            name: "attachment_link__analysis",
             name_short: "analysis",
             iconClass: "fas fa-chart-pie",
           },
           {
-            name: "attach_link__dataset",
+            name: "attachment_link__dataset",
             name_short: "dataset",
             iconClass: "fas fa-server",
           },
           {
-            name: "attach_link__doi",
+            name: "attachment_link__doi",
             name_short: "doi",
             iconClass: "fas fa-database",
           },
           {
-            name: "attach_link__locality",
+            name: "attachment_link__locality",
             name_short: "locality",
             iconClass: "fas fa-map-marker-alt",
           },
           {
-            name: "attach_link__drillcore",
+            name: "attachment_link__drillcore",
             name_short: "drillcore",
             iconClass: "fas fa-tools",
           },
           {
-            name: "attach_link__drillcore_box",
+            name: "attachment_link__drillcore_box",
             name_short: "drillcore_box",
             iconClass: "fas fa-boxes",
           },
           {
-            name: "attach_link__preparation",
+            name: "attachment_link__preparation",
             name_short: "preparation",
             iconClass: "fas fa-prescription-bottle",
           },
           {
-            name: "attach_link__reference",
+            name: "attachment_link__reference",
             name_short: "reference",
             iconClass: "fas fa-book",
           },
           {
-            name: "attach_link__storage",
+            name: "attachment_link__storage",
             name_short: "storage",
             iconClass: "fas fa-archive",
           },
           {
-            name: "attach_link__project",
+            name: "attachment_link__project",
             name_short: "project",
             iconClass: "fas fa-project-diagram",
           },
           {
-            name: "attach_link__site",
+            name: "attachment_link__site",
             name_short: "site",
             iconClass: "fas fa-map-pin",
           },
           {
-            name: "attach_link__locality_description",
+            name: "attachment_link__locality_description",
             name_short: "locality_description",
             iconClass: "fas fa-align-left",
           },
           {
-            name: "attach_link__taxon",
+            name: "attachment_link__taxon",
             name_short: "taxon",
             iconClass: "fas fa-pastafarianism",
           },
@@ -4368,23 +4458,23 @@ export default {
             keyword: false,
             specimen: false,
             type: false,
-            attach_link__collection: false,
-            attach_link__specimen: false,
-            attach_link__sample: false,
-            attach_link__sample_series: false,
-            attach_link__analysis: false,
-            attach_link__dataset: false,
-            attach_link__doi: false,
-            attach_link__locality: false,
-            attach_link__drillcore: false,
-            attach_link__drillcore_box: false,
-            attach_link__preparation: false,
-            attach_link__reference: false,
-            attach_link__storage: false,
-            attach_link__project: false,
-            attach_link__site: false,
-            attach_link__locality_description: false,
-            attach_link__taxon: false,
+            attachment_link__collection: false,
+            attachment_link__specimen: false,
+            attachment_link__sample: false,
+            attachment_link__sample_series: false,
+            attachment_link__analysis: false,
+            attachment_link__dataset: false,
+            attachment_link__doi: false,
+            attachment_link__locality: false,
+            attachment_link__drillcore: false,
+            attachment_link__drillcore_box: false,
+            attachment_link__preparation: false,
+            attachment_link__reference: false,
+            attachment_link__storage: false,
+            attachment_link__project: false,
+            attachment_link__site: false,
+            attachment_link__locality_description: false,
+            attachment_link__taxon: false,
           },
           agent: [],
           imageset: [],
@@ -4397,23 +4487,23 @@ export default {
           keyword: [],
           specimen: [],
           type: [],
-          attach_link__collection: [],
-          attach_link__specimen: [],
-          attach_link__sample: [],
-          attach_link__sample_series: [],
-          attach_link__analysis: [],
-          attach_link__dataset: [],
-          attach_link__doi: [],
-          attach_link__locality: [],
-          attach_link__drillcore: [],
-          attach_link__drillcore_box: [],
-          attach_link__preparation: [],
-          attach_link__reference: [],
-          attach_link__storage: [],
-          attach_link__project: [],
-          attach_link__site: [],
-          attach_link__locality_description: [],
-          attach_link__taxon: [],
+          attachment_link__collection: [],
+          attachment_link__specimen: [],
+          attachment_link__sample: [],
+          attachment_link__sample_series: [],
+          attachment_link__analysis: [],
+          attachment_link__dataset: [],
+          attachment_link__doi: [],
+          attachment_link__locality: [],
+          attachment_link__drillcore: [],
+          attachment_link__drillcore_box: [],
+          attachment_link__preparation: [],
+          attachment_link__reference: [],
+          attachment_link__storage: [],
+          attachment_link__project: [],
+          attachment_link__site: [],
+          attachment_link__locality_description: [],
+          attachment_link__taxon: [],
         },
         requiredFields: {
           photo_archive: ["imageset"],
@@ -4519,7 +4609,7 @@ export default {
         fetchAttachmentLinkCollections(this.$route.params.id).then(
           (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__collection = collections.map(
+            this.relatedData.attachment_link__collection = collections.map(
               (entity) => {
                 return {
                   id: entity.collection,
@@ -4528,37 +4618,41 @@ export default {
                 };
               }
             );
-            this.autocomplete.attach_link__collection =
-              this.relatedData.attach_link__collection;
+            this.autocomplete.attachment_link__collection =
+              this.relatedData.attachment_link__collection;
           }
         );
         fetchAttachmentLinkSpecimens(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__specimen = collections.map((entity) => {
-            return {
-              id: entity.specimen,
-              specimen_id: entity.specimen_id,
-              coll__number: entity.specimen__coll__number,
-            };
-          });
-          this.autocomplete.attach_link__specimen =
-            this.relatedData.attach_link__specimen;
+          this.relatedData.attachment_link__specimen = collections.map(
+            (entity) => {
+              return {
+                id: entity.specimen,
+                specimen_id: entity.specimen_id,
+                coll__number: entity.specimen__coll__number,
+              };
+            }
+          );
+          this.autocomplete.attachment_link__specimen =
+            this.relatedData.attachment_link__specimen;
         });
         fetchAttachmentLinkSamples(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__sample = collections.map((entity) => {
-            return {
-              id: entity.sample,
-              number: entity.sample__number,
-            };
-          });
-          this.autocomplete.attach_link__sample =
-            this.relatedData.attach_link__sample;
+          this.relatedData.attachment_link__sample = collections.map(
+            (entity) => {
+              return {
+                id: entity.sample,
+                number: entity.sample__number,
+              };
+            }
+          );
+          this.autocomplete.attachment_link__sample =
+            this.relatedData.attachment_link__sample;
         });
         fetchAttachmentLinkSampleSeries(this.$route.params.id).then(
           (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__sample_series = collections.map(
+            this.relatedData.attachment_link__sample_series = collections.map(
               (entity) => {
                 return {
                   id: entity.sample_series,
@@ -4566,37 +4660,41 @@ export default {
                 };
               }
             );
-            this.autocomplete.attach_link__sample_series =
-              this.relatedData.attach_link__sample_series;
+            this.autocomplete.attachment_link__sample_series =
+              this.relatedData.attachment_link__sample_series;
           }
         );
         fetchAttachmentLinkAnalyses(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__analysis = collections.map((entity) => {
-            return {
-              id: entity.analysis,
-              sample__number: entity.analysis__sample__number,
-            };
-          });
-          this.autocomplete.attach_link__analysis =
-            this.relatedData.attach_link__analysis;
+          this.relatedData.attachment_link__analysis = collections.map(
+            (entity) => {
+              return {
+                id: entity.analysis,
+                sample__number: entity.analysis__sample__number,
+              };
+            }
+          );
+          this.autocomplete.attachment_link__analysis =
+            this.relatedData.attachment_link__analysis;
         });
         fetchAttachmentLinkDatasets(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__dataset = collections.map((entity) => {
-            return {
-              id: entity.dataset,
-              name: entity.dataset__name,
-              name_en: entity.dataset__name_en,
-            };
-          });
-          this.autocomplete.attach_link__dataset =
-            this.relatedData.attach_link__dataset;
+          this.relatedData.attachment_link__dataset = collections.map(
+            (entity) => {
+              return {
+                id: entity.dataset,
+                name: entity.dataset__name,
+                name_en: entity.dataset__name_en,
+              };
+            }
+          );
+          this.autocomplete.attachment_link__dataset =
+            this.relatedData.attachment_link__dataset;
         });
         fetchAttachmentLinkLocalities(this.$route.params.id).then(
           (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__locality = collections.map(
+            this.relatedData.attachment_link__locality = collections.map(
               (entity) => {
                 return {
                   id: entity.locality,
@@ -4605,14 +4703,14 @@ export default {
                 };
               }
             );
-            this.autocomplete.attach_link__locality =
-              this.relatedData.attach_link__locality;
+            this.autocomplete.attachment_link__locality =
+              this.relatedData.attachment_link__locality;
           }
         );
         fetchAttachmentLinkDrillcores(this.$route.params.id).then(
           (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__drillcore = collections.map(
+            this.relatedData.attachment_link__drillcore = collections.map(
               (entity) => {
                 return {
                   id: entity.drillcore,
@@ -4621,14 +4719,14 @@ export default {
                 };
               }
             );
-            this.autocomplete.attach_link__drillcore =
-              this.relatedData.attach_link__drillcore;
+            this.autocomplete.attachment_link__drillcore =
+              this.relatedData.attachment_link__drillcore;
           }
         );
         fetchAttachmentLinkDrillcoreBoxes(this.$route.params.id).then(
           (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__drillcore_box = collections.map(
+            this.relatedData.attachment_link__drillcore_box = collections.map(
               (entity) => {
                 return {
                   id: entity.drillcore_box,
@@ -4639,14 +4737,14 @@ export default {
                 };
               }
             );
-            this.autocomplete.attach_link__drillcore_box =
-              this.relatedData.attach_link__drillcore_box;
+            this.autocomplete.attachment_link__drillcore_box =
+              this.relatedData.attachment_link__drillcore_box;
           }
         );
         fetchAttachmentLinkPreparations(this.$route.params.id).then(
           (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__preparation = collections.map(
+            this.relatedData.attachment_link__preparation = collections.map(
               (entity) => {
                 return {
                   id: entity.preparation,
@@ -4654,14 +4752,14 @@ export default {
                 };
               }
             );
-            this.autocomplete.attach_link__preparation =
-              this.relatedData.attach_link__preparation;
+            this.autocomplete.attachment_link__preparation =
+              this.relatedData.attachment_link__preparation;
           }
         );
         fetchAttachmentLinkReferences(this.$route.params.id).then(
           (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__reference = collections.map(
+            this.relatedData.attachment_link__reference = collections.map(
               (entity) => {
                 return {
                   id: entity.reference,
@@ -4669,82 +4767,88 @@ export default {
                 };
               }
             );
-            this.autocomplete.attach_link__reference =
-              this.relatedData.attach_link__reference;
+            this.autocomplete.attachment_link__reference =
+              this.relatedData.attachment_link__reference;
           }
         );
         fetchAttachmentLinkDois(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__doi = collections.map((entity) => {
+          this.relatedData.attachment_link__doi = collections.map((entity) => {
             return {
               id: entity.doi,
               identifier: entity.doi__identifier,
             };
           });
-          this.autocomplete.attach_link__doi =
-            this.relatedData.attach_link__doi;
+          this.autocomplete.attachment_link__doi =
+            this.relatedData.attachment_link__doi;
         });
         fetchAttachmentLinkStorages(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__storage = collections.map((entity) => {
-            return {
-              id: entity.storage,
-              location: entity.storage__location,
-              contents: entity.storage__contents,
-            };
-          });
-          this.autocomplete.attach_link__storage =
-            this.relatedData.attach_link__storage;
+          this.relatedData.attachment_link__storage = collections.map(
+            (entity) => {
+              return {
+                id: entity.storage,
+                location: entity.storage__location,
+                contents: entity.storage__contents,
+              };
+            }
+          );
+          this.autocomplete.attachment_link__storage =
+            this.relatedData.attachment_link__storage;
         });
         fetchAttachmentLinkProjects(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__project = collections.map((entity) => {
-            return {
-              id: entity.project,
-              name: entity.project__name,
-              name_en: entity.project__name_en,
-            };
-          });
-          this.autocomplete.attach_link__project =
-            this.relatedData.attach_link__project;
+          this.relatedData.attachment_link__project = collections.map(
+            (entity) => {
+              return {
+                id: entity.project,
+                name: entity.project__name,
+                name_en: entity.project__name_en,
+              };
+            }
+          );
+          this.autocomplete.attachment_link__project =
+            this.relatedData.attachment_link__project;
         });
         fetchAttachmentLinkSites(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__site = collections.map((entity) => {
+          this.relatedData.attachment_link__site = collections.map((entity) => {
             return {
               id: entity.site,
               name: entity.site__name,
               name_en: entity.site__name_en,
             };
           });
-          this.autocomplete.attach_link__site =
-            this.relatedData.attach_link__site;
+          this.autocomplete.attachment_link__site =
+            this.relatedData.attachment_link__site;
         });
         fetchAttachmentLinkLocalityDescriptions(this.$route.params.id).then(
           (response) => {
             let collections = this.handleResponse(response);
-            this.relatedData.attach_link__locality_description =
+            this.relatedData.attachment_link__locality_description =
               collections.map((entity) => {
                 return {
                   id: entity.locality_description,
                   description: entity.locality_description__description,
                 };
               });
-            this.autocomplete.attach_link__locality_description =
-              this.relatedData.attach_link__locality_description;
+            this.autocomplete.attachment_link__locality_description =
+              this.relatedData.attachment_link__locality_description;
           }
         );
         fetchAttachmentLinkTaxa(this.$route.params.id).then((response) => {
           let collections = this.handleResponse(response);
-          this.relatedData.attach_link__taxon = collections.map((entity) => {
-            return {
-              id: entity.taxon,
-              taxon: entity.taxon__taxon,
-              author_year: entity.taxon__author_year,
-            };
-          });
-          this.autocomplete.attach_link__taxon =
-            this.relatedData.attach_link__taxon;
+          this.relatedData.attachment_link__taxon = collections.map(
+            (entity) => {
+              return {
+                id: entity.taxon,
+                taxon: entity.taxon__taxon,
+                author_year: entity.taxon__author_year,
+              };
+            }
+          );
+          this.autocomplete.attachment_link__taxon =
+            this.relatedData.attachment_link__taxon;
         });
       }
     },
@@ -4752,23 +4856,23 @@ export default {
     setDefaultRelatedData() {
       return {
         keyword: [],
-        attach_link__collection: [],
-        attach_link__specimen: [],
-        attach_link__sample: [],
-        attach_link__sample_series: [],
-        attach_link__analysis: [],
-        attach_link__dataset: [],
-        attach_link__doi: [],
-        attach_link__locality: [],
-        attach_link__drillcore: [],
-        attach_link__drillcore_box: [],
-        attach_link__preparation: [],
-        attach_link__reference: [],
-        attach_link__storage: [],
-        attach_link__project: [],
-        attach_link__site: [],
-        attach_link__locality_description: [],
-        attach_link__taxon: [],
+        attachment_link__collection: [],
+        attachment_link__specimen: [],
+        attachment_link__sample: [],
+        attachment_link__sample_series: [],
+        attachment_link__analysis: [],
+        attachment_link__dataset: [],
+        attachment_link__doi: [],
+        attachment_link__locality: [],
+        attachment_link__drillcore: [],
+        attachment_link__drillcore_box: [],
+        attachment_link__preparation: [],
+        attachment_link__reference: [],
+        attachment_link__storage: [],
+        attachment_link__project: [],
+        attachment_link__site: [],
+        attachment_link__locality_description: [],
+        attachment_link__taxon: [],
         searchParameters: {
           keyword: {
             page: 1,
