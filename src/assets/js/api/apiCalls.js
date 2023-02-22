@@ -1,11 +1,13 @@
 import qs from "qs";
 import Vue from "vue";
 import router from "../../../router";
+import store from "../../../store";
 
 const axios = require("axios");
 
 const api = {
-  url: "https://rwapi.geocollections.info/",
+  url: "https://rwapi.geoloogia.info/api/v0/",
+  accountsUrl: "https://rwapi.geoloogia.info/accounts/",
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",
@@ -74,9 +76,14 @@ axios.interceptors.response.use(function (response) {
 async function get(child = "", customUrl) {
   let url = api.url + child;
   if (customUrl) url = customUrl + child;
-
+  console.log(store.state);
+  const accessToken = store.state.user.authUser.access_token;
   try {
-    return await axios.get(url);
+    return await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
   } catch (error) {
     return error.request();
   }
@@ -133,19 +140,19 @@ async function post_delete(child, returnErrorResponse = false) {
  *******************/
 
 export function fetchLogin(userData) {
-  return post(`login/`, userData);
+  return post(`v0/login`, userData, api.accountsUrl);
 }
 
 export function fetchLoginId() {
-  return get(`loginid/`);
+  return get(`idcard`, api.accountsUrl);
 }
 
 export function fetchLogout() {
-  return get(`logout/`);
+  return post(`dj-rest-auth/logout`, {}, api.accountsUrl);
 }
 
 export function fetchIsLoggedIn() {
-  return get(`is_logged_in/login_state`);
+  return get(`v0/login_state`, api.accountsUrl);
 }
 
 /*******************
@@ -4450,7 +4457,7 @@ export function fetchSarvIssues(data, currentUserId, dynamicSearch) {
 
 export function fetchLastLoggedInDate(currentUserId) {
   return get(
-    `sarv_session/?userid=${currentUserId}&order_by=-id&paginate_by=1&session_end!=null&format=json`
+    `sarv_session/?user_id=${currentUserId}&order_by=-id&paginate_by=1&session_end!=null&format=json`
   );
 }
 

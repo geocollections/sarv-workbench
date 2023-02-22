@@ -90,7 +90,7 @@ export default {
   components: { InputWrapper, FileInput },
   data: () => ({
     test: {
-      url: "https://rwapi.geocollections.info/import/",
+      url: "https://rwapi.geoloogia.info/api/v0/import/",
       table: "area",
       file: [],
       textKey: "text",

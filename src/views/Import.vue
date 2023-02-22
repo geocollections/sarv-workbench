@@ -123,7 +123,7 @@ export default {
   mixins: [toastMixin],
 
   data: () => ({
-    url: "https://rwapi.geocollections.info/import/",
+    url: "https://rwapi.geoloogia.info/api/v0/import/",
     importResponse: null,
     file: null,
     attachment: null,
