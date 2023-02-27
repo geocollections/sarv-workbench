@@ -18,72 +18,101 @@ const attachmentFields =
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
-  if (config.url.includes("rwapi") && !config.url.includes("/egf/")) {
+  if (
+    config.url.includes("rwapi") &&
+    !config.url.includes("/login/") &&
+    !config.url.includes("/idcard") &&
+    !config.url.includes("/egf/")
+  ) {
     let csrftoken = Vue.$cookies.get("csrftoken");
     config.withCredentials = true;
     config.headers["X-CSRFTOKEN"] = csrftoken;
+    config.headers[
+      "Authorization"
+    ] = `Bearer ${store?.state?.user?.authUser?.access_token}`;
   }
 
   return config;
 });
 
 // Add a response interceptor
-axios.interceptors.response.use(function (response) {
-  if (response.status === 200 && response.config.url.includes("rwapi")) {
-    // Showing Missing permissions message
-    if (response.data.error_permissions) {
-      Vue.prototype.toast.error(
-        response.data.error_permissions,
-        "Missing permissions",
-        {
+axios.interceptors.response.use(
+  function (response) {
+    if (response.status === 200 && response.config.url.includes("rwapi")) {
+      // Showing Missing permissions message
+      if (response.data.error_permissions) {
+        Vue.prototype.toast.error(
+          response.data.error_permissions,
+          "Missing permissions",
+          {
+            position: "topCenter",
+            timeout: 5000,
+            closeOnEscape: true,
+            pauseOnHover: false,
+            displayMode: "replace",
+          }
+        );
+      }
+
+      // Destroying session and redirecting to login view
+      if (response.data.error_not_logged_in) {
+        Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
+        Vue.$cookies.remove("csrftoken", null, "geocollections.info");
+        Vue.prototype.toast.error("Please log back in", "Session expired", {
           position: "topCenter",
           timeout: 5000,
           closeOnEscape: true,
           pauseOnHover: false,
           displayMode: "replace",
-        }
+        });
+        router.push({ path: "/" });
+      }
+
+      // Showing link error message
+      if (response.data.link_error) {
+        Vue.prototype.toast.error(response.data.link_error, "Error", {
+          position: "topCenter",
+          timeout: 99999999999,
+          pauseOnHover: false,
+          displayMode: "replace",
+        });
+      }
+    }
+
+    return response;
+  },
+  async (error) => {
+    const config = error?.config;
+    if (error?.response?.status === 401 && !config?._retry) {
+      config._retry = true;
+
+      const refreshToken = store.state.user.authUser.refresh_token;
+      const newAccessTokenResponse = await axios.post(
+        `${api.accountsUrl}/dj-rest-auth/token/refresh/`,
+        { refresh: refreshToken }
       );
-    }
+      const newAuthUser = {
+        ...store.state.user.authUser,
+        access_token: newAccessTokenResponse.data.access,
+      };
+      await store.dispatch("user/setAuthUser", newAuthUser);
+      if (newAccessTokenResponse?.data.access) {
+        config.headers[
+          "Authorization"
+        ] = `Bearer ${newAccessTokenResponse?.data.access}`;
+      }
 
-    // Destroying session and redirecting to login view
-    if (response.data.error_not_logged_in) {
-      Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
-      Vue.$cookies.remove("csrftoken", null, "geocollections.info");
-      Vue.prototype.toast.error("Please log back in", "Session expired", {
-        position: "topCenter",
-        timeout: 5000,
-        closeOnEscape: true,
-        pauseOnHover: false,
-        displayMode: "replace",
-      });
-      router.push({ path: "/" });
+      return axios(config);
     }
-
-    // Showing link error message
-    if (response.data.link_error) {
-      Vue.prototype.toast.error(response.data.link_error, "Error", {
-        position: "topCenter",
-        timeout: 99999999999,
-        pauseOnHover: false,
-        displayMode: "replace",
-      });
-    }
+    return Promise.reject(error);
   }
-
-  return response;
-});
+);
 
 async function get(child = "", customUrl) {
   let url = api.url + child;
   if (customUrl) url = customUrl + child;
-  console.log(store.state);
-  const accessToken = store.state.user.authUser.access_token;
   try {
-    return await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    return await axios.get(url);
   } catch (error) {
     return error.request();
   }
@@ -852,7 +881,7 @@ export function fetchAnalysisMethod() {
 
 export function fetchSamples(data, dynamicSearch) {
   const fields =
-    "number,number_additional,number_field,igsn,series,series__name,parent_sample,parent_sample__number,parent_specimen,parent_specimen__specimen_id,sample_purpose,sample_purpose__value,sample_purpose__value_en,sample_type,locality,locality__locality,locality__locality_en,site,site__name,site__name_en,locality_free,soil_site,soil_site__site,soil_site__site_en,latitude1,longitude1,x1,y1,epsg,coordinate_accuracy,depth,depth_interval,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,stratigraphy_bed,soil_horizon,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,classification_rock,classification_rock__name,classification_rock__name_en,rock,rock_en,fossils,palaeontology,analysis,mass,location,location_additional,storage,storage__location,storage_additional,storage_additional__location,remarks,user_added,date_added,user_changed,date_changed,owner,owner__agent,is_private,database__acronym,id,number,database__name_label";
+    "number,number_additional,number_field,igsn,series,series__name,parent_sample,parent_sample__number,parent_specimen,parent_specimen__specimen_id,sample_purpose,sample_purpose__value,sample_purpose__value_en,sample_type,locality,locality__locality,locality__locality_en,site,site__name,site__name_en,locality_free,latitude1,longitude1,x1,y1,epsg,coordinate_accuracy,depth,depth_interval,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,stratigraphy_bed,soil_horizon,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,classification_rock,classification_rock__name,classification_rock__name_en,rock,rock_en,fossils,palaeontology,analysis,mass,location,location_additional,storage,storage__location,storage_additional,storage_additional__location,remarks,user_added,date_added,user_changed,date_changed,owner,owner__agent,is_private,database__acronym,id,number,database__name_label";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
