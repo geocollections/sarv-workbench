@@ -63,16 +63,15 @@ const authenticationMixin = {
      * and then log out request is initiated.
      */
     logOut() {
-      this.$cookies.remove("csrftokenLocalhost", null, "localhost");
-      this.$cookies.remove("csrftoken", null, "geocollections.info");
-      this.removeAuthUser();
-
       fetchLogout().then((response) => {
         if (response.status === 200) {
           this.$router.push({
             name: "login",
             params: { dontShowSessionExpired: true },
           });
+          this.$cookies.remove("csrftokenLocalhost", null, "localhost");
+          this.$cookies.remove("csrftoken", null, "geocollections.info");
+          this.removeAuthUser();
           this.$_authenticationMixin_toastSuccessMessage(
             response,
             this.$i18n.locale
