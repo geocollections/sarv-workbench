@@ -2594,44 +2594,51 @@ router.beforeEach(async (to, from, next) => {
   // console.log('--- TO ---');
   // console.log(to);
 
-  const loginPath = window.location.pathname;
-
-  const loginStateResponse = await fetchIsLoggedIn().then(
-    (response) => response,
-    (errResponse) => errResponse
-  );
-
-  const isLoggedIn = handleResponse(loginStateResponse);
-
-  if (isLoggedIn) {
-    const loggedInUser = getLoggedInUser(loginStateResponse);
-
-    if (checkCookiesAndStorage(loggedInUser)) {
-      if (to.meta.requiresAuth) next();
-      else {
-        if (to.name === "login") next({ path: "/dashboard" });
-        else next();
-      }
-    } else {
-      removeBrowserDataAndLogout();
-      next({ path: "/" });
-    }
+  const publicPages = ["/"];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = store.state.user.authUser;
+  if (authRequired && !loggedIn) {
+    next("/");
   } else {
-    if (from.fullPath !== "/") {
-      if (to.params.dontShowSessionExpired === false) {
-        Vue.prototype.toast.error("Please log back in", "Session expired", {
-          position: "topCenter",
-          timeout: 5000,
-          closeOnEscape: true,
-          pauseOnHover: false,
-          displayMode: "replace",
-        });
-      }
-    }
-
-    if (to.meta.requiresAuth) next({ path: "/", query: { from: loginPath } });
-    else next();
+    next();
   }
+  // const loginPath = window.location.pathname;
+  //
+  // const loginStateResponse = await fetchIsLoggedIn().then(
+  //   (response) => response,
+  //   (errResponse) => errResponse
+  // );
+  // const isLoggedIn = handleResponse(loginStateResponse);
+  //
+  // if (isLoggedIn) {
+  //   const loggedInUser = getLoggedInUser(loginStateResponse);
+  //
+  //   if (checkCookiesAndStorage(loggedInUser)) {
+  //     if (to.meta.requiresAuth) next();
+  //     else {
+  //       if (to.name === "login") next({ path: "/dashboard" });
+  //       else next();
+  //     }
+  //   } else {
+  //     removeBrowserDataAndLogout();
+  //     next({ path: "/" });
+  //   }
+  // } else {
+  //   if (from.fullPath !== "/") {
+  //     if (to.params.dontShowSessionExpired === false) {
+  //       Vue.prototype.toast.error("Please log back in", "Session expired", {
+  //         position: "topCenter",
+  //         timeout: 5000,
+  //         closeOnEscape: true,
+  //         pauseOnHover: false,
+  //         displayMode: "replace",
+  //       });
+  //     }
+  //   }
+  //
+  //   if (to.meta.requiresAuth) next({ path: "/", query: { from: loginPath } });
+  //   else next();
+  // }
 });
 
 function checkCookiesAndStorage(user) {
