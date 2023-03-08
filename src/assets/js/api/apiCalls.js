@@ -6,8 +6,8 @@ import store from "../../../store";
 const axios = require("axios");
 
 const api = {
-  url: "https://rwapi.geoloogia.info/api/v0/",
-  accountsUrl: "https://rwapi.geoloogia.info/accounts/",
+  url: "https://rwapi-dev.geoloogia.info/api/v0/",
+  accountsUrl: "https://rwapi-dev.geoloogia.info/accounts/",
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",

@@ -105,15 +105,15 @@ const authenticationMixin = {
           response.data.expires = date.setDate(date.getDate() + 7);
 
           // Cookie for localhost
-          this.$cookies.set(
-            "csrftokenLocalhost",
-            "test token",
-            "1d",
-            null,
-            "localhost",
-            true,
-            "Lax"
-          );
+          // this.$cookies.set(
+          //   "csrftokenLocalhost",
+          //   "test token",
+          //   "1d",
+          //   null,
+          //   "localhost",
+          //   true,
+          //   "Lax"
+          // );
           this.setAuthUser(response.data);
 
           if (this.$route.query.from) {
