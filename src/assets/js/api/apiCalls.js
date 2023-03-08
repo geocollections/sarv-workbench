@@ -817,7 +817,7 @@ export function fetchLocalityImage(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `locality_image/?taxon_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+    `locality_image/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
