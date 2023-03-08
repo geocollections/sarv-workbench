@@ -1890,8 +1890,15 @@
       "locality_synonym": "Nime sünonüümid",
       "attachment_link": "Manused",
       "locality_stratigraphy": "Strat. piirid",
-      "locality_description": "Kirjeldus"
+      "locality_description": "Kirjeldus",
+      "locality_image": "Pildid"
     }
+  },
+  "localityImage": {
+    "attachment": "Pilt",
+    "attachment_filename": "Failinimi",
+    "title": "Pealkiri",
+    "title_en": "Pealkiri (EN)"
   },
   "agent": {
     "country__id": "Riik ID",

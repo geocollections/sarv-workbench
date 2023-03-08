@@ -1891,8 +1891,15 @@
       "locality_synonym": "Synonyms",
       "attachment_link": "Attachment",
       "locality_stratigraphy": "Stratigraphy",
-      "locality_description": "Description"
+      "locality_description": "Description",
+      "locality_image": "Images"
     }
+  },
+  "localityImage": {
+    "attachment": "Image",
+    "attachment_filename": "Filename",
+    "title": "Title",
+    "title_en": "Title (EN)"
   },
   "agent": {
     "country__id": "Country ID",
