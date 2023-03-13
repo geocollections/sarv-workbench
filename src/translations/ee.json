@@ -1899,7 +1899,8 @@
     "attachment": "Pilt",
     "attachment_filename": "Failinimi",
     "title": "Pealkiri",
-    "title_en": "Pealkiri (EN)"
+    "title_en": "Pealkiri (EN)",
+    "sort": "Järjekord"
   },
   "agent": {
     "country__id": "Riik ID",
