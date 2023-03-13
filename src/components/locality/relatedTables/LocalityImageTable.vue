@@ -160,13 +160,20 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
+                    v-model="item.sort"
+                    :color="bodyActiveColor"
+                    :label="$t('localityImage.sort')"
+                  />
+                </v-col>
+                <v-col cols="12" md="12" class="pa-1">
+                  <input-wrapper
                     v-model="item.title"
                     :color="bodyActiveColor"
                     :label="$t('localityImage.title')"
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" md="12" class="pa-1">
                   <input-wrapper
                     v-model="item.title_en"
                     :color="bodyActiveColor"
@@ -174,7 +181,7 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" md="12" class="pa-1">
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
@@ -234,7 +241,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          paginateBy: 10,
         };
       },
     },
@@ -261,6 +268,7 @@ export default {
       { text: "localityImage.attachment_filename", value: "attachment" },
       { text: "localityImage.title", value: "title" },
       { text: "localityImage.title_en", value: "title_en" },
+      { text: "localityImage.sort", value: "sort" },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -275,6 +283,7 @@ export default {
       title: "",
       title_en: "",
       remarks: "",
+      sort: null
     },
     isNewItem: true,
     autocomplete: {
@@ -357,6 +366,7 @@ export default {
       this.item.title = item.title;
       this.item.title_en = item.title_en;
       this.item.remarks = item.remarks;
+      this.item.sort = item.sort
 
       this.dialog = true;
     },
