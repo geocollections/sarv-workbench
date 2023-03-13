@@ -142,23 +142,24 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" md="8" class="pa-1">
                   <autocomplete-wrapper
                     v-model="item.attachment"
                     :color="bodyActiveColor"
                     :items="autocomplete.attachment"
                     :loading="autocomplete.loaders.attachment"
-                    item-text="original_filename"
+                    :item-text="(item) => `${item.original_filename} (${item.id})`"
                     use-state
                     :label="$t('localityImage.attachment')"
                     is-link
                     route-object="attachment"
                     is-searchable
+                    no-filter
                     v-on:search:items="autocompletePublicAttachmentImageSearch"
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" md="4" class="pa-1">
                   <input-wrapper
                     v-model="item.sort"
                     :color="bodyActiveColor"
