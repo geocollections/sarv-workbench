@@ -290,7 +290,8 @@
     "taxon_pages": "Taksoni veebilehed",
     "stratigraphy_catalogue": "Kataloog",
     "selection_series": "Valikud",
-    "geography": "Geograafia"
+    "geography": "Geograafia",
+    "locality_image": "Image"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"

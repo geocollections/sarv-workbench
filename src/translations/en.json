@@ -289,7 +289,8 @@
     "taxon_pages": "Taxon pages",
     "stratigraphy_catalogue": "Catalogue",
     "selection_series": "Selections",
-    "geography": "Geography"
+    "geography": "Geography",
+    "locality_image": "Image"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1899,7 +1900,8 @@
     "attachment": "Image",
     "attachment_filename": "Filename",
     "title": "Title",
-    "title_en": "Title (EN)"
+    "title_en": "Title (EN)",
+    "sort": "Order"
   },
   "agent": {
     "country__id": "Country ID",
