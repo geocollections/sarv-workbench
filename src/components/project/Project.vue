@@ -860,8 +860,8 @@ export default {
       relatedData.forEach((entity) => {
         if (type === "project_agent") {
           let item = {
-            agent: entity.projectagent__agent__agent,
-            id: entity.projectagent__agent,
+            agent: entity.project_agent__agent__agent,
+            id: entity.project_agent__agent,
           };
           obj.push(item);
         } else obj.push(entity);

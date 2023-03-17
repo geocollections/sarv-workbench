@@ -2589,19 +2589,30 @@ router.beforeEach(async (to, from, next) => {
     x: document.documentElement.scrollLeft,
     y: document.documentElement.scrollTop,
   };
-  // console.log('--- FROM ---');
-  // console.log(from);
-  // console.log('--- TO ---');
-  // console.log(to);
 
-  const publicPages = ["/"];
-  const authRequired = !publicPages.includes(to.path);
-  const loggedIn = store.state.user.authUser;
-  if (authRequired && !loggedIn) {
+  const loginStateResponse = await fetchIsLoggedIn().then(
+    (response) => response,
+    (errResponse) => errResponse
+  );
+  const isLoggedIn = handleResponse(loginStateResponse);
+
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    if (to.params.dontShowSessionExpired === false) {
+      Vue.prototype.toast.error("Please log back in", "Session expired", {
+        position: "topCenter",
+        timeout: 5000,
+        closeOnEscape: true,
+        pauseOnHover: false,
+        displayMode: "replace",
+      });
+    }
+    removeBrowserDataAndLogout();
     next("/");
-  } else {
-    next();
   }
+
+  next();
+
+  // NOTE: old login checking logic. the one above should function the same but need to check if everything is ported over
   // const loginPath = window.location.pathname;
   //
   // const loginStateResponse = await fetchIsLoggedIn().then(

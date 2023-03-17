@@ -491,13 +491,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "locality_description",
+          table: "locality_stratigraphy",
           item: formattedItem,
           rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
-          table: "locality_description",
+          table: "locality_stratigraphy",
           item: formattedItem,
           rawItem: this.item,
         });

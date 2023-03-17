@@ -8,6 +8,7 @@ const axios = require("axios");
 const api = {
   url: "https://rwapi-dev.geoloogia.info/api/v0/",
   accountsUrl: "https://rwapi-dev.geoloogia.info/accounts/",
+  dataciteUrl: "https://rwapi-dev.geoloogia.info/datacite/",
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",
@@ -29,7 +30,7 @@ axios.interceptors.request.use(function (config) {
     config.headers["X-CSRFTOKEN"] = csrftoken;
     config.headers[
       "Authorization"
-    ] = `Bearer ${store?.state?.user?.authUser?.access_token}`;
+    ] = `Token ${store?.state?.user?.authUser?.token}`;
   }
 
   return config;
@@ -82,31 +83,17 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const config = error?.config;
-    if (error?.response?.status === 401 && !config?._retry) {
-      config._retry = true;
-
-      const refreshToken = store.state.user.authUser.refresh_token;
-      const newAccessTokenResponse = await axios.post(
-        `${api.accountsUrl}/dj-rest-auth/token/refresh/`,
-        { refresh: refreshToken }
-      );
-      const newAuthUser = {
-        ...store.state.user.authUser,
-        access_token: newAccessTokenResponse.data.access,
-      };
-      await store.dispatch("user/setAuthUser", newAuthUser);
-      if (newAccessTokenResponse?.data.access) {
-        config.headers[
-          "Authorization"
-        ] = `Bearer ${newAccessTokenResponse?.data.access}`;
-      }
-
-      return axios(config);
+    if (error.status === 401) {
+      await store.dispatch("user/setAuthUser", null);
     }
     return Promise.reject(error);
   }
 );
+function handleResponse(response) {
+  if (response.status === 200) {
+    return !!response?.data?.results?.success;
+  } else return false;
+}
 
 async function get(child = "", customUrl) {
   let url = api.url + child;
@@ -177,7 +164,7 @@ export function fetchLoginId() {
 }
 
 export function fetchLogout() {
-  return post(`dj-rest-auth/logout`, {}, api.accountsUrl);
+  return post(`knox/auth/logout`, {}, api.accountsUrl);
 }
 
 export function fetchIsLoggedIn() {
@@ -1372,19 +1359,19 @@ export function fetchAddDoiAgent(data) {
 }
 
 export function fetchCheckMetadataInDataCite(id) {
-  return get(`datacite/check_metadata/${id}`);
+  return get(`metadata/${id}`, api.dataciteUrl);
 }
 
 export function fetchCheckDoiUrlInDataCite(id) {
-  return get(`datacite/check_doi/${id}`);
+  return get(`doi/${id}`, api.dataciteUrl);
 }
 
 export function fetchRegisterMetadataToDataCite(id) {
-  return get(`datacite/register_metadata/${id}`);
+  return post(`metadata/${id}`, api.dataciteUrl);
 }
 
 export function fetchRegisterDoiUrlToDataCite(id) {
-  return get(`datacite/register_doi/${id}`);
+  return post(`doi/${id}`, api.dataciteUrl);
 }
 
 /*****************
@@ -1413,7 +1400,7 @@ export function fetchProject(id) {
 
 export function fetchProjectAgent(id) {
   return get(
-    `project/${id}?fields=id,projectagent__agent,projectagent__agent__agent&format=json`
+    `project/${id}?fields=id,project_agent__agent,project_agent__agent__agent&format=json`
   );
 }
 
@@ -2488,7 +2475,7 @@ export function fetchTaxonPage(taxonId, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `taxon_page/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+    `taxon_page/?taxon=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

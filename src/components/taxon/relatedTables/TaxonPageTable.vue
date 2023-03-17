@@ -37,6 +37,31 @@
           <v-icon small>far fa-trash-alt</v-icon>
         </v-btn>
       </template>
+      <template v-slot:item.language="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <span
+            v-if="$route.meta.isEdit"
+            v-translate="{
+              et: item.language__value,
+              en: item.language__value_en,
+            }"
+          />
+          <span
+            v-else-if="item.language"
+            v-translate="{
+              et: item.language.value,
+              en: item.language.value_en,
+            }"
+          />
+        </div>
+        <div
+          v-else
+          v-translate="{
+            et: item.language__value,
+            en: item.language__value_en,
+          }"
+        ></div>
+      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
@@ -60,7 +85,7 @@
                     :color="bodyActiveColor"
                     :items="autocomplete.language"
                     :loading="autocomplete.loaders.language"
-                    item-text="iso1"
+                    :item-text="commonLabel"
                     :label="$t('taxon.language')"
                   />
                 </v-col>
@@ -213,7 +238,7 @@ export default {
     ],
     dialog: false,
     item: {
-      language: "",
+      language: null,
       frontpage: "",
       frontpage_title: "",
       title: "",
@@ -258,7 +283,7 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        language: "",
+        language: null,
         frontpage: "",
         frontpage_title: "",
         title: "",
@@ -304,8 +329,14 @@ export default {
         this.item.author = item.author;
         this.autocomplete.agent.push(this.item.author);
       }
+      if (typeof item.language !== "object" && item.language !== null) {
+        this.item.language = {
+          id: item.language__id,
+          value: item.language__value,
+          value_en: item.language__value_en,
+        };
+      } else this.item.language = item.language;
 
-      this.item.language = item.language;
       this.item.frontpage = item.frontpage;
       this.item.frontpage_title = item.frontpage_title;
       this.item.title = item.title;
@@ -330,9 +361,7 @@ export default {
         fetchListLanguages().then((response) => {
           if (response.status === 200) {
             this.autocomplete.language =
-              response.data.count > 0
-                ? response.data.results.map((item) => item.iso1)
-                : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.language = false;
@@ -341,6 +370,7 @@ export default {
 
     formatItem(item) {
       Object.keys(item).forEach((key) => {
+        console.log(key, item[key]);
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;

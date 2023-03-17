@@ -64,7 +64,7 @@ const authenticationMixin = {
      */
     logOut() {
       fetchLogout().then((response) => {
-        if (response.status === 200) {
+        if (response.status === 204) {
           this.$router.push({
             name: "login",
             params: { dontShowSessionExpired: true },
