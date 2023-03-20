@@ -149,8 +149,8 @@
         </router-link>
       </template>
 
-      <template v-slot:item.is_preferred="{ item }">
-        <v-icon v-if="item.is_preferred" small>fas fa-check</v-icon>
+      <template v-slot:item.current="{ item }">
+        <v-icon v-if="item.current" small>fas fa-check</v-icon>
         <v-icon v-else small>fas fa-minus</v-icon>
       </template>
     </v-data-table>
@@ -298,10 +298,10 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <checkbox-wrapper
-                    v-model="item.is_preferred"
+                    v-model="item.current"
                     :color="bodyActiveColor"
                     :label="$t('stratigraphy.is_preferred')"
-                    @change="item.is_preferred = !item.is_preferred"
+                    @change="item.current = !item.current"
                   />
                 </v-col>
 
@@ -405,7 +405,7 @@ export default {
       { text: "common.reference", value: "reference" },
       { text: "stratigraphy.author", value: "agent" },
       { text: "common.year", value: "year" },
-      { text: "stratigraphy.is_preferred", value: "is_preferred" },
+      { text: "stratigraphy.is_preferred", value: "current" },
       {
         text: "common.actions",
         value: "action",
@@ -427,7 +427,7 @@ export default {
       agent: null,
       author_free: "",
       year: "",
-      is_preferred: false,
+      current: false,
       remarks: "",
       is_private: false,
     },
@@ -479,7 +479,7 @@ export default {
         agent: null,
         author_free: "",
         year: "",
-        is_preferred: false,
+        current: false,
         remarks: "",
         is_private: false,
       };
@@ -554,7 +554,7 @@ export default {
       this.item.thickness = item.thickness;
       this.item.author_free = item.author_free;
       this.item.year = item.year;
-      this.item.is_preferred = item.is_preferred === true;
+      this.item.current = item.current === true;
       this.item.remarks = item.remarks;
       this.item.is_private = item.is_private === true;
 
@@ -563,7 +563,7 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "locality_description",
+        table: "locality_stratigraphy",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item),
       });
