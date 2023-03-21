@@ -160,7 +160,10 @@ export function fetchLogin(userData) {
 }
 
 export function fetchLoginId() {
-  return get(`idcard`, api.accountsUrl);
+  return get(
+    `?redirect_uri=https://rwapi-dev.geoloogia.info/accounts/idcard/`,
+    "https://idcard.geoloogia.info/"
+  );
 }
 
 export function fetchLogout() {
