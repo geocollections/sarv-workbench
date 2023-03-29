@@ -36,6 +36,15 @@ const router = new Router({
         isLogin: true,
         requiresAuth: false,
       },
+      beforeEnter: async (to, from, next) => {
+        const loginStateResponse = await fetchIsLoggedIn().then(
+          (response) => response,
+          (errResponse) => errResponse
+        );
+        const isLoggedIn = handleResponse(loginStateResponse);
+        if (isLoggedIn) next("/dashboard");
+        next();
+      },
     },
     {
       path: "/dashboard",
