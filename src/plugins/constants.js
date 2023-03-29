@@ -1,8 +1,8 @@
 const defaultOptions = {
-  IMAGE_URL:
-    location.hostname === "localhost"
-      ? "https://edit2.geocollections.info/y4fkz2fr/"
-      : "/y4fkz2fr/",
+  IMAGE_URL: "https://files-new.geocollections.info/private/",
+  // location.hostname === "localhost"
+  //   ? "https://edit2.geocollections.info/y4fkz2fr/"
+  //   : "/y4fkz2fr/",
 };
 
 const constants = {

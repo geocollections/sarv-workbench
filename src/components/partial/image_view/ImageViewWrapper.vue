@@ -34,7 +34,7 @@
               :title="openFile ? $t(viewMessage) : $t(editMessage)"
               @click="
                 openFile
-                  ? openFileInNewWindow(image)
+                  ? $urlClicked(image)
                   : $router.push({ path: `/${object}/${image[idField]}` })
               "
             >
@@ -44,8 +44,14 @@
                 aspect-ratio="1"
                 :contain="containImages"
                 v-if="isImageFile(image)"
-                :src="getFileUrl(image.uuid_filename, 'small')"
-                :lazy-src="getFileUrl(image.uuid_filename, 'small')"
+                :src="
+                  $constants.IMAGE_URL +
+                  getFileUrl(image.uuid_filename, 'small')
+                "
+                :lazy-src="
+                  $constants.IMAGE_URL +
+                  getFileUrl(image.uuid_filename, 'small')
+                "
                 class="grey lighten-2"
               >
                 <template v-slot:placeholder>
@@ -251,25 +257,19 @@ export default {
       if (typeof file !== "undefined" && file !== null) {
         let url = "";
         if (this.isImageFile(file)) {
-          url = this.getFileUrl(file.uuid_filename, "large");
+          url = `large/${file.uuid_filename}`;
         } else {
-          url = this.getFileUrl(file.uuid_filename);
+          url = file.uuid_filename;
         }
-        window.open(url, "_blank", "width=800,height=750");
+        this.$urlClicked(url, "_blank", "width=800,height=750");
       }
     },
 
     getFileUrl(uuid, size = null) {
       if (size) {
-        return `${this.$constants.IMAGE_URL}${size}/${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
+        return `${size}/${uuid}`;
       } else {
-        return `${this.$constants.IMAGE_URL}${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
+        return `${uuid}`;
       }
     },
 

@@ -18,13 +18,14 @@ import "leaflet/dist/leaflet.css"; // Leaflet css
 // Custom css
 import "@/assets/css/styles.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import attachmentUrl from "./plugins/attachmentUrl";
 
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueCookies);
 Vue.use(require("vue-moment"));
 Vue.use(constants);
-
+Vue.use(attachmentUrl);
 Vue.config.productionTip = false;
 
 /******************************
@@ -62,6 +63,42 @@ Vue.directive("translate", function (el, binding) {
   if (binding.value.useInnerText) el.innerText = value ? value : "";
   else el.innerHTML = value ? value : "";
 });
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    // register service worker, that adds Authentication header to file requests
+    navigator.serviceWorker.register("/service-worker.js").then((reg) => {
+      const sw = reg.installing || reg.waiting;
+      sw.onstatechange = function () {
+        if (sw.state === "installed") {
+          // service worker installed. refresh page to enable the worker.
+          window.location.reload();
+        }
+      };
+    });
+
+    // listen for messages coming from service worker.
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      // for every message we expect an action field
+      // determining operation that we should perform
+      const { action } = event.data;
+      // we use 2nd port provided by the message channel
+      const port = event.ports[0];
+
+      if (action === "getAuthTokenHeader") {
+        // return authHeader, will be accessible in sw via event.data.authHeader
+        port.postMessage({
+          authHeader: store.state.user?.authUser?.token,
+        });
+      } else {
+        console.error("Unknown event", event);
+        port.postMessage({
+          error: "Unknown request",
+        });
+      }
+    });
+  });
+}
 
 new Vue({
   i18n,

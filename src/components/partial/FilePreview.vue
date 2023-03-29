@@ -29,7 +29,9 @@
       <!-- AUDIO -->
       <audio v-if="isAudioFile" controls>
         <source
-          :src="getFileLink({ filename: data.uuid_filename })"
+          :src="
+            $constants.IMAGE_URL + getFileLink({ filename: data.uuid_filename })
+          "
           :type="data.attachment_format__value"
         />
         Your browser does not support the audio element.
@@ -39,7 +41,9 @@
       <!-- VIDEO -->
       <video v-else-if="isVideoFile" type="video" controls>
         <source
-          :src="getFileLink({ filename: data.uuid_filename })"
+          :src="
+            $constants.IMAGE_URL + getFileLink({ filename: data.uuid_filename })
+          "
           :type="data.attachment_format__value"
         />
         Your browser does not support the video element.
@@ -50,12 +54,15 @@
 
       <img
         v-else-if="isImageFile"
-        :src="getFileLink({ filename: data.uuid_filename, size: 'medium' })"
+        :src="
+          $constants.IMAGE_URL +
+          getFileLink({ filename: data.uuid_filename, size: 'medium' })
+        "
         :title="getFileLink({ filename: data.uuid_filename, size: 'medium' })"
         @click="
-          openUrlInNewWindow({
-            url: getFileLink({ filename: data.uuid_filename, size: 'medium' }),
-          })
+          openUrlInNewWindow(
+            getFileLink({ filename: data.uuid_filename, size: 'medium' })
+          )
         "
         alt="Image preview..."
         class="img-thumbnail image"
@@ -67,9 +74,7 @@
         v-else
         class="far fa-5x link"
         @click="
-          openUrlInNewWindow({
-            url: getFileLink({ filename: data.uuid_filename }),
-          })
+          openUrlInNewWindow(getFileLink({ filename: data.uuid_filename }))
         "
         :title="getFileLink({ filename: data.uuid_filename })"
         :class="getAttachmentIcon(data)"
@@ -87,12 +92,12 @@
           small
           class="ma-1"
           @click="
-            openUrlInNewWindow({
-              url: getFileLink({
+            openUrlInNewWindow(
+              getFileLink({
                 filename: data.uuid_filename,
                 size: btn === 'original' ? '' : btn,
-              }),
-            })
+              })
+            )
           "
           :title="
             getFileLink({
@@ -207,7 +212,6 @@ export default {
     getFileLink(params) {
       if (params.size) {
         return (
-          this.$constants.IMAGE_URL +
           params.size +
           "/" +
           params.filename.substring(0, 2) +
@@ -218,7 +222,6 @@ export default {
         );
       } else {
         return (
-          this.$constants.IMAGE_URL +
           params.filename.substring(0, 2) +
           "/" +
           params.filename.substring(2, 4) +
@@ -228,18 +231,8 @@ export default {
       }
     },
 
-    openUrlInNewWindow(params) {
-      if (typeof params.width === "undefined") {
-        params.width = 800;
-      }
-      if (typeof params.height === "undefined") {
-        params.height = 750;
-      }
-      window.open(
-        params.url,
-        "",
-        "width=" + params.width + ",height=" + params.height
-      );
+    openUrlInNewWindow(url) {
+      this.$urlClicked(url, "", "width=" + 800 + ",height=" + 750);
     },
 
     rotateImage(deg) {
