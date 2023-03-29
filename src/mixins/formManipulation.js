@@ -233,10 +233,17 @@ const formManipulation = {
                             },
                           },
                         });
-                      } else
-                        this.$router.push({
-                          path: "/" + object + "/" + savedObjectId,
-                        });
+                      } else {
+                        if (Array.isArray(savedObjectId)) {
+                          this.$router.push({
+                            path: "/" + object,
+                          });
+                        } else {
+                          this.$router.push({
+                            path: "/" + object + "/" + savedObjectId,
+                          });
+                        }
+                      }
                     }
                   } else {
                     // Save and leave
