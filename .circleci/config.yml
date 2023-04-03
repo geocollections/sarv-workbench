@@ -71,6 +71,17 @@ jobs:
             - run:
                 name: Archive Docker sarv-wb-dev image
                 command: docker save -o image.tar $IMAGE_NAME_SARV_WB_DEV
+      - when:
+          condition:
+            equal: [ "new-rwapi-test", << pipeline.git.branch >> ]
+          steps:
+            - run:
+                name: Build Docker edit4 image
+                command: |
+                  docker build -t $IMAGE_NAME_SARV_WB_DEV:<< pipeline.parameters.package-version >> -t $IMAGE_NAME_SARV_WB_DEV:latest .
+            - run:
+                name: Archive Docker sarv-wb-dev image
+                command: docker save -o image.tar $IMAGE_NAME_SARV_WB_DEV
       - persist_to_workspace:
           root: .
           paths:
@@ -255,9 +266,23 @@ jobs:
           name: Copying built files to production
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit
 
+  deploy_edit4:
+    executor: docker-publisher
+    steps:
+      - run:
+          name: Run edit4 script
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/edit4/script && . run_docker_image.sh"
+
 workflows:
   build:
     jobs:
+
+      # Edit4
+      - deploy_edit4:
+          filters:
+            branches:
+              only: new-rwapi-test
+
       # NEW (cloud)
       - build_docker_image:
           filters:
