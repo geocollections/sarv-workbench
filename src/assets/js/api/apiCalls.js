@@ -6,9 +6,9 @@ import store from "../../../store";
 const axios = require("axios");
 
 const api = {
-  url: "https://rwapi-dev.geoloogia.info/api/v0/",
-  accountsUrl: "https://rwapi-dev.geoloogia.info/accounts/",
-  dataciteUrl: "https://rwapi-dev.geoloogia.info/datacite/",
+  url: "https://rwapi.geoloogia.info/api/v0/",
+  accountsUrl: "https://rwapi.geoloogia.info/accounts/",
+  dataciteUrl: "https://rwapi.geoloogia.info/datacite/",
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",
@@ -161,7 +161,7 @@ export function fetchLogin(userData) {
 
 export function fetchLoginId() {
   return get(
-    `?redirect_uri=https://rwapi-dev.geoloogia.info/accounts/idcard/`,
+    `?redirect_uri=https://rwapi.geoloogia.info/accounts/idcard/`,
     "https://idcard.geoloogia.info/"
   );
 }
