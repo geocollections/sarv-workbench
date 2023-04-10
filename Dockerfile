@@ -3,7 +3,7 @@
 # ---- Base ----
 # lts-apline doesn't seems to be webpack version differences
 #FROM node:lts-alpine AS base
-FROM node:14-alpine AS base
+FROM node:14 AS base
 WORKDIR /app
 COPY package.json .
 
