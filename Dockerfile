@@ -3,7 +3,7 @@
 # ---- Base ----
 # lts-apline doesn't seems to be webpack version differences
 #FROM node:lts-alpine AS base
-FROM node:14 AS base
+FROM node:14-alpine AS base
 WORKDIR /app
 COPY package.json .
 
@@ -30,7 +30,8 @@ RUN npm run build
 
 #
 # ---- Serve using nginx ----
-FROM nginx:stable-alpine AS production
+#FROM nginx:stable-alpine AS production
+FROM nginx:stable AS production
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY --from=build /app/nginx/default.conf /etc/nginx/conf.d/
 EXPOSE 80

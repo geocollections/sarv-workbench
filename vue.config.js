@@ -3,4 +3,7 @@ module.exports = {
   productionSourceMap: false,
   transpileDependencies: ["vuetify"],
   parallel: process.env.CI ? +process.env.CIRCLE_NODE_TOTAL : undefined,
+  devServer: {
+    allowedHosts: "all",
+  },
 };
