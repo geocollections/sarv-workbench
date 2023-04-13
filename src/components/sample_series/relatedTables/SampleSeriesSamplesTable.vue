@@ -1,6 +1,7 @@
 <template>
   <div class="sample-series-sample-table">
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedHeaders"
       hide-default-footer
       dense

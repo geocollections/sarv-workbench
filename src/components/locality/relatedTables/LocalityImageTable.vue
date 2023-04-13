@@ -1,6 +1,7 @@
 <template>
   <div class="locality-image-table">
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedHeaders"
       hide-default-footer
       dense
@@ -148,7 +149,9 @@
                     :color="bodyActiveColor"
                     :items="autocomplete.attachment"
                     :loading="autocomplete.loaders.attachment"
-                    :item-text="(item) => `${item.original_filename} (${item.id})`"
+                    :item-text="
+                      (item) => `${item.original_filename} (${item.id})`
+                    "
                     use-state
                     :label="$t('localityImage.attachment')"
                     is-link
@@ -284,7 +287,7 @@ export default {
       title: "",
       title_en: "",
       remarks: "",
-      sort: null
+      sort: null,
     },
     isNewItem: true,
     autocomplete: {
@@ -367,7 +370,7 @@ export default {
       this.item.title = item.title;
       this.item.title_en = item.title_en;
       this.item.remarks = item.remarks;
-      this.item.sort = item.sort
+      this.item.sort = item.sort;
 
       this.dialog = true;
     },
@@ -413,4 +416,4 @@ export default {
   max-width: 200px;
   border-radius: 0.25rem;
 }
-<
+</style>

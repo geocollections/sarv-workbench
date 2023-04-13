@@ -1,6 +1,7 @@
 <template>
   <div class="rock-locality-table">
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedHeaders"
       hide-default-footer
       dense

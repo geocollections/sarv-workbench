@@ -1016,8 +1016,14 @@ import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 import cloneDeep from "lodash/cloneDeep";
 import { mapActions, mapState } from "vuex";
 import {
-fetchLatestSampleInSite, fetchLSampleAttachment, fetchSample, fetchSampleAnalysis,
-fetchSamplePreparation, fetchSamplePurpose, fetchSampleReference, fetchTaxonList
+  fetchLatestSampleInSite,
+  fetchLSampleAttachment,
+  fetchSample,
+  fetchSampleAnalysis,
+  fetchSamplePreparation,
+  fetchSamplePurpose,
+  fetchSampleReference,
+  fetchTaxonList,
 } from "../../assets/js/api/apiCalls";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formManipulation from "../../mixins/formManipulation";
