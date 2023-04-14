@@ -92,7 +92,9 @@
     "idCardMessage": "Make sure that ID-card is in the reader and connected to a computer",
     "username": "Username",
     "loginButton": "LOGIN",
-    "overlay": "Logging in..."
+    "overlay": "Logging in...",
+    "signInOrcid": "Sign in with Orcid",
+    "progressOrcid": "Signing in using Orcid..."
   },
   "header": {
     "title": "SARV workbench",

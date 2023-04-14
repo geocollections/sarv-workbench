@@ -28,9 +28,11 @@ axios.interceptors.request.use(function (config) {
     let csrftoken = Vue.$cookies.get("csrftoken");
     config.withCredentials = true;
     config.headers["X-CSRFTOKEN"] = csrftoken;
-    config.headers[
-      "Authorization"
-    ] = `Token ${store?.state?.user?.authUser?.token}`;
+    if (store.state?.user?.authUser?.token) {
+      config.headers[
+        "Authorization"
+      ] = `Token ${store?.state?.user?.authUser?.token}`;
+    }
   }
 
   return config;
@@ -157,6 +159,11 @@ async function post_delete(child, returnErrorResponse = false) {
 
 export function fetchLogin(userData) {
   return post(`v0/login`, userData, api.accountsUrl);
+}
+
+export function fetchLoginOrcid(code) {
+  console.log(code);
+  return post(`v0/dj-rest-auth/orcid`, { code: code }, api.accountsUrl);
 }
 
 export function fetchLoginId() {

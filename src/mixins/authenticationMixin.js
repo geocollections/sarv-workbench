@@ -1,6 +1,7 @@
 import {
   fetchLogin,
   fetchLoginId,
+  fetchLoginOrcid,
   fetchLogout,
 } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
@@ -38,6 +39,20 @@ const authenticationMixin = {
           );
         } else if (authenticationType === "id") {
           fetchLoginId().then(
+            (successfulResponse) => {
+              return this.$_authenticationMixin_handleSuccessfulAuthentication(
+                successfulResponse,
+                authenticationType
+              );
+            },
+            () => {
+              return this.$_authenticationMixin_handleAuthenticationError(
+                authenticationType
+              );
+            }
+          );
+        } else if (authenticationType === "orcid") {
+          fetchLoginOrcid(loginData).then(
             (successfulResponse) => {
               return this.$_authenticationMixin_handleSuccessfulAuthentication(
                 successfulResponse,

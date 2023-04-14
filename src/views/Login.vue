@@ -134,6 +134,12 @@
                         </v-btn>
                       </div>
                     </v-form>
+                    <v-divider class="my-2" />
+                    <div class="text-center">
+                      <v-btn :href="getOrcidLoginUrl()" color="#a6ce39" dark>
+                        {{ $t("login.signInOrcid") }}
+                      </v-btn>
+                    </div>
                   </v-card-text>
                 </v-card>
               </v-tab-item>
@@ -252,6 +258,9 @@ export default {
           else this.imageId++;
         }, this.imageInterval);
       }
+    },
+    getOrcidLoginUrl() {
+      return process.env.VUE_APP_ORCID_LOGIN_URL;
     },
   },
 };

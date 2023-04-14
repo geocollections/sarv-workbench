@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Login from "./views/Login.vue";
 import Dashboard from "./views/Dashboard.vue";
+import OrcidCallback from "./views/OrcidCallback.vue";
 import { fetchIsLoggedIn, fetchLogout } from "./assets/js/api/apiCalls";
 import store from "./store";
 Vue.use(Router);
@@ -44,6 +45,15 @@ const router = new Router({
         const isLoggedIn = handleResponse(loginStateResponse);
         if (isLoggedIn) next("/dashboard");
         next();
+      },
+    },
+    {
+      path: "/orcid/callback",
+      name: "orcid-callback",
+      component: OrcidCallback,
+      meta: {
+        isLogin: true,
+        requiresAuth: false,
       },
     },
     {
