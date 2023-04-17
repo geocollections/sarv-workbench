@@ -162,8 +162,7 @@ export function fetchLogin(userData) {
 }
 
 export function fetchLoginOrcid(code) {
-  console.log(code);
-  return post(`v0/dj-rest-auth/orcid`, { code: code }, api.accountsUrl);
+  return post(`v0/dj-rest-auth/orcid`, { code: code }, api.accountsUrl, true);
 }
 
 export function fetchLoginId() {

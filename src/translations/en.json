@@ -94,7 +94,9 @@
     "loginButton": "LOGIN",
     "overlay": "Logging in...",
     "signInOrcid": "Sign in with Orcid",
-    "progressOrcid": "Signing in using Orcid..."
+    "progressOrcid": "Signing in using Orcid...",
+    "connectingOrcid": "Connecting Workbench account to Orcid ...",
+    "connectOrcid": "Connect Orcid account"
   },
   "header": {
     "title": "SARV workbench",
@@ -342,7 +344,8 @@
     "dark": "Dark",
     "light": "Light",
     "drawer": "drawer",
-    "navbarText": "navbar"
+    "navbarText": "navbar",
+    "linkedAccounts": "Linked accounts"
   },
   "sidebar": {
     "recentUrls": "History",
@@ -3041,7 +3044,8 @@
     "globalNotificationIsAvailable": "View global notification!",
     "devNotification": "You are visiting the <b>development version</b> of the application. More stable version can be found here: ",
     "prodNotification": "Did you know there is also a <b>development version</b>, which has all the latest features and functionality. Development version can be found here: ",
-    "containImages": "Prevent image cropping"
+    "containImages": "Prevent image cropping",
+    "orcidConnectSuccess": "Account successfully connected to Orcid" 
   },
   "logs": {
     "title": "Editing history",

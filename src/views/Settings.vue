@@ -6,6 +6,51 @@
       </div>
     </div>
 
+    <v-card
+      class="mt-2"
+      id="block-linked-accounts"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.linkedAccounts = !block.linkedAccounts"
+        >
+          <span>{{ $t("settings.linkedAccounts") }}</span>
+          <v-icon right>fas fa-people-arrows</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.linkedAccounts = !block.linkedAccounts"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.linkedAccounts ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.linkedAccounts" class="px-1 pt-1 pb-2">
+          <v-btn class="mb-2" :href="getOrcidConnectUrl()" color="#a6ce39" dark>
+            {{ $t("login.connectOrcid") }}
+          </v-btn>
+          <v-data-table
+            :headers="linkedSocialAccountHeaders"
+            :items="linkedSocialAccounts.results"
+          >
+            <template v-slot:item.actions="{ item }">
+              <v-icon small @click="deleteSocialAccount(item)">
+                fas fa-trash
+              </v-icon>
+            </template>
+          </v-data-table>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- COLORS -->
     <v-card
       class="mt-2"
@@ -194,14 +239,11 @@ import { mapGetters, mapState } from "vuex";
 import Colors from "../components/partial/settings/Colors";
 import PermissionsTable from "../components/partial/settings/PermissionsTable";
 import Security from "../components/partial/settings/Security";
-
+import axios from "axios";
 export default {
   name: "Settings",
-
   components: { Security, PermissionsTable, Colors, Shortcuts, Accessibility },
-
   mixins: [formSectionsMixin],
-
   data() {
     return {
       block: {
@@ -210,10 +252,22 @@ export default {
         shortcuts: false,
         security: false,
         permissions: true,
+        linkedAccounts: false,
       },
+      linkedSocialAccounts: [],
+      linkedSocialAccountHeaders: [
+        { text: "Provider", value: "provider" },
+        { text: "Uid", value: "uid" },
+        { text: "Actions", value: "actions", sortable: false },
+      ],
     };
   },
-
+  async mounted() {
+    const res = await axios.get(
+      "https://rwapi.geoloogia.info/accounts/dj-rest-auth/socialaccounts"
+    );
+    this.linkedSocialAccounts = res.data;
+  },
   computed: {
     ...mapState("settings", [
       "bodyColor",
@@ -223,6 +277,16 @@ export default {
       "showRecentUrls",
     ]),
     ...mapGetters("user", ["getPermissions"]),
+  },
+  methods: {
+    getOrcidConnectUrl() {
+      return process.env.VUE_APP_ORCID_CONNECT_URL;
+    },
+    async deleteSocialAccount(item) {
+      const res = await axios.post(
+        `https://rwapi.geoloogia.info/accounts/dj-rest-auth/socialaccounts/${item.id}/disconnect/`
+      );
+    },
   },
 };
 </script>

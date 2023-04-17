@@ -24,17 +24,19 @@ const authenticationMixin = {
         this.loggingIn = true;
 
         if (authenticationType === "password") {
-          fetchLogin(loginData).then(
+          return fetchLogin(loginData).then(
             (successfulResponse) => {
-              return this.$_authenticationMixin_handleSuccessfulAuthentication(
+              this.$_authenticationMixin_handleSuccessfulAuthentication(
                 successfulResponse,
                 authenticationType
               );
+              return successfulResponse;
             },
-            () => {
-              return this.$_authenticationMixin_handleAuthenticationError(
+            (err) => {
+              this.$_authenticationMixin_handleAuthenticationError(
                 authenticationType
               );
+              return err;
             }
           );
         } else if (authenticationType === "id") {
@@ -52,17 +54,19 @@ const authenticationMixin = {
             }
           );
         } else if (authenticationType === "orcid") {
-          fetchLoginOrcid(loginData).then(
+          return fetchLoginOrcid(loginData).then(
             (successfulResponse) => {
-              return this.$_authenticationMixin_handleSuccessfulAuthentication(
+              this.$_authenticationMixin_handleSuccessfulAuthentication(
                 successfulResponse,
                 authenticationType
               );
+              return successfulResponse;
             },
-            () => {
-              return this.$_authenticationMixin_handleAuthenticationError(
+            (err) => {
+              this.$_authenticationMixin_handleAuthenticationError(
                 authenticationType
               );
+              return err;
             }
           );
         }

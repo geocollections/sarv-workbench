@@ -95,7 +95,9 @@
     "loginButton": "LOGI SISSE",
     "overlay": "Login sisse...",
     "signInOrcid": "Sisene Orcidiga",
-    "progressOrcid": "Sisselogimine kasutades Orcid ..."
+    "progressOrcid": "Sisselogimine kasutades Orcid ...",
+    "connectingOrcid": "Kasutaja ühendamine Orcidiga...",
+    "connectOrcid": "Ühenda Orcidi konto"
   },
   "header": {
     "title": "SARV töölaud",
@@ -343,7 +345,8 @@
     "dark": "Tume",
     "light": "Hele",
     "drawer": "külgriba",
-    "navbarText": "navigatsiooniriba"
+    "navbarText": "navigatsiooniriba",
+    "linkedAccounts": "Ühendatud kontod"
   },
   "sidebar": {
     "recentUrls": "Ajalugu",
@@ -3043,7 +3046,8 @@
     "globalNotificationIsAvailable": "Vaata üldist teadet!",
     "devNotification": "Külastate rakenduse <b>arendusversiooni</b>, kus võib esineda tõrkeid. Stabiilsema versiooni leiate siit: ",
     "prodNotification": "Kas teadsite, et on olemas ka rakenduse <b>arendusversioon</b>, kus on olemas kõige viimased uuendused. Arendusversiooni leiate siit: ",
-    "containImages": "Vältige piltide kärpimist"
+    "containImages": "Vältige piltide kärpimist",
+    "orcidConnectSuccess": "Kasutaja edukalt Orcidiga ühendatud" 
   },
   "logs": {
     "title": "Kirje ajalugu",

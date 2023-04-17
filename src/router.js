@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Login from "./views/Login.vue";
 import Dashboard from "./views/Dashboard.vue";
 import OrcidCallback from "./views/OrcidCallback.vue";
+import OrcidConnect from "./views/OrcidConnect.vue";
 import { fetchIsLoggedIn, fetchLogout } from "./assets/js/api/apiCalls";
 import store from "./store";
 Vue.use(Router);
@@ -54,6 +55,15 @@ const router = new Router({
       meta: {
         isLogin: true,
         requiresAuth: false,
+      },
+    },
+    {
+      path: "/orcid/connect",
+      name: "orcid-connect",
+      component: OrcidConnect,
+      meta: {
+        isLogin: true,
+        requiresAuth: true,
       },
     },
     {
