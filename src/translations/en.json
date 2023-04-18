@@ -295,7 +295,9 @@
     "taxon_pages": "Taxon pages",
     "stratigraphy_catalogue": "Catalogue",
     "selection_series": "Selections",
-    "geography": "Geography"
+    "geography": "Geography",
+    "provider": "Pakkuja",
+    "uid": "Uid"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
