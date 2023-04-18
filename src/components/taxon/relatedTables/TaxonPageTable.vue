@@ -1,6 +1,7 @@
 <template>
   <div class="taxon-page-table">
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedHeaders"
       hide-default-footer
       dense

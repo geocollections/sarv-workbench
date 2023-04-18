@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+    mobile-breakpoint="0"
     class="taxon-list-table"
     :headers="translatedHeaders"
     dense

@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+    mobile-breakpoint="0"
     :headers="headers"
     hide-default-footer
     dense

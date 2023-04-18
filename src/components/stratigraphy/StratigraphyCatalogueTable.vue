@@ -13,11 +13,11 @@
     </v-card-title>
 
     <v-data-table
+      mobile-breakpoint="0"
       class="stratigraphy-catalogue-table"
       :headers="translatedHeaders"
       dense
       disable-sort
-      mobile-breakpoint="0"
       :search="search"
       :items="response.results"
       disable-pagination

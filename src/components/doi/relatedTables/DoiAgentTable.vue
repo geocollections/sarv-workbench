@@ -1,6 +1,7 @@
 <template>
   <div class="doi-agent-table">
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedHeaders"
       hide-default-footer
       dense

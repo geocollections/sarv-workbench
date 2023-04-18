@@ -289,7 +289,8 @@
     "taxon_pages": "Taxon pages",
     "stratigraphy_catalogue": "Catalogue",
     "selection_series": "Selections",
-    "geography": "Geography"
+    "geography": "Geography",
+    "locality_image": "Image"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1891,8 +1892,16 @@
       "locality_synonym": "Synonyms",
       "attachment_link": "Attachment",
       "locality_stratigraphy": "Stratigraphy",
-      "locality_description": "Description"
+      "locality_description": "Description",
+      "locality_image": "Images"
     }
+  },
+  "localityImage": {
+    "attachment": "Image",
+    "attachment_filename": "Filename",
+    "title": "Title",
+    "title_en": "Title (EN)",
+    "sort": "Order"
   },
   "agent": {
     "country__id": "Country ID",
@@ -2160,7 +2169,7 @@
     "book_editor": "Editor(s)",
     "publisher": "Publisher",
     "publisherPlace": "Publisher place",
-    "checkDoi": "Check",
+    "checkDoi": "Populate using DOI",
     "journalAdditional": "Journal (Add'l)",
     "volume": "Volume",
     "number": "Number",
@@ -2927,6 +2936,7 @@
     "remarks": "Remarks",
     "parameter": "Parameter",
     "parameter_html": "HTML",
+    "parameter_index": "Index",
     "parameter_name": "Name",
     "parameter_name_en": "Name (EN)",
     "synonyms": "Synonyms",

@@ -579,6 +579,17 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <locality-image-table
+            v-show="activeTab === 'locality_image'"
+            :response="relatedData.locality_image"
+            :search-parameters="relatedData.searchParameters.locality_image"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- PAGINATION -->
           <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -615,6 +626,7 @@ import {
   fetchLocalityStratigraphy,
   fetchSiteLocalityDescriptions,
   fetchLocalityDescriptions,
+  fetchLocalityImage,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
@@ -633,6 +645,7 @@ import LocalityStratigraphyTable from "./relatedTables/LocalityStratigraphyTable
 import requestsMixin from "../../mixins/requestsMixin";
 import LocalityDescriptionTable from "./relatedTables/LocalityDescriptionTable";
 import Pagination from "@/components/partial/Pagination";
+import LocalityImageTable from "./relatedTables/LocalityImageTable.vue";
 
 export default {
   name: "Locality",
@@ -649,6 +662,7 @@ export default {
     TextareaWrapper,
     InputWrapper,
     MapComponent,
+    LocalityImageTable,
   },
 
   props: {
@@ -757,6 +771,7 @@ export default {
           { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "locality_stratigraphy", iconClass: "fas fa-globe-asia" },
           { name: "locality_description", iconClass: "fas fa-align-left" },
+          { name: "locality_image", iconClass: "far fa-image" },
         ],
         activeTab: "locality_reference",
         relatedData: this.setDefaultRelatedData(),
@@ -913,6 +928,7 @@ export default {
           count: 0,
           results: [],
         },
+        locality_image: { count: 0, results: [] },
         searchParameters: {
           locality_reference: {
             page: 1,
@@ -941,6 +957,12 @@ export default {
           locality_description: {
             page: 1,
             paginateBy: 25,
+            sortBy: ["id"],
+            sortDesc: [true],
+          },
+          locality_image: {
+            page: 1,
+            paginateBy: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -1112,6 +1134,11 @@ export default {
         query = fetchLocalityDescriptions(
           this.$route.params.id,
           this.relatedData.searchParameters.locality_description
+        );
+      } else if (type === "locality_image") {
+        query = fetchLocalityImage(
+          this.$route.params.id,
+          this.relatedData.searchParameters.locality_image
         );
       }
 

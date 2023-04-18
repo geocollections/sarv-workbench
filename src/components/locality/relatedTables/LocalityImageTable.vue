@@ -1,5 +1,5 @@
 <template>
-  <div class="rock-image-table">
+  <div class="locality-image-table">
     <v-data-table
       mobile-breakpoint="0"
       :headers="translatedHeaders"
@@ -28,7 +28,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -37,6 +37,62 @@
         >
           <v-icon small>far fa-trash-alt</v-icon>
         </v-btn>
+      </template>
+
+      <template v-slot:item.attachment_image="{ item }">
+        <div v-if="$route.meta.isEdit">
+          <router-link
+            v-if="item.attachment__uuid_filename"
+            :title="$t('edit.editMessage')"
+            :to="{ path: '/attachment/' + item.attachment }"
+          >
+            <v-img
+              v-if="
+                !!item.attachment__attachment_format__value.includes('image')
+              "
+              :src="getFileUrl(item.attachment__uuid_filename, 'small')"
+              :lazy-src="getFileUrl(item.attachment__uuid_filename, 'small')"
+              class="grey lighten-2 attachment-table-image-preview my-1"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular indeterminate color="grey lighten-5" />
+                </v-row>
+              </template>
+            </v-img>
+
+            <v-icon v-else class="my-1" style="font-size: 3rem"
+              >far fa-file</v-icon
+            >
+          </router-link>
+        </div>
+
+        <div v-else>
+          <router-link
+            v-if="item.attachment && item.attachment.uuid_filename"
+            :title="$t('edit.editMessage')"
+            :to="{ path: '/attachment/' + item.attachment }"
+          >
+            <v-img
+              v-if="
+                !!item.attachment.attachment_format__value.includes('image')
+              "
+              :src="getFileUrl(item.attachment.uuid_filename, 'small')"
+              :lazy-src="getFileUrl(item.attachment.uuid_filename, 'small')"
+              class="grey lighten-2 attachment-table-image-preview my-1"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular indeterminate color="grey lighten-5" />
+                </v-row>
+              </template>
+            </v-img>
+
+            <v-icon v-else class="my-1" style="font-size: 3rem"
+              >far fa-file</v-icon
+            >
+          </router-link>
+        </div>
       </template>
 
       <template v-slot:item.attachment="{ item }">
@@ -48,7 +104,7 @@
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.attachment }}
+            {{ item.attachment__original_filename }}
           </router-link>
           <router-link
             v-else-if="item.attachment"
@@ -57,7 +113,7 @@
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.attachment.id }}
+            {{ item.attachment.original_filename }}
           </router-link>
         </div>
         <router-link
@@ -67,60 +123,8 @@
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.attachment }}
+          {{ item.attachment__original_filename }}
         </router-link>
-      </template>
-
-      <template v-slot:item.link="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/rock/' + item.link }"
-            :title="$t('editRock.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <div
-              v-translate="{
-                et: item.link__name,
-                en: item.link__name_en,
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.link"
-            :to="{ path: '/rock/' + item.link.id }"
-            :title="$t('editRock.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <div
-              v-translate="{
-                et: item.link.name,
-                en: item.link.name_en,
-              }"
-            />
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/rock/' + item.link }"
-          :title="$t('editRock.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          <div
-            v-translate="{
-              et: item.link__name,
-              en: item.link__name_en,
-            }"
-          />
-        </router-link>
-      </template>
-
-      <template v-slot:item.is_private="{ item }">
-        <v-icon v-if="item.is_private" color="green" small>fas fa-check</v-icon>
-        <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
     </v-data-table>
 
@@ -133,73 +137,55 @@
         </template>
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title>
-            <span class="headline">{{ $t("header.rock_image") }}</span>
+            <span class="headline">{{ $t("header.locality_image") }}</span>
           </v-card-title>
 
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" class="pa-1">
+                <v-col cols="12" md="8" class="pa-1">
                   <autocomplete-wrapper
                     v-model="item.attachment"
                     :color="bodyActiveColor"
                     :items="autocomplete.attachment"
                     :loading="autocomplete.loaders.attachment"
-                    :item-text="customLabelForAttachment"
-                    :label="$t('rock.attachment')"
+                    :item-text="
+                      (item) => `${item.original_filename} (${item.id})`
+                    "
                     use-state
+                    :label="$t('localityImage.attachment')"
+                    is-link
+                    route-object="attachment"
                     is-searchable
-                    v-on:search:items="autocompleteAttachmentSearch"
+                    no-filter
+                    v-on:search:items="autocompletePublicAttachmentImageSearch"
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.link"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.rock"
-                    :loading="autocomplete.loaders.rock"
-                    :item-text="nameLabel"
-                    :label="$t('rock.parent')"
-                    is-searchable
-                    v-on:search:items="autocompleteRockSearch"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.title"
-                    :color="bodyActiveColor"
-                    :label="$t('rock.title')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.title_en"
-                    :color="bodyActiveColor"
-                    :label="$t('rock.title_en')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" md="4" class="pa-1">
                   <input-wrapper
                     v-model="item.sort"
                     :color="bodyActiveColor"
-                    :label="$t('rock.sort')"
+                    :label="$t('localityImage.sort')"
                   />
                 </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <checkbox-wrapper
-                    v-model="item.is_private"
+                <v-col cols="12" md="12" class="pa-1">
+                  <input-wrapper
+                    v-model="item.title"
                     :color="bodyActiveColor"
-                    :label="$t('common.is_private')"
-                    @change="item.is_private = !item.is_private"
+                    :label="$t('localityImage.title')"
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" md="12" class="pa-1">
+                  <input-wrapper
+                    v-model="item.title_en"
+                    :color="bodyActiveColor"
+                    :label="$t('localityImage.title_en')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="12" class="pa-1">
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
@@ -230,17 +216,15 @@
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
-import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
 export default {
-  name: "RockImageTable",
+  name: "LocalityImageTable",
 
   components: {
-    CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper,
   },
@@ -261,7 +245,7 @@ export default {
       default: function () {
         return {
           page: 1,
-          paginateBy: 25,
+          paginateBy: 10,
         };
       },
     },
@@ -284,12 +268,11 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "rock.attachment", value: "attachment" },
-      { text: "rock.link", value: "link" },
-      { text: "rock.title", value: "title" },
-      { text: "rock.title_en", value: "title_en" },
-      { text: "rock.sort", value: "sort" },
-      { text: "common.is_private", value: "is_private" },
+      { text: "localityImage.attachment", value: "attachment_image" },
+      { text: "localityImage.attachment_filename", value: "attachment" },
+      { text: "localityImage.title", value: "title" },
+      { text: "localityImage.title_en", value: "title_en" },
+      { text: "localityImage.sort", value: "sort" },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -301,20 +284,16 @@ export default {
     dialog: false,
     item: {
       attachment: null,
-      link: null,
       title: "",
       title_en: "",
-      sort: "",
-      is_private: false,
       remarks: "",
+      sort: null,
     },
     isNewItem: true,
     autocomplete: {
       attachment: [],
-      rock: [],
       loaders: {
         attachment: false,
-        rock: false,
       },
     },
   }),
@@ -343,11 +322,8 @@ export default {
       this.isNewItem = true;
       this.item = {
         attachment: null,
-        link: null,
         title: "",
         title_en: "",
-        sort: "",
-        is_private: false,
         remarks: "",
       };
     },
@@ -358,13 +334,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "rock_image",
+          table: "locality_image",
           item: formattedItem,
           rawItem: this.item,
         });
       } else {
         this.$emit("related:edit", {
-          table: "rock_image",
+          table: "locality_image",
           item: formattedItem,
           rawItem: this.item,
         });
@@ -382,6 +358,8 @@ export default {
         this.item.attachment = {
           id: item.attachment,
           original_filename: item.attachment__original_filename,
+          uuid_filename: item.attachment__uuid_filename,
+          attachment_format__value: item.attachment__attachment_format__value,
         };
         this.autocomplete.attachment.push(this.item.attachment);
       } else if (item.attachment !== null) {
@@ -389,30 +367,17 @@ export default {
         this.autocomplete.attachment.push(this.item.attachment);
       }
 
-      if (typeof item.link !== "object" && item.link !== null) {
-        this.item.link = {
-          id: item.link,
-          name: item.link__name,
-          name_en: item.link__name_en,
-        };
-        this.autocomplete.rock.push(this.item.link);
-      } else if (item.link !== null) {
-        this.item.link = item.link;
-        this.autocomplete.rock.push(this.item.link);
-      }
-
       this.item.title = item.title;
       this.item.title_en = item.title_en;
-      this.item.sort = item.sort;
-      this.item.is_private = item.is_private;
       this.item.remarks = item.remarks;
+      this.item.sort = item.sort;
 
       this.dialog = true;
     },
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "rock_image",
+        table: "locality_image",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item),
       });
@@ -428,11 +393,27 @@ export default {
       return item;
     },
 
-    customLabelForAttachment(option) {
-      return `${option.id} - (${option.original_filename})`;
+    getFileUrl(uuid, size = null) {
+      if (size) {
+        return `${this.$constants.IMAGE_URL}${size}/${uuid.substring(
+          0,
+          2
+        )}/${uuid.substring(2, 4)}/${uuid}`;
+      } else {
+        return `${this.$constants.IMAGE_URL}${uuid.substring(
+          0,
+          2
+        )}/${uuid.substring(2, 4)}/${uuid}`;
+      }
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.attachment-table-image-preview {
+  max-height: 200px;
+  max-width: 200px;
+  border-radius: 0.25rem;
+}
+</style>

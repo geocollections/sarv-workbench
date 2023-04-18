@@ -56,7 +56,8 @@
     "medium": "Keskmine",
     "large": "Suur",
     "original": "Originaal",
-    "fields": "Tabeli päised"
+    "fields": "Tabeli päised",
+    "fillUsingDoi": "Täida DOI abil"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -289,7 +290,8 @@
     "taxon_pages": "Taksoni veebilehed",
     "stratigraphy_catalogue": "Kataloog",
     "selection_series": "Valikud",
-    "geography": "Geograafia"
+    "geography": "Geograafia",
+    "locality_image": "Image"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1889,8 +1891,16 @@
       "locality_synonym": "Nime sünonüümid",
       "attachment_link": "Manused",
       "locality_stratigraphy": "Strat. piirid",
-      "locality_description": "Kirjeldus"
+      "locality_description": "Kirjeldus",
+      "locality_image": "Pildid"
     }
+  },
+  "localityImage": {
+    "attachment": "Pilt",
+    "attachment_filename": "Failinimi",
+    "title": "Pealkiri",
+    "title_en": "Pealkiri (EN)",
+    "sort": "Järjekord"
   },
   "agent": {
     "country__id": "Riik ID",
@@ -2159,7 +2169,7 @@
     "book_editor": "Toimetaja(d)",
     "publisher": "Kirjastus",
     "publisherPlace": "Kirjastuse asukoht",
-    "checkDoi": "Kontrolli",
+    "checkDoi": "Täida DOI abil",
     "journalAdditional": "Ajakirja lisainfo",
     "volume": "Köide",
     "number": "Number",
@@ -2927,6 +2937,7 @@
     "remarks": "Lisainfo",
     "parameter": "Parameeter",
     "parameter_html": "HTML",
+    "parameter_index": "Indeks",
     "parameter_name": "Nimi",
     "parameter_name_en": "Nimi (EN)",
     "synonyms": "Sünonüümid",

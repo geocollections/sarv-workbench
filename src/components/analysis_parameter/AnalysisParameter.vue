@@ -76,7 +76,7 @@
               />
             </v-col>
           </v-row>
-          <!-- HTML and SYNONYMS -->
+          <!-- HTML, INDEX and SYNONYMS -->
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
@@ -85,8 +85,16 @@
                 :label="$t('analysis_parameter.parameter_html')"
               />
             </v-col>
-
             <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="analysis_parameter.parameter_index"
+                :color="bodyActiveColor"
+                :label="$t('analysis_parameter.parameter_index')"
+              />
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
               <input-wrapper
                 v-model="analysis_parameter.synonyms"
                 :color="bodyActiveColor"
@@ -216,6 +224,7 @@ export default {
           "parameter_name",
           "parameter_name_en",
           "parameter_html",
+          "parameter_index",
           "synonyms",
           "parent_parameter",
           "remarks",

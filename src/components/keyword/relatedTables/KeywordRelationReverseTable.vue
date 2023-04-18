@@ -2,6 +2,7 @@
   <div class="keyword-relation-reverse-table">
     <div class="title ml-2">{{ $t("keyword.information") }}:</div>
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedHeaders"
       hide-default-footer
       dense
