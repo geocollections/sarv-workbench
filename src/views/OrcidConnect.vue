@@ -28,7 +28,8 @@ export default {
   mixins: [toastMixin],
   async mounted() {
     if (!this.$route.query.code) {
-      this.$router.replace("/");
+      this.toastError({ text: this.$t("messages.loginError") });
+      this.$router.replace("/settings");
     }
     const res = await axios.post(
       "https://rwapi.geoloogia.info/accounts/dj-rest-auth/orcid/connect/",
@@ -36,9 +37,10 @@ export default {
     );
     if (res.status !== 200) {
       this.toastError({ text: this.$t("messages.loginError") });
+      this.$router.replace("/settings");
     } else {
       this.toastSuccess({ text: this.$t("messages.orcidConnectSuccess") });
-      this.$router.replace("/");
+      this.$router.replace("/settings");
     }
   },
 };

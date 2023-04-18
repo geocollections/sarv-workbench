@@ -97,7 +97,9 @@
     "signInOrcid": "Sisene Orcidiga",
     "progressOrcid": "Sisselogimine kasutades Orcid ...",
     "connectingOrcid": "Kasutaja ühendamine Orcidiga...",
-    "connectOrcid": "Ühenda Orcidi konto"
+    "connectOrcid": "Ühenda Orcidi konto",
+    "disconnectDialogTitle": "Oled kindel, et soovid selle konto ühenduse katkestada?",
+    "disconnectDialogWarning":"Pärast ühenduse katkestamist ei saa seda kontot enam sisselogimiseks kasutada!" 
   },
   "header": {
     "title": "SARV töölaud",
@@ -294,7 +296,9 @@
     "taxon_pages": "Taksoni veebilehed",
     "stratigraphy_catalogue": "Kataloog",
     "selection_series": "Valikud",
-    "geography": "Geograafia"
+    "geography": "Geograafia",
+    "provider": "Pakkuja",
+    "uid": "Uid"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -3085,7 +3089,8 @@
     "reset_files": "Puhasta ebaõnnestunud faili(d)",
     "import": "Impordi fail",
     "try_again": "Proovi uuesti",
-    "print": "Prindi"
+    "print": "Prindi",
+    "ok": "OK"
   },
   "selection_series": {
     "database": "Andmebaas",

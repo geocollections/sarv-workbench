@@ -41,8 +41,40 @@
             :headers="linkedSocialAccountHeaders"
             :items="linkedSocialAccounts.results"
           >
+            <template v-slot:top>
+              <v-dialog v-model="dialogDisconnect" max-width="550px">
+                <v-card>
+                  <v-card-title class="text-h6">
+                    {{ $t("login.disconnectDialogTitle") }}
+                  </v-card-title>
+                  <v-card-text>
+                    <div class="mb-2 text-body-1">
+                      <span class="mr-2">{{ disconnectItem.provider }}</span>
+                      <span>{{ disconnectItem.uid }}</span>
+                    </div>
+                    <div class="font-weight-bold red--text">
+                      {{ $t("login.disconnectDialogWarning") }}
+                    </div>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="closeDelete">
+                      {{ $t("buttons.cancel") }}
+                    </v-btn>
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="disconnectSocialAccountConfirm"
+                    >
+                      {{ $t("buttons.ok") }}
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </template>
             <template v-slot:item.actions="{ item }">
-              <v-icon small @click="deleteSocialAccount(item)">
+              <v-icon small @click="disconnectSocialAccount(item)">
                 fas fa-trash
               </v-icon>
             </template>
@@ -256,10 +288,12 @@ export default {
       },
       linkedSocialAccounts: [],
       linkedSocialAccountHeaders: [
-        { text: "Provider", value: "provider" },
-        { text: "Uid", value: "uid" },
-        { text: "Actions", value: "actions", sortable: false },
+        { text: this.$t("header.provider"), value: "provider" },
+        { text: this.$t("header.uid"), value: "uid" },
+        { text: this.$t("common.actions"), value: "actions", sortable: false },
       ],
+      dialogDisconnect: false,
+      disconnectItem: { id: -1, provider: "", uid: "" },
     };
   },
   async mounted() {
@@ -282,10 +316,20 @@ export default {
     getOrcidConnectUrl() {
       return process.env.VUE_APP_ORCID_CONNECT_URL;
     },
-    async deleteSocialAccount(item) {
+    disconnectSocialAccount(item) {
+      this.disconnectItem = Object.assign({}, item);
+      this.dialogDisconnect = true;
+    },
+    async disconnectSocialAccountConfirm() {
       const res = await axios.post(
-        `https://rwapi.geoloogia.info/accounts/dj-rest-auth/socialaccounts/${item.id}/disconnect/`
+        `https://rwapi.geoloogia.info/accounts/dj-rest-auth/socialaccounts/${this.disconnectItem.id}/disconnect/`
       );
+    },
+    closeDelete() {
+      this.dialogDisconnect = false;
+      this.$nextTick(() => {
+        this.disconnectItem = { id: -1, provider: "", uid: "" };
+      });
     },
   },
 };

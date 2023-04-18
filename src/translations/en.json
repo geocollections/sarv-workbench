@@ -96,7 +96,9 @@
     "signInOrcid": "Sign in with Orcid",
     "progressOrcid": "Signing in using Orcid...",
     "connectingOrcid": "Connecting Workbench account to Orcid ...",
-    "connectOrcid": "Connect Orcid account"
+    "connectOrcid": "Connect Orcid account",
+    "disconnectDialogTitle": "Are you sure you want to disconnect this account?",
+    "disconnectDialogWarning":"After disconnecting, the account can no longer be used to sign in to this application!" 
   },
   "header": {
     "title": "SARV workbench",
@@ -3083,7 +3085,8 @@
     "reset_files": "Clear failed file(s)",
     "import": "Import file",
     "try_again": "Try again",
-    "print": "Print"
+    "print": "Print",
+    "ok": "OK"
   },
   "selection_series": {
     "database": "Database",
