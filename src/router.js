@@ -2625,18 +2625,23 @@ router.beforeEach(async (to, from, next) => {
   );
   const isLoggedIn = handleResponse(loginStateResponse);
 
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    if (to.params.dontShowSessionExpired === false) {
-      Vue.prototype.toast.error("Please log back in", "Session expired", {
-        position: "topCenter",
-        timeout: 5000,
-        closeOnEscape: true,
-        pauseOnHover: false,
-        displayMode: "replace",
-      });
+  if (!isLoggedIn) {
+    if (to.meta.requiresAuth) {
+      if (to.params.dontShowSessionExpired === false) {
+        Vue.prototype.toast.error("Please log back in", "Session expired", {
+          position: "topCenter",
+          timeout: 5000,
+          closeOnEscape: true,
+          pauseOnHover: false,
+          displayMode: "replace",
+        });
+      }
     }
     removeBrowserDataAndLogout();
-    next("/");
+    if (store.state?.user?.authUser) {
+      store.dispatch("user/removeAuthUser");
+      next("/");
+    }
   }
 
   next();
