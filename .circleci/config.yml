@@ -13,7 +13,6 @@ executors:
     environment:
       IMAGE_NAME: geocollections/sarv-edit
       IMAGE_NAME_DEV: geocollections/sarv-edit-dev
-      IMAGE_NAME_EDIT2: geocollections/edit2
     docker:
       - image: cimg/node:lts
 
