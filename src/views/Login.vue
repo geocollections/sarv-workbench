@@ -157,7 +157,7 @@
     <!--      v-show="false"-->
     <!--    />-->
     <img
-      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_2.jpg`"
+      :src="`${config.app.filesUrl}/img/sarv-edit/background_2.jpg`"
       alt="background_image_2"
       v-show="false"
     />
@@ -181,6 +181,7 @@ import { mapState } from "vuex";
 import SiteIcons from "@/components/partial/SiteIcons";
 import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
 import DevNotification from "@/components/partial/DevNotification";
+import config from "@/config";
 
 export default {
   name: "Login",
@@ -191,36 +192,39 @@ export default {
     LangButtons,
   },
   mixins: [authenticationMixin],
-  data: () => ({
-    tab: null,
-    loggingIn: false,
-    valid: true,
-    user: {
-      username: "",
-      password: null,
-    },
-    usernameRules: [
-      (v) => !!v || "Name is required",
-      (v) => (v && v.trim().length > 0) || "Name cant be empty",
-    ],
-    passwordRules: [
-      (v) => !!v || "Password is required",
-      (v) => (v && v.trim().length > 0) || "Password cant be empty",
-    ],
-    showPassword: false,
-    passMessage: null,
-    passError: false,
-    idMessage: null,
-    idError: false,
-    imageId: 0,
-    images: [
-      // "/img/sarv-edit/background_1.jpg",
-      "/img/sarv-edit/background_2.jpg",
-      // "/img/sarv-edit/background_3.jpg",
-      // "/img/sarv-edit/background_4.jpg"
-    ],
-    imageInterval: 60000,
-  }),
+  data() {
+    return {
+      tab: null,
+      loggingIn: false,
+      valid: true,
+      user: {
+        username: "",
+        password: null,
+      },
+      usernameRules: [
+        (v) => !!v || "Name is required",
+        (v) => (v && v.trim().length > 0) || "Name cant be empty",
+      ],
+      passwordRules: [
+        (v) => !!v || "Password is required",
+        (v) => (v && v.trim().length > 0) || "Password cant be empty",
+      ],
+      showPassword: false,
+      passMessage: null,
+      passError: false,
+      idMessage: null,
+      idError: false,
+      imageId: 0,
+      images: [
+        // "/img/sarv-edit/background_1.jpg",
+        "/img/sarv-edit/background_2.jpg",
+        // "/img/sarv-edit/background_3.jpg",
+        // "/img/sarv-edit/background_4.jpg"
+      ],
+      imageInterval: 60000,
+      config,
+    };
+  },
 
   created() {
     window.addEventListener("keyup", this.handleKeyUp);
@@ -234,8 +238,7 @@ export default {
   computed: {
     ...mapState("settings", ["bodyColor"]),
     image() {
-      console.log(this.$constants.IMAGE_URL);
-      return this.$constants.IMAGE_URL + this.images[this.imageId];
+      return this.config.app.filesUrl + this.images[this.imageId];
     },
   },
 
