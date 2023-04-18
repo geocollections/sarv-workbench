@@ -76,7 +76,7 @@ jobs:
             equal: [ "new-rwapi-test", << pipeline.git.branch >> ]
           steps:
             - run:
-                name: Build Docker edit4 image
+                name: Build Docker edit2 image
                 command: |
                   docker build -t $IMAGE_NAME_SARV_WB_DEV:<< pipeline.parameters.package-version >> -t $IMAGE_NAME_SARV_WB_DEV:latest .
             - run:
@@ -266,19 +266,19 @@ jobs:
           name: Copying built files to production
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit
 
-  deploy_edit4:
+  deploy_edit2:
     executor: docker-publisher
     steps:
       - run:
-          name: Run edit4 script
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/edit4/script && . run_docker_image.sh"
+          name: Run edit2 script
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/edit2/script && . run_docker_image.sh"
 
 workflows:
   build:
     jobs:
 
-      # Edit4
-      - deploy_edit4:
+      # Edit2
+      - deploy_edit2:
           filters:
             branches:
               only: new-rwapi-test

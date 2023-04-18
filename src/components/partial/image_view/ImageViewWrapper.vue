@@ -201,9 +201,12 @@ export default {
     openFile: Boolean,
     showAttachmentLink: Boolean,
   },
-  data: () => ({
-    containImages: false,
-  }),
+  data() {
+    return {
+      containImages: false,
+      config,
+    };
+  },
   computed: {
     editMessage() {
       if (this.object === "specimen") return "editSpecimen.editMessage";
@@ -225,7 +228,7 @@ export default {
   methods: {
     openFileInNewWindow(file) {
       if (file) {
-        let url = config.app.filesUrl;
+        let url = this.config.app.filesUrl;
         if (this.isImageFile(file)) {
           url += `/large/${file.uuid_filename}`;
         } else {
