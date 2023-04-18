@@ -26,16 +26,16 @@
           @click="block.linkedAccounts = !block.linkedAccounts"
           :color="bodyActiveColor"
         >
-          <v-icon>{{
-            block.linkedAccounts ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
+          <v-icon>
+            {{ block.linkedAccounts ? "fas fa-angle-up" : "fas fa-angle-down" }}
+          </v-icon>
         </v-btn>
       </v-card-title>
 
       <transition>
         <div v-show="block.linkedAccounts" class="px-1 pt-1 pb-2">
           <v-btn class="mb-2" :href="getOrcidConnectUrl()" color="#a6ce39" dark>
-            {{ $t("login.connectOrcid") }}
+            <v-icon left>fab fa-orcid</v-icon>{{ $t("login.connectOrcid") }}
           </v-btn>
           <v-data-table
             :headers="linkedSocialAccountHeaders"

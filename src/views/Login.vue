@@ -137,6 +137,7 @@
                     <v-divider class="my-2" />
                     <div class="text-center">
                       <v-btn :href="getOrcidLoginUrl()" color="#a6ce39" dark>
+                        <v-icon left>fab fa-orcid</v-icon>
                         {{ $t("login.signInOrcid") }}
                       </v-btn>
                     </div>
