@@ -49,8 +49,12 @@
               v-if="
                 !!item.attachment__attachment_format__value.includes('image')
               "
-              :src="getFileUrl(item.attachment__uuid_filename, 'small')"
-              :lazy-src="getFileUrl(item.attachment__uuid_filename, 'small')"
+              :src="
+                $helpers.getFileUrl(item.attachment__uuid_filename, 'small')
+              "
+              :lazy-src="
+                $helpers.getFileUrl(item.attachment__uuid_filename, 'small')
+              "
               class="grey lighten-2 attachment-table-image-preview my-1"
             >
               <template v-slot:placeholder>
@@ -76,8 +80,10 @@
               v-if="
                 !!item.attachment.attachment_format__value.includes('image')
               "
-              :src="getFileUrl(item.attachment.uuid_filename, 'small')"
-              :lazy-src="getFileUrl(item.attachment.uuid_filename, 'small')"
+              :src="$helpers.getFileUrl(item.attachment.uuid_filename, 'small')"
+              :lazy-src="
+                $helpers.getFileUrl(item.attachment.uuid_filename, 'small')
+              "
               class="grey lighten-2 attachment-table-image-preview my-1"
             >
               <template v-slot:placeholder>
@@ -440,20 +446,6 @@ export default {
         }
       });
       return item;
-    },
-
-    getFileUrl(uuid, size = null) {
-      if (size) {
-        return `${this.$constants.IMAGE_URL}${size}/${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
-      } else {
-        return `${this.$constants.IMAGE_URL}${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
-      }
     },
   },
 };

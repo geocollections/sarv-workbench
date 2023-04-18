@@ -49,8 +49,8 @@
         <!-- TODO: DOI LINK -->
         <span v-if="entity.doi">
           <a
-            :href="getDoiUrl(entity.doi)"
-            :title="getDoiUrl(entity.doi)"
+            :href="$helpers.getDoiUrl(entity.doi)"
+            :title="$helpers.getDoiUrl(entity.doi)"
             target="_blank"
             :class="`${bodyActiveColor}--text`"
             >https://doi.org/{{ entity.doi }}
@@ -60,8 +60,14 @@
         <span>
           <a
             v-if="entity.attachment__filename"
-            :title="getFileUrl(entity.attachment__filename)"
-            @click="openWindow(getFileUrl(entity.attachment__filename))"
+            :title="$helpers.getFileUrl(entity.attachment__filename)"
+            @click="
+              $helpers.openUrlInNewWindow(
+                $helpers.getFileUrl(entity.attachment__filename),
+                1000,
+                900
+              )
+            "
             class="green-link"
           >
             <b>PDF</b>
@@ -73,7 +79,7 @@
               getUrl(entity.url)
             "
             :title="getUrl(entity.url)"
-            @click="openWindow(getUrl(entity.url))"
+            @click="$helpers.openUrlInNewWindow(getUrl(entity.url), 1000, 900)"
             rel="noopener noreferrer"
             class="red-link"
           >
@@ -99,43 +105,12 @@ export default {
   },
   name: "ReferenceListView",
   methods: {
-    getDoiUrl(doi) {
-      return `https://doi.org/${doi}`;
-    },
-
-    getFileUrl(uuid) {
-      return `${this.$constants.IMAGE_URL}${uuid.substring(
-        0,
-        2
-      )}/${uuid.substring(2, 4)}/${uuid}`;
-    },
-
     getUrl(url) {
       if (url.startsWith("http")) return url;
       else if (url.startsWith("www.")) return "http://" + url;
       else if (url.includes("www."))
         return "http://" + url.substring(url.indexOf("www."));
       else return false;
-    },
-    openWindow(url) {
-      window.open(url, "", "width=1000,height=900");
-    },
-    openDOI(params) {
-      // TODO: Check for correct doi address
-      window.open("https://doi.org/" + params.doi, "", "width=1000,height=900");
-    },
-
-    openPdf(params) {
-      window.open(
-        this.$constants.IMAGE_URL +
-          params.pdf.substring(0, 2) +
-          "/" +
-          params.pdf.substring(2, 4) +
-          "/" +
-          params.pdf,
-        "",
-        "width=1000,height=900"
-      );
     },
   },
 };

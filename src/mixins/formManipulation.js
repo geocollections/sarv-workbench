@@ -6,7 +6,7 @@ import {
   fetchChangeRecordState,
   fetchRotateImage,
   postRequest,
-} from "../assets/js/api/apiCalls";
+} from "@/assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
 
 const formManipulation = {
@@ -431,9 +431,7 @@ const formManipulation = {
             date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
             is_private: true,
             is_preferred:
-              relatedObject === "drillcore_box" && totalAttachmentCount === 0
-                ? true
-                : false,
+              relatedObject === "drillcore_box" && totalAttachmentCount === 0,
             is_locked: relatedObject === "doi",
             related_data: {
               [attachment_link]: [{ id: this[relatedObject].id }],
@@ -592,50 +590,6 @@ const formManipulation = {
         "",
         "width=" + width + ",height=750"
       );
-    },
-
-    openUrlInNewWindow(params) {
-      if (typeof params.width === "undefined") {
-        params.width = 800;
-      }
-      if (typeof params.height === "undefined") {
-        params.height = 750;
-      }
-      window.open(
-        params.url,
-        "",
-        "width=" + params.width + ",height=" + params.height
-      );
-    },
-
-    openDOI(params) {
-      window.open("https://doi.org/" + params.doi, "", "width=1000,height=900");
-    },
-
-    openPdf(params) {
-      window.open(
-        this.$constants.IMAGE_URL +
-          params.pdf.substring(0, 2) +
-          "/" +
-          params.pdf.substring(2, 4) +
-          "/" +
-          params.pdf,
-        "",
-        "width=1000,height=900"
-      );
-    },
-
-    getDoiUrl(doi) {
-      return `https://doi.org/${doi}`;
-    },
-
-    getSarvDoiUrl(doiIdentifier) {
-      if (doiIdentifier)
-        return "https://doi.geocollections.info/" + doiIdentifier;
-    },
-
-    getFossilsUrl(id) {
-      return `https://fossiilid.info/${id}`;
     },
 
     /**

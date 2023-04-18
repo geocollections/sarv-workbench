@@ -7,6 +7,7 @@ import VueCookies from "vue-cookies";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import constants from "@/plugins/constants";
+import helpers from "@/plugins/helpers";
 // import moment from "moment";
 require("moment/locale/et");
 
@@ -18,14 +19,13 @@ import "leaflet/dist/leaflet.css"; // Leaflet css
 // Custom css
 import "@/assets/css/styles.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import attachmentUrl from "./plugins/attachmentUrl";
 
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueCookies);
 Vue.use(require("vue-moment"));
 Vue.use(constants);
-Vue.use(attachmentUrl);
+Vue.use(helpers);
 Vue.config.productionTip = false;
 
 /******************************
@@ -45,7 +45,7 @@ const lang = store?.state?.settings?.lang || "ee";
 const i18n = new VueI18n({
   locale: lang,
   fallbackLocale: "en",
-  silentTranslationWarn: process.env.NODE_ENV === "production",
+  silentTranslationWarn: true,
   messages,
 });
 /******************************

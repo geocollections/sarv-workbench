@@ -13,23 +13,12 @@
             @click="openFileInNewWindow(box)"
             style="max-width: 800px; max-height: 500px"
             class="elevation-4"
-            :src="getFileUrl(box.attachment__uuid_filename, 'medium')"
-            :title="getFileUrl(box.attachment__uuid_filename, 'medium')"
+            :src="$helpers.getFileUrl(box.attachment__uuid_filename, 'medium')"
+            :title="
+              $helpers.getFileUrl(box.attachment__uuid_filename, 'medium')
+            "
           />
 
-          <!--          <v-img-->
-          <!--            max-width="700"-->
-          <!--            max-height="500"-->
-          <!--            contain-->
-          <!--            :lazy-src="getFileUrl(box.attachment__uuid_filename, 'small')"-->
-          <!--            :src="getFileUrl(box.attachment__uuid_filename, 'medium')"-->
-          <!--          >-->
-          <!--            <template v-slot:placeholder>-->
-          <!--              <v-row class="fill-height ma-0" align="center" justify="center">-->
-          <!--                <v-progress-circular indeterminate color="grey lighten-5" />-->
-          <!--              </v-row>-->
-          <!--            </template>-->
-          <!--          </v-img>-->
           <slot name="itemTitle" v-bind:item="box"></slot>
         </div>
       </v-col>
@@ -64,28 +53,15 @@ export default {
       if (typeof file !== "undefined" && file !== null) {
         let url = "";
         if (this.isImageFile(file)) {
-          url = this.getFileUrl(file.attachment__uuid_filename, "large");
+          url = this.$helpers.getFileUrl(
+            file.attachment__uuid_filename,
+            "large"
+          );
         } else {
-          url = this.getFileUrl(file.attachment__uuid_filename);
+          url = this.$helpers.getFileUrl(file.attachment__uuid_filename);
         }
 
         window.open(url, "FileWindow", "width=800,height=750");
-      }
-    },
-    getFileUrl(uuid, size = null) {
-      console.log(this.vueAppImageUrl);
-      if (uuid) {
-        if (size) {
-          return `${this.$constants.IMAGE_URL}${size}/${uuid.substring(
-            0,
-            2
-          )}/${uuid.substring(2, 4)}/${uuid}`;
-        } else {
-          return `${this.$constants.IMAGE_URL}${uuid.substring(
-            0,
-            2
-          )}/${uuid.substring(2, 4)}/${uuid}`;
-        }
       }
     },
     isImageFile(image) {
