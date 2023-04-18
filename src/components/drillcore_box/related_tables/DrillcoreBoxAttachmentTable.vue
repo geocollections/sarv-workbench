@@ -36,7 +36,7 @@
         <!--        >-->
         <div style="max-width: 200px; max-height: 200px">
           <a
-            :href="getFileUrl(item.uuid_filename)"
+            :href="$helpers.getFileUrl(item.uuid_filename)"
             target="DrillcoreBoxWindow"
             title="View original file"
             class="image-link"
@@ -48,8 +48,8 @@
                 item.attachment_format__value &&
                 !!item.attachment_format__value.includes('image')
               "
-              :src="getFileUrl(item.uuid_filename, 'small')"
-              :lazy-src="getFileUrl(item.uuid_filename, 'small')"
+              :src="$helpers.getFileUrl(item.uuid_filename, 'small')"
+              :lazy-src="$helpers.getFileUrl(item.uuid_filename, 'small')"
               class="grey lighten-2 attachment-table-image-preview my-1 rounded"
               :max-width="200"
               :max-height="200"
@@ -299,20 +299,6 @@ export default {
       return item;
     },
 
-    getFileUrl(uuid, size = null) {
-      if (size) {
-        return `${this.$constants.IMAGE_URL}${size}/${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
-      } else {
-        return `${this.$constants.IMAGE_URL}${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
-      }
-    },
-
     getMeta(url) {
       return new Promise((resolve, reject) => {
         let img = new Image();
@@ -324,7 +310,7 @@ export default {
 
     async getImageWidth(uuid, id) {
       if (uuid) {
-        let img = await this.getMeta(this.getFileUrl(uuid, "small"));
+        let img = await this.getMeta(this.$helpers.getFileUrl(uuid, "small"));
         if (img.width) this.$set(this.widths, id, img.width);
         else this.$set(this.widths, id, 400);
       } else this.$set(this.widths, id, 400);

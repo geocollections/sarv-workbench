@@ -34,7 +34,7 @@
               :title="openFile ? $t(viewMessage) : $t(editMessage)"
               @click="
                 openFile
-                  ? $urlClicked(image)
+                  ? openFileInNewWindow(image)
                   : $router.push({ path: `/${object}/${image[idField]}` })
               "
             >
@@ -44,14 +44,8 @@
                 aspect-ratio="1"
                 :contain="containImages"
                 v-if="isImageFile(image)"
-                :src="
-                  $constants.IMAGE_URL +
-                  getFileUrl(image.uuid_filename, 'small')
-                "
-                :lazy-src="
-                  $constants.IMAGE_URL +
-                  getFileUrl(image.uuid_filename, 'small')
-                "
+                :src="$helpers.getFileUrl(image.uuid_filename, 'small')"
+                :lazy-src="$helpers.getFileUrl(image.uuid_filename, 'small')"
                 class="grey lighten-2"
               >
                 <template v-slot:placeholder>
@@ -175,38 +169,14 @@
             <span>{{ $t(editMessage) }}</span>
           </v-tooltip>
         </div>
-
-        <!--        <v-row no-gutters class="pr-2" style="max-width: 50px;">-->
-        <!--          <v-col cols="12" class="pa-1 align-self-center">-->
-        <!--            <v-btn-->
-        <!--              :title="$t(viewMessage)"-->
-        <!--              icon-->
-        <!--              color="blue"-->
-        <!--              @click="openFileInNewWindow(image)"-->
-        <!--              :small="$vuetify.breakpoint.xsOnly"-->
-        <!--            >-->
-        <!--              <v-icon :small="$vuetify.breakpoint.xsOnly">fas fa-eye</v-icon>-->
-        <!--            </v-btn>-->
-        <!--          </v-col>-->
-        <!--          <v-col cols="12" class="pa-1 align-self-center">-->
-        <!--            <v-btn-->
-        <!--              color="green"-->
-        <!--              :title="$t(editMessage)"-->
-        <!--              icon-->
-        <!--              @click="openInNewTab(object, image[idField])"-->
-        <!--              :small="$vuetify.breakpoint.xsOnly"-->
-        <!--              ><v-icon :small="$vuetify.breakpoint.xsOnly"-->
-        <!--                >fas fa-edit</v-icon-->
-        <!--              ></v-btn-->
-        <!--            >-->
-        <!--          </v-col>-->
-        <!--        </v-row>-->
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
+import config from "@/config";
+
 export default {
   name: "ImageViewWrapper",
   props: {
@@ -254,22 +224,14 @@ export default {
   },
   methods: {
     openFileInNewWindow(file) {
-      if (typeof file !== "undefined" && file !== null) {
-        let url = "";
+      if (file) {
+        let url = config.app.filesUrl;
         if (this.isImageFile(file)) {
-          url = `large/${file.uuid_filename}`;
+          url += `/large/${file.uuid_filename}`;
         } else {
-          url = file.uuid_filename;
+          url += "/" + file.uuid_filename;
         }
-        this.$urlClicked(url, "_blank", "width=800,height=750");
-      }
-    },
-
-    getFileUrl(uuid, size = null) {
-      if (size) {
-        return `${size}/${uuid}`;
-      } else {
-        return `${uuid}`;
+        this.$helpers.openUrlInNewWindow(url);
       }
     },
 

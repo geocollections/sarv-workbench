@@ -29,9 +29,7 @@
       <!-- AUDIO -->
       <audio v-if="isAudioFile" controls>
         <source
-          :src="
-            $constants.IMAGE_URL + getFileLink({ filename: data.uuid_filename })
-          "
+          :src="$helpers.getFileUrl(data.uuid_filename)"
           :type="data.attachment_format__value"
         />
         Your browser does not support the audio element.
@@ -41,9 +39,7 @@
       <!-- VIDEO -->
       <video v-else-if="isVideoFile" type="video" controls>
         <source
-          :src="
-            $constants.IMAGE_URL + getFileLink({ filename: data.uuid_filename })
-          "
+          :src="$helpers.getFileUrl(data.uuid_filename)"
           :type="data.attachment_format__value"
         />
         Your browser does not support the video element.
@@ -54,14 +50,11 @@
 
       <img
         v-else-if="isImageFile"
-        :src="
-          $constants.IMAGE_URL +
-          getFileLink({ filename: data.uuid_filename, size: 'medium' })
-        "
-        :title="getFileLink({ filename: data.uuid_filename, size: 'medium' })"
+        :src="$helpers.getFileUrl(data.uuid_filename, 'medium')"
+        :title="$helpers.getFileUrl(data.uuid_filename, 'medium')"
         @click="
-          openUrlInNewWindow(
-            getFileLink({ filename: data.uuid_filename, size: 'medium' })
+          $helpers.openUrlInNewWindow(
+            $helpers.getFileUrl(data.uuid_filename, 'medium')
           )
         "
         alt="Image preview..."
@@ -74,9 +67,9 @@
         v-else
         class="far fa-5x link"
         @click="
-          openUrlInNewWindow(getFileLink({ filename: data.uuid_filename }))
+          $helpers.openUrlInNewWindow($helpers.getFileUrl(data.uuid_filename))
         "
-        :title="getFileLink({ filename: data.uuid_filename })"
+        :title="$helpers.getFileUrl(data.uuid_filename)"
         :class="getAttachmentIcon(data)"
       ></i>
     </div>
@@ -87,25 +80,17 @@
     >
       <div class="d-flex flex-row flex-wrap">
         <v-btn
-          v-for="btn in buttons"
-          :key="btn"
+          v-for="size in buttons"
+          :key="size"
           small
           class="ma-1"
           @click="
-            openUrlInNewWindow(
-              getFileLink({
-                filename: data.uuid_filename,
-                size: btn === 'original' ? '' : btn,
-              })
+            $helpers.openUrlInNewWindow(
+              $helpers.getFileUrl(data.uuid_filename, size)
             )
           "
-          :title="
-            getFileLink({
-              filename: data.uuid_filename,
-              size: btn === 'original' ? '' : btn,
-            })
-          "
-          >{{ $t(`common.${btn}`) }}</v-btn
+          :title="$helpers.getFileUrl(data.uuid_filename, size)"
+          >{{ $t(`common.${size}`) }}</v-btn
         >
       </div>
     </div>
@@ -207,32 +192,6 @@ export default {
         // 1 webm
         else return "fa-file"; // 4 hz1
       }
-    },
-
-    getFileLink(params) {
-      if (params.size) {
-        return (
-          params.size +
-          "/" +
-          params.filename.substring(0, 2) +
-          "/" +
-          params.filename.substring(2, 4) +
-          "/" +
-          params.filename
-        );
-      } else {
-        return (
-          params.filename.substring(0, 2) +
-          "/" +
-          params.filename.substring(2, 4) +
-          "/" +
-          params.filename
-        );
-      }
-    },
-
-    openUrlInNewWindow(url) {
-      this.$urlClicked(url, "", "width=" + 800 + ",height=" + 750);
     },
 
     rotateImage(deg) {

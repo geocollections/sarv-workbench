@@ -25,8 +25,8 @@
             <div class="pa-1" v-if="reference.doi">
               <v-btn
                 icon
-                :href="getDoiUrl(reference.doi)"
-                :title="getDoiUrl(reference.doi)"
+                :href="$helpers.getDoiUrl(reference.doi)"
+                :title="$helpers.getDoiUrl(reference.doi)"
                 target="DoiWindow"
                 :color="bodyActiveColor"
               >

@@ -35,8 +35,8 @@
         >
           <v-img
             v-if="isAttachmentImage(item.attachment_format__value)"
-            :src="getFileUrl(item.uuid_filename, 'small')"
-            :lazy-src="getFileUrl(item.uuid_filename, 'small')"
+            :src="$helpers.getFileUrl(item.uuid_filename, 'small')"
+            :lazy-src="$helpers.getFileUrl(item.uuid_filename, 'small')"
             class="grey lighten-2 attachment-table-image-preview my-1"
             max-width="200"
             max-height="200"
@@ -185,20 +185,6 @@ export default {
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
-    },
-
-    getFileUrl(uuid, size = null) {
-      if (size) {
-        return `${this.$constants.IMAGE_URL}${size}/${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
-      } else {
-        return `${this.$constants.IMAGE_URL}${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
-      }
     },
 
     isAttachmentImage(type) {

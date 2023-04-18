@@ -75,8 +75,8 @@
     <template v-slot:item.doi="{ item }">
       <a
         v-if="item.doi"
-        :href="getDoiUrl(item.doi)"
-        :title="getDoiUrl(item.doi)"
+        :href="$helpers.getDoiUrl(item.doi)"
+        :title="$helpers.getDoiUrl(item.doi)"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
         target="DoiWindow"
@@ -87,8 +87,8 @@
     <template v-slot:item.attachment__filename="{ item }">
       <v-btn
         v-if="item.attachment__filename"
-        :href="getFileUrl(item.attachment__filename)"
-        :title="getFileUrl(item.attachment__filename)"
+        :href="$helpers.getFileUrl(item.attachment__filename)"
+        :title="$helpers.getFileUrl(item.attachment__filename)"
         :color="bodyActiveColor"
         target="FileWindow"
         icon
@@ -153,17 +153,6 @@ export default {
   methods: {
     getGeoloogiaUrl(id) {
       return `https://kirjandus.geoloogia.info/reference/${id}`;
-    },
-
-    getDoiUrl(doi) {
-      return `https://doi.org/${doi}`;
-    },
-
-    getFileUrl(uuid) {
-      return `${this.$constants.IMAGE_URL}${uuid.substring(
-        0,
-        2
-      )}/${uuid.substring(2, 4)}/${uuid}`;
     },
 
     getUrl(url) {
