@@ -315,9 +315,9 @@
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
           <sample-series-samples-table
-            v-show="activeTab === 'samples'"
-            :response="relatedData.samples"
-            :search-parameters="relatedData.searchParameters.samples"
+            v-show="activeTab === 'sample'"
+            :response="relatedData.sample"
+            :search-parameters="relatedData.searchParameters.sample"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem($event, 'series')"
@@ -325,10 +325,10 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <div v-show="activeTab === 'attachments'">
+          <div v-show="activeTab === 'attachment'">
             <file-input
               show-existing
-              :files-from-object="relatedData.attachments.results"
+              :files-from-object="relatedData.attachment.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
@@ -370,7 +370,7 @@ import {
   fetchSampleSeriesAttachments,
   fetchSampleSeriesDetail,
   fetchSampleSeriesSamples,
-} from "../../assets/js/api/apiCalls";
+} from "@/assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
 import DateWrapper from "../partial/inputs/DateWrapper";
@@ -478,10 +478,10 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "samples", iconClass: "fas fa-vial" },
-          { name: "attachments", iconClass: "far fa-file" },
+          { name: "sample", iconClass: "fas fa-vial" },
+          { name: "attachment", iconClass: "far fa-file" },
         ],
-        activeTab: "samples",
+        activeTab: "sample",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "id",
@@ -573,16 +573,16 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        samples: { count: 0, results: [] },
-        attachments: { count: 0, results: [] },
+        sample: { count: 0, results: [] },
+        attachment: { count: 0, results: [] },
         searchParameters: {
-          samples: {
+          sample: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
             sortDesc: [true],
           },
-          attachments: {
+          attachment: {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
@@ -613,19 +613,19 @@ export default {
       if (!this.$route.meta.isEdit) {
         this.relatedTabs.forEach((tab) => {
           if (
-            tab.name === "attachments" &&
+            tab.name === "attachment" &&
             this.relatedData[tab.name].count > 0
           ) {
             uploadableObject.related_data.attachment =
-              this.relatedData.attachments.results.map((item) => {
+              this.relatedData.attachment.results.map((item) => {
                 return { id: item.id };
               });
           }
         });
       } else {
-        if (this.relatedData.attachments.results.length > 0) {
+        if (this.relatedData.attachment.results.length > 0) {
           uploadableObject.related_data.attachment =
-            this.relatedData.attachments.results.map((item) => {
+            this.relatedData.attachment.results.map((item) => {
               return { id: item.id };
             });
         } else uploadableObject.related_data.attachment = null;
@@ -687,15 +687,15 @@ export default {
     loadRelatedData(object) {
       let query;
 
-      if (object === "samples") {
+      if (object === "sample") {
         query = fetchSampleSeriesSamples(
           this.$route.params.id,
-          this.relatedData.searchParameters.samples
+          this.relatedData.searchParameters.sample
         );
-      } else if (object === "attachments") {
+      } else if (object === "attachment") {
         query = fetchSampleSeriesAttachments(
           this.$route.params.id,
-          this.relatedData.searchParameters.attachments
+          this.relatedData.searchParameters.attachment
         );
       }
 
@@ -712,8 +712,7 @@ export default {
     },
 
     addExistingFiles(files) {
-      // this.relatedData.attachments.count = files.length;
-      this.relatedData.attachments.results = files;
+      this.relatedData.attachment.results = files;
     },
   },
 };
