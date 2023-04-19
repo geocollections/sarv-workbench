@@ -57,7 +57,8 @@
     "large": "Suur",
     "original": "Originaal",
     "fields": "Tabeli päised",
-    "fillUsingDoi": "Täida DOI abil"
+    "fillUsingDoi": "Täida DOI abil",
+    "or": "VÕI"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -92,14 +93,15 @@
     "passwordMessage": "Palun sisesta oma kasutajanimi ja parool",
     "idCardMessage": "Kontrolli, et ID-kaart oleks lugejas ja arvutiga ühendatud",
     "username": "Kasutajanimi",
-    "loginButton": "LOGI SISSE",
+    "loginButton": "Logi sisse",
     "overlay": "Login sisse...",
-    "signInOrcid": "Sisene Orcidiga",
-    "progressOrcid": "Sisselogimine kasutades Orcid ...",
-    "connectingOrcid": "Kasutaja ühendamine Orcidiga...",
-    "connectOrcid": "Ühenda Orcidi konto",
+    "signInOrcid": "Sisene ORCIDiga",
+    "progressOrcid": "Sisselogimine kasutades ORCID...",
+    "connectingOrcid": "Kasutaja ühendamine ORCIDiga...",
+    "connectOrcid": "Ühenda ORCIDi konto",
     "disconnectDialogTitle": "Oled kindel, et soovid selle konto ühenduse katkestada?",
-    "disconnectDialogWarning":"Pärast ühenduse katkestamist ei saa seda kontot enam sisselogimiseks kasutada!" 
+    "disconnectDialogWarning":"Pärast ühenduse katkestamist ei saa seda kontot enam sisselogimiseks kasutada!",
+    "signInIdCard": "Sisene ID-kaardiga"
   },
   "header": {
     "title": "SARV töölaud",

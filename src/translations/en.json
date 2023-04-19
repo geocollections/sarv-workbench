@@ -56,7 +56,8 @@
     "medium": "Medium",
     "large": "large",
     "original": "Original",
-    "fields": "Table headers"
+    "fields": "Table headers",
+    "or": "OR"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -91,14 +92,15 @@
     "passwordMessage": "Please enter your username and password",
     "idCardMessage": "Make sure that ID-card is in the reader and connected to a computer",
     "username": "Username",
-    "loginButton": "LOGIN",
+    "loginButton": "Sign in",
     "overlay": "Logging in...",
-    "signInOrcid": "Sign in with Orcid",
-    "progressOrcid": "Signing in using Orcid...",
-    "connectingOrcid": "Connecting Workbench account to Orcid ...",
-    "connectOrcid": "Connect Orcid account",
+    "signInOrcid": "Sign in with ORCID",
+    "progressOrcid": "Signing in using ORCID...",
+    "connectingOrcid": "Connecting Workbench account to ORCID...",
+    "connectOrcid": "Connect ORCID account",
     "disconnectDialogTitle": "Are you sure you want to disconnect this account?",
-    "disconnectDialogWarning":"After disconnecting, the account can no longer be used to sign in to this application!" 
+    "disconnectDialogWarning":"After disconnecting, the account can no longer be used to sign in to this application!",
+    "signInIdCard": "Sign in with ID-card"
   },
   "header": {
     "title": "SARV workbench",

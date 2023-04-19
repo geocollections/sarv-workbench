@@ -1,11 +1,5 @@
 <template>
-  <v-main
-    class="login"
-    :style="{
-      backgroundImage: `url('${image}')`,
-      transition: 'background 5s ease-in-out',
-    }"
-  >
+  <v-main class="login" :style="mainCss">
     <lang-buttons v-if="$route.meta.isLogin" style="z-index: 3" />
     <div class="gradient"></div>
     <v-container fill-height style="padding-bottom: 80px">
@@ -15,136 +9,128 @@
 
           <GlobalAlertNotification />
 
-          <DevNotification />
+          <!-- <DevNotification /> -->
 
-          <v-card
-            :color="bodyColor.split('n-')[0] + 'n-5'"
-            elevation="8"
-            style="z-index: 3"
-          >
-            <v-tabs
-              v-model="tab"
-              grow
-              :background-color="bodyColor.split('n-')[0] + 'n-3'"
-              hide-slider
-              :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
-            >
-              <v-tabs-slider></v-tabs-slider>
+          <v-card color="grey lighten-4" style="z-index: 3">
+            <!-- <v-card-text> -->
+            <!-- <v-alert -->
+            <!--   class="mb-0" -->
+            <!--   border="right" -->
+            <!--   :colored-border="!idError" -->
+            <!--   :color="idError ? 'red' : 'green darken-3'" -->
+            <!--   elevation="3" -->
+            <!--   :icon="idError ? 'fas fa-exclamation' : 'fas fa-info'" -->
+            <!--   prominent -->
+            <!--   dense -->
+            <!-- > -->
+            <!--   <span v-if="!idMessage" -->
+            <!--     ><b>{{ $t("login.idCardMessage") }}</b></span -->
+            <!--   > -->
+            <!--   <b>{{ idMessage }}</b> -->
+            <!-- </v-alert> -->
+            <!-- </v-card-text> -->
+            <!-- <v-card-title> Login </v-card-title> -->
+            <v-card-text class="pt-4">
+              <v-btn
+                id="login-id"
+                class="text-none"
+                block
+                @click="authenticate('id')"
+                :loading="loggingInIdCard"
+                color="#003168"
+                dark
+                elevation="0"
+              >
+                <v-icon left>fas fa-id-card</v-icon>
+                {{ $t("login.signInIdCard") }}
+              </v-btn>
+              <v-btn
+                class="mt-2 text-none"
+                block
+                :href="getOrcidLoginUrl()"
+                color="#a6ce39"
+                dark
+                elevation="0"
+              >
+                <v-icon left>fab fa-orcid</v-icon>
+                {{ $t("login.signInOrcid") }}
+              </v-btn>
+            </v-card-text>
+            <div class="d-flex align-center my-2 px-2">
+              <div
+                style="flex-grow: 1; border-bottom: 1px solid lightgray"
+              ></div>
+              <div class="mx-3" style="color: darkgray">
+                {{ $t("common.or") }}
+              </div>
+              <div
+                style="flex-grow: 1; border-bottom: 1px solid lightgray"
+              ></div>
+            </div>
+            <v-card-text>
+              <!-- <v-alert -->
+              <!--   border="right" -->
+              <!--   :colored-border="!passError" -->
+              <!--   :color="passError ? 'red lighten-1' : 'green darken-3'" -->
+              <!--   elevation="3" -->
+              <!--   :icon="passError ? 'fas fa-exclamation' : 'fas fa-info'" -->
+              <!--   prominent -->
+              <!--   dense -->
+              <!-- > -->
+              <!--   <span v-if="!passMessage"> -->
+              <!--     <b>{{ $t("login.passwordMessage") }}</b> -->
+              <!--   </span> -->
+              <!--   <b>{{ passMessage }}</b> -->
+              <!-- </v-alert> -->
 
-              <v-tab class="font-weight-bold">{{ $t("login.idCard") }}</v-tab>
+              <v-form v-model="valid">
+                <v-text-field
+                  id="username-field"
+                  v-model="user.username"
+                  :rules="usernameRules"
+                  :label="$t('login.username')"
+                  placeholder=""
+                  color="black"
+                  outlined
+                  dense
+                  required
+                />
 
-              <v-tab class="font-weight-bold">{{ $t("login.password") }}</v-tab>
-            </v-tabs>
+                <v-text-field
+                  id="password-field"
+                  v-model="user.password"
+                  :rules="passwordRules"
+                  :label="$t('login.password')"
+                  placeholder=""
+                  color="black"
+                  outlined
+                  dense
+                  :type="showPassword ? 'text' : 'password'"
+                  required
+                >
+                  <template v-slot:append>
+                    <v-icon tabindex="-1" @click="showPassword = !showPassword">
+                      {{ showPassword ? "far fa-eye" : "far fa-eye-slash" }}
+                    </v-icon>
+                  </template>
+                </v-text-field>
 
-            <v-tabs-items v-model="tab">
-              <v-tab-item>
-                <v-card flat :color="bodyColor.split('n-')[0] + 'n-5'">
-                  <v-card-text>
-                    <v-alert
-                      class="mb-0"
-                      border="right"
-                      :colored-border="!idError"
-                      :color="idError ? 'red' : 'green darken-3'"
-                      elevation="3"
-                      :icon="idError ? 'fas fa-exclamation' : 'fas fa-info'"
-                      prominent
-                      dense
-                    >
-                      <span v-if="!idMessage"
-                        ><b>{{ $t("login.idCardMessage") }}</b></span
-                      >
-                      <b>{{ idMessage }}</b>
-                    </v-alert>
-                  </v-card-text>
-
-                  <v-card-actions class="justify-center pa-4 pt-2">
-                    <v-btn
-                      id="login-id"
-                      @click="authenticate('id')"
-                      :loading="loggingIn"
-                      color="green darken-3"
-                      dark
-                    >
-                      {{ $t("login.loginButton") }}
-                      <v-icon small right>fas fa-id-card</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-tab-item>
-
-              <v-tab-item>
-                <v-card flat :color="bodyColor.split('n-')[0] + 'n-5'">
-                  <v-card-text>
-                    <v-alert
-                      border="right"
-                      :colored-border="!passError"
-                      :color="passError ? 'red lighten-1' : 'green darken-3'"
-                      elevation="3"
-                      :icon="passError ? 'fas fa-exclamation' : 'fas fa-info'"
-                      prominent
-                      dense
-                    >
-                      <span v-if="!passMessage">
-                        <b>{{ $t("login.passwordMessage") }}</b>
-                      </span>
-                      <b>{{ passMessage }}</b>
-                    </v-alert>
-
-                    <v-form v-model="valid">
-                      <v-text-field
-                        id="username-field"
-                        v-model="user.username"
-                        :rules="usernameRules"
-                        :label="$t('login.username')"
-                        placeholder=""
-                        color="black"
-                        outlined
-                        dense
-                        required
-                      ></v-text-field>
-
-                      <v-text-field
-                        id="password-field"
-                        v-model="user.password"
-                        :rules="passwordRules"
-                        :label="$t('login.password')"
-                        placeholder=""
-                        color="black"
-                        outlined
-                        dense
-                        :type="showPassword ? 'text' : 'password'"
-                        :append-icon="
-                          showPassword ? 'far fa-eye' : 'far fa-eye-slash'
-                        "
-                        @click:append="showPassword = !showPassword"
-                        required
-                      ></v-text-field>
-
-                      <div class="text-center mt-2">
-                        <v-btn
-                          id="login-pass"
-                          @click="login"
-                          :disabled="!valid"
-                          :loading="loggingIn"
-                          color="green darken-3"
-                          :dark="valid"
-                        >
-                          {{ $t("login.loginButton") }}
-                          <v-icon small right>fas fa-sign-in-alt</v-icon>
-                        </v-btn>
-                      </div>
-                    </v-form>
-                    <v-divider class="my-2" />
-                    <div class="text-center">
-                      <v-btn :href="getOrcidLoginUrl()" color="#a6ce39" dark>
-                        <v-icon left>fab fa-orcid</v-icon>
-                        {{ $t("login.signInOrcid") }}
-                      </v-btn>
-                    </div>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-            </v-tabs-items>
+                <v-btn
+                  block
+                  id="login-pass"
+                  class="text-none"
+                  color="green darken-3"
+                  elevation="0"
+                  :disabled="!valid"
+                  :loading="loggingIn"
+                  :dark="valid"
+                  @click="login"
+                >
+                  <v-icon left>fas fa-sign-in-alt</v-icon>
+                  {{ $t("login.loginButton") }}
+                </v-btn>
+              </v-form>
+            </v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -156,11 +142,6 @@
     <!--      alt="background_image_1"-->
     <!--      v-show="false"-->
     <!--    />-->
-    <img
-      :src="`${config.app.filesUrl}/img/sarv-edit/background_2.jpg`"
-      alt="background_image_2"
-      v-show="false"
-    />
     <!--    <img-->
     <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_3.jpg`"-->
     <!--      alt="background_image_3"-->
@@ -180,13 +161,13 @@ import LangButtons from "../components/partial/LangButtons";
 import { mapState } from "vuex";
 import SiteIcons from "@/components/partial/SiteIcons";
 import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
-import DevNotification from "@/components/partial/DevNotification";
+// import DevNotification from "@/components/partial/DevNotification";
 import config from "@/config";
 
 export default {
   name: "Login",
   components: {
-    DevNotification,
+    // DevNotification,
     GlobalAlertNotification,
     SiteIcons,
     LangButtons,
@@ -196,6 +177,7 @@ export default {
     return {
       tab: null,
       loggingIn: false,
+      loggingInIdCard: false,
       valid: true,
       user: {
         username: "",
@@ -237,8 +219,15 @@ export default {
 
   computed: {
     ...mapState("settings", ["bodyColor"]),
-    image() {
-      return this.config.app.filesUrl + this.images[this.imageId];
+    mainCss() {
+      return {
+        backgroundImage: `linear-gradient(
+    to top right,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  ),url(${require("../assets/img/login_background.jpg")})`,
+        transition: "background 5s ease-in-out",
+      };
     },
   },
 
@@ -272,15 +261,10 @@ export default {
 
 <style>
 .gradient {
-  background: linear-gradient(
-    to top right,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  z-index: 1;
+  /* height: 100%; */
+  /* width: 100%; */
+  /* position: absolute; */
+  /* z-index: 1; */
 }
 .login {
   background-size: cover;
@@ -299,6 +283,6 @@ export default {
   margin-bottom: 2rem;
   font-size: 2.5rem;
   font-weight: bold;
-  text-shadow: 1px 1px 2px #000;
+  /* text-shadow: 1px 1px 2px #000; */
 }
 </style>

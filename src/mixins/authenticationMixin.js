@@ -21,9 +21,8 @@ const authenticationMixin = {
      */
     authenticate(authenticationType, loginData) {
       if (!this.loggingIn) {
-        this.loggingIn = true;
-
         if (authenticationType === "password") {
+          this.loggingIn = true;
           return fetchLogin(loginData).then(
             (successfulResponse) => {
               this.$_authenticationMixin_handleSuccessfulAuthentication(
@@ -40,6 +39,7 @@ const authenticationMixin = {
             }
           );
         } else if (authenticationType === "id") {
+          this.loggingInIdCard = true;
           fetchLoginId().then(
             (successfulResponse) => {
               return this.$_authenticationMixin_handleSuccessfulAuthentication(
@@ -160,6 +160,7 @@ const authenticationMixin = {
           }
         }
         this.loggingIn = false;
+        this.loggingInIdCard = false;
       }
     },
 
@@ -185,6 +186,7 @@ const authenticationMixin = {
       }
 
       this.loggingIn = false;
+      this.loggingInIdCard = false;
     },
 
     /**
