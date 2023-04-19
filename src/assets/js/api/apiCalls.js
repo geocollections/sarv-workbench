@@ -1872,7 +1872,7 @@ export function fetchSpecimens(data, dynamicSearch) {
   if (data.fossil && data.fossil.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.fossil
-    };fields:specimenidentification__name,specimenidentification__taxon__taxon;lookuptype:${
+    };fields:specimen_identification__name,specimen_identification__taxon__taxon;lookuptype:${
       data.fossil__lookuptype || "icontains"
     }`;
   }
