@@ -113,6 +113,7 @@ import { mapState } from "vuex";
 import SiteIcons from "@/components/partial/SiteIcons";
 import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
 import config from "@/config";
+
 export default {
   name: "Login",
   components: {
@@ -148,25 +149,15 @@ export default {
       config,
     };
   },
-
-  created() {
-    window.addEventListener("keyup", this.handleKeyUp);
-    this.changeImage();
-  },
-
-  beforeDestroy() {
-    window.removeEventListener("keyup", this.handleKeyUp);
-  },
-
   computed: {
     ...mapState("settings", ["bodyColor"]),
     mainCss() {
       return {
         backgroundImage: `linear-gradient(
-    to top right,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(0, 0, 0, 0.5) 100%
-  ),url(${require("../assets/img/login_background.jpg")})`,
+            to top right,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(0, 0, 0, 0.5) 100%
+            ),url(${require("../assets/img/login_background.jpg")})`,
         transition: "background 5s ease-in-out",
       };
     },
@@ -179,18 +170,6 @@ export default {
           user: this.user.username,
           pwd: this.user.password,
         });
-      }
-    },
-    handleKeyUp(event) {
-      if (this.tab === 1 && (event.key === "Enter" || event.keyCode === 13))
-        this.login();
-    },
-    changeImage() {
-      if (this.images.length > 1) {
-        setInterval(() => {
-          if (this.imageId >= this.images.length - 1) this.imageId = 0;
-          else this.imageId++;
-        }, this.imageInterval);
       }
     },
     getOrcidLoginUrl() {

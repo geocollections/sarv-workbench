@@ -311,7 +311,8 @@
     "files": "Hiljutised failid",
     "sitesMap": "Viimati külastatud/sisestatud objektid",
     "active": "Aktiivne",
-    "lastLogin": "Viimane sisselogimine"
+    "lastLogin": "Viimane sisselogimine",
+    "noPermissions": "Kontol ei ole hetkel õiguseid. Võta ühendus administraatoriga õiguste saamiseks."
   },
   "settings": {
     "permissions": "Minu õigused",

@@ -310,7 +310,8 @@
     "files": "Recent files",
     "sitesMap": "Recently visited/inserted objects",
     "active": "Active",
-    "lastLogin": "Last login"
+    "lastLogin": "Last login",
+    "noPermissions": "Account currently has no permissions. Contact an administrator to get permissions."
   },
   "settings": {
     "permissions": "My permissions",

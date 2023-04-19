@@ -6,11 +6,7 @@
         <v-card flat color="transparent">
           <v-card-title class="pl-0">
             <span class="table-title text-capitalize break-word">
-              {{
-                `${$t("frontPage.welcome")}, ${getCurrentUser.forename} ${
-                  getCurrentUser.surename
-                }!`
-              }}
+              {{ `${$t("frontPage.welcome")}, ${name}!` }}
             </span>
 
             <v-spacer></v-spacer>
@@ -38,117 +34,126 @@
         </v-card>
       </v-col>
     </v-row>
+    <div v-if="!isPermissionsEmpty">
+      <!-- MESSAGES -->
+      <v-row v-if="activeSarvIssues !== null && activeSarvIssues.count > 0">
+        <v-col>
+          <messages
+            :sarv-issues="activeSarvIssues"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+          />
+        </v-col>
+      </v-row>
 
-    <!-- MESSAGES -->
-    <v-row v-if="activeSarvIssues !== null && activeSarvIssues.count > 0">
-      <v-col>
-        <messages
-          :sarv-issues="activeSarvIssues"
-          :body-color="bodyColor"
-          :body-active-color="bodyActiveColor"
-        />
-      </v-col>
-    </v-row>
-
-    <!-- MAP -->
-    <v-row
-      class="mt-0"
-      v-if="
-        isUserAllowedTo('add', 'site') &&
-        isUserAllowedTo('add', 'sample') &&
-        isUserAllowedTo('add', 'specimen') &&
-        isUserAllowedTo('add', 'attachment')
-      "
-    >
-      <v-col>
-        <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
-          <v-card-title class="pt-2 pb-1">
-            <div class="card-title--clickable" @click="block.map = !block.map">
-              <span>{{ $t("frontPage.sitesMap") }}</span>
-              <v-icon right color="purple lighten-2"
-                >fas fa-map-marked-alt</v-icon
+      <!-- MAP -->
+      <v-row
+        class="mt-0"
+        v-if="
+          isUserAllowedTo('add', 'site') &&
+          isUserAllowedTo('add', 'sample') &&
+          isUserAllowedTo('add', 'specimen') &&
+          isUserAllowedTo('add', 'attachment')
+        "
+      >
+        <v-col>
+          <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
+            <v-card-title class="pt-2 pb-1">
+              <div
+                class="card-title--clickable"
+                @click="block.map = !block.map"
               >
-            </div>
-            <v-spacer></v-spacer>
-            <v-btn
-              icon
-              @click="block.map = !block.map"
-              :color="bodyActiveColor"
-            >
-              <v-icon>{{
-                block.map ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
-            </v-btn>
-          </v-card-title>
-
-          <div v-show="block.map">
-            <sites-map :show-map="block.map" />
-          </div>
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <!-- IMAGES/FILES -->
-    <v-row v-if="isUserAllowedTo('add', 'attachment')">
-      <v-col>
-        <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
-          <v-card-title class="pt-2 pb-1">
-            <div
-              class="card-title--clickable"
-              @click="block.files = !block.files"
-            >
-              <span>{{ $t("frontPage.files") }}</span>
-              <v-icon right color="teal lighten-1">far fa-folder-open</v-icon>
-            </div>
-            <v-spacer></v-spacer>
-            <v-btn
-              icon
-              @click="block.files = !block.files"
-              :color="bodyActiveColor"
-            >
-              <v-icon>{{
-                block.files ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
-            </v-btn>
-          </v-card-title>
-
-          <div v-show="block.files">
-            <v-row no-gutters class="mx-3">
-              <v-col cols="12">
-                <v-radio-group
-                  v-model="recentFilesPaginateBy"
-                  row
-                  dense
-                  hide-details
-                  label="Number of recent files: "
-                  class="mt-0 radio-buttons"
+                <span>{{ $t("frontPage.sitesMap") }}</span>
+                <v-icon right color="purple lighten-2"
+                  >fas fa-map-marked-alt</v-icon
                 >
-                  <v-radio label="6" :value="6" :color="bodyActiveColor" />
-                  <v-radio label="12" :value="12" :color="bodyActiveColor" />
-                  <v-radio label="24" :value="24" :color="bodyActiveColor" />
-                  <v-radio label="36" :value="36" :color="bodyActiveColor" />
-                </v-radio-group>
-              </v-col>
-            </v-row>
+              </div>
+              <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="block.map = !block.map"
+                :color="bodyActiveColor"
+              >
+                <v-icon>{{
+                  block.map ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+              </v-btn>
+            </v-card-title>
 
-            <image-view-wrapper
-              class="pb-3"
-              :data="recentFiles"
-              :body-active-color="bodyActiveColor"
-              :body-color="bodyColor"
-              clear-item-background
-            />
-          </div>
-        </v-card>
-      </v-col>
-    </v-row>
+            <div v-show="block.map">
+              <sites-map :show-map="block.map" />
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
 
-    <!-- RECENT ACTIVITY -->
-    <recent-activity
-      :user="getCurrentUser.user"
-      :body-color="bodyColor"
-      :body-active-color="bodyActiveColor"
-    />
+      <!-- IMAGES/FILES -->
+      <v-row v-if="isUserAllowedTo('add', 'attachment')">
+        <v-col>
+          <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
+            <v-card-title class="pt-2 pb-1">
+              <div
+                class="card-title--clickable"
+                @click="block.files = !block.files"
+              >
+                <span>{{ $t("frontPage.files") }}</span>
+                <v-icon right color="teal lighten-1">far fa-folder-open</v-icon>
+              </div>
+              <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="block.files = !block.files"
+                :color="bodyActiveColor"
+              >
+                <v-icon>{{
+                  block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+              </v-btn>
+            </v-card-title>
+
+            <div v-show="block.files">
+              <v-row no-gutters class="mx-3">
+                <v-col cols="12">
+                  <v-radio-group
+                    v-model="recentFilesPaginateBy"
+                    row
+                    dense
+                    hide-details
+                    label="Number of recent files: "
+                    class="mt-0 radio-buttons"
+                  >
+                    <v-radio label="6" :value="6" :color="bodyActiveColor" />
+                    <v-radio label="12" :value="12" :color="bodyActiveColor" />
+                    <v-radio label="24" :value="24" :color="bodyActiveColor" />
+                    <v-radio label="36" :value="36" :color="bodyActiveColor" />
+                  </v-radio-group>
+                </v-col>
+              </v-row>
+
+              <image-view-wrapper
+                class="pb-3"
+                :data="recentFiles"
+                :body-active-color="bodyActiveColor"
+                :body-color="bodyColor"
+                clear-item-background
+              />
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <!-- RECENT ACTIVITY -->
+      <recent-activity
+        :user="getCurrentUser.user"
+        :body-color="bodyColor"
+        :body-active-color="bodyActiveColor"
+      />
+    </div>
+    <div v-else>
+      <v-alert type="warning">
+        {{ $t("frontPage.noPermissions") }}
+      </v-alert>
+    </div>
 
     <!-- HELP -->
     <v-row id="block-help">
@@ -236,14 +241,24 @@ export default {
     ...mapState("search", ["activeSarvIssues"]),
     ...mapGetters("user", [
       "getCurrentUser",
+      "getPermissions",
       "getLastLoginDate",
       "isUserAllowedTo",
     ]),
+    name() {
+      if (this.getCurrentUser.forename && this.getCurrentUser.surename)
+        return `${this.getCurrentUser.forename} ${this.getCurrentUser.surename}`;
+      return this.getCurrentUser.user;
+    },
+    isPermissionsEmpty() {
+      return Object.keys(this.getPermissions).length === 0;
+    },
   },
 
   watch: {
     recentFilesPaginateBy: {
       handler(newVal) {
+        if (!this.isUserAllowedTo("add", "attachment")) return;
         this.getRecentFiles(newVal);
       },
       immediate: true,
@@ -251,6 +266,7 @@ export default {
   },
 
   created() {
+    if (this.isPermissionsEmpty) return;
     this.fetchActiveSarvIssues();
   },
 
