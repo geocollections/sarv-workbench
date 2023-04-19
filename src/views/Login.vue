@@ -12,25 +12,7 @@
           <!-- <DevNotification /> -->
 
           <v-card color="grey lighten-4" style="z-index: 3">
-            <!-- <v-card-text> -->
-            <!-- <v-alert -->
-            <!--   class="mb-0" -->
-            <!--   border="right" -->
-            <!--   :colored-border="!idError" -->
-            <!--   :color="idError ? 'red' : 'green darken-3'" -->
-            <!--   elevation="3" -->
-            <!--   :icon="idError ? 'fas fa-exclamation' : 'fas fa-info'" -->
-            <!--   prominent -->
-            <!--   dense -->
-            <!-- > -->
-            <!--   <span v-if="!idMessage" -->
-            <!--     ><b>{{ $t("login.idCardMessage") }}</b></span -->
-            <!--   > -->
-            <!--   <b>{{ idMessage }}</b> -->
-            <!-- </v-alert> -->
-            <!-- </v-card-text> -->
-            <!-- <v-card-title> Login </v-card-title> -->
-            <v-card-text class="pt-4">
+            <v-card-text>
               <v-btn
                 id="login-id"
                 class="text-none"
@@ -68,22 +50,7 @@
               ></div>
             </div>
             <v-card-text>
-              <!-- <v-alert -->
-              <!--   border="right" -->
-              <!--   :colored-border="!passError" -->
-              <!--   :color="passError ? 'red lighten-1' : 'green darken-3'" -->
-              <!--   elevation="3" -->
-              <!--   :icon="passError ? 'fas fa-exclamation' : 'fas fa-info'" -->
-              <!--   prominent -->
-              <!--   dense -->
-              <!-- > -->
-              <!--   <span v-if="!passMessage"> -->
-              <!--     <b>{{ $t("login.passwordMessage") }}</b> -->
-              <!--   </span> -->
-              <!--   <b>{{ passMessage }}</b> -->
-              <!-- </v-alert> -->
-
-              <v-form v-model="valid">
+              <v-form v-model="valid" @submit.prevent="login">
                 <v-text-field
                   id="username-field"
                   v-model="user.username"
@@ -116,6 +83,7 @@
                 </v-text-field>
 
                 <v-btn
+                  type="submit"
                   block
                   id="login-pass"
                   class="text-none"
@@ -124,7 +92,6 @@
                   :disabled="!valid"
                   :loading="loggingIn"
                   :dark="valid"
-                  @click="login"
                 >
                   <v-icon left>fas fa-sign-in-alt</v-icon>
                   {{ $t("login.loginButton") }}
@@ -136,22 +103,6 @@
       </v-row>
     </v-container>
     <site-icons style="z-index: 3"></site-icons>
-    <!--  Load in background images  -->
-    <!--    <img-->
-    <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_1.jpg`"-->
-    <!--      alt="background_image_1"-->
-    <!--      v-show="false"-->
-    <!--    />-->
-    <!--    <img-->
-    <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_3.jpg`"-->
-    <!--      alt="background_image_3"-->
-    <!--      v-show="false"-->
-    <!--    />-->
-    <!--    <img-->
-    <!--      :src="`${$constants.IMAGE_URL}/img/sarv-edit/background_4.jpg`"-->
-    <!--      alt="background_image_4"-->
-    <!--      v-show="false"-->
-    <!--    />-->
   </v-main>
 </template>
 
@@ -161,13 +112,10 @@ import LangButtons from "../components/partial/LangButtons";
 import { mapState } from "vuex";
 import SiteIcons from "@/components/partial/SiteIcons";
 import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
-// import DevNotification from "@/components/partial/DevNotification";
 import config from "@/config";
-
 export default {
   name: "Login",
   components: {
-    // DevNotification,
     GlobalAlertNotification,
     SiteIcons,
     LangButtons,
@@ -197,13 +145,6 @@ export default {
       idMessage: null,
       idError: false,
       imageId: 0,
-      images: [
-        // "/img/sarv-edit/background_1.jpg",
-        "/img/sarv-edit/background_2.jpg",
-        // "/img/sarv-edit/background_3.jpg",
-        // "/img/sarv-edit/background_4.jpg"
-      ],
-      imageInterval: 60000,
       config,
     };
   },
@@ -281,8 +222,8 @@ export default {
   position: relative;
   text-align: center;
   margin-bottom: 2rem;
-  font-size: 2.5rem;
-  font-weight: bold;
+  font-size: 3.5rem;
+  font-weight: 600;
   /* text-shadow: 1px 1px 2px #000; */
 }
 </style>
