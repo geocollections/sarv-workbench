@@ -1,10 +1,12 @@
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  /* font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, */
+  /*   Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, */
+  /*   Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji; */
   /*background-color: #f8f9fa;*/
   overflow-x: unset !important; /* Todo: Had to insert it after vuetify  */
 }
@@ -20,7 +22,7 @@ body {
 
 /* data table alternating colors */
 .v-data-table tbody tr:nth-child(even) td {
-  background-color: #ECEFF1;
+  background-color: #eceff1;
 }
 
 .v-data-table tbody tr:nth-child(odd) td {
@@ -28,8 +30,9 @@ body {
 }
 
 /* Adding white background to vuetify outlined text-fields in add and edit forms */
-.add-form .v-text-field--outlined, .edit-form .v-text-field--outlined {
-    background-color: #ffffff;
+.add-form .v-text-field--outlined,
+.edit-form .v-text-field--outlined {
+  background-color: #ffffff;
 }
 
 /* Vuetify ul override for tabs in edit and add view */
@@ -83,17 +86,17 @@ th.sortable > span:after {
 
 /* Track */
 .v-navigation-drawer__content::-webkit-scrollbar-track {
-  background: #ECEFF1;
+  background: #eceff1;
 }
 
 /* Handle */
 .v-navigation-drawer__content::-webkit-scrollbar-thumb {
-  background: #607D8B;
+  background: #607d8b;
 }
 
 /* Handle on hover */
 .v-navigation-drawer__content::-webkit-scrollbar-thumb:hover {
-  background: #455A64;
+  background: #455a64;
 }
 /* Scrollbar style for drawers END */
 
@@ -105,20 +108,19 @@ th.sortable > span:after {
 
 /* Track */
 .floating-settings::-webkit-scrollbar-track {
-  background: #ECEFF1;
+  background: #eceff1;
 }
 
 /* Handle */
 .floating-settings::-webkit-scrollbar-thumb {
-  background: #90A4AE;
+  background: #90a4ae;
 }
 
 /* Handle on hover */
 .floating-settings::-webkit-scrollbar-thumb:hover {
-  background: #607D8B;
+  background: #607d8b;
 }
 /* Scrollbar style for floating settings END */
-
 
 /*********************
  *** HELPERS START ***
@@ -141,7 +143,6 @@ th.sortable > span:after {
  ***  HELPERS END  ***
  *********************/
 
-
 /**************************
  *** RELATED DATA START ***
  **************************/
@@ -149,7 +150,8 @@ th.sortable > span:after {
 .related-table {
   font-size: 0.9rem !important;
 }
-.related-table td, .related-table th {
+.related-table td,
+.related-table th {
   padding: 0.25rem 0.4rem !important;
 }
 
@@ -160,12 +162,12 @@ th.sortable > span:after {
 }
 
 .related-table th.date-th {
-  min-width: 100px!important;
+  min-width: 100px !important;
 }
 
 .related-table th.btn-th {
-  min-width: 5.7em!important;
-  width: 5.7em!important;
+  min-width: 5.7em !important;
+  width: 5.7em !important;
 }
 
 .allow-remove {
@@ -179,8 +181,6 @@ th.sortable > span:after {
 /**************************
  ***  RELATED DATA END  ***
  **************************/
-
-
 
 .custom > .multislelect__input {
   height: calc(1.5em + 0.5rem + 2px);
@@ -201,37 +201,35 @@ th.sortable > span:after {
 
 /* Cancel request button style */
 .abort-request-overlay {
-    position: fixed;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1050;
-    text-align: center;
-    bottom: 15%;
-    padding: 10px 15px;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
+  text-align: center;
+  bottom: 15%;
+  padding: 10px 15px;
 }
-
-
 
 /***************************************
  *** MULTISELECT CUSTOM STYLES START ***
  ***************************************/
 
 .invalid > .multiselect__tags {
-    border-color: #dc3545;
+  border-color: #dc3545;
 }
 
 /*noinspection CssInvalidPseudoSelector*/
 .invalid > .multiselect__tags:focus-within {
-    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
 
 .valid > .multiselect__tags {
-    border-color: #28a745;
+  border-color: #28a745;
 }
 
 /*noinspection CssInvalidPseudoSelector*/
 .valid > .multiselect__tags:focus-within {
-    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
 
 /*
@@ -239,7 +237,7 @@ th.sortable > span:after {
  * https://github.com/shentao/vue-multiselect/issues/662
  */
 .multiselect--active {
-    z-index: 1500;
+  z-index: 1500;
 }
 
 /* Giving this class to multiselects so they wouldn't get stuck behind some items i.e., maps */
@@ -252,46 +250,43 @@ ul.multiselect__content {
   padding-left: 0;
 }
 
-
 .card-title--clickable:hover {
-    cursor: pointer;
-    opacity: 0.8;
+  cursor: pointer;
+  opacity: 0.8;
 }
 
 /* Multiselect size to small like bootstrap's START */
 .multiselect {
-    min-height: 31px;
-    /*height: 31px;*/
+  min-height: 31px;
+  /*height: 31px;*/
 }
 
 .multiselect__tags {
-    min-height: 31px;
-    /*height: 31px;*/
-    padding: 4px 40px 4px 8px;
+  min-height: 31px;
+  /*height: 31px;*/
+  padding: 4px 40px 4px 8px;
 }
 
 .multiselect__select {
-    min-height: 29px;
-    height: 29px;
+  min-height: 29px;
+  height: 29px;
 }
 
 .multiselect__single {
-    padding: 0;
-    margin-bottom: 0;
-    font-size: 0.875rem;
+  padding: 0;
+  margin-bottom: 0;
+  font-size: 0.875rem;
 }
 
 .multiselect__placeholder {
-    padding: 0;
-    margin-bottom: 0;
+  padding: 0;
+  margin-bottom: 0;
 }
 /* Multiselect size to small like bootstrap's END */
 
 /***************************************
  ***  MULTISELECT CUSTOM STYLES END  ***
  ***************************************/
-
-
 
 /*******************************
  *** DATE CLEAR BUTTON START ***
@@ -306,57 +301,53 @@ ul.multiselect__content {
 /*}*/
 
 .date-clear-button:hover {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 
 /*******************************
  ***  DATE CLEAR BUTTON END  ***
  *******************************/
 
-
-
 /********************************
  *** EDIT IMAGE PREVIEW START ***
  ********************************/
 
 .image-preview {
-    max-height: 500px;
-    max-width: 100%;
-    padding: 0.25rem;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
+  max-height: 500px;
+  max-width: 100%;
+  padding: 0.25rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
 }
 
 @media (max-width: 767px) {
-    .image-preview {
-        max-height: 500px;
-        max-width: 100%;
-    }
-
+  .image-preview {
+    max-height: 500px;
+    max-width: 100%;
+  }
 }
 
 /********************************
  ***  EDIT IMAGE PREVIEW END  ***
  ********************************/
 
-
 /* CUSTOM STYLES */
-  .table {
-      background-color: #fff;
-  }
-  .table td {
-	font-size: 0.9rem;
-	padding: 0.25rem 0.4rem;
-  }
- .table th {
-		font-size: 0.9rem;
-		padding: 0.5rem 0.4rem;
-	  }
+.table {
+  background-color: #fff;
+}
+.table td {
+  font-size: 0.9rem;
+  padding: 0.25rem 0.4rem;
+}
+.table th {
+  font-size: 0.9rem;
+  padding: 0.5rem 0.4rem;
+}
 label {
-	font-size: 0.9rem;
-	/*padding: 0.20rem 0.4rem;*/
-	color: #666;
+  font-size: 0.9rem;
+  /*padding: 0.20rem 0.4rem;*/
+  color: #666;
 }
 
 /*
@@ -367,12 +358,11 @@ label {
 }
 */
 
-
 .fade-leave-active {
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
 .fade-enter-active {
-  transition: opacity .7s;
+  transition: opacity 0.7s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0.1;
@@ -385,11 +375,11 @@ legend {
 /* legend is used in headings where data is divided into blocks */
 legend:hover {
   color: #007bff;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .modal {
-  top:5% !important;
+  top: 5% !important;
 }
 
 /*********************************
@@ -434,7 +424,7 @@ legend:hover {
 
 @media (max-width: 992px) {
   .modal-dialog-scrollable .modal-content {
-    min-width: calc(110vh ) !important;
+    min-width: calc(110vh) !important;
   }
 }
 @media (max-width: 623px) {
@@ -448,8 +438,6 @@ legend:hover {
 /*  background-color: #007bff;*/
 /*  color: #ffffff;*/
 /*}*/
-
-
 
 /********************
  *** EDITOR START ***

@@ -6,7 +6,20 @@
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" xl="4" style="margin: 48px 0">
           <div class="sarv-title">{{ $t("header.title") }}</div>
-
+          <!-- <div class="text-center mb-10"> -->
+          <!--   <v-img -->
+          <!--     class="mx-auto" -->
+          <!--     :height="100" -->
+          <!--     :width="400" -->
+          <!--     :src="require('../assets/img/sarv_logo.svg')" -->
+          <!--   /> -->
+          <!-- <span class="sarv font-weight-black text-h2"> SARV </span> -->
+          <!--   <span -->
+          <!--     class="mt-2 white--text font-weight-bold text-capitalize workbench" -->
+          <!--   > -->
+          <!--     workbench -->
+          <!--   </span> -->
+          <!-- </div> -->
           <GlobalAlertNotification />
 
           <!-- <DevNotification /> -->
@@ -40,13 +53,19 @@
             </v-card-text>
             <div class="d-flex align-center my-2 px-2">
               <div
-                style="flex-grow: 1; border-bottom: 1px solid lightgray"
+                style="
+                  flex-grow: 1;
+                  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                "
               ></div>
               <div class="mx-3" style="color: darkgray">
                 {{ $t("common.or") }}
               </div>
               <div
-                style="flex-grow: 1; border-bottom: 1px solid lightgray"
+                style="
+                  flex-grow: 1;
+                  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                "
               ></div>
             </div>
             <v-card-text>
@@ -98,11 +117,12 @@
                 </v-btn>
               </v-form>
             </v-card-text>
+            <v-divider class="mx-2" />
+            <site-icons style="z-index: 3"></site-icons>
           </v-card>
         </v-col>
       </v-row>
     </v-container>
-    <site-icons style="z-index: 3"></site-icons>
   </v-main>
 </template>
 
@@ -195,14 +215,27 @@ export default {
   color: #37474f !important;
 }
 
+.sarv {
+  color: white;
+  text-shadow: 0px 14px 10px rgba(0, 0, 0, 0.15),
+    0px 24px 2px rgba(0, 0, 0, 0.1), 0px 34px 30px rgba(0, 0, 0, 0.1);
+}
+.workbench {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 0px 14px 10px rgba(0, 0, 0, 0.15),
+    0px 24px 2px rgba(0, 0, 0, 0.1), 0px 34px 30px rgba(0, 0, 0, 0.1);
+}
+
 .sarv-title {
-  z-index: 2;
+  margin-bottom: 2rem;
+  font-size: 4rem;
+  font-weight: bold;
   color: white;
   position: relative;
   text-align: center;
-  margin-bottom: 2rem;
-  font-size: 3.5rem;
-  font-weight: 600;
   /* text-shadow: 1px 1px 2px #000; */
+  text-shadow: 0.1em 0.1em 0 hsl(0 0% 23%);
 }
 </style>

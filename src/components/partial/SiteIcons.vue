@@ -49,7 +49,7 @@ export default {
         },
         {
           key: "sarv",
-          url: "https://geocollections.info",
+          url: "https://geoloogia.info",
           icon: require("../../assets/img/sarv_logo.svg"),
           height: this.$vuetify.breakpoint.smAndUp ? 100 : 45,
           width: 180,
@@ -62,7 +62,7 @@ export default {
 
 <style scoped>
 .site-icons {
-  position: absolute;
+  /* position: absolute; */
   bottom: 0;
   width: 100%;
   height: max-content;
