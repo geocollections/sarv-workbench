@@ -128,7 +128,7 @@
       <!-- ROUTES SPECIAL -->
       <v-list-group
         v-if="
-          !drawerState &&
+          (!drawerState || ($vuetify.breakpoint.smAndDown && drawerState)) &&
           allowedRouteLinksSpecial &&
           allowedRouteLinksSpecial.length > 0
         "
@@ -160,7 +160,7 @@
         </div>
       </v-list-group>
       <v-list-item
-        v-show="drawerState"
+        v-show="$vuetify.breakpoint.mdAndUp && drawerState"
         id="item-curation"
         link
         :color="drawerActiveColor"
