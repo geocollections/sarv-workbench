@@ -41,23 +41,7 @@
         </v-btn>
       </v-toolbar-items>
 
-      <!-- <v-toolbar-items> -->
-      <!--   <v-btn -->
-      <!--     v-if="$vuetify.breakpoint.smAndDown" -->
-      <!--     icon -->
-      <!--     exact -->
-      <!--     :to="{ path: '/dashboard' }" -->
-      <!--   > -->
-      <!--     <v-icon>fas fa-home</v-icon> -->
-      <!--   </v-btn> -->
-      <!--   <v-btn text :to="{ path: '/dashboard' }" exact v-else> -->
-      <!--     <span class="text-none">{{ $t("header.title") }}</span> -->
-      <!--          <span v-if="isBeta">-beta</span>-->
-      <!--          <span v-else-if="isLocal">-development</span>-->
-      <!--   </v-btn> -->
-      <!-- </v-toolbar-items> -->
-
-      <v-toolbar-items v-if="shortcuts.length > 0">
+      <v-toolbar-items v-if="shortcuts.length > 0" class="ml-2">
         <v-btn
           text
           v-for="(entity, index) in shortcuts"

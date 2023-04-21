@@ -12,6 +12,7 @@
         :color="bodyActiveColor"
         :dark="bodyActiveColorDark"
       >
+        <v-icon left>fas fa-plus</v-icon>
         {{ $t("add.new") }}
       </v-btn>
       <v-btn

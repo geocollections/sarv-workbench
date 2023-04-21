@@ -7,52 +7,53 @@
     />
 
     <!-- EXPORT and OPTIONS -->
-    <v-row align="center" justify="start" class="px-4 mt-4 mb-1 d-print-none">
-      <!-- EXPORT -->
-      <div class="mr-4 mb-2" v-if="exportButtons">
-        <export-buttons
-          :filename="module"
-          :table-data="response.results"
-          :body-active-color="bodyActiveColor"
-        />
-      </div>
-
-      <!-- OPTIONS -->
-      <div v-if="useListView || useImageView" class="mb-2">
-        <v-radio-group
-          class="radio-buttons mt-0"
-          v-model="currentViewType"
-          row
-          hide-details
-        >
-          <v-radio
-            value="table"
-            class="mb-2"
-            :label="$t('references.tableView')"
-            :color="bodyActiveColor"
+    <v-row align="center" justify="start" class="d-print-none">
+      <v-col class="d-flex">
+        <!-- EXPORT -->
+        <div class="mr-4" v-if="exportButtons">
+          <export-buttons
+            :filename="module"
+            :table-data="response.results"
+            :body-active-color="bodyActiveColor"
           />
-          <v-radio
-            v-if="useListView"
-            class="mb-2"
-            value="list"
-            :label="
-              module === 'sample' ||
-              module === 'specimen' ||
-              module === 'location'
-                ? $t('references.labelView')
-                : $t('references.listView')
-            "
-            :color="bodyActiveColor"
-          />
-          <v-radio
-            v-if="useImageView"
-            class="mb-2"
-            value="image"
-            :label="$t('buttons.imageView')"
-            :color="bodyActiveColor"
-          />
-        </v-radio-group>
-      </div>
+        </div>
+        <!-- OPTIONS -->
+        <div v-if="useListView || useImageView" class="mb-2">
+          <v-radio-group
+            class="radio-buttons mt-0"
+            v-model="currentViewType"
+            row
+            hide-details
+          >
+            <v-radio
+              value="table"
+              class="mb-2"
+              :label="$t('references.tableView')"
+              :color="bodyActiveColor"
+            />
+            <v-radio
+              v-if="useListView"
+              class="mb-2"
+              value="list"
+              :label="
+                module === 'sample' ||
+                module === 'specimen' ||
+                module === 'location'
+                  ? $t('references.labelView')
+                  : $t('references.listView')
+              "
+              :color="bodyActiveColor"
+            />
+            <v-radio
+              v-if="useImageView"
+              class="mb-2"
+              value="image"
+              :label="$t('buttons.imageView')"
+              :color="bodyActiveColor"
+            />
+          </v-radio-group>
+        </div>
+      </v-col>
     </v-row>
 
     <pagination
@@ -70,7 +71,6 @@
 
     <!-- DATA TABLE -->
     <v-card
-      elevation="4"
       :color="bodyColor.split('n-')[0] + 'n-3'"
       class="table-card my-1"
       :loading="isLoading"
@@ -83,13 +83,12 @@
       </template>
 
       <v-card-title class="d-print-none">
-        <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
+        <v-icon class="mr-2" color="#191414">fas fa-list</v-icon>
         <span id="table-title">
           <span>{{ $t("main.found") }}</span>
           <span class="font-weight-bold">{{ ` ${response.count} ` }}</span>
           <span>{{ $t("main.records") }}</span>
         </span>
-        <div class="flex-grow-1"></div>
       </v-card-title>
 
       <!-- LIST VIEW -->

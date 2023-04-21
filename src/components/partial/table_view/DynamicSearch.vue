@@ -7,8 +7,8 @@
             class="card-title--clickable"
             @click="showDynamicSearch = !showDynamicSearch"
           >
+            <v-icon left :color="bodyActiveColor">fas fa-search-plus</v-icon>
             <span>{{ $t("edit.dynamicSearch") }}</span>
-            <v-icon right :color="bodyActiveColor">fas fa-search-plus</v-icon>
           </div>
           <v-spacer></v-spacer>
           <v-btn

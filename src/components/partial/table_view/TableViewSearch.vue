@@ -1,14 +1,14 @@
 <template>
   <v-row class="table-view-search d-print-none mt-0" v-if="filters.length > 0">
     <v-col>
-      <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
-        <v-card-title class="pb-0">
+      <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
+        <v-card-title class="pb-0 pt-2">
           <div
             class="card-title--clickable"
             @click="$emit('update:showSearch', !showSearch)"
           >
+            <v-icon left :color="bodyActiveColor">fas fa-search</v-icon>
             <span>{{ $t("edit.search") }}</span>
-            <v-icon right :color="bodyActiveColor">fas fa-search</v-icon>
           </div>
           <v-spacer></v-spacer>
           <v-btn
@@ -22,7 +22,7 @@
           </v-btn>
         </v-card-title>
 
-        <v-card-text class="pt-0">
+        <v-card-text class="pt-0 pb-2">
           <div v-show="showSearch">
             <v-row no-gutters class="mb-2">
               <v-col
@@ -313,57 +313,56 @@
                 </v-row>
               </v-col>
             </v-row>
-
-            <!-- DYNAMIC SEARCH -->
-            <DynamicSearch
-              class="mt-4 mb-2"
-              :body-color="bodyColor"
-              :body-active-color="bodyActiveColor"
-              :look-up-types="translatedLookUpTypes"
-              :dynamic-search-fields="$_tableHeaderMixin_searchFields"
-              :col-size="3"
-              @update:dynamicSearchFields="updateDynamicSearchFieldsDebounced"
-            />
-
-            <!-- DYNAMIC FIELDS -->
-            <v-row no-gutters class="mt-6 mb-4">
-              <v-col cols="12">
-                <v-select
-                  :items="$_tableHeaderMixin_allHeaders"
-                  :value="$_tableHeaderMixin_shownHeaders"
-                  chips
-                  small-chips
-                  deletable-chips
-                  multiple
-                  :color="bodyActiveColor"
-                  :label="$t('common.fields')"
-                  clearable
-                  clear-icon="fas fa-times"
-                  @change="
-                    $_tableHeaderMixin_updateTableHeaders({
-                      event: $event,
-                      table: $route.meta.object,
-                    })
-                  "
-                  class="chips-select"
-                  hide-details
-                  dense
-                />
-              </v-col>
-            </v-row>
-
-            <!-- RESET SEARCH PREFERENCES -->
-            <v-row no-gutters>
-              <v-col cols="12">
-                <v-btn @click="resetSearch" :color="bodyActiveColor" dark>
-                  <v-icon left>fas fa-filter</v-icon>
-                  {{ $t("buttons.resetSearch") }}
-                </v-btn>
-              </v-col>
-            </v-row>
           </div>
         </v-card-text>
       </v-card>
+      <!-- DYNAMIC SEARCH -->
+      <DynamicSearch
+        class="mt-4 mb-2"
+        :body-color="bodyColor"
+        :body-active-color="bodyActiveColor"
+        :look-up-types="translatedLookUpTypes"
+        :dynamic-search-fields="$_tableHeaderMixin_searchFields"
+        :col-size="3"
+        @update:dynamicSearchFields="updateDynamicSearchFieldsDebounced"
+      />
+
+      <!-- DYNAMIC FIELDS -->
+      <v-row no-gutters class="mt-6 mb-4">
+        <v-col cols="12">
+          <v-select
+            :items="$_tableHeaderMixin_allHeaders"
+            :value="$_tableHeaderMixin_shownHeaders"
+            chips
+            small-chips
+            deletable-chips
+            multiple
+            :color="bodyActiveColor"
+            :label="$t('common.fields')"
+            clearable
+            clear-icon="fas fa-times"
+            @change="
+              $_tableHeaderMixin_updateTableHeaders({
+                event: $event,
+                table: $route.meta.object,
+              })
+            "
+            class="chips-select"
+            hide-details
+            dense
+          />
+        </v-col>
+      </v-row>
+
+      <!-- RESET SEARCH PREFERENCES -->
+      <v-row no-gutters>
+        <v-col cols="12">
+          <v-btn @click="resetSearch" :color="bodyActiveColor" dark>
+            <v-icon left>fas fa-redo</v-icon>
+            {{ $t("buttons.resetSearch") }}
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-col>
   </v-row>
 </template>

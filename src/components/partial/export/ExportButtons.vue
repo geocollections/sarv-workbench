@@ -2,8 +2,8 @@
   <v-menu class="d-print-none" offset-y min-width="180">
     <template v-slot:activator="{ on }">
       <v-btn :color="bodyActiveColor" dark v-on="on" :small="small">
+        <v-icon :small="small" left>fas fa-file-export</v-icon>
         <span>{{ $t("buttons.export") }}</span>
-        <v-icon :small="small" right>fas fa-file-export</v-icon>
       </v-btn>
     </template>
     <v-list class="d-print-none" :color="bodyActiveColor" dark dense>
