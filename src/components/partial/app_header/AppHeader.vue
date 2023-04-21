@@ -19,9 +19,18 @@
       :dark="navbarDark"
       dense
     >
-      <v-app-bar-nav-icon @click.stop="updateDrawerState(!drawerState)" />
-
-      <v-toolbar-items>
+      <v-app-bar-nav-icon @click.stop="updateDrawerState(!drawerState)">
+        <v-icon>fas fa-bars</v-icon>
+      </v-app-bar-nav-icon>
+      <v-toolbar-title
+        v-if="$vuetify.breakpoint.mdAndUp"
+        class="font-weight-medium"
+        style="cursor: pointer"
+        @click="$router.push({ path: '/dashboard' })"
+      >
+        {{ $t("header.title") }}
+      </v-toolbar-title>
+      <v-toolbar-items v-else>
         <v-btn
           v-if="$vuetify.breakpoint.smAndDown"
           icon
@@ -30,12 +39,23 @@
         >
           <v-icon>fas fa-home</v-icon>
         </v-btn>
-        <v-btn text :to="{ path: '/dashboard' }" exact v-else>
-          <span class="text-none">{{ $t("header.title") }}</span>
-          <!--          <span v-if="isBeta">-beta</span>-->
-          <!--          <span v-else-if="isLocal">-development</span>-->
-        </v-btn>
       </v-toolbar-items>
+
+      <!-- <v-toolbar-items> -->
+      <!--   <v-btn -->
+      <!--     v-if="$vuetify.breakpoint.smAndDown" -->
+      <!--     icon -->
+      <!--     exact -->
+      <!--     :to="{ path: '/dashboard' }" -->
+      <!--   > -->
+      <!--     <v-icon>fas fa-home</v-icon> -->
+      <!--   </v-btn> -->
+      <!--   <v-btn text :to="{ path: '/dashboard' }" exact v-else> -->
+      <!--     <span class="text-none">{{ $t("header.title") }}</span> -->
+      <!--          <span v-if="isBeta">-beta</span>-->
+      <!--          <span v-else-if="isLocal">-development</span>-->
+      <!--   </v-btn> -->
+      <!-- </v-toolbar-items> -->
 
       <v-toolbar-items v-if="shortcuts.length > 0">
         <v-btn
