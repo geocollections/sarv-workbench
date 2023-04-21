@@ -1,30 +1,15 @@
 <template>
   <v-navigation-drawer
-    :value="drawerState"
+    style="z-index: 1100"
     app
     clipped
-    @input="changeDrawerState"
-    mobile-breakpoint="992"
+    mobile-breakpoint="960"
+    :value="$vuetify.breakpoint.mdAndUp ? true : drawerState"
+    :mini-variant="$vuetify.breakpoint.mdAndUp ? drawerState : false"
     :dark="isDrawerDark"
     :color="drawerColor"
-    style="z-index: 1100"
+    @input="changeDrawerState"
   >
-    <template v-slot:prepend>
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-icon>far fa-user</v-icon>
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title>{{
-            `${currentUser.forename} ${currentUser.surename}`
-          }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </template>
-
-    <v-divider class="mt-0" />
-
     <v-list expand dense>
       <!-- USER SHORTCUTS -->
       <v-list-group
@@ -49,110 +34,193 @@
       </v-list-group>
 
       <!-- ROUTES -->
-      <v-list-group
-        v-if="filteredRouteLinks.length > 0"
-        prepend-icon="fas fa-home"
-        append-icon="fas fa-angle-down"
-        :color="drawerActiveColor"
-        :value="true"
-      >
-        <template v-slot:activator>
-          <v-list-item-title>{{ $t("header.title") }}</v-list-item-title>
-        </template>
-
+      <div v-for="(entity, index) in filteredRouteLinks" :key="entity.title">
         <v-list-group
-          sub-group
+          v-if="
+            entity.links.length > 1 &&
+            (!drawerState || ($vuetify.breakpoint.smAndDown && drawerState))
+          "
+          append-icon="fas fa-angle-down"
           :color="drawerActiveColor"
-          v-for="entity in filteredRouteLinks"
-          :key="entity.title"
-          v-model="entity.state"
         >
           <template v-slot:activator>
+            <v-list-item-icon class="justify-center mr-6">
+              <v-icon v-text="entity.icon" />
+            </v-list-item-icon>
             <v-list-item-title v-text="$t(`header.${entity.title}`)" />
           </template>
-
           <v-list-item
-            v-for="(link, index) in entity.links"
-            :to="{ path: link.path }"
-            :key="index"
-            :color="drawerActiveColor"
+            v-for="(link, i) in entity.links"
+            dense
             exact
+            :to="{ path: link.path }"
+            :key="i"
+            :color="drawerActiveColor"
           >
-            <v-list-item-title
-              style="white-space: unset"
-              v-text="$t(`header.${link.title}`)"
-            />
-            <v-list-item-icon>
-              <v-icon v-text="link.icon" />
-            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title
+                style="white-space: unset"
+                v-text="$t(`header.${link.title}`)"
+              />
+            </v-list-item-content>
           </v-list-item>
         </v-list-group>
-      </v-list-group>
+        <v-list-item
+          v-else-if="
+            entity.links.length === 1 &&
+            (!drawerState || ($vuetify.breakpoint.smAndDown && drawerState))
+          "
+          dense
+          exact
+          :to="{ path: entity.links[0].path }"
+          :key="index"
+          :color="drawerActiveColor"
+        >
+          <v-list-item-icon class="justify-center mr-6">
+            <v-icon v-text="entity.icon" />
+          </v-list-item-icon>
+          <v-list-item-title
+            style="white-space: unset"
+            v-text="$t(`header.${entity.links[0].title}`)"
+          />
+        </v-list-item>
+        <v-list-item
+          v-show="$vuetify.breakpoint.mdAndUp && drawerState"
+          link
+          :key="`menu-${index}`"
+          :color="drawerActiveColor"
+          :id="`item-${entity.title}`"
+        >
+          <v-list-item-icon class="justify-center">
+            <v-icon v-text="entity.icon" />
+          </v-list-item-icon>
+          <v-list-item-title
+            style="white-space: unset"
+            v-text="$t(`header.${entity.links[0].title}`)"
+          />
+        </v-list-item>
+        <v-menu
+          open-on-hover
+          offset-x
+          close-delay="50"
+          open-delay="50"
+          content-class="elevation-2"
+          :activator="`#item-${entity.title}`"
+        >
+          <v-list>
+            <v-list-item
+              v-for="(link, i) in entity.links"
+              exact
+              dense
+              :to="{ path: link.path }"
+              :key="i"
+              :color="drawerActiveColor"
+            >
+              <v-list-item-title
+                style="white-space: unset"
+                v-text="$t(`header.${link.title}`)"
+              />
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
 
       <!-- ROUTES SPECIAL -->
       <v-list-group
-        v-if="allowedRouteLinksSpecial && allowedRouteLinksSpecial.length > 0"
-        prepend-icon="fas fa-university"
+        v-if="
+          !drawerState &&
+          allowedRouteLinksSpecial &&
+          allowedRouteLinksSpecial.length > 0
+        "
         append-icon="fas fa-angle-down"
         :color="drawerActiveColor"
         :value="false"
       >
         <template v-slot:activator>
+          <v-list-item-icon class="justify-center mr-6">
+            <v-icon>fas fa-university</v-icon>
+          </v-list-item-icon>
           <v-list-item-title>{{ $t("header.curation") }}</v-list-item-title>
         </template>
 
-        <v-list-group
-          sub-group
-          :color="drawerActiveColor"
-          v-for="entity in allowedRouteLinksSpecial"
+        <div
+          v-for="(entity, index) in allowedRouteLinksSpecial"
           :key="entity.title"
-          v-model="entity.state"
         >
-          <template v-slot:activator>
-            <v-list-item-title v-text="$t(`header.${entity.title}`)" />
-          </template>
-
           <v-list-item
-            v-for="(link, index) in entity.links"
-            :to="{ path: link.path }"
-            :key="index"
-            :color="drawerActiveColor"
             exact
+            :to="{ path: entity.path }"
+            :color="drawerActiveColor"
+          >
+            <v-list-item-title
+              style="white-space: unset"
+              v-text="$t(`header.${entity.title}`)"
+            />
+          </v-list-item>
+        </div>
+      </v-list-group>
+      <v-list-item
+        v-show="drawerState"
+        id="item-curation"
+        link
+        :color="drawerActiveColor"
+      >
+        <v-list-item-icon class="justify-center">
+          <v-icon>fas fa-university</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title
+          style="white-space: unset"
+          v-text="$t(`header.curation`)"
+        />
+      </v-list-item>
+      <v-menu
+        activator="#item-curation"
+        open-on-hover
+        offset-x
+        close-delay="50"
+        open-delay="50"
+        content-class="elevation-2"
+      >
+        <v-list>
+          <v-list-item
+            v-for="(link, i) in routeLinksSpecial"
+            exact
+            dense
+            :to="{ path: link.path }"
+            :key="i"
+            :color="drawerActiveColor"
           >
             <v-list-item-title
               style="white-space: unset"
               v-text="$t(`header.${link.title}`)"
             />
-            <v-list-item-icon>
-              <v-icon v-text="link.icon" />
-            </v-list-item-icon>
           </v-list-item>
-        </v-list-group>
-      </v-list-group>
+        </v-list>
+      </v-menu>
 
       <!-- TEST-DEV -->
-      <v-list-item
-        v-if="isDevUrl && isUserSuperuser"
-        :to="{ path: '/test-dev' }"
-        :color="drawerActiveColor"
-      >
-        <v-list-item-title>Test interface</v-list-item-title>
-        <v-list-item-icon>
-          <v-icon>fas fa-code</v-icon>
-        </v-list-item-icon>
-      </v-list-item>
+      <!-- <v-list-item -->
+      <!--   v-if="isDevUrl && isUserSuperuser" -->
+      <!--   :to="{ path: '/test-dev' }" -->
+      <!--   :color="drawerActiveColor" -->
+      <!-- > -->
+      <!--   <v-list-item-icon> -->
+      <!--     <v-icon>fas fa-code</v-icon> -->
+      <!--   </v-list-item-icon> -->
+      <!--   <v-list-item-title>Test interface</v-list-item-title> -->
+      <!-- </v-list-item> -->
 
       <!-- HIERARCHY UPDATE -->
-      <v-list-item
-        v-if="isDevUrl && isUserSuperuser"
-        :to="{ path: '/hierarchy_update' }"
-        :color="drawerActiveColor"
-      >
-        <v-list-item-title>Hierarchy update</v-list-item-title>
-        <v-list-item-icon>
-          <v-icon>fas fa-sitemap</v-icon>
-        </v-list-item-icon>
-      </v-list-item>
+      <!-- <v-list-item -->
+      <!--   v-if="isDevUrl && isUserSuperuser" -->
+      <!--   :to="{ path: '/hierarchy_update' }" -->
+      <!--   :color="drawerActiveColor" -->
+      <!-- > -->
+      <!--   <v-list-item-icon> -->
+      <!--     <v-icon>fas fa-sitemap</v-icon> -->
+      <!--   </v-list-item-icon> -->
+      <!--   <v-list-item-title>Hierarchy update</v-list-item-title> -->
+      <!-- </v-list-item> -->
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -196,6 +264,7 @@ export default {
         {
           name: "attachment",
           title: "files",
+          icon: "fas fa-folder",
           links: [
             { title: "myFiles", path: "/attachment", icon: "far fa-folder" },
             {
@@ -224,6 +293,7 @@ export default {
         {
           name: "reference",
           title: "references",
+          icon: "fas fa-book",
           links: [
             { title: "myReferences", path: "/reference", icon: "fas fa-book" },
             { title: "libraries", path: "/library", icon: "far fa-list-alt" },
@@ -234,6 +304,7 @@ export default {
         {
           name: "project",
           title: "projects",
+          icon: "fas fa-tasks",
           links: [
             { title: "editProject", path: "/project", icon: "fas fa-tasks" },
           ],
@@ -241,6 +312,7 @@ export default {
         {
           name: "locality",
           title: "geography",
+          icon: "fas fa-map-marked-alt",
           links: [
             {
               title: "localities",
@@ -263,6 +335,7 @@ export default {
         {
           name: "drillcore",
           title: "drillcores",
+          icon: "fas fa-box",
           links: [
             {
               title: "drillcores",
@@ -279,6 +352,7 @@ export default {
         {
           name: "sample",
           title: "samples",
+          icon: "fas fa-vial",
           links: [
             { title: "samples", path: "/sample", icon: "fas fa-vial" },
             {
@@ -301,6 +375,7 @@ export default {
         {
           name: "analysis",
           title: "analyses",
+          icon: "fas fa-chart-bar",
           links: [
             {
               title: "editAnalysis",
@@ -327,6 +402,7 @@ export default {
         {
           name: "dataset",
           title: "datasets",
+          icon: "fas fa-database",
           links: [
             {
               title: "datasets",
@@ -338,11 +414,13 @@ export default {
         {
           name: "doi",
           title: "dois",
+          icon: "ai ai-doi",
           links: [{ title: "dois", path: "/doi", icon: "fas fa-database" }],
         },
         {
           name: "specimen",
           title: "specimens",
+          icon: "fas fa-boxes",
           links: [
             { title: "specimens", path: "/specimen", icon: "fas fa-fish" },
             { title: "collections", path: "/collection", icon: "fas fa-boxes" },
@@ -351,6 +429,7 @@ export default {
         {
           name: "taxon",
           title: "classifications",
+          icon: "fas fa-gem",
           links: [
             { title: "taxa", path: "/taxon", icon: "fas fa-pastafarianism" },
             { title: "rocks", path: "/rock", icon: "far fa-gem" },
@@ -369,6 +448,7 @@ export default {
         {
           name: "selection_series",
           title: "selectionSeries",
+          icon: "fas fa-clipboard-list",
           links: [
             {
               title: "selectionSeries",
@@ -380,6 +460,7 @@ export default {
         {
           name: "agent",
           title: "agents",
+          icon: "fas fa-users",
           links: [
             {
               title: "agents",
@@ -393,103 +474,66 @@ export default {
         {
           name: "location",
           title: "locations",
-          links: [
-            {
-              title: "locations",
-              path: "/location",
-              icon: "fas fa-location-arrow",
-            },
-          ],
+          path: "/location",
+          icon: "fas fa-location-arrow",
         },
         {
           name: "visit",
           title: "visits",
-          links: [
-            {
-              title: "visits",
-              path: "/visit",
-              icon: "fas fa-user-friends",
-            },
-          ],
+          path: "/visit",
+          icon: "fas fa-user-friends",
         },
         {
           name: "loan",
           title: "loans",
-          links: [
-            {
-              title: "loans",
-              path: "/loan",
-              icon: "fas fa-people-carry",
-            },
-          ],
+          path: "/loan",
+          icon: "fas fa-people-carry",
         },
         {
           name: "accession",
           title: "accessions",
-          links: [
-            {
-              title: "accessions",
-              path: "/accession",
-              icon: "far fa-handshake",
-            },
-          ],
+          path: "/accession",
+          icon: "far fa-handshake",
         },
         {
           name: "deaccession",
           title: "deaccessions",
-          links: [
-            {
-              title: "deaccessions",
-              path: "/deaccession",
-              icon: "fas fa-handshake-slash",
-            },
-          ],
+          path: "/deaccession",
+          icon: "fas fa-handshake-slash",
         },
         {
           name: "web_news",
           title: "web_news",
-          links: [
-            {
-              title: "web_news",
-              path: "/web_news",
-              icon: "far fa-newspaper",
-            },
-          ],
+          path: "/web_news",
+          icon: "far fa-newspaper",
         },
         {
           name: "web_pages",
           title: "web_pages",
-          links: [
-            {
-              title: "web_pages",
-              path: "/web_pages",
-              icon: "fas fa-pager",
-            },
-            {
-              title: "editTaxonPage",
-              path: "/taxon_page",
-              icon: "fas fa-pager",
-            },
-          ],
+          path: "/web_pages",
+          icon: "fas fa-pager",
+        },
+        {
+          name: "web_pages",
+          title: "editTaxonPage",
+          path: "/taxon_page",
+          icon: "fas fa-pager",
         },
       ],
     };
   },
   computed: {
     ...mapGetters("user", ["isUserSuperuser"]),
-
     allowedRouteLinks() {
       return this.routeLinks.filter((link) =>
         this.isUserAllowedTo("add", link.name)
       );
     },
-
     allowedRouteLinksSpecial() {
       return this.routeLinksSpecial.filter((link) =>
         this.isUserAllowedTo("add", link.name)
       );
     },
-
     filteredRouteLinks() {
       return this.allowedRouteLinks.filter((parentLink) => {
         if (parentLink.name === "project") {
@@ -526,7 +570,6 @@ export default {
         return true;
       });
     },
-
     isDevUrl() {
       return (
         document.location.origin.includes("localhost") ||
@@ -534,7 +577,6 @@ export default {
         document.location.origin.includes("edit3")
       );
     },
-
     ...mapState(["activeProject", "activeSite", "activeSample"]),
     ...mapGetters("user", ["isUserAllowedTo"]),
   },
