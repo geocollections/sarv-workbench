@@ -74,25 +74,25 @@
                   id="username-field"
                   v-model="user.username"
                   :rules="usernameRules"
-                  :label="$t('login.username')"
-                  placeholder=""
+                  :placeholder="$t('login.username')"
                   color="black"
                   outlined
                   dense
                   required
+                  autocomplete="username"
                 />
 
                 <v-text-field
                   id="password-field"
                   v-model="user.password"
                   :rules="passwordRules"
-                  :label="$t('login.password')"
-                  placeholder=""
+                  :placeholder="$t('login.password')"
                   color="black"
                   outlined
                   dense
                   :type="showPassword ? 'text' : 'password'"
                   required
+                  autocomplete="password"
                 >
                   <template v-slot:append>
                     <v-icon tabindex="-1" @click="showPassword = !showPassword">
