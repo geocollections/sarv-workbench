@@ -66,42 +66,6 @@ jobs:
           paths:
             - ~/geocollections/sarv-edit
 
-  deploy_to_dev:
-    docker:
-      - image: cimg/node:lts
-    working_directory: ~/geocollections/sarv-edit
-    steps:
-      - restore_cache:
-          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
-      - run:
-          name: Directory update
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
-      - run:
-          name: Copying built files to development
-          command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit-dev
-
-  deploy_to_dev_2:
-    docker:
-      - image: cimg/node:lts
-    working_directory: ~/geocollections/sarv-edit
-    steps:
-      - restore_cache:
-          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
-      - run:
-          name: Removing current production files
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_2} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
-      - run:
-          name: Copying built files to production
-          command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_2}:/var/www/sarv-edit
-
   deploy_to_prod:
     docker:
       - image: cimg/node:lts
@@ -130,17 +94,15 @@ jobs:
 workflows:
   build:
     jobs:
-
-      # Edit2
       - deploy_edit2:
           filters:
             branches:
-              only: new-rwapi-test
+              only: main
 
       - checkout_code:
           filters:
             branches:
-              only: [development, production]
+              only: production-v1-old
       - bundle_dependencies:
           requires:
             - checkout_code
@@ -149,22 +111,10 @@ workflows:
             - bundle_dependencies
           filters:
             branches:
-              only: [ development, production ]
-      - deploy_to_dev:
-          requires:
-            - build_dependencies
-          filters:
-            branches:
-              only: development
-      - deploy_to_dev_2:
-          requires:
-            - build_dependencies
-          filters:
-            branches:
-              only: development
+              only: production-v1-old
       - deploy_to_prod:
           requires:
             - build_dependencies
           filters:
             branches:
-              only: production
+              only: production-v1-old
