@@ -1,6 +1,7 @@
 <template>
   <div class="keyword-relation-table">
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedAndFilteredHeaders"
       hide-default-footer
       dense

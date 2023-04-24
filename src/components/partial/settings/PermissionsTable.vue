@@ -11,6 +11,7 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedHeaders"
       :items="computedPerms"
       :sort-by="['table']"

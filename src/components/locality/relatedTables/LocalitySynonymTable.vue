@@ -1,6 +1,7 @@
 <template>
   <div class="locality-synonym-table">
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedHeaders"
       hide-default-footer
       dense

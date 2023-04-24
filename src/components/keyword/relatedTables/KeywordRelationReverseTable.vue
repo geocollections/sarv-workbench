@@ -2,6 +2,7 @@
   <div class="keyword-relation-reverse-table">
     <div class="title ml-2">{{ $t("keyword.information") }}:</div>
     <v-data-table
+      mobile-breakpoint="0"
       :headers="translatedHeaders"
       hide-default-footer
       dense
@@ -15,7 +16,6 @@
       :sort-by.sync="searchParameters.sortBy"
       :sort-desc.sync="searchParameters.sortDesc"
       :server-items-length="response.count"
-      :mobile-breakpoint="0"
       :class="bodyColor.split('n-')[0] + 'n-5'"
     >
       <template v-slot:item.action="{ item }">

@@ -38,6 +38,7 @@
             <v-icon left>fab fa-orcid</v-icon>{{ $t("login.connectOrcid") }}
           </v-btn>
           <v-data-table
+            mobile-breakpoint="0"
             :headers="linkedSocialAccountHeaders"
             :items="linkedSocialAccounts.results"
           >

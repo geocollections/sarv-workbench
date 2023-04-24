@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+    mobile-breakpoint="0"
     :headers="$_tableHeaderMixin_shownHeaders"
     hide-default-footer
     :items="response.results"
