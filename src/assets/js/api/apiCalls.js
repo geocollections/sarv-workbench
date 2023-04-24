@@ -501,7 +501,7 @@ export async function fetchReferences(data, dynamicSearch) {
     searchFields +=
       "&multi_search=value:" +
       data.libraryAuthorIdTitle +
-      ";fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt,libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:" +
+      ";fields:reference_libraries__library__author__id,reference_libraries__library__author__agent,reference_libraries__library__author_txt,reference_libraries__library__id,reference_libraries__library__title,reference_libraries__library__title_en;lookuptype:" +
       `${data.libraryAuthorIdTitle__lookuptype || "icontains"}&distinct=true`;
   }
   if (data.userAdded && data.userAdded.trim().length > 0) {
