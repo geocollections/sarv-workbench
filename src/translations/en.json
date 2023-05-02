@@ -1128,7 +1128,7 @@
       "specimen_reference": "References",
       "specimen_description": "Descriptions",
       "attachment": "Files",
-      "specimen_location": "Locations",
+      "specimen_location": "Parts",
       "specimen_history": "History",
       "analysis": "Analyses"
     }
