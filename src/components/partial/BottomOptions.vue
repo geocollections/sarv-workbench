@@ -311,14 +311,14 @@ export default {
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 960px) {
   .drawer-left-margin {
     margin-left: 256px;
     transition: all 200ms ease;
   }
 
   .drawer-left-margin-0 {
-    margin-left: 0;
+    margin-left: 56px;
     transition: all 200ms ease-out;
   }
 }
