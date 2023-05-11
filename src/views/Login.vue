@@ -236,6 +236,6 @@ export default {
   position: relative;
   text-align: center;
   /* text-shadow: 1px 1px 2px #000; */
-  text-shadow: 0.1em 0.1em 0 hsl(0 0% 23%);
+  /* text-shadow: 0.1em 0.1em 0 hsl(0 0% 23%); */
 }
 </style>
