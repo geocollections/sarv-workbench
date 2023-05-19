@@ -5,7 +5,7 @@
     clipped
     mobile-breakpoint="960"
     :value="$vuetify.breakpoint.mdAndUp ? true : drawerState"
-    :mini-variant="$vuetify.breakpoint.mdAndUp ? drawerState : false"
+    :mini-variant="$vuetify.breakpoint.mdAndUp ? !drawerState : false"
     :dark="isDrawerDark"
     :color="drawerColor"
     @input="changeDrawerState"
