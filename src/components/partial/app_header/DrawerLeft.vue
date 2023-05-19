@@ -38,7 +38,7 @@
         <v-list-group
           v-if="
             entity.links.length > 1 &&
-            (!drawerState || ($vuetify.breakpoint.smAndDown && drawerState))
+            (drawerState || ($vuetify.breakpoint.smAndDown && !drawerState))
           "
           append-icon="fas fa-angle-down"
           :color="drawerActiveColor"
@@ -68,7 +68,7 @@
         <v-list-item
           v-else-if="
             entity.links.length === 1 &&
-            (!drawerState || ($vuetify.breakpoint.smAndDown && drawerState))
+            (drawerState || ($vuetify.breakpoint.smAndDown && !drawerState))
           "
           dense
           exact
@@ -85,7 +85,7 @@
           />
         </v-list-item>
         <v-list-item
-          v-show="$vuetify.breakpoint.mdAndUp && drawerState"
+          v-show="$vuetify.breakpoint.mdAndUp && !drawerState"
           link
           :key="`menu-${index}`"
           :color="drawerActiveColor"
@@ -128,7 +128,7 @@
       <!-- ROUTES SPECIAL -->
       <v-list-group
         v-if="
-          (!drawerState || ($vuetify.breakpoint.smAndDown && drawerState)) &&
+          (drawerState || ($vuetify.breakpoint.smAndDown && !drawerState)) &&
           allowedRouteLinksSpecial &&
           allowedRouteLinksSpecial.length > 0
         "
@@ -160,7 +160,7 @@
         </div>
       </v-list-group>
       <v-list-item
-        v-show="$vuetify.breakpoint.mdAndUp && drawerState"
+        v-show="$vuetify.breakpoint.mdAndUp && !drawerState"
         id="item-curation"
         link
         :color="drawerActiveColor"

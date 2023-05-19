@@ -1903,7 +1903,8 @@
       "locality_synonym": "Synonyms",
       "attachment_link": "Attachment",
       "locality_stratigraphy": "Stratigraphy",
-      "locality_description": "Description"
+      "locality_description": "Description",
+      "locality_image": "Images"
     }
   },
   "agent": {
@@ -3110,5 +3111,12 @@
     "touch": "Use two fingers to move the map",
     "scroll": "Use ctrl + scroll to zoom the map",
     "scrollMac": "Use \u2318 + scroll to zoom the map"
-  }
+  },
+  "localityImage": {
+    "attachment": "Attachment",
+    "attachment_filename": "Filename",
+    "title": "Title",
+    "title_en": "Title (en)",
+    "sort": "Sort"
+}
 }

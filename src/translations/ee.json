@@ -1902,7 +1902,8 @@
       "locality_synonym": "Nime sünonüümid",
       "attachment_link": "Manused",
       "locality_stratigraphy": "Strat. piirid",
-      "locality_description": "Kirjeldus"
+      "locality_description": "Kirjeldus",
+      "locality_image": "Pildid"
     }
   },
   "agent": {
@@ -3112,5 +3113,12 @@
     "touch": "Kasuta kahte näppu kaardi liigutamiseks",
     "scroll": "Kasuta ctrl + scroll kaardi suumimiseks",
     "scrollMac": "Kasuta \u2318 + scroll kaardi suumimiseks"
+  },
+  "localityImage": {
+    "attachment": "Fail",
+    "attachment_filename": "Failinimi",
+    "title": "Pealkiri",
+    "title_en": "Pealkiri (en)",
+    "sort": "Sorteeri"
   }
 }

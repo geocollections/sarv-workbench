@@ -579,6 +579,17 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <locality-image-table
+            v-show="activeTab === 'locality_image'"
+            :response="relatedData.locality_image"
+            :search-parameters="relatedData.searchParameters.locality_image"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- PAGINATION -->
           <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -614,6 +625,7 @@ import {
   fetchLocalityAttachment,
   fetchLocalityStratigraphy,
   fetchSiteLocalityDescriptions,
+  fetchLocalityImage,
   fetchLocalityDescriptions,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
@@ -630,6 +642,7 @@ import FileInput from "../partial/inputs/FileInput";
 import LocalityReferenceTable from "./relatedTables/LocalityReferenceTable";
 import LocalitySynonymTable from "./relatedTables/LocalitySynonymTable";
 import LocalityStratigraphyTable from "./relatedTables/LocalityStratigraphyTable";
+import LocalityImageTable from "./relatedTables/LocalityImageTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import LocalityDescriptionTable from "./relatedTables/LocalityDescriptionTable";
 import Pagination from "@/components/partial/Pagination";
@@ -643,6 +656,7 @@ export default {
     LocalityStratigraphyTable,
     LocalitySynonymTable,
     LocalityReferenceTable,
+    LocalityImageTable,
     FileInput,
     AutocompleteWrapper,
     CheckboxWrapper,
@@ -757,6 +771,7 @@ export default {
           { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "locality_stratigraphy", iconClass: "fas fa-globe-asia" },
           { name: "locality_description", iconClass: "fas fa-align-left" },
+          { name: "locality_image", iconClass: "fas fa-image" },
         ],
         activeTab: "locality_reference",
         relatedData: this.setDefaultRelatedData(),
@@ -909,6 +924,7 @@ export default {
         locality_synonym: { count: 0, results: [] },
         attachment_link: { count: 0, results: [] },
         locality_stratigraphy: { count: 0, results: [] },
+        locality_image: { count: 0, results: [] },
         locality_description: {
           count: 0,
           results: [],
@@ -939,6 +955,12 @@ export default {
             sortDesc: [false, false],
           },
           locality_description: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["id"],
+            sortDesc: [true],
+          },
+          locality_image: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
@@ -1112,6 +1134,11 @@ export default {
         query = fetchLocalityDescriptions(
           this.$route.params.id,
           this.relatedData.searchParameters.locality_description
+        );
+      } else if (type === "locality_image") {
+        query = fetchLocalityImage(
+          this.$route.params.id,
+          this.relatedData.searchParameters.locality_image
         );
       }
 

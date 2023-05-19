@@ -833,6 +833,15 @@ export function fetchLocalityStratigraphy(id, searchParameters) {
     `locality_stratigraphy/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
+export function fetchLocalityImage(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `locality_image/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
 
 export function fetchLocalityDescriptions(id, searchParameters) {
   let orderBy = buildOrderBy(
