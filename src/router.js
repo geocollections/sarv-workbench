@@ -2643,9 +2643,7 @@ router.beforeEach(async (to, from, next) => {
       next("/");
     }
   }
-
   next();
-
   // NOTE: old login checking logic. the one above should function the same but need to check if everything is ported over
   // const loginPath = window.location.pathname;
   //
@@ -2717,7 +2715,10 @@ function removeBrowserDataAndLogout() {
         displayMode: "replace",
       });
     },
-    (errResponse) => console.log("LOGOUT ERROR: " + JSON.stringify(errResponse))
+    (errResponse) => {
+      router.push("/");
+      console.log("LOGOUT ERROR: " + JSON.stringify(errResponse));
+    }
   );
 }
 
