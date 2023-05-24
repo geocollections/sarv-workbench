@@ -3,8 +3,8 @@
     <div
       class="d-flex align-center justify-space-around"
       :class="{
-        'drawer-left-margin': !drawerState,
-        'drawer-left-margin-0': drawerState,
+        'drawer-left-margin': drawerState,
+        'drawer-left-margin-0': !drawerState,
         'drawer-right-margin': drawerRightState,
         'drawer-right-margin-0': !drawerRightState,
       }"
