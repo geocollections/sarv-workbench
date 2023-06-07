@@ -930,7 +930,9 @@
     "rotateRight": "Pööra paremale",
     "rotateLeft": "Pööra vasakule",
     "imageRotated": "Pilt edukalt pööratud!",
-    "imageRotationFailed": "Pildi pööramine ebaõnnestus!"
+    "imageRotationFailed": "Pildi pööramine ebaõnnestus!",
+    "imageWidthMm": "Pildi laius (mm)",
+    "imageHeightMm": "Pildi kõrgus (mm)"
   },
   "imageset": {
     "author__agent": "Autor",

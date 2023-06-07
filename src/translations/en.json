@@ -929,7 +929,9 @@
     "rotateRight": "Rotate right",
     "rotateLeft": "Rotate left",
     "imageRotated": "Image successfully rotated!",
-    "imageRotationFailed": "Image rotation unsuccessful!"
+    "imageRotationFailed": "Image rotation unsuccessful!",
+    "imageWidthMm": "Image width (mm)",
+    "imageHeightMm": "Image height (mm)"
   },
   "imageset": {
     "author__agent": "Author",

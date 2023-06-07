@@ -1883,6 +1883,25 @@
                 </v-col>
               </v-row>
 
+              <!-- IMAGE SIZE MM -->
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="pa-1">
+                  <textarea-wrapper
+                    v-model="attachment.image_width_mm"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageWidthMm')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <textarea-wrapper
+                    v-model="attachment.image_height_mm"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageHeightMm')"
+                  />
+                </v-col>
+              </v-row>
+
               <!-- KEYWORDS -->
               <div class="d-flex justify-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
@@ -4425,6 +4444,8 @@ export default {
           "id",
           "image_description",
           "image_description_en",
+          "image_width_mm",
+          "image_height_mm",
           "image_latitude",
           "image_longitude",
           "image_object",
@@ -4919,6 +4940,18 @@ export default {
           uploadableObject.image_longitude
         ).toFixed(6);
       else uploadableObject.image_longitude = null;
+
+      if (this.isNotEmpty(uploadableObject.image_width_mm))
+        uploadableObject.image_width_mm = parseFloat(
+          uploadableObject.image_width_mm
+        );
+      else uploadableObject.image_width_mm = null;
+
+      if (this.isNotEmpty(uploadableObject.image_height_mm))
+        uploadableObject.image_height_mm = parseFloat(
+          uploadableObject.image_height_mm
+        );
+      else uploadableObject.image_height_mm = null;
 
       Object.keys(uploadableObject).forEach((key) => {
         if (
