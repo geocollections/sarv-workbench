@@ -891,7 +891,7 @@ export default {
     isFossil() {
       let fossilId = this.specimen?.fossil?.id;
 
-      return fossilId === 1 || fossilId === 7;
+      return fossilId === 1 || fossilId === 7 || fossilId === 9;
     },
 
     paginateByOptionsTranslated() {
