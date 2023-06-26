@@ -7,6 +7,7 @@ const axios = require("axios");
 
 const api = {
   url: "https://rwapi.geoloogia.info/api/v0/",
+  baseUrl: "https://rwapi.geoloogia.info/",
   accountsUrl: "https://rwapi.geoloogia.info/accounts/",
   dataciteUrl: "https://rwapi.geoloogia.info/datacite/",
   checkDoiUrl: "https://api.crossref.org/works/",
@@ -1275,7 +1276,7 @@ export function fetchDoi(id) {
 }
 
 export function fetchDoiUsingEGF(id) {
-  return get(`egf/${id}`);
+  return get(`egf/${id}`, api.baseUrl);
 }
 
 export function fetchDoiResourceType() {
