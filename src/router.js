@@ -2624,7 +2624,6 @@ router.beforeEach(async (to, from, next) => {
     (errResponse) => errResponse
   );
   const isLoggedIn = handleResponse(loginStateResponse);
-
   if (!isLoggedIn) {
     if (to.meta.requiresAuth) {
       if (to.params.dontShowSessionExpired === false) {
@@ -2636,10 +2635,17 @@ router.beforeEach(async (to, from, next) => {
           displayMode: "replace",
         });
       }
-    }
-    removeBrowserDataAndLogout();
-    if (store.state?.user?.authUser) {
-      store.dispatch("user/removeAuthUser");
+      removeBrowserDataAndLogout();
+      if (store.state?.user?.authUser) {
+        store.dispatch("user/removeAuthUser");
+        Vue.prototype.toast.error("Please log back in", "Session expired", {
+          position: "topCenter",
+          timeout: 5000,
+          closeOnEscape: true,
+          pauseOnHover: false,
+          displayMode: "replace",
+        });
+      }
       next("/");
     }
   }
@@ -2705,21 +2711,21 @@ function removeBrowserDataAndLogout() {
   Vue.$cookies.remove("csrftoken", null, "geocollections.info");
 
   // Sending logout request to API
-  fetchLogout().then(
-    () => {
-      Vue.prototype.toast.error("Please log back in", "Session expired", {
-        position: "topCenter",
-        timeout: 5000,
-        closeOnEscape: true,
-        pauseOnHover: false,
-        displayMode: "replace",
-      });
-    },
-    (errResponse) => {
-      router.push("/");
-      console.log("LOGOUT ERROR: " + JSON.stringify(errResponse));
-    }
-  );
+  // fetchLogout().then(
+  //   () => {
+  //     Vue.prototype.toast.error("Please log back in", "Session expired", {
+  //       position: "topCenter",
+  //       timeout: 5000,
+  //       closeOnEscape: true,
+  //       pauseOnHover: false,
+  //       displayMode: "replace",
+  //     });
+  //   },
+  //   (errResponse) => {
+  //     console.log("removeBrowserDataAndLogout");
+  //     router.push("/");
+  //   }
+  // );
 }
 
 function handleResponse(response) {
