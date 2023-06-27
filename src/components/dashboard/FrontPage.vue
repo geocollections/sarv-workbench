@@ -251,6 +251,7 @@ export default {
       return this.getCurrentUser.user;
     },
     isPermissionsEmpty() {
+      if (!this.getPermissions) return true;
       return Object.keys(this.getPermissions).length === 0;
     },
   },
