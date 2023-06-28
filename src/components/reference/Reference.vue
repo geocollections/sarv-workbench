@@ -762,41 +762,18 @@
             </v-col>
           </v-row>
 
-          <div v-show="activeTab === 'stratigraphy'">
-            <v-row no-gutters>
-              <v-col cols="12" class="px-1">
-                <stratigraphy-table
-                  :response="stratigraphyList"
-                  :search-parameters="relatedData.searchParameters.stratigraphy"
-                  :body-active-color="bodyActiveColor"
-                  :body-color="bodyColor"
-                />
-              </v-col>
-            </v-row>
-
-            <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
-              <v-btn
-                class="mr-2"
-                small
-                :to="{
-                  name: 'Stratigraphy add',
-                  query: { reference: JSON.stringify(reference) },
-                }"
-                target="newStratigraphyWindow"
-                :color="bodyActiveColor"
-                :dark="isBodyActiveColorDark"
-                >{{ $t("add.new") }}</v-btn
-              >
-              <export-buttons
-                v-if="relatedData.stratigraphy.count > 0"
-                filename="stratigraphy"
-                :table-data="relatedData.stratigraphy.results"
-                clipboard-class="stratigraphy-table"
-                :body-active-color="bodyActiveColor"
-                small
-              />
-            </v-toolbar>
-          </div>
+          <reference-stratigraphy-table
+            v-show="activeTab === 'reference_stratigraphy'"
+            :response="relatedData.reference_stratigraphy"
+            :search-parameters="
+              relatedData.searchParameters.reference_stratigraphy
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <div v-show="activeTab === 'taxon'">
             <v-row no-gutters>
@@ -921,6 +898,7 @@ import {
   fetchJournalForReference,
   fetchLinkedTaxonReference,
   fetchLinkedStratigraphyReference,
+  fetchReferenceStratigraphy,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
@@ -938,6 +916,7 @@ import ExportButtons from "../partial/export/ExportButtons";
 import StratigraphyTable from "../stratigraphy/StratigraphyTable";
 import TaxonTable from "../taxon/TaxonTable";
 import LocalityReferenceTable from "./relatedTables/LocalityReferenceTable";
+import ReferenceStratigraphyTable from "./relatedTables/ReferenceStratigraphyTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import Pagination from "@/components/partial/Pagination";
 
@@ -956,6 +935,7 @@ export default {
     AutocompleteWrapper,
     InputWrapper,
     NewDoiButton,
+    ReferenceStratigraphyTable,
   },
   props: {
     isBodyActiveColorDark: {
@@ -1096,7 +1076,7 @@ export default {
       return {
         relatedTabs: [
           { name: "library", iconClass: "fas fa-book" },
-          { name: "stratigraphy", iconClass: "fas fa-layer-group" },
+          { name: "reference_stratigraphy", iconClass: "fas fa-layer-group" },
           { name: "taxon", iconClass: "fas fa-pastafarianism" },
           { name: "locality_reference", iconClass: "fas fa-globe" },
         ],
@@ -1333,11 +1313,21 @@ export default {
           count: 0,
           results: [],
         },
+        reference_stratigraphy: {
+          count: 0,
+          results: [],
+        },
         searchParameters: {
           locality_reference: {
             page: 1,
             paginateBy: 10,
             sortBy: ["locality"],
+            sortDesc: [true],
+          },
+          reference_stratigraphy: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["stratigraphy"],
             sortDesc: [true],
           },
           attachment: {
@@ -1507,6 +1497,11 @@ export default {
         query = fetchLocalityReferenceForReference(
           this.$route.params.id,
           this.relatedData.searchParameters.locality_reference
+        );
+      } else if (object === "reference_stratigraphy") {
+        query = fetchReferenceStratigraphy(
+          this.$route.params.id,
+          this.relatedData.searchParameters.reference_stratigraphy
         );
       }
 

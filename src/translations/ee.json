@@ -2232,7 +2232,8 @@
       "locality_reference": "Kirjeldatud lokaliteedid",
       "library": "Seotud kogumikud",
       "taxon": "Taksonid",
-      "stratigraphy": "Stratigraafia"
+      "stratigraphy": "Stratigraafia",
+      "reference_stratigraphy": "Stratigraafia"
     },
     "translation_of": "Tõlge teosest"
   },
@@ -2345,7 +2346,8 @@
     "age_top": "Ülem. vanus",
     "is_preferred_age": "Eelistatud vanus",
     "pages": "Lk.",
-    "figures": "Joon."
+    "figures": "Joon.",
+    "stratigraphy": "Stratigraafia"
   },
   "stratigraphy_stratotype": {
     "locality": "Lokaliteet",

@@ -674,6 +674,16 @@ export function fetchLinkedTaxonReference(referenceID, data) {
   );
 }
 
+export function fetchReferenceStratigraphy(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `stratigraphy_reference/?reference=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
 /************************
  ***  REFERENCES END  ***
  ************************/

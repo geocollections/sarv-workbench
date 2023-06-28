@@ -2231,7 +2231,8 @@
       "locality_reference": "Locality references",
       "library": "Related libraries",
       "taxon": "Taxon",
-      "stratigraphy": "Stratigraphy"
+      "stratigraphy": "Stratigraphy",
+      "reference_stratigraphy": "Stratigraphy"
     },
     "translation_of": "Translation of"
   },
@@ -2344,7 +2345,8 @@
     "age_top": "Age top",
     "is_preferred_age": "Preferred age",
     "pages": "Pages",
-    "figures": "Figures"
+    "figures": "Figures",
+    "stratigraphy": "Stratigraphy"
   },
   "stratigraphy_stratotype": {
     "locality": "Locality",
