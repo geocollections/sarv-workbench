@@ -913,7 +913,6 @@ import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import Editor from "../partial/inputs/Editor";
 import FileInput from "../partial/inputs/FileInput";
 import ExportButtons from "../partial/export/ExportButtons";
-import StratigraphyTable from "../stratigraphy/StratigraphyTable";
 import TaxonTable from "../taxon/TaxonTable";
 import LocalityReferenceTable from "./relatedTables/LocalityReferenceTable";
 import ReferenceStratigraphyTable from "./relatedTables/ReferenceStratigraphyTable";
@@ -926,7 +925,6 @@ export default {
     Pagination,
     LocalityReferenceTable,
     TaxonTable,
-    StratigraphyTable,
     ExportButtons,
     FileInput,
     Editor,
