@@ -1373,19 +1373,19 @@ export function fetchAddDoiAgent(data) {
 }
 
 export function fetchCheckMetadataInDataCite(id) {
-  return get(`metadata/${id}`, api.dataciteUrl);
+  return get(`metadata/${id}/`, api.dataciteUrl);
 }
 
 export function fetchCheckDoiUrlInDataCite(id) {
-  return get(`doi/${id}`, api.dataciteUrl);
+  return get(`doi/${id}/`, api.dataciteUrl);
 }
 
 export function fetchRegisterMetadataToDataCite(id) {
-  return post(`metadata/${id}`, "", api.dataciteUrl);
+  return post(`metadata/${id}/`, "", api.dataciteUrl);
 }
 
 export function fetchRegisterDoiUrlToDataCite(id) {
-  return post(`doi/${id}`, "", api.dataciteUrl);
+  return post(`doi/${id}/`, "", api.dataciteUrl);
 }
 
 /*****************
