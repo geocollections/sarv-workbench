@@ -1396,8 +1396,6 @@ export default {
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 
@@ -1691,7 +1689,6 @@ export default {
     // Checks metadata from DataCite
     checkMetadata() {
       fetchCheckMetadataInDataCite(this.$route.params.id).then((response) => {
-        console.log(response);
         if (response?.data?.success) {
           if (response.data.doi_metadata_needs_update) {
             this.showMetadataButton = true;

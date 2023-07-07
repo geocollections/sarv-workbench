@@ -131,21 +131,17 @@ async function post(
     if (useLoginOptions) return await axios(loginOptions);
     else return await axios.post(url, data, config);
   } catch (error) {
-    // console.log(error.response);
-    if (returnErrorResponse) return error.response;
-    else return error.request();
+    return error.response;
   }
 }
 
-async function post_delete(child, returnErrorResponse = false) {
+async function post_delete(child) {
   let url = `${api.url}delete/${child}`;
 
   try {
     return await axios.delete(url);
   } catch (error) {
-    // console.log(error.response);
-    if (returnErrorResponse) return error.response;
-    else return error.request();
+    return error.response;
   }
 }
 
@@ -180,14 +176,8 @@ export function fetchIsLoggedIn() {
  ***  LOGIN END  ***
  *******************/
 
-export function postRequest(
-  url,
-  data,
-  customUrl = "",
-  returnErrorResponse = false,
-  config = {}
-) {
-  return post(url, data, customUrl, returnErrorResponse, config);
+export function postRequest(url, data, customUrl = "", config = {}) {
+  return post(url, data, customUrl, config);
 }
 
 /*************************
@@ -1391,11 +1381,11 @@ export function fetchCheckDoiUrlInDataCite(id) {
 }
 
 export function fetchRegisterMetadataToDataCite(id) {
-  return get(`metadata/${id}`, api.dataciteUrl);
+  return post(`metadata/${id}`, "", api.dataciteUrl);
 }
 
 export function fetchRegisterDoiUrlToDataCite(id) {
-  return get(`doi/${id}`, api.dataciteUrl);
+  return post(`doi/${id}`, "", api.dataciteUrl);
 }
 
 /*****************
