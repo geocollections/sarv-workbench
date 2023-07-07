@@ -281,7 +281,7 @@ const formManipulation = {
       this.setLoadingType(url.startsWith("change") ? "edit" : "add");
       this.setLoadingPercent(0);
 
-      postRequest(url, formData, "", false, {
+      postRequest(url, formData, "", {
         onUploadProgress: (progressEvent) => {
           if (progressEvent.lengthComputable) {
             let loadingPercent = Math.round(

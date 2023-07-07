@@ -217,7 +217,7 @@ export default {
       }
 
       try {
-        return await postRequest("", formData, this.importUrl, true);
+        return await postRequest("", formData, this.importUrl);
       } catch (err) {
         console.log(err);
         return false;
@@ -241,7 +241,7 @@ export default {
       formData.append("data", JSON.stringify(data));
       formData.append("file0", this.file[0]);
 
-      await postRequest("add/attachment/", formData, "", true).then(
+      await postRequest("add/attachment/", formData, "").then(
         (response) => {
           if (response && response.status === 200) {
             this.toastSuccess({
