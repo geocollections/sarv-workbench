@@ -1791,6 +1791,7 @@
     "doiDataCiteRegisterConfirmation": "Are you sure, you would like to register DOI to DataCite server?",
     "doiDataCiteUpdateConfirmation": "Are you sure, you would like to update DOI in DataCite server?",
     "dataciteMetadataNeedsUpdate": "Metadata on the DataCite server can be updated!",
+    "dataciteMetadataNeedsUpdateAfterFileIsAdded": "Metadata on the DataCite server can be updated after the file(s) have been added!",
     "dataciteUrlNeedsUpdate": "DOI link in DataCite server needs and update!",
     "dataciteUrlUpdated": "DataCite DOI URL updated!",
     "dataciteUrlUpdateFailed": "DataCite DOI URL update failed!",
@@ -3057,7 +3058,7 @@
     "devNotification": "You are visiting the <b>development version</b> of the application. More stable version can be found here: ",
     "prodNotification": "Did you know there is also a <b>development version</b>, which has all the latest features and functionality. Development version can be found here: ",
     "containImages": "Prevent image cropping",
-    "orcidConnectSuccess": "Account successfully connected to Orcid" 
+    "orcidConnectSuccess": "Account successfully connected to Orcid"
   },
   "logs": {
     "title": "Editing history",

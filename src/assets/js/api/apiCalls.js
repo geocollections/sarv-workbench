@@ -92,11 +92,6 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-function handleResponse(response) {
-  if (response.status === 200) {
-    return !!response?.data?.results?.success;
-  } else return false;
-}
 
 async function get(child = "", customUrl) {
   let url = api.url + child;
@@ -104,7 +99,7 @@ async function get(child = "", customUrl) {
   try {
     return await axios.get(url);
   } catch (error) {
-    return error.request();
+    return error.response;
   }
 }
 
@@ -1396,11 +1391,11 @@ export function fetchCheckDoiUrlInDataCite(id) {
 }
 
 export function fetchRegisterMetadataToDataCite(id) {
-  return post(`metadata/${id}`, api.dataciteUrl);
+  return get(`metadata/${id}`, api.dataciteUrl);
 }
 
 export function fetchRegisterDoiUrlToDataCite(id) {
-  return post(`doi/${id}`, api.dataciteUrl);
+  return get(`doi/${id}`, api.dataciteUrl);
 }
 
 /*****************
