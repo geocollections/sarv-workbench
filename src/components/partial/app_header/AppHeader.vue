@@ -140,6 +140,10 @@
             <v-icon>far fa-envelope</v-icon>
           </v-badge>
         </v-btn>
+
+        <v-btn icon href="https://geoloogia.info" target="_blank">
+          <div class="icon icon--emaapou"></div>
+        </v-btn>
       </v-toolbar-items>
 
       <v-app-bar-nav-icon
@@ -264,5 +268,11 @@ export default {
 
 .flag-circle {
   border-radius: 100%;
+}
+
+.icon--emaapou {
+  background-image: url("../../../assets/emaapou.svg");
+  width: 24px;
+  height: 24px;
 }
 </style>
