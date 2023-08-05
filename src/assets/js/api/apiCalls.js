@@ -496,7 +496,7 @@ export async function fetchReferences(data, dynamicSearch) {
     }=${data.userAdded}`;
   }
   if (data.keywords !== null && data.keywords.trim().length > 0) {
-    searchFields += `&referencekeywords__keyword__keyword__${
+    searchFields += `&reference_keyword__keyword__keyword__${
       data.keywords__lookuptype || "icontains"
     }=${data.keywords}`;
   }
