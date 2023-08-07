@@ -1245,7 +1245,7 @@ export default {
         searchParameters: {
           attachment_link: {
             page: 1,
-            paginateBy: 10,
+            paginateBy: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },

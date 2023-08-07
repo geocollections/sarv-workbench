@@ -944,7 +944,7 @@ export default {
           },
           attachment_link: {
             page: 1,
-            paginateBy: 25,
+            paginateBy: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
