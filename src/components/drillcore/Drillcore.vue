@@ -634,7 +634,7 @@ export default {
           },
           attachment_link: {
             page: 1,
-            paginateBy: 10,
+            paginateBy: 100,
             sortBy: ["original_filename"],
             sortDesc: [true],
           },
