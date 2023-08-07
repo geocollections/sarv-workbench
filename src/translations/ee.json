@@ -241,6 +241,7 @@
     "dataset_reference": "Andmeseti kirjandus",
     "dataset_geolocation": "Andmeseti lokaliteet",
     "locality_stratigraphy": "Stratigraafilised piirid",
+    "locality_image": "Pildid",
     "doi_agent": "Doi isik/asutus",
     "doi_date": "Doi kuupäev",
     "doi_geolocation": "Doi lokaliteet",
