@@ -1804,7 +1804,7 @@ export default {
           };
         }
         if (egfDoiObject.title_eng) {
-          this.doi.title_tranlated = egfDoiObject.title_eng;
+          this.doi.title_translated = egfDoiObject.title_eng;
           this.doi.title_translated_language = {
             id: 1,
             value: "inglise",
