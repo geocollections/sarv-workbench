@@ -240,6 +240,7 @@
     "dataset_geolocation": "Dataset geolocation",
     "dataset_analysis": "Dataset analysis",
     "locality_stratigraphy": "Stratigraphic boundaries",
+    "locality_image": "Image",
     "doi_agent": "Doi agent",
     "doi_date": "Doi date",
     "doi_geolocation": "Doi geolocation",

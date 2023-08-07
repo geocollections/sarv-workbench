@@ -28,7 +28,6 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -50,8 +49,12 @@
               v-if="
                 !!item.attachment__attachment_format__value.includes('image')
               "
-              :src="getFileUrl(item.attachment__uuid_filename, 'small')"
-              :lazy-src="getFileUrl(item.attachment__uuid_filename, 'small')"
+              :src="
+                $helpers.getFileUrl(item.attachment__uuid_filename, 'small')
+              "
+              :lazy-src="
+                $helpers.getFileUrl(item.attachment__uuid_filename, 'small')
+              "
               class="grey lighten-2 attachment-table-image-preview my-1"
             >
               <template v-slot:placeholder>
@@ -77,8 +80,10 @@
               v-if="
                 !!item.attachment.attachment_format__value.includes('image')
               "
-              :src="getFileUrl(item.attachment.uuid_filename, 'small')"
-              :lazy-src="getFileUrl(item.attachment.uuid_filename, 'small')"
+              :src="$helpers.getFileUrl(item.attachment.uuid_filename, 'small')"
+              :lazy-src="
+                $helpers.getFileUrl(item.attachment.uuid_filename, 'small')
+              "
               class="grey lighten-2 attachment-table-image-preview my-1"
             >
               <template v-slot:placeholder>
@@ -149,15 +154,12 @@
                     :color="bodyActiveColor"
                     :items="autocomplete.attachment"
                     :loading="autocomplete.loaders.attachment"
-                    :item-text="
-                      (item) => `${item.original_filename} (${item.id})`
-                    "
+                    item-text="original_filename"
                     use-state
                     :label="$t('localityImage.attachment')"
                     is-link
                     route-object="attachment"
                     is-searchable
-                    no-filter
                     v-on:search:items="autocompletePublicAttachmentImageSearch"
                   />
                 </v-col>
@@ -391,20 +393,6 @@ export default {
         }
       });
       return item;
-    },
-
-    getFileUrl(uuid, size = null) {
-      if (size) {
-        return `${this.$constants.IMAGE_URL}${size}/${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
-      } else {
-        return `${this.$constants.IMAGE_URL}${uuid.substring(
-          0,
-          2
-        )}/${uuid.substring(2, 4)}/${uuid}`;
-      }
     },
   },
 };
