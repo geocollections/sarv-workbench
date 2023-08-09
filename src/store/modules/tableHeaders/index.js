@@ -355,8 +355,8 @@ const state = {
     taxon_page: ["id", "taxon", "language", "title"],
     visit: [
       "id",
-      "visitor",
-      "visitor_country",
+      "visitor__agent",
+      "visitor_institution__agent",
       "date_arrived",
       "date_left",
       "host",

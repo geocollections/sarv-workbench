@@ -785,8 +785,9 @@ export default {
         searchParameters: {
           attachment_link: {
             page: 1,
-            paginateBy: 10,
-            orderBy: "id",
+            paginateBy: 100,
+            sortBy: ["id"],
+            sortDesc: [true],
           },
           analysis_results: {
             page: 1,

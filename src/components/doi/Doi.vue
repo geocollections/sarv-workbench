@@ -1245,7 +1245,7 @@ export default {
         searchParameters: {
           attachment_link: {
             page: 1,
-            paginateBy: 10,
+            paginateBy: 100,
             sortBy: ["id"],
             sortDesc: [true],
           },
@@ -1396,8 +1396,6 @@ export default {
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 
@@ -1601,80 +1599,6 @@ export default {
       }
     },
 
-    /**
-     *
-     */
-    handleCheckDoiResponse(response) {
-      if (response.status === 200) {
-        let dataCiteResponse = response.data.results;
-
-        if (
-          typeof dataCiteResponse !== "undefined" &&
-          dataCiteResponse.length > 0
-        ) {
-          // SUCCESSFUL RESPONSE
-          if (dataCiteResponse[0].success) {
-            // Checking if metadata needs an update
-            if (
-              typeof dataCiteResponse[0].update_datacite_metadata !==
-              "undefined"
-            ) {
-              if (dataCiteResponse[0].update_datacite_metadata) {
-                this.showDataCiteButton = true;
-                this.showUpdateMessage = true;
-                this.toastInfo({
-                  text: this.$t("doi.dataCiteNeedsUpdate"),
-                  timeout: 7000,
-                });
-              }
-            }
-
-            // Checking if url needs an update
-            if (
-              typeof dataCiteResponse[0].update_datacite_url !== "undefined"
-            ) {
-              if (dataCiteResponse[0].update_datacite_url) {
-                this.showDataCiteUrlButton = true;
-                this.toastInfo({
-                  text: this.$t("doi.dataCiteUrlNeedsUpdate"),
-                  timeout: 7000,
-                });
-              }
-            }
-            // UNSUCCESSFUL RESPONSE, but DOI is in SARV database
-          } else if (dataCiteResponse[0].is_in_sarv) {
-            // Checking if DOI is not in DataCite database (can be registered)
-            if (!dataCiteResponse[0].is_in_datacite) {
-              this.showDataCiteButton = true;
-              this.showUpdateMessage = false;
-              if (this.$i18n.locale === "ee")
-                this.toastInfo({
-                  text: dataCiteResponse[0].error_et,
-                  timeout: 7000,
-                });
-              else
-                this.toastInfo({
-                  text: dataCiteResponse[0].error,
-                  timeout: 7000,
-                });
-            }
-          } else {
-            // Unsuccessful response and doi doesn't exist in sarv database (if not in sarv then it can't be in datacite)
-            if (this.$i18n.locale === "ee")
-              this.toastInfo({
-                text: dataCiteResponse[0].error_et,
-                timeout: 7000,
-              });
-            else
-              this.toastInfo({
-                text: dataCiteResponse[0].error,
-                timeout: 7000,
-              });
-          }
-        }
-      }
-    },
-
     /* DOI METADATA START */
 
     setCurrentTimeToDataCiteDateFields() {
@@ -1690,7 +1614,7 @@ export default {
       if (this.validate("doi")) {
         if (
           confirm(
-            this.showUpdateMessage
+            this.showMetadataUpdateMessage
               ? this.$t("doi.doiDataCiteUpdateConfirmation")
               : this.$t("doi.doiDataCiteRegisterConfirmation")
           )
@@ -1700,32 +1624,25 @@ export default {
 
           fetchRegisterMetadataToDataCite(this.$route.params.id).then(
             (response) => {
-              if (response.status === 200) {
-                if (
-                  typeof response.data.results !== "undefined" &&
-                  response.data.results.length > 0
-                ) {
-                  if (response.data.results[0].success) {
-                    this.toastSuccess({
-                      text:
-                        this.$t("doi.dataciteMetadataUpdated") +
-                        " DataCite response: " +
-                        response.data.results[0].content,
-                      timeout: 5000,
-                    });
-                    this.setCurrentTimeToDataCiteDateFields();
-                    this.showMetadataButton = false;
-                    this.showMetadataUpdateMessage = false;
-                    this.setLoadingState(false);
-                    this.add(true, "doi");
-                    this.checkDoiUrl();
-                  } else {
-                    this.toastError({
-                      text: this.$t("doi.dataciteMetadataUpdateFailed"),
-                    });
-                    this.setLoadingState(false);
-                  }
-                }
+              if (response?.data?.success) {
+                this.toastSuccess({
+                  text:
+                    this.$t("doi.dataciteMetadataUpdated") +
+                    " DataCite response: " +
+                    response.data.content,
+                  timeout: 5000,
+                });
+                this.setCurrentTimeToDataCiteDateFields();
+                this.showMetadataButton = false;
+                this.showMetadataUpdateMessage = false;
+                this.setLoadingState(false);
+                this.add(true, "doi");
+                this.checkDoiUrl();
+              } else {
+                this.toastError({
+                  text: this.$t("doi.dataciteMetadataUpdateFailed"),
+                });
+                this.setLoadingState(false);
               }
             }
           );
@@ -1737,7 +1654,7 @@ export default {
       if (this.validate("doi")) {
         if (
           confirm(
-            this.showUpdateMessage
+            this.showDoiUrlUpdateMessage
               ? this.$t("doi.doiDataCiteUpdateConfirmation")
               : this.$t("doi.doiDataCiteRegisterConfirmation")
           )
@@ -1747,27 +1664,20 @@ export default {
 
           fetchRegisterDoiUrlToDataCite(this.$route.params.id).then(
             (response) => {
-              if (response.status === 200) {
-                if (
-                  typeof response.data.results !== "undefined" &&
-                  response.data.results.length > 0
-                ) {
-                  if (response.data.results[0].success) {
-                    this.toastSuccess({
-                      text:
-                        this.$t("doi.dataciteUrlUpdated") +
-                        " DataCite response: " +
-                        response.data.results[0].content,
-                      timeout: 5000,
-                    });
-                    this.showDoiUrlButton = false;
-                    this.showDoiUrlUpdateMessage = false;
-                  } else {
-                    this.toastError({
-                      text: this.$t("doi.dataciteUrlUpdateFailed"),
-                    });
-                  }
-                }
+              if (response?.data?.success) {
+                this.toastSuccess({
+                  text:
+                    this.$t("doi.dataciteUrlUpdated") +
+                    " DataCite response: " +
+                    response.data.content,
+                  timeout: 5000,
+                });
+                this.showDoiUrlButton = false;
+                this.showDoiUrlUpdateMessage = false;
+              } else {
+                this.toastError({
+                  text: this.$t("doi.dataciteUrlUpdateFailed"),
+                });
               }
               this.setLoadingState(false);
             }
@@ -1779,42 +1689,34 @@ export default {
     // Checks metadata from DataCite
     checkMetadata() {
       fetchCheckMetadataInDataCite(this.$route.params.id).then((response) => {
-        if (response.status === 200) {
-          if (
-            typeof response.data.results !== "undefined" &&
-            response.data.results.length > 0
-          ) {
-            if (response.data.results[0].success) {
-              if (response.data.results[0].doi_metadata_needs_update) {
-                this.showMetadataButton = true;
-                this.showMetadataUpdateMessage = true;
-                this.sarvXML = response.data.results[0].sarv_xml;
-                this.dataciteXML = response.data.results[0].datacite_xml;
-                this.toastInfo({
-                  text: this.$t("doi.dataciteMetadataNeedsUpdate"),
-                });
-              } else {
-                this.showMetadataButton = false;
-                this.showMetadataUpdateMessage = false;
-                this.sarvXML = response.data.results[0].sarv_xml;
-                this.dataciteXML = response.data.results[0].datacite_xml;
-                if (
-                  typeof response.data.results[0].error !== "undefined" &&
-                  response.data.results[0].error_et !== "undefined"
-                ) {
-                  if (this.$i18n.locale === "ee")
-                    this.toastInfo({ text: response.data.results[0].error_et });
-                  else this.toastInfo({ text: response.data.results[0].error });
-                }
-              }
-            } else if (response.data.results[0].error_code === 404) {
-              this.showMetadataButton = true;
-              this.showMetadataUpdateMessage = false;
-            } else {
-              this.showMetadataButton = false;
-              this.showMetadataUpdateMessage = false;
+        if (response?.data?.success) {
+          if (response.data.doi_metadata_needs_update) {
+            this.showMetadataButton = true;
+            this.showMetadataUpdateMessage = response.data.status_code !== 404;
+            this.sarvXML = response.data.sarv_xml;
+            this.dataciteXML = response.data.datacite_xml;
+            this.toastInfo({
+              text: this.doiContainsFile
+                ? this.$t("doi.dataciteMetadataNeedsUpdate")
+                : this.$t("doi.dataciteMetadataNeedsUpdateAfterFileIsAdded"),
+            });
+          } else {
+            this.showMetadataButton = false;
+            this.showMetadataUpdateMessage = false;
+            this.sarvXML = response.data.sarv_xml;
+            this.dataciteXML = response.data.datacite_xml;
+            if (response.data.error || response.data.error_et) {
+              if (this.$i18n.locale === "ee")
+                this.toastInfo({ text: response.data.error_et });
+              else this.toastInfo({ text: response.data.error });
             }
           }
+        } else if (response.data.status_code === 404) {
+          this.showMetadataButton = true;
+          this.showMetadataUpdateMessage = false;
+        } else {
+          this.showMetadataButton = false;
+          this.showMetadataUpdateMessage = false;
         }
       });
     },
@@ -1822,26 +1724,19 @@ export default {
     // Checks DOI url from DataCite
     checkDoiUrl() {
       fetchCheckDoiUrlInDataCite(this.$route.params.id).then((response) => {
-        if (response.status === 200) {
-          if (
-            typeof response.data.results !== "undefined" &&
-            response.data.results.length > 0
-          ) {
-            if (response.data.results[0].success) {
-              if (response.data.results[0].doi_url_needs_update) {
-                this.showDoiUrlButton = true;
-                this.showDoiUrlUpdateMessage = true;
-                this.doiURL = response.data.results[0].doi_url;
-                this.dataciteURL = response.data.results[0].datacite_url;
-              }
-            } else if (response.data.results[0].error_code === 204) {
-              this.showDoiUrlButton = true;
-              this.showDoiUrlUpdateMessage = false;
-            } else {
-              this.showDoiUrlButton = false;
-              this.showDoiUrlUpdateMessage = false;
-            }
+        if (response?.data?.success) {
+          if (response.data.doi_url_needs_update) {
+            this.showDoiUrlButton = true;
+            this.showDoiUrlUpdateMessage = response.data.status_code !== 404;
+            this.doiURL = response.data.doi_url;
+            this.dataciteURL = response.data.datacite_url;
           }
+        } else if (response.data.status_code === 204) {
+          this.showDoiUrlButton = true;
+          this.showDoiUrlUpdateMessage = false;
+        } else {
+          this.showDoiUrlButton = false;
+          this.showDoiUrlUpdateMessage = false;
         }
       });
     },
@@ -1909,7 +1804,7 @@ export default {
           };
         }
         if (egfDoiObject.title_eng) {
-          this.doi.title_tranlated = egfDoiObject.title_eng;
+          this.doi.title_translated = egfDoiObject.title_eng;
           this.doi.title_translated_language = {
             id: 1,
             value: "inglise",

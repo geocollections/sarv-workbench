@@ -100,7 +100,7 @@
     "connectingOrcid": "Kasutaja ühendamine ORCIDiga...",
     "connectOrcid": "Ühenda ORCIDi konto",
     "disconnectDialogTitle": "Oled kindel, et soovid selle konto ühenduse katkestada?",
-    "disconnectDialogWarning":"Pärast ühenduse katkestamist ei saa seda kontot enam sisselogimiseks kasutada!",
+    "disconnectDialogWarning": "Pärast ühenduse katkestamist ei saa seda kontot enam sisselogimiseks kasutada!",
     "signInIdCard": "Sisene ID-kaardiga"
   },
   "header": {
@@ -241,6 +241,7 @@
     "dataset_reference": "Andmeseti kirjandus",
     "dataset_geolocation": "Andmeseti lokaliteet",
     "locality_stratigraphy": "Stratigraafilised piirid",
+    "locality_image": "Pildid",
     "doi_agent": "Doi isik/asutus",
     "doi_date": "Doi kuupäev",
     "doi_geolocation": "Doi lokaliteet",
@@ -1790,6 +1791,7 @@
     "doiDataCiteRegisterConfirmation": "Kas olete kindel, et soovite registreerida DOI DataCite serverisse?",
     "doiDataCiteUpdateConfirmation": "Kas olete kindel, et soovite uuendada DOId DataCite serveris?",
     "dataciteMetadataNeedsUpdate": "DataCite serveris olevaid metaandmeid on võimalik uuendada!",
+    "dataciteMetadataNeedsUpdateAfterFileIsAdded": "DataCite serveris olevaid metaandmeid on võimalik uuendada peale faili lisamist!",
     "dataciteUrlNeedsUpdate": "DataCite serveris olev DOI link vajab uuendamist!",
     "dataciteUrlUpdated": "DataCite DOI URL uuendatud!",
     "dataciteUrlUpdateFailed": "DataCite DOI URL uuendus ebaõnnestus!",
@@ -3059,7 +3061,7 @@
     "devNotification": "Külastate rakenduse <b>arendusversiooni</b>, kus võib esineda tõrkeid. Stabiilsema versiooni leiate siit: ",
     "prodNotification": "Kas teadsite, et on olemas ka rakenduse <b>arendusversioon</b>, kus on olemas kõige viimased uuendused. Arendusversiooni leiate siit: ",
     "containImages": "Vältige piltide kärpimist",
-    "orcidConnectSuccess": "Kasutaja edukalt Orcidiga ühendatud" 
+    "orcidConnectSuccess": "Kasutaja edukalt Orcidiga ühendatud"
   },
   "logs": {
     "title": "Kirje ajalugu",

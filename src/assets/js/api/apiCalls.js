@@ -92,11 +92,6 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-function handleResponse(response) {
-  if (response.status === 200) {
-    return !!response?.data?.results?.success;
-  } else return false;
-}
 
 async function get(child = "", customUrl) {
   let url = api.url + child;
@@ -104,7 +99,7 @@ async function get(child = "", customUrl) {
   try {
     return await axios.get(url);
   } catch (error) {
-    return error.request();
+    return error.response;
   }
 }
 
@@ -136,21 +131,17 @@ async function post(
     if (useLoginOptions) return await axios(loginOptions);
     else return await axios.post(url, data, config);
   } catch (error) {
-    // console.log(error.response);
-    if (returnErrorResponse) return error.response;
-    else return error.request();
+    return error.response;
   }
 }
 
-async function post_delete(child, returnErrorResponse = false) {
+async function post_delete(child) {
   let url = `${api.url}delete/${child}`;
 
   try {
     return await axios.delete(url);
   } catch (error) {
-    // console.log(error.response);
-    if (returnErrorResponse) return error.response;
-    else return error.request();
+    return error.response;
   }
 }
 
@@ -185,14 +176,8 @@ export function fetchIsLoggedIn() {
  ***  LOGIN END  ***
  *******************/
 
-export function postRequest(
-  url,
-  data,
-  customUrl = "",
-  returnErrorResponse = false,
-  config = {}
-) {
-  return post(url, data, customUrl, returnErrorResponse, config);
+export function postRequest(url, data, customUrl = "", config = {}) {
+  return post(url, data, customUrl, config);
 }
 
 /*************************
@@ -511,7 +496,7 @@ export async function fetchReferences(data, dynamicSearch) {
     }=${data.userAdded}`;
   }
   if (data.keywords !== null && data.keywords.trim().length > 0) {
-    searchFields += `&referencekeywords__keyword__keyword__${
+    searchFields += `&reference_keyword__keyword__keyword__${
       data.keywords__lookuptype || "icontains"
     }=${data.keywords}`;
   }
@@ -1388,19 +1373,19 @@ export function fetchAddDoiAgent(data) {
 }
 
 export function fetchCheckMetadataInDataCite(id) {
-  return get(`metadata/${id}`, api.dataciteUrl);
+  return get(`metadata/${id}/`, api.dataciteUrl);
 }
 
 export function fetchCheckDoiUrlInDataCite(id) {
-  return get(`doi/${id}`, api.dataciteUrl);
+  return get(`doi/${id}/`, api.dataciteUrl);
 }
 
 export function fetchRegisterMetadataToDataCite(id) {
-  return post(`metadata/${id}`, api.dataciteUrl);
+  return post(`metadata/${id}/`, "", api.dataciteUrl);
 }
 
 export function fetchRegisterDoiUrlToDataCite(id) {
-  return post(`doi/${id}`, api.dataciteUrl);
+  return post(`doi/${id}/`, "", api.dataciteUrl);
 }
 
 /*****************
