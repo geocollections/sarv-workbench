@@ -6,10 +6,10 @@ import store from "../../../store";
 const axios = require("axios");
 
 const api = {
-  url: "https://rwapi.geoloogia.info/api/v0/",
-  baseUrl: "https://rwapi.geoloogia.info/",
-  accountsUrl: "https://rwapi.geoloogia.info/accounts/",
-  dataciteUrl: "https://rwapi.geoloogia.info/datacite/",
+  url: `${process.env.VUE_APP_API_URL}/api/v0/`,
+  baseUrl: `${process.env.VUE_APP_API_URL}/`,
+  accountsUrl: `${process.env.VUE_APP_API_URL}/accounts/`,
+  dataciteUrl: `${process.env.VUE_APP_API_URL}/datacite/`,
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",
@@ -168,7 +168,7 @@ export function fetchLoginOrcid(code) {
 
 export function fetchLoginId() {
   return get(
-    `?redirect_uri=https://rwapi.geoloogia.info/accounts/idcard/`,
+    `?redirect_uri=${process.env.VUE_APP_API_URL}/accounts/idcard/`,
     "https://idcard.geoloogia.info/"
   );
 }

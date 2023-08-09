@@ -299,7 +299,7 @@ export default {
   },
   async mounted() {
     const res = await axios.get(
-      "https://rwapi.geoloogia.info/accounts/dj-rest-auth/socialaccounts"
+      `${process.env.VUE_APP_API_URL}/accounts/dj-rest-auth/socialaccounts`
     );
     this.linkedSocialAccounts = res.data;
   },
@@ -323,7 +323,7 @@ export default {
     },
     async disconnectSocialAccountConfirm() {
       const res = await axios.post(
-        `https://rwapi.geoloogia.info/accounts/dj-rest-auth/socialaccounts/${this.disconnectItem.id}/disconnect/`
+        `${process.env.VUE_APP_API_URL}/accounts/dj-rest-auth/socialaccounts/${this.disconnectItem.id}/disconnect/`
       );
     },
     closeDelete() {
