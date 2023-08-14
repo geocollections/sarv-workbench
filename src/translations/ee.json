@@ -58,7 +58,8 @@
     "original": "Originaal",
     "fields": "Tabeli päised",
     "fillUsingDoi": "Täida DOI abil",
-    "or": "VÕI"
+    "or": "VÕI",
+    "activeDatabase": "Aktiivne andmebaas"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",

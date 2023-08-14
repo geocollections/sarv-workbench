@@ -57,7 +57,8 @@
     "large": "large",
     "original": "Original",
     "fields": "Table headers",
-    "or": "OR"
+    "or": "OR",
+    "activeDatabase": "Active database"
   },
   "main": {
     "pagination": "Show {num} results per page",

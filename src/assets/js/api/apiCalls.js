@@ -4425,6 +4425,21 @@ export function fetchSiteGroundwaters(data, dynamicSearch) {
  ******************************/
 
 /************************
+ *** DATABASE GROUP START ***
+ ************************/
+export function fetchDatabaseGroups() {
+  return get(`database-groups/`, api.accountsUrl);
+}
+export function changeDatabaseGroup(database) {
+  return axios.patch(`${api.accountsUrl}/database-groups/`, {
+    database: database.id,
+  });
+}
+/************************
+ *** DATABASE GROUP END***
+ ************************/
+
+/************************
  *** SARV_ISSUE START ***
  ************************/
 

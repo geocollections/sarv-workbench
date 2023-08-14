@@ -51,6 +51,9 @@ const actions = {
   setAuthUser({ commit }, userData) {
     commit("SET_AUTH_USER", userData);
   },
+  setActiveDatabase({ commit }, userData) {
+    commit("SET_ACTIVE_DATABASE", userData);
+  },
 
   removeAuthUser({ commit }) {
     commit("SET_AUTH_USER", null);
@@ -68,6 +71,11 @@ const mutations = {
     state.authUser = payload;
   },
 
+  SET_ACTIVE_DATABASE(state, payload) {
+    if (state.authUser) {
+      state.authUser.database_id = payload;
+    }
+  },
   SET_LAST_LOGIN(state, payload) {
     if (payload?.data?.results && payload?.data?.results.length === 1) {
       state.lastLogin = payload.data.results[0];

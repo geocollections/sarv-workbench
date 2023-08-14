@@ -73,6 +73,43 @@
           ENG &nbsp;<span class="flag flag-en flag-squared flag-circle"></span>
         </v-btn>
 
+        <div
+          v-if="databaseGroups.length === 1"
+          :title="$t('common.activeDatabase')"
+          class="text-button font-weight-medium d-flex justify-center align-center px-4"
+        >
+          <v-icon left small>fas fa-database</v-icon>
+          {{ currentGroup.acronym }}
+        </div>
+        <v-menu
+          v-else-if="databaseGroups.length > 1"
+          v-model="showGroupDropdown"
+          offset-y
+          z-index="50100"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn text v-on="on" :title="$t('common.activeDatabase')">
+              {{ currentGroup.acronym }}&nbsp;
+              <v-icon>{{
+                showDropdown ? "fas fa-caret-up" : "fas fa-caret-down"
+              }}</v-icon>
+            </v-btn>
+          </template>
+          <v-list
+            :color="navbarColor"
+            :dark="navbarDark"
+            dense
+            style="border-radius: 0"
+          >
+            <v-list-item
+              v-for="(group, index) in databaseGroups"
+              :key="index"
+              @click="handleDatabaseGroupChange(group)"
+            >
+              <v-list-item-title>{{ group.acronym }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
         <v-menu v-model="showDropdown" offset-y z-index="50100">
           <template v-slot:activator="{ on }">
             <v-btn text v-on="on">
@@ -114,6 +151,33 @@
               <v-list-item-title>{{ $t("header.settings") }}</v-list-item-title>
             </v-list-item>
 
+            <v-list-item
+              v-if="$vuetify.breakpoint.smAndDown"
+              href="https://geoloogia.info"
+              target="_blank"
+            >
+              <v-list-item-icon>
+                <div class="icon icon--emaapou"></div>
+              </v-list-item-icon>
+              <v-list-item-title>eMaapõu</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item :to="{ path: '/sarv_issue' }">
+              <v-list-item-icon>
+                <v-badge
+                  :content="getActiveSarvIssuesCount()"
+                  :value="getActiveSarvIssuesCount()"
+                  color="red"
+                  overlap
+                >
+                  <v-icon>far fa-envelope</v-icon>
+                </v-badge>
+              </v-list-item-icon>
+              <v-list-item-title>{{
+                $t("sarv_issue.my_messages")
+              }}</v-list-item-title>
+            </v-list-item>
+
             <v-list-item :to="{ path: '/admin' }" v-if="isUserSuperuser">
               <v-list-item-icon
                 ><v-icon>fa fa-user-shield</v-icon></v-list-item-icon
@@ -130,18 +194,12 @@
           </v-list>
         </v-menu>
 
-        <v-btn icon to="/sarv_issue" :title="$t('sarv_issue.my_messages')">
-          <v-badge
-            :content="getActiveSarvIssuesCount()"
-            :value="getActiveSarvIssuesCount()"
-            color="red"
-            overlap
-          >
-            <v-icon>far fa-envelope</v-icon>
-          </v-badge>
-        </v-btn>
-
-        <v-btn icon href="https://geoloogia.info" target="_blank">
+        <v-btn
+          v-if="$vuetify.breakpoint.mdAndUp"
+          icon
+          href="https://geoloogia.info"
+          target="_blank"
+        >
           <div class="icon icon--emaapou"></div>
         </v-btn>
       </v-toolbar-items>
@@ -166,7 +224,10 @@ import authenticationMixin from "../../../mixins/authenticationMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
 import DrawerLeft from "./DrawerLeft";
 import DrawerRight from "./DrawerRight";
-
+import {
+  fetchDatabaseGroups,
+  changeDatabaseGroup,
+} from "../../../assets/js/api/apiCalls";
 export default {
   name: "AppBar",
   components: {
@@ -178,12 +239,19 @@ export default {
     drawer: null,
     drawerRight: false,
     showDropdown: false,
+    showGroupDropdown: false,
+    databaseGroups: [],
   }),
   computed: {
     isBeta() {
       return (
         document.location.origin.includes("edit2") ||
         document.location.origin.includes("edit3")
+      );
+    },
+    currentGroup() {
+      return this.databaseGroups.find(
+        (group) => group.id === this.getDatabaseId
       );
     },
 
@@ -206,9 +274,11 @@ export default {
       "lang",
     ]),
     ...mapGetters("user", ["getCurrentUser", "isUserSuperuser"]),
+    ...mapGetters("user", ["getDatabaseId"]),
   },
-  created() {
+  async created() {
     this.fetchActiveSarvIssues();
+    this.databaseGroups = (await fetchDatabaseGroups()).data;
   },
   methods: {
     ...mapActions("settings", [
@@ -219,6 +289,7 @@ export default {
     ...mapGetters("search", ["getActiveSarvIssuesCount"]),
 
     ...mapActions("search", ["fetchActiveSarvIssues"]),
+    ...mapActions("user", ["setActiveDatabase"]),
 
     changeLang(newLang) {
       if (this.lang === newLang) return;
@@ -226,6 +297,13 @@ export default {
       this.$moment.locale(newLang === "ee" ? "et" : "en");
       this.updateLang(newLang);
       this.toastInfo({ text: this.$t("messages.langChange") });
+    },
+    async handleDatabaseGroupChange(group) {
+      const res = await changeDatabaseGroup(group);
+
+      this.setActiveDatabase(res.data.database);
+
+      this.$router.go(0);
     },
   },
 };
