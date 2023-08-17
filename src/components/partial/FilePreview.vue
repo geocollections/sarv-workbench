@@ -124,6 +124,20 @@
         </v-list>
       </v-menu>
     </div>
+    <div v-else>
+      <v-btn
+        small
+        icon
+        tag="a"
+        :href="$helpers.getFileUrl(data.uuid_filename, size)"
+        :download="downloadFileName(data.original_filename, size)"
+        :title="$t('common.downloadFile')"
+        :color="bodyActiveColor"
+        :dark="bodyActiveColorDark"
+      >
+        <v-icon color="" small>fas fa-download</v-icon>
+      </v-btn>
+    </div>
   </div>
 </template>
 
