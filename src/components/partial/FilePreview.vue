@@ -87,8 +87,7 @@
           small
           text
           link
-          plain
-          class="ma-1 text-capitalize blue--text text--darken-1"
+          class="ma-1 text-capitalize blue--text text--darken-2"
           @click="
             $helpers.openUrlInNewWindow(
               $helpers.getFileUrl(data.uuid_filename, size)
