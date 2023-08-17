@@ -92,6 +92,22 @@
           :title="$helpers.getFileUrl(data.uuid_filename, size)"
           >{{ $t(`common.${size}`) }}</v-btn
         >
+        <v-menu>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on" title="download">
+              <v-icon>fas fa-download</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item v-for="(size, index) in buttons" :key="index">
+              <a
+                :href="$helpers.getFileUrl(data.uuid_filename, size)"
+                :download="`${size}_${data.original_filename}`"
+                >{{ $t(`common.${size}`) }}</a
+              >
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </div>
     </div>
   </div>
