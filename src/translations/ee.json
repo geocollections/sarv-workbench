@@ -60,6 +60,7 @@
     "fillUsingDoi": "Täida DOI abil",
     "or": "VÕI",
     "activeDatabase": "Aktiivne andmebaas"
+    "downloadFile": "Laadi alla"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",

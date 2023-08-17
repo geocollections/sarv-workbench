@@ -75,15 +75,20 @@
     </div>
 
     <div
-      class="align-self-center"
+      class="d-flex align-self-center justify-space-between px-2"
+      style="width: 100%"
       v-if="isAudioFile || isVideoFile || isImageFile"
     >
-      <div class="d-flex flex-row flex-wrap">
+      <div class="d-flex">
+        <v-icon small>fas fa-external-link-alt</v-icon>
         <v-btn
           v-for="size in buttons"
           :key="size"
           small
-          class="ma-1"
+          text
+          link
+          plain
+          class="ma-1 text-capitalize blue--text text--darken-1"
           @click="
             $helpers.openUrlInNewWindow(
               $helpers.getFileUrl(data.uuid_filename, size)
@@ -92,28 +97,39 @@
           :title="$helpers.getFileUrl(data.uuid_filename, size)"
           >{{ $t(`common.${size}`) }}</v-btn
         >
-        <v-menu>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on" title="download">
-              <v-icon>fas fa-download</v-icon>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item v-for="(size, index) in buttons" :key="index">
-              <a
-                :href="$helpers.getFileUrl(data.uuid_filename, size)"
-                :download="`${size}_${data.original_filename}`"
-                >{{ $t(`common.${size}`) }}</a
-              >
-            </v-list-item>
-          </v-list>
-        </v-menu>
       </div>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            small
+            icon
+            v-bind="attrs"
+            v-on="on"
+            :title="$t('common.downloadFile')"
+            :color="bodyActiveColor"
+            :dark="bodyActiveColorDark"
+          >
+            <v-icon color="" small>fas fa-download</v-icon>
+          </v-btn>
+        </template>
+        <v-list dense>
+          <v-list-item
+            v-for="(size, index) in buttons"
+            :key="index"
+            tag="a"
+            :href="$helpers.getFileUrl(data.uuid_filename, size)"
+            :download="downloadFileName(data.original_filename, size)"
+          >
+            <v-list-item-title>{{ $t(`common.${size}`) }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     data: {
@@ -125,6 +141,7 @@ export default {
   },
   name: "FilePreview",
   computed: {
+    ...mapState("settings", ["bodyActiveColor", "bodyActiveColorDark"]),
     isAudioFile() {
       return !!(
         this.data.attachment_format__value &&
@@ -208,6 +225,10 @@ export default {
         // 1 webm
         else return "fa-file"; // 4 hz1
       }
+    },
+    downloadFileName(filename, size) {
+      if (size === "original") return filename;
+      return `${size}_${filename}`;
     },
 
     rotateImage(deg) {

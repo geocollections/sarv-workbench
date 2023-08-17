@@ -59,6 +59,7 @@
     "fields": "Table headers",
     "or": "OR",
     "activeDatabase": "Active database"
+    "downloadFile": "Download file"
   },
   "main": {
     "pagination": "Show {num} results per page",
