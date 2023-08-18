@@ -1,24 +1,21 @@
 <template>
-  <div class="list-module-core">
+  <div class="list-module-core mt-2">
     <ScrollToTop
       class="d-print-none"
       v-if="$route.meta.isTableView"
       :body-active-color="bodyActiveColor"
     />
 
-    <!-- EXPORT and OPTIONS -->
-    <v-row align="center" justify="start" class="d-print-none">
+    <!-- DATA TABLE -->
+    <span id="table-title" class="text-h6">
+      <span>{{ $t("main.found") }}</span>
+      <span class="font-weight-bold">{{ ` ${response.count} ` }}</span>
+      <span>{{ $t("main.records") }}</span>
+    </span>
+    <v-row no-gutters align="center" justify="start" class="d-print-none">
       <v-col class="d-flex">
-        <!-- EXPORT -->
-        <div class="mr-4" v-if="exportButtons">
-          <export-buttons
-            :filename="module"
-            :table-data="response.results"
-            :body-active-color="bodyActiveColor"
-          />
-        </div>
         <!-- OPTIONS -->
-        <div v-if="useListView || useImageView" class="mb-2">
+        <div v-if="useListView || useImageView">
           <v-radio-group
             class="radio-buttons mt-0"
             v-model="currentViewType"
@@ -53,23 +50,47 @@
             />
           </v-radio-group>
         </div>
+        <export-buttons
+          v-if="exportButtons"
+          :filename="module"
+          :table-data="response.results"
+          :body-active-color="bodyActiveColor"
+        />
+
+        <v-menu offset-y v-if="isCurrentViewTypeTable">
+          <template #activator="{ on, attrs }">
+            <v-btn :color="bodyActiveColor" v-on="on" v-bind="attrs" icon>
+              <v-icon>fas fa-table</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-text>
+              <v-select
+                :items="$_tableHeaderMixin_allHeaders"
+                :value="$_tableHeaderMixin_shownHeaders"
+                chips
+                small-chips
+                deletable-chips
+                multiple
+                :color="bodyActiveColor"
+                :label="$t('common.fields')"
+                clearable
+                clear-icon="fas fa-times"
+                @change="
+                  $_tableHeaderMixin_updateTableHeaders({
+                    event: $event,
+                    table: $route.meta.object,
+                  })
+                "
+                class="chips-select"
+                hide-details
+                dense
+              />
+            </v-card-text>
+          </v-card>
+        </v-menu>
       </v-col>
     </v-row>
-
-    <pagination
-      class="pb-2"
-      :body-active-color="bodyActiveColor"
-      :count="response.count"
-      :paginate-by="searchParameters.paginateBy"
-      :options="paginateByOptionsTranslated"
-      :page="searchParameters.page"
-      v-on:update:page="$emit('update:searchParameters', $event, 'page')"
-      v-on:update:paginateBy="
-        $emit('update:searchParameters', $event, 'paginateBy')
-      "
-    />
-
-    <!-- DATA TABLE -->
     <v-card
       :color="bodyColor.split('n-')[0] + 'n-3'"
       class="table-card my-1"
@@ -81,14 +102,19 @@
           :color="bodyColor.split('n-')[0] + 'n-1'"
         ></v-progress-linear>
       </template>
-
-      <v-card-title class="d-print-none">
-        <v-icon class="mr-2" color="#191414">fas fa-list</v-icon>
-        <span id="table-title">
-          <span>{{ $t("main.found") }}</span>
-          <span class="font-weight-bold">{{ ` ${response.count} ` }}</span>
-          <span>{{ $t("main.records") }}</span>
-        </span>
+      <v-card-title class="py-0 pb-2">
+        <pagination
+          style="width: 100%"
+          :body-active-color="bodyActiveColor"
+          :count="response.count"
+          :paginate-by="searchParameters.paginateBy"
+          :options="paginateByOptionsTranslated"
+          :page="searchParameters.page"
+          v-on:update:page="$emit('update:searchParameters', $event, 'page')"
+          v-on:update:paginateBy="
+            $emit('update:searchParameters', $event, 'paginateBy')
+          "
+        />
       </v-card-title>
 
       <!-- LIST VIEW -->
@@ -153,6 +179,7 @@ import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
 import Pagination from "@/components/partial/Pagination";
 import { fetchChangeRecordState } from "@/assets/js/api/apiCalls";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
@@ -190,7 +217,7 @@ export default {
       default: false,
     },
   },
-  mixins: [toastMixin, activeListMixin],
+  mixins: [toastMixin, activeListMixin, tableHeaderMixin],
   name: "ListModuleCore",
   data() {
     return {
