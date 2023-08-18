@@ -24,6 +24,7 @@
       "
       :small-chips="!!$attrs.multiple"
       :deletable-chips="!!$attrs.multiple"
+      :no-filter="isSearchable"
       @change="resetSearchInput"
       autocomplete="off"
     >
