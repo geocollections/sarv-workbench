@@ -60,7 +60,10 @@
     "fillUsingDoi": "Täida DOI abil",
     "or": "VÕI",
     "activeDatabase": "Aktiivne andmebaas",
-    "downloadFile": "Laadi alla"
+    "downloadFile": "Laadi alla",
+    "pageSelect": "{current} / {count}",
+    "headers": "Päised",
+    "filter": "Filter"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -3128,5 +3131,11 @@
     "title": "Pealkiri",
     "title_en": "Pealkiri (en)",
     "sort": "Sorteeri"
+  },
+  "table": {
+    "tooltipConfig": "Tabeli konfiguratsioon",
+    "tooltipResetHeaders": "Lähtesta päised",
+    "tooltipShowActiveHeaders": "Vaata aktiveeritud päiseid",
+    "tooltipShowAllHeaders": "Vaata kõiki päiseid"
   }
 }

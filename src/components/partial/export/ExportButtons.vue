@@ -1,15 +1,7 @@
 <template>
   <v-menu class="d-print-none" offset-y min-width="180">
     <template v-slot:activator="{ on }">
-      <v-btn
-        :color="bodyActiveColor"
-        dark
-        text
-        v-on="on"
-        :small="small"
-        icon
-        class="text-capitalize"
-      >
+      <v-btn text v-on="on" :small="small" icon class="text-capitalize">
         <v-icon :small="small">fas fa-file-export</v-icon>
         <!-- <span>{{ $t("buttons.export") }}</span> -->
       </v-btn>

@@ -59,7 +59,10 @@
     "fields": "Table headers",
     "or": "OR",
     "activeDatabase": "Active database",
-    "downloadFile": "Download file"
+    "downloadFile": "Download file",
+    "pageSelect": "{current} / {count}",
+    "headers": "Headers",
+    "filter": "Filter"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -3126,5 +3129,11 @@
     "title": "Title",
     "title_en": "Title (en)",
     "sort": "Sort"
-}
+  },
+  "table": {
+    "tooltipConfig": "Table configuration",
+    "tooltipResetHeaders": "Reset headers",
+    "tooltipShowActiveHeaders": "Show active headers",
+    "tooltipShowAllHeaders": "Show all headers"
+  }
 }
