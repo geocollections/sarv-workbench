@@ -382,8 +382,19 @@ const formManipulation = {
 
               if (this.$route.meta.object === "reference") {
                 fetchAttachmentForReference(this.$route.params.id).then(
-                  (response) =>
-                    (this.attachment = this.handleResponse(response))
+                  (response) => {
+                    const res = this.handleResponse(response);
+                    this.attachment = {
+                      id: res.attachment__id,
+                      attachment_format_value:
+                        res.attachment__attachment_format_value,
+                      author__agent: res.attachment__author__agent,
+                      description: res.attachment__description,
+                      description_en: res.attachment__description_en,
+                      original_filename: res.attachment__original_filename,
+                      uuid_filename: res.attachment__uuid_filename,
+                    };
+                  }
                 );
               }
             }
