@@ -79,6 +79,7 @@
                   outlined
                   dense
                   required
+                  autofocus
                   autocomplete="username"
                 />
 
