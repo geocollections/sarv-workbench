@@ -351,6 +351,14 @@
         @change="drillcore.is_private = !drillcore.is_private"
       />
     </div>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -378,6 +386,7 @@ import { mapActions, mapState } from "vuex";
 import { fetchRelatedDrillcoreBoxImages } from "@/assets/js/api/apiCalls";
 import DrillcoreBoxListView from "@/components/drillcore_box/DrillcoreBoxListView";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Drillcore",
@@ -392,6 +401,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -472,6 +482,9 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
     boxRange(item) {
       if (!item.drillcore_box__depth_start && !item.drillcore_box__depth_end) {
         return "";
@@ -501,6 +514,12 @@ export default {
         ],
         activeTab: "drillcore_box",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "drillcore",
@@ -681,6 +700,7 @@ export default {
               });
             }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
           uploadableObject.related_data.attachment =

@@ -637,6 +637,14 @@
         @change="doi.is_locked = !doi.is_locked"
       />
     </div>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
 
     <!-- DOI METADATA REGISTER and UPDATE BUTTONS -->
     <div class="row mt-3">
@@ -887,6 +895,7 @@ import requestsMixin from "../../mixins/requestsMixin";
 import toastMixin from "../../mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 import { orderBy } from "lodash";
 
 export default {
@@ -901,6 +910,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -1015,6 +1025,9 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setTab(type) {
       if (type) {
@@ -1040,6 +1053,12 @@ export default {
         ],
         activeTab: "doi_agent",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "identifier",
@@ -1390,6 +1409,10 @@ export default {
           if (uploadableObject.related_data.doi_date.length === 0)
             uploadableObject.related_data.doi_date = null;
         } else uploadableObject.related_data.doi_date = null;
+      }
+
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.initial_permissions = this.initialPermissions;
       }
 
       if (!this.isNotEmpty(uploadableObject.related_data))

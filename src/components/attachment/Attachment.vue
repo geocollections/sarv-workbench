@@ -3943,6 +3943,14 @@
           />
         </div>
       </div>
+      <v-row no-gutters class="mt-2">
+        <v-col>
+          <object-permissions-create
+            v-if="!$route.meta.isEdit"
+            @change="handlePermissionsChange"
+          />
+        </v-col>
+      </v-row>
     </template>
 
     <template v-slot:local-storage>
@@ -4016,6 +4024,7 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import SelectWrapper from "../partial/inputs/SelectWrapper";
 import FileInput from "../partial/inputs/FileInput";
 import toastMixin from "../../mixins/toastMixin";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Attachment",
@@ -4033,6 +4042,7 @@ export default {
     FileInformation,
     AttachmentWrapper,
     MapComponent,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -4317,7 +4327,9 @@ export default {
 
   methods: {
     ...mapActions("map", ["updateShowMap"]),
-
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
     setInitialData() {
       return {
         imageRotationDegrees: 0,
@@ -4429,6 +4441,12 @@ export default {
           { name: "digitisedReference", value: 4, disabled: false },
         ],
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "agent_digitised",
           "author",
@@ -4998,6 +5016,10 @@ export default {
         });
       }
       /* Related Data END */
+
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.initial_permissions = this.initialPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

@@ -414,6 +414,14 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -444,6 +452,7 @@ import {
   fetchMultiAddLoanLists,
 } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Loan",
@@ -457,6 +466,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -539,6 +549,9 @@ export default {
         this.activeTab = type;
       }
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
@@ -548,6 +561,12 @@ export default {
         ],
         activeTab: "loan_specimen",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "loan_number",
@@ -682,6 +701,10 @@ export default {
           uploadableObject[key] = null;
         }
       });
+
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.initial_permissions = this.initialPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

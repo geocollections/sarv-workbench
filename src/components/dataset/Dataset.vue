@@ -590,6 +590,13 @@
           :label="$t('common.is_private')"
           @change="dataset.is_private = !dataset.is_private"
         />
+      </v-col> </v-row
+    ><v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
       </v-col>
     </v-row>
   </div>
@@ -624,6 +631,7 @@ import DatasetAnalysisTable from "./relatedTables/DatasetAnalysisTable";
 import Pagination from "@/components/partial/Pagination";
 import { orderBy } from "lodash";
 import DatasetGeolocationTable from "@/components/dataset/relatedTables/DatasetGeolocationTable";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 import {
   fetchIdsUsingSelection,
   fetchMultiAddDatasetLists,
@@ -642,6 +650,7 @@ export default {
     DateWrapper,
     TextareaWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -728,6 +737,9 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setTab(type) {
       if (type) {
@@ -749,6 +761,12 @@ export default {
         ],
         activeTab: "dataset_author",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "dataset_html",
@@ -972,6 +990,7 @@ export default {
             });
           }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       }
 
       if (!this.isNotEmpty(uploadableObject.related_data))

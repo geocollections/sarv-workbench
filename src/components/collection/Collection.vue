@@ -378,6 +378,14 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -396,6 +404,7 @@ import { mapActions, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Collection",
@@ -405,6 +414,7 @@ export default {
     AutocompleteWrapper,
     InputWrapper,
     SpecimenTable,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -480,9 +490,18 @@ export default {
 
   methods: {
     ...mapActions("detail", ["saveFields"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "number",
@@ -628,6 +647,9 @@ export default {
           uploadableObject[key] = null;
         }
       });
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.initial_permissions = this.initialPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

@@ -744,6 +744,14 @@
         />
       </v-col>
     </v-row>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -790,6 +798,7 @@ import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 import { fetchListSpecimenSubtype } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
 import ImageViewWrapper from "@/components/partial/image_view/ImageViewWrapper";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Specimen",
@@ -810,6 +819,7 @@ export default {
     TextareaWrapper,
     InputWrapper,
     AutocompleteWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -917,6 +927,9 @@ export default {
         this.activeTab = type;
       }
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
@@ -933,6 +946,12 @@ export default {
         ],
         activeTab: "specimen_identification",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         specimenImages: null,
         copyFields: [
           "id",
@@ -1258,6 +1277,7 @@ export default {
             });
           }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment.results.length > 0) {
           uploadableObject.related_data.attachment =

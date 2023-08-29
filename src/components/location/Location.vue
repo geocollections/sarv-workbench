@@ -471,6 +471,14 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -497,6 +505,7 @@ import ExportButtons from "../partial/export/ExportButtons";
 import { fetchMultiChangeLocation } from "@/assets/js/api/apiCalls";
 import ListView from "@/components/partial/ListView";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Location",
@@ -511,6 +520,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -618,6 +628,9 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     changeRelatedDataLocation() {
       console.log(this.filledRelatedDataObjects);
@@ -681,6 +694,12 @@ export default {
           { name: "sample", iconClass: "fas fa-vial" },
         ],
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         activeTab: "attachment_link",
         currentViewType: "table",
         copyFields: [
@@ -825,6 +844,7 @@ export default {
               });
             }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
           uploadableObject.related_data.attachment =

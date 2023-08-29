@@ -272,6 +272,14 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
 
     <!-- RELATED DATA TABS -->
     <v-card
@@ -380,6 +388,7 @@ import SampleSeriesSamplesTable from "./relatedTables/SampleSeriesSamplesTable";
 import FileInput from "../partial/inputs/FileInput";
 import { mapActions, mapState } from "vuex";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "SampleSeries",
@@ -393,6 +402,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -474,6 +484,9 @@ export default {
         this.activeTab = type;
       }
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
@@ -483,6 +496,12 @@ export default {
         ],
         activeTab: "sample",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "name",
@@ -622,6 +641,7 @@ export default {
               });
           }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment.results.length > 0) {
           uploadableObject.related_data.attachment =
