@@ -116,13 +116,17 @@ async function post(
   let loginOptions;
 
   if (child.includes("login")) {
+    const form = new FormData();
+    form.append("user", data.user);
+    form.append("pwd", data.pwd);
+
     useLoginOptions = true;
     loginOptions = {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "multipart/form-data",
       },
-      data: qs.stringify(data),
+      data: form,
       url,
     };
   }
