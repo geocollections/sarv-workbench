@@ -1,5 +1,5 @@
 <template>
-  <div v-show="true" class="loading-overlay text-center">
+  <div v-show="loadingState" class="loading-overlay text-center">
     <v-progress-circular :size="118" color="blue" indeterminate>
     </v-progress-circular>
     <div class="mt-2 grey--text text--darken-3" style="font-size: 1.5rem">
