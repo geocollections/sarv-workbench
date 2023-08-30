@@ -1,8 +1,7 @@
 import Vue from "vue";
 import router from "../../../router";
 import store from "../../../store";
-
-const axios = require("axios");
+import axios from "axios";
 
 const api = {
   url: `${process.env.VUE_APP_API_URL}/api/v0/`,
