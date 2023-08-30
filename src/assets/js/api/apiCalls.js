@@ -1,4 +1,3 @@
-import qs from "qs";
 import Vue from "vue";
 import router from "../../../router";
 import store from "../../../store";
