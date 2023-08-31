@@ -123,7 +123,7 @@ export default {
   mixins: [toastMixin],
 
   data: () => ({
-    url: `${process.env.VUE_APP_API_URL}/api/v0/import/`,
+    url: `${import.meta.env.VITE_API_URL}/api/v0/import/`,
     importResponse: null,
     file: null,
     attachment: null,

@@ -136,10 +136,12 @@
             padding: 0.5mm;
           "
         >
-          <vue-q-r-code-component
-            :text="'http://geocollections.info/sample/' + entity.id"
-            error-level="L"
-          ></vue-q-r-code-component>
+          <qrcode
+            class="d-block"
+            :value="'http://geocollections.info/sample/' + entity.id"
+            :options="{ errorCorrectionLevel: 'L', margin: 0 }"
+            tag="img"
+          ></qrcode>
         </div>
       </div>
     </router-link>
@@ -147,16 +149,12 @@
 </template>
 
 <script>
-import VueQRCodeComponent from "vue-qrcode-component";
 
 export default {
   props: {
     data: {
       type: Array,
     },
-  },
-  components: {
-    VueQRCodeComponent,
   },
   name: "SampleListView",
   methods: {

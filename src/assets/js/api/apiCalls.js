@@ -4,10 +4,10 @@ import store from "../../../store";
 import axios from "axios";
 
 const api = {
-  url: `${process.env.VUE_APP_API_URL}/api/v0/`,
-  baseUrl: `${process.env.VUE_APP_API_URL}/`,
-  accountsUrl: `${process.env.VUE_APP_API_URL}/accounts/`,
-  dataciteUrl: `${process.env.VUE_APP_API_URL}/datacite/`,
+  url: `${import.meta.env.VITE_API_URL}/api/v0/`,
+  baseUrl: `${import.meta.env.VITE_API_URL}/`,
+  accountsUrl: `${import.meta.env.VITE_API_URL}/accounts/`,
+  dataciteUrl: `${import.meta.env.VITE_API_URL}/datacite/`,
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",
@@ -161,7 +161,7 @@ export function fetchLoginOrcid(code) {
 
 export function fetchLoginId() {
   return get(
-    `?redirect_uri=${process.env.VUE_APP_API_URL}/accounts/idcard/`,
+    `?redirect_uri=${import.meta.env.VITE_API_URL}/accounts/idcard/`,
     "https://idcard.geoloogia.info/"
   );
 }

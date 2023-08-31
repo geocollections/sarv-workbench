@@ -9,8 +9,8 @@ import vuetify from "./plugins/vuetify";
 import constants from "@/plugins/constants";
 import helpers from "@/plugins/helpers";
 // import moment from "moment";
-require("moment/locale/et");
-
+import "moment/locale/et";
+import VueMoment from "vue-moment";
 // Bootstrap css
 // import "bootstrap/dist/css/bootstrap.css";
 
@@ -19,13 +19,17 @@ import "leaflet/dist/leaflet.css"; // Leaflet css
 // Custom css
 import "@/assets/css/styles.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import ee from "./translations/ee.json";
+import en from "./translations/en.json";
+import VueQrcode from "@chenfengyuan/vue-qrcode";
 
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueCookies);
-Vue.use(require("vue-moment"));
+Vue.use(VueMoment);
 Vue.use(constants);
 Vue.use(helpers);
+Vue.component(VueQrcode.name, VueQrcode);
 Vue.config.productionTip = false;
 
 /******************************
@@ -34,8 +38,8 @@ Vue.config.productionTip = false;
 
 // Gets translations from json files
 const messages = {
-  en: require("./translations/en"),
-  ee: require("./translations/ee"),
+  en: en,
+  ee: ee,
 };
 
 // Gets preferred language from store (fallback is ee)

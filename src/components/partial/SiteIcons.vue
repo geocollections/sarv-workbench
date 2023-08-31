@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import NATARCLogo from "../../assets/img/NATARC_transparent.png";
+import sarvLogo from "../../assets/img/sarv_logo.svg";
 export default {
   name: "SiteIcons",
   computed: {
@@ -43,14 +45,14 @@ export default {
         {
           key: "natarc",
           url: "https://natarc.ut.ee",
-          icon: require("../../assets/img/NATARC_transparent.png"),
+          icon: NATARCLogo,
           height: this.$vuetify.breakpoint.smAndUp ? 100 : 45,
           width: 40,
         },
         {
           key: "sarv",
           url: "https://geoloogia.info",
-          icon: require("../../assets/img/sarv_logo.svg"),
+          icon: sarvLogo,
           height: this.$vuetify.breakpoint.smAndUp ? 100 : 45,
           width: 180,
         },
