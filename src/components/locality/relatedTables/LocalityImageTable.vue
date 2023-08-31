@@ -219,7 +219,7 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
+import  cloneDeep  from "lodash/cloneDeep";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 

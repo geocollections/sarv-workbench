@@ -891,7 +891,7 @@ import requestsMixin from "../../mixins/requestsMixin";
 import toastMixin from "../../mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
 import Pagination from "@/components/partial/Pagination";
-import { orderBy } from "lodash";
+import  orderBy  from "lodash/orderBy";
 
 export default {
   components: {

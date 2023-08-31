@@ -390,7 +390,7 @@ import {
   fetchListCollectionType,
   fetchSpecimens,
 } from "../../assets/js/api/apiCalls";
-import { cloneDeep } from "lodash";
+import  cloneDeep  from "lodash/cloneDeep";
 import SpecimenTable from "../specimen/SpecimenTable";
 import { mapActions, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";

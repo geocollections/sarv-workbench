@@ -181,7 +181,7 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
-import { cloneDeep } from "lodash";
+import  cloneDeep  from "lodash/cloneDeep";
 export default {
   name: "StratigraphySynonymTable",
 

@@ -622,7 +622,7 @@ import DatasetReferenceTable from "./relatedTables/DatasetReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import DatasetAnalysisTable from "./relatedTables/DatasetAnalysisTable";
 import Pagination from "@/components/partial/Pagination";
-import { orderBy } from "lodash";
+import  orderBy  from "lodash/orderBy";
 import DatasetGeolocationTable from "@/components/dataset/relatedTables/DatasetGeolocationTable";
 import {
   fetchIdsUsingSelection,

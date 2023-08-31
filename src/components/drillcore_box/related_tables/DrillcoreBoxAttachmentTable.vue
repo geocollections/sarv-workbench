@@ -162,7 +162,7 @@
 </template>
 
 <script>
-import { cloneDeep } from "lodash";
+import cloneDeep  from "lodash/cloneDeep";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 
 export default {
