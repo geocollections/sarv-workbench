@@ -1,5 +1,5 @@
 import cloneDeep from "lodash/cloneDeep";
-import moment from "moment";
+import dayjs from "dayjs";
 import { mapActions, mapGetters, mapState } from "vuex";
 import {
   fetchAttachmentForReference,
@@ -724,11 +724,11 @@ const formManipulation = {
 
     isValidDateTime(dateTime) {
       const formats = ["YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm"];
-      return moment(dateTime, formats, true).isValid();
+      return dayjs(dateTime, formats, true).isValid();
     },
 
     formatDateForUpload(date) {
-      return moment(date).toISOString(true).split(".")[0] + "Z"; // Without fractions
+      return dayjs(date).toISOString(true).split(".")[0] + "Z"; // Without fractions
     },
 
     unformatISOStringToDate(date, format = "YYYY-MM-DD HH:mm:ss") {
@@ -736,18 +736,19 @@ const formManipulation = {
         let datePart = date.split("T")[0];
         let timePart = date.split("T")[1].slice(0, -1);
 
-        return moment(datePart + " " + timePart).format(format);
+        return dayjs(datePart + " " + timePart).format(format);
       } else return null;
     },
 
     getCurrentFormattedDate(format) {
-      if (format) return moment().format(format);
-      else return moment().format("YYYY-MM-DD HH:mm:ss");
+      if (format) return dayjs().format(format);
+      else return dayjs().format("YYYY-MM-DD HH:mm:ss");
     },
 
     updateUserInputtedDate(fieldToBeUpdated, date) {
       if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
+        const formattedDate = dayjs(date, "YYYY-MM-DD", true);
+        if (formattedDate.isValid()) {
           this[this.$route.meta.object][fieldToBeUpdated] = date;
         }
       }

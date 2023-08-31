@@ -8,9 +8,7 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import constants from "@/plugins/constants";
 import helpers from "@/plugins/helpers";
-// import moment from "moment";
-import "moment/locale/et";
-import VueMoment from "vue-moment";
+import dayjs from "@/plugins/dayjs.js";
 // Bootstrap css
 // import "bootstrap/dist/css/bootstrap.css";
 
@@ -26,9 +24,9 @@ import VueQrcode from "@chenfengyuan/vue-qrcode";
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueCookies);
-Vue.use(VueMoment);
 Vue.use(constants);
 Vue.use(helpers);
+Vue.use(dayjs);
 Vue.component(VueQrcode.name, VueQrcode);
 Vue.config.productionTip = false;
 

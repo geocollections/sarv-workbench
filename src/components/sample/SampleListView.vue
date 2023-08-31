@@ -149,7 +149,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     data: {

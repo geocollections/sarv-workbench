@@ -51,17 +51,16 @@
     </template>
 
     <template v-slot:item.date_start="{ item }">
-      <span>{{ item.date_start | moment("YYYY-DD-MM HH:mm") }}</span>
+      <span>{{ $dayjs(item.date_start).format("YYYY-DD-MM HH:mm") }}</span>
     </template>
 
     <template v-slot:item.date_end="{ item }">
-      <span>{{ item.date_end | moment("YYYY-DD-MM HH:mm") }}</span>
+      <span>{{ $dayjs(item.date_end).format("YYYY-DD-MM HH:mm") }}</span>
     </template>
   </v-data-table>
 </template>
 
 <script>
-import moment from "moment";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {

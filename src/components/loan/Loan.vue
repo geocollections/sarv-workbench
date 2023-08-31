@@ -433,7 +433,7 @@ import {
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
-import DateWrapper from "../partial/inputs/DateWrapper";
+import DateWrapper from "../partial/inputs/DateWrapper.vue";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import { mapActions, mapGetters, mapState } from "vuex";
 import LoanSampleTable from "./relatedTables/LoanSampleTable";

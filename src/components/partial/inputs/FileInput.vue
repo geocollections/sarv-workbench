@@ -310,7 +310,6 @@ import CheckboxWrapper from "./CheckboxWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import ImageViewWrapper from "../image_view/ImageViewWrapper";
 import EXIF from "exif-js";
-import moment from "moment";
 import toastMixin from "@/mixins/toastMixin";
 
 export default {
@@ -618,7 +617,7 @@ export default {
     },
 
     getFormattedDate(date) {
-      if (date) return moment(date).format("YYYY-MM-DD HH:mm");
+      if (date) return this.$dayjs(date).format("YYYY-MM-DD HH:mm");
       else return "";
     },
 

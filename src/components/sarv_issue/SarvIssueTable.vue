@@ -41,7 +41,9 @@
     </template>
 
     <template v-slot:item.date_added="{ item }">
-      <div>{{ item.date_added | moment("MMMM Do YYYY HH:mm") }}</div>
+      <div v-if="$dayjs(item.date_added).isValid()">
+        {{ $dayjs(item.date_added).format("MMMM Do YYYY HH:mm") }}
+      </div>
     </template>
   </v-data-table>
 </template>

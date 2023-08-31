@@ -450,7 +450,7 @@ export default {
 
     updateUserInputtedDate(fieldToBeUpdated, date) {
       if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
+        if (this.$dayjs(date, "YYYY-MM-DD", true).isValid()) {
           this.item[fieldToBeUpdated] = date;
         }
       }

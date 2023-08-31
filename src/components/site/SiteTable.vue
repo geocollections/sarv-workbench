@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import moment from "moment";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
@@ -126,7 +125,7 @@ export default {
         let datePart = date.split("T")[0];
         let timePart = date.split("T")[1].slice(0, -1);
 
-        return moment(datePart + " " + timePart).format(format);
+        return this.$dayjs(datePart + " " + timePart).format(format);
       } else return null;
     },
   },
