@@ -2139,6 +2139,10 @@ export function fetchDeaccession() {
   return get(`deaccession/?format=json`);
 }
 
+export function fetchDatabase() {
+  return get(`database/?format=json`);
+}
+
 export function fetchSpecimenIdentifications(specimenId, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,

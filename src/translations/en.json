@@ -59,7 +59,8 @@
     "fields": "Table headers",
     "or": "OR",
     "activeDatabase": "Active database",
-    "downloadFile": "Download file"
+    "downloadFile": "Download file",
+    "institution": "Institution"
   },
   "main": {
     "pagination": "Show {num} results per page",
