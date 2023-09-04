@@ -3942,6 +3942,15 @@
             @change="attachment.is_locked = !attachment.is_locked"
           />
         </div>
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="attachment.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
       </div>
       <v-row no-gutters class="mt-2">
         <v-col>
@@ -4010,6 +4019,7 @@ import {
   fetchListAttachmentType,
   fetchListImageType,
   fetchListLicences,
+  fetchDatabase,
 } from "../../assets/js/api/apiCalls";
 import AttachmentWrapper from "./AttachmentWrapper";
 import MapComponent from "../partial/MapComponent";
@@ -4082,7 +4092,7 @@ export default {
       "digitisedReference",
       "digitisedReferenceKeywords",
     ]),
-    ...mapGetters("user", ["isUserAllowedTo"]),
+    ...mapGetters("user", ["isUserAllowedTo", "getDatabaseId"]),
 
     myShowMap: {
       get() {
@@ -4257,6 +4267,8 @@ export default {
           if (attachmentHistory) {
             this.attachment = attachmentHistory;
             this.removeUnnecessaryFields(this.attachment, this.copyFields);
+            console.log("nanana");
+            console.log(this.attachment);
             if (this.isNotEmpty(this.attachment.specimen)) {
               this.autocomplete.specimen.push(this.attachment.specimen);
             }
@@ -4483,6 +4495,7 @@ export default {
           "stars",
           "storage",
           "type",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -4497,6 +4510,7 @@ export default {
             keyword: false,
             specimen: false,
             type: false,
+            database: false,
             attachment_link__collection: false,
             attachment_link__specimen: false,
             attachment_link__sample: false,
@@ -4526,6 +4540,7 @@ export default {
           keyword: [],
           specimen: [],
           type: [],
+          database: [],
           attachment_link__collection: [],
           attachment_link__specimen: [],
           attachment_link__sample: [],
@@ -4612,6 +4627,13 @@ export default {
         this.loadAutocompleteFields(false, true);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+
+        if (this.getDatabaseId !== null) {
+          this.attachment.database = {
+            id: this.getDatabaseId,
+          };
+          console.log(this.attachment);
+        }
       }
     },
 
@@ -4632,6 +4654,10 @@ export default {
           (response) => (this.autocomplete.type = this.handleResponse(response))
         );
       }
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
+      );
 
       if (relatedDataAutocompleteFields) {
         fetchAttachmentKeyword(this.$route.params.id).then((response) => {
@@ -5105,6 +5131,11 @@ export default {
           number: obj.coll__number,
         };
       }
+      this.attachment.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
 
     /* FileInput Events START */
