@@ -490,12 +490,21 @@
 
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
-      <v-col>
+      <v-col class="d-flex">
         <checkbox-wrapper
           v-model="analysis.is_private"
           :color="bodyActiveColor"
           :label="$t('common.is_private')"
           @change="analysis.is_private = !analysis.is_private"
+        />
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="analysis.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
         />
       </v-col>
     </v-row>
@@ -521,6 +530,7 @@ import {
   fetchAnalysisAttachment,
   fetchAnalysisResults,
   fetchAnalysisMethod,
+  fetchDatabase,
 } from "../../assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
@@ -614,6 +624,7 @@ export default {
 
   computed: {
     ...mapState("search", ["analysisSearchParameters"]),
+    ...mapGetters("user", ["getDatabaseId"]),
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -689,6 +700,7 @@ export default {
           "location",
           "remarks",
           "is_private",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -703,6 +715,7 @@ export default {
             instruments: false,
             reference: false,
             attachment: false,
+            database: false,
           },
           agent: [],
           owner: [],
@@ -715,6 +728,7 @@ export default {
           reference: [],
           analysis_methods: [],
           attachment: [],
+          database: [],
         },
         requiredFields: ["analysis_method"],
         analysis: {},
@@ -769,6 +783,11 @@ export default {
         this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.analysis.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
 
       if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
@@ -787,6 +806,10 @@ export default {
         fetchAnalysisMethod().then(
           (response) =>
             (this.autocomplete.analysis_methods = this.handleResponse(response))
+        );
+        fetchDatabase().then(
+          (response) =>
+            (this.autocomplete.database = this.handleResponse(response))
         );
       }
     },
@@ -934,6 +957,12 @@ export default {
         id: obj.instrument,
         instrument: obj.instrument__instrument,
         instrument_en: obj.instrument__instrument_en,
+      };
+
+      this.analysis.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
       };
     },
 
