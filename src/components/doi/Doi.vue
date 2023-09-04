@@ -636,6 +636,15 @@
         :label="$t('common.is_locked')"
         @change="doi.is_locked = !doi.is_locked"
       />
+      <autocomplete-wrapper
+        class="ml-auto"
+        v-model="doi.database"
+        :color="bodyActiveColor"
+        :items="autocomplete.database"
+        :loading="autocomplete.loaders.database"
+        :item-text="nameLabel"
+        :label="$t('common.institution')"
+      />
     </div>
     <v-row no-gutters class="mt-2">
       <v-col>
@@ -879,9 +888,10 @@ import {
   fetchDoiUsingEGF,
   fetchAgentUsingName,
   fetchDoiPublisher,
+  fetchDatabase,
 } from "@/assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -1087,6 +1097,7 @@ export default {
           "datacite_created",
           "datacite_updated",
           "egf",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -1105,6 +1116,7 @@ export default {
             locality: false,
             doi_date_type: false,
             attachment_public: false,
+            database: false,
           },
           resource_type: [],
           doi_publisher: [],
@@ -1121,6 +1133,7 @@ export default {
           locality: [],
           doi_date_type: [],
           attachment: [],
+          database: [],
         },
         requiredFields: [
           "resource_type",
@@ -1170,6 +1183,12 @@ export default {
 
       if (!this.$route.meta.isEdit) {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+
+        if (this.getDatabaseId !== null) {
+          this.doi.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
 
       if (this.$route.meta.isEdit) {
@@ -1249,6 +1268,10 @@ export default {
       fetchListLicences().then(
         (response) =>
           (this.autocomplete.licence = this.handleResponse(response))
+      );
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
       );
     },
 
@@ -1440,6 +1463,11 @@ export default {
         id: obj.language,
         value: obj.language__value,
         value_en: obj.language__value_en,
+      };
+      this.doi.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
       };
       if (this.isNotEmpty(obj.copyright_agent)) {
         this.doi.copyright_agent = {
