@@ -1276,17 +1276,21 @@ export default {
 
         fetchAttachmentForReference(this.$route.params.id).then((response) => {
           const res = this.handleResponse(response)[0];
-          this.attachment = [
-            {
-              id: res.attachment__id,
-              attachment_format_value: res.attachment__attachment_format_value,
-              author__agent: res.attachment__author__agent,
-              description: res.attachment__description,
-              description_en: res.attachment__description_en,
-              original_filename: res.attachment__original_filename,
-              uuid_filename: res.attachment__uuid_filename,
-            },
-          ];
+
+          if (res.attachment__id !== null) {
+            this.attachment = [
+              {
+                id: res.attachment__id,
+                attachment_format_value:
+                  res.attachment__attachment_format_value,
+                author__agent: res.attachment__author__agent,
+                description: res.attachment__description,
+                description_en: res.attachment__description_en,
+                original_filename: res.attachment__original_filename,
+                uuid_filename: res.attachment__uuid_filename,
+              },
+            ];
+          }
         });
         fetchLibrariesForReference(this.$route.params.id).then((response) => {
           let handledResponse = this.handleResponse(response);
