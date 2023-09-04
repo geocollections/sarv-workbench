@@ -272,6 +272,19 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="collection.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
 
     <!-- REMARKS -->
     <v-card
@@ -397,10 +410,11 @@ import {
   fetchCollection,
   fetchListCollectionType,
   fetchSpecimens,
+  fetchDatabase,
 } from "../../assets/js/api/apiCalls";
 import { cloneDeep } from "lodash";
 import SpecimenTable from "../specimen/SpecimenTable";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -437,6 +451,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["collectionSearchParameters"]),
     ...mapState("detail", ["collectionDetail"]),
 
@@ -519,6 +534,7 @@ export default {
           "remarks",
           "number_objects",
           "number_types",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -528,6 +544,7 @@ export default {
             locality: false,
             stratigraphy: false,
             reference: false,
+            database: false,
           },
           type: [],
           classification: [],
@@ -535,6 +552,7 @@ export default {
           locality: [],
           stratigraphy: [],
           reference: [],
+          database: [],
         },
         requiredFields: ["collection_id", "number"],
         collection: {},
@@ -608,6 +626,11 @@ export default {
         });
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.collection.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -624,6 +647,10 @@ export default {
       if (regularAutocompleteFields) {
         fetchListCollectionType().then(
           (response) => (this.autocomplete.type = this.handleResponse(response))
+        );
+        fetchDatabase().then(
+          (response) =>
+            (this.autocomplete.database = this.handleResponse(response))
         );
       }
     },
@@ -699,6 +726,11 @@ export default {
         };
         this.autocomplete.reference.push(this.collection.reference);
       }
+      this.collection.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
   },
 };
