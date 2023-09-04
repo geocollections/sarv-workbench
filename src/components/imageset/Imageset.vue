@@ -106,6 +106,19 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="imageset.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
 
     <!-- CLEAR LOCAL STORAGE -->
     <v-row no-gutters class="mt-3" v-if="!$route.meta.isEdit">
@@ -123,8 +136,11 @@ import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
-import { fetchIsImagesetNumberInImageset } from "@/assets/js/api/apiCalls";
+import { mapState, mapGetters } from "vuex";
+import {
+  fetchIsImagesetNumberInImageset,
+  fetchDatabase,
+} from "@/assets/js/api/apiCalls";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -164,6 +180,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["imagesetSearchParameters"]),
     ...mapState("detail", ["imagesetDetail"]),
   },
@@ -218,12 +235,21 @@ export default {
 
     setInitialData() {
       return {
-        copyFields: ["id", "imageset_number", "author", "description"],
+        copyFields: [
+          "id",
+          "imageset_number",
+          "author",
+          "description",
+          "dataset",
+          "database",
+        ],
         autocomplete: {
           loaders: {
             agent: false,
+            database: false,
           },
           agent: [],
+          database: [],
         },
         requiredFields: ["imageset_number", "author"],
         imageset: {},
@@ -231,8 +257,15 @@ export default {
         block: { info: true },
       };
     },
+    loadAutocompleteFields() {
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
+      );
+    },
 
     loadFullInfo() {
+      this.loadAutocompleteFields();
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
@@ -253,6 +286,11 @@ export default {
         });
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.imageset.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -289,6 +327,11 @@ export default {
         };
         this.autocomplete.agent.push(this.imageset.author);
       }
+      this.imageset.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
 
     isInImagesetTable(query) {
