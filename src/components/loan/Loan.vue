@@ -242,7 +242,19 @@
         </div>
       </transition>
     </v-card>
-
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="loan.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
     <!-- RELATED DATA TABS -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -438,6 +450,7 @@ import {
   fetchLoanSamples,
   fetchLoanSpecimens,
   fetchSelectedSpecimens,
+  fetchDatabase,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -585,6 +598,7 @@ export default {
           "date_signed",
           "date_returned",
           "remarks",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -592,11 +606,13 @@ export default {
             list_loan_type: false,
             list_loan_delivery_method: false,
             selection_series: false,
+            database: false,
           },
           agent: [],
           list_loan_type: [],
           list_loan_delivery_method: [],
           selection_series: [],
+          database: [],
         },
         loan: {},
         requiredFields: ["loan_number", "date_start"],
@@ -649,6 +665,11 @@ export default {
         this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.loan.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -683,6 +704,10 @@ export default {
         (response) =>
           (this.autocomplete.list_loan_delivery_method =
             this.handleResponse(response))
+      );
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
       );
     },
 
@@ -749,6 +774,11 @@ export default {
         id: obj.type,
         value: obj.type__value,
         value_en: obj.type__value_en,
+      };
+      this.loan.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
       };
     },
 
