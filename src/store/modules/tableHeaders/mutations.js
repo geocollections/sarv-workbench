@@ -1,8 +1,10 @@
 const mutations = {
   UPDATE_TABLE_HEADERS(state, payload) {
-    state[payload.table].forEach((item, index) => {
-      state[payload.table][index].show = !!payload.event.includes(item.value);
-    });
+    const index = state[payload.table].findIndex(
+      (header) => header.value === payload.event.value
+    );
+
+    state[payload.table][index].show = !state[payload.table][index].show;
   },
 
   SET_ALL_TABLE_HEADERS(state, payload) {
