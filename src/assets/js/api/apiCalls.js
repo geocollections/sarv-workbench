@@ -4434,7 +4434,7 @@ export function fetchDatabaseGroups() {
   return get(`user/database-groups/`, api.accountsUrl);
 }
 export function changeDatabaseGroup(database) {
-  return axios.patch(`${api.accountsUrl}/database-groups/`, {
+  return axios.patch(`${api.accountsUrl}/user/database-groups/`, {
     database: database.id,
   });
 }
