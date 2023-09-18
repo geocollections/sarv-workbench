@@ -583,12 +583,29 @@
     </v-card>
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
-      <v-col>
+      <v-col class="d-flex">
         <checkbox-wrapper
           v-model="dataset.is_private"
           :color="bodyActiveColor"
           :label="$t('common.is_private')"
           @change="dataset.is_private = !dataset.is_private"
+        />
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="dataset.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
         />
       </v-col>
     </v-row>
@@ -599,7 +616,7 @@
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import {
   fetchDataset,
   fetchDatasetAnalyses,
@@ -610,6 +627,7 @@ import {
   fetchDoiResourceType,
   fetchListLanguages,
   fetchListLicences,
+  fetchDatabase,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -624,6 +642,7 @@ import DatasetAnalysisTable from "./relatedTables/DatasetAnalysisTable";
 import Pagination from "@/components/partial/Pagination";
 import { orderBy } from "lodash";
 import DatasetGeolocationTable from "@/components/dataset/relatedTables/DatasetGeolocationTable";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 import {
   fetchIdsUsingSelection,
   fetchMultiAddDatasetLists,
@@ -642,6 +661,7 @@ export default {
     DateWrapper,
     TextareaWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -711,6 +731,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["datasetSearchParameters"]),
     ...mapState("search", {
       activeRelatedDataTab: (state) => state.activeRelatedDataTab.dataset,
@@ -728,6 +749,9 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setTab(type) {
       if (type) {
@@ -749,6 +773,12 @@ export default {
         ],
         activeTab: "dataset_author",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "dataset_html",
@@ -776,6 +806,7 @@ export default {
           "subjects",
           "reference",
           "locality",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -787,6 +818,7 @@ export default {
             reference: false,
             locality: false,
             selection_series: false,
+            database: false,
           },
           resource_type: [],
           publishers: [],
@@ -797,6 +829,7 @@ export default {
           reference: [],
           locality: [],
           selection_series: [],
+          database: [],
         },
         requiredFields: [
           "resource",
@@ -870,6 +903,11 @@ export default {
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
 
+        if (this.getDatabaseId !== null) {
+          this.dataset.database = {
+            id: this.getDatabaseId,
+          };
+        }
         // NOTE: Dataset ID is 3
         this.dataset.resource_type = 3;
       }
@@ -900,6 +938,10 @@ export default {
       fetchListLicences().then(
         (response) =>
           (this.autocomplete.licence = this.handleResponse(response))
+      );
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
       );
     },
 
@@ -972,6 +1014,7 @@ export default {
             });
           }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       }
 
       if (!this.isNotEmpty(uploadableObject.related_data))
@@ -1017,6 +1060,11 @@ export default {
         };
         this.autocomplete.locality.push(this.dataset.locality);
       }
+      this.dataset.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
 
     loadRelatedData(object) {

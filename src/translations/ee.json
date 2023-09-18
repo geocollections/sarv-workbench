@@ -61,6 +61,7 @@
     "or": "VÕI",
     "activeDatabase": "Aktiivne andmebaas",
     "downloadFile": "Laadi alla",
+    "institution": "Asutus",
     "pageSelect": "{current} / {count}",
     "headers": "Päised",
     "filter": "Filter"
@@ -3021,6 +3022,8 @@
   },
   "permissions": {
     "title": "Juurdepääsuõigused",
+    "title_default": "Objekti vaikimisi juurdepääsuõigused",
+    "default_permissions_message": "Järgnevad õigused lisatakse kõigile objektidele, millele saab õiguseid lisada",
     "group": "Grupp",
     "user": "Kasutaja",
     "view_perms_title": "Vaatamise õigus:",
@@ -3066,7 +3069,9 @@
     "devNotification": "Külastate rakenduse <b>arendusversiooni</b>, kus võib esineda tõrkeid. Stabiilsema versiooni leiate siit: ",
     "prodNotification": "Kas teadsite, et on olemas ka rakenduse <b>arendusversioon</b>, kus on olemas kõige viimased uuendused. Arendusversiooni leiate siit: ",
     "containImages": "Vältige piltide kärpimist",
-    "orcidConnectSuccess": "Kasutaja edukalt Orcidiga ühendatud"
+    "orcidConnectSuccess": "Kasutaja edukalt Orcidiga ühendatud",
+    "settingsSaveSuccess": "Seaded salvestatud",
+    "settingsSaveFail": "Salvestamine ebaõnnestus"
   },
   "logs": {
     "title": "Kirje ajalugu",
@@ -3131,6 +3136,9 @@
     "title": "Pealkiri",
     "title_en": "Pealkiri (en)",
     "sort": "Sorteeri"
+  },
+  "groups": {
+    "all": "Kõik"
   },
   "table": {
     "tooltipConfig": "Tabeli konfiguratsioon",

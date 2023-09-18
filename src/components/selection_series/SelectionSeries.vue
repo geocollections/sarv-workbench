@@ -279,6 +279,14 @@
         </v-card>
       </v-dialog>
     </div>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -308,6 +316,7 @@ import {
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "SelectionSeries",
@@ -317,6 +326,7 @@ export default {
     AutocompleteWrapper,
     SelectionSeriesDataTable,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -407,6 +417,9 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     async clearSelection() {
       let allSelections = await fetchAllSelections(this.$route.params.id);
@@ -523,6 +536,12 @@ export default {
         ],
         activeTab: "specimen",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: ["id", "name", "remarks"],
         requiredFields: ["name"],
         selection_series: {},
@@ -591,6 +610,10 @@ export default {
     formatDataForUpload(objectToUpload) {
       console.log("This object is sent in string format:");
       console.log(objectToUpload);
+
+      if (!this.$route.meta.isEdit) {
+        objectToUpload.initial_permissions = this.initialPermissions;
+      }
       return JSON.stringify(objectToUpload);
     },
 

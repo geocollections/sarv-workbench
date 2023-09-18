@@ -60,6 +60,7 @@
     "or": "OR",
     "activeDatabase": "Active database",
     "downloadFile": "Download file",
+    "institution": "Institution",
     "pageSelect": "{current} / {count}",
     "headers": "Headers",
     "filter": "Filter"
@@ -3019,6 +3020,8 @@
   },
   "permissions": {
     "title": "Data access permissions",
+    "title_default": " Object default access permissions",
+    "default_permissions_message": "These permissions will be added automatically to any object that requires permissions",
     "group": "Group",
     "user": "User",
     "view_perms_title": "View only:",
@@ -3064,7 +3067,9 @@
     "devNotification": "You are visiting the <b>development version</b> of the application. More stable version can be found here: ",
     "prodNotification": "Did you know there is also a <b>development version</b>, which has all the latest features and functionality. Development version can be found here: ",
     "containImages": "Prevent image cropping",
-    "orcidConnectSuccess": "Account successfully connected to Orcid"
+    "orcidConnectSuccess": "Account successfully connected to Orcid",
+    "settingsSaveSuccess": "Settings saved",
+    "settingsSaveFail": "Saving failed"
   },
   "logs": {
     "title": "Editing history",
@@ -3129,6 +3134,9 @@
     "title": "Title",
     "title_en": "Title (en)",
     "sort": "Sort"
+  },
+  "groups": {
+    "all": "All"
   },
   "table": {
     "tooltipConfig": "Table configuration",

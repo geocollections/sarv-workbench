@@ -350,7 +350,24 @@
         :label="$t('common.is_private')"
         @change="drillcore.is_private = !drillcore.is_private"
       />
+      <autocomplete-wrapper
+        class="ml-auto"
+        v-model="drillcore.database"
+        :color="bodyActiveColor"
+        :items="autocomplete.database"
+        :loading="autocomplete.loaders.database"
+        :item-text="nameLabel"
+        :label="$t('common.institution')"
+      />
     </div>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -374,10 +391,14 @@ import FileInput from "../partial/inputs/FileInput";
 import DrillcoreBoxTable from "./relatedTables/DrillcoreBoxTable";
 import DrillcoreStudyTable from "./relatedTables/DrillcoreStudyTable";
 import requestsMixin from "../../mixins/requestsMixin";
-import { mapActions, mapState } from "vuex";
-import { fetchRelatedDrillcoreBoxImages } from "@/assets/js/api/apiCalls";
+import { mapActions, mapState, mapGetters } from "vuex";
+import {
+  fetchRelatedDrillcoreBoxImages,
+  fetchDatabase,
+} from "@/assets/js/api/apiCalls";
 import DrillcoreBoxListView from "@/components/drillcore_box/DrillcoreBoxListView";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Drillcore",
@@ -392,6 +413,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -455,6 +477,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["drillcoreSearchParameters"]),
     ...mapState("search", {
       activeRelatedDataTab: (state) => state.activeRelatedDataTab.drillcore,
@@ -472,6 +495,9 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
     boxRange(item) {
       if (!item.drillcore_box__depth_start && !item.drillcore_box__depth_end) {
         return "";
@@ -501,6 +527,12 @@ export default {
         ],
         activeTab: "drillcore_box",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "drillcore",
@@ -518,6 +550,7 @@ export default {
           "depth",
           "remarks",
           "is_private",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -528,6 +561,7 @@ export default {
             attachment: false,
             stratigraphy_base: false,
             stratigraphy_top: false,
+            database: false,
           },
           locality: [],
           agent: [],
@@ -536,6 +570,7 @@ export default {
           attachment: [],
           stratigraphy_base: [],
           stratigraphy_top: [],
+          database: [],
         },
         requiredFields: ["drillcore", "drillcore_en"],
         drillcore: {},
@@ -596,6 +631,11 @@ export default {
         );
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.drillcore.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -604,6 +644,10 @@ export default {
         (response) =>
           (this.autocomplete.list_drillcore_storage =
             this.handleResponse(response))
+      );
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
       );
     },
 
@@ -681,6 +725,7 @@ export default {
               });
             }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
           uploadableObject.related_data.attachment =
@@ -719,6 +764,11 @@ export default {
         id: obj.depository,
         value: obj.depository__value,
         value_en: obj.depository__value_en,
+      };
+      this.drillcore.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
       };
       if (this.isNotEmpty(obj.storage)) {
         this.drillcore.storage = {

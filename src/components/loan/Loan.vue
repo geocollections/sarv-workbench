@@ -242,7 +242,19 @@
         </div>
       </transition>
     </v-card>
-
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="loan.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
     <!-- RELATED DATA TABS -->
     <v-card
       v-if="$route.meta.isEdit"
@@ -414,6 +426,14 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -430,6 +450,7 @@ import {
   fetchLoanSamples,
   fetchLoanSpecimens,
   fetchSelectedSpecimens,
+  fetchDatabase,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -444,6 +465,7 @@ import {
   fetchMultiAddLoanLists,
 } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Loan",
@@ -457,6 +479,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -539,6 +562,9 @@ export default {
         this.activeTab = type;
       }
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
@@ -548,6 +574,12 @@ export default {
         ],
         activeTab: "loan_specimen",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "loan_number",
@@ -566,6 +598,7 @@ export default {
           "date_signed",
           "date_returned",
           "remarks",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -573,11 +606,13 @@ export default {
             list_loan_type: false,
             list_loan_delivery_method: false,
             selection_series: false,
+            database: false,
           },
           agent: [],
           list_loan_type: [],
           list_loan_delivery_method: [],
           selection_series: [],
+          database: [],
         },
         loan: {},
         requiredFields: ["loan_number", "date_start"],
@@ -630,6 +665,11 @@ export default {
         this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.loan.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -665,6 +705,10 @@ export default {
           (this.autocomplete.list_loan_delivery_method =
             this.handleResponse(response))
       );
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
+      );
     },
 
     formatDataForUpload(objectToUpload) {
@@ -682,6 +726,10 @@ export default {
           uploadableObject[key] = null;
         }
       });
+
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.initial_permissions = this.initialPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -726,6 +774,11 @@ export default {
         id: obj.type,
         value: obj.type__value,
         value_en: obj.type__value_en,
+      };
+      this.loan.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
       };
     },
 

@@ -471,6 +471,27 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="location.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -486,9 +507,10 @@ import {
   fetchLocationSamples,
   fetchLocationSpecimens,
   fetchMultiChangeSpecimen,
+  fetchDatabase,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import FileInput from "../partial/inputs/FileInput";
 import requestsMixin from "../../mixins/requestsMixin";
 import SpecimenTable from "../specimen/SpecimenTable";
@@ -497,6 +519,7 @@ import ExportButtons from "../partial/export/ExportButtons";
 import { fetchMultiChangeLocation } from "@/assets/js/api/apiCalls";
 import ListView from "@/components/partial/ListView";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Location",
@@ -511,6 +534,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -573,6 +597,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["locationSearchParameters"]),
 
     activeRelatedDataTab() {
@@ -618,6 +643,9 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     changeRelatedDataLocation() {
       console.log(this.filledRelatedDataObjects);
@@ -681,6 +709,12 @@ export default {
           { name: "sample", iconClass: "fas fa-vial" },
         ],
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         activeTab: "attachment_link",
         currentViewType: "table",
         copyFields: [
@@ -694,14 +728,17 @@ export default {
           "date_collected_free",
           "contents",
           "remarks",
+          "database",
         ],
         autocomplete: {
           loaders: {
             agent: false,
             storage: false,
+            database: false,
           },
           agent: [],
           storage: [],
+          database: [],
         },
         location: {},
         requiredFields: ["location"],
@@ -728,7 +765,14 @@ export default {
       this.loadFullInfo();
     },
 
+    loadAutocompleteFields() {
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
+      );
+    },
     loadFullInfo() {
+      this.loadAutocompleteFields();
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
@@ -755,6 +799,11 @@ export default {
         });
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.location.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -825,6 +874,7 @@ export default {
               });
             }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
           uploadableObject.related_data.attachment =
@@ -858,6 +908,12 @@ export default {
         };
         this.autocomplete.storage.push(this.location.parent_location);
       }
+
+      this.location.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
 
     loadRelatedData(type) {

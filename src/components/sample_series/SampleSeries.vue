@@ -257,21 +257,37 @@
               />
             </v-col>
           </v-row>
-
-          <!-- IS_PRIVATE -->
-          <v-row no-gutters class="my-2">
-            <v-col>
-              <checkbox-wrapper
-                v-model="sample_series.is_private"
-                :color="bodyActiveColor"
-                :label="$t('common.is_private')"
-                @change="sample_series.is_private = !sample_series.is_private"
-              />
-            </v-col>
-          </v-row>
         </div>
       </transition>
     </v-card>
+    <!-- IS_PRIVATE -->
+    <v-row no-gutters class="my-2">
+      <v-col class="d-flex">
+        <checkbox-wrapper
+          v-model="sample_series.is_private"
+          :color="bodyActiveColor"
+          :label="$t('common.is_private')"
+          @change="sample_series.is_private = !sample_series.is_private"
+        />
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="sample_series.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
 
     <!-- RELATED DATA TABS -->
     <v-card
@@ -370,6 +386,7 @@ import {
   fetchSampleSeriesAttachments,
   fetchSampleSeriesDetail,
   fetchSampleSeriesSamples,
+  fetchDatabase,
 } from "@/assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -378,8 +395,9 @@ import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import SampleSeriesSamplesTable from "./relatedTables/SampleSeriesSamplesTable";
 import FileInput from "../partial/inputs/FileInput";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "SampleSeries",
@@ -393,6 +411,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -450,6 +469,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["sample_seriesSearchParameters"]),
 
     paginateByOptionsTranslated() {
@@ -474,6 +494,9 @@ export default {
         this.activeTab = type;
       }
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
@@ -483,6 +506,12 @@ export default {
         ],
         activeTab: "sample",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "name",
@@ -507,6 +536,7 @@ export default {
           "remarks",
           "owner",
           "is_private",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -515,12 +545,14 @@ export default {
             agent_collected: false,
             locality: false,
             agent: false,
+            database: false,
           },
           stratigraphy_base: [],
           stratigraphy_top: [],
           agent_collected: [],
           locality: [],
           owner: [],
+          database: [],
         },
         sample_series: {},
         requiredFields: ["name"],
@@ -544,7 +576,14 @@ export default {
       this.loadFullInfo();
     },
 
+    loadAutocompleteFields() {
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
+      );
+    },
     loadFullInfo() {
+      this.loadAutocompleteFields();
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
@@ -568,6 +607,11 @@ export default {
         this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.sample_series.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -622,6 +666,7 @@ export default {
               });
           }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment.results.length > 0) {
           uploadableObject.related_data.attachment =
@@ -682,6 +727,11 @@ export default {
         this.sample_series.owner = { id: obj.owner, agent: obj.owner__agent };
         this.autocomplete.owner.push(this.sample_series.owner);
       }
+      this.sample_series.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
 
     loadRelatedData(object) {

@@ -879,12 +879,29 @@
 
     <template v-slot:privacy>
       <v-row class="my-2">
-        <v-col>
+        <v-col class="d-flex">
           <checkbox-wrapper
             v-model="sample.is_private"
             :color="bodyActiveColor"
             :label="$t('common.is_private')"
             @change="sample.is_private = !sample.is_private"
+          />
+          <autocomplete-wrapper
+            class="ml-auto"
+            v-model="sample.database"
+            :color="bodyActiveColor"
+            :items="autocomplete.database"
+            :loading="autocomplete.loaders.database"
+            :item-text="nameLabel"
+            :label="$t('common.institution')"
+          />
+        </v-col>
+      </v-row>
+      <v-row no-gutters class="mt-2">
+        <v-col>
+          <object-permissions-create
+            v-if="!$route.meta.isEdit"
+            @change="handlePermissionsChange"
           />
         </v-col>
       </v-row>
@@ -1014,7 +1031,7 @@
 import Pagination from "@/components/partial/Pagination";
 import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 import cloneDeep from "lodash/cloneDeep";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import {
   fetchLatestSampleInSite,
   fetchLSampleAttachment,
@@ -1024,6 +1041,7 @@ import {
   fetchSamplePurpose,
   fetchSampleReference,
   fetchTaxonList,
+  fetchDatabase,
 } from "@/assets/js/api/apiCalls";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formManipulation from "../../mixins/formManipulation";
@@ -1040,6 +1058,7 @@ import PreparationTable from "./relatedTables/PreparationTable";
 import SampleReferenceTable from "./relatedTables/SampleReferenceTable";
 import TaxonListTable from "./relatedTables/TaxonListTable";
 import SampleWrapper from "./SampleWrapper";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Sample",
@@ -1057,6 +1076,7 @@ export default {
     InputWrapper,
     CheckboxWrapper,
     SampleWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -1142,6 +1162,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["sampleSearchParameters", "isSampleSimpleView"]),
 
     isSimpleView: {
@@ -1187,6 +1208,9 @@ export default {
         this.activeTab = type;
       }
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
@@ -1198,6 +1222,12 @@ export default {
           { name: "sample_reference", iconClass: "fas fa-book" },
         ],
         activeTab: "analysis",
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "id",
@@ -1235,6 +1265,7 @@ export default {
           "is_private",
           "site",
           "project",
+          "database",
         ],
         simplifiedFormCopyFields: [
           "number",
@@ -1251,6 +1282,7 @@ export default {
           "owner",
           "remarks",
           "is_private",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -1275,6 +1307,7 @@ export default {
             site: false,
             project: false,
             purpose: false,
+            database: false,
           },
           series: [],
           purpose: [],
@@ -1299,6 +1332,7 @@ export default {
           samplePreparation: [],
           site: [],
           project: [],
+          database: [],
         },
         requiredFields: [],
         sample: {},
@@ -1354,6 +1388,11 @@ export default {
         this.$on("tab-changed", this.setTab);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.sample.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
 
       if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
@@ -1364,6 +1403,10 @@ export default {
       fetchSamplePurpose().then(
         (response) =>
           (this.autocomplete.purpose = this.handleResponse(response))
+      );
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
       );
     },
 
@@ -1463,6 +1506,7 @@ export default {
               });
             }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
           uploadableObject.related_data.attachment =
@@ -1576,6 +1620,11 @@ export default {
         };
         this.autocomplete.project.push(this.sample.project);
       }
+      this.sample.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
 
     loadRelatedData(object) {

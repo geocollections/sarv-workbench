@@ -138,6 +138,23 @@ async function post(
   }
 }
 
+async function put(
+  child,
+  data,
+  customUrl = "",
+  returnErrorResponse = false,
+  config = {}
+) {
+  let url = api.url + child;
+  if (customUrl && customUrl.length > 0) url = customUrl + child + "/";
+
+  try {
+    return await axios.put(url, data, config);
+  } catch (error) {
+    return error.response;
+  }
+}
+
 async function post_delete(child) {
   let url = `${api.url}delete/${child}`;
 
@@ -2123,6 +2140,10 @@ export function fetchAccession() {
 
 export function fetchDeaccession() {
   return get(`deaccession/?format=json`);
+}
+
+export function fetchDatabase() {
+  return get(`database/?format=json`);
 }
 
 export function fetchSpecimenIdentifications(specimenId, searchParameters) {
@@ -4799,6 +4820,14 @@ export function fetchUsers() {
 
 export function fetchObjectPermissions(id, table) {
   return get(`${table}/${id}/getpermissions?format=json`);
+}
+
+export function fetchUserDefaultPermissions() {
+  return get(`user/default-permissions/`, api.accountsUrl);
+}
+
+export function changeUserDefaultPermissions(newPerms) {
+  return put(`user/default-permissions/`, newPerms, api.accountsUrl);
 }
 
 export function fetchObjectGroupPermissions(id, table, permissionName) {

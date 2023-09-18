@@ -146,6 +146,19 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="accession.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -155,10 +168,13 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import { fetchAccessionDetail } from "../../assets/js/api/apiCalls";
+import {
+  fetchAccessionDetail,
+  fetchDatabase,
+} from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import DateWrapper from "../partial/inputs/DateWrapper";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "Accession",
@@ -219,6 +235,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["accessionSearchParameters"]),
   },
 
@@ -237,12 +254,15 @@ export default {
           "number_items",
           "description",
           "remarks",
+          "database",
         ],
         autocomplete: {
           loaders: {
             agent: false,
+            database: false,
           },
           agent: [],
+          database: [],
         },
         accession: {},
         requiredFields: ["number"],
@@ -256,8 +276,15 @@ export default {
       Object.assign(this.$data, this.setInitialData());
       this.loadFullInfo();
     },
+    loadAutocompleteFields() {
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
+      );
+    },
 
     loadFullInfo() {
+      this.loadAutocompleteFields();
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
@@ -278,6 +305,12 @@ export default {
         });
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+
+        if (this.getDatabaseId !== null) {
+          this.accession.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -324,6 +357,11 @@ export default {
         };
         this.autocomplete.agent.push(this.accession.agent_kinnitas);
       }
+      this.accession.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
   },
 };

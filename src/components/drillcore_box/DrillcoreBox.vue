@@ -196,7 +196,19 @@
         </div>
       </transition>
     </v-card>
-
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="drillcore_box.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
     <!-- RELATED DATA TABS -->
     <v-card
       class="related-tabs mt-2"
@@ -278,6 +290,14 @@
         </v-card>
       </v-tabs-items>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -290,13 +310,15 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import {
   fetchDrillcoreBox,
   fetchDrillcoreBoxAttachments,
+  fetchDatabase,
 } from "@/assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import FileInput from "../partial/inputs/FileInput";
 import DrillcoreBoxAttachmentTable from "./related_tables/DrillcoreBoxAttachmentTable";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "DrillcoreBox",
@@ -308,6 +330,7 @@ export default {
     TextareaWrapper,
     InputWrapper,
     AutocompleteWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -369,6 +392,7 @@ export default {
 
   computed: {
     ...mapState("search", ["drillcore_boxSearchParameters"]),
+    ...mapGetters("user", ["getDatabaseId"]),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map((item) => {
@@ -392,12 +416,21 @@ export default {
         this.activeTab = type;
       }
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
         relatedTabs: [{ name: "attachment", iconClass: "fas fa-image" }],
         activeTab: "attachment",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "drillcore",
@@ -414,6 +447,7 @@ export default {
           "depth_other",
           "stratigraphy_free",
           "remarks",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -421,8 +455,10 @@ export default {
             storage: false,
             stratigraphy_base: false,
             stratigraphy_top: false,
+            database: false,
           },
           drillcore: [],
+          database: [],
           storage: [],
           stratigraphy_base: [],
           stratigraphy_top: [],
@@ -451,6 +487,8 @@ export default {
     },
 
     loadFullInfo() {
+      this.loadAutocompleteFields();
+
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
@@ -474,7 +512,19 @@ export default {
         this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+
+        if (this.getDatabaseId !== null) {
+          this.drillcore_box.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
+    },
+    loadAutocompleteFields() {
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
+      );
     },
 
     formatDataForUpload(objectToUpload, saveAsNew = false) {
@@ -516,6 +566,7 @@ export default {
               });
             }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment.results.length > 0) {
           uploadableObject.related_data.attachment =
@@ -570,6 +621,11 @@ export default {
           this.drillcore_box.stratigraphy_base
         );
       }
+      this.drillcore_box.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
 
     setDefaultRelatedData() {

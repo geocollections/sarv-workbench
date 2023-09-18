@@ -169,6 +169,7 @@ export default {
         "library",
         "doi",
         "selection",
+        "loan",
       ];
 
       return availableTables.includes(table);

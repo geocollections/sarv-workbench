@@ -767,6 +767,14 @@
         />
       </v-col>
     </v-row>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -803,6 +811,7 @@ import SiteLocalityReferenceTable from "./relatedTables/SiteLocalityReferenceTab
 import toastMixin from "@/mixins/toastMixin";
 import Pagination from "@/components/partial/Pagination";
 import CheckboxWrapper from "@/components/partial/inputs/CheckboxWrapper";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Site",
@@ -818,6 +827,7 @@ export default {
     SampleTable,
     MapComponent,
     ExportButtons,
+    ObjectPermissionsCreate,
   },
   props: {
     isBodyActiveColorDark: {
@@ -954,7 +964,9 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSite", "updateActiveTab"]),
     ...mapActions("map", ["updateShowMap"]),
-
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
     saveGroundwater() {
       if (this.isNotEmpty(this.site_groundwater)) {
         let uploadableObject = cloneDeep(this.site_groundwater);
@@ -1027,6 +1039,12 @@ export default {
         ],
         activeTab: "attachment_link",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "name",
@@ -1305,6 +1323,7 @@ export default {
               }
             }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment_link.results.length > 0) {
           uploadableObject.related_data.attachment =

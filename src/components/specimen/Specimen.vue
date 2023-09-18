@@ -735,12 +735,29 @@
 
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
-      <v-col>
+      <v-col class="d-flex">
         <checkbox-wrapper
           v-model="specimen.is_private"
           :color="bodyActiveColor"
           :label="$t('common.is_private')"
           @change="specimen.is_private = !specimen.is_private"
+        />
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="specimen.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
         />
       </v-col>
     </v-row>
@@ -770,8 +787,9 @@ import {
   fetchSpecimenIdentifications,
   fetchSpecimenLocations,
   fetchSpecimenReferences,
+  fetchDatabase,
 } from "../../assets/js/api/apiCalls";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -790,6 +808,7 @@ import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 import { fetchListSpecimenSubtype } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
 import ImageViewWrapper from "@/components/partial/image_view/ImageViewWrapper";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Specimen",
@@ -810,6 +829,7 @@ export default {
     TextareaWrapper,
     InputWrapper,
     AutocompleteWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -883,6 +903,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["specimenSearchParameters"]),
     ...mapState("search", {
       activeRelatedDataTab: (state) => state.activeRelatedDataTab.specimen,
@@ -917,6 +938,9 @@ export default {
         this.activeTab = type;
       }
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
@@ -933,6 +957,12 @@ export default {
         ],
         activeTab: "specimen_identification",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         specimenImages: null,
         copyFields: [
           "id",
@@ -973,6 +1003,7 @@ export default {
           "original_status",
           "parent",
           "number_pieces",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -1004,6 +1035,7 @@ export default {
             list_history_type: false,
             analysis_method: false,
             parent: false,
+            database: false,
           },
           coll: [],
           specimen_kind: [],
@@ -1033,6 +1065,7 @@ export default {
           list_history_type: [],
           analysis_method: [],
           parent: [],
+          database: [],
         },
         requiredFields: ["fossil"],
         specimen: {},
@@ -1085,6 +1118,12 @@ export default {
         this.loadSpecimenImages(this.$route.params.id);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+
+        if (this.getDatabaseId !== null) {
+          this.specimen.database = {
+            id: this.getDatabaseId,
+          };
+        }
 
         // Set default tab
         // if (this.specimen?.fossil) {
@@ -1148,6 +1187,10 @@ export default {
       fetchDeaccession().then(
         (response) =>
           (this.autocomplete.deaccession = this.handleResponse(response))
+      );
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
       );
     },
 
@@ -1258,6 +1301,7 @@ export default {
             });
           }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         if (this.relatedData.attachment.results.length > 0) {
           uploadableObject.related_data.attachment =
@@ -1296,6 +1340,13 @@ export default {
         value: obj.subtype_id__value,
         value_en: obj.subtype_id__value_en,
       };
+
+      this.specimen.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
+
       if (this.isNotEmpty(obj.locality)) {
         this.specimen.locality = {
           id: obj.locality,

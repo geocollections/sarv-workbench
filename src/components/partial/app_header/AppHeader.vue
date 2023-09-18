@@ -91,7 +91,7 @@
             <v-btn text v-on="on" :title="$t('common.activeDatabase')">
               {{ currentGroup.acronym }}&nbsp;
               <v-icon>{{
-                showDropdown ? "fas fa-caret-up" : "fas fa-caret-down"
+                showGroupDropdown ? "fas fa-caret-up" : "fas fa-caret-down"
               }}</v-icon>
             </v-btn>
           </template>
@@ -101,6 +101,10 @@
             dense
             style="border-radius: 0"
           >
+            <v-list-item @click="handleDatabaseGroupChange({ id: null })">
+              <v-list-item-title>{{ $t("groups.all") }}</v-list-item-title>
+            </v-list-item>
+            <v-divider />
             <v-list-item
               v-for="(group, index) in databaseGroups"
               :key="index"
@@ -250,6 +254,12 @@ export default {
       );
     },
     currentGroup() {
+      if (this.getDatabaseId === null) {
+        return {
+          acronym: this.$t("groups.all"),
+        };
+      }
+
       return this.databaseGroups.find(
         (group) => group.id === this.getDatabaseId
       );
