@@ -61,7 +61,10 @@
     "or": "VÕI",
     "activeDatabase": "Aktiivne andmebaas",
     "downloadFile": "Laadi alla",
-    "institution": "Asutus"
+    "institution": "Asutus",
+    "pageSelect": "{current} / {count}",
+    "headers": "Päised",
+    "filter": "Filter"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -3136,5 +3139,11 @@
   },
   "groups": {
     "all": "Kõik"
+  },
+  "table": {
+    "tooltipConfig": "Tabeli konfiguratsioon",
+    "tooltipResetHeaders": "Lähtesta päised",
+    "tooltipShowActiveHeaders": "Vaata aktiveeritud päiseid",
+    "tooltipShowAllHeaders": "Vaata kõiki päiseid"
   }
 }

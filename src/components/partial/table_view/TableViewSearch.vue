@@ -327,33 +327,6 @@
         @update:dynamicSearchFields="updateDynamicSearchFieldsDebounced"
       />
 
-      <!-- DYNAMIC FIELDS -->
-      <v-row no-gutters class="mt-6 mb-4">
-        <v-col cols="12">
-          <v-select
-            :items="$_tableHeaderMixin_allHeaders"
-            :value="$_tableHeaderMixin_shownHeaders"
-            chips
-            small-chips
-            deletable-chips
-            multiple
-            :color="bodyActiveColor"
-            :label="$t('common.fields')"
-            clearable
-            clear-icon="fas fa-times"
-            @change="
-              $_tableHeaderMixin_updateTableHeaders({
-                event: $event,
-                table: $route.meta.object,
-              })
-            "
-            class="chips-select"
-            hide-details
-            dense
-          />
-        </v-col>
-      </v-row>
-
       <!-- RESET SEARCH PREFERENCES -->
       <v-row no-gutters>
         <v-col cols="12">

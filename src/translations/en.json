@@ -60,7 +60,10 @@
     "or": "OR",
     "activeDatabase": "Active database",
     "downloadFile": "Download file",
-    "institution": "Institution"
+    "institution": "Institution",
+    "pageSelect": "{current} / {count}",
+    "headers": "Headers",
+    "filter": "Filter"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -3134,5 +3137,11 @@
   },
   "groups": {
     "all": "All"
+  },
+  "table": {
+    "tooltipConfig": "Table configuration",
+    "tooltipResetHeaders": "Reset headers",
+    "tooltipShowActiveHeaders": "Show active headers",
+    "tooltipShowAllHeaders": "Show all headers"
   }
 }

@@ -1,77 +1,21 @@
 <template>
-  <div class="list-module-core">
+  <div class="list-module-core mt-2">
     <ScrollToTop
       class="d-print-none"
       v-if="$route.meta.isTableView"
       :body-active-color="bodyActiveColor"
     />
 
-    <!-- EXPORT and OPTIONS -->
-    <v-row align="center" justify="start" class="d-print-none">
-      <v-col class="d-flex">
-        <!-- EXPORT -->
-        <div class="mr-4" v-if="exportButtons">
-          <export-buttons
-            :filename="module"
-            :table-data="response.results"
-            :body-active-color="bodyActiveColor"
-          />
-        </div>
-        <!-- OPTIONS -->
-        <div v-if="useListView || useImageView" class="mb-2">
-          <v-radio-group
-            class="radio-buttons mt-0"
-            v-model="currentViewType"
-            row
-            hide-details
-          >
-            <v-radio
-              value="table"
-              class="mb-2"
-              :label="$t('references.tableView')"
-              :color="bodyActiveColor"
-            />
-            <v-radio
-              v-if="useListView"
-              class="mb-2"
-              value="list"
-              :label="
-                module === 'sample' ||
-                module === 'specimen' ||
-                module === 'location'
-                  ? $t('references.labelView')
-                  : $t('references.listView')
-              "
-              :color="bodyActiveColor"
-            />
-            <v-radio
-              v-if="useImageView"
-              class="mb-2"
-              value="image"
-              :label="$t('buttons.imageView')"
-              :color="bodyActiveColor"
-            />
-          </v-radio-group>
-        </div>
-      </v-col>
-    </v-row>
-
-    <pagination
-      class="pb-2"
-      :body-active-color="bodyActiveColor"
-      :count="response.count"
-      :paginate-by="searchParameters.paginateBy"
-      :options="paginateByOptionsTranslated"
-      :page="searchParameters.page"
-      v-on:update:page="$emit('update:searchParameters', $event, 'page')"
-      v-on:update:paginateBy="
-        $emit('update:searchParameters', $event, 'paginateBy')
-      "
-    />
-
     <!-- DATA TABLE -->
+    <v-row no-gutters align="center" justify="start" class="d-print-none">
+      <span id="table-title" class="mr-2" style="font-size: 1.25rem">
+        <span>{{ $t("main.found") }}</span>
+        <span class="font-weight-bold">{{ ` ${response.count} ` }}</span>
+        <span>{{ $t("main.records") }}</span>
+      </span>
+    </v-row>
     <v-card
-      :color="bodyColor.split('n-')[0] + 'n-3'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       class="table-card my-1"
       :loading="isLoading"
     >
@@ -81,14 +25,66 @@
           :color="bodyColor.split('n-')[0] + 'n-1'"
         ></v-progress-linear>
       </template>
-
-      <v-card-title class="d-print-none">
-        <v-icon class="mr-2" color="#191414">fas fa-list</v-icon>
-        <span id="table-title">
-          <span>{{ $t("main.found") }}</span>
-          <span class="font-weight-bold">{{ ` ${response.count} ` }}</span>
-          <span>{{ $t("main.records") }}</span>
-        </span>
+      <v-card-title class="d-print-none py-0 pr-0">
+        <v-btn-toggle
+          v-if="useListView || useImageView"
+          class="mr-2"
+          v-model="currentViewType"
+          :color="bodyActiveColor"
+          dense
+        >
+          <v-btn value="table" :title="$t('references.tableView')">
+            <v-icon>fas fa-list</v-icon>
+          </v-btn>
+          <v-btn
+            v-if="useListView"
+            :title="
+              module === 'sample' ||
+              module === 'specimen' ||
+              module === 'location'
+                ? $t('references.labelView')
+                : $t('references.listView')
+            "
+            value="list"
+          >
+            <v-icon>fas fa-tag</v-icon>
+          </v-btn>
+          <v-btn
+            v-if="useImageView"
+            :title="$t('buttons.imageView')"
+            value="image"
+          >
+            <v-icon>fas fa-image</v-icon>
+          </v-btn>
+        </v-btn-toggle>
+        <data-table-headers-menu
+          :headers="$_tableHeaderMixin_allHeaders"
+          :visible-headers="$_tableHeaderMixin_shownHeaders"
+          @change="
+            $_tableHeaderMixin_updateTableHeaders({
+              event: $event,
+              table: $route.meta.object,
+            })
+          "
+          @reset="$_tableHeaderMixin_setDefaultTableHeaders($route.meta.object)"
+        />
+        <export-buttons
+          v-if="exportButtons"
+          :filename="module"
+          :table-data="response.results"
+          :body-active-color="bodyActiveColor"
+        />
+        <data-table-pagination
+          class="ml-auto"
+          :count="response.count"
+          :paginate-by="searchParameters.paginateBy"
+          :page="searchParameters.page"
+          :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
+          v-on:update:page="$emit('update:searchParameters', $event, 'page')"
+          v-on:update:paginateBy="
+            $emit('update:searchParameters', $event, 'paginateBy')
+          "
+        />
       </v-card-title>
 
       <!-- LIST VIEW -->
@@ -125,20 +121,20 @@
           $emit('update:searchParameters', $event.value, $event.key)
         "
       />
+      <div class="text-right d-print-none">
+        <data-table-pagination
+          class="ml-auto"
+          :count="response.count"
+          :paginate-by="searchParameters.paginateBy"
+          :page="searchParameters.page"
+          :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
+          v-on:update:page="$emit('update:searchParameters', $event, 'page')"
+          v-on:update:paginateBy="
+            $emit('update:searchParameters', $event, 'paginateBy')
+          "
+        />
+      </div>
     </v-card>
-
-    <pagination
-      class="pt-2 pt-md-0 pb-0 pb-md-5"
-      :body-active-color="bodyActiveColor"
-      :count="response.count"
-      :paginate-by="searchParameters.paginateBy"
-      :options="paginateByOptionsTranslated"
-      :page="searchParameters.page"
-      v-on:update:page="$emit('update:searchParameters', $event, 'page')"
-      v-on:update:paginateBy="
-        $emit('update:searchParameters', $event, 'paginateBy')
-      "
-    />
   </div>
 </template>
 
@@ -151,16 +147,19 @@ import { mapActions, mapState } from "vuex";
 import ScrollToTop from "../components/partial/ScrollToTop";
 import toastMixin from "../mixins/toastMixin";
 import activeListMixin from "../mixins/activeListMixin";
-import Pagination from "@/components/partial/Pagination";
+import DataTablePagination from "@/components/partial/DataTablePagination";
+import DataTableHeadersMenu from "@/components/partial/DataTableHeadersMenu";
 import { fetchChangeRecordState } from "@/assets/js/api/apiCalls";
+import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
   components: {
-    Pagination,
     ScrollToTop,
     ExportButtons,
     ListView,
     ImageView,
+    DataTablePagination,
+    DataTableHeadersMenu,
   },
   props: {
     apiCall: {
@@ -190,7 +189,7 @@ export default {
       default: false,
     },
   },
-  mixins: [toastMixin, activeListMixin],
+  mixins: [toastMixin, activeListMixin, tableHeaderMixin],
   name: "ListModuleCore",
   data() {
     return {

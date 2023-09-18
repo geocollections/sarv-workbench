@@ -1,22 +1,18 @@
 <template>
-  <spinner
-    v-show="loadingState"
-    v-bind="$attrs"
-    class="loading-overlay"
-    size="massive"
-    :message="spinnerMessage"
-  ></spinner>
+  <div v-show="loadingState" class="loading-overlay text-center">
+    <v-progress-circular :size="118" color="blue" indeterminate>
+    </v-progress-circular>
+    <div class="mt-2 grey--text text--darken-3" style="font-size: 1.5rem">
+      {{ spinnerMessage }}
+    </div>
+  </div>
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import { mapState } from "vuex";
 
 export default {
   name: "SpinnerWrapper",
-  components: {
-    Spinner,
-  },
   computed: {
     ...mapState("search", ["loadingState", "loadingType", "loadingPercent"]),
 
@@ -33,9 +29,9 @@ export default {
 
 <style scoped>
 .loading-overlay {
-  position: fixed;
+  position: absolute;
   left: 50%;
-  top: 50%;
+  top: 50vh;
   transform: translate(-50%, -50%);
   z-index: 1040;
   background: rgba(255, 255, 255, 0.5);
