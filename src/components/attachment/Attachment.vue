@@ -4020,6 +4020,7 @@ import {
   fetchListImageType,
   fetchListLicences,
   fetchDatabase,
+  fetchObjectPermissions,
 } from "../../assets/js/api/apiCalls";
 import AttachmentWrapper from "./AttachmentWrapper";
 import MapComponent from "../partial/MapComponent";
@@ -4459,6 +4460,12 @@ export default {
           users_view: [],
           users_change: [],
         },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "agent_digitised",
           "author",
@@ -4624,6 +4631,32 @@ export default {
           }
         });
 
+        fetchObjectPermissions(this.attachment.id, "attachment").then((res) => {
+          this.currentPermissions.groups_change =
+            res.data.group
+              ?.filter(
+                (perm) => perm.permission__codename === "change_attachment"
+              )
+              .map((perm) => perm.group_id) ?? [];
+          this.currentPermissions.groups_view =
+            res.data.group
+              ?.filter(
+                (perm) => perm.permission__codename === "view_attachment"
+              )
+              .map((perm) => perm.group_id) ?? [];
+          this.currentPermissions.users_change =
+            res.data.user
+              ?.filter(
+                (perm) => perm.permission__codename === "change_attachment"
+              )
+              .map((perm) => perm.user_id) ?? [];
+          this.currentPermissions.users_view =
+            res.data.user
+              ?.filter(
+                (perm) => perm.permission__codename === "view_attachment"
+              )
+              .map((perm) => perm.user_id) ?? [];
+        });
         this.loadAutocompleteFields(false, true);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
@@ -4951,7 +4984,7 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       if (!this.$route.meta.isEdit) {
@@ -5047,6 +5080,11 @@ export default {
         uploadableObject.initial_permissions = this.initialPermissions;
       }
 
+      if (saveAsNew) delete uploadableObject.related_data;
+
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
+      }
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);

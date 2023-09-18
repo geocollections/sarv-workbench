@@ -771,6 +771,7 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
   fetchAccession,
+  fetchObjectPermissions,
   fetchDeaccession,
   fetchDirectSpecimenImages,
   fetchListSpecimenKind,
@@ -963,6 +964,12 @@ export default {
           users_view: [],
           users_change: [],
         },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         specimenImages: null,
         copyFields: [
           "id",
@@ -1111,6 +1118,24 @@ export default {
             this.$emit("data-loaded", this.specimen);
           } else this.$emit("object-exists", false);
 
+          fetchObjectPermissions(this.specimen.id, "specimen").then((res) => {
+            this.currentPermissions.groups_change = res.data.group
+              ?.filter(
+                (perm) => perm.permission__codename === "change_specimen"
+              )
+              .map((perm) => perm.group_id);
+            this.currentPermissions.groups_view = res.data.group
+              ?.filter((perm) => perm.permission__codename === "view_specimen")
+              .map((perm) => perm.group_id);
+            this.currentPermissions.users_change = res.data.user
+              ?.filter(
+                (perm) => perm.permission__codename === "change_specimen"
+              )
+              .map((perm) => perm.user_id);
+            this.currentPermissions.users_view = res.data.user
+              ?.filter((perm) => perm.permission__codename === "view_specimen")
+              .map((perm) => perm.user_id);
+          });
           this.setLoadingState(false);
         });
 
@@ -1314,6 +1339,10 @@ export default {
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
+
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

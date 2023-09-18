@@ -311,6 +311,7 @@ import {
   fetchDrillcoreBox,
   fetchDrillcoreBoxAttachments,
   fetchDatabase,
+  fetchObjectPermissions,
 } from "@/assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -431,6 +432,12 @@ export default {
           users_view: [],
           users_change: [],
         },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "drillcore",
@@ -507,6 +514,36 @@ export default {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
+          fetchObjectPermissions(this.drillcore_box.id, "drillcore_box").then(
+            (res) => {
+              this.currentPermissions.groups_change =
+                res.data.group
+                  ?.filter(
+                    (perm) =>
+                      perm.permission__codename === "change_drillcorebox"
+                  )
+                  .map((perm) => perm.group_id) ?? [];
+              this.currentPermissions.groups_view =
+                res.data.group
+                  ?.filter(
+                    (perm) => perm.permission__codename === "view_drillcorebox"
+                  )
+                  .map((perm) => perm.group_id) ?? [];
+              this.currentPermissions.users_change =
+                res.data.user
+                  ?.filter(
+                    (perm) =>
+                      perm.permission__codename === "change_drillcorebox"
+                  )
+                  .map((perm) => perm.user_id) ?? [];
+              this.currentPermissions.users_view =
+                res.data.user
+                  ?.filter(
+                    (perm) => perm.permission__codename === "view_drillcorebox"
+                  )
+                  .map((perm) => perm.user_id) ?? [];
+            }
+          );
         });
 
         this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
@@ -579,6 +616,9 @@ export default {
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

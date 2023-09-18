@@ -531,6 +531,7 @@ import {
   fetchAnalysisResults,
   fetchAnalysisMethod,
   fetchDatabase,
+  fetchObjectPermissions,
 } from "../../assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
@@ -673,6 +674,12 @@ export default {
           users_view: [],
           users_change: [],
         },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "sample",
@@ -778,6 +785,32 @@ export default {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
+          fetchObjectPermissions(this.analysis.id, "analysis").then((res) => {
+            this.currentPermissions.groups_change =
+              res.data.group
+                ?.filter(
+                  (perm) => perm.permission__codename === "change_analysis"
+                )
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.groups_view =
+              res.data.group
+                ?.filter(
+                  (perm) => perm.permission__codename === "view_analysis"
+                )
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.users_change =
+              res.data.user
+                ?.filter(
+                  (perm) => perm.permission__codename === "change_analysis"
+                )
+                .map((perm) => perm.user_id) ?? [];
+            this.currentPermissions.users_view =
+              res.data.user
+                ?.filter(
+                  (perm) => perm.permission__codename === "view_analysis"
+                )
+                .map((perm) => perm.user_id) ?? [];
+          });
         });
 
         this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
@@ -895,6 +928,9 @@ export default {
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

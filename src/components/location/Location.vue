@@ -508,6 +508,7 @@ import {
   fetchLocationSpecimens,
   fetchMultiChangeSpecimen,
   fetchDatabase,
+  fetchObjectPermissions,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import { mapActions, mapState, mapGetters } from "vuex";
@@ -715,6 +716,12 @@ export default {
           users_view: [],
           users_change: [],
         },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         activeTab: "attachment_link",
         currentViewType: "table",
         copyFields: [
@@ -791,6 +798,32 @@ export default {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
+          fetchObjectPermissions(this.location.id, "location").then((res) => {
+            this.currentPermissions.groups_change =
+              res.data.group
+                ?.filter(
+                  (perm) => perm.permission__codename === "change_location"
+                )
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.groups_view =
+              res.data.group
+                ?.filter(
+                  (perm) => perm.permission__codename === "view_location"
+                )
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.users_change =
+              res.data.user
+                ?.filter(
+                  (perm) => perm.permission__codename === "change_location"
+                )
+                .map((perm) => perm.user_id) ?? [];
+            this.currentPermissions.users_view =
+              res.data.user
+                ?.filter(
+                  (perm) => perm.permission__codename === "view_location"
+                )
+                .map((perm) => perm.user_id) ?? [];
+          });
         });
 
         // Load Related Data which is in tabs
@@ -887,6 +920,9 @@ export default {
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

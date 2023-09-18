@@ -889,6 +889,7 @@ import {
   fetchAgentUsingName,
   fetchDoiPublisher,
   fetchDatabase,
+  fetchObjectPermissions,
 } from "@/assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapActions, mapState, mapGetters } from "vuex";
@@ -1069,6 +1070,12 @@ export default {
           users_view: [],
           users_change: [],
         },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "identifier",
@@ -1216,6 +1223,24 @@ export default {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
+          fetchObjectPermissions(this.doi.id, "doi").then((res) => {
+            this.currentPermissions.groups_change =
+              res.data.group
+                ?.filter((perm) => perm.permission__codename === "change_doi")
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.groups_view =
+              res.data.group
+                ?.filter((perm) => perm.permission__codename === "view_doi")
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.users_change =
+              res.data.user
+                ?.filter((perm) => perm.permission__codename === "change_doi")
+                .map((perm) => perm.user_id) ?? [];
+            this.currentPermissions.users_view =
+              res.data.user
+                ?.filter((perm) => perm.permission__codename === "view_doi")
+                .map((perm) => perm.user_id) ?? [];
+          });
 
           this.checkMetadata();
           this.checkDoiUrl();
@@ -1441,6 +1466,9 @@ export default {
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
+      }
 
       return JSON.stringify(uploadableObject);
     },

@@ -451,6 +451,7 @@ import {
   fetchLoanSpecimens,
   fetchSelectedSpecimens,
   fetchDatabase,
+  fetchObjectPermissions,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -580,6 +581,12 @@ export default {
           users_view: [],
           users_change: [],
         },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "loan_number",
@@ -659,6 +666,24 @@ export default {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
+          fetchObjectPermissions(this.loan.id, "loan").then((res) => {
+            this.currentPermissions.groups_change =
+              res.data.group
+                ?.filter((perm) => perm.permission__codename === "change_loan")
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.groups_view =
+              res.data.group
+                ?.filter((perm) => perm.permission__codename === "view_loan")
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.users_change =
+              res.data.user
+                ?.filter((perm) => perm.permission__codename === "change_loan")
+                .map((perm) => perm.user_id) ?? [];
+            this.currentPermissions.users_view =
+              res.data.user
+                ?.filter((perm) => perm.permission__codename === "view_loan")
+                .map((perm) => perm.user_id) ?? [];
+          });
         });
 
         // Load Related Data which is in tabs
@@ -711,7 +736,7 @@ export default {
       );
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       Object.keys(uploadableObject).forEach((key) => {
@@ -729,6 +754,9 @@ export default {
 
       if (!this.$route.meta.isEdit) {
         uploadableObject.initial_permissions = this.initialPermissions;
+      }
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
       }
 
       console.log("This object is sent in string format:");
