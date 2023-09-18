@@ -73,16 +73,8 @@
           ENG &nbsp;<span class="flag flag-en flag-squared flag-circle"></span>
         </v-btn>
 
-        <div
-          v-if="databaseGroups.length === 1"
-          :title="$t('common.activeDatabase')"
-          class="text-button font-weight-medium d-flex justify-center align-center px-4"
-        >
-          <v-icon left small>fas fa-database</v-icon>
-          {{ currentGroup.acronym }}
-        </div>
         <v-menu
-          v-else-if="databaseGroups.length > 1"
+          v-if="databaseGroups.length > 0"
           v-model="showGroupDropdown"
           offset-y
           z-index="50100"
