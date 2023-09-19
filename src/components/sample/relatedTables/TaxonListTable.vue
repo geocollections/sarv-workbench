@@ -59,6 +59,26 @@
           {{ item.taxon.taxon }}
         </router-link>
       </template>
+      <template v-slot:item.preparation="{ item }">
+        <router-link
+          v-if="$route.meta.isEdit"
+          :to="{ path: '/preparation/' + item.preparation }"
+          :title="$t('editPreparation.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.preparation__preparation_number }}
+        </router-link>
+        <router-link
+          v-else-if="item.preparation"
+          :to="{ path: '/taxon/' + item.preparation }"
+          :title="$t('editPreparation.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.preparation.preparation_number }}
+        </router-link>
+      </template>
 
       <template v-slot:item.agent_identified="{ item }">
         <router-link
@@ -162,6 +182,21 @@
                   />
                 </v-col>
 
+                <v-col cols="12" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.preparation"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.preparation"
+                    :loading="autocomplete.loaders.preparation"
+                    item-text="preparation_number"
+                    :label="$t('taxon.preparation')"
+                    is-link
+                    immediate
+                    route-object="preparation"
+                    is-searchable
+                    v-on:search:items="autocompletePreparation"
+                  />
+                </v-col>
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
                     v-model="item.frequency"
@@ -261,6 +296,7 @@ import DateWrapper from "../../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
+import { autocompleteSearch } from "../../../assets/js/api/apiCalls";
 
 export default {
   name: "TaxonListTable",
@@ -309,6 +345,7 @@ export default {
     headers: [
       { text: "taxon.taxon", value: "taxon" },
       { text: "taxon.taxon_free", value: "name" },
+      { text: "taxon.preparation", value: "preparation" },
       { text: "taxon.abundance", value: "frequency" },
       { text: "taxon.det_agent", value: "agent_identified" },
       { text: "taxon.det_date", value: "date_identified" },
@@ -325,6 +362,7 @@ export default {
     dialog: false,
     item: {
       taxon: null,
+      preparation: null,
       name: "",
       frequency: "",
       agent_identified: null,
@@ -337,9 +375,11 @@ export default {
     autocomplete: {
       taxon: [],
       agent: [],
+      preparation: [],
       loaders: {
         taxon: false,
         agent: false,
+        preparation: false,
       },
     },
   }),
@@ -358,6 +398,7 @@ export default {
     resetItem() {
       this.item = {
         taxon: null,
+        preparation: null,
         name: "",
         frequency: "",
         agent_identified: null,
@@ -367,6 +408,16 @@ export default {
         is_private: false,
         remarks: "",
       };
+    },
+    async autocompletePreparation(value) {
+      this.autocomplete.loaders.preparation = true;
+      let query = `preparation/?sample=${this.$route.params.id}&fields=id,preparation_number`;
+      if (value) {
+        query += `&multi_search=value:${value};fields:preparation_number,id;lookuptype:icontains`;
+      }
+      const res = await autocompleteSearch(query);
+      this.autocomplete.preparation = res.data.results;
+      this.autocomplete.loaders.preparation = false;
     },
 
     setItemFields(item) {
@@ -381,6 +432,16 @@ export default {
       } else if (item.taxon !== null) {
         this.item.taxon = item.taxon;
         this.autocomplete.taxon.push(this.item.taxon);
+      }
+      if (typeof item.preparation !== "object" && item.preparation !== null) {
+        this.item.preparation = {
+          id: item.preparation,
+          preparation_number: item.preparation__preparation_number,
+        };
+        this.autocomplete.preparation.push(this.item.preparation);
+      } else if (item.preparation !== null) {
+        this.item.preparation = item.preparation;
+        this.autocomplete.preparation.push(this.item.preparation);
       }
 
       if (
