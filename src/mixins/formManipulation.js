@@ -8,6 +8,7 @@ import {
   postRequest,
 } from "@/assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
+import { fetchUserDefaultPermissions } from "../assets/js/api/apiCalls";
 
 const formManipulation = {
   mixins: [toastMixin],
@@ -410,7 +411,7 @@ const formManipulation = {
       }
     },
 
-    addFileAsRelatedDataNew(
+    async addFileAsRelatedDataNew(
       files,
       relatedObject,
       singleFileMetadata,
@@ -426,7 +427,13 @@ const formManipulation = {
       let formData = new FormData();
 
       let notYetUploadedFiles = files.filter((file) => !file.isAlreadyUploaded);
-
+      const defaultPerms = await fetchUserDefaultPermissions();
+      const perms = {
+        groups_view: defaultPerms.data.groups_view.map((perm) => perm.id),
+        groups_change: defaultPerms.data.groups_change.map((perm) => perm.id),
+        users_view: defaultPerms.data.users_view.map((perm) => perm.id),
+        users_change: defaultPerms.data.users_change.map((perm) => perm.id),
+      };
       notYetUploadedFiles.forEach((file, index) => {
         if (!file.isAlreadyUploaded) {
           let newUploadableObject = {
@@ -451,6 +458,7 @@ const formManipulation = {
             related_data: {
               [attachment_link]: [{ id: this[relatedObject].id }],
             },
+            initial_permissions: perms,
           };
 
           if (singleFileMetadata)
