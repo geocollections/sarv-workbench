@@ -4631,32 +4631,34 @@ export default {
           }
         });
 
-        fetchObjectPermissions(this.attachment.id, "attachment").then((res) => {
-          this.currentPermissions.groups_change =
-            res.data.group
-              ?.filter(
-                (perm) => perm.permission__codename === "change_attachment"
-              )
-              .map((perm) => perm.group_id) ?? [];
-          this.currentPermissions.groups_view =
-            res.data.group
-              ?.filter(
-                (perm) => perm.permission__codename === "view_attachment"
-              )
-              .map((perm) => perm.group_id) ?? [];
-          this.currentPermissions.users_change =
-            res.data.user
-              ?.filter(
-                (perm) => perm.permission__codename === "change_attachment"
-              )
-              .map((perm) => perm.user_id) ?? [];
-          this.currentPermissions.users_view =
-            res.data.user
-              ?.filter(
-                (perm) => perm.permission__codename === "view_attachment"
-              )
-              .map((perm) => perm.user_id) ?? [];
-        });
+        fetchObjectPermissions(this.$route.params.id, "attachment").then(
+          (res) => {
+            this.currentPermissions.groups_change =
+              res.data.group
+                ?.filter(
+                  (perm) => perm.permission__codename === "change_attachment"
+                )
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.groups_view =
+              res.data.group
+                ?.filter(
+                  (perm) => perm.permission__codename === "view_attachment"
+                )
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.users_change =
+              res.data.user
+                ?.filter(
+                  (perm) => perm.permission__codename === "change_attachment"
+                )
+                .map((perm) => perm.user_id) ?? [];
+            this.currentPermissions.users_view =
+              res.data.user
+                ?.filter(
+                  (perm) => perm.permission__codename === "view_attachment"
+                )
+                .map((perm) => perm.user_id) ?? [];
+          }
+        );
         this.loadAutocompleteFields(false, true);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
