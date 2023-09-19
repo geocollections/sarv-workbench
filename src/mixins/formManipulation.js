@@ -344,11 +344,18 @@ const formManipulation = {
     },
 
     // Currently this method has only one use case and it is in Reference.vue when adding digital version (pdf)
-    addFileAsObject(files, relatedObject) {
+    async addFileAsObject(files, relatedObject) {
       let formData = new FormData();
 
       let notYetUploadedFiles = files.filter((file) => !file.isAlreadyUploaded);
 
+      const defaultPerms = await fetchUserDefaultPermissions();
+      const perms = {
+        groups_view: defaultPerms.data.groups_view.map((perm) => perm.id),
+        groups_change: defaultPerms.data.groups_change.map((perm) => perm.id),
+        users_view: defaultPerms.data.users_view.map((perm) => perm.id),
+        users_change: defaultPerms.data.users_change.map((perm) => perm.id),
+      };
       notYetUploadedFiles.forEach((file, index) => {
         formData.append(
           "data",
@@ -367,6 +374,7 @@ const formManipulation = {
             is_private: !this[relatedObject].is_oa,
             specimen_image_attachment: relatedObject === "reference" ? 4 : 3,
             [relatedObject]: this[relatedObject].id,
+            initial_permissions: perms,
           })
         );
 
