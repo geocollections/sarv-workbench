@@ -2124,7 +2124,11 @@
     "taxa": "Taxa",
     "link": "Link",
     "sample__locality__locality": "Locality",
-    "sample__old_number": "Old sample number"
+    "sample__old_number": "Old sample number",
+    "relatedTables": {
+      "attachment_link": "Attachments",
+      "taxon_list": "Identified taxa"
+    }
   },
   "reference": {
     "attachment__filename": "Filename",

@@ -3212,6 +3212,15 @@ export function fetchLinkedTaxa(data, prepId) {
     );
   }
 }
+export function fetchPreparationTaxonList(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `taxon_list/?preparation=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
 
 /*************************
  ***  PREPARATION END  ***

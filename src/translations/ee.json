@@ -2124,7 +2124,11 @@
     "taxa": "Taksonid",
     "link": "Link",
     "sample__locality__locality": "Lokaliteet",
-    "sample__old_number": "Vana proovi number"
+    "sample__old_number": "Vana proovi number",
+    "relatedTables": {
+      "attachment_link": "Manused",
+      "taxon_list": "Taksonid"
+    }
   },
   "reference": {
     "attachment__filename": "Failinimi",
