@@ -4460,7 +4460,12 @@ export function fetchSiteGroundwaters(data, dynamicSearch) {
 /************************
  *** DATABASE GROUP START ***
  ************************/
+
 export function fetchDatabaseGroups() {
+  return get(`database-groups/`, api.accountsUrl);
+}
+
+export function fetchUserDatabaseGroups() {
   return get(`user/database-groups/`, api.accountsUrl);
 }
 export function changeDatabaseGroup(database) {

@@ -175,7 +175,7 @@
 <script>
 import AutocompleteWrapper from "./inputs/AutocompleteWrapper";
 import {
-  fetchGroups,
+  fetchDatabaseGroups,
   fetchObjectGroupPermissions,
   fetchObjectPermissions,
   fetchObjectUserPermissions,
@@ -221,10 +221,8 @@ export default {
     },
   }),
   async mounted() {
-    if (!this.$route.meta.isEdit) {
-      const defaultPerms = await fetchUserDefaultPermissions();
-      this.object_permissions = defaultPerms.data;
-    }
+    const defaultPerms = await fetchUserDefaultPermissions();
+    this.object_permissions = defaultPerms.data;
     this.getAutocompletes();
   },
   methods: {
@@ -336,8 +334,15 @@ export default {
     },
 
     getAutocompletes() {
-      fetchGroups().then((response) => {
-        this.autocomplete.groups = this.handleResponse(response);
+      fetchDatabaseGroups().then((response) => {
+        this.autocomplete.groups = this.handleResponse(response).map(
+          (databaseGroup) => {
+            return {
+              id: databaseGroup.group,
+              name: databaseGroup.acronym,
+            };
+          }
+        );
       });
 
       fetchUsers().then((response) => {

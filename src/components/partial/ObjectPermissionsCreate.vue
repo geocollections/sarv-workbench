@@ -165,10 +165,8 @@
 <script>
 import AutocompleteWrapper from "./inputs/AutocompleteWrapper";
 import {
-  fetchGroups,
-  fetchObjectGroupPermissions,
+  fetchDatabaseGroups,
   fetchObjectPermissions,
-  fetchObjectUserPermissions,
   fetchUserDefaultPermissions,
   fetchUsers,
   postRequest,
@@ -341,8 +339,15 @@ export default {
     },
 
     getAutocompletes() {
-      fetchGroups().then((response) => {
-        this.autocomplete.groups = this.handleResponse(response);
+      fetchDatabaseGroups().then((response) => {
+        this.autocomplete.groups = this.handleResponse(response).map(
+          (databaseGroup) => {
+            return {
+              id: databaseGroup.group,
+              name: databaseGroup.acronym,
+            };
+          }
+        );
       });
 
       fetchUsers().then((response) => {

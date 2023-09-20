@@ -221,7 +221,7 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import DrawerLeft from "./DrawerLeft";
 import DrawerRight from "./DrawerRight";
 import {
-  fetchDatabaseGroups,
+  fetchUserDatabaseGroups,
   changeDatabaseGroup,
 } from "../../../assets/js/api/apiCalls";
 export default {
@@ -280,7 +280,7 @@ export default {
   },
   async created() {
     this.fetchActiveSarvIssues();
-    this.databaseGroups = (await fetchDatabaseGroups()).data;
+    this.databaseGroups = (await fetchUserDatabaseGroups()).data;
   },
   methods: {
     ...mapActions("settings", [
