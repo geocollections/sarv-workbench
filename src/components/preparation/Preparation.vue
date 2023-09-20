@@ -319,7 +319,7 @@
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
-          <span>{{ $t("sample.relatedTables." + tab.name) }}</span>
+          <span>{{ $t("preparation.relatedTables." + tab.name) }}</span>
           <span class="ml-1">
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
