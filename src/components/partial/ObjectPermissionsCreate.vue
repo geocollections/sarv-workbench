@@ -173,6 +173,7 @@ import {
 } from "../../assets/js/api/apiCalls";
 import toastMixin from "../../mixins/toastMixin";
 import { isEqual } from "lodash";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ObjectPermissionsCreate",
@@ -212,6 +213,25 @@ export default {
     if (!this.$route.meta.isEdit) {
       const defaultPerms = await fetchUserDefaultPermissions();
       this.object_permissions = defaultPerms.data;
+
+      if (this.getDatabaseId !== null) {
+        if (
+          !this.object_permissions.groups_change.includes(
+            (groupId) => groupId === this.getDatabaseId
+          )
+        ) {
+          this.object_permissions.groups_change.push({
+            id: this.getDatabaseId,
+          });
+        }
+        if (
+          !this.object_permissions.groups_view.includes(
+            (groupId) => groupId === this.getDatabaseId
+          )
+        ) {
+          this.object_permissions.groups_view.push({ id: this.getDatabaseId });
+        }
+      }
     }
     this.getAutocompletes();
   },
@@ -229,6 +249,9 @@ export default {
       },
       deep: true,
     },
+  },
+  computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
   },
   methods: {
     getObjectPerms() {
