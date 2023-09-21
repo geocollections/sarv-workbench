@@ -849,8 +849,8 @@ const formManipulation = {
           image_ids: [this[object].id],
           degrees: degrees,
         };
-
-        formData.append("data", JSON.stringify({ ...data }));
+        formData.append("image_ids", data.image_ids);
+        formData.append("degrees", data.degrees);
 
         const response = await fetchRotateImage(formData);
 
