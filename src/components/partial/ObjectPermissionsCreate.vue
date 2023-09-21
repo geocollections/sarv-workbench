@@ -216,8 +216,8 @@ export default {
 
       if (this.getDatabaseId !== null) {
         if (
-          !this.object_permissions.groups_change.includes(
-            (groupId) => groupId === this.getDatabaseId
+          !this.object_permissions.groups_change.some(
+            (group) => group.id === this.getDatabaseId
           )
         ) {
           this.object_permissions.groups_change.push({
@@ -225,8 +225,8 @@ export default {
           });
         }
         if (
-          !this.object_permissions.groups_view.includes(
-            (groupId) => groupId === this.getDatabaseId
+          !this.object_permissions.groups_view.some(
+            (group) => group.id === this.getDatabaseId
           )
         ) {
           this.object_permissions.groups_view.push({ id: this.getDatabaseId });
