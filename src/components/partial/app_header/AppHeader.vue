@@ -93,10 +93,10 @@
             dense
             style="border-radius: 0"
           >
-            <v-list-item @click="handleDatabaseGroupChange({ id: null })">
-              <v-list-item-title>{{ $t("groups.all") }}</v-list-item-title>
-            </v-list-item>
-            <v-divider />
+            <!-- <v-list-item @click="handleDatabaseGroupChange({ id: null })"> -->
+            <!--   <v-list-item-title>{{ $t("groups.all") }}</v-list-item-title> -->
+            <!-- </v-list-item> -->
+            <!-- <v-divider /> -->
             <v-list-item
               v-for="(group, index) in databaseGroups"
               :key="index"
