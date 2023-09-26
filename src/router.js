@@ -67,6 +67,19 @@ const router = new Router({
       },
     },
     {
+      path: "/",
+      component: () => import("./views/AppLayout.vue"),
+      children: [
+        {
+          path: "/references",
+          component: () => import("./views/ReferenceList.vue"),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+      ],
+    },
+    {
       path: "/dashboard",
       component: Dashboard,
       children: [

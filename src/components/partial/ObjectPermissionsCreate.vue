@@ -9,7 +9,7 @@
         class="card-title--clickable"
         @click="block.permissions = !block.permissions"
       >
-        <span>{{ $t("permissions.title") }}</span>
+        <span>{{ $t(title) }}</span>
         <v-icon right>fas fa-cogs</v-icon>
       </div>
       <v-spacer></v-spacer>
@@ -26,6 +26,9 @@
 
     <transition>
       <div v-show="block.permissions" class="pa-1">
+        <v-card-text v-if="message.length > 0" class="py-0">
+          {{ $t(message) }}
+        </v-card-text>
         <v-row no-gutters>
           <!-- VIEW AND EDIT -->
           <v-col cols="12" md="6" class="pa-1">
@@ -180,6 +183,14 @@ export default {
   components: { AutocompleteWrapper },
   mixins: [toastMixin],
   props: {
+    title: {
+      type: String,
+      default: "permissions.title",
+    },
+    message: {
+      type: String,
+      default: "",
+    },
     bodyColor: {
       type: String,
       required: false,

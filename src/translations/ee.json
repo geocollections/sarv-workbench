@@ -3026,8 +3026,10 @@
   },
   "permissions": {
     "title": "Juurdepääsuõigused",
-    "title_default": "Objekti vaikimisi juurdepääsuõigused",
-    "default_permissions_message": "Järgnevad õigused lisatakse kõigile objektidele, millele saab õiguseid lisada",
+    "title_default": "Kirje vaikimisi juurdepääsuõigused",
+    "title_import": "Imporditud kirjete juurdepääsuõigused",
+    "default_permissions_message": "Järgnevad õigused lisatakse kõigile kirjetele, millele saab õiguseid lisada",
+    "import_permissions_message": "Järgnevad õigused lisatakse kõigile failist imporditud kirjetele",
     "group": "Grupp",
     "user": "Kasutaja",
     "view_perms_title": "Vaatamise õigus:",

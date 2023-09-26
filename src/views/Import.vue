@@ -16,7 +16,20 @@
             />
           </v-col>
         </v-row>
-
+      </div>
+    </v-card>
+    <v-row no-gutters class="my-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          title="permissions.title_import"
+          message="permissions.import_permissions_message"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
+    <v-card
+      ><div>
         <v-row no-gutters>
           <v-col cols="12" class="pa-1 font-weight-bold">Request info:</v-col>
 
@@ -109,22 +122,29 @@
 </template>
 
 <script>
-import SpinnerWrapper from "@/components/partial/SpinnerWrapper";
-import FileInput from "@/components/partial/inputs/FileInput";
+import SpinnerWrapper from "@/components/partial/SpinnerWrapper.vue";
+import FileInput from "@/components/partial/inputs/FileInput.vue";
 import toastMixin from "@/mixins/toastMixin";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { postRequest } from "@/assets/js/api/apiCalls";
+import ObjectPermissionsCreate from "../components/partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Import",
 
-  components: { SpinnerWrapper, FileInput },
+  components: { SpinnerWrapper, FileInput, ObjectPermissionsCreate },
 
   mixins: [toastMixin],
 
   data: () => ({
     url: `${process.env.VUE_APP_API_URL}/api/v0/import/`,
     importResponse: null,
+    initialPermissions: {
+      groups_view: [],
+      groups_change: [],
+      users_view: [],
+      users_change: [],
+    },
     file: null,
     attachment: null,
     records: {
@@ -215,6 +235,10 @@ export default {
           formData.append("file" + [index], file);
         });
       }
+      formData.append(
+        "initial_permissions",
+        JSON.stringify(this.initialPermissions)
+      );
 
       try {
         return await postRequest("", formData, this.importUrl);
@@ -235,6 +259,7 @@ export default {
         }, Date: ${new Date().toISOString().split("T")[0]}`,
         is_private: true,
         author: this?.getCurrentUser?.id,
+        initial_permissions: this.initialPermissions,
       };
 
       let formData = new FormData();
@@ -262,6 +287,9 @@ export default {
           this.attachment = null;
         }
       );
+    },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
     },
 
     async getNewlyAddedRecords() {

@@ -3024,8 +3024,10 @@
   },
   "permissions": {
     "title": "Data access permissions",
-    "title_default": " Object default access permissions",
+    "title_default": "Default access permissions for record",
+    "title_import": "Access permissions for imported records",
     "default_permissions_message": "These permissions will be added automatically to any object that requires permissions",
+    "import_permissions_message": "These permissions will be added automatically to every record that is imported from the file",
     "group": "Group",
     "user": "User",
     "view_perms_title": "View only:",

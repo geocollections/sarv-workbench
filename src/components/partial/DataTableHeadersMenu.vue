@@ -11,19 +11,21 @@
     :close-on-content-click="false"
   >
     <template #activator="menu">
-      <v-tooltip bottom open-delay="500">
-        <template #activator="tooltip">
-          <v-btn
-            icon
-            class="mr-2"
-            v-bind="{ ...menu.attrs, ...tooltip.attrs }"
-            v-on="{ ...menu.on, ...tooltip.on }"
-          >
-            <v-icon>fas fa-table</v-icon>
-          </v-btn>
-        </template>
-        <span>{{ $t("table.tooltipConfig") }}</span>
-      </v-tooltip>
+      <slot name="activator" v-bind="menu">
+        <v-tooltip bottom open-delay="500">
+          <template #activator="tooltip">
+            <v-btn
+              icon
+              class="mr-2"
+              v-bind="{ ...menu.attrs, ...tooltip.attrs }"
+              v-on="{ ...menu.on, ...tooltip.on }"
+            >
+              <v-icon>fas fa-table</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ $t("table.tooltipConfig") }}</span>
+        </v-tooltip>
+      </slot>
     </template>
     <v-card>
       <v-list flat class="">
