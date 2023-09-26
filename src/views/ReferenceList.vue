@@ -1,22 +1,6 @@
 <template>
-  <!-- <div class="d-flex flex-row"> -->
-  <!-- <div -->
-  <!--   style=" -->
-  <!--     min-width: 256px; -->
-  <!--     background-color: white; -->
-  <!--     border-right: 1px solid lightgray; -->
-  <!--   " -->
-  <!-- > -->
-  <!--   <h2>Filters</h2> -->
-  <!--   <filter-builder-vertical :filters="filters" :filter-map="filterMap" /> -->
-  <!-- </div> -->
   <div>
     <h1 class="pa-2">References</h1>
-    <!-- <expandable-card> -->
-    <!--   <template #title>Filters</template> -->
-    <!--   <filter-builder :filters="filters" :filter-map="filterMap" /> -->
-    <!-- </expandable-card> -->
-    <!-- <filter-summary :filters="filters" /> -->
     <data-table-reference
       :filters="filters"
       :items="references"
@@ -27,17 +11,13 @@
       @export="handleExport"
     />
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
 import axios from "axios";
 import store from "@/store";
 import DataTableReference from "../components/DataTableReference.vue";
-import FilterBuilder from "../components/FilterBuilder.vue";
-import FilterSummary from "../components/FilterSummary.vue";
-import ExpandableCard from "../components/ExpandableCard.vue";
-import FilterBuilderVertical from "../components/FilterBuilderVertical.vue";
+
 const axiosInstance = axios.create({
   baseURL: "https://rwapi-dev.geoloogia.info",
   headers: {
