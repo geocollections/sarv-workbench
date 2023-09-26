@@ -1,4 +1,5 @@
-import { cloneDeep } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
+import dayjs from "dayjs";
 
 const relatedDataMixin = {
   data: () => ({
@@ -105,7 +106,8 @@ const relatedDataMixin = {
 
     updateUserInputtedDate(fieldToBeUpdated, date) {
       if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
+        const formattedDate = dayjs(date, "YYYY-MM-DD", true);
+        if (formattedDate.isValid()) {
           this.item[fieldToBeUpdated] = date;
         }
       }

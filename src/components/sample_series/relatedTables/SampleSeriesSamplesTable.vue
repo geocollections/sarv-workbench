@@ -235,7 +235,7 @@
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import { cloneDeep } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 export default {
   name: "SampleSeriesSamplesTable",
 

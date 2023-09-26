@@ -38,7 +38,9 @@
                     <td>
                       <b>{{ entity.user }}</b>
                     </td>
-                    <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
+                    <td>
+                      {{ $dayjs(entity.time).format("DD.MM.YYYY | HH:mm:ss") }}
+                    </td>
                     <td>{{ entity.command }}</td>
                     <td style="max-width: 25rem; padding: 0.3rem; margin: 0">
                       <div style="max-height: 10rem !important; overflow: auto">

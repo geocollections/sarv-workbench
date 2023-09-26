@@ -2,7 +2,7 @@ module.exports = {
   // Disable source viewing in production
   productionSourceMap: false,
   transpileDependencies: ["vuetify"],
-  parallel: process.env.CI ? +process.env.CIRCLE_NODE_TOTAL : undefined,
+  parallel: import.meta.env.CI ? +import.meta.env.CIRCLE_NODE_TOTAL : undefined,
   devServer: {
     allowedHosts: "all",
   },

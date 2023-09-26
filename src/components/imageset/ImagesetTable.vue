@@ -42,13 +42,14 @@
     </template>
 
     <template v-slot:item.date_added="{ item }">
-      <span>{{ item.date_added | moment("YYYY-DD-MM HH:mm") }}</span>
+      <span v-if="$dayjs(item.date_added).isValid()">
+        {{ $dayjs(item.date_added).format("YYYY-DD-MM HH:mm") }}
+      </span>
     </template>
   </v-data-table>
 </template>
 
 <script>
-import moment from "moment";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {

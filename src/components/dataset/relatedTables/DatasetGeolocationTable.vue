@@ -247,7 +247,7 @@ import PolygonMap from "@/components/partial/PolygonMap";
 import AutocompleteWrapper from "@/components/partial/inputs/AutocompleteWrapper";
 import InputWrapper from "@/components/partial/inputs/InputWrapper";
 import autocompleteMixin from "@/mixins/autocompleteMixin";
-import { cloneDeep } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 
 export default {
   name: "DatasetGeolocationTable",

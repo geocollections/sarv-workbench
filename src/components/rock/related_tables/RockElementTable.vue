@@ -163,7 +163,7 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
+import  cloneDeep  from "lodash/cloneDeep";
 import { fetchListElement } from "../../../assets/js/api/apiCalls";
 
 export default {

@@ -1,5 +1,5 @@
 import { mapActions, mapState } from "vuex";
-import { cloneDeep } from "lodash";
+import cloneDeep  from "lodash/cloneDeep";
 
 const formSectionsMixin = {
   data: () => ({

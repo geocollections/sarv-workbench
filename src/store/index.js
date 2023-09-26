@@ -47,5 +47,5 @@ export default new Vuex.Store({
     tableHeaders,
   },
   plugins: [vuexLocal.plugin],
-  strict: process.env.NODE_ENV !== "production",
+  strict: import.meta.env.NODE_ENV !== "production",
 });

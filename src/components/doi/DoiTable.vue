@@ -29,9 +29,11 @@
         {{ item.id }}
       </router-link>
     </template>
-
+    @chenfengyuan/vue-qrcode@1
     <template v-slot:item.datacite_created="{ item }">
-      <span>{{ item.datacite_created | moment("YYYY-MM-DD HH:mm") }}</span>
+      <span v-if="$dayjs(item.datacite_created).isValid()">
+        {{ $dayjs(item.datacite_created).format("YYYY-MM-DD HH:mm") }}
+      </span>
     </template>
 
     <template v-slot:item.link="{ item }">
@@ -50,7 +52,6 @@
 </template>
 
 <script>
-import moment from "moment";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
@@ -84,6 +85,9 @@ export default {
       required: false,
       default: "deep-orange",
     },
+  },
+  created() {
+    console.log(this.$dayjs);
   },
   methods: {
     getSarvDoiUrl(doiIdentifier) {

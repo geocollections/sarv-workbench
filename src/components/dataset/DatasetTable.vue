@@ -53,9 +53,9 @@
 
     <template v-slot:item.publication_year="{ item }">
       <span v-if="item.publication_year">{{ item.publication_year }}</span>
-      <span v-else-if="item.date">{{
-        item.date | moment("YYYY-MM-DD HH:mm")
-      }}</span>
+      <span v-else-if="$dayjs(item.date).isValid()">
+        {{ $dayjs(item.date).format("YYYY-MM-DD HH:mm") }}
+      </span>
       <span v-else>{{ item.date_txt }}</span>
     </template>
 

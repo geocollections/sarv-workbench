@@ -308,7 +308,7 @@ export default {
   },
   async mounted() {
     const res = await axios.get(
-      `${process.env.VUE_APP_API_URL}/accounts/dj-rest-auth/socialaccounts`
+      `${import.meta.env.VITE_API_URL}/accounts/dj-rest-auth/socialaccounts`
     );
     this.linkedSocialAccounts = res.data;
   },
@@ -324,7 +324,7 @@ export default {
   },
   methods: {
     getOrcidConnectUrl() {
-      return process.env.VUE_APP_ORCID_CONNECT_URL;
+      return import.meta.env.VITE_ORCID_CONNECT_URL;
     },
     disconnectSocialAccount(item) {
       this.disconnectItem = Object.assign({}, item);
@@ -332,7 +332,7 @@ export default {
     },
     async disconnectSocialAccountConfirm() {
       const res = await axios.post(
-        `${process.env.VUE_APP_API_URL}/accounts/dj-rest-auth/socialaccounts/${this.disconnectItem.id}/disconnect/`
+        `${import.meta.env.VITE_API_URL}/accounts/dj-rest-auth/socialaccounts/${this.disconnectItem.id}/disconnect/`
       );
     },
     closeDelete() {

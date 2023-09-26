@@ -1,6 +1,6 @@
 const config = {
   app: {
-    filesUrl: process.env.VUE_APP_FILES_URL || "/files",
+    filesUrl: import.meta.env.VITE_FILES_URL || "/files",
   },
 };
 

@@ -328,7 +328,7 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
-import { cloneDeep } from "lodash";
+import  cloneDeep  from "lodash/cloneDeep";
 import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
 import { mapGetters } from "vuex";
 

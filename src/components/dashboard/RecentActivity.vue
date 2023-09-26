@@ -36,7 +36,7 @@
                   <div v-else>{{ entity.table_name }}: {{ entity.row_id }}</div>
                 </td>
                 <td>
-                  {{ entity.time | moment("YYYY-MM-DD HH:mm") }}
+                  {{ $dayjs(entity.time).format("YYYY-MM-DD HH:mm") }}
                 </td>
               </tr>
             </tbody>
@@ -81,7 +81,7 @@
                   <div v-else>{{ entity.table_name }}: {{ entity.row_id }}</div>
                 </td>
                 <td>
-                  {{ entity.time | moment("YYYY-MM-DD HH:mm") }}
+                  {{ $dayjs(entity.time).format("YYYY-MM-DD HH:mm") }}
                 </td>
               </tr>
             </tbody>
@@ -94,7 +94,6 @@
 
 <script>
 import { fetchLatestLogs } from "@/assets/js/api/apiCalls";
-import moment from "moment";
 import { mapGetters } from "vuex";
 
 export default {

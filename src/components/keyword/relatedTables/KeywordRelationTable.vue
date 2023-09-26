@@ -169,7 +169,7 @@
 <script>
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { cloneDeep } from "lodash";
+import  cloneDeep  from "lodash/cloneDeep";
 import { fetchKeywordRelationType } from "../../../assets/js/api/apiCalls";
 
 export default {
