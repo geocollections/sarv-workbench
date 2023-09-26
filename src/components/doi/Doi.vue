@@ -640,7 +640,24 @@
         :label="$t('common.is_locked')"
         @change="doi.is_locked = !doi.is_locked"
       />
+      <autocomplete-wrapper
+        class="ml-auto"
+        v-model="doi.database"
+        :color="bodyActiveColor"
+        :items="autocomplete.database"
+        :loading="autocomplete.loaders.database"
+        :item-text="nameLabel"
+        :label="$t('common.institution')"
+      />
     </div>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
 
     <!-- DOI METADATA REGISTER and UPDATE BUTTONS -->
     <div class="row mt-3">
@@ -875,9 +892,11 @@ import {
   fetchDoiUsingEGF,
   fetchAgentUsingName,
   fetchDoiPublisher,
+  fetchDatabase,
+  fetchObjectPermissions,
 } from "@/assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -892,6 +911,7 @@ import toastMixin from "../../mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
 import Pagination from "@/components/partial/Pagination";
 import  orderBy  from "lodash/orderBy";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   components: {
@@ -905,6 +925,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -1019,6 +1040,9 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setTab(type) {
       if (type) {
@@ -1044,6 +1068,18 @@ export default {
         ],
         activeTab: "doi_agent",
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "identifier",
@@ -1072,6 +1108,7 @@ export default {
           "datacite_created",
           "datacite_updated",
           "egf",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -1090,6 +1127,7 @@ export default {
             locality: false,
             doi_date_type: false,
             attachment_public: false,
+            database: false,
           },
           resource_type: [],
           doi_publisher: [],
@@ -1106,6 +1144,7 @@ export default {
           locality: [],
           doi_date_type: [],
           attachment: [],
+          database: [],
         },
         requiredFields: [
           "resource_type",
@@ -1155,6 +1194,12 @@ export default {
 
       if (!this.$route.meta.isEdit) {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+
+        if (this.getDatabaseId !== null) {
+          this.doi.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
 
       if (this.$route.meta.isEdit) {
@@ -1182,6 +1227,24 @@ export default {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
+          fetchObjectPermissions(this.doi.id, "doi").then((res) => {
+            this.currentPermissions.groups_change =
+              res.data.group
+                ?.filter((perm) => perm.permission__codename === "change_doi")
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.groups_view =
+              res.data.group
+                ?.filter((perm) => perm.permission__codename === "view_doi")
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.users_change =
+              res.data.user
+                ?.filter((perm) => perm.permission__codename === "change_doi")
+                .map((perm) => perm.user_id) ?? [];
+            this.currentPermissions.users_view =
+              res.data.user
+                ?.filter((perm) => perm.permission__codename === "view_doi")
+                .map((perm) => perm.user_id) ?? [];
+          });
 
           this.checkMetadata();
           this.checkDoiUrl();
@@ -1234,6 +1297,10 @@ export default {
       fetchListLicences().then(
         (response) =>
           (this.autocomplete.licence = this.handleResponse(response))
+      );
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
       );
     },
 
@@ -1396,9 +1463,16 @@ export default {
         } else uploadableObject.related_data.doi_date = null;
       }
 
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.initial_permissions = this.initialPermissions;
+      }
+
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
+      }
 
       return JSON.stringify(uploadableObject);
     },
@@ -1421,6 +1495,11 @@ export default {
         id: obj.language,
         value: obj.language__value,
         value_en: obj.language__value_en,
+      };
+      this.doi.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
       };
       if (this.isNotEmpty(obj.copyright_agent)) {
         this.doi.copyright_agent = {

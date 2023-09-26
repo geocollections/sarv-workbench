@@ -8,6 +8,7 @@ import {
   postRequest,
 } from "@/assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
+import { fetchUserDefaultPermissions } from "../assets/js/api/apiCalls";
 
 const formManipulation = {
   mixins: [toastMixin],
@@ -343,11 +344,18 @@ const formManipulation = {
     },
 
     // Currently this method has only one use case and it is in Reference.vue when adding digital version (pdf)
-    addFileAsObject(files, relatedObject) {
+    async addFileAsObject(files, relatedObject) {
       let formData = new FormData();
 
       let notYetUploadedFiles = files.filter((file) => !file.isAlreadyUploaded);
 
+      const defaultPerms = await fetchUserDefaultPermissions();
+      const perms = {
+        groups_view: defaultPerms.data.groups_view.map((perm) => perm.id),
+        groups_change: defaultPerms.data.groups_change.map((perm) => perm.id),
+        users_view: defaultPerms.data.users_view.map((perm) => perm.id),
+        users_change: defaultPerms.data.users_change.map((perm) => perm.id),
+      };
       notYetUploadedFiles.forEach((file, index) => {
         formData.append(
           "data",
@@ -366,6 +374,7 @@ const formManipulation = {
             is_private: !this[relatedObject].is_oa,
             specimen_image_attachment: relatedObject === "reference" ? 4 : 3,
             [relatedObject]: this[relatedObject].id,
+            initial_permissions: perms,
           })
         );
 
@@ -383,17 +392,21 @@ const formManipulation = {
               if (this.$route.meta.object === "reference") {
                 fetchAttachmentForReference(this.$route.params.id).then(
                   (response) => {
-                    const res = this.handleResponse(response);
-                    this.attachment = {
-                      id: res.attachment__id,
-                      attachment_format_value:
-                        res.attachment__attachment_format_value,
-                      author__agent: res.attachment__author__agent,
-                      description: res.attachment__description,
-                      description_en: res.attachment__description_en,
-                      original_filename: res.attachment__original_filename,
-                      uuid_filename: res.attachment__uuid_filename,
-                    };
+                    const res = this.handleResponse(response)[0];
+                    if (res.attachment__id !== null) {
+                      this.attachment = [
+                        {
+                          id: res.attachment__id,
+                          attachment_format_value:
+                            res.attachment__attachment_format_value,
+                          author__agent: res.attachment__author__agent,
+                          description: res.attachment__description,
+                          description_en: res.attachment__description_en,
+                          original_filename: res.attachment__original_filename,
+                          uuid_filename: res.attachment__uuid_filename,
+                        },
+                      ];
+                    }
                   }
                 );
               }
@@ -406,7 +419,7 @@ const formManipulation = {
       }
     },
 
-    addFileAsRelatedDataNew(
+    async addFileAsRelatedDataNew(
       files,
       relatedObject,
       singleFileMetadata,
@@ -422,7 +435,13 @@ const formManipulation = {
       let formData = new FormData();
 
       let notYetUploadedFiles = files.filter((file) => !file.isAlreadyUploaded);
-
+      const defaultPerms = await fetchUserDefaultPermissions();
+      const perms = {
+        groups_view: defaultPerms.data.groups_view.map((perm) => perm.id),
+        groups_change: defaultPerms.data.groups_change.map((perm) => perm.id),
+        users_view: defaultPerms.data.users_view.map((perm) => perm.id),
+        users_change: defaultPerms.data.users_change.map((perm) => perm.id),
+      };
       notYetUploadedFiles.forEach((file, index) => {
         if (!file.isAlreadyUploaded) {
           let newUploadableObject = {
@@ -447,6 +466,7 @@ const formManipulation = {
             related_data: {
               [attachment_link]: [{ id: this[relatedObject].id }],
             },
+            initial_permissions: perms,
           };
 
           if (singleFileMetadata)
@@ -830,8 +850,8 @@ const formManipulation = {
           image_ids: [this[object].id],
           degrees: degrees,
         };
-
-        formData.append("data", JSON.stringify({ ...data }));
+        formData.append("image_ids", data.image_ids);
+        formData.append("degrees", data.degrees);
 
         const response = await fetchRotateImage(formData);
 

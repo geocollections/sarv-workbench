@@ -132,6 +132,19 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="deaccession.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -141,10 +154,13 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import { fetchDeaccessionDetail } from "../../assets/js/api/apiCalls";
+import {
+  fetchDeaccessionDetail,
+  fetchDatabase,
+} from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import DateWrapper from "../partial/inputs/DateWrapper";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "Deaccession",
@@ -221,12 +237,15 @@ export default {
           "number_items",
           "description",
           "remarks",
+          "database",
         ],
         autocomplete: {
           loaders: {
             agent: false,
+            database: false,
           },
           agent: [],
+          database: [],
         },
         deaccession: {},
         requiredFields: ["number"],
@@ -241,7 +260,15 @@ export default {
       this.loadFullInfo();
     },
 
+    loadAutocompleteFields() {
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
+      );
+    },
     loadFullInfo() {
+      this.loadAutocompleteFields();
+
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
@@ -262,6 +289,11 @@ export default {
         });
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.deaccession.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -287,6 +319,12 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
+      this.deaccession.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
+
       if (this.isNotEmpty(obj.agent_kandis)) {
         this.deaccession.agent_kandis = {
           id: obj.agent_kandis,

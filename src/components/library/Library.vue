@@ -315,6 +315,14 @@
         />
       </v-col>
     </v-row>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -338,6 +346,7 @@ import LibraryReferenceTable from "./relatedTables/LibraryReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import Editor from "../partial/inputs/Editor";
 import Pagination from "@/components/partial/Pagination";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Library",
@@ -350,6 +359,7 @@ export default {
     TextareaWrapper,
     InputWrapper,
     LibraryReferenceListView,
+    ObjectPermissionsCreate,
   },
   props: {
     isBodyActiveColorDark: {
@@ -444,6 +454,9 @@ export default {
     setTab(type) {
       this.activeTab = type;
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
@@ -458,6 +471,12 @@ export default {
           },
         ],
         activeTab: "library_reference",
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "id",
@@ -603,6 +622,7 @@ export default {
                 this.relatedData[tab.name].results;
           }
         });
+        uploadableObject.initial_permissions = this.initialPermissions;
       } else {
         // Library agent is not in tab.
         if (this.isNotEmpty(this.relatedData.library_agent)) {

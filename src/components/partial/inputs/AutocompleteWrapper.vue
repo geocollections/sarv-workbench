@@ -80,6 +80,10 @@ export default {
     useCustomState: Boolean,
     noCache: Boolean,
     attachmentRelatedData: Boolean,
+    immediate: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     search: null,
@@ -99,19 +103,22 @@ export default {
     },
   },
   watch: {
-    search(newVal, oldVal) {
-      let currentValue =
-        this.$attrs.value && this.$attrs.value[this.$attrs["item-text"]];
-
-      if (
-        this.isSearchable &&
-        newVal &&
-        newVal.length > 0 &&
-        newVal !== currentValue &&
-        newVal !== oldVal
-      ) {
-        this.$emit("search:items", newVal);
-      }
+    search: {
+      handler(newVal, oldVal) {
+        let currentValue =
+          this.$attrs.value && this.$attrs.value[this.$attrs["item-text"]];
+        if (
+          (this.isSearchable &&
+            newVal &&
+            newVal.length > 0 &&
+            newVal !== currentValue &&
+            newVal !== oldVal) ||
+          this.immediate
+        ) {
+          this.$emit("search:items", newVal);
+        }
+      },
+      immediate: true,
     },
   },
   methods: {

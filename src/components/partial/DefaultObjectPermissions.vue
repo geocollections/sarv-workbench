@@ -9,7 +9,7 @@
         class="card-title--clickable"
         @click="block.permissions = !block.permissions"
       >
-        <span>{{ $t("permissions.title") }}</span>
+        <span>{{ $t("permissions.title_default") }}</span>
         <v-icon right>fas fa-cogs</v-icon>
       </div>
       <v-spacer></v-spacer>
@@ -26,6 +26,9 @@
 
     <transition>
       <div v-show="block.permissions" class="pa-1">
+        <v-card-text class="py-0">
+          {{ $t("permissions.default_permissions_message") }}
+        </v-card-text>
         <v-row no-gutters>
           <!-- VIEW AND EDIT -->
           <v-col cols="12" md="6" class="pa-1">
@@ -49,7 +52,7 @@
               <v-row no-gutters>
                 <v-col cols="12" sm="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="object_permissions.change_group"
+                    v-model="object_permissions.groups_change"
                     :color="bodyActiveColor"
                     :items="autocomplete.groups"
                     :loading="autocomplete.loaders.groups"
@@ -57,8 +60,8 @@
                     :label="$t('permissions.group')"
                     :multiple="true"
                     v-on:chip:close="
-                      object_permissions.change_group.splice(
-                        object_permissions.change_group.findIndex(
+                      object_permissions.groups_change.splice(
+                        object_permissions.groups_change.findIndex(
                           (item) => item.id === $event.id
                         ),
                         1
@@ -70,7 +73,7 @@
 
                 <v-col cols="12" sm="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="object_permissions.change_user"
+                    v-model="object_permissions.users_change"
                     :color="bodyActiveColor"
                     :items="autocomplete.users"
                     :loading="autocomplete.loaders.users"
@@ -78,8 +81,8 @@
                     :label="$t('permissions.user')"
                     :multiple="true"
                     v-on:chip:close="
-                      object_permissions.change_user.splice(
-                        object_permissions.change_user.findIndex(
+                      object_permissions.users_change.splice(
+                        object_permissions.users_change.findIndex(
                           (item) => item.id === $event.id
                         ),
                         1
@@ -114,7 +117,7 @@
               <v-row no-gutters>
                 <v-col cols="12" sm="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="object_permissions.view_group"
+                    v-model="object_permissions.groups_view"
                     :color="bodyActiveColor"
                     :items="autocomplete.groups"
                     :loading="autocomplete.loaders.groups"
@@ -122,8 +125,8 @@
                     :label="$t('permissions.group')"
                     :multiple="true"
                     v-on:chip:close="
-                      object_permissions.view_group.splice(
-                        object_permissions.view_group.findIndex(
+                      object_permissions.groups_view.splice(
+                        object_permissions.groups_view.findIndex(
                           (item) => item.id === $event.id
                         ),
                         1
@@ -135,7 +138,7 @@
 
                 <v-col cols="12" sm="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="object_permissions.view_user"
+                    v-model="object_permissions.users_view"
                     :color="bodyActiveColor"
                     :items="autocomplete.users"
                     :loading="autocomplete.loaders.users"
@@ -143,8 +146,8 @@
                     :label="$t('permissions.user')"
                     :multiple="true"
                     v-on:chip:close="
-                      object_permissions.view_user.splice(
-                        object_permissions.view_user.findIndex(
+                      object_permissions.users_view.splice(
+                        object_permissions.users_view.findIndex(
                           (item) => item.id === $event.id
                         ),
                         1
@@ -157,28 +160,13 @@
             </v-card>
           </v-col>
         </v-row>
-
-        <v-row no-gutters>
-          <v-col cols="12" class="pa-1">
-            <div class="v-messages theme--light">
-              <div class="v-messages__wrapper mb-1">
-                <div class="v-messages__message">
-                  {{ $t("permissions.update_message") }}
-                </div>
-              </div>
-            </div>
-
-            <v-btn
-              :color="bodyActiveColor"
-              dark
-              :title="$t('permissions.update')"
-              @click="updatePermissions"
-            >
-              {{ $t("permissions.update") }}
-              <v-icon small right>fas fa-users-cog</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+        <v-btn
+          class="mx-3 mb-3"
+          :color="bodyActiveColor"
+          dark
+          @click="handleSave"
+          >{{ $t("edit.buttons.save") }}</v-btn
+        >
       </div>
     </transition>
   </v-card>
@@ -191,24 +179,18 @@ import {
   fetchObjectGroupPermissions,
   fetchObjectPermissions,
   fetchObjectUserPermissions,
+  fetchUserDefaultPermissions,
+  changeUserDefaultPermissions,
   fetchUsers,
   postRequest,
 } from "../../assets/js/api/apiCalls";
 import toastMixin from "../../mixins/toastMixin";
 
 export default {
-  name: "ObjectPermissions",
+  name: "DefaultObjectPermissions",
   components: { AutocompleteWrapper },
   mixins: [toastMixin],
   props: {
-    table: {
-      type: String,
-      required: true,
-    },
-    objectData: {
-      type: Object,
-      required: true,
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -222,7 +204,7 @@ export default {
   },
 
   data: () => ({
-    block: { permissions: false },
+    block: { permissions: true },
     autocomplete: {
       loaders: {
         users: false,
@@ -232,27 +214,17 @@ export default {
       groups: [],
     },
     object_permissions: {
-      view_group: [],
-      change_group: [],
-      view_user: [],
-      change_user: [],
+      groups_view: [],
+      groups_change: [],
+      users_view: [],
+      users_change: [],
     },
   }),
-
-  watch: {
-    objectData: {
-      handler: function (newVal) {
-        if (newVal && newVal.id) {
-          if (newVal.id.toString() === this.$route.params.id) {
-            this.getObjectPerms();
-            this.getAutocompletes();
-          }
-        }
-      },
-      immediate: true,
-    },
+  async mounted() {
+    const defaultPerms = await fetchUserDefaultPermissions();
+    this.object_permissions = defaultPerms.data;
+    this.getAutocompletes();
   },
-
   methods: {
     getObjectPerms() {
       if (this.objectData.id && this.table) {
@@ -290,18 +262,18 @@ export default {
             object.username = perm.user__username;
 
             if (perm.permission__codename.includes("change")) {
-              this.object_permissions.change_user.push(object);
+              this.object_permissions.users_change.push(object);
             } else {
-              this.object_permissions.view_user.push(object);
+              this.object_permissions.users_view.push(object);
             }
           } else {
             object.id = perm.group_id;
             object.name = perm.group__name;
 
             if (perm.permission__codename.includes("change")) {
-              this.object_permissions.change_group.push(object);
+              this.object_permissions.groups_change.push(object);
             } else {
-              this.object_permissions.view_group.push(object);
+              this.object_permissions.groups_view.push(object);
             }
           }
         });
@@ -381,6 +353,25 @@ export default {
     handleResponse(response) {
       if (response.status === 200) {
         return response.data.count > 0 ? response.data.results : [];
+      }
+    },
+    async handleSave() {
+      const permsData = {
+        groups_view: this.object_permissions.groups_view.map((perm) => perm.id),
+        groups_change: this.object_permissions.groups_change.map(
+          (perm) => perm.id
+        ),
+        users_view: this.object_permissions.users_view.map((perm) => perm.id),
+        users_change: this.object_permissions.users_change.map(
+          (perm) => perm.id
+        ),
+      };
+      const res = await changeUserDefaultPermissions(permsData);
+
+      if (res.status === 200) {
+        this.toastSuccess({ text: this.$t("messages.settingsSaveSuccess") });
+      } else {
+        this.toastError({ text: this.$t("messages.settingsSaveFail") });
       }
     },
   },

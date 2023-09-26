@@ -49,6 +49,7 @@ const tableHeaderMixin = {
     },
 
     $_tableHeaderMixin_updateTableHeaders(payload) {
+      console.log(payload);
       this.updateTableHeaders(payload);
     },
 

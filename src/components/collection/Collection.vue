@@ -272,6 +272,19 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="collection.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
 
     <!-- REMARKS -->
     <v-card
@@ -378,6 +391,14 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -389,13 +410,16 @@ import {
   fetchCollection,
   fetchListCollectionType,
   fetchSpecimens,
+  fetchDatabase,
+  fetchObjectPermissions,
 } from "../../assets/js/api/apiCalls";
 import  cloneDeep  from "lodash/cloneDeep";
 import SpecimenTable from "../specimen/SpecimenTable";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Collection",
@@ -405,6 +429,7 @@ export default {
     AutocompleteWrapper,
     InputWrapper,
     SpecimenTable,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -427,6 +452,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["collectionSearchParameters"]),
     ...mapState("detail", ["collectionDetail"]),
 
@@ -480,9 +506,24 @@ export default {
 
   methods: {
     ...mapActions("detail", ["saveFields"]),
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
 
     setInitialData() {
       return {
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "number",
@@ -500,6 +541,7 @@ export default {
           "remarks",
           "number_objects",
           "number_types",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -509,6 +551,7 @@ export default {
             locality: false,
             stratigraphy: false,
             reference: false,
+            database: false,
           },
           type: [],
           classification: [],
@@ -516,6 +559,7 @@ export default {
           locality: [],
           stratigraphy: [],
           reference: [],
+          database: [],
         },
         requiredFields: ["collection_id", "number"],
         collection: {},
@@ -586,9 +630,42 @@ export default {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
+          fetchObjectPermissions(this.collection.id, "collection").then(
+            (res) => {
+              this.currentPermissions.groups_change =
+                res.data.group
+                  ?.filter(
+                    (perm) => perm.permission__codename === "change_collection"
+                  )
+                  .map((perm) => perm.group_id) ?? [];
+              this.currentPermissions.groups_view =
+                res.data.group
+                  ?.filter(
+                    (perm) => perm.permission__codename === "view_collection"
+                  )
+                  .map((perm) => perm.group_id) ?? [];
+              this.currentPermissions.users_change =
+                res.data.user
+                  ?.filter(
+                    (perm) => perm.permission__codename === "change_collection"
+                  )
+                  .map((perm) => perm.user_id) ?? [];
+              this.currentPermissions.users_view =
+                res.data.user
+                  ?.filter(
+                    (perm) => perm.permission__codename === "view_collection"
+                  )
+                  .map((perm) => perm.user_id) ?? [];
+            }
+          );
         });
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.collection.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -606,10 +683,14 @@ export default {
         fetchListCollectionType().then(
           (response) => (this.autocomplete.type = this.handleResponse(response))
         );
+        fetchDatabase().then(
+          (response) =>
+            (this.autocomplete.database = this.handleResponse(response))
+        );
       }
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       if (!this.$route.meta.isEdit) {
@@ -628,6 +709,12 @@ export default {
           uploadableObject[key] = null;
         }
       });
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.initial_permissions = this.initialPermissions;
+      }
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -677,6 +764,11 @@ export default {
         };
         this.autocomplete.reference.push(this.collection.reference);
       }
+      this.collection.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
   },
 };

@@ -489,6 +489,14 @@
         />
       </v-col>
     </v-row>
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <object-permissions-create
+          v-if="!$route.meta.isEdit"
+          @change="handlePermissionsChange"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -518,6 +526,7 @@ import DateWrapper from "../partial/inputs/DateWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import FileInput from "../partial/inputs/FileInput";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Project",
@@ -531,6 +540,7 @@ export default {
     MapComponent,
     ExportButtons,
     SiteTable,
+    ObjectPermissionsCreate,
   },
   props: {
     isBodyActiveColorDark: {
@@ -625,7 +635,9 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveProject"]),
     ...mapActions("map", ["updateShowMap"]),
-
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
     fetchLinkedSiteWrapper() {
       return new Promise((resolve) => {
         resolve(
@@ -649,6 +661,12 @@ export default {
           height: 0,
         },
         relatedData: this.setDefaultRalatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "id",
           "name",
@@ -824,6 +842,10 @@ export default {
 
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
+
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.initial_permissions = this.initialPermissions;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

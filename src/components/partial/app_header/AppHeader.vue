@@ -73,16 +73,8 @@
           ENG &nbsp;<span class="flag flag-en flag-squared flag-circle"></span>
         </v-btn>
 
-        <div
-          v-if="databaseGroups.length === 1"
-          :title="$t('common.activeDatabase')"
-          class="text-button font-weight-medium d-flex justify-center align-center px-4"
-        >
-          <v-icon left small>fas fa-database</v-icon>
-          {{ currentGroup.acronym }}
-        </div>
         <v-menu
-          v-else-if="databaseGroups.length > 1"
+          v-if="databaseGroups.length > 0"
           v-model="showGroupDropdown"
           offset-y
           z-index="50100"
@@ -91,7 +83,7 @@
             <v-btn text v-on="on" :title="$t('common.activeDatabase')">
               {{ currentGroup.acronym }}&nbsp;
               <v-icon>{{
-                showDropdown ? "fas fa-caret-up" : "fas fa-caret-down"
+                showGroupDropdown ? "fas fa-caret-up" : "fas fa-caret-down"
               }}</v-icon>
             </v-btn>
           </template>
@@ -101,6 +93,10 @@
             dense
             style="border-radius: 0"
           >
+            <!-- <v-list-item @click="handleDatabaseGroupChange({ id: null })"> -->
+            <!--   <v-list-item-title>{{ $t("groups.all") }}</v-list-item-title> -->
+            <!-- </v-list-item> -->
+            <!-- <v-divider /> -->
             <v-list-item
               v-for="(group, index) in databaseGroups"
               :key="index"
@@ -225,7 +221,7 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import DrawerLeft from "./DrawerLeft";
 import DrawerRight from "./DrawerRight";
 import {
-  fetchDatabaseGroups,
+  fetchUserDatabaseGroups,
   changeDatabaseGroup,
 } from "../../../assets/js/api/apiCalls";
 export default {
@@ -250,6 +246,12 @@ export default {
       );
     },
     currentGroup() {
+      if (this.getDatabaseId === null) {
+        return {
+          acronym: this.$t("groups.all"),
+        };
+      }
+
       return this.databaseGroups.find(
         (group) => group.id === this.getDatabaseId
       );
@@ -278,7 +280,7 @@ export default {
   },
   async created() {
     this.fetchActiveSarvIssues();
-    this.databaseGroups = (await fetchDatabaseGroups()).data;
+    this.databaseGroups = (await fetchUserDatabaseGroups()).data;
   },
   methods: {
     ...mapActions("settings", [

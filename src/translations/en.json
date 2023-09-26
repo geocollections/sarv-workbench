@@ -59,7 +59,11 @@
     "fields": "Table headers",
     "or": "OR",
     "activeDatabase": "Active database",
-    "downloadFile": "Download file"
+    "downloadFile": "Download file",
+    "institution": "Institution",
+    "pageSelect": "{current} / {count}",
+    "headers": "Headers",
+    "filter": "Filter"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -2120,7 +2124,11 @@
     "taxa": "Taxa",
     "link": "Link",
     "sample__locality__locality": "Locality",
-    "sample__old_number": "Old sample number"
+    "sample__old_number": "Old sample number",
+    "relatedTables": {
+      "attachment_link": "Attachments",
+      "taxon_list": "Identified taxa"
+    }
   },
   "reference": {
     "attachment__filename": "Filename",
@@ -3016,6 +3024,8 @@
   },
   "permissions": {
     "title": "Data access permissions",
+    "title_default": " Object default access permissions",
+    "default_permissions_message": "These permissions will be added automatically to any object that requires permissions",
     "group": "Group",
     "user": "User",
     "view_perms_title": "View only:",
@@ -3061,7 +3071,9 @@
     "devNotification": "You are visiting the <b>development version</b> of the application. More stable version can be found here: ",
     "prodNotification": "Did you know there is also a <b>development version</b>, which has all the latest features and functionality. Development version can be found here: ",
     "containImages": "Prevent image cropping",
-    "orcidConnectSuccess": "Account successfully connected to Orcid"
+    "orcidConnectSuccess": "Account successfully connected to Orcid",
+    "settingsSaveSuccess": "Settings saved",
+    "settingsSaveFail": "Saving failed"
   },
   "logs": {
     "title": "Editing history",
@@ -3126,5 +3138,14 @@
     "title": "Title",
     "title_en": "Title (en)",
     "sort": "Sort"
-}
+  },
+  "groups": {
+    "all": "All groups"
+  },
+  "table": {
+    "tooltipConfig": "Table configuration",
+    "tooltipResetHeaders": "Reset headers",
+    "tooltipShowActiveHeaders": "Show active headers",
+    "tooltipShowAllHeaders": "Show all headers"
+  }
 }

@@ -270,6 +270,9 @@ const autocompleteMixin = {
     autocompleteDrillcoreSearch(value) {
       this.$_autocompleteMixin_search(value, "drillcore", "drillcore");
     },
+    autocompleteDatabaseSearch(value) {
+      this.$_autocompleteMixin_search(value, "database", "database");
+    },
     autocompleteAgentCollectedSearch(value) {
       this.$_autocompleteMixin_search(
         value,
@@ -529,6 +532,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `imageset/?imageset_number__icontains=${value}&or_search=user_added:${currentUser.forename};author__id:${currentUser.id}`;
     case "user":
       return `user/?username__icontains=${value}&fields=id,username`;
+    case "database":
+      return `database/?multi_search=value:${value};fields:name,name_en&fields=id,name,name_en`;
     case "rock_classification":
       return `rock_classification/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case "selection_series":

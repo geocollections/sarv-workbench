@@ -188,6 +188,19 @@
         </div>
       </transition>
     </v-card>
+    <v-row no-gutters class="mt-2">
+      <v-col class="d-flex">
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="visit.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -201,11 +214,12 @@ import {
   fetchListAgentType,
   fetchListCountry,
   fetchVisit,
+  fetchDatabase,
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 
 import DateWrapper from "../partial/inputs/DateWrapper";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "Visit",
@@ -267,6 +281,7 @@ export default {
 
   computed: {
     ...mapState("search", ["visitSearchParameters"]),
+    ...mapGetters("user", ["getDatabaseId"]),
   },
 
   methods: {
@@ -285,16 +300,19 @@ export default {
           "collections_studied",
           "items_studied",
           "remarks",
+          "database",
         ],
         autocomplete: {
           loaders: {
             agent: false,
             institution: false,
             list_country: false,
+            database: false,
           },
           agent: [],
           institution: [],
           list_country: [],
+          database: [],
         },
         visit: {},
         requiredFields: [],
@@ -335,6 +353,11 @@ export default {
         });
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+        if (this.getDatabaseId !== null) {
+          this.visit.database = {
+            id: this.getDatabaseId,
+          };
+        }
       }
     },
 
@@ -342,6 +365,10 @@ export default {
       fetchListCountry().then(
         (response) =>
           (this.autocomplete.list_country = this.handleResponse(response))
+      );
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
       );
     },
 
@@ -392,6 +419,11 @@ export default {
         id: obj.country,
         value: obj.visitor_country__value,
         value_en: obj.visitor_country__value_en,
+      };
+      this.visit.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
       };
     },
   },

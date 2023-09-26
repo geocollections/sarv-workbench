@@ -137,6 +137,23 @@ async function post(
   }
 }
 
+async function put(
+  child,
+  data,
+  customUrl = "",
+  returnErrorResponse = false,
+  config = {}
+) {
+  let url = api.url + child;
+  if (customUrl && customUrl.length > 0) url = customUrl + child + "/";
+
+  try {
+    return await axios.put(url, data, config);
+  } catch (error) {
+    return error.response;
+  }
+}
+
 async function post_delete(child) {
   let url = `${api.url}delete/${child}`;
 
@@ -2124,6 +2141,10 @@ export function fetchDeaccession() {
   return get(`deaccession/?format=json`);
 }
 
+export function fetchDatabase() {
+  return get(`database/?format=json`);
+}
+
 export function fetchSpecimenIdentifications(specimenId, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
@@ -3189,6 +3210,15 @@ export function fetchLinkedTaxa(data, prepId) {
       `taxon_list/?preparation=${prepId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
+}
+export function fetchPreparationTaxonList(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `taxon_list/?preparation=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
 }
 
 /*************************
@@ -4429,11 +4459,16 @@ export function fetchSiteGroundwaters(data, dynamicSearch) {
 /************************
  *** DATABASE GROUP START ***
  ************************/
+
 export function fetchDatabaseGroups() {
   return get(`database-groups/`, api.accountsUrl);
 }
+
+export function fetchUserDatabaseGroups() {
+  return get(`user/database-groups/`, api.accountsUrl);
+}
 export function changeDatabaseGroup(database) {
-  return axios.patch(`${api.accountsUrl}/database-groups/`, {
+  return axios.patch(`${api.accountsUrl}/user/database-groups/`, {
     database: database.id,
   });
 }
@@ -4798,6 +4833,14 @@ export function fetchUsers() {
 
 export function fetchObjectPermissions(id, table) {
   return get(`${table}/${id}/getpermissions?format=json`);
+}
+
+export function fetchUserDefaultPermissions() {
+  return get(`user/default-permissions/`, api.accountsUrl);
+}
+
+export function changeUserDefaultPermissions(newPerms) {
+  return put(`user/default-permissions/`, newPerms, api.accountsUrl);
 }
 
 export function fetchObjectGroupPermissions(id, table, permissionName) {

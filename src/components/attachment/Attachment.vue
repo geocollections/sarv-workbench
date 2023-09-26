@@ -3942,7 +3942,24 @@
             @change="attachment.is_locked = !attachment.is_locked"
           />
         </div>
+        <autocomplete-wrapper
+          class="ml-auto"
+          v-model="attachment.database"
+          :color="bodyActiveColor"
+          :items="autocomplete.database"
+          :loading="autocomplete.loaders.database"
+          :item-text="nameLabel"
+          :label="$t('common.institution')"
+        />
       </div>
+      <v-row no-gutters class="mt-2">
+        <v-col>
+          <object-permissions-create
+            v-if="!$route.meta.isEdit"
+            @change="handlePermissionsChange"
+          />
+        </v-col>
+      </v-row>
     </template>
 
     <template v-slot:local-storage>
@@ -4002,6 +4019,8 @@ import {
   fetchListAttachmentType,
   fetchListImageType,
   fetchListLicences,
+  fetchDatabase,
+  fetchObjectPermissions,
 } from "../../assets/js/api/apiCalls";
 import AttachmentWrapper from "./AttachmentWrapper";
 import MapComponent from "../partial/MapComponent";
@@ -4016,6 +4035,7 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import SelectWrapper from "../partial/inputs/SelectWrapper";
 import FileInput from "../partial/inputs/FileInput";
 import toastMixin from "../../mixins/toastMixin";
+import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
   name: "Attachment",
@@ -4033,6 +4053,7 @@ export default {
     FileInformation,
     AttachmentWrapper,
     MapComponent,
+    ObjectPermissionsCreate,
   },
 
   props: {
@@ -4072,7 +4093,7 @@ export default {
       "digitisedReference",
       "digitisedReferenceKeywords",
     ]),
-    ...mapGetters("user", ["isUserAllowedTo"]),
+    ...mapGetters("user", ["isUserAllowedTo", "getDatabaseId"]),
 
     myShowMap: {
       get() {
@@ -4247,6 +4268,8 @@ export default {
           if (attachmentHistory) {
             this.attachment = attachmentHistory;
             this.removeUnnecessaryFields(this.attachment, this.copyFields);
+            console.log("nanana");
+            console.log(this.attachment);
             if (this.isNotEmpty(this.attachment.specimen)) {
               this.autocomplete.specimen.push(this.attachment.specimen);
             }
@@ -4317,7 +4340,9 @@ export default {
 
   methods: {
     ...mapActions("map", ["updateShowMap"]),
-
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
     setInitialData() {
       return {
         imageRotationDegrees: 0,
@@ -4429,6 +4454,18 @@ export default {
           { name: "digitisedReference", value: 4, disabled: false },
         ],
         relatedData: this.setDefaultRelatedData(),
+        initialPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
+        currentPermissions: {
+          groups_view: [],
+          groups_change: [],
+          users_view: [],
+          users_change: [],
+        },
         copyFields: [
           "agent_digitised",
           "author",
@@ -4465,6 +4502,7 @@ export default {
           "stars",
           "storage",
           "type",
+          "database",
         ],
         autocomplete: {
           loaders: {
@@ -4479,6 +4517,7 @@ export default {
             keyword: false,
             specimen: false,
             type: false,
+            database: false,
             attachment_link__collection: false,
             attachment_link__specimen: false,
             attachment_link__sample: false,
@@ -4508,6 +4547,7 @@ export default {
           keyword: [],
           specimen: [],
           type: [],
+          database: [],
           attachment_link__collection: [],
           attachment_link__specimen: [],
           attachment_link__sample: [],
@@ -4591,9 +4631,44 @@ export default {
           }
         });
 
+        fetchObjectPermissions(this.$route.params.id, "attachment").then(
+          (res) => {
+            this.currentPermissions.groups_change =
+              res.data.group
+                ?.filter(
+                  (perm) => perm.permission__codename === "change_attachment"
+                )
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.groups_view =
+              res.data.group
+                ?.filter(
+                  (perm) => perm.permission__codename === "view_attachment"
+                )
+                .map((perm) => perm.group_id) ?? [];
+            this.currentPermissions.users_change =
+              res.data.user
+                ?.filter(
+                  (perm) => perm.permission__codename === "change_attachment"
+                )
+                .map((perm) => perm.user_id) ?? [];
+            this.currentPermissions.users_view =
+              res.data.user
+                ?.filter(
+                  (perm) => perm.permission__codename === "view_attachment"
+                )
+                .map((perm) => perm.user_id) ?? [];
+          }
+        );
         this.loadAutocompleteFields(false, true);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+
+        if (this.getDatabaseId !== null) {
+          this.attachment.database = {
+            id: this.getDatabaseId,
+          };
+          console.log(this.attachment);
+        }
       }
     },
 
@@ -4614,6 +4689,10 @@ export default {
           (response) => (this.autocomplete.type = this.handleResponse(response))
         );
       }
+      fetchDatabase().then(
+        (response) =>
+          (this.autocomplete.database = this.handleResponse(response))
+      );
 
       if (relatedDataAutocompleteFields) {
         fetchAttachmentKeyword(this.$route.params.id).then((response) => {
@@ -4907,7 +4986,7 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       if (!this.$route.meta.isEdit) {
@@ -4999,6 +5078,15 @@ export default {
       }
       /* Related Data END */
 
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.initial_permissions = this.initialPermissions;
+      }
+
+      if (saveAsNew) delete uploadableObject.related_data;
+
+      if (saveAsNew) {
+        uploadableObject.initial_permissions = this.currentPermissions;
+      }
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
@@ -5083,6 +5171,11 @@ export default {
           number: obj.coll__number,
         };
       }
+      this.attachment.database = {
+        id: obj.database,
+        value: obj.database__name,
+        value_en: obj.database__name_en,
+      };
     },
 
     /* FileInput Events START */

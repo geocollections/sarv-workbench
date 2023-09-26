@@ -6,6 +6,7 @@
       </div>
     </div>
 
+    <default-object-permissions />
     <v-card
       class="mt-2"
       id="block-linked-accounts"
@@ -272,10 +273,18 @@ import { mapGetters, mapState } from "vuex";
 import Colors from "../components/partial/settings/Colors";
 import PermissionsTable from "../components/partial/settings/PermissionsTable";
 import Security from "../components/partial/settings/Security";
+import DefaultObjectPermissions from "../components/partial/DefaultObjectPermissions.vue";
 import axios from "axios";
 export default {
   name: "Settings",
-  components: { Security, PermissionsTable, Colors, Shortcuts, Accessibility },
+  components: {
+    Security,
+    PermissionsTable,
+    Colors,
+    Shortcuts,
+    Accessibility,
+    DefaultObjectPermissions,
+  },
   mixins: [formSectionsMixin],
   data() {
     return {
