@@ -11,6 +11,7 @@ export default defineConfig({
   plugins: [
     vue(),
     Components({
+      directoryAsNamespace: true,
       resolvers: [
         // Vuetify
         VuetifyResolver(),
