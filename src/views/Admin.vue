@@ -50,7 +50,7 @@
                 <tr v-for="entity in activeUsers.results" :key="entity.id">
                   <td class="font-weight-bold">{{ entity.user }}</td>
                   <td>
-                    {{ entity.session_start | moment("MMMM Do YYYY HH:mm") }}
+                    {{ entity.session_start | dayjs("MMMM Do YYYY HH:mm") }}
                   </td>
                 </tr>
               </tbody>

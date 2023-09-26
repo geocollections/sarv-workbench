@@ -155,7 +155,7 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
+import  cloneDeep  from "lodash/cloneDeep";
 import DateWrapper from "../../partial/inputs/DateWrapper";
 import { fetchListHistoryType } from "../../../assets/js/api/apiCalls";
 
@@ -345,7 +345,7 @@ export default {
 
     updateUserInputtedDate(fieldToBeUpdated, date) {
       if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
+        if (this.$dayjs(date, "YYYY-MM-DD", true).isValid()) {
           this.item[fieldToBeUpdated] = date;
         }
       }

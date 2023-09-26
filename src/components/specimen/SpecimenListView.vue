@@ -126,10 +126,12 @@
             padding: 0.5mm;
           "
         >
-          <vue-q-r-code-component
-            :text="'http://geocollections.info/specimen/' + entity.id"
-            error-level="L"
-          ></vue-q-r-code-component>
+          <qrcode
+            class="d-block"
+            :value="'http://geocollections.info/specimen/' + entity.id"
+            :options="{ errorCorrectionLevel: 'L', margin: 0 }"
+            tag="img"
+          ></qrcode>
         </div>
       </div>
     </router-link>
@@ -137,11 +139,10 @@
 </template>
 
 <script>
-import VueQRCodeComponent from "vue-qrcode-component";
 import {
   fetchSpecimenIdentificationGeologiesList,
   fetchSpecimenIdentificationsList,
-} from "../../assets/js/api/apiCalls";
+} from "../../assets/js/api/apiCalls.js";
 
 export default {
   name: "SpecimenListView",
@@ -149,9 +150,6 @@ export default {
     data: {
       type: Array,
     },
-  },
-  components: {
-    VueQRCodeComponent,
   },
   data: () => ({
     names: [],

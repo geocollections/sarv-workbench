@@ -17,9 +17,9 @@
               v-if="getLastLoginDate"
             >
               <span>({{ $t("frontPage.lastLogin") }}: </span>
-              <span
-                >{{ getLastLoginDate | moment("MMMM Do YYYY HH:mm") }})</span
-              >
+              <span v-if="$dayjs(getLastLoginDate).isValid()">
+                {{ $dayjs(getLastLoginDate).format("MMMM Do YYYY HH:mm") }})
+              </span>
             </span>
 
             <v-btn

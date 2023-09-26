@@ -36,10 +36,12 @@
           style="width: 36% !important"
         >
           <div class="qr-code align-self-center">
-            <vue-q-r-code-component
-              :text="'https://edit.geocollections.info/location/' + entity.id"
-              error-level="L"
-            />
+            <qrcode
+              class="d-block"
+              :value="'http://geocollections.info/location/' + entity.id"
+              :options="{ errorCorrectionLevel: 'L', margin: 0 }"
+              tag="img"
+            ></qrcode>
           </div>
         </div>
       </div>
@@ -48,17 +50,12 @@
 </template>
 
 <script>
-import VueQRCodeComponent from "vue-qrcode-component";
-
 export default {
   name: "LocationListView",
   props: {
     data: {
       type: Array,
     },
-  },
-  components: {
-    VueQRCodeComponent,
   },
   data: () => ({
     names: [],

@@ -585,8 +585,10 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                v-if="doi.datacite_created"
-                :value="doi.datacite_created | moment('YYYY-MM-DD hh:mm:ss')"
+                v-if="$dayjs(doi.datacite_created).isValid()"
+                :value="
+                  $dayjs(doi.datacite_created).format('YYYY-MM-DD hh:mm:ss')
+                "
                 :color="bodyActiveColor"
                 :label="$t('doi.dataciteCreated')"
                 :readonly="true"
@@ -602,8 +604,10 @@
 
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                v-if="doi.datacite_updated"
-                :value="doi.datacite_updated | moment('YYYY-MM-DD hh:mm:ss')"
+                v-if="$dayjs(doi.datacite_updated).isValid()"
+                :value="
+                  $dayjs(doi.datacite_updated).format('YYYY-MM-DD hh:mm:ss')
+                "
                 :color="bodyActiveColor"
                 :label="$t('doi.dataciteUpdated')"
                 :readonly="true"
@@ -906,8 +910,8 @@ import requestsMixin from "../../mixins/requestsMixin";
 import toastMixin from "../../mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
 import Pagination from "@/components/partial/Pagination";
+import  orderBy  from "lodash/orderBy";
 import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
-import { orderBy } from "lodash";
 
 export default {
   components: {

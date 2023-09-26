@@ -281,7 +281,6 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import DateWrapper from "../../partial/inputs/DateWrapper";
 import { fetchListIdentificationType } from "../../../assets/js/api/apiCalls";

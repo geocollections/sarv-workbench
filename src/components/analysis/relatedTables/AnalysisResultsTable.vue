@@ -220,7 +220,6 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import { fetchListUnit } from "../../../assets/js/api/apiCalls";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";

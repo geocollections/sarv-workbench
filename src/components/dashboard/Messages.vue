@@ -73,7 +73,7 @@
           </div>
 
           <div class="text-right">
-            {{ entity.date_added | moment("MMMM Do YYYY HH:mm") }}
+            {{ $dayjs(entity.date_added).format("MMMM Do YYYY HH:mm") }}
           </div>
 
           <v-btn

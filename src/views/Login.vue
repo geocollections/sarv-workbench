@@ -134,7 +134,7 @@ import { mapState } from "vuex";
 import SiteIcons from "@/components/partial/SiteIcons";
 import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
 import config from "@/config";
-
+import backgroundImg from "../assets/img/login_background.jpg";
 export default {
   name: "Login",
   components: {
@@ -178,7 +178,7 @@ export default {
             to top right,
             rgba(255, 255, 255, 0.2) 0%,
             rgba(0, 0, 0, 0.5) 100%
-            ),url(${require("../assets/img/login_background.jpg")})`,
+            ),url(${backgroundImg})`,
         transition: "background 5s ease-in-out",
       };
     },
@@ -194,7 +194,7 @@ export default {
       }
     },
     getOrcidLoginUrl() {
-      return process.env.VUE_APP_ORCID_LOGIN_URL;
+      return import.meta.env.VITE_ORCID_LOGIN_URL;
     },
   },
 };

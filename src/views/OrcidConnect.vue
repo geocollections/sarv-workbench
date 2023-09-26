@@ -32,7 +32,7 @@ export default {
       this.$router.replace("/settings");
     }
     const res = await axios.post(
-      `${process.env.VUE_APP_API_URL}/accounts/dj-rest-auth/orcid/connect/`,
+      `${import.meta.env.VITE_API_URL}/accounts/dj-rest-auth/orcid/connect/`,
       { code: this.$route.query.code }
     );
     if (res.status !== 200) {
