@@ -344,7 +344,7 @@
 import { mapState } from "vuex";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 import DynamicSearch from "@/components/partial/table_view/DynamicSearch";
-import  debounce  from "lodash/cloneDeep";
+import debounce from "lodash/debounce";
 
 export default {
   name: "TableViewSearch",
