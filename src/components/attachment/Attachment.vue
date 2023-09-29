@@ -5198,80 +5198,54 @@ export default {
         // DATE
         if (metadata.DateTimeOriginal) {
           this.attachment.date_created = this.formatMetadataDate(
-            metadata.DateTimeOriginal
+            metadata.DateTimeOriginal.description
           );
         } else if (metadata.DateTime) {
           this.attachment.date_created = this.formatMetadataDate(
-            metadata.DateTime
+            metadata.DateTime.description
           );
         }
 
         // DEVICE_TXT
-        if (metadata.Model) this.attachment.device_txt = metadata.Model;
-        else if (metadata.Make) this.attachment.device_txt = metadata.Make;
+        if (metadata.Model)
+          this.attachment.device_txt = metadata.Model.description;
+        else if (metadata.Make)
+          this.attachment.device_txt = metadata.Make.description;
 
         // IMAGE DIMENSIONS
         if (metadata.PixelXDimension)
-          this.attachment.image_width = metadata.PixelXDimension;
+          this.attachment.image_width = metadata.PixelXDimension.description;
         if (metadata.PixelYDimension)
-          this.attachment.image_height = metadata.PixelYDimension;
+          this.attachment.image_height = metadata.PixelYDimension.description;
 
         // DESCRIPTION
         if (this.isSpecimenImage) {
           if (
             metadata.ImageDescription &&
-            metadata.ImageDescription.trim().length > 0
+            metadata.ImageDescription.description.trim().length > 0
           ) {
             this.attachment.image_description_en =
-              metadata.ImageDescription.trim();
+              metadata.ImageDescription.description.trim();
           }
         } else {
           if (
             metadata.ImageDescription &&
-            metadata.ImageDescription.trim().length > 0
+            metadata.ImageDescription.description.trim().length > 0
           ) {
-            this.attachment.description_en = metadata.ImageDescription.trim();
+            this.attachment.description_en =
+              metadata.ImageDescription.description.trim();
           }
         }
 
         // GPS DATA
         if (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile) {
           if (metadata.GPSLatitude) {
-            const degrees =
-              metadata.GPSLatitude[0].numerator /
-              metadata.GPSLatitude[0].denominator;
-            const minutes =
-              metadata.GPSLatitude[1].numerator /
-              metadata.GPSLatitude[1].denominator;
-            const seconds =
-              metadata.GPSLatitude[2].numerator /
-              metadata.GPSLatitude[2].denominator;
-            const latitude = this.convertExifGPSToDecimal(
-              degrees,
-              minutes,
-              seconds,
-              metadata.GPSLatitudeRef
-            );
-            this.attachment.image_latitude = latitude.toFixed(6);
+            this.attachment.image_latitude =
+              metadata.GPSLatitude.description.toFixed(6);
           }
           if (metadata.GPSLongitude) {
-            const degrees =
-              metadata.GPSLongitude[0].numerator /
-              metadata.GPSLongitude[0].denominator;
-            const minutes =
-              metadata.GPSLongitude[1].numerator /
-              metadata.GPSLongitude[1].denominator;
-            const seconds =
-              metadata.GPSLongitude[2].numerator /
-              metadata.GPSLongitude[2].denominator;
-            const longitude = this.convertExifGPSToDecimal(
-              degrees,
-              minutes,
-              seconds,
-              metadata.GPSLatitudeRef
-            );
-
-            this.attachment.image_longitude = longitude.toFixed(6);
+            this.attachment.image_longitude =
+              metadata.GPSLongitude.description.toFixed(6);
           }
         }
       }

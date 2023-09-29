@@ -305,11 +305,11 @@
 
 <script>
 import { mapState } from "vuex";
+import ExifReader from "exifreader";
 import AutocompleteWrapper from "./AutocompleteWrapper";
 import CheckboxWrapper from "./CheckboxWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import ImageViewWrapper from "../image_view/ImageViewWrapper";
-import EXIF from "exif-js";
 import toastMixin from "@/mixins/toastMixin";
 
 export default {
@@ -507,7 +507,7 @@ export default {
         try {
           let reader = new FileReader();
           reader.onload = (event) => {
-            let fileMetaData = EXIF.readFromBinaryFile(event.target.result);
+            let fileMetaData = ExifReader.load(event.target.result);
             resolve(fileMetaData);
           };
           reader.readAsArrayBuffer(file);
