@@ -21,13 +21,8 @@
 import axios from "axios";
 import store from "@/store";
 import DataTableReference from "../components/DataTableReference.vue";
+import { rwapiClient } from "../helpers/httpClients";
 
-const axiosInstance = axios.create({
-  baseURL: "https://rwapi-dev.geoloogia.info",
-  headers: {
-    Authorization: `Token ${store?.state?.user?.authUser?.token}`,
-  },
-});
 export default {
   name: "ReferenceList",
   components: {
@@ -70,7 +65,7 @@ export default {
           name: "Journal",
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/journals", {
+            rwapiClient.get("/api/v1/private/journals", {
               params: {
                 fields: "id,name",
                 limit,
@@ -86,7 +81,7 @@ export default {
           name: "Parent reference",
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/references", {
+            rwapiClient.get("/api/v1/private/references", {
               params: {
                 fields: "id,reference",
                 limit,
@@ -102,7 +97,7 @@ export default {
           name: "Translated reference",
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/references", {
+            rwapiClient.get("/api/v1/private/references", {
               params: {
                 fields: "id,reference",
                 limit,
@@ -118,7 +113,7 @@ export default {
           name: "Language",
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/languages", {
+            rwapiClient.get("/api/v1/private/languages", {
               params: {
                 fields: "id,name",
                 limit,
@@ -134,7 +129,7 @@ export default {
           name: "Translated title language",
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/languages", {
+            rwapiClient.get("/api/v1/private/languages", {
               params: {
                 fields: "id,name",
                 limit,
@@ -150,7 +145,7 @@ export default {
           name: "Licence",
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/licences", {
+            rwapiClient.get("/api/v1/private/licences", {
               params: {
                 fields: "id,name",
                 limit,
@@ -166,7 +161,7 @@ export default {
           name: "Type",
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/reference-types", {
+            rwapiClient.get("/api/v1/private/reference-types", {
               params: {
                 fields: "id,value",
                 limit,
@@ -182,7 +177,7 @@ export default {
           name: "Libraries",
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/libraries", {
+            rwapiClient.get("/api/v1/private/libraries", {
               params: {
                 fields: "id,title",
                 limit,
@@ -198,7 +193,7 @@ export default {
           name: "Keywords",
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/keywords", {
+            rwapiClient.get("/api/v1/private/keywords", {
               params: {
                 fields: "id,name",
                 limit,
@@ -214,7 +209,7 @@ export default {
           name: "Taxa",
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/taxa", {
+            rwapiClient.get("/api/v1/private/taxa", {
               params: {
                 fields: "id,name",
                 limit,
@@ -230,7 +225,7 @@ export default {
           name: "Areas",
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/areas", {
+            rwapiClient.get("/api/v1/private/areas", {
               params: {
                 fields: "id,name",
                 limit,
@@ -246,7 +241,7 @@ export default {
           name: "Localities",
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/localities", {
+            rwapiClient.get("/api/v1/private/localities", {
               params: {
                 fields: "id,name",
                 limit,
@@ -262,7 +257,7 @@ export default {
           name: "Stratigraphies",
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/stratigraphies", {
+            rwapiClient.get("/api/v1/private/stratigraphies", {
               params: {
                 fields: "id,name",
                 limit,
@@ -439,7 +434,7 @@ export default {
   },
   methods: {
     async handleExport(options) {
-      const res = await axiosInstance.get("/api/v1/private/references", {
+      const res = await rwapiClient.get("/api/v1/private/references", {
         responseType: "blob",
         params: {
           ordering: this.ordering ?? "-id",
@@ -486,7 +481,7 @@ export default {
           ordering: "-id",
         };
       }
-      const res = await axiosInstance.get("/api/v1/private/references", {
+      const res = await rwapiClient.get("/api/v1/private/references", {
         params: {
           ...viewParams,
           limit: this.options?.itemsPerPage,
