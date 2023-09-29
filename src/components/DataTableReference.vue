@@ -11,6 +11,7 @@
         ref="filterMenu"
         :filters="filters"
         :filter-map="filterMap"
+        :total-active-filters="activeFilters.length"
       />
       <v-menu offset-y bottom :close-on-content-click="false">
         <template #activator="{ on, attrs }">
@@ -103,11 +104,16 @@
       />
     </div>
     <div
-      v-if="filters.length > 0"
-      class="px-2 py-1 d-flex align-center"
+      v-if="activeFilters.length > 0"
+      class="px-2 pt-1 d-flex align-center"
       style="border-bottom: 1px solid lightgray"
     >
-      <filter-summary :filters="filters" @click:value="handleValueClick" />
+      <filter-summary
+        :filters="activeFilters"
+        @click:value="handleValueClick"
+        @remove:filter="handleRemoveFilter"
+        @clear="handleClear"
+      />
     </div>
     <v-data-table
       v-if="view === 'table'"
@@ -301,6 +307,23 @@ export default {
     };
   },
   computed: {
+    activeFilters() {
+      return this.filters
+        .map((filter, index) => ({ ...filter, filterIndex: index }))
+        .filter((filter) => {
+          if (
+            !filter.enabled ||
+            filter.field === null ||
+            filter.lookup === null ||
+            filter.value === null ||
+            filter.value.length < 1 ||
+            (Array.isArray(filter.value) && filter.value.includes(null))
+          )
+            return false;
+
+          return true;
+        });
+    },
     citationStyles() {
       return [
         { text: "APA", value: "apa" },
@@ -445,7 +468,7 @@ export default {
           itemValue: "id",
         },
         library: {
-          field: "reference_libraries",
+          field: "reference_libraries__library",
           name: this.$t("filters.libraries"),
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
@@ -493,7 +516,7 @@ export default {
           itemValue: "id",
         },
         area: {
-          field: "reference_areas",
+          field: "reference_areas__area",
           name: this.$t("filters.areas"),
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
@@ -525,7 +548,7 @@ export default {
           itemValue: "id",
         },
         stratigraphy: {
-          field: "reference_stratigraphies",
+          field: "reference_stratigraphies__stratigraphy",
           name: this.$t("filters.stratigraphies"),
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
@@ -727,6 +750,29 @@ export default {
     },
     handleValueClick(value) {
       this.$refs.filterMenu.openAndFocusInput(value.filterIndex);
+    },
+    handleRemoveFilter({ filterIndex }) {
+      const filter = this.filters[filterIndex];
+
+      if (filter.lookup.type === "autocompleteList") {
+        filter.value = [];
+      } else if (["range", "dateRange"].includes(filter.lookup.type)) {
+        filter.value = [null, null];
+      } else {
+        filter.value = null;
+      }
+    },
+    handleClear() {
+      for (let i = 0; i < this.filters.length; i++) {
+        if (this.filters[i].lookup.type === "autocomplete") {
+          this.filters[i].value = null;
+        } else if (this.filters[i].lookup.type === "autocompleteList") {
+          this.filters[i].value = [];
+        } else if (this.filters[i].lookup.typpe === "range") {
+          this.filters[i].value = [null, null];
+        }
+        this.filters[i].value = null;
+      }
     },
   },
 };

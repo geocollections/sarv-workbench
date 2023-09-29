@@ -18,15 +18,16 @@
       {{ value.filter.field.name }}:
       <span class="ml-1 font-weight-bold">{{ value.value }}</span>
     </v-chip>
-    <v-btn
+    <v-chip
       v-if="activeFilterValues.length > 0"
       text
       rounded
+      color="transparent"
       class="mb-1 text-capitalize"
       @click="handleClear"
     >
       Clear
-    </v-btn>
+    </v-chip>
   </div>
 </template>
 
@@ -64,14 +65,31 @@ export default {
         }
         if (filter.lookup.type === "autocomplete") {
           if (Array.isArray(filter.value)) {
-            for (const [valueIndex, value] of filter.value.entries()) {
-              acc.push({
-                filter,
-                filterIndex: index,
-                valueIndex,
-                value: value[filter.field.itemText],
-              });
-            }
+            acc.push({
+              filter,
+              filterIndex: index,
+              value: filter.value
+                .map((value) => value[filter.field.itemText])
+                .join(", "),
+            });
+          } else if (filter.value !== null) {
+            acc.push({
+              filter,
+              filterIndex: index,
+              value: filter.value[filter.field.itemText],
+            });
+          }
+          return acc;
+        }
+        if (filter.lookup.type === "autocompleteList") {
+          if (Array.isArray(filter.value)) {
+            acc.push({
+              filter,
+              filterIndex: index,
+              value: filter.value
+                .map((value) => `"${value[filter.field.itemText]}"`)
+                .join(filter.lookup.value === "__in" ? " | " : " & "),
+            });
           } else if (filter.value !== null) {
             acc.push({
               filter,
@@ -96,31 +114,13 @@ export default {
   },
   methods: {
     handleValueRemove(removableValue) {
-      if (removableValue.valueIndex) {
-        this.filters[removableValue.filterIndex].value.splice(
-          removableValue.valueIndex,
-          1
-        );
-      } else {
-        this.filters[removableValue.filterIndex].value = null;
-      }
+      this.$emit("remove:filter", { filterIndex: removableValue.filterIndex });
     },
     handleValueClick(value) {
       this.$emit("click:value", value);
     },
     handleClear() {
-      for (let i = 0; i < this.filters.length; i++) {
-        if (this.filters[i].lookup.type === "autocomplete") {
-          if (Array.isArray(this.filters[i].value)) {
-            this.filters[i].value = [];
-          } else {
-            this.filters[i].value = null;
-          }
-        } else if (this.filters[i].lookup.typpe === "range") {
-          this.filters[i].value = [null, null];
-        }
-        this.filters[i].value = null;
-      }
+      this.$emit("clear");
     },
   },
 };

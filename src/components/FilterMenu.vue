@@ -46,14 +46,12 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    totalActiveFilters: {
+      type: Number,
+      default: 0,
+    },
   },
   computed: {
-    totalActiveFilters() {
-      return this.filters.reduce((acc, cur) => {
-        if (cur.enabled) acc += 1;
-        return acc;
-      }, 0);
-    },
     filterTypeIconMap() {
       return {
         string: "fas fa-font",

@@ -358,6 +358,7 @@ export default {
     queryFilters() {
       const result = {};
       for (const filter of this.filters) {
+        console.log(filter);
         if (
           !filter.enabled ||
           filter.field === null ||
@@ -378,6 +379,9 @@ export default {
           const key = `${filter.field.field}${filter.lookup.value}`;
           result[key] = this.parseQueryValueRange(filter);
         } else if (filter.lookup.type === "autocomplete") {
+          const key = `${filter.field.field}${filter.lookup.value}`;
+          result[key] = this.parseQueryValueAutocomplete(filter);
+        } else if (filter.lookup.type === "autocompleteList") {
           const key = `${filter.field.field}${filter.lookup.value}`;
           result[key] = this.parseQueryValueAutocomplete(filter);
         } else if (filter.lookup.type === "boolean") {

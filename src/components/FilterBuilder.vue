@@ -19,6 +19,7 @@
         placeholder="-"
         return-object
         :menu-props="{ bottom: true, offsetY: true }"
+        :filter="fieldFilter"
         :value-comparator="fieldComparator"
         @input="handleFieldChange(index, $event)"
       >
@@ -291,6 +292,12 @@ export default {
     },
   },
   methods: {
+    fieldFilter(item, queryText, itemText) {
+      return (
+        item.name.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) >
+        -1
+      );
+    },
     addFilter() {
       this.filters.push({
         field: null,
