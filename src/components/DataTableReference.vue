@@ -1,7 +1,116 @@
 <template>
   <div>
+    <div
+      class="px-2 py-1 d-flex align-center"
+      style="
+        border-bottom: 1px solid lightgray;
+        border-top: 1px solid lightgray;
+      "
+    >
+      <filter-menu
+        ref="filterMenu"
+        :filters="filters"
+        :filter-map="filterMap"
+      />
+      <v-menu offset-y bottom :close-on-content-click="false">
+        <template #activator="{ on, attrs }">
+          <v-btn
+            class="mx-2 text-capitalize"
+            outlined
+            text
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon left>fas fa-file-export</v-icon>
+            {{ $t("dataTable.export") }}
+          </v-btn>
+        </template>
+        <v-card class="pa-2">
+          <v-btn-toggle dense v-model="exportOptions.format">
+            <v-btn value="json">JSON</v-btn>
+            <v-btn value="xlsx">XLSX</v-btn>
+            <v-btn value="csv">CSV</v-btn>
+            <v-btn value="ris">RIS</v-btn>
+          </v-btn-toggle>
+          <v-divider class="my-2" />
+          <v-text-field
+            v-model="exportOptions.filename"
+            outlined
+            dense
+            :suffix="`.${exportOptions.format}`"
+            label="Filename"
+          ></v-text-field>
+          <v-text-field
+            v-model="exportOptions.count"
+            outlined
+            dense
+            type="number"
+            :min="1"
+            :max="count"
+            label="Rows to export"
+          ></v-text-field>
+          <v-btn outlined color="warning" @click="handleExport">Export</v-btn>
+        </v-card>
+      </v-menu>
+      <v-btn-toggle class="mr-2" dense v-model="view">
+        <v-btn icon value="table">
+          <v-icon>fas fa-table</v-icon>
+        </v-btn>
+        <v-btn value="bibliography">
+          <v-icon small>fas fa-book-open</v-icon>
+        </v-btn>
+      </v-btn-toggle>
+      <data-table-headers-menu
+        v-if="view === 'table'"
+        :headers="headers"
+        :visible-headers="visibleHeaders"
+        @change="handleHeaderChange"
+        @reset="handleHeadersReset"
+      >
+        <template #activator="menu">
+          <v-btn
+            class="text-capitalize"
+            outlined
+            text
+            v-bind="{ ...menu.attrs }"
+            v-on="{ ...menu.on }"
+          >
+            <v-icon left>fas fa-table</v-icon>
+            {{ $t("dataTable.columns") }}
+          </v-btn>
+        </template>
+      </data-table-headers-menu>
+      <v-select
+        v-if="view === 'bibliography'"
+        class="mr-2"
+        style="max-width: 12em"
+        dense
+        outlined
+        hide-details
+        label="Style"
+        v-model="citationStyle"
+        :menu-props="{ bottom: true, offsetY: true }"
+        :items="citationStyles"
+      />
+      <data-table-pagination
+        class="ml-auto"
+        :count="count"
+        :paginate-by="options.itemsPerPage"
+        :page="options.page ?? 1"
+        :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
+        v-on:update:page="options.page = $event"
+        v-on:update:paginateBy="options.itemsPerPage = $event"
+      />
+    </div>
+    <div
+      v-if="filters.length > 0"
+      class="px-2 py-1 d-flex align-center"
+      style="border-bottom: 1px solid lightgray"
+    >
+      <filter-summary :filters="filters" @click:value="handleValueClick" />
+    </div>
     <v-data-table
-      style="overflow-y: auto; margin-bottom: 100px"
+      v-if="view === 'table'"
       class="rounded-0"
       dense
       hide-default-footer
@@ -44,156 +153,81 @@
       <template #item.url="{ item }">
         <a v-if="item.url" :href="item.url"> URL </a>
       </template>
-      <template #top>
-        <div
-          class="px-2 py-1 d-flex align-center"
-          style="
-            border-bottom: 1px solid lightgray;
-            border-top: 1px solid lightgray;
-          "
-        >
-          <filter-menu
-            ref="filterMenu"
-            :filters="filters"
-            :filter-map="filterMap"
-          />
-          <data-table-headers-menu
-            :headers="headers"
-            :visible-headers="visibleHeaders"
-            @change="handleHeaderChange"
-            @reset="handleHeadersReset"
-          >
-            <template #activator="menu">
-              <v-btn
-                class="ml-2 text-capitalize"
-                outlined
-                text
-                v-bind="{ ...menu.attrs }"
-                v-on="{ ...menu.on }"
-              >
-                <v-icon left>fas fa-table</v-icon>
-                Columns
-              </v-btn>
-            </template>
-          </data-table-headers-menu>
-          <v-menu offset-y bottom :close-on-content-click="false">
-            <template #activator="{ on, attrs }">
-              <v-btn
-                class="ml-2 text-capitalize"
-                outlined
-                text
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon left>fas fa-file-export</v-icon>
-                Export
-              </v-btn>
-            </template>
-            <v-card class="pa-2">
-              <v-btn-toggle dense v-model="exportOptions.format">
-                <v-btn value="json">JSON</v-btn>
-                <v-btn value="xlsx">XLSX</v-btn>
-                <v-btn value="csv">CSV</v-btn>
-              </v-btn-toggle>
-              <v-divider class="my-2" />
-              <v-text-field
-                v-model="exportOptions.filename"
-                outlined
-                dense
-                :suffix="`.${exportOptions.format}`"
-                label="Filename"
-              ></v-text-field>
-              <v-text-field
-                v-model="exportOptions.count"
-                outlined
-                dense
-                type="number"
-                :min="1"
-                :max="count"
-                label="Rows to export"
-              ></v-text-field>
-              <v-btn outlined color="warning" @click="handleExport"
-                >Export</v-btn
-              >
-            </v-card>
-          </v-menu>
-          <data-table-pagination
-            class="ml-auto"
-            :count="count"
-            :paginate-by="options.itemsPerPage"
-            :page="options.page ?? 1"
-            :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
-            v-on:update:page="options.page = $event"
-            v-on:update:paginateBy="options.itemsPerPage = $event"
-          />
-        </div>
-        <div
-          v-if="filters.length > 0"
-          class="px-2 py-1 d-flex align-center"
-          style="border-bottom: 1px solid lightgray"
-        >
-          <filter-summary :filters="filters" @click:value="handleValueClick" />
-        </div>
+    </v-data-table>
+    <v-data-table
+      class="rounded-0"
+      v-else-if="view === 'bibliography'"
+      dense
+      hide-default-footer
+      hide-default-header
+      mobile-breakpoint="0"
+      :headers="visibleHeadersBibliography"
+      :items="items"
+      :options.sync="options"
+      :server-items-length="count"
+      :loading="loading"
+      :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, 500, 1000] }"
+    >
+      <template #item.record="{ item }">
+        <v-btn color="blue" icon :to="{ path: `/reference/${item.id}` }">
+          <v-icon>fas fa-eye</v-icon>
+        </v-btn>
       </template>
-      <template #footer>
-        <div
-          style="
-            border-bottom: 1px solid lightgray;
-            border-top: 1px solid lightgray;
-          "
-          class="d-flex justify-end px-2 py-1"
+      <template #item.source="{ item }">
+        <span v-html="item.source" />
+        <v-chip
+          v-if="item.doi"
+          class="ml-1"
+          outlined
+          color="blue"
+          link
+          small
+          :href="`https://doi.org/${item.doi}`"
         >
-          <data-table-pagination
-            class="ml-auto"
-            :count="count"
-            :paginate-by="options.itemsPerPage"
-            :page="options.page ?? 1"
-            :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
-            v-on:update:page="options.page = $event"
-            v-on:update:paginateBy="options.itemsPerPage = $event"
-          />
-        </div>
+          DOI
+        </v-chip>
+        <v-chip v-if="item.pdf" class="ml-1" outlined color="red" link small>
+          PDF
+        </v-chip>
+        <v-chip
+          v-if="item.url"
+          class="ml-1"
+          outlined
+          color="green"
+          link
+          small
+          :href="item.url"
+        >
+          URL
+        </v-chip>
       </template>
     </v-data-table>
-    <!-- <v-card -->
-    <!--   style=" -->
-    <!--     min-width: 100px; -->
-    <!--     background: white; -->
-    <!--     position: fixed; -->
-    <!--     right: 1em; -->
-    <!--     bottom: 1em; -->
-    <!--     z-index: 5000; -->
-    <!--   " -->
-    <!-- > -->
-    <!--   <v-data-footer -->
-    <!--     :options.sync="options" -->
-    <!--     :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]" -->
-    <!--     :pagination="{ -->
-    <!--       page: options.page - 1 ?? 0, -->
-    <!--       itemsPerPage: options.itemsPerPage, -->
-    <!--       itemsLength: count, -->
-    <!--       pageStart: (options.page - 1 ?? 0) * options.itemsPerPage, -->
-    <!--       pageStop: (options.page ?? 0) * options.itemsPerPage, -->
-    <!--       pageCount: Math.ceil(count / options.itemsPerPage), -->
-    <!--     }" -->
-    <!--   /> -->
-    <!-- </v-card> -->
+    <div
+      style="
+        border-bottom: 1px solid lightgray;
+        border-top: 1px solid lightgray;
+      "
+      class="d-flex justify-end px-2 py-1"
+    >
+      <data-table-pagination
+        class="ml-auto"
+        :count="count"
+        :paginate-by="options.itemsPerPage"
+        :page="options.page ?? 1"
+        :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
+        v-on:update:page="options.page = $event"
+        v-on:update:paginateBy="options.itemsPerPage = $event"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import store from "@/store";
 import FilterMenu from "./FilterMenu.vue";
 import DataTableHeadersMenu from "@/components/partial/DataTableHeadersMenu.vue";
 import DataTablePagination from "@/components/partial/DataTablePagination.vue";
 import FilterSummary from "./FilterSummary.vue";
-const axiosInstance = axios.create({
-  baseURL: "https://rwapi-dev.geoloogia.info",
-  headers: {
-    Authorization: `Token ${store?.state?.user?.authUser?.token}`,
-  },
-});
+import { rwapiClient } from "../helpers/httpClients";
 
 function defaultHeaders() {
   return [
@@ -209,6 +243,12 @@ function defaultHeaders() {
     { text: "DOI", value: "doi", show: true },
     { text: "PDF", value: "pdf", show: true },
     { text: "URL", value: "url", show: true },
+  ];
+}
+function defaultHeadersBibliography() {
+  return [
+    { text: "", value: "record", sortable: false, show: true },
+    { text: "Source", value: "source", show: true },
   ];
 }
 
@@ -237,11 +277,22 @@ export default {
       type: Boolean,
       required: true,
     },
+    initView: {
+      type: String,
+      default: "table",
+    },
+    initCitationStyle: {
+      type: String,
+      default: "apa",
+    },
   },
   data() {
     return {
+      view: this.initView,
+      citationStyle: this.initCitationStyle,
       options: { itemsPerPage: 25 },
       headers: defaultHeaders(),
+      headersBibliography: defaultHeadersBibliography(),
       exportOptions: {
         filename: "export",
         format: "json",
@@ -250,28 +301,43 @@ export default {
     };
   },
   computed: {
+    citationStyles() {
+      return [
+        { text: "APA", value: "apa" },
+        { text: "Harvard", value: "harvard1" },
+        { text: "Sedimentology", value: "sedimentology" },
+      ];
+    },
     filterMap() {
       return {
-        id: { field: "id", name: "Id", type: "number" },
-        title: { field: "title", name: "Title", type: "string" },
-        author: { field: "author", name: "Authors", type: "string" },
+        id: { field: "id", name: this.$t("filters.id"), type: "number" },
+        title: {
+          field: "title",
+          name: this.$t("filters.title"),
+          type: "string",
+        },
+        author: {
+          field: "author",
+          name: this.$t("filters.authors"),
+          type: "string",
+        },
         titleOriginal: {
           field: "title_original",
-          name: "Original title",
+          name: this.$t("filters.originalTitle"),
           type: "string",
         },
         titleTranslated: {
           field: "title_translated",
-          name: "Translated title",
+          name: this.$t("filters.translatedTitle"),
           type: "string",
         },
-        year: { field: "year", name: "Year", type: "string" },
+        year: { field: "year", name: this.$t("filters.year"), type: "string" },
         journal: {
           field: "journal",
-          name: "Journal",
+          name: this.$t("filters.journal"),
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/journals", {
+            rwapiClient.get("/api/v1/private/journals", {
               params: {
                 fields: "id,name",
                 limit,
@@ -284,10 +350,10 @@ export default {
         },
         parent: {
           field: "parent",
-          name: "Parent reference",
+          name: this.$t("filters.parentReference"),
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/references", {
+            rwapiClient.get("/api/v1/private/references", {
               params: {
                 fields: "id,reference",
                 limit,
@@ -300,10 +366,10 @@ export default {
         },
         translatedReference: {
           field: "translated_reference",
-          name: "Translated reference",
+          name: this.$t("filters.translatedReference"),
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/references", {
+            rwapiClient.get("/api/v1/private/references", {
               params: {
                 fields: "id,reference",
                 limit,
@@ -316,10 +382,10 @@ export default {
         },
         language: {
           field: "language",
-          name: "Language",
+          name: this.$t("filters.language"),
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/languages", {
+            rwapiClient.get("/api/v1/private/languages", {
               params: {
                 fields: "id,name",
                 limit,
@@ -332,10 +398,10 @@ export default {
         },
         titleTranslatedLanguage: {
           field: "title_translated_language",
-          name: "Translated title language",
+          name: this.$t("filters.translatedTitleLanguage"),
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/languages", {
+            rwapiClient.get("/api/v1/private/languages", {
               params: {
                 fields: "id,name",
                 limit,
@@ -348,10 +414,10 @@ export default {
         },
         licence: {
           field: "licence",
-          name: "Licence",
+          name: this.$t("filters.licence"),
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/licences", {
+            rwapiClient.get("/api/v1/private/licences", {
               params: {
                 fields: "id,name",
                 limit,
@@ -364,10 +430,10 @@ export default {
         },
         type: {
           field: "type",
-          name: "Type",
+          name: this.$t("filters.type"),
           type: "autocomplete",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/reference-types", {
+            rwapiClient.get("/api/v1/private/reference-types", {
               params: {
                 fields: "id,value",
                 limit,
@@ -380,10 +446,10 @@ export default {
         },
         library: {
           field: "reference_libraries",
-          name: "Libraries",
+          name: this.$t("filters.libraries"),
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/libraries", {
+            rwapiClient.get("/api/v1/private/libraries", {
               params: {
                 fields: "id,title",
                 limit,
@@ -396,10 +462,10 @@ export default {
         },
         keyword: {
           field: "keywords",
-          name: "Keywords",
+          name: this.$t("filters.keywords"),
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/keywords", {
+            rwapiClient.get("/api/v1/private/keywords", {
               params: {
                 fields: "id,name",
                 limit,
@@ -412,10 +478,10 @@ export default {
         },
         taxon: {
           field: "taxa",
-          name: "Taxa",
+          name: this.$t("filters.taxa"),
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/taxa", {
+            rwapiClient.get("/api/v1/private/taxa", {
               params: {
                 fields: "id,name",
                 limit,
@@ -428,10 +494,10 @@ export default {
         },
         area: {
           field: "reference_areas",
-          name: "Areas",
+          name: this.$t("filters.areas"),
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/areas", {
+            rwapiClient.get("/api/v1/private/areas", {
               params: {
                 fields: "id,name",
                 limit,
@@ -444,10 +510,10 @@ export default {
         },
         locality: {
           field: "reference_localities__locality",
-          name: "Localities",
+          name: this.$t("filters.localities"),
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/localities", {
+            rwapiClient.get("/api/v1/private/localities", {
               params: {
                 fields: "id,name",
                 limit,
@@ -460,10 +526,10 @@ export default {
         },
         stratigraphy: {
           field: "reference_stratigraphies",
-          name: "Stratigraphies",
+          name: this.$t("filters.stratigraphies"),
           type: "autocompleteList",
           queryFunc: ({ search, limit, offset }) =>
-            axiosInstance.get("/api/v1/private/stratigraphies", {
+            rwapiClient.get("/api/v1/private/stratigraphies", {
               params: {
                 fields: "id,name",
                 limit,
@@ -474,90 +540,105 @@ export default {
           itemText: "name",
           itemValue: "id",
         },
-        book: { field: "book", name: "Book", type: "string" },
+        book: { field: "book", name: this.$t("filters.book"), type: "string" },
         bookEditor: {
           field: "book_editor",
-          name: "Book editor",
+          name: this.$t("filters.bookEditor"),
           type: "string",
         },
         bookOriginal: {
           field: "book_original",
-          name: "Original book title",
+          name: this.$t("filters.originalBookTitle"),
           type: "string",
         },
         bookTranslated: {
           field: "book_translated",
-          name: "Translated book title",
+          name: this.$t("filters.translatedBookTitle"),
           type: "string",
         },
         bookTranslatedLanguage: {
           field: "book_translated_language",
-          name: "Translated book title language",
+          name: this.$t("filters.translatedBookTitleLanguage"),
           type: "string",
         },
-        abstract: { field: "abstract", name: "Abstract", type: "string" },
-        remarks: { field: "remarks", name: "Remarks", type: "string" },
-        reference: { field: "reference", name: "Reference", type: "string" },
-        doi: { field: "doi", name: "Doi", type: "string" },
+        abstract: {
+          field: "abstract",
+          name: this.$t("filters.abstract"),
+          type: "string",
+        },
+        remarks: {
+          field: "remarks",
+          name: this.$t("filters.remarks"),
+          type: "string",
+        },
+        reference: {
+          field: "reference",
+          name: this.$t("filters.reference"),
+          type: "string",
+        },
+        doi: { field: "doi", name: this.$t("filters.doi"), type: "string" },
         isEstonian: {
           field: "is_estonian",
-          name: "Estonian",
+          name: this.$t("filters.estonian"),
           type: "boolean",
         },
         isEstonianAuthor: {
           field: "is_estonian_author",
-          name: "Estonian author",
+          name: this.$t("filters.estonianAuthor"),
           type: "boolean",
         },
         isPrivate: {
           field: "is_private",
-          name: "Private",
+          name: this.$t("filters.private"),
           type: "boolean",
         },
         isOA: {
           field: "is_oa",
-          name: "OpenAccess",
+          name: this.$t("filters.openAccess"),
           type: "boolean",
         },
         isbn: {
           field: "isbn",
-          name: "ISBN",
+          name: this.$t("filters.isbn"),
           type: "string",
         },
         issn: {
           field: "issn",
-          name: "ISSN",
+          name: this.$t("filters.issn"),
           type: "string",
         },
         publisher: {
           field: "publisher",
-          name: "Publisher",
+          name: this.$t("filters.publisher"),
           type: "string",
         },
         publisherPlace: {
           field: "publisher_place",
-          name: "Publisher place",
+          name: this.$t("filters.publisherPlace"),
           type: "string",
         },
         userAdded: {
           field: "user_added",
-          name: "User added",
+          name: this.$t("filters.userAdded"),
           type: "string",
         },
         dateAdded: {
           field: "date_added",
-          name: "Date added",
+          name: this.$t("filters.dateAdded"),
           type: "datetime",
         },
         userChanged: {
           field: "user_changed",
-          name: "User changed",
+          name: this.$t("filters.userChanged"),
           type: "string",
         },
       };
     },
     visibleHeaders() {
       return this.headers.filter((header) => header.show);
+    },
+    visibleHeadersBibliography() {
+      return this.headersBibliography.filter((header) => header.show);
     },
     sortFieldMap() {
       return {
@@ -593,6 +674,16 @@ export default {
         this.$emit("filters:change", value);
       },
       deep: true,
+    },
+    view: {
+      handler(value) {
+        this.$emit("change:view", value);
+      },
+    },
+    citationStyle: {
+      handler(value) {
+        this.$emit("change:citation-style", value);
+      },
     },
   },
   methods: {

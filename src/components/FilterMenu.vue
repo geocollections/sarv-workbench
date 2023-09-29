@@ -13,12 +13,12 @@
         class="text-capitalize"
         text
         outlined
-        :color="totalActiveFilters > 0 ? 'warning' : null"
+        :color="totalActiveFilters > 0 ? 'warning' : 'grey darken-3'"
         v-bind="attrs"
         v-on="on"
       >
         <v-icon small left>fas fa-filter</v-icon>
-        Filters ({{ totalActiveFilters }})
+        {{ $t("dataTable.filters", { count: totalActiveFilters }) }}
       </v-btn>
     </template>
     <v-card class="pa-2" style="min-width: 14em">

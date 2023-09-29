@@ -1,13 +1,17 @@
 <template>
   <div>
-    <h1 class="pa-2">References</h1>
+    <h1 class="pa-2">{{ $tc("modules.reference", 2) }}</h1>
     <data-table-reference
       :filters="filters"
       :items="references"
       :count="totalReferences"
       :loading="loading"
+      :init-view="view"
+      :init-citation-style="citationStyle"
       @options:change="options = $event"
       @filters:change="filters = $event"
+      @change:view="view = $event"
+      @change:citation-style="citationStyle = $event"
       @export="handleExport"
     />
   </div>
@@ -40,6 +44,8 @@ export default {
       loading: true,
       totalReferences: 0,
       filters: [],
+      view: "table",
+      citationStyle: "apa",
     };
   },
   computed: {
@@ -389,20 +395,42 @@ export default {
     },
   },
   created() {
-    this.getReferences();
+    this.getReferences({ view: this.view, citationStyle: this.citationStyle });
   },
   watch: {
     options: {
       handler() {
-        this.getReferences();
+        this.getReferences({
+          view: this.view,
+          citationStyle: this.citationStyle,
+        });
       },
       deep: true,
     },
     queryFilters: {
       handler() {
-        this.getReferences();
+        this.getReferences({
+          view: this.view,
+          citationStyle: this.citationStyle,
+        });
       },
       deep: true,
+    },
+    view: {
+      handler() {
+        this.getReferences({
+          view: this.view,
+          citationStyle: this.citationStyle,
+        });
+      },
+    },
+    citationStyle: {
+      handler() {
+        this.getReferences({
+          view: this.view,
+          citationStyle: this.citationStyle,
+        });
+      },
     },
   },
   methods: {
@@ -438,13 +466,25 @@ export default {
       }
       return filter.value.id;
     },
-    async getReferences() {
+    async getReferences({ view, citationStyle }) {
       this.loading = true;
 
-      const res = await axiosInstance.get("/api/v1/private/references", {
-        params: {
+      let viewParams = {};
+      if (view === "table") {
+        viewParams = {
           expand: "journal,attachment",
           ordering: this.ordering ?? "-id",
+        };
+      } else if (view === "bibliography") {
+        viewParams = {
+          view_type: "bibliography",
+          citation_style: citationStyle,
+          ordering: "-id",
+        };
+      }
+      const res = await axiosInstance.get("/api/v1/private/references", {
+        params: {
+          ...viewParams,
           limit: this.options?.itemsPerPage,
           offset: this.options?.itemsPerPage * (this.options?.page - 1),
           ...this.queryFilters,
