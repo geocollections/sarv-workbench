@@ -22,7 +22,7 @@ jobs:
           paths:
             - ~/geocollections/sarv-edit
 
-  bundle_edit:
+  install_edit:
     executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
