@@ -64,10 +64,10 @@ jobs:
           key: -bundle-{{ checksum "package-lock.json" }}
       - run:
           name: Removing current production files
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER_1}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf assets/ favicon.ico index.html robots.txt service-worker.js'
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf assets/ favicon.ico index.html robots.txt service-worker.js'
       - run:
           name: Copying built files to production
-          command: scp -P ${PORT} -r dist/* ${USER_1}@${ADDRESS_1}:/var/www/sarv-edit
+          command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit
 
   deploy_edit2:
     executor: docker-publisher
