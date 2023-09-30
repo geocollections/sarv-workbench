@@ -53,6 +53,10 @@ jobs:
       - run:
           name: Building application
           command: npm run build
+      - save_cache:
+          key: -build-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/geocollections/sarv-edit
 
   deploy_edit:
     executor: docker-publisher
@@ -62,6 +66,8 @@ jobs:
           key: -repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           key: -bundle-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: -build-{{ checksum "package-lock.json" }}
       - run:
           name: Removing current production files
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf assets/ favicon.ico index.html robots.txt service-worker.js'
