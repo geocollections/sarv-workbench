@@ -3,11 +3,6 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
 
-parameters:
-  package-version:
-    type: string
-    default: "2.1.5"
-
 executors:
   docker-publisher:
     environment:
@@ -17,26 +12,24 @@ executors:
       - image: cimg/node:lts
 
 jobs:
-  checkout_code:
-    docker:
-      - image: cimg/node:lts
+  checkout:
+    executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
       - checkout
       - save_cache:
-          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: -repo-{{ checksum "package-lock.json" }}
           paths:
             - ~/geocollections/sarv-edit
 
-  bundle_dependencies:
-    docker:
-      - image: cimg/node:lts
+  bundle:
+    executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: -repo-{{ checksum "package-lock.json" }}
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
+          key: -bundle-{{ checksum "package-lock.json" }}
       - run:
           name: Npm disabling progress bar and adding depth 0
           command: npm set progress=false && npm config set depth 0
@@ -44,42 +37,34 @@ jobs:
           name: Installing packages
           command: npm install
       - save_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
+          key: -bundle-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
             - ./package-lock.json
 
-  build_dependencies:
-    docker:
-      - image: cimg/node:lts
+  build:
+    executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: -repo-{{ checksum "package-lock.json" }}
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
+          key: -bundle-{{ checksum "package-lock.json" }}
       - run:
           name: Building application
           command: npm run build
-      - save_cache:
-          key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/geocollections/sarv-edit
 
-  deploy_to_prod:
-    docker:
-      - image: cimg/node:lts
+  deploy_edit:
+    executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: -repo-{{ checksum "package-lock.json" }}
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
+          key: -bundle-{{ checksum "package-lock.json" }}
       - run:
           name: Removing current production files
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf assets/ favicon.ico index.html robots.txt service-worker.js'
       - run:
           name: Copying built files to production
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit
@@ -99,22 +84,16 @@ workflows:
             branches:
               only: main
 
-      - checkout_code:
+      - checkout:
           filters:
             branches:
-              only: production-v1-old
-      - bundle_dependencies:
+              only: production-v1
+      - install:
           requires:
             - checkout_code
-      - build_dependencies:
+      - build:
           requires:
             - bundle_dependencies
-          filters:
-            branches:
-              only: production-v1-old
-      - deploy_to_prod:
+      - deploy_edit:
           requires:
             - build_dependencies
-          filters:
-            branches:
-              only: production-v1-old
