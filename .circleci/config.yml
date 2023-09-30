@@ -17,11 +17,17 @@ jobs:
     working_directory: ~/geocollections/sarv-edit
     steps:
       - checkout
+      - save_cache:
+          key: -repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/geocollections/sarv-edit
 
   install_edit:
     executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
+      - restore_cache:
+          key: -repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           key: -bundle-{{ checksum "package-lock.json" }}
       - run:
@@ -41,6 +47,8 @@ jobs:
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
+          key: -repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
           key: -bundle-{{ checksum "package-lock.json" }}
       - run:
           name: Building application
@@ -50,6 +58,8 @@ jobs:
     executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
+      - restore_cache:
+          key: -repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           key: -bundle-{{ checksum "package-lock.json" }}
       - run:
