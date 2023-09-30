@@ -12,7 +12,7 @@ executors:
       - image: cimg/node:lts
 
 jobs:
-  checkout:
+  checkout_edit:
     executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
@@ -22,7 +22,7 @@ jobs:
           paths:
             - ~/geocollections/sarv-edit
 
-  bundle:
+  bundle_edit:
     executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
@@ -42,7 +42,7 @@ jobs:
             - ./node_modules
             - ./package-lock.json
 
-  build:
+  build_edit:
     executor: docker-publisher
     working_directory: ~/geocollections/sarv-edit
     steps:
@@ -84,14 +84,14 @@ workflows:
             branches:
               only: main
 
-      - checkout:
+      - checkout_edit:
           filters:
             branches:
               only: production-v1
-      - install:
+      - install_edit:
           requires:
             - checkout_code
-      - build:
+      - build_edit:
           requires:
             - bundle_dependencies
       - deploy_edit:
