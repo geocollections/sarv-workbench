@@ -90,10 +90,10 @@ workflows:
               only: production-v1
       - install_edit:
           requires:
-            - checkout_code
+            - checkout_edit
       - build_edit:
           requires:
-            - bundle_dependencies
+            - install_edit
       - deploy_edit:
           requires:
-            - build_dependencies
+            - build_edit
