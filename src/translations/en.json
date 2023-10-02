@@ -3201,7 +3201,9 @@
     "isNull": "is null",
     "range": "between",
     "in": "in",
-    "superset": "includes"
+    "superset": "includes",
+    "after": "after",
+    "before": "before"
   },
   "dataTable": {
     "filters": "Filters ({count})",
@@ -3223,5 +3225,22 @@
     "doi": "DOI",
     "pdf": "PDF",
     "url": "URL"
+  },
+  "boolean": {
+    "true": "true",
+    "false": "false"
+  },
+  "exists": {
+    "true": "exists",
+    "false": "doesn't exist"
+  },
+  "filterSummary": {
+    "between": "from {0} to {1}",
+    "in": "in {value}",
+    "inNumberic": "in {count} options",
+    "includes": "include {value}",
+    "includesNumberic": "include {count} options",
+    "after": "after {date}",
+    "before": "before {date}"
   }
 }

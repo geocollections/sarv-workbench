@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import store from "@/store";
 import DataTableReference from "../components/DataTableReference.vue";
 import { rwapiClient } from "../helpers/httpClients";
 
@@ -27,10 +25,6 @@ export default {
   name: "ReferenceList",
   components: {
     DataTableReference,
-    // FilterBuilder,
-    // FilterBuilderVertical,
-    // FilterSummary,
-    // ExpandableCard,
   },
   data() {
     return {
@@ -353,7 +347,6 @@ export default {
     queryFilters() {
       const result = {};
       for (const filter of this.filters) {
-        console.log(filter);
         if (
           !filter.enabled ||
           filter.field === null ||

@@ -1,25 +1,27 @@
 <template>
   <div>
     <v-chip
-      v-for="(value, index) in activeFilterValues"
+      v-for="(filter, index) in filters"
       color="warning"
       class="mr-1 mb-1"
       outlined
       close
       :key="index"
-      @click="handleValueClick(value)"
-      @click:close="handleValueRemove(value)"
+      @click="handleValueClick(filter)"
+      @click:close="handleValueRemove(filter)"
     >
       <v-avatar left>
         <v-icon small>
-          {{ filterTypeIconMap[value.filter.lookup.type] }}
+          {{ filterTypeIconMap[filter.lookup.type] }}
         </v-icon>
       </v-avatar>
-      {{ value.filter.field.name }}:
-      <span class="ml-1 font-weight-bold">{{ value.value }}</span>
+      <span class="grey--text text--darken-2"> {{ filter.field.name }} </span>
+      <span class="ml-1 font-weight-bold black--text">
+        {{ filter.lookup.summaryFunc(filter) }}
+      </span>
     </v-chip>
     <v-chip
-      v-if="activeFilterValues.length > 0"
+      v-if="filters.length > 0"
       text
       rounded
       color="transparent"
@@ -49,67 +51,8 @@ export default {
         autocompleteList: "fas fa-tags",
         boolean: "fas fa-check",
         datetime: "fas fa-clock",
+        datetimeRange: "fas fa-clock",
       };
-    },
-    activeFilterValues() {
-      return this.filters.reduce((acc, filter, index) => {
-        if (
-          !filter.enabled ||
-          filter.field === null ||
-          filter.lookup === null ||
-          filter.value === null ||
-          filter.value.length < 1 ||
-          (Array.isArray(filter.value) && filter.value.includes(null))
-        ) {
-          return acc;
-        }
-        if (filter.lookup.type === "autocomplete") {
-          if (Array.isArray(filter.value)) {
-            acc.push({
-              filter,
-              filterIndex: index,
-              value: filter.value
-                .map((value) => value[filter.field.itemText])
-                .join(", "),
-            });
-          } else if (filter.value !== null) {
-            acc.push({
-              filter,
-              filterIndex: index,
-              value: filter.value[filter.field.itemText],
-            });
-          }
-          return acc;
-        }
-        if (filter.lookup.type === "autocompleteList") {
-          if (Array.isArray(filter.value)) {
-            acc.push({
-              filter,
-              filterIndex: index,
-              value: filter.value
-                .map((value) => `"${value[filter.field.itemText]}"`)
-                .join(filter.lookup.value === "__in" ? " | " : " & "),
-            });
-          } else if (filter.value !== null) {
-            acc.push({
-              filter,
-              filterIndex: index,
-              value: filter.value[filter.field.itemText],
-            });
-          }
-          return acc;
-        }
-        if (filter.lookup.type === "range") {
-          acc.push({
-            filter,
-            filterIndex: index,
-            value: `${filter.value[0] ?? "*"} - ${filter.value[1] ?? "*"}`,
-          });
-          return acc;
-        }
-        acc.push({ filter, filterIndex: index, value: filter.value });
-        return acc;
-      }, []);
     },
   },
   methods: {

@@ -3193,7 +3193,6 @@
     "doi": "DOI",
     "authors": "Autorid"
   },
-
   "lookups": {
     "equal": "võrdub",
     "notEqual" : "ei võrdu",
@@ -3204,7 +3203,9 @@
     "isNull": "on null",
     "range": "vahemikus",
     "in": "hulgas",
-    "superset": "sisaldab"
+    "superset": "sisaldab",
+    "after": "peale",
+    "before": "enne"
   },
   "dataTable": {
     "filters": "Filtrid ({count})",
@@ -3226,5 +3227,22 @@
     "doi": "DOI",
     "pdf": "PDF",
     "url": "URL"
+  },
+  "boolean": {
+    "true": "tõene",
+    "false": "väär"
+  },
+  "exists": {
+    "true": "olemas",
+    "false": "ei ole olemas"
+  },
+  "filterSummary": {
+    "between": "vahemikus {0} kuni {1}",
+    "in": "hulgas {value}",
+    "inNumberic": "{count} valiku hulgas",
+    "includes": "sisaldab {value}",
+    "includesNumberic": "sisaldab {count} valikut",
+    "after": "pärast {date}",
+    "before": "enne {date}"
   }
 }
