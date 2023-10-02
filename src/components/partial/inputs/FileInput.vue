@@ -503,6 +503,9 @@ export default {
     },
 
     readFileMetaData(file) {
+      if (!file.type.startsWith("image")) {
+        return null;
+      }
       return new Promise((resolve, reject) => {
         try {
           let reader = new FileReader();
