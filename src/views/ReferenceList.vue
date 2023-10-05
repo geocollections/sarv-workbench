@@ -1,6 +1,20 @@
 <template>
   <div>
-    <h1 class="pa-2">{{ $tc("modules.reference", 2) }}</h1>
+    <span class="d-flex pa-2 align-center">
+      <h1>
+        {{ $tc("modules.reference", 2) }}
+      </h1>
+      <v-btn
+        class="ml-3"
+        color="green"
+        :to="{ path: '/reference/add' }"
+        rounded
+        outlined
+      >
+        <v-icon left>fas fa-plus</v-icon>
+        {{ $t("add.new") }}
+      </v-btn>
+    </span>
     <data-table-reference
       :filters="filters"
       :items="references"
@@ -8,9 +22,12 @@
       :loading="loading"
       :init-view="view"
       :init-citation-style="citationStyle"
-      @options:change="options = $event"
-      @filters:change="filters = $event"
+      :init-options="tableOptions"
+      :init-headers="headers"
       @change:view="view = $event"
+      @change:options="tableOptions = $event"
+      @change:filters="filters = $event"
+      @change:headers="headers = $event"
       @change:citation-style="citationStyle = $event"
       @export="handleExport"
     />
@@ -20,6 +37,9 @@
 <script>
 import DataTableReference from "../components/DataTableReference.vue";
 import { rwapiClient } from "../helpers/httpClients";
+import { mapWritableState } from "pinia";
+import cloneDeep from "lodash/cloneDeep";
+import { useReferenceStore } from "@/stores/reference";
 
 export default {
   name: "ReferenceList",
@@ -29,320 +49,37 @@ export default {
   data() {
     return {
       references: [],
-      options: { itemsPerPage: 25 },
       loading: true,
       totalReferences: 0,
-      filters: [],
-      view: "table",
-      citationStyle: "apa",
     };
   },
   computed: {
-    filterMap() {
+    ...mapWritableState(useReferenceStore, [
+      "citationStyle",
+      "filters",
+      "headers",
+      "tableOptions",
+      "view",
+    ]),
+    sortFieldMap() {
       return {
-        id: { field: "id", name: "Id", type: "number" },
-        title: { field: "title", name: "Title", type: "string" },
-        author: { field: "author", name: "Authors", type: "string" },
-        titleOriginal: {
-          field: "title_original",
-          name: "Original title",
-          type: "string",
-        },
-        titleTranslated: {
-          field: "title_translated",
-          name: "Translated title",
-          type: "string",
-        },
-        year: { field: "year", name: "Year", type: "string" },
-        journal: {
-          field: "journal",
-          name: "Journal",
-          type: "autocomplete",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/journals", {
-              params: {
-                fields: "id,name",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "name",
-          itemValue: "id",
-        },
-        parent: {
-          field: "parent",
-          name: "Parent reference",
-          type: "autocomplete",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/references", {
-              params: {
-                fields: "id,reference",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "reference",
-          itemValue: "id",
-        },
-        translatedReference: {
-          field: "translated_reference",
-          name: "Translated reference",
-          type: "autocomplete",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/references", {
-              params: {
-                fields: "id,reference",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "reference",
-          itemValue: "id",
-        },
-        language: {
-          field: "language",
-          name: "Language",
-          type: "autocomplete",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/languages", {
-              params: {
-                fields: "id,name",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "name",
-          itemValue: "id",
-        },
-        titleTranslatedLanguage: {
-          field: "title_translated_language",
-          name: "Translated title language",
-          type: "autocomplete",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/languages", {
-              params: {
-                fields: "id,name",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "name",
-          itemValue: "id",
-        },
-        licence: {
-          field: "licence",
-          name: "Licence",
-          type: "autocomplete",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/licences", {
-              params: {
-                fields: "id,name",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "name",
-          itemValue: "id",
-        },
-        type: {
-          field: "type",
-          name: "Type",
-          type: "autocomplete",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/reference-types", {
-              params: {
-                fields: "id,value",
-                limit,
-                offset,
-                value__icontains: search,
-              },
-            }),
-          itemText: "value",
-          itemValue: "id",
-        },
-        library: {
-          field: "reference_libraries",
-          name: "Libraries",
-          type: "autocompleteList",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/libraries", {
-              params: {
-                fields: "id,title",
-                limit,
-                offset,
-                title__icontains: search,
-              },
-            }),
-          itemText: "title",
-          itemValue: "id",
-        },
-        keyword: {
-          field: "keywords",
-          name: "Keywords",
-          type: "autocompleteList",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/keywords", {
-              params: {
-                fields: "id,name",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "name",
-          itemValue: "id",
-        },
-        taxon: {
-          field: "taxa",
-          name: "Taxa",
-          type: "autocompleteList",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/taxa", {
-              params: {
-                fields: "id,name",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "name",
-          itemValue: "id",
-        },
-        area: {
-          field: "reference_areas",
-          name: "Areas",
-          type: "autocompleteList",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/areas", {
-              params: {
-                fields: "id,name",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "name",
-          itemValue: "id",
-        },
-        locality: {
-          field: "reference_localities__locality",
-          name: "Localities",
-          type: "autocompleteList",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/localities", {
-              params: {
-                fields: "id,name",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "name",
-          itemValue: "id",
-        },
-        stratigraphy: {
-          field: "reference_stratigraphies",
-          name: "Stratigraphies",
-          type: "autocompleteList",
-          queryFunc: ({ search, limit, offset }) =>
-            rwapiClient.get("/api/v1/private/stratigraphies", {
-              params: {
-                fields: "id,name",
-                limit,
-                offset,
-                name__icontains: search,
-              },
-            }),
-          itemText: "name",
-          itemValue: "id",
-        },
-        book: { field: "book", name: "Book", type: "string" },
-        bookEditor: {
-          field: "book_editor",
-          name: "Book editor",
-          type: "string",
-        },
-        bookOriginal: {
-          field: "book_original",
-          name: "Original book title",
-          type: "string",
-        },
-        bookTranslated: {
-          field: "book_translated",
-          name: "Translated book title",
-          type: "string",
-        },
-        bookTranslatedLanguage: {
-          field: "book_translated_language",
-          name: "Translated book title language",
-          type: "string",
-        },
-        abstract: { field: "abstract", name: "Abstract", type: "string" },
-        remarks: { field: "remarks", name: "Remarks", type: "string" },
-        reference: { field: "reference", name: "Reference", type: "string" },
-        doi: { field: "doi", name: "Doi", type: "string" },
-        isEstonian: {
-          field: "is_estonian",
-          name: "Estonian",
-          type: "boolean",
-        },
-        isEstonianAuthor: {
-          field: "is_estonian_author",
-          name: "Estonian author",
-          type: "boolean",
-        },
-        isPrivate: {
-          field: "is_private",
-          name: "Private",
-          type: "boolean",
-        },
-        isOA: {
-          field: "is_oa",
-          name: "OpenAccess",
-          type: "boolean",
-        },
-        isbn: {
-          field: "isbn",
-          name: "ISBN",
-          type: "string",
-        },
-        issn: {
-          field: "issn",
-          name: "ISSN",
-          type: "string",
-        },
-        publisher: {
-          field: "publisher",
-          name: "Publisher",
-          type: "string",
-        },
-        publisherPlace: {
-          field: "publisher_place",
-          name: "Publisher place",
-          type: "string",
-        },
-        userAdded: {
-          field: "user_added",
-          name: "User added",
-          type: "string",
-        },
-        dateAdded: {
-          field: "date_added",
-          name: "Date added",
-          type: "datetime",
-        },
-        userChanged: {
-          field: "user_changed",
-          name: "User changed",
-          type: "string",
-        },
+        journal: "journal__journal_name",
       };
+    },
+    ordering() {
+      if (this.tableOptions?.sortBy?.length > 0) {
+        return this.tableOptions.sortBy
+          .map((value, index) => {
+            const sortField = this.sortFieldMap[value] ?? value;
+
+            if (this.tableOptions.sortDesc[index]) {
+              return `-${sortField}`;
+            }
+            return sortField;
+          })
+          .join(",");
+      }
+      return null;
     },
     queryFilters() {
       const result = {};
@@ -390,8 +127,8 @@ export default {
     this.getReferences({ view: this.view, citationStyle: this.citationStyle });
   },
   watch: {
-    options: {
-      handler() {
+    tableOptions: {
+      handler(val) {
         this.getReferences({
           view: this.view,
           citationStyle: this.citationStyle,
@@ -426,6 +163,10 @@ export default {
     },
   },
   methods: {
+    cloneDeep,
+    handleChangeFilters(newFilters) {
+      this.setFilters(newFilters);
+    },
     async handleExport(options) {
       const res = await rwapiClient.get("/api/v1/private/references", {
         responseType: "blob",
@@ -460,7 +201,6 @@ export default {
     },
     async getReferences({ view, citationStyle }) {
       this.loading = true;
-
       let viewParams = {};
       if (view === "table") {
         viewParams = {
@@ -477,8 +217,9 @@ export default {
       const res = await rwapiClient.get("/api/v1/private/references", {
         params: {
           ...viewParams,
-          limit: this.options?.itemsPerPage,
-          offset: this.options?.itemsPerPage * (this.options?.page - 1),
+          limit: this.tableOptions?.itemsPerPage,
+          offset:
+            this.tableOptions?.itemsPerPage * (this.tableOptions?.page - 1),
           ...this.queryFilters,
         },
       });

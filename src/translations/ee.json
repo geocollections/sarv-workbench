@@ -3175,7 +3175,7 @@
     "bookEditor": "Raamatu toimetaja",
     "originalBookTitle": "Originaal raamatu pealkiri",
     "translatedBookTitle": "Tõlgitud raamatu pealkiri",
-    "translatedBookTitleLanguage": "Tõlgitud raamatud pealkirja keel",
+    "translatedBookTitleLanguage": "Tõlgitud raamatu pealkirja keel",
     "abstract": "Abstrakt",
     "remarks": "Märkmed",
     "reference": "Viide",
@@ -3210,7 +3210,9 @@
   "dataTable": {
     "filters": "Filtrid ({count})",
     "columns": "Päised",
-    "export": "Ekspordi"
+    "export": "Ekspordi",
+    "foundSingle": "Otsing tagastas {count} tulemuse",
+    "foundPlural": "Otsing tagastas {count} tulemust"
   },
   "modules": {
     "reference": "Kirjandusallikas | Kirjandus"
@@ -3244,5 +3246,8 @@
     "includesNumberic": "sisaldab {count} valikut",
     "after": "pärast {date}",
     "before": "enne {date}"
+  },
+  "filterBuilder": {
+    "addFilter": "Lisa filter"
   }
 }

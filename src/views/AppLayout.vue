@@ -8,12 +8,12 @@
       <v-container fluid class="px-0 w-100">
         <GlobalAlertNotification class="d-print-none" />
 
-        <!-- <breadcrumbs -->
-        <!--   class="d-print-none px-2" -->
-        <!--   v-if="recentUrlsState" -->
-        <!--   :items="recentUrls" -->
-        <!--   :body-active-color="bodyActiveColor" -->
-        <!-- /> -->
+        <breadcrumbs
+          class="d-print-none px-2"
+          v-if="recentUrlsState"
+          :items="recentUrls"
+          :body-active-color="bodyActiveColor"
+        />
 
         <router-view />
       </v-container>
@@ -30,7 +30,7 @@ import GlobalAlertNotification from "@/components/partial/GlobalAlertNotificatio
 export default {
   components: {
     GlobalAlertNotification,
-    // Breadcrumbs,
+    Breadcrumbs,
     AppHeader,
   },
   name: "Dashboard",

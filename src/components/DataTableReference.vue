@@ -12,22 +12,31 @@
         :filters="filters"
         :filter-map="filterMap"
         :total-active-filters="activeFilters.length"
+        :total-results="count"
       />
       <v-menu offset-y bottom :close-on-content-click="false">
         <template #activator="{ on, attrs }">
           <v-btn
+            :tile="$vuetify.breakpoint.mdAndDown"
+            :icon="$vuetify.breakpoint.mdAndDown"
             class="mx-2 text-capitalize"
-            outlined
             text
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon left>fas fa-file-export</v-icon>
-            {{ $t("dataTable.export") }}
+            <v-icon
+              :left="!$vuetify.breakpoint.mdAndDown"
+              color="grey darken-3"
+            >
+              fas fa-file-export
+            </v-icon>
+            <span v-show="!$vuetify.breakpoint.mdAndDown">
+              {{ $t("dataTable.export") }}
+            </span>
           </v-btn>
         </template>
         <v-card class="pa-2">
-          <v-btn-toggle dense v-model="exportOptions.format">
+          <v-btn-toggle mandatory dense v-model="exportOptions.format">
             <v-btn value="json">JSON</v-btn>
             <v-btn value="xlsx">XLSX</v-btn>
             <v-btn value="csv">CSV</v-btn>
@@ -53,14 +62,30 @@
           <v-btn outlined color="warning" @click="handleExport">Export</v-btn>
         </v-card>
       </v-menu>
-      <v-btn-toggle class="mr-2" dense v-model="view">
-        <v-btn icon value="table">
-          <v-icon>fas fa-table</v-icon>
+      <v-divider vertical class="mr-2" />
+      <v-btn-toggle
+        class="mr-2"
+        borderless
+        color="warning"
+        background-color="transparent"
+        mandatory
+        dense
+        v-model="view"
+      >
+        <v-btn value="table">
+          <v-icon :color="view === 'table' ? 'warning' : 'grey darken-3'">
+            fas fa-table
+          </v-icon>
         </v-btn>
         <v-btn value="bibliography">
-          <v-icon small>fas fa-book-open</v-icon>
+          <v-icon
+            :color="view === 'bibliography' ? 'warning' : 'grey darken-3'"
+            small
+            >fas fa-book-open</v-icon
+          >
         </v-btn>
       </v-btn-toggle>
+      <v-divider vertical class="mr-2" />
       <data-table-headers-menu
         v-if="view === 'table'"
         :headers="headers"
@@ -70,14 +95,22 @@
       >
         <template #activator="menu">
           <v-btn
-            class="text-capitalize"
-            outlined
+            class="text-capitalize mr-2"
             text
+            :tile="$vuetify.breakpoint.mdAndDown"
+            :icon="$vuetify.breakpoint.mdAndDown"
             v-bind="{ ...menu.attrs }"
             v-on="{ ...menu.on }"
           >
-            <v-icon left>fas fa-table</v-icon>
-            {{ $t("dataTable.columns") }}
+            <v-icon
+              color="grey darken-3"
+              :left="!$vuetify.breakpoint.mdAndDown"
+            >
+              fas fa-table
+            </v-icon>
+            <span v-show="!$vuetify.breakpoint.mdAndDown">
+              {{ $t("dataTable.columns") }}
+            </span>
           </v-btn>
         </template>
       </data-table-headers-menu>
@@ -93,14 +126,21 @@
         :menu-props="{ bottom: true, offsetY: true }"
         :items="citationStyles"
       />
+      <i18n
+        :path="count === 1 ? 'dataTable.foundSingle' : 'dataTable.foundPlural'"
+        class="ml-auto body-2 text--secondary"
+      >
+        <template #count>
+          <span class="font-weight-bold black--text">{{ count }}</span>
+        </template>
+      </i18n>
       <data-table-pagination
-        class="ml-auto"
         :count="count"
         :paginate-by="options.itemsPerPage"
         :page="options.page ?? 1"
         :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
-        v-on:update:page="options.page = $event"
-        v-on:update:paginateBy="options.itemsPerPage = $event"
+        v-on:update:page="handleUpdatePage"
+        v-on:update:paginateBy="handleUpdatePaginateBy"
       />
     </div>
     <div
@@ -123,10 +163,11 @@
       mobile-breakpoint="0"
       :headers="visibleHeaders"
       :items="items"
-      :options.sync="options"
+      :options="options"
       :server-items-length="count"
       :loading="loading"
       :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, 500, 1000] }"
+      @update:options="handleUpdateOptions"
     >
       <template #item.record="{ item }">
         <v-btn color="blue" icon :to="{ path: `/reference/${item.id}` }">
@@ -169,10 +210,11 @@
       mobile-breakpoint="0"
       :headers="visibleHeadersBibliography"
       :items="items"
-      :options.sync="options"
+      :options="options"
       :server-items-length="count"
       :loading="loading"
       :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, 500, 1000] }"
+      @update:options="handleUpdateOptions"
     >
       <template #item.record="{ item }">
         <v-btn color="blue" icon :to="{ path: `/reference/${item.id}` }">
@@ -221,8 +263,8 @@
         :paginate-by="options.itemsPerPage"
         :page="options.page ?? 1"
         :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
-        v-on:update:page="options.page = $event"
-        v-on:update:paginateBy="options.itemsPerPage = $event"
+        v-on:update:page="handleUpdatePage"
+        v-on:update:paginateBy="handleUpdatePaginateBy"
       />
     </div>
   </div>
@@ -237,7 +279,7 @@ import { rwapiClient } from "../helpers/httpClients";
 
 function defaultHeaders() {
   return [
-    { text: "", value: "record", sortable: false, show: true },
+    { text: "", value: "record", sortable: false, show: true, hideable: false },
     { text: "Id", value: "id", show: true },
     { text: "Authors", value: "author", show: true },
     { text: "Year", value: "year", show: true },
@@ -291,13 +333,21 @@ export default {
       type: String,
       default: "apa",
     },
+    initOptions: {
+      type: Object,
+      default: () => ({ itemsPerPage: 25 }),
+    },
+    initHeaders: {
+      type: Array,
+      default: null,
+    },
   },
   data() {
     return {
       view: this.initView,
       citationStyle: this.initCitationStyle,
-      options: { itemsPerPage: 25 },
-      headers: defaultHeaders(),
+      options: this.initOptions,
+      headers: this.initHeaders ? this.initHeaders : defaultHeaders(),
       headersBibliography: defaultHeadersBibliography(),
       exportOptions: {
         filename: "export",
@@ -663,38 +713,18 @@ export default {
     visibleHeadersBibliography() {
       return this.headersBibliography.filter((header) => header.show);
     },
-    sortFieldMap() {
-      return {
-        journal: "journal__journal_name",
-      };
-    },
-    ordering() {
-      if (this.options?.sortBy?.length > 0) {
-        return this.options.sortBy
-          .map((value, index) => {
-            const sortField = this.sortFieldMap[value] ?? value;
-
-            if (this.options.sortDesc[index]) {
-              return `-${sortField}`;
-            }
-            return sortField;
-          })
-          .join(",");
-      }
-      return null;
+    activeHeaderIndexes() {
+      return this.headers.reduce((acc, header, index) => {
+        if (header.show) acc.push(index);
+        return acc;
+      }, []);
     },
   },
-
   watch: {
-    options: {
-      handler(value) {
-        this.$emit("options:change", value);
-      },
-      deep: true,
-    },
     filters: {
-      handler(value) {
-        this.$emit("filters:change", value);
+      handler() {
+        this.options.page = 1;
+        this.$emit("change:options", structuredClone(this.options));
       },
       deep: true,
     },
@@ -710,40 +740,28 @@ export default {
     },
   },
   methods: {
+    handleUpdateOptions(newOptions) {
+      this.options = newOptions;
+      this.$emit("change:options", structuredClone(this.options));
+    },
+    handleUpdatePage(newPage) {
+      this.options.page = newPage;
+      this.$emit("change:options", structuredClone(this.options));
+    },
+    handleUpdatePaginateBy(newPaginateBy) {
+      this.options.page = 1;
+      this.options.itemsPerPage = newPaginateBy;
+      this.$emit("change:options", structuredClone(this.options));
+    },
     handleExport() {
-      this.$emit("export", this.exportOptions);
-    },
-    addFilter() {
-      this.filters.push({
-        field: null,
-        lookup: null,
-        value: null,
-        enabled: true,
-      });
-    },
-    removeFilter(index) {
-      this.filters.splice(index, 1);
-    },
-    handleFieldChange(index, newField) {
-      this.filters[index].field = newField;
-      this.filters[index].lookup = this.lookupMap[newField.type][0];
-      this.filters[index].value = null;
-    },
-    handleLookupChange(index, newLookup) {
-      this.filters[index].lookup = newLookup;
-      if (["__in", "__superset_of"].includes(newLookup.value)) {
-        this.filters[index].value = [];
-      } else if (newLookup.value === "__range") {
-        this.filters[index].value = [null, null];
-      } else {
-        this.filters[index].value = null;
-      }
+      this.$emit("export", structuredClone(this.exportOptions));
     },
     handleHeaderChange(event) {
       const index = this.headers.findIndex(
         (header) => header.value === event.value
       );
       this.headers[index].show = !this.headers[index].show;
+      this.$emit("change:headers", structuredClone(this.headers));
     },
     handleHeadersReset() {
       this.headers = defaultHeaders();
@@ -784,5 +802,9 @@ export default {
 .v-select__selections input {
   width: 0 !important;
   min-width: 0 !important;
+}
+.v-btn-toggle > .v-btn {
+  opacity: 1 !important;
+  background-color: transparent;
 }
 </style>

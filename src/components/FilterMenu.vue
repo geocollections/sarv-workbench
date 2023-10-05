@@ -6,26 +6,33 @@
     ref="menu"
     content-class="elevation-1"
     style="z-index: 1 !important"
+    :min-width="$vuetify.breakpoint.mdAndDown ? '95%' : '800px'"
   >
     <template #activator="{ on, attrs }">
       <v-btn
         ref="menuButton"
         class="text-capitalize"
         text
-        outlined
+        :tile="$vuetify.breakpoint.mdAndDown"
+        :icon="$vuetify.breakpoint.mdAndDown"
         :color="totalActiveFilters > 0 ? 'warning' : 'grey darken-3'"
         v-bind="attrs"
         v-on="on"
       >
-        <v-icon small left>fas fa-filter</v-icon>
-        {{ $t("dataTable.filters", { count: totalActiveFilters }) }}
+        <v-icon small :left="!$vuetify.breakpoint.mdAndDown">
+          fas fa-filter
+        </v-icon>
+        <span v-show="!$vuetify.breakpoint.mdAndDown">
+          {{ $t("dataTable.filters", { count: totalActiveFilters }) }}
+        </span>
       </v-btn>
     </template>
-    <v-card class="pa-2" style="min-width: 14em">
+    <v-card class="pa-2" style="min-width: 600px">
       <filter-builder
         ref="filterBuilder"
         :filters="filters"
         :filter-map="filterMap"
+        :total-results="totalResults"
       />
     </v-card>
   </v-menu>
@@ -47,6 +54,10 @@ export default {
       default: () => ({}),
     },
     totalActiveFilters: {
+      type: Number,
+      default: 0,
+    },
+    totalResults: {
       type: Number,
       default: 0,
     },

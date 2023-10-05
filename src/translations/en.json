@@ -3208,7 +3208,9 @@
   "dataTable": {
     "filters": "Filters ({count})",
     "columns": "Columns",
-    "export": "Export"
+    "export": "Export",
+    "foundSingle": "Found {count} result",
+    "foundPlural": "Found {count} results"
   },
   "modules": {
     "reference": "Reference | References"
@@ -3242,5 +3244,8 @@
     "includesNumberic": "include {count} options",
     "after": "after {date}",
     "before": "before {date}"
+  },
+  "filterBuilder": {
+    "addFilter": "Add filter"
   }
 }

@@ -116,9 +116,10 @@ export default {
   name: "DataTableHeaderMenu",
   filters: {
     filterHeaders(headers, filter) {
-      return headers.filter((header) =>
-        header.text.toLowerCase().includes(filter.toLowerCase())
-      );
+      return headers.filter((header) => {
+        if (header.hideable === false) return false;
+        return header.text.toLowerCase().includes(filter.toLowerCase());
+      });
     },
   },
   props: {
