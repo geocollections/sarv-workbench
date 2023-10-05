@@ -1,5 +1,5 @@
 <template>
-  <div class="d-inline-flex justify-end">
+  <div class="d-inline-flex justify-end" style="width: min-content">
     <div class="d-inline-flex align-center mr-2 mr-sm-3" style="flex: 0 0 0">
       <v-select
         class="mt-0 text-caption"

@@ -1,149 +1,157 @@
 <template>
   <div>
     <div
-      class="px-2 py-1 d-flex align-center"
+      class="px-2 py-1 d-sm-flex align-center"
       style="
         border-bottom: 1px solid lightgray;
         border-top: 1px solid lightgray;
       "
     >
-      <filter-menu
-        ref="filterMenu"
-        :filters="filters"
-        :filter-map="filterMap"
-        :total-active-filters="activeFilters.length"
-        :total-results="count"
-      />
-      <v-menu offset-y bottom :close-on-content-click="false">
-        <template #activator="{ on, attrs }">
-          <v-btn
-            :tile="$vuetify.breakpoint.mdAndDown"
-            :icon="$vuetify.breakpoint.mdAndDown"
-            class="mx-2 text-capitalize"
-            text
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon
-              :left="!$vuetify.breakpoint.mdAndDown"
-              color="grey darken-3"
+      <div class="d-flex align-center">
+        <filter-menu
+          ref="filterMenu"
+          :filters="filters"
+          :filter-map="filterMap"
+          :total-active-filters="activeFilters.length"
+          :total-results="count"
+        />
+        <v-menu offset-y bottom :close-on-content-click="false">
+          <template #activator="{ on, attrs }">
+            <v-btn
+              :tile="$vuetify.breakpoint.mdAndDown"
+              :icon="$vuetify.breakpoint.mdAndDown"
+              class="mx-2 text-capitalize"
+              text
+              v-bind="attrs"
+              v-on="on"
             >
-              fas fa-file-export
+              <v-icon
+                :left="!$vuetify.breakpoint.mdAndDown"
+                color="grey darken-3"
+              >
+                fas fa-file-export
+              </v-icon>
+              <span v-show="!$vuetify.breakpoint.mdAndDown">
+                {{ $t("dataTable.export") }}
+              </span>
+            </v-btn>
+          </template>
+          <v-card class="pa-2">
+            <v-btn-toggle mandatory dense v-model="exportOptions.format">
+              <v-btn value="json">JSON</v-btn>
+              <v-btn value="xlsx">XLSX</v-btn>
+              <v-btn value="csv">CSV</v-btn>
+              <v-btn value="ris">RIS</v-btn>
+            </v-btn-toggle>
+            <v-divider class="my-2" />
+            <v-text-field
+              v-model="exportOptions.filename"
+              outlined
+              dense
+              :suffix="`.${exportOptions.format}`"
+              label="Filename"
+            ></v-text-field>
+            <v-text-field
+              v-model="exportOptions.count"
+              outlined
+              dense
+              type="number"
+              :min="1"
+              :max="count"
+              label="Rows to export"
+            ></v-text-field>
+            <v-btn outlined color="deep-orange" @click="handleExport">
+              Export
+            </v-btn>
+          </v-card>
+        </v-menu>
+        <v-divider vertical class="mr-2" />
+        <v-btn-toggle
+          class="mr-2"
+          borderless
+          color="deep-orange"
+          background-color="transparent"
+          mandatory
+          dense
+          v-model="view"
+        >
+          <v-btn value="table">
+            <v-icon :color="view === 'table' ? 'deep-orange' : 'grey darken-3'">
+              fas fa-table
             </v-icon>
-            <span v-show="!$vuetify.breakpoint.mdAndDown">
-              {{ $t("dataTable.export") }}
-            </span>
           </v-btn>
-        </template>
-        <v-card class="pa-2">
-          <v-btn-toggle mandatory dense v-model="exportOptions.format">
-            <v-btn value="json">JSON</v-btn>
-            <v-btn value="xlsx">XLSX</v-btn>
-            <v-btn value="csv">CSV</v-btn>
-            <v-btn value="ris">RIS</v-btn>
-          </v-btn-toggle>
-          <v-divider class="my-2" />
-          <v-text-field
-            v-model="exportOptions.filename"
-            outlined
-            dense
-            :suffix="`.${exportOptions.format}`"
-            label="Filename"
-          ></v-text-field>
-          <v-text-field
-            v-model="exportOptions.count"
-            outlined
-            dense
-            type="number"
-            :min="1"
-            :max="count"
-            label="Rows to export"
-          ></v-text-field>
-          <v-btn outlined color="deep-orange" @click="handleExport">
-            Export
-          </v-btn>
-        </v-card>
-      </v-menu>
-      <v-divider vertical class="mr-2" />
-      <v-btn-toggle
-        class="mr-2"
-        borderless
-        color="deep-orange"
-        background-color="transparent"
-        mandatory
-        dense
-        v-model="view"
-      >
-        <v-btn value="table">
-          <v-icon :color="view === 'table' ? 'deep-orange' : 'grey darken-3'">
-            fas fa-table
-          </v-icon>
-        </v-btn>
-        <v-btn value="bibliography">
-          <v-icon
-            :color="view === 'bibliography' ? 'deep-orange' : 'grey darken-3'"
-            small
-            >fas fa-book-open</v-icon
-          >
-        </v-btn>
-      </v-btn-toggle>
-      <v-divider vertical class="mr-2" />
-      <data-table-headers-menu
-        v-if="view === 'table'"
-        :headers="headers"
-        :visible-headers="visibleHeaders"
-        @change="handleHeaderChange"
-        @reset="handleHeadersReset"
-      >
-        <template #activator="menu">
-          <v-btn
-            class="text-capitalize mr-2"
-            text
-            :tile="$vuetify.breakpoint.mdAndDown"
-            :icon="$vuetify.breakpoint.mdAndDown"
-            v-bind="{ ...menu.attrs }"
-            v-on="{ ...menu.on }"
-          >
+          <v-btn value="bibliography">
             <v-icon
-              color="grey darken-3"
-              :left="!$vuetify.breakpoint.mdAndDown"
+              :color="view === 'bibliography' ? 'deep-orange' : 'grey darken-3'"
+              small
+              >fas fa-book-open</v-icon
             >
-              fas fa-table-columns
-            </v-icon>
-            <span v-show="!$vuetify.breakpoint.mdAndDown">
-              {{ $t("dataTable.columns") }}
-            </span>
           </v-btn>
-        </template>
-      </data-table-headers-menu>
-      <v-select
-        v-if="view === 'bibliography'"
-        class="mr-2"
-        style="max-width: 12em"
-        dense
-        outlined
-        hide-details
-        label="Style"
-        v-model="citationStyle"
-        :menu-props="{ bottom: true, offsetY: true }"
-        :items="citationStyles"
-      />
-      <i18n
-        :path="count === 1 ? 'dataTable.foundSingle' : 'dataTable.foundPlural'"
-        class="ml-auto body-2 text--secondary"
+        </v-btn-toggle>
+        <v-divider vertical class="mr-2" />
+        <data-table-headers-menu
+          v-if="view === 'table'"
+          :headers="headers"
+          :visible-headers="visibleHeaders"
+          @change="handleHeaderChange"
+          @reset="handleHeadersReset"
+        >
+          <template #activator="menu">
+            <v-btn
+              class="text-capitalize mr-2"
+              text
+              :tile="$vuetify.breakpoint.mdAndDown"
+              :icon="$vuetify.breakpoint.mdAndDown"
+              v-bind="{ ...menu.attrs }"
+              v-on="{ ...menu.on }"
+            >
+              <v-icon
+                color="grey darken-3"
+                :left="!$vuetify.breakpoint.mdAndDown"
+              >
+                fas fa-table-columns
+              </v-icon>
+              <span v-show="!$vuetify.breakpoint.mdAndDown">
+                {{ $t("dataTable.columns") }}
+              </span>
+            </v-btn>
+          </template>
+        </data-table-headers-menu>
+        <v-select
+          v-if="view === 'bibliography'"
+          class="mr-2"
+          style="max-width: 12em"
+          dense
+          outlined
+          hide-details
+          label="Style"
+          v-model="citationStyle"
+          :menu-props="{ bottom: true, offsetY: true }"
+          :items="citationStyles"
+        />
+      </div>
+      <div
+        class="d-flex flex-column align-center mt-2 mt-sm-0 flex-sm-row align-sm-center text-sm-left ml-sm-auto"
       >
-        <template #count>
-          <span class="font-weight-bold black--text">{{ count }}</span>
-        </template>
-      </i18n>
-      <data-table-pagination
-        :count="count"
-        :paginate-by="options.itemsPerPage"
-        :page="options.page ?? 1"
-        :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
-        v-on:update:page="handleUpdatePage"
-        v-on:update:paginateBy="handleUpdatePaginateBy"
-      />
+        <i18n
+          :path="
+            count === 1 ? 'dataTable.foundSingle' : 'dataTable.foundPlural'
+          "
+          class="body-2 text--secondary mr-sm-3"
+        >
+          <template #count>
+            <span class="font-weight-bold black--text">{{ count }}</span>
+          </template>
+        </i18n>
+        <data-table-pagination
+          :count="count"
+          :paginate-by="options.itemsPerPage"
+          :page="options.page ?? 1"
+          :items-per-page-options="[10, 25, 50, 100, 250, 500, 1000]"
+          v-on:update:page="handleUpdatePage"
+          v-on:update:paginateBy="handleUpdatePaginateBy"
+        />
+      </div>
     </div>
     <div
       v-if="activeFilters.length > 0"
@@ -280,10 +288,9 @@
         border-bottom: 1px solid lightgray;
         border-top: 1px solid lightgray;
       "
-      class="d-flex justify-end px-2 py-1"
+      class="d-flex justify-center justify-sm-end px-2 py-1"
     >
       <data-table-pagination
-        class="ml-auto"
         :count="count"
         :paginate-by="options.itemsPerPage"
         :page="options.page ?? 1"
