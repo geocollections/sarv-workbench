@@ -173,20 +173,13 @@
     >
       <template #item.record="{ item }">
         <div class="d-flex">
-          <v-btn
-            small
-            color="blue"
-            icon
-            :to="{ path: `/reference/${item.id}` }"
-          >
-            <v-icon small>fas fa-eye</v-icon>
+          <v-btn color="blue" icon :to="{ path: `/reference/${item.id}` }">
+            <v-icon>fas fa-eye</v-icon>
           </v-btn>
         </div>
       </template>
       <template #item.is_estonian="{ item }">
-        <v-icon v-if="item.is_estonian === true" color="green" small
-          >fas fa-check</v-icon
-        >
+        <v-icon v-if="item.is_estonian" color="green">fas fa-check</v-icon>
       </template>
       <template #item.journal="{ item }">
         <router-link
@@ -198,34 +191,37 @@
           <span>{{ item.journal.name }}</span>
         </router-link>
       </template>
+      <template #item.author="{ item }">
+        <div style="min-width: 8rem">
+          {{ item.author }}
+        </div>
+      </template>
+      <template #item.title="{ item }">
+        <div style="min-width: 16rem">
+          {{ item.title }}
+        </div>
+      </template>
       <template #item.links="{ item }">
         <div class="d-flex">
           <v-btn
             icon
-            small
             v-if="!item.is_private"
             :href="`https://kirjandus.geoloogia.info/reference/${item.id}`"
           >
-            <v-icon small>fas fa-arrow-up-right-from-square</v-icon>
+            <v-icon>fas fa-arrow-up-right-from-square</v-icon>
           </v-btn>
-          <v-btn
-            v-if="item.doi"
-            small
-            icon
-            :href="`https://doi.org/${item.doi}`"
-          >
-            <v-icon small color="#fab608">ai ai-doi</v-icon>
+          <v-btn v-if="item.doi" icon :href="`https://doi.org/${item.doi}`">
+            <v-icon color="#fab608">ai ai-doi</v-icon>
           </v-btn>
           <v-btn
             v-if="item.attachment?.[0]?.uuid_filename"
             icon
-            small
             :href="`https://files-dev.geoloogia.info/${item.attachment[0].uuid_filename}`"
           >
-            <v-icon small color="red">fas fa-file-pdf</v-icon>
+            <v-icon color="red">fas fa-file-pdf</v-icon>
           </v-btn>
-          <v-btn v-if="item.url" icon small :href="item.url">
-            <v-icon small>fas fa-link</v-icon>
+          <v-btn v-if="item.url" icon :href="item.url">
+            <v-icon>fas fa-link</v-icon>
           </v-btn>
         </div>
       </template>
