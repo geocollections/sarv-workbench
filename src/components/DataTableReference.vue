@@ -59,27 +59,29 @@
             :max="count"
             label="Rows to export"
           ></v-text-field>
-          <v-btn outlined color="warning" @click="handleExport">Export</v-btn>
+          <v-btn outlined color="deep-orange" @click="handleExport">
+            Export
+          </v-btn>
         </v-card>
       </v-menu>
       <v-divider vertical class="mr-2" />
       <v-btn-toggle
         class="mr-2"
         borderless
-        color="warning"
+        color="deep-orange"
         background-color="transparent"
         mandatory
         dense
         v-model="view"
       >
         <v-btn value="table">
-          <v-icon :color="view === 'table' ? 'warning' : 'grey darken-3'">
+          <v-icon :color="view === 'table' ? 'deep-orange' : 'grey darken-3'">
             fas fa-table
           </v-icon>
         </v-btn>
         <v-btn value="bibliography">
           <v-icon
-            :color="view === 'bibliography' ? 'warning' : 'grey darken-3'"
+            :color="view === 'bibliography' ? 'deep-orange' : 'grey darken-3'"
             small
             >fas fa-book-open</v-icon
           >
@@ -106,7 +108,7 @@
               color="grey darken-3"
               :left="!$vuetify.breakpoint.mdAndDown"
             >
-              fas fa-table
+              fas fa-table-columns
             </v-icon>
             <span v-show="!$vuetify.breakpoint.mdAndDown">
               {{ $t("dataTable.columns") }}
@@ -170,12 +172,21 @@
       @update:options="handleUpdateOptions"
     >
       <template #item.record="{ item }">
-        <v-btn color="blue" icon :to="{ path: `/reference/${item.id}` }">
-          <v-icon>fas fa-eye</v-icon>
-        </v-btn>
+        <div class="d-flex">
+          <v-btn
+            small
+            color="blue"
+            icon
+            :to="{ path: `/reference/${item.id}` }"
+          >
+            <v-icon small>fas fa-eye</v-icon>
+          </v-btn>
+        </div>
       </template>
       <template #item.is_estonian="{ item }">
-        <v-icon v-if="item.is_estonian">fas fa-check</v-icon>
+        <v-icon v-if="item.is_estonian === true" color="green" small
+          >fas fa-check</v-icon
+        >
       </template>
       <template #item.journal="{ item }">
         <router-link
@@ -187,18 +198,36 @@
           <span>{{ item.journal.name }}</span>
         </router-link>
       </template>
-      <template #item.doi="{ item }">
-        <a v-if="item.doi" :href="`https://doi.org/${item.doi}`">DOI</a>
-      </template>
-      <template #item.pdf="{ item }">
-        <a
-          v-if="item.attachment[0]?.uuid_filename"
-          :href="`https://files-dev.geoloogia.info/${item.attachment[0].uuid_filename}`"
-          >pdf</a
-        >
-      </template>
-      <template #item.url="{ item }">
-        <a v-if="item.url" :href="item.url"> URL </a>
+      <template #item.links="{ item }">
+        <div class="d-flex">
+          <v-btn
+            icon
+            small
+            v-if="!item.is_private"
+            :href="`https://kirjandus.geoloogia.info/reference/${item.id}`"
+          >
+            <v-icon small>fas fa-arrow-up-right-from-square</v-icon>
+          </v-btn>
+          <v-btn
+            v-if="item.doi"
+            small
+            icon
+            :href="`https://doi.org/${item.doi}`"
+          >
+            <v-icon small color="#fab608">ai ai-doi</v-icon>
+          </v-btn>
+          <v-btn
+            v-if="item.attachment?.[0]?.uuid_filename"
+            icon
+            small
+            :href="`https://files-dev.geoloogia.info/${item.attachment[0].uuid_filename}`"
+          >
+            <v-icon small color="red">fas fa-file-pdf</v-icon>
+          </v-btn>
+          <v-btn v-if="item.url" icon small :href="item.url">
+            <v-icon small>fas fa-link</v-icon>
+          </v-btn>
+        </div>
       </template>
     </v-data-table>
     <v-data-table
@@ -277,22 +306,6 @@ import DataTablePagination from "@/components/partial/DataTablePagination.vue";
 import FilterSummary from "./FilterSummary.vue";
 import { rwapiClient } from "../helpers/httpClients";
 
-function defaultHeaders() {
-  return [
-    { text: "", value: "record", sortable: false, show: true, hideable: false },
-    { text: "Id", value: "id", show: true },
-    { text: "Authors", value: "author", show: true },
-    { text: "Year", value: "year", show: true },
-    { text: "Title", value: "title", show: true },
-    { text: "Journal", value: "journal", show: true },
-    { text: "Volume", value: "volume", show: true },
-    { text: "Pages", value: "pages", show: true },
-    { text: "Estonian", value: "is_estonian", show: true },
-    { text: "DOI", value: "doi", show: true },
-    { text: "PDF", value: "pdf", show: true },
-    { text: "URL", value: "url", show: true },
-  ];
-}
 function defaultHeadersBibliography() {
   return [
     { text: "", value: "record", sortable: false, show: true },
@@ -347,7 +360,7 @@ export default {
       view: this.initView,
       citationStyle: this.initCitationStyle,
       options: this.initOptions,
-      headers: this.initHeaders ? this.initHeaders : defaultHeaders(),
+      headers: this.initHeaders ? this.initHeaders : this.defaultHeaders(),
       headersBibliography: defaultHeadersBibliography(),
       exportOptions: {
         filename: "export",
@@ -379,6 +392,26 @@ export default {
         { text: "APA", value: "apa" },
         { text: "Harvard", value: "harvard1" },
         { text: "Sedimentology", value: "sedimentology" },
+      ];
+    },
+    testHeaders() {
+      return [
+        {
+          text: "",
+          value: "record",
+          sortable: false,
+          show: true,
+          hideable: false,
+        },
+        { text: this.$t("headers.id"), value: "id", show: true },
+        { text: this.$t("headers.authors"), value: "author", show: true },
+        { text: this.$t("headers.year"), value: "year", show: true },
+        { text: this.$t("headers.title"), value: "title", show: true },
+        { text: this.$t("headers.journal"), value: "journal", show: true },
+        { text: this.$t("headers.volume"), value: "volume", show: true },
+        { text: this.$t("headers.pages"), value: "pages", show: true },
+        { text: this.$t("headers.estonian"), value: "is_estonian", show: true },
+        { text: this.$t("headers.links"), value: "links", show: true },
       ];
     },
     filterMap() {
@@ -721,6 +754,14 @@ export default {
     },
   },
   watch: {
+    "$i18n.locale": {
+      handler() {
+        const translatedHeaders = this.defaultHeaders();
+        this.headers.forEach((header, index) => {
+          header.text = translatedHeaders[index].text;
+        });
+      },
+    },
     filters: {
       handler() {
         this.options.page = 1;
@@ -740,6 +781,26 @@ export default {
     },
   },
   methods: {
+    defaultHeaders() {
+      return [
+        {
+          text: "",
+          value: "record",
+          sortable: false,
+          show: true,
+          hideable: false,
+        },
+        { text: this.$t("headers.id"), value: "id", show: true },
+        { text: this.$t("headers.authors"), value: "author", show: true },
+        { text: this.$t("headers.year"), value: "year", show: true },
+        { text: this.$t("headers.title"), value: "title", show: true },
+        { text: this.$t("headers.journal"), value: "journal", show: true },
+        { text: this.$t("headers.volume"), value: "volume", show: true },
+        { text: this.$t("headers.pages"), value: "pages", show: true },
+        { text: this.$t("headers.estonian"), value: "is_estonian", show: true },
+        { text: this.$t("headers.links"), value: "links", show: true },
+      ];
+    },
     handleUpdateOptions(newOptions) {
       this.options = newOptions;
       this.$emit("change:options", structuredClone(this.options));

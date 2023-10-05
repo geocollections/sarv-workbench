@@ -2,7 +2,7 @@
   <div>
     <v-chip
       v-for="(filter, index) in filters"
-      color="warning"
+      color="deep-orange"
       class="mr-1 mb-1"
       outlined
       close

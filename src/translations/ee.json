@@ -3228,7 +3228,8 @@
     "estonian": "Eesti päritolu",
     "doi": "DOI",
     "pdf": "PDF",
-    "url": "URL"
+    "url": "URL",
+    "links": "Lingid"
   },
   "boolean": {
     "true": "tõene",

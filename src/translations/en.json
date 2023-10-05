@@ -3226,7 +3226,8 @@
     "estonian": "Estonian",
     "doi": "DOI",
     "pdf": "PDF",
-    "url": "URL"
+    "url": "URL",
+    "links": "Links"
   },
   "boolean": {
     "true": "true",

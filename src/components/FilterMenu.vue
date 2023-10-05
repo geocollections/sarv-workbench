@@ -15,7 +15,7 @@
         text
         :tile="$vuetify.breakpoint.mdAndDown"
         :icon="$vuetify.breakpoint.mdAndDown"
-        :color="totalActiveFilters > 0 ? 'warning' : 'grey darken-3'"
+        :color="totalActiveFilters > 0 ? 'deep-orange' : 'grey darken-3'"
         v-bind="attrs"
         v-on="on"
       >
