@@ -51,7 +51,7 @@
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
 
 export default {
-  name: "TaxonPagesTable",
+  name: "TaxonPageTable",
   mixins: [tableHeaderMixin],
   props: {
     response: {
