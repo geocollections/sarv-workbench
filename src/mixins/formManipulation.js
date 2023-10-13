@@ -159,9 +159,14 @@ const formManipulation = {
           if (saveAsNew) delete objectToUpload.id;
 
           if (saveAsDifferentObject) {
+            const originalObjectId = this.$route.params.id;
             if (objectToUpload.id) delete objectToUpload.id;
             object = saveAsDifferentObject;
-            this.updateNewObjectsFields(objectToUpload, saveAsDifferentObject);
+            this.updateNewObjectsFields(
+              objectToUpload,
+              saveAsDifferentObject,
+              originalObjectId
+            );
           }
 
           let url = objectToUpload.id
@@ -510,7 +515,7 @@ const formManipulation = {
      * @param currentData - Data which is saved (current active data)
      * @param object - New object name as string
      */
-    updateNewObjectsFields(currentData, object) {
+    updateNewObjectsFields(currentData, object, originalObjectId) {
       if (object === "locality") {
         let site = cloneDeep(currentData);
         delete currentData.date_end;
@@ -548,9 +553,15 @@ const formManipulation = {
         delete currentData.original_status;
         delete currentData.parent;
         delete currentData.number_pieces;
+        currentData.parent_specimen = originalObjectId;
 
-        currentData.remarks += " (This record was added from specimen form)";
+        if (currentData.remarks) {
+          currentData.remarks += " (This record was added from specimen form)";
+        } else {
+          currentData.remarks = "(This record was added from specimen form)";
+        }
       } else if (object === "specimen") {
+        console.log(originalObjectId);
         delete currentData.number;
         delete currentData.number_additional;
         delete currentData.series;
@@ -571,9 +582,17 @@ const formManipulation = {
         delete currentData.analysis;
         delete currentData.locality;
         delete currentData.locality_free;
+        delete currentData.site;
 
-        currentData.remarks_internal +=
-          "(This record was added from sample form)";
+        currentData.sample = originalObjectId;
+
+        if (currentData.remarks_internal) {
+          currentData.remarks_internal +=
+            "(This record was added from sample form)";
+        } else {
+          currentData.remarks_internal =
+            "(This record was added from sample form)";
+        }
       }
     },
 
