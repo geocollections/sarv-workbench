@@ -1907,7 +1907,7 @@ export function fetchSpecimens(data, dynamicSearch) {
       searchFields += "&distinct=true";
     searchFields += `&multi_search=value:${
       data.mineralRock
-    };fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:${
+    };fields:specimen_identification_geology__name,specimen_identification_geology__name_en,specimen_identification_geology__rock__name,specimen_identification_geology__rock__name_en;lookuptype:${
       data.mineralRock__lookuptype || "icontains"
     }`;
   }
@@ -2033,7 +2033,7 @@ export function fetchSpecimenImages(data, dynamicSearch) {
       searchFields += "&distinct=true";
     searchFields += `&multi_search=value:${
       data.mineralRock
-    };fields:specimen__specimenidentificationgeologies__name,specimen__specimenidentificationgeologies__name_en,specimen__specimenidentificationgeologies__rock__name,specimen__specimenidentificationgeologies__rock__name_en;lookuptype:${
+    };fields:specimen__specimen_identification_geology__name,specimen__specimen_identification_geology__name_en,specimen__specimen_identification_geology__rock__name,specimen__specimen_identification_geology__rock__name_en;lookuptype:${
       data.mineralRock__lookuptype || "icontains"
     }`;
   }
