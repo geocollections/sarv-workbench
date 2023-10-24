@@ -137,7 +137,7 @@ export default {
   mixins: [toastMixin],
 
   data: () => ({
-    url: `${import.meta.env.VITE_API_URL}/api/v0/import/`,
+    url: `${import.meta.env.VITE_API_URL}/api/v0/private/import/`,
     importResponse: null,
     initialPermissions: {
       groups_view: [],

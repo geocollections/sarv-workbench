@@ -90,7 +90,7 @@ export default {
   components: { InputWrapper, FileInput },
   data: () => ({
     test: {
-      url: `${import.meta.env.VITE_API_URL}/api/v0/import/`,
+      url: `${import.meta.env.VITE_API_URL}/api/v0/private/import/`,
       table: "area",
       file: [],
       textKey: "text",

@@ -4,7 +4,7 @@ import store from "../../../store";
 import axios from "axios";
 
 const api = {
-  url: `${import.meta.env.VITE_API_URL}/api/v0/`,
+  url: `${import.meta.env.VITE_API_URL}/api/v0/private/`,
   baseUrl: `${import.meta.env.VITE_API_URL}/`,
   accountsUrl: `${import.meta.env.VITE_API_URL}/accounts/`,
   dataciteUrl: `${import.meta.env.VITE_API_URL}/datacite/`,
