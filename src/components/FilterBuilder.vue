@@ -1,5 +1,16 @@
 <template>
   <div class="pa-2">
+    <i18n
+      :path="
+        totalResults === 1 ? 'dataTable.foundSingle' : 'dataTable.foundPlural'
+      "
+      class="mb-5 text--secondary"
+      tag="div"
+    >
+      <template #count>
+        <span class="font-weight-bold black--text">{{ totalResults }}</span>
+      </template>
+    </i18n>
     <div
       class="d-flex align-start mb-1"
       v-for="(filter, index) in filters"
@@ -11,8 +22,9 @@
       <v-autocomplete
         class="mr-1"
         style="min-width: 14em"
-        :value="filter.filter"
+        :value="filter.field"
         :items="filterOptions ?? []"
+        item-text="id"
         hide-details
         outlined
         dense
@@ -20,7 +32,6 @@
         return-object
         :menu-props="{ bottom: true, offsetY: true }"
         :filter="fieldFilter"
-        :value-comparator="fieldComparator"
         @input="handleFieldChange(index, $event)"
       >
         <template #item="{ item }">
@@ -143,13 +154,23 @@
         <v-icon>fas fa-times</v-icon>
       </v-btn>
     </div>
-    <v-btn text color="primary" @click="addFilter">+ add</v-btn>
+    <v-btn
+      class="mt-2 text-none"
+      outlined
+      dense
+      color="primary"
+      @click="addFilter"
+    >
+      <v-icon left>fas fa-plus</v-icon>
+      {{ $t("filterBuilder.addFilter") }}
+    </v-btn>
   </div>
 </template>
 <script>
 import FilterAutocomplete from "@/components/FilterAutocomplete.vue";
 import FilterDatetime from "@/components/FilterDatetime.vue";
 import sortBy from "lodash/sortBy";
+
 export default {
   name: "FilterBuilder",
   components: { FilterAutocomplete, FilterDatetime },
@@ -161,6 +182,10 @@ export default {
     filterMap: {
       type: Object,
       default: () => ({}),
+    },
+    totalResults: {
+      type: Number,
+      default: 0,
     },
   },
   computed: {
@@ -183,94 +208,150 @@ export default {
     lookupMap() {
       return {
         string: [
-          { value: "", name: this.$t("lookups.equal"), type: "string" },
-          { value: "!", name: this.$t("lookups.notEqual"), type: "string" },
           {
+            id: "contains",
             value: "__icontains",
             name: this.$t("lookups.contains"),
             type: "string",
           },
           {
-            value: "__icontains!",
-            name: this.$t("lookups.notContains"),
+            id: "equal",
+            value: "",
+            name: this.$t("lookups.equal"),
             type: "string",
           },
           {
+            id: "startsWith",
             value: "__istartswith",
             name: this.$t("lookups.startsWith"),
             type: "string",
           },
           {
+            id: "endswith",
             value: "__iendswith",
             name: this.$t("lookups.endsWith"),
             type: "string",
           },
           {
+            id: "isNull",
             value: "__isnull",
             name: this.$t("lookups.isNull"),
             type: "boolean",
           },
         ],
         number: [
-          { value: "", name: "=", type: "string" },
-          { value: "!", name: "!=", type: "string" },
-          { value: "__lt", name: "<", type: "string" },
-          { value: "__lte", name: "<=", type: "string" },
-          { value: "__gt", name: ">", type: "string" },
-          { value: "__gte", name: ">=", type: "string" },
-          { value: "__range", name: this.$t("lookups.range"), type: "range" },
           {
+            id: "equal",
+            value: "",
+            name: "=",
+            type: "number",
+          },
+          {
+            id: "notEqual",
+            value: "!",
+            name: "!=",
+            type: "number",
+          },
+          {
+            id: "lessThan",
+            value: "__lt",
+            name: "<",
+            type: "number",
+          },
+          {
+            id: "lessThanEqual",
+            value: "__lte",
+            name: "<=",
+            type: "number",
+          },
+          {
+            id: "greaterThan",
+            value: "__gt",
+            name: ">",
+            type: "number",
+          },
+          {
+            id: "greaterThanEqual",
+            value: "__gte",
+            name: ">=",
+            type: "number",
+          },
+          {
+            id: "range",
+            value: "__range",
+            name: this.$t("lookups.range"),
+            type: "range",
+          },
+          {
+            id: "isNull",
             value: "__isnull",
             name: this.$t("lookups.isNull"),
             type: "boolean",
           },
         ],
         autocomplete: [
-          { value: "", name: "=", type: "autocomplete" },
           {
+            id: "in",
             value: "__in",
             name: this.$t("lookups.in"),
             type: "autocompleteList",
           },
           {
+            id: "isNull",
             value: "__isnull",
             name: this.$t("lookups.isNull"),
             type: "boolean",
           },
         ],
         autocompleteList: [
-          { value: "", name: "=", type: "autocomplete" },
           {
+            id: "in",
             value: "__in",
             name: this.$t("lookups.in"),
             type: "autocompleteList",
           },
           {
+            id: "superset",
             value: "__superset_of",
             name: this.$t("lookups.superset"),
             type: "autocompleteList",
           },
           {
+            id: "isNull",
             value: "__isnull",
             name: this.$t("lookups.isNull"),
             type: "boolean",
           },
         ],
         boolean: [
-          { value: "", name: "=", type: "boolean" },
-          { value: "!", name: "!=", type: "boolean" },
           {
+            id: "equal",
+            value: "",
+            name: "=",
+            type: "boolean",
+          },
+          {
+            id: "isNull",
             value: "__isnull",
             name: this.$t("lookups.isNull"),
             type: "boolean",
           },
         ],
         datetime: [
-          { value: "__gt", name: ">", type: "datetime" },
-          { value: "__gte", name: ">=", type: "datetime" },
-          { value: "__lt", name: "<", type: "datetime" },
-          { value: "__lte", name: "<=", type: "datetime" },
           {
+            id: "greaterThanEqual",
+            value: "__gte",
+            name: this.$t("lookups.after"),
+            type: "datetime",
+          },
+          {
+            id: "lessThanEqual",
+            value: "__lte",
+            name: this.$t("lookups.before"),
+            type: "datetime",
+          },
+          {
+            id: "range",
             value: "__range",
             name: this.$t("lookups.range"),
             type: "datetimeRange",
@@ -313,9 +394,23 @@ export default {
       this.filters[index].field = newField;
       this.filters[index].lookup = this.lookupMap[newField.type][0];
       this.filters[index].value = null;
+      if (this.filters[index].lookup.type === "autocompleteList") {
+        this.filters[index].value = [];
+      } else if (
+        ["range", "datetimeRange"].includes(this.filters[index].lookup.type)
+      ) {
+        this.filters[index].value = [null, null];
+      } else {
+        this.filters[index].value = null;
+      }
     },
     handleLookupChange(index, newLookup) {
+      const isSameLookupType =
+        this.filters[index].lookup.type === newLookup.type;
       this.filters[index].lookup = newLookup;
+
+      if (isSameLookupType) return;
+
       if (newLookup.type === "autocompleteList") {
         this.filters[index].value = [];
       } else if (["range", "datetimeRange"].includes(newLookup.type)) {
@@ -324,8 +419,9 @@ export default {
         this.filters[index].value = null;
       }
     },
-    fieldComparator(a, b) {
-      return a?.id === b?.id;
+    isNullSummary(filter) {
+      if (filter.value) return this.$t("exists.true");
+      return this.$t("exists.false");
     },
   },
 };

@@ -21,12 +21,19 @@ import ee from "./translations/ee.json";
 import en from "./translations/en.json";
 import VueQrcode from "@chenfengyuan/vue-qrcode";
 
+import { createPinia, PiniaVuePlugin } from "pinia";
+import piniaPluginPersistedState from "pinia-plugin-persistedstate";
+
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedState);
+
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueCookies);
 Vue.use(constants);
 Vue.use(helpers);
 Vue.use(dayjs);
+Vue.use(PiniaVuePlugin);
 Vue.component(VueQrcode.name, VueQrcode);
 Vue.config.productionTip = false;
 
@@ -71,5 +78,6 @@ new Vue({
   store,
   router,
   vuetify,
+  pinia,
   render: (h) => h(App),
 }).$mount("#app");

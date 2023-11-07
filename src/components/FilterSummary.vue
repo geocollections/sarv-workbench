@@ -1,25 +1,27 @@
 <template>
   <div>
     <v-chip
-      v-for="(value, index) in activeFilterValues"
-      color="warning"
+      v-for="(filter, index) in filters"
+      color="deep-orange"
       class="mr-1 mb-1"
       outlined
       close
       :key="index"
-      @click="handleValueClick(value)"
-      @click:close="handleValueRemove(value)"
+      @click="handleValueClick(filter)"
+      @click:close="handleValueRemove(filter)"
     >
       <v-avatar left>
         <v-icon small>
-          {{ filterTypeIconMap[value.filter.lookup.type] }}
+          {{ filterTypeIconMap[filter.lookup.type] }}
         </v-icon>
       </v-avatar>
-      {{ value.filter.field.name }}:
-      <span class="ml-1 font-weight-bold">{{ value.value }}</span>
+      <span class="grey--text text--darken-2"> {{ filter.field.name }} </span>
+      <span class="ml-1 font-weight-bold black--text">
+        {{ summaryFns[filter.lookup.type][filter.lookup.id](filter) }}
+      </span>
     </v-chip>
     <v-chip
-      v-if="activeFilterValues.length > 0"
+      v-if="filters.length > 0"
       text
       rounded
       color="transparent"
@@ -49,70 +51,97 @@ export default {
         autocompleteList: "fas fa-tags",
         boolean: "fas fa-check",
         datetime: "fas fa-clock",
+        datetimeRange: "fas fa-clock",
       };
     },
-    activeFilterValues() {
-      return this.filters.reduce((acc, filter, index) => {
-        if (
-          !filter.enabled ||
-          filter.field === null ||
-          filter.lookup === null ||
-          filter.value === null ||
-          filter.value.length < 1 ||
-          (Array.isArray(filter.value) && filter.value.includes(null))
-        ) {
-          return acc;
-        }
-        if (filter.lookup.type === "autocomplete") {
-          if (Array.isArray(filter.value)) {
-            acc.push({
-              filter,
-              filterIndex: index,
-              value: filter.value
-                .map((value) => value[filter.field.itemText])
-                .join(", "),
-            });
-          } else if (filter.value !== null) {
-            acc.push({
-              filter,
-              filterIndex: index,
-              value: filter.value[filter.field.itemText],
-            });
-          }
-          return acc;
-        }
-        if (filter.lookup.type === "autocompleteList") {
-          if (Array.isArray(filter.value)) {
-            acc.push({
-              filter,
-              filterIndex: index,
+    summaryFns() {
+      return {
+        string: {
+          contains: (filter) => `..${filter.value}..`,
+          startsWith: (filter) => `${filter.value}..`,
+          endsWith: (filter) => `..${filter.value}`,
+          isNull: this.isNullSummary,
+        },
+        number: {
+          equal: (filter) => `= ${filter.value}`,
+          notEqual: (filter) => `!= ${filter.value}`,
+          lessThan: (filter) => `< ${filter.value}`,
+          lessThanEqual: (filter) => `<= ${filter.value}`,
+          greaterThan: (filter) => `> ${filter.value}`,
+          greaterThanEqual: (filter) => `>= ${filter.value}`,
+          range: (filter) => this.$t("filterSummary.between", filter.value),
+          isNull: this.isNullSummary,
+        },
+        autocomplete: {
+          in: (filter) => {
+            if (filter.value.length > 3)
+              return this.$t("filterSummary.inNumberic", {
+                count: filter.value.length,
+              });
+            return this.$t("filterSummary.in", {
               value: filter.value
                 .map((value) => `"${value[filter.field.itemText]}"`)
-                .join(filter.lookup.value === "__in" ? " | " : " & "),
+                .join(", "),
             });
-          } else if (filter.value !== null) {
-            acc.push({
-              filter,
-              filterIndex: index,
-              value: filter.value[filter.field.itemText],
+          },
+          isNull: this.isNullSummary,
+        },
+        autocompleteList: {
+          in: (filter) => {
+            if (filter.value.length > 3)
+              return this.$t("filterSummary.inNumberic", {
+                count: filter.value.length,
+              });
+            return this.$t("filterSummary.in", {
+              value: filter.value
+                .map((value) => `"${value[filter.field.itemText]}"`)
+                .join(", "),
             });
-          }
-          return acc;
-        }
-        if (filter.lookup.type === "range") {
-          acc.push({
-            filter,
-            filterIndex: index,
-            value: `${filter.value[0] ?? "*"} - ${filter.value[1] ?? "*"}`,
-          });
-          return acc;
-        }
-        acc.push({ filter, filterIndex: index, value: filter.value });
-        return acc;
-      }, []);
+          },
+          superset: (filter) => {
+            if (filter.value.length > 3)
+              return this.$t("filterSummary.includesNumberic", {
+                count: filter.value.length,
+              });
+            return this.$t("filterSummary.includes", {
+              value: filter.value
+                .map((value) => `"${value[filter.field.itemText]}"`)
+                .join(", "),
+            });
+          },
+          isNull: this.isNullSummary,
+        },
+        boolean: {
+          equal: (filter) => {
+            if (filter.value) return this.$t("boolean.true");
+            return this.$t("boolean.false");
+          },
+          isNull: this.isNullSummary,
+        },
+        datetime: {
+          greaterThanEqual: (filter) =>
+            this.$t("filterSummary.after", {
+              date: new Date(filter.value).toLocaleString(),
+            }),
+          lessThanEqual: (filter) =>
+            this.$t("filterSummary.before", {
+              date: new Date(filter.value).toLocaleString(),
+            }),
+          range: (filter) => {
+            return this.$t(
+              "filterSummary.between",
+              filter.value.map((value) => new Date(value).toLocaleString())
+            );
+          },
+        },
+      };
     },
   },
   methods: {
+    isNullSummary(filter) {
+      if (filter.value) return this.$t("exists.true");
+      return this.$t("exists.false");
+    },
     handleValueRemove(removableValue) {
       this.$emit("remove:filter", { filterIndex: removableValue.filterIndex });
     },

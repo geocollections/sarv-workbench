@@ -1,16 +1,11 @@
 <template>
-  <div class="d-inline-flex justify-end mr-2 mr-sm-3">
+  <div class="d-inline-flex justify-end" style="width: min-content">
     <div class="d-inline-flex align-center mr-2 mr-sm-3" style="flex: 0 0 0">
-      <div
-        v-show="$vuetify.breakpoint.smAndUp"
-        class="mr-3 text-no-wrap text-caption"
-      >
-        {{ itemsPerPageText }}
-      </div>
       <v-select
         class="mt-0 text-caption"
         style="max-width: 100px"
         dense
+        outlined
         hide-details
         :items="itemsPerPageOptions"
         :value="paginateBy"

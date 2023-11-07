@@ -2248,7 +2248,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("./components/taxon_pages/TaxonPagesTable.vue"),
+                import("./components/taxon_pages/TaxonPageTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "taxon_page",

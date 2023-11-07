@@ -25,6 +25,17 @@ export default defineConfig({
       filename: "analyse.html", // will be saved in project's root
     }),
   ],
+  css: {
+    preprocessorOptions: {
+      sass: {
+        additionalData: [
+          '@import "./src/styles/variables"',
+          '@import "vuetify/src/styles/settings/_variables"',
+          "", // end with newline
+        ].join("\n"),
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

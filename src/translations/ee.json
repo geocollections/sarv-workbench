@@ -3175,7 +3175,7 @@
     "bookEditor": "Raamatu toimetaja",
     "originalBookTitle": "Originaal raamatu pealkiri",
     "translatedBookTitle": "Tõlgitud raamatu pealkiri",
-    "translatedBookTitleLanguage": "Tõlgitud raamatud pealkirja keel",
+    "translatedBookTitleLanguage": "Tõlgitud raamatu pealkirja keel",
     "abstract": "Abstrakt",
     "remarks": "Märkmed",
     "reference": "Viide",
@@ -3193,7 +3193,6 @@
     "doi": "DOI",
     "authors": "Autorid"
   },
-
   "lookups": {
     "equal": "võrdub",
     "notEqual" : "ei võrdu",
@@ -3204,12 +3203,16 @@
     "isNull": "on null",
     "range": "vahemikus",
     "in": "hulgas",
-    "superset": "sisaldab"
+    "superset": "sisaldab",
+    "after": "peale",
+    "before": "enne"
   },
   "dataTable": {
     "filters": "Filtrid ({count})",
     "columns": "Päised",
-    "export": "Ekspordi"
+    "export": "Ekspordi",
+    "foundSingle": "Otsing tagastas {count} tulemuse",
+    "foundPlural": "Otsing tagastas {count} tulemust"
   },
   "modules": {
     "reference": "Kirjandusallikas | Kirjandus"
@@ -3225,6 +3228,27 @@
     "estonian": "Eesti päritolu",
     "doi": "DOI",
     "pdf": "PDF",
-    "url": "URL"
+    "url": "URL",
+    "links": "Lingid"
+  },
+  "boolean": {
+    "true": "tõene",
+    "false": "väär"
+  },
+  "exists": {
+    "true": "olemas",
+    "false": "ei ole olemas"
+  },
+  "filterSummary": {
+    "between": "vahemikus {0} kuni {1}",
+    "in": "hulgas {value}",
+    "inNumberic": "{count} valiku hulgas",
+    "includes": "sisaldab {value}",
+    "includesNumberic": "sisaldab {count} valikut",
+    "after": "pärast {date}",
+    "before": "enne {date}"
+  },
+  "filterBuilder": {
+    "addFilter": "Lisa filter"
   }
 }
