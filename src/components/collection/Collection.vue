@@ -412,8 +412,8 @@ import {
   fetchSpecimens,
   fetchDatabase,
   fetchObjectPermissions,
-} from "../../assets/js/api/apiCalls";
-import  cloneDeep  from "lodash/cloneDeep";
+} from "@/assets/js/api/apiCalls";
+import cloneDeep from "lodash/cloneDeep";
 import SpecimenTable from "../specimen/SpecimenTable";
 import { mapActions, mapState, mapGetters } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -578,6 +578,7 @@ export default {
         specimenSearchParameters: {
           idSpecimen: null,
           collNumber: null,
+          collNumber__lookuptype: "iexact",
           fossil: null,
           mineralRock: null,
           locality: null,
