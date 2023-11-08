@@ -11,6 +11,7 @@ const api = {
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",
+  filesUrl: `${import.meta.env.VITE_API_URL}/`,
 };
 
 const attachmentFields =
@@ -91,11 +92,11 @@ axios.interceptors.response.use(
   }
 );
 
-async function get(child = "", customUrl) {
+async function get(child = "", customUrl, options) {
   let url = api.url + child;
   if (customUrl) url = customUrl + child;
   try {
-    return await axios.get(url);
+    return await axios.get(url, options);
   } catch (error) {
     return error.response;
   }
@@ -202,6 +203,15 @@ export function postRequest(url, data, customUrl = "", config = {}) {
 /*************************
  *** ATTACHMENTS START ***
  *************************/
+
+export function fetchRawFile(data) {
+  let path = "files/";
+  if (data.size) path += `${data.size}/`;
+  path += `${data.uuid}.${data.extension}/`;
+  return get(path, api.filesUrl, {
+    responseType: "blob",
+  });
+}
 
 export function fetchAttachments(data, dynamicSearch) {
   let fields =
