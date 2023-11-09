@@ -37,6 +37,16 @@
             />
           </v-col>
         </v-row>
+        <v-row no-gutters class="my-2">
+          <v-col>
+            <object-permissions-create
+              v-if="!$route.meta.isedit"
+              title="permissions.title_import"
+              message="permissions.import_permissions_message"
+              @change="handlePermissionsChange"
+            />
+          </v-col>
+        </v-row>
 
         <v-row no-gutters>
           <v-col cols="6" class="pa-1">
@@ -83,14 +93,21 @@
 <script>
 import FileInput from "../inputs/FileInput";
 import InputWrapper from "../inputs/InputWrapper";
+import ObjectPermissionsCreate from "../ObjectPermissionsCreate.vue";
 import { mapState } from "vuex";
 import { postRequest } from "../../../assets/js/api/apiCalls";
 export default {
   name: "Test",
-  components: { InputWrapper, FileInput },
+  components: { InputWrapper, FileInput, ObjectPermissionsCreate },
   data: () => ({
     test: {
       url: `${import.meta.env.VITE_API_URL}/api/v0/private/import/`,
+      initialPermissions: {
+        groups_view: [],
+        groups_change: [],
+        users_view: [],
+        users_change: [],
+      },
       table: "area",
       file: [],
       textKey: "text",
@@ -116,6 +133,9 @@ export default {
     clearFiles() {
       this.test.file = [];
     },
+    handlePermissionsChange(perms) {
+      this.initialPermissions = perms;
+    },
     async upload() {
       if (this.test.url && this.test.table) {
         let formData = new FormData();
@@ -126,6 +146,10 @@ export default {
           this.test.file.forEach((file, index) => {
             formData.append("file" + [index], file);
           });
+          formData.append(
+            "initial_permissions",
+            JSON.stringify(this.initialPermissions)
+          );
         }
         try {
           let response = await postRequest(
@@ -144,5 +168,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
