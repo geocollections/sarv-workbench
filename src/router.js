@@ -32,8 +32,7 @@ const router = new Router({
       redirect: "/",
     },
     {
-      // Todo: Find out how to support dot file endings in params
-      path: "/test_files/:size(small|medium|large)?/:uuid/:extension",
+      path: "/files/:size(small|medium|large)?/:uuid",
       name: "files-response",
       component: FileResponse,
       meta: {

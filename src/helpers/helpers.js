@@ -1,9 +1,10 @@
 import config from "@/config";
 
 const getFileUrl = (filename, size) => {
-  let filePath = "/" + filename;
+  const uuid = filename.split(".")[0];
+  let filePath = "/" + uuid;
   if (size && ["small", "medium", "large"].includes(size)) {
-    filePath = "/" + size + "/" + filename;
+    filePath = "/" + size + "/" + uuid;
   }
   return config.app.filesUrl + filePath;
 };

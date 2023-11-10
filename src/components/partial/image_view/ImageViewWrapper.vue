@@ -230,9 +230,9 @@ export default {
       if (file) {
         let url = this.config.app.filesUrl;
         if (this.isImageFile(file)) {
-          url += `/large/${file.uuid_filename}`;
+          url += `/large/${file.uuid}`;
         } else {
-          url += "/" + file.uuid_filename;
+          url += "/" + file.uuid;
         }
         this.$helpers.openUrlInNewWindow(url);
       }
