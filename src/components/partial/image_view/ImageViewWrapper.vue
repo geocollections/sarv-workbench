@@ -10,7 +10,7 @@
     </div>
     <v-row>
       <v-col
-        v-for="(image, index) in data"
+        v-for="image in data"
         :key="image.id"
         class="py-3"
         style="position: relative"
@@ -23,6 +23,7 @@
           <template v-slot:activator="{ on }">
             <v-card
               flat
+              style="max-width: 400px; max-height: 400px"
               class="d-flex image-hover fill-height"
               v-on="on"
               :class="
@@ -39,12 +40,15 @@
               "
             >
               <file-preview
-                style="max-width: 400px; max-height: 400px"
                 :attachment="image"
                 :contain="containImages"
                 icon-size="6rem"
                 square
-                max="400"
+                :prefix="
+                  object === 'drillcore_box' || object === 'location'
+                    ? 'attachment__'
+                    : ''
+                "
               />
             </v-card>
           </template>
@@ -199,68 +203,42 @@ export default {
     idField() {
       if (this.object === "specimen") return "specimen_id";
       if (this.object === "location") return "storage__id";
-      if (this.object === "drillcore_box") return "drillcore_box";
+      if (this.object === "drillcore_box") return "drillcore_box__id";
       else return "id";
     },
   },
   methods: {
     openFileInNewWindow(file) {
-      if (file) {
-        let url = this.config.app.filesUrl;
-        if (this.isImageFile(file)) {
-          url += `/large/${file.uuid}`;
-        } else {
-          url += "/" + file.uuid;
-        }
-        this.$helpers.openUrlInNewWindow(url);
-      }
-    },
+      console.log(file);
+      if (!file) return;
+      const uuidFilename = file.uuid_filename || file.attachment__uuid_filename;
 
-    getAttachmentIcon(attachment) {
-      if (attachment.attachment_format__value) {
-        let fileType = attachment.attachment_format__value;
-        if (fileType.includes("application")) {
-          if (fileType.includes("docx")) return "fa-file-word";
-          else if (fileType.includes("pdf")) return "fa-file-pdf";
-          else if (fileType.includes("xlsx") || fileType.includes("ods"))
-            return "fa-file-excel";
-          else if (fileType.includes("zip")) return "fa-file-archive";
-          else return "fa-file";
-        } else if (fileType.includes("audio")) return "fa-file-audio";
-        else if (fileType.includes("image")) return "fa-file-image";
-        else if (fileType.includes("text")) return "fa-file-alt";
-        else if (fileType.includes("video")) return "fa-file-video";
-        else return "fa-file";
+      const uuid = uuidFilename.split(".")?.[0];
+      let url = this.config.app.filesUrl;
+      if (this.isImageFile(file)) {
+        url += `/large/${uuid}`;
       } else {
-        let fileType = attachment.uuid_filename.split(".")[1];
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value
-        if (fileType.includes("jpg") || fileType.includes("png"))
-          return "fa-file-image";
-        // 859 jpg and 2 png
-        else if (fileType.includes("pdf")) return "fa-file-pdf";
-        // 635 pdf
-        else if (fileType.includes("xls") || fileType.includes("ods"))
-          return "fa-file-excel";
-        // 4 xls and 2 ods
-        else if (fileType.includes("txt")) return "fa-file-alt";
-        // 1 txt
-        else if (fileType.includes("webm")) return "fa-file-video";
-        // 1 webm
-        else return "fa-file"; // 4 hz1
+        url += "/" + uuid;
       }
+      this.$helpers.openUrlInNewWindow(url);
     },
 
     isImageFile(image) {
+      const mimeType =
+        image.attachment_format__value ||
+        image.attachment__attachment_format__value;
+      const uuidFilename =
+        image.uuid_filename || image.attachment__uuid_filename;
       const imageMimeTypes = [
         "image/jpe",
         "image/jpg",
         "image/jpeg",
         "image/png",
       ];
-      if (image.attachment_format__value) {
-        return imageMimeTypes.includes(image?.attachment_format__value);
+      if (mimeType) {
+        return imageMimeTypes.includes(mimeType);
       } else {
-        let fileType = image.uuid_filename.split(".")[1];
+        let fileType = uuidFilename.split(".")[1];
         // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
         return !!(fileType.includes("jpg") || fileType.includes("png"));
       }

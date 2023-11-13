@@ -3,7 +3,7 @@
     v-if="isImage"
     class="grey lighten-2"
     :is-public="isPublic"
-    :attachment="attachment"
+    :uuid="attachment?.[`${prefix}uuid_filename`]"
     :contain="contain"
     :square="square"
     :max="max"
@@ -12,7 +12,7 @@
   <file-preview-icon
     v-else
     :icon-size="iconSize"
-    :file-type="attachment.attachment_format__value"
+    :file-type="attachment?.[`${prefix}attachment_format__value`]"
     :square="square"
   />
 </template>
@@ -46,10 +46,15 @@ export default {
       type: String,
       required: false,
     },
+    prefix: {
+      type: String,
+      required: false,
+      default: "",
+    },
   },
   computed: {
     isPublic() {
-      return !this.attachment.is_private;
+      return !this.attachment[`${this.prefix}is_private`];
     },
     isImage() {
       const imageMimeTypes = [
@@ -58,7 +63,9 @@ export default {
         "image/jpeg",
         "image/png",
       ];
-      return imageMimeTypes.includes(this.attachment?.attachment_format__value);
+      return imageMimeTypes.includes(
+        this.attachment?.[`${this.prefix}attachment_format__value`]
+      );
     },
   },
 };

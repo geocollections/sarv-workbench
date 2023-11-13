@@ -13,9 +13,17 @@
             @click="openFileInNewWindow(box)"
             style="max-width: 800px; max-height: 500px"
             class="elevation-4"
-            :src="$helpers.getFileUrl(box.attachment__uuid_filename, 'medium')"
+            :src="
+              $helpers.getPublicImageUrl(
+                box.attachment__uuid_filename,
+                'medium'
+              )
+            "
             :title="
-              $helpers.getFileUrl(box.attachment__uuid_filename, 'medium')
+              $helpers.getPublicImageUrl(
+                box.attachment__uuid_filename,
+                'medium'
+              )
             "
           />
 

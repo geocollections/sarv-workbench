@@ -26,20 +26,15 @@
     :class="bodyColor.split('n-')[0] + 'n-5'"
   >
     <template v-slot:item.uuid_filename="{ item }">
-      <div style="max-width: 200px; max-height: 200px" class="text-center">
+      <div class="text-center">
         <router-link
           v-if="item.uuid_filename"
           :title="$t('edit.editMessage')"
           :to="{ path: '/attachment/' + item.id }"
-          class="image-link"
-          style="max-width: 200px; max-height: 200px"
+          class="image-link my-1"
+          style="max-width: 150px; max-height: 150px; display: block"
         >
-          <file-preview
-            style="max-width: 150px; max-height: 150px"
-            class="my-1"
-            :attachment="item"
-            max="150"
-          />
+          <file-preview :attachment="item" />
         </router-link>
         <router-link
           v-else

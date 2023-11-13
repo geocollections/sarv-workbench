@@ -1,8 +1,8 @@
 <template>
   <image-preview
     v-if="isPublic"
-    :src="$helpers.getPublicImageUrl(attachment.uuid_filename, size)"
-    :lazy-src="$helpers.getPublicImageUrl(attachment.uuid_filename, 'small')"
+    :src="$helpers.getPublicImageUrl(uuid, size)"
+    :lazy-src="$helpers.getPublicImageUrl(uuid, 'small')"
     :contain="contain"
     :square="square"
     :max="max"
@@ -28,8 +28,8 @@ export default {
   name: "ImagePreviewWrapper",
   components: { ImagePreview, Lazy, PrivateImagePreview },
   props: {
-    attachment: {
-      type: Object,
+    uuid: {
+      type: String,
       required: true,
     },
     isPublic: {
@@ -52,11 +52,6 @@ export default {
     max: {
       type: String,
       required: false,
-    },
-  },
-  computed: {
-    uuid() {
-      return this.attachment?.uuid_filename?.split(".")?.[0];
     },
   },
 };

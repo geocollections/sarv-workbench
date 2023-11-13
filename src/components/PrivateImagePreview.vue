@@ -1,5 +1,12 @@
 <template>
-  <image-preview :src="blobUrl" v-bind="$attrs" />
+  <image-preview
+    :src="
+      error
+        ? 'https://files.geocollections.info/img/sarv-edit/image_not_available.png'
+        : blobUrl
+    "
+    v-bind="$attrs"
+  />
 </template>
 
 <script>
@@ -25,6 +32,7 @@ export default {
       fileResponse: null,
       blobUrl: "",
       isLoading: false,
+      error: false,
     };
   },
   async mounted() {
@@ -34,7 +42,10 @@ export default {
       uuid: this.uuid,
     });
     this.isLoading = false;
-    if (this.fileResponse.status !== 200) return;
+    if (this.fileResponse.status !== 200) {
+      this.error = true;
+      return;
+    }
 
     this.blobUrl = URL.createObjectURL(this.fileResponse.data);
   },
