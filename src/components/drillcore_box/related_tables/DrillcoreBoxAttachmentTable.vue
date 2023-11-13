@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import FilePreview from "@/components/FilePreview.vue";
 
@@ -280,7 +280,9 @@ export default {
 
     async getImageWidth(uuid, id) {
       if (uuid) {
-        let img = await this.getMeta(this.$helpers.getFileUrl(uuid, "small"));
+        let img = await this.getMeta(
+          this.$helpers.getPublicImageUrl(uuid, "small")
+        );
         if (img.width) this.$set(this.widths, id, img.width);
         else this.$set(this.widths, id, 400);
       } else this.$set(this.widths, id, 400);

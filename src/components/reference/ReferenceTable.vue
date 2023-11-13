@@ -87,12 +87,11 @@
 
     <template v-slot:item.attachment__filename="{ item }">
       <v-btn
-        v-if="item.attachment__filename"
-        :href="$helpers.getFileUrl(item.attachment__filename)"
-        :title="$helpers.getFileUrl(item.attachment__filename)"
+        v-if="item.attachment__uuid_filename"
         :color="bodyActiveColor"
         target="FileWindow"
         icon
+        @click="$helpers.openFileInNewWindow(item)"
       >
         <v-icon>far fa-file-pdf</v-icon>
       </v-btn>
@@ -117,9 +116,11 @@
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import FilePreview from "@/components/FilePreview.vue";
 
 export default {
   name: "ReferenceTable",
+  components: { FilePreview },
   mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {

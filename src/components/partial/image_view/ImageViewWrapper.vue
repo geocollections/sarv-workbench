@@ -35,7 +35,7 @@
               :title="openFile ? $t(viewMessage) : $t(editMessage)"
               @click="
                 openFile
-                  ? openFileInNewWindow(image)
+                  ? $helpers.openFileInNewWindow(image)
                   : $router.push({ path: `/${object}/${image[idField]}` })
               "
             >
@@ -120,7 +120,7 @@
                 v-on="on"
                 icon
                 dark
-                @click.stop="openFileInNewWindow(image)"
+                @click.stop="$helpers.openFileInNewWindow(image)"
               >
                 <v-icon style="text-shadow: 0 0 6px #000, 0 0 4px #2196f3" small
                   >fas fa-eye</v-icon
@@ -155,7 +155,6 @@
 </template>
 
 <script>
-import config from "@/config";
 import FilePreview from "@/components/FilePreview.vue";
 
 export default {
@@ -186,7 +185,6 @@ export default {
   data() {
     return {
       containImages: false,
-      config,
     };
   },
   computed: {
@@ -208,42 +206,6 @@ export default {
     },
   },
   methods: {
-    openFileInNewWindow(file) {
-      console.log(file);
-      if (!file) return;
-      const uuidFilename = file.uuid_filename || file.attachment__uuid_filename;
-
-      const uuid = uuidFilename.split(".")?.[0];
-      let url = this.config.app.filesUrl;
-      if (this.isImageFile(file)) {
-        url += `/large/${uuid}`;
-      } else {
-        url += "/" + uuid;
-      }
-      this.$helpers.openUrlInNewWindow(url);
-    },
-
-    isImageFile(image) {
-      const mimeType =
-        image.attachment_format__value ||
-        image.attachment__attachment_format__value;
-      const uuidFilename =
-        image.uuid_filename || image.attachment__uuid_filename;
-      const imageMimeTypes = [
-        "image/jpe",
-        "image/jpg",
-        "image/jpeg",
-        "image/png",
-      ];
-      if (mimeType) {
-        return imageMimeTypes.includes(mimeType);
-      } else {
-        let fileType = uuidFilename.split(".")[1];
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
-        return !!(fileType.includes("jpg") || fileType.includes("png"));
-      }
-    },
-
     openInNewTab(object, id) {
       let routeData = this.$router.resolve({ path: `/${object}/${id}` });
       window.open(routeData.href, "AttachmentWindow");

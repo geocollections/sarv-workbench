@@ -39,65 +39,19 @@
       </template>
 
       <template v-slot:item.attachment_image="{ item }">
-        <div v-if="$route.meta.isEdit">
-          <router-link
-            v-if="item.attachment__uuid_filename"
-            :title="$t('edit.editMessage')"
-            :to="{ path: '/attachment/' + item.attachment }"
-          >
-            <v-img
-              v-if="
-                !!item.attachment__attachment_format__value.includes('image')
-              "
-              :src="
-                $helpers.getFileUrl(item.attachment__uuid_filename, 'small')
-              "
-              :lazy-src="
-                $helpers.getFileUrl(item.attachment__uuid_filename, 'small')
-              "
-              class="grey lighten-2 attachment-table-image-preview my-1"
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5" />
-                </v-row>
-              </template>
-            </v-img>
-
-            <v-icon v-else class="my-1" style="font-size: 3rem"
-              >far fa-file</v-icon
-            >
-          </router-link>
-        </div>
-
-        <div v-else>
-          <router-link
-            v-if="item.attachment && item.attachment.uuid_filename"
-            :title="$t('edit.editMessage')"
-            :to="{ path: '/attachment/' + item.attachment }"
-          >
-            <v-img
-              v-if="
-                !!item.attachment.attachment_format__value.includes('image')
-              "
-              :src="$helpers.getFileUrl(item.attachment.uuid_filename, 'small')"
-              :lazy-src="
-                $helpers.getFileUrl(item.attachment.uuid_filename, 'small')
-              "
-              class="grey lighten-2 attachment-table-image-preview my-1"
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5" />
-                </v-row>
-              </template>
-            </v-img>
-
-            <v-icon v-else class="my-1" style="font-size: 3rem"
-              >far fa-file</v-icon
-            >
-          </router-link>
-        </div>
+        <router-link
+          v-if="item.attachment && item.attachment__uuid_filename"
+          :title="$t('edit.editMessage')"
+          :to="{ path: '/attachment/' + item.attachment }"
+          class="my-1"
+          style="max-width: 150px; max-height: 150px; display: block"
+        >
+          <file-preview
+            class="file-preview"
+            :attachment="item"
+            prefix="attachment__"
+          />
+        </router-link>
       </template>
 
       <template v-slot:item.attachment="{ item }">
@@ -219,14 +173,16 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import FilePreview from "@/components/FilePreview.vue";
 
 export default {
   name: "LocalityImageTable",
 
   components: {
+    FilePreview,
     AutocompleteWrapper,
     InputWrapper,
   },
@@ -399,9 +355,13 @@ export default {
 </script>
 
 <style scoped>
-.attachment-table-image-preview {
-  max-height: 200px;
-  max-width: 200px;
-  border-radius: 0.25rem;
+.file-preview {
+  opacity: 1;
+  transition: opacity 200ms ease-in;
+  cursor: pointer;
+}
+
+.file-preview:hover {
+  opacity: 0.8;
 }
 </style>

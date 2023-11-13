@@ -6,6 +6,7 @@
     :uuid="attachment?.[`${prefix}uuid_filename`]"
     :contain="contain"
     :square="square"
+    :size="size"
     :max="max"
   />
 
@@ -50,6 +51,14 @@ export default {
       type: String,
       required: false,
       default: "",
+    },
+    size: {
+      type: String,
+      required: false,
+      default: "small",
+      validator: function (value) {
+        return ["small", "medium", "large"].includes(value);
+      },
     },
   },
   computed: {

@@ -60,14 +60,7 @@
         <span>
           <a
             v-if="entity.attachment__filename"
-            :title="$helpers.getFileUrl(entity.attachment__filename)"
-            @click="
-              $helpers.openUrlInNewWindow(
-                $helpers.getFileUrl(entity.attachment__filename),
-                1000,
-                900
-              )
-            "
+            @click="$helpers.openFileInNewWindow(entity)"
             class="green-link"
           >
             <b>PDF</b>
