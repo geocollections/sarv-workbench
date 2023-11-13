@@ -34,24 +34,13 @@
           class="image-link"
           style="max-width: 200px; max-height: 200px"
         >
-          <v-img
-            v-if="isAttachmentImage(item.attachment_format__value)"
-            :src="$helpers.getFileUrl(item.uuid_filename, 'small')"
-            :lazy-src="$helpers.getFileUrl(item.uuid_filename, 'small')"
-            class="grey lighten-2 attachment-table-image-preview my-1"
-            max-width="200"
-            max-height="200"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-row>
-            </template>
-          </v-img>
-
-          <v-icon v-else class="my-1" style="font-size: 3rem"
-            >far fa-file</v-icon
-          >
+          <file-preview-table
+            input-class="my-1"
+            min-width="150"
+            min-height="150"
+            :attachment="item"
+            :body-active-color="bodyActiveColor"
+          />
         </router-link>
         <router-link
           v-else
@@ -149,9 +138,11 @@
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import FilePreviewTable from "@/components/FilePreviewTable.vue";
 
 export default {
   name: "AttachmentTable",
+  components: { FilePreviewTable },
   mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
@@ -186,10 +177,6 @@ export default {
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
-    },
-
-    isAttachmentImage(type) {
-      return type && type.includes("image");
     },
   },
 };

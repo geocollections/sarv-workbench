@@ -21,11 +21,29 @@
         <v-icon>fas fa-file-download</v-icon>
       </v-btn>
 
-      <!--  Todo: Different files like pdf, videos etc.  -->
       <img
         class="img"
         v-if="contentType?.startsWith('image')"
         :class="{ 'img--svg': contentType?.startsWith('image/svg') }"
+        :src="blobUrl"
+      />
+
+      <video
+        class="video"
+        v-else-if="
+          contentType?.startsWith('video') || contentType?.startsWith('audio')
+        "
+        controls
+        autoplay
+        :src="blobUrl"
+      />
+
+      <embed
+        class="pdf"
+        v-else-if="
+          contentType === 'application/pdf' || contentType?.startsWith('text')
+        "
+        :type="contentType"
         :src="blobUrl"
       />
 
@@ -55,7 +73,7 @@
 import { fetchRawFile } from "@/assets/js/api/apiCalls";
 
 export default {
-  name: "TestFiles",
+  name: "FileResponse",
   data() {
     return {
       fileResponse: null,
@@ -118,10 +136,16 @@ export default {
   margin: auto;
 }
 
-.file-response img {
+.file-response .img,
+.file-response .video {
   display: block;
   max-width: 100vw;
   max-height: 100vh;
+}
+
+.file-response .pdf {
+  height: 100vh;
+  width: 100vw;
 }
 
 .file-response .img--svg {

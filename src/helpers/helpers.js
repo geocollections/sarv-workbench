@@ -1,12 +1,25 @@
 import config from "@/config";
 
 const getFileUrl = (filename, size) => {
+  const filePath = getFilePath(filename, size);
+
+  return config.app.filesUrl + filePath;
+};
+
+const getPublicImageUrl = (filename, size) => {
+  const filePath = getFilePath(filename, size);
+  const fileExtension = filename.split(".")[1];
+
+  return config.app.publicFilesUrl + filePath + "." + fileExtension;
+};
+
+const getFilePath = (filename, size) => {
   const uuid = filename.split(".")[0];
   let filePath = "/" + uuid;
   if (size && ["small", "medium", "large"].includes(size)) {
     filePath = "/" + size + "/" + uuid;
   }
-  return config.app.filesUrl + filePath;
+  return filePath;
 };
 
 const openUrlInNewWindow = (url, width, height) => {
@@ -19,6 +32,7 @@ const getDoiUrl = (doi) => {
 
 export default {
   getFileUrl,
+  getPublicImageUrl,
   openUrlInNewWindow,
   getDoiUrl,
 };

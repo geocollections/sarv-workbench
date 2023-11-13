@@ -11,7 +11,7 @@
     <v-row>
       <v-col
         v-for="(image, index) in data"
-        :key="index"
+        :key="image.id"
         class="py-3"
         style="position: relative"
         cols="6"
@@ -38,38 +38,16 @@
                   : $router.push({ path: `/${object}/${image[idField]}` })
               "
             >
-              <v-img
+              <file-preview-table
+                :attachment="image"
+                :contain="containImages"
                 max-height="400"
+                max-width="none"
                 min-width="72"
                 aspect-ratio="1"
-                :contain="containImages"
-                v-if="isImageFile(image)"
-                :src="$helpers.getFileUrl(image.uuid_filename, 'small')"
-                :lazy-src="$helpers.getFileUrl(image.uuid_filename, 'small')"
-                class="grey lighten-2"
-              >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular indeterminate color="grey lighten-5" />
-                  </v-row>
-                </template>
-              </v-img>
-
-              <v-row align="center" v-else>
-                <v-col class="text-center">
-                  <div class="py-3">
-                    <v-icon
-                      style="font-size: 6rem"
-                      :class="bodyActiveColor + '--text'"
-                      >far {{ getAttachmentIcon(image) }}</v-icon
-                    >
-                  </div>
-                </v-col>
-              </v-row>
+                icon-size="6rem"
+                :body-active-color="bodyActiveColor"
+              />
             </v-card>
           </template>
 
@@ -176,9 +154,11 @@
 
 <script>
 import config from "@/config";
+import FilePreviewTable from "@/components/FilePreviewTable.vue";
 
 export default {
   name: "ImageViewWrapper",
+  components: { FilePreviewTable },
   props: {
     data: {
       type: Array,

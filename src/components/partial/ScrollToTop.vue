@@ -1,7 +1,6 @@
 <template>
   <v-fab-transition>
     <v-btn
-      v-scroll="onScroll"
       v-show="showFab"
       fab
       fixed
@@ -18,6 +17,8 @@
 </template>
 
 <script>
+import { throttle } from "lodash";
+
 export default {
   name: "ScrollToTop",
 
@@ -29,17 +30,27 @@ export default {
     },
   },
 
-  data: () => ({
-    showFab: false,
-  }),
+  data() {
+    return {
+      showFab: false,
+    };
+  },
+
+  mounted() {
+    window.addEventListener("scroll", this.onScroll);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onScroll);
+  },
 
   methods: {
-    onScroll(event) {
+    onScroll: throttle(function (event) {
       if (typeof window === "undefined") return;
       const top = window.pageYOffset || event.target.scrollTop || 0;
 
       this.showFab = top > 400;
-    },
+    }, 500),
 
     toTop() {
       this.$vuetify.goTo(0);
