@@ -1,18 +1,14 @@
 <template>
-  <v-img class="private-image-preview" :src="blobUrl" v-bind="$attrs">
-    <template v-slot:placeholder>
-      <v-row no-gutters class="fill-height" align="center" justify="center">
-        <v-progress-circular indeterminate color="grey lighten-5" />
-      </v-row>
-    </template>
-  </v-img>
+  <image-preview :src="blobUrl" v-bind="$attrs" />
 </template>
 
 <script>
 import { fetchRawFile } from "@/assets/js/api/apiCalls";
+import ImagePreview from "@/components/ImagePreview.vue";
 
 export default {
   name: "PrivateImagePreview",
+  components: { ImagePreview },
   props: {
     uuid: {
       type: String,
@@ -27,7 +23,7 @@ export default {
   data() {
     return {
       fileResponse: null,
-      blobUrl: null,
+      blobUrl: "",
       isLoading: false,
     };
   },
@@ -45,8 +41,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.private-image-preview {
-  border-radius: 4px;
-}
-</style>
+<style scoped></style>

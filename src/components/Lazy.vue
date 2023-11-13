@@ -47,10 +47,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.lazy-component--loaded {
-  /* The element itself does not generate any boxes, but its children and pseudo-elements still generate boxes and text sequences as normal. */
-  /* https://www.w3.org/TR/css-display-3/#valdef-display-contents */
-  display: contents;
-}
-</style>
+<style scoped></style>

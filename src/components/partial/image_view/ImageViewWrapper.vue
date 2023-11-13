@@ -38,15 +38,13 @@
                   : $router.push({ path: `/${object}/${image[idField]}` })
               "
             >
-              <file-preview-table
+              <file-preview
+                style="max-width: 400px; max-height: 400px"
                 :attachment="image"
                 :contain="containImages"
-                max-height="400"
-                max-width="none"
-                min-width="72"
-                aspect-ratio="1"
                 icon-size="6rem"
-                :body-active-color="bodyActiveColor"
+                square
+                max="400"
               />
             </v-card>
           </template>
@@ -154,11 +152,11 @@
 
 <script>
 import config from "@/config";
-import FilePreviewTable from "@/components/FilePreviewTable.vue";
+import FilePreview from "@/components/FilePreview.vue";
 
 export default {
   name: "ImageViewWrapper",
-  components: { FilePreviewTable },
+  components: { FilePreview },
   props: {
     data: {
       type: Array,
@@ -253,8 +251,14 @@ export default {
     },
 
     isImageFile(image) {
+      const imageMimeTypes = [
+        "image/jpe",
+        "image/jpg",
+        "image/jpeg",
+        "image/png",
+      ];
       if (image.attachment_format__value) {
-        return !!image.attachment_format__value.includes("image");
+        return imageMimeTypes.includes(image?.attachment_format__value);
       } else {
         let fileType = image.uuid_filename.split(".")[1];
         // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png

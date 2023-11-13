@@ -34,12 +34,11 @@
           class="image-link"
           style="max-width: 200px; max-height: 200px"
         >
-          <file-preview-table
-            input-class="my-1"
-            min-width="150"
-            min-height="150"
+          <file-preview
+            style="max-width: 150px; max-height: 150px"
+            class="my-1"
             :attachment="item"
-            :body-active-color="bodyActiveColor"
+            max="150"
           />
         </router-link>
         <router-link
@@ -138,11 +137,11 @@
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
-import FilePreviewTable from "@/components/FilePreviewTable.vue";
+import FilePreview from "@/components/FilePreview.vue";
 
 export default {
   name: "AttachmentTable",
-  components: { FilePreviewTable },
+  components: { FilePreview },
   mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {

@@ -152,7 +152,7 @@ export default {
       required: false,
     },
   },
-  name: "FilePreview",
+  name: "AttachmentFile",
   computed: {
     ...mapState("settings", ["bodyActiveColor", "bodyActiveColorDark"]),
     isAudioFile() {

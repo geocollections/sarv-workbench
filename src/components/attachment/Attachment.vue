@@ -94,7 +94,7 @@
           <div v-show="block.file" class="pa-1">
             <v-row no-gutters>
               <v-col cols="12" md="6" class="pa-1">
-                <file-preview
+                <attachment-file
                   :data="rawAttachment"
                   :rotation-degrees="imageRotationDegrees"
                   :key="filePreviewKey"
@@ -4025,7 +4025,7 @@ import {
 import AttachmentWrapper from "./AttachmentWrapper";
 import MapComponent from "../partial/MapComponent";
 import FileInformation from "../partial/FileInformation";
-import FilePreview from "../partial/FilePreview";
+import AttachmentFile from "../partial/AttachmentFile";
 import NewDoiButton from "../partial/NewDoiButton";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
@@ -4049,7 +4049,7 @@ export default {
     AutocompleteWrapper,
     CheckboxWrapper,
     NewDoiButton,
-    FilePreview,
+    AttachmentFile,
     FileInformation,
     AttachmentWrapper,
     MapComponent,
