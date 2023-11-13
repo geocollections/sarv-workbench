@@ -529,7 +529,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "analysis_parameter":
       return `analysis_parameter/?multi_search=value:${value};fields:parameter,parameter_name,parameter_name_en;lookuptype:icontains&fields=id,parameter,parameter_name,parameter_name_en,parameter_html`;
     case "imageset":
-      return `imageset/?imageset_number__icontains=${value}&or_search=user_added:${currentUser.user};author__id:${currentUser.id}`;
+      return `imageset/?imageset_number__icontains=${value}`;
     case "user":
       return `user/?username__icontains=${value}&fields=id,username`;
     case "database":
