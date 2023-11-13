@@ -46,7 +46,6 @@
 
         <span v-else-if="entity.pages"> pp. {{ entity.pages }}. </span>
 
-        <!-- TODO: DOI LINK -->
         <span v-if="entity.doi">
           <a
             :href="$helpers.getDoiUrl(entity.doi)"
