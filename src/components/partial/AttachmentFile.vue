@@ -65,7 +65,7 @@
       style="width: 100%"
       v-if="isAudioFile || isVideoFile || isImageFile"
     >
-      <div class="d-flex">
+      <div class="d-flex flex-wrap">
         <v-icon small>fas fa-external-link-alt</v-icon>
         <v-btn
           v-for="size in buttons"
