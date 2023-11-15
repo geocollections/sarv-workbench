@@ -12,75 +12,19 @@ executors:
       - image: cimg/node:lts
 
 jobs:
-  checkout_edit:
-    executor: docker-publisher
-    working_directory: ~/geocollections/sarv-edit
-    steps:
-      - checkout
-      - save_cache:
-          key: -repo-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/geocollections/sarv-edit
-
-  install_edit:
-    executor: docker-publisher
-    working_directory: ~/geocollections/sarv-edit
-    steps:
-      - restore_cache:
-          key: -repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: -bundle-{{ checksum "package-lock.json" }}
-      - run:
-          name: Npm disabling progress bar and adding depth 0
-          command: npm set progress=false && npm config set depth 0
-      - run:
-          name: Installing packages
-          command: npm install
-      - save_cache:
-          key: -bundle-{{ checksum "package-lock.json" }}
-          paths:
-            - ./node_modules
-            - ./package-lock.json
-
-  build_edit:
-    executor: docker-publisher
-    working_directory: ~/geocollections/sarv-edit
-    steps:
-      - restore_cache:
-          key: -repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: -bundle-{{ checksum "package-lock.json" }}
-      - run:
-          name: Building application
-          command: npm run build
-      - save_cache:
-          key: -build-{{ checksum "package-lock.json" }}
-          paths:
-            - ~/geocollections/sarv-edit
-
-  deploy_edit:
-    executor: docker-publisher
-    working_directory: ~/geocollections/sarv-edit
-    steps:
-      - restore_cache:
-          key: -repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          key: -bundle-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          key: -build-{{ checksum "package-lock.json" }}
-      - run:
-          name: Removing current production files
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf assets/ favicon.ico index.html robots.txt service-worker.js'
-      - run:
-          name: Copying built files to production
-          command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit
-
   deploy_edit2:
     executor: docker-publisher
     steps:
       - run:
           name: Run edit2 script
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/edit2/script && . run_docker_image.sh"
+
+  deploy_edit2-dev:
+    executor: docker-publisher
+    steps:
+      - run:
+          name: Run edit2 script
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/edit2-dev/script && . run_docker_image.sh"
 
 workflows:
   build:
@@ -89,17 +33,7 @@ workflows:
           filters:
             branches:
               only: main
-
-      - checkout_edit:
+      - deploy_edit2-dev:
           filters:
             branches:
-              only: production-v1
-      - install_edit:
-          requires:
-            - checkout_edit
-      - build_edit:
-          requires:
-            - install_edit
-      - deploy_edit:
-          requires:
-            - build_edit
+              only: development

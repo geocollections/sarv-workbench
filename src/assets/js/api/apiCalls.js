@@ -11,6 +11,7 @@ const api = {
   checkDoiUrl: "https://api.crossref.org/works/",
   solrUrl: "https://api.geocollections.info/solr/",
   publicApi: "https://api.geocollections.info/",
+  filesUrl: `${import.meta.env.VITE_API_URL}/`,
 };
 
 const attachmentFields =
@@ -91,11 +92,11 @@ axios.interceptors.response.use(
   }
 );
 
-async function get(child = "", customUrl) {
+async function get(child = "", customUrl, options) {
   let url = api.url + child;
   if (customUrl) url = customUrl + child;
   try {
-    return await axios.get(url);
+    return await axios.get(url, options);
   } catch (error) {
     return error.response;
   }
@@ -202,6 +203,15 @@ export function postRequest(url, data, customUrl = "", config = {}) {
 /*************************
  *** ATTACHMENTS START ***
  *************************/
+
+export function fetchRawFile({ size, uuid, extension }, blob) {
+  let path = "files/";
+  if (size) path += `${size}/`;
+  path += `${uuid}/`;
+  return get(path, api.filesUrl, {
+    responseType: "blob",
+  });
+}
 
 export function fetchAttachments(data, dynamicSearch) {
   let fields =
@@ -441,7 +451,7 @@ export function fetchReference(id) {
 
 export async function fetchReferences(data, dynamicSearch) {
   const fields =
-    "reference,author,author_original,year,type,type__ris_type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid,attachment__filename";
+    "reference,author,author_original,year,type,type__ris_type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid,attachment__filename,attachment__uuid_filename,attachment__is_private";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
   // This (solr search) overrides regular search fields
   if (data.solrSearch && data.solrSearch.trim().length > 0) {
@@ -1995,7 +2005,7 @@ export function fetchSpecimens(data, dynamicSearch) {
 
 export function fetchSpecimenImages(data, dynamicSearch) {
   const fields =
-    "id,specimen_id,size_mb,original_filename,uuid_filename,user_added,date_added,specimen__specimen_id,specimen__collection,specimen__coll,specimen__coll__number,specimen__specimen_nr,specimen__number_field,specimen__type,specimen__type__value,specimen__type__value_en,specimen__subtype_id,specimen__subtype_id__value,specimen__subtype_id__value_en,specimen__fossil,specimen__fossil__value,specimen__fossil__value_en,specimen__kind,specimen__kind,specimen__kind,specimen__classification,specimen__classification__class_field,specimen__part,specimen__number_pieces,specimen__locality,specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free,specimen__locality_free_en,specimen__locality_is_private,specimen__depth,specimen__depth_interval,specimen__sample_number,specimen__sample,specimen__sample__number,specimen__parent,specimen__parent__specimen_id,specimen__remarks_collecting,specimen__stratigraphy,specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__agent_collected,specimen__agent_collected__agent,specimen__agent_collected_free,specimen__date_collected,specimen__date_collected_free,specimen__remarks,specimen__remarks_internal,specimen__tags,specimen__presence,specimen__presence__value,specimen__presence__value_en,specimen__storage,specimen__storage__location,specimen__location,specimen__status,specimen__status__value,specimen__status__value_en,specimen__original_status,specimen__original_status__value,specimen__original_status__value_en,specimen__is_private,specimen__accession,specimen__accession__number,specimen__deaccession,specimen__deaccession__number,specimen__user_added,specimen__date_added,specimen__user_changed,specimen__date_changed,specimen__database,specimen__database__acronym,specimen__id";
+    "id,specimen_id,size_mb,original_filename,uuid_filename,is_private,attachment_format__value,user_added,date_added,specimen__specimen_id,specimen__collection,specimen__coll,specimen__coll__number,specimen__specimen_nr,specimen__number_field,specimen__type,specimen__type__value,specimen__type__value_en,specimen__subtype_id,specimen__subtype_id__value,specimen__subtype_id__value_en,specimen__fossil,specimen__fossil__value,specimen__fossil__value_en,specimen__kind,specimen__kind,specimen__kind,specimen__classification,specimen__classification__class_field,specimen__part,specimen__number_pieces,specimen__locality,specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free,specimen__locality_free_en,specimen__locality_is_private,specimen__depth,specimen__depth_interval,specimen__sample_number,specimen__sample,specimen__sample__number,specimen__parent,specimen__parent__specimen_id,specimen__remarks_collecting,specimen__stratigraphy,specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__agent_collected,specimen__agent_collected__agent,specimen__agent_collected_free,specimen__date_collected,specimen__date_collected_free,specimen__remarks,specimen__remarks_internal,specimen__tags,specimen__presence,specimen__presence__value,specimen__presence__value_en,specimen__storage,specimen__storage__location,specimen__location,specimen__status,specimen__status__value,specimen__status__value_en,specimen__original_status,specimen__original_status__value,specimen__original_status__value_en,specimen__is_private,specimen__accession,specimen__accession__number,specimen__deaccession,specimen__deaccession__number,specimen__user_added,specimen__date_added,specimen__user_changed,specimen__date_changed,specimen__database,specimen__database__acronym,specimen__id";
   let searchFields = "";
   let orderBy = "";
 
@@ -3035,7 +3045,7 @@ export function fetchDrillcoreBoxes(data, dynamicSearch) {
 
 export function fetchDrillcoreBoxImages(data, dynamicSearch) {
   let fields =
-    "attachment__uuid_filename,drillcore_box__drillcore,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__number_meters,drillcore_box__diameter,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base_free,drillcore_box__stratigraphy_top_free,drillcore_box__stratigraphy_free,drillcore_box__location,drillcore_box__storage,drillcore_box__storage__location,drillcore_box__remarks,drillcore_box__user_added,drillcore_box__date_added,drillcore_box__user_changed,drillcore_box__date_changed,drillcore_box__database,drillcore_box__database__acronym,drillcore_box__id";
+    "id,attachment__uuid_filename,attachment__attachment_format__value,attachment__is_private,drillcore_box__drillcore,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__number_meters,drillcore_box__diameter,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base_free,drillcore_box__stratigraphy_top_free,drillcore_box__stratigraphy_free,drillcore_box__location,drillcore_box__storage,drillcore_box__storage__location,drillcore_box__remarks,drillcore_box__user_added,drillcore_box__date_added,drillcore_box__user_changed,drillcore_box__date_changed,drillcore_box__database,drillcore_box__database__acronym,drillcore_box__id";
   let searchFields = "";
 
   if (data.storage && data.storage.trim().length > 0) {
@@ -3656,7 +3666,7 @@ export function fetchLocations(data, dynamicSearch) {
 
 export function fetchLocationImages(data, dynamicSearch) {
   let fields =
-    "attachment__uuid_filename,storage__location,storage__parent_location,storage__parent_location__location,storage__location_location,storage__contents,storage__agent,storage__agent__agent,storage__date_collected_free,storage__stratigraphy_free,storage__number_items,storage__number_items_registered,storage__remarks,storage__database,storage__database__acronym,storage__user_added,storage__date_added,storage__user_changed,storage__date_changed,storage__id";
+    "id,attachment__uuid_filename,attachment__attachment_format__value,attachment__is_private,storage__location,storage__parent_location,storage__parent_location__location,storage__location_location,storage__contents,storage__agent,storage__agent__agent,storage__date_collected_free,storage__stratigraphy_free,storage__number_items,storage__number_items_registered,storage__remarks,storage__database,storage__database__acronym,storage__user_added,storage__date_added,storage__user_changed,storage__date_changed,storage__id";
   let searchFields = "";
 
   if (data.id && data.id.trim().length > 0) {

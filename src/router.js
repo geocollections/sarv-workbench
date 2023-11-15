@@ -6,6 +6,7 @@ import OrcidCallback from "./views/OrcidCallback.vue";
 import OrcidConnect from "./views/OrcidConnect.vue";
 import { fetchIsLoggedIn, fetchLogout } from "./assets/js/api/apiCalls";
 import store from "./store";
+import FileResponse from "@/components/FileResponse.vue";
 Vue.use(Router);
 
 const router = new Router({
@@ -29,6 +30,14 @@ const router = new Router({
     {
       path: "*",
       redirect: "/",
+    },
+    {
+      path: "/files/:size(small|medium|large)?/:uuid",
+      name: "files-response",
+      component: FileResponse,
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: "/",

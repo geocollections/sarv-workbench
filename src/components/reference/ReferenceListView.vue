@@ -46,7 +46,6 @@
 
         <span v-else-if="entity.pages"> pp. {{ entity.pages }}. </span>
 
-        <!-- TODO: DOI LINK -->
         <span v-if="entity.doi">
           <a
             :href="$helpers.getDoiUrl(entity.doi)"
@@ -60,14 +59,7 @@
         <span>
           <a
             v-if="entity.attachment__filename"
-            :title="$helpers.getFileUrl(entity.attachment__filename)"
-            @click="
-              $helpers.openUrlInNewWindow(
-                $helpers.getFileUrl(entity.attachment__filename),
-                1000,
-                900
-              )
-            "
+            @click="$helpers.openFileInNewWindow(entity)"
             class="green-link"
           >
             <b>PDF</b>

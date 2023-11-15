@@ -10,8 +10,8 @@
     </div>
     <v-row>
       <v-col
-        v-for="(image, index) in data"
-        :key="index"
+        v-for="image in data"
+        :key="image.id"
         class="py-3"
         style="position: relative"
         cols="6"
@@ -23,6 +23,7 @@
           <template v-slot:activator="{ on }">
             <v-card
               flat
+              style="max-width: 400px; max-height: 400px"
               class="d-flex image-hover fill-height"
               v-on="on"
               :class="
@@ -34,42 +35,21 @@
               :title="openFile ? $t(viewMessage) : $t(editMessage)"
               @click="
                 openFile
-                  ? openFileInNewWindow(image)
+                  ? $helpers.openFileInNewWindow(image)
                   : $router.push({ path: `/${object}/${image[idField]}` })
               "
             >
-              <v-img
-                max-height="400"
-                min-width="72"
-                aspect-ratio="1"
+              <file-preview
+                :attachment="image"
                 :contain="containImages"
-                v-if="isImageFile(image)"
-                :src="$helpers.getFileUrl(image.uuid_filename, 'small')"
-                :lazy-src="$helpers.getFileUrl(image.uuid_filename, 'small')"
-                class="grey lighten-2"
-              >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular indeterminate color="grey lighten-5" />
-                  </v-row>
-                </template>
-              </v-img>
-
-              <v-row align="center" v-else>
-                <v-col class="text-center">
-                  <div class="py-3">
-                    <v-icon
-                      style="font-size: 6rem"
-                      :class="bodyActiveColor + '--text'"
-                      >far {{ getAttachmentIcon(image) }}</v-icon
-                    >
-                  </div>
-                </v-col>
-              </v-row>
+                icon-size="6rem"
+                square
+                :prefix="
+                  object === 'drillcore_box' || object === 'location'
+                    ? 'attachment__'
+                    : ''
+                "
+              />
             </v-card>
           </template>
 
@@ -140,7 +120,7 @@
                 v-on="on"
                 icon
                 dark
-                @click.stop="openFileInNewWindow(image)"
+                @click.stop="$helpers.openFileInNewWindow(image)"
               >
                 <v-icon style="text-shadow: 0 0 6px #000, 0 0 4px #2196f3" small
                   >fas fa-eye</v-icon
@@ -175,10 +155,11 @@
 </template>
 
 <script>
-import config from "@/config";
+import FilePreview from "@/components/FilePreview.vue";
 
 export default {
   name: "ImageViewWrapper",
+  components: { FilePreview },
   props: {
     data: {
       type: Array,
@@ -204,7 +185,6 @@ export default {
   data() {
     return {
       containImages: false,
-      config,
     };
   },
   computed: {
@@ -221,67 +201,11 @@ export default {
     idField() {
       if (this.object === "specimen") return "specimen_id";
       if (this.object === "location") return "storage__id";
-      if (this.object === "drillcore_box") return "drillcore_box";
+      if (this.object === "drillcore_box") return "drillcore_box__id";
       else return "id";
     },
   },
   methods: {
-    openFileInNewWindow(file) {
-      if (file) {
-        let url = this.config.app.filesUrl;
-        if (this.isImageFile(file)) {
-          url += `/large/${file.uuid_filename}`;
-        } else {
-          url += "/" + file.uuid_filename;
-        }
-        this.$helpers.openUrlInNewWindow(url);
-      }
-    },
-
-    getAttachmentIcon(attachment) {
-      if (attachment.attachment_format__value) {
-        let fileType = attachment.attachment_format__value;
-        if (fileType.includes("application")) {
-          if (fileType.includes("docx")) return "fa-file-word";
-          else if (fileType.includes("pdf")) return "fa-file-pdf";
-          else if (fileType.includes("xlsx") || fileType.includes("ods"))
-            return "fa-file-excel";
-          else if (fileType.includes("zip")) return "fa-file-archive";
-          else return "fa-file";
-        } else if (fileType.includes("audio")) return "fa-file-audio";
-        else if (fileType.includes("image")) return "fa-file-image";
-        else if (fileType.includes("text")) return "fa-file-alt";
-        else if (fileType.includes("video")) return "fa-file-video";
-        else return "fa-file";
-      } else {
-        let fileType = attachment.uuid_filename.split(".")[1];
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value
-        if (fileType.includes("jpg") || fileType.includes("png"))
-          return "fa-file-image";
-        // 859 jpg and 2 png
-        else if (fileType.includes("pdf")) return "fa-file-pdf";
-        // 635 pdf
-        else if (fileType.includes("xls") || fileType.includes("ods"))
-          return "fa-file-excel";
-        // 4 xls and 2 ods
-        else if (fileType.includes("txt")) return "fa-file-alt";
-        // 1 txt
-        else if (fileType.includes("webm")) return "fa-file-video";
-        // 1 webm
-        else return "fa-file"; // 4 hz1
-      }
-    },
-
-    isImageFile(image) {
-      if (image.attachment_format__value) {
-        return !!image.attachment_format__value.includes("image");
-      } else {
-        let fileType = image.uuid_filename.split(".")[1];
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
-        return !!(fileType.includes("jpg") || fileType.includes("png"));
-      }
-    },
-
     openInNewTab(object, id) {
       let routeData = this.$router.resolve({ path: `/${object}/${id}` });
       window.open(routeData.href, "AttachmentWindow");
