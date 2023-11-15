@@ -224,7 +224,7 @@
           <v-btn
             v-if="item.attachment?.[0]?.uuid_filename"
             icon
-            :href="`https://files-dev.geoloogia.info/${item.attachment[0].uuid_filename}`"
+            :href="`/files/${item.attachment[0].uuid_filename}`"
           >
             <v-icon color="red">fas fa-file-pdf</v-icon>
           </v-btn>
@@ -258,27 +258,37 @@
         <span v-html="item.source" />
         <v-chip
           v-if="item.doi"
-          class="ml-1"
+          class="ml-1 font-weight-medium black--text"
           outlined
-          color="blue"
+          color="#fab608"
           link
           small
           :href="`https://doi.org/${item.doi}`"
         >
+          <v-icon small left color="#fab608">ai ai-doi</v-icon>
           DOI
         </v-chip>
-        <v-chip v-if="item.pdf" class="ml-1" outlined color="red" link small>
-          PDF
+        <v-chip
+          v-if="item.pdf"
+          class="ml-1"
+          outlined
+          color="red"
+          link
+          small
+          :href="`/files/${item.pdf}`"
+        >
+          <v-icon small left color="red">fas fa-file-pdf</v-icon>
+          <span class="black--text"> PDF </span>
         </v-chip>
         <v-chip
           v-if="item.url"
           class="ml-1"
           outlined
-          color="green"
           link
           small
           :href="item.url"
         >
+          <v-icon small left>fas fa-link</v-icon>
           URL
         </v-chip>
       </template>

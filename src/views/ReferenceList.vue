@@ -14,6 +14,18 @@
         <v-icon left>fas fa-plus</v-icon>
         {{ $t("add.new") }}
       </v-btn>
+      <v-btn
+        class="ml-2"
+        text
+        elevation="0"
+        color="warning"
+        small
+        to="/reference"
+      >
+        {{ $t("buttons.goToOldSearch") }}
+
+        <v-icon right>fas fa-arrow-left</v-icon>
+      </v-btn>
     </span>
     <data-table-reference
       :filters="filters"

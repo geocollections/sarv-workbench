@@ -3117,7 +3117,9 @@
     "import": "Impordi fail",
     "try_again": "Proovi uuesti",
     "print": "Prindi",
-    "ok": "OK"
+    "ok": "OK",
+    "goToNewSearch": "Proovi uut otsingu vaadet",
+    "goToOldSearch": "Tagasi vanasse otsingusse"
   },
   "selection_series": {
     "database": "Andmebaas",

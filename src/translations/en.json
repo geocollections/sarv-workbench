@@ -3115,7 +3115,9 @@
     "import": "Import file",
     "try_again": "Try again",
     "print": "Print",
-    "ok": "OK"
+    "ok": "OK",
+    "goToNewSearch": "Check out new search view",
+    "goToOldSearch": "Back to old search"
   },
   "selection_series": {
     "database": "Database",

@@ -1,6 +1,10 @@
 <template>
   <div class="references">
     <table-view-title title="header.references" buttonPath="/reference/add" />
+    <v-btn text elevation="0" color="warning" small to="/references">
+      {{ $t("buttons.goToNewSearch") }}
+      <v-icon right>fas fa-arrow-right</v-icon>
+    </v-btn>
 
     <table-view-search
       :show-search="block.search"
