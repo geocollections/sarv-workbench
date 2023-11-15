@@ -1,8 +1,8 @@
 <template>
   <image-preview
     v-if="isPublic"
-    :src="$helpers.getPublicImageUrl(uuid, size)"
-    :lazy-src="$helpers.getPublicImageUrl(uuid, 'small')"
+    :src="$helpers.getPublicFileUrl(uuid, size)"
+    :lazy-src="$helpers.getPublicFileUrl(uuid, 'small')"
     :contain="contain"
     :square="square"
     :max="max"

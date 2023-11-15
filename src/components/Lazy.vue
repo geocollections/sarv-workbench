@@ -17,11 +17,6 @@ export default {
       observer: null,
     };
   },
-  watch: {
-    shouldRender(newVal) {
-      console.log("shouldRender: ", newVal);
-    },
-  },
   mounted() {
     // const defaultLazyThreshold =
     //   Math.floor(Math.max(window.innerHeight, 700)) || 1000;

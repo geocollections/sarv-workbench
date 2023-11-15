@@ -281,7 +281,7 @@ export default {
     async getImageWidth(uuid, id) {
       if (uuid) {
         let img = await this.getMeta(
-          this.$helpers.getPublicImageUrl(uuid, "small")
+          this.$helpers.getPublicFileUrl(uuid, "small")
         );
         if (img.width) this.$set(this.widths, id, img.width);
         else this.$set(this.widths, id, 400);

@@ -5,7 +5,7 @@ const getFileUrl = (filename, size) => {
   return config.app.filesUrl + filePath;
 };
 
-const getPublicImageUrl = (filename, size) => {
+const getPublicFileUrl = (filename, size) => {
   const filePath = getFilePath(filename, size);
   const fileExtension = filename.split(".")[1];
 
@@ -68,7 +68,7 @@ const isImageFile = (file) => {
 
 export default {
   getFileUrl,
-  getPublicImageUrl,
+  getPublicFileUrl,
   openUrlInNewWindow,
   getDoiUrl,
   isImageFile,

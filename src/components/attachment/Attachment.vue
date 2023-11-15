@@ -98,7 +98,6 @@
                   :data="rawAttachment"
                   :rotation-degrees="imageRotationDegrees"
                   :key="filePreviewKey"
-                  object="attachment"
                   @rotate="imageRotationDegrees = $event"
                 />
               </v-col>
