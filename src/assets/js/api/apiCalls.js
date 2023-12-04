@@ -441,7 +441,7 @@ export function fetchReference(id) {
 
 export async function fetchReferences(data, dynamicSearch) {
   const fields =
-    "reference,author,author_original,year,type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid,attachment__filename";
+    "reference,author,author_original,year,type,type__ris_type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid,attachment__filename";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
   // This (solr search) overrides regular search fields
   if (data.solrSearch && data.solrSearch.trim().length > 0) {
@@ -2022,7 +2022,7 @@ export function fetchSpecimenImages(data, dynamicSearch) {
   if (data.fossil && data.fossil.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.fossil
-    };fields:specimen__specimenidentification__name,specimen__specimenidentification__taxon__taxon;lookuptype:${
+    };fields:specimen__specimen_identification__name,specimen__specimen_identification__taxon__taxon;lookuptype:${
       data.fossil__lookuptype || "icontains"
     }`;
   }

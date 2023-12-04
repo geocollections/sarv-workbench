@@ -40,6 +40,7 @@
 
 <script>
 import toastMixin from "../../../mixins/toastMixin";
+import { Parser } from "@json2csv/plainjs";
 
 export default {
   props: {
@@ -100,8 +101,6 @@ export default {
     },
 
     convertJsonToCsv(jsonArray) {
-      const { Parser } = require("json2csv");
-
       // Possibility to export exact fields for each object
       const fields = Object.keys(jsonArray[0]);
       const opts = { fields };
@@ -300,5 +299,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
