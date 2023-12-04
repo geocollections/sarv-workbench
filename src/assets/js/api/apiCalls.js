@@ -2022,7 +2022,7 @@ export function fetchSpecimenImages(data, dynamicSearch) {
   if (data.fossil && data.fossil.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.fossil
-    };fields:specimen__specimenidentification__name,specimen__specimenidentification__taxon__taxon;lookuptype:${
+    };fields:specimen__specimen_identification__name,specimen__specimen_identification__taxon__taxon;lookuptype:${
       data.fossil__lookuptype || "icontains"
     }`;
   }
