@@ -50,6 +50,7 @@
             class="file-preview"
             :attachment="item"
             prefix="attachment__"
+            max="150"
           />
         </router-link>
       </template>
