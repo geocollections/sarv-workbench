@@ -1054,13 +1054,14 @@ export default {
           }
         });
       } else {
-        if (this.relatedData.attachment.count > 0) {
+        if (this.relatedData.attachment.results.length > 0) {
           uploadableObject.related_data.attachment =
             this.relatedData.attachment.results.map((item) => {
               return { id: item.id };
             });
         } else uploadableObject.related_data.attachment = null;
       }
+      // console.log(uploadableObject.related_data);
 
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
