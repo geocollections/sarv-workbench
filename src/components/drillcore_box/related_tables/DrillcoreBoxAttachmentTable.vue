@@ -30,48 +30,15 @@
       </template>
 
       <template v-slot:item.id="{ item, value }">
-        <!--        <router-link-->
-        <!--          v-if="item.id"-->
-        <!--          :title="$t('edit.editMessage')"-->
-        <!--          :to="{ path: '/attachment/' + item.id }"-->
-        <!--        >-->
-        <div style="max-width: 200px; max-height: 200px">
-          <a
-            :href="$helpers.getFileUrl(item.uuid_filename)"
-            target="DrillcoreBoxWindow"
-            title="View original file"
-            class="image-link"
-            style="max-width: 200px; max-height: 200px"
-          >
-            <v-img
-              :id="item.id"
-              v-if="
-                item.attachment_format__value &&
-                !!item.attachment_format__value.includes('image')
-              "
-              :src="$helpers.getFileUrl(item.uuid_filename, 'small')"
-              :lazy-src="$helpers.getFileUrl(item.uuid_filename, 'small')"
-              class="grey lighten-2 attachment-table-image-preview my-1 rounded"
-              :max-width="200"
-              :max-height="200"
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5" />
-                </v-row>
-              </template>
-            </v-img>
-
-            <div
-              v-else
-              class="my-3"
-              style="max-width: 400px; max-height: 400px"
-            >
-              <v-icon style="font-size: 3rem">far fa-file</v-icon>
-            </div>
-          </a>
-        </div>
-        <!--        </router-link>-->
+        <router-link
+          v-if="item.uuid_filename"
+          :title="$t('edit.editMessage')"
+          :to="{ path: '/attachment/' + item.id }"
+          class="image-link my-1"
+          style="max-width: 150px; max-height: 150px; display: block"
+        >
+          <file-preview :attachment="item" max="150" />
+        </router-link>
       </template>
 
       <template v-slot:item.is_preferred="{ item }">
@@ -162,13 +129,15 @@
 </template>
 
 <script>
-import cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import FilePreview from "@/components/FilePreview.vue";
 
 export default {
   name: "DrillcoreBoxAttachmentTable",
 
   components: {
+    FilePreview,
     CheckboxWrapper,
   },
 
@@ -311,7 +280,9 @@ export default {
 
     async getImageWidth(uuid, id) {
       if (uuid) {
-        let img = await this.getMeta(this.$helpers.getFileUrl(uuid, "small"));
+        let img = await this.getMeta(
+          this.$helpers.getPublicFileUrl(uuid, "small")
+        );
         if (img.width) this.$set(this.widths, id, img.width);
         else this.$set(this.widths, id, 400);
       } else this.$set(this.widths, id, 400);

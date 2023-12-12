@@ -1282,7 +1282,7 @@ export default {
               {
                 id: res.attachment__id,
                 attachment_format_value:
-                  res.attachment__attachment_format_value,
+                  res.attachment__attachment_format__value,
                 author__agent: res.attachment__author__agent,
                 description: res.attachment__description,
                 description_en: res.attachment__description_en,

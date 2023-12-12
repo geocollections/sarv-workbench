@@ -15,7 +15,7 @@
         <drillcore-box-list-view v-if="module === 'drillcore_box'" :data="data">
           <template v-slot:itemTitle="{ item }">
             <router-link
-              :to="{ path: '/drillcore_box/' + item.drillcore_box }"
+              :to="{ path: '/drillcore_box/' + item.drillcore_box__id }"
               :title="$t('editDrillcoreBox.editMessage')"
               class="sarv-link pt-3 ma-0"
               :class="`${bodyActiveColor}--text`"

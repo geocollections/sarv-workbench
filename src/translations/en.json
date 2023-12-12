@@ -51,6 +51,7 @@
     "loadingEdit": "Please wait! Changing data...",
     "loadingAdd": "Please wait! Adding data...",
     "loading": "Please wait! Fetching data...",
+    "loadingFile": "Please wait! Fetching file...",
     "print": "Print",
     "small": "Small",
     "medium": "Medium",

@@ -6,7 +6,6 @@ import VueI18n from "vue-i18n"; // Translations
 import VueCookies from "vue-cookies";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
-import constants from "@/plugins/constants";
 import helpers from "@/plugins/helpers";
 import dayjs from "@/plugins/dayjs.js";
 // Bootstrap css
@@ -30,7 +29,6 @@ pinia.use(piniaPluginPersistedState);
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueCookies);
-Vue.use(constants);
 Vue.use(helpers);
 Vue.use(dayjs);
 Vue.use(PiniaVuePlugin);

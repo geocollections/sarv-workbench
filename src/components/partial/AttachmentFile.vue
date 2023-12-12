@@ -1,9 +1,9 @@
 <template>
   <div
-    class="file-preview d-flex flex-column align-center justify-center fill-height"
+    class="attachment-file d-flex flex-column align-center justify-center fill-height"
     v-if="data"
   >
-    <div class="align-center align-end my-2">
+    <div class="align-center align-end my-2" style="max-width: 100%">
       <div class="rotation d-flex flex-row justify-end mb-1" v-if="isImageFile">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -27,9 +27,9 @@
       </div>
 
       <!-- AUDIO -->
-      <audio v-if="isAudioFile" controls>
+      <audio v-if="isAudioFile && !data.is_private" controls>
         <source
-          :src="$helpers.getFileUrl(data.uuid_filename)"
+          :src="$helpers.getPublicFileUrl(data.uuid_filename)"
           :type="data.attachment_format__value"
         />
         Your browser does not support the audio element.
@@ -37,9 +37,9 @@
       </audio>
 
       <!-- VIDEO -->
-      <video v-else-if="isVideoFile" type="video" controls>
+      <video v-else-if="isVideoFile && !data.is_private" type="video" controls>
         <source
-          :src="$helpers.getFileUrl(data.uuid_filename)"
+          :src="$helpers.getPublicFileUrl(data.uuid_filename)"
           :type="data.attachment_format__value"
         />
         Your browser does not support the video element.
@@ -47,31 +47,17 @@
       </video>
 
       <!-- IMAGE -->
-
-      <img
-        v-else-if="isImageFile"
-        :src="$helpers.getFileUrl(data.uuid_filename, 'medium')"
-        :title="$helpers.getFileUrl(data.uuid_filename, 'medium')"
-        @click="
-          $helpers.openUrlInNewWindow(
-            $helpers.getFileUrl(data.uuid_filename, 'medium')
-          )
-        "
-        alt="Image preview..."
-        class="img-thumbnail image"
-        :style="imageStyle"
-      />
-
-      <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
-      <i
+      <file-preview
         v-else
-        class="far fa-5x link"
-        @click="
-          $helpers.openUrlInNewWindow($helpers.getFileUrl(data.uuid_filename))
-        "
-        :title="$helpers.getFileUrl(data.uuid_filename)"
-        :class="getAttachmentIcon(data)"
-      ></i>
+        class="file-preview"
+        :attachment="data"
+        size="medium"
+        icon-size="5rem"
+        contain
+        max="500"
+        :style="imageStyle"
+        @click.native="$helpers.openFileInNewWindow(data)"
+      />
     </div>
 
     <div
@@ -79,7 +65,7 @@
       style="width: 100%"
       v-if="isAudioFile || isVideoFile || isImageFile"
     >
-      <div class="d-flex">
+      <div class="d-flex flex-wrap">
         <v-icon small>fas fa-external-link-alt</v-icon>
         <v-btn
           v-for="size in buttons"
@@ -88,12 +74,7 @@
           text
           link
           class="ma-1 text-capitalize blue--text text--darken-2"
-          @click="
-            $helpers.openUrlInNewWindow(
-              $helpers.getFileUrl(data.uuid_filename, size)
-            )
-          "
-          :title="$helpers.getFileUrl(data.uuid_filename, size)"
+          @click="$helpers.openFileInNewWindow(data)"
           >{{ $t(`common.${size}`) }}</v-btn
         >
       </div>
@@ -115,9 +96,7 @@
           <v-list-item
             v-for="(size, index) in buttons"
             :key="index"
-            tag="a"
-            :href="$helpers.getFileUrl(data.uuid_filename, size)"
-            :download="downloadFileName(data.original_filename, size)"
+            @click="downloadFile(data, size)"
           >
             <v-list-item-title>{{ $t(`common.${size}`) }}</v-list-item-title>
           </v-list-item>
@@ -128,12 +107,10 @@
       <v-btn
         small
         icon
-        tag="a"
-        :href="$helpers.getFileUrl(data.uuid_filename, size)"
-        :download="downloadFileName(data.original_filename, size)"
         :title="$t('common.downloadFile')"
         :color="bodyActiveColor"
         :dark="bodyActiveColorDark"
+        @click="downloadFile(data)"
       >
         <v-icon color="" small>fas fa-download</v-icon>
       </v-btn>
@@ -143,7 +120,10 @@
 
 <script>
 import { mapState } from "vuex";
+import FilePreview from "@/components/FilePreview.vue";
+import { fetchRawFile } from "@/assets/js/api/apiCalls";
 export default {
+  components: { FilePreview },
   props: {
     data: {
       required: true,
@@ -152,7 +132,7 @@ export default {
       required: false,
     },
   },
-  name: "FilePreview",
+  name: "AttachmentFile",
   computed: {
     ...mapState("settings", ["bodyActiveColor", "bodyActiveColorDark"]),
     isAudioFile() {
@@ -172,13 +152,7 @@ export default {
     },
 
     isImageFile() {
-      if (this.data.attachment_format__value) {
-        return !!this.data.attachment_format__value.includes("image");
-      } else {
-        let fileType = this.data.uuid_filename.split(".")[1];
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
-        return !!(fileType.includes("jpg") || fileType.includes("png"));
-      }
+      return this.$helpers.isImageFile(this.data);
     },
 
     buttons() {
@@ -191,8 +165,12 @@ export default {
     imageStyle() {
       let style = `transform:rotate(${this.rotationDegrees}deg);`;
 
-      const height = document?.querySelector("img")?.offsetHeight;
-      const width = document?.querySelector("img")?.offsetWidth;
+      const height = document?.querySelector(
+        ".attachment-file .image-preview"
+      )?.offsetHeight;
+      const width = document?.querySelector(
+        ".attachment-file .image-preview"
+      )?.offsetWidth;
 
       if (width > height) {
         const isOdd = (Math.abs(this.rotationDegrees) / 90) % 2 === 1;
@@ -206,41 +184,46 @@ export default {
     },
   },
   methods: {
-    getAttachmentIcon(attachment) {
-      if (attachment.attachment_format__value) {
-        let fileType = attachment.attachment_format__value;
-        if (fileType.includes("application")) {
-          if (fileType.includes("docx")) return "fa-file-word";
-          else if (fileType.includes("pdf")) return "fa-file-pdf";
-          else if (fileType.includes("xlsx") || fileType.includes("ods"))
-            return "fa-file-excel";
-          else if (fileType.includes("zip")) return "fa-file-archive";
-          else return "fa-file";
-        } else if (fileType.includes("audio")) return "fa-file-audio";
-        else if (fileType.includes("image")) return "fa-file-image";
-        else if (fileType.includes("text")) return "fa-file-alt";
-        else if (fileType.includes("video")) return "fa-file-video";
-        else return "fa-file";
-      } else {
-        let fileType = attachment.uuid_filename.split(".")[1];
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value
-        if (fileType.includes("jpg") || fileType.includes("png"))
-          return "fa-file-image";
-        // 859 jpg and 2 png
-        else if (fileType.includes("pdf")) return "fa-file-pdf";
-        // 635 pdf
-        else if (fileType.includes("xls") || fileType.includes("ods"))
-          return "fa-file-excel";
-        // 4 xls and 2 ods
-        else if (fileType.includes("txt")) return "fa-file-alt";
-        // 1 txt
-        else if (fileType.includes("webm")) return "fa-file-video";
-        // 1 webm
-        else return "fa-file"; // 4 hz1
+    async downloadFile(data, size) {
+      const filename = this.downloadFileName(data.uuid_filename, size);
+      let url = this.$helpers.getPublicFileUrl(data.uuid_filename, size);
+
+      if (data.is_private) {
+        try {
+          const uuid = data.uuid_filename?.split(".")?.[0];
+          let res = await fetchRawFile({ uuid });
+
+          if (res.status !== 200) return;
+          url = URL.createObjectURL(res.data);
+        } catch (e) {
+          return;
+        }
       }
+
+      this.downloadBlob(url, filename);
     },
+
+    downloadBlob(blobUrl, name = "myfile") {
+      const link = document.createElement("a");
+
+      link.href = blobUrl;
+      link.download = name;
+
+      document.body.appendChild(link);
+
+      link.dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        })
+      );
+
+      document.body.removeChild(link);
+    },
+
     downloadFileName(filename, size) {
-      if (size === "original") return filename;
+      if (!size || size === "original") return filename;
       return `${size}_${filename}`;
     },
 
@@ -252,35 +235,26 @@ export default {
 </script>
 
 <style scoped>
-video {
-  max-width: 100%;
-  vertical-align: middle;
-}
+.attachment-file .file-preview {
+  background-color: transparent !important;
+  border: none;
 
-.link:hover {
-  cursor: pointer;
-}
-
-img {
-  opacity: 1;
-  transition: opacity 200ms ease-out;
-}
-
-img:hover {
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 200ms ease-in;
-}
-
-.img-thumbnail {
-  padding: 0.25rem;
-  background-color: #fff;
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  max-width: 100%;
-  max-height: 400px;
   height: auto;
   transition: 0.2s ease-in-out;
   transition-property: transform, margin;
+}
+
+.file-preview {
+  cursor: pointer;
+  transition: opacity 200ms ease-in-out;
+}
+
+.file-preview:hover {
+  opacity: 0.8;
+}
+
+video {
+  max-width: 100%;
+  vertical-align: middle;
 }
 </style>

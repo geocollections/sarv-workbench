@@ -26,32 +26,15 @@
     :class="bodyColor.split('n-')[0] + 'n-5'"
   >
     <template v-slot:item.uuid_filename="{ item }">
-      <div style="max-width: 200px; max-height: 200px" class="text-center">
+      <div class="text-center">
         <router-link
           v-if="item.uuid_filename"
           :title="$t('edit.editMessage')"
           :to="{ path: '/attachment/' + item.id }"
-          class="image-link"
-          style="max-width: 200px; max-height: 200px"
+          class="image-link my-1"
+          style="max-width: 150px; max-height: 150px; display: block"
         >
-          <v-img
-            v-if="isAttachmentImage(item.attachment_format__value)"
-            :src="$helpers.getFileUrl(item.uuid_filename, 'small')"
-            :lazy-src="$helpers.getFileUrl(item.uuid_filename, 'small')"
-            class="grey lighten-2 attachment-table-image-preview my-1"
-            max-width="200"
-            max-height="200"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-row>
-            </template>
-          </v-img>
-
-          <v-icon v-else class="my-1" style="font-size: 3rem"
-            >far fa-file</v-icon
-          >
+          <file-preview :attachment="item" max="150" />
         </router-link>
         <router-link
           v-else
@@ -149,9 +132,11 @@
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
+import FilePreview from "@/components/FilePreview.vue";
 
 export default {
   name: "AttachmentTable",
+  components: { FilePreview },
   mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {
@@ -186,10 +171,6 @@ export default {
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
-    },
-
-    isAttachmentImage(type) {
-      return type && type.includes("image");
     },
   },
 };

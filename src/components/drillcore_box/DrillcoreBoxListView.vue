@@ -9,14 +9,13 @@
       <v-col cols="12" class="box">
         <v-divider v-if="index > 0" class="d-print-none" />
         <div class="py-2 d-flex align-center flex-column">
-          <img
-            @click="openFileInNewWindow(box)"
+          <file-preview
+            @click.native="$helpers.openFileInNewWindow(box)"
+            prefix="attachment__"
+            class="elevation-4 file-preview"
+            :attachment="box"
+            size="medium"
             style="max-width: 800px; max-height: 500px"
-            class="elevation-4"
-            :src="$helpers.getFileUrl(box.attachment__uuid_filename, 'medium')"
-            :title="
-              $helpers.getFileUrl(box.attachment__uuid_filename, 'medium')
-            "
           />
 
           <slot name="itemTitle" v-bind:item="box"></slot>
@@ -33,8 +32,11 @@
 </template>
 
 <script>
+import FilePreview from "@/components/FilePreview.vue";
+
 export default {
   name: "DrillcoreBoxListView",
+  components: { FilePreview },
   props: {
     data: {
       type: Array,
@@ -48,42 +50,16 @@ export default {
       type: Object,
     },
   },
-  methods: {
-    openFileInNewWindow(file) {
-      if (typeof file !== "undefined" && file !== null) {
-        let url = "";
-        if (this.isImageFile(file)) {
-          url = this.$helpers.getFileUrl(
-            file.attachment__uuid_filename,
-            "large"
-          );
-        } else {
-          url = this.$helpers.getFileUrl(file.attachment__uuid_filename);
-        }
-
-        window.open(url, "FileWindow", "width=800,height=750");
-      }
-    },
-    isImageFile(image) {
-      if (image.attachment_format__value) {
-        return !!image.attachment_format__value.includes("image");
-      } else {
-        let fileType = image.attachment__uuid_filename.split(".")[1];
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
-        return !!(fileType.includes("jpg") || fileType.includes("png"));
-      }
-    },
-  },
 };
 </script>
 
 <style scoped>
-img {
+.file-preview {
   opacity: 1;
   transition: opacity 200ms ease-in;
 }
 
-img:hover {
+.file-preview:hover {
   cursor: pointer;
   opacity: 0.8;
   transition: opacity 200ms ease-in;
