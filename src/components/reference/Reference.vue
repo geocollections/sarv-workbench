@@ -642,6 +642,7 @@
 
       <transition>
         <div v-show="block.digital" class="pa-1">
+          {{ attachment }}
           <file-input
             :files-from-object="attachment"
             v-on:file-uploaded="addPDF"
@@ -1267,6 +1268,7 @@ export default {
               uuid_filename: entity.attachment__uuid_filename,
               remarks: entity.attachment__remarks,
               original_filename: entity.attachment__original_filename,
+              is_private: entity.attachment__is_private,
             };
           });
           if (this.isNotEmpty(this.relatedData.attachment)) {
@@ -1288,6 +1290,7 @@ export default {
                 description_en: res.attachment__description_en,
                 original_filename: res.attachment__original_filename,
                 uuid_filename: res.attachment__uuid_filename,
+                is_private: res.attachment__is_private,
               },
             ];
           }

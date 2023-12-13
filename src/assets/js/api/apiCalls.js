@@ -651,7 +651,7 @@ export function fetchListLanguages() {
 
 export function fetchAttachmentForReference(id) {
   return get(
-    `reference/?id=${id}&fields=attachment__id,attachment__attachment_format__value,attachment__author__agent,attachment__description,attachment__description_en,attachment__original_filename,attachment__uuid_filename&format=json`
+    `reference/?id=${id}&fields=attachment__id,attachment__attachment_format__value,attachment__author__agent,attachment__description,attachment__description_en,attachment__original_filename,attachment__uuid_filename,attachment__is_private&format=json`
   );
 }
 

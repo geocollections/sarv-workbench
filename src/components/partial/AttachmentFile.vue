@@ -185,7 +185,10 @@ export default {
   },
   methods: {
     async downloadFile(data, size) {
-      const filename = this.downloadFileName(data.uuid_filename, size);
+      const filename = this.downloadFileName(
+        data.original_filename || data.uuid_filename,
+        size
+      );
       let url = this.$helpers.getPublicFileUrl(data.uuid_filename, size);
 
       if (data.is_private) {
