@@ -642,7 +642,6 @@
 
       <transition>
         <div v-show="block.digital" class="pa-1">
-          {{ attachment }}
           <file-input
             :files-from-object="attachment"
             v-on:file-uploaded="addPDF"
