@@ -8,6 +8,7 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import helpers from "@/plugins/helpers";
 import dayjs from "@/plugins/dayjs.js";
+import "@/middleware/RedirectService.js";
 // Bootstrap css
 // import "bootstrap/dist/css/bootstrap.css";
 
