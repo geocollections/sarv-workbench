@@ -3032,7 +3032,7 @@
     "group": "Group",
     "user": "User",
     "view_perms_title": "View only:",
-    "change_perms_title": "View and edit:",
+    "change_perms_title": "Edit only:",
     "update": "Update permissions",
     "update_message": "Note that removing your own permissions will result in losing access to the record."
   },
