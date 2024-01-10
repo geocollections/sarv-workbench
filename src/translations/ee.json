@@ -3034,7 +3034,7 @@
     "group": "Grupp",
     "user": "Kasutaja",
     "view_perms_title": "Vaatamise õigus:",
-    "change_perms_title": "Vaatamise ja muutmise õigus:",
+    "change_perms_title": "Muutmise õigus:",
     "update": "Uuenda õiguseid",
     "update_message": "NB! Enda juurdepääsuõiguste eemaldamisel kaotate võimaluse kirje nägemiseks / muutmiseks."
   },
