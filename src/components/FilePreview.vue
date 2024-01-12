@@ -71,6 +71,7 @@ export default {
         "image/jpg",
         "image/jpeg",
         "image/png",
+        "image/svg+xml",
       ];
       return imageMimeTypes.includes(
         this.attachment?.[`${this.prefix}attachment_format__value`]

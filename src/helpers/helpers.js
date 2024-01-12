@@ -15,6 +15,11 @@ const getPublicFileUrl = (filename, size) => {
 const getFilePath = (filename, size) => {
   const uuid = filename.split(".")[0];
   let filePath = "/" + uuid;
+
+  // SVG-s do not have sizes
+  const useOriginal = filename.endsWith(".svg");
+  if (useOriginal) return filePath;
+
   if (size && ["small", "medium", "large"].includes(size)) {
     filePath = "/" + size + "/" + uuid;
   }
