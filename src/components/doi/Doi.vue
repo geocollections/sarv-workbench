@@ -1624,11 +1624,6 @@ export default {
       return `${option.id} - (${option.reference})`;
     },
 
-    customLabelForDataset(option) {
-      if (this.$i18n.locale === "ee") return `${option.id} - (${option.name})`;
-      return `${option.id} - (${option.name_en})`;
-    },
-
     /**
      * Updates DOI creators field using persons (Creators) in doi_agent
      * Always overwrites creators field, because doi_agent is more reliable than user entered creators field!
