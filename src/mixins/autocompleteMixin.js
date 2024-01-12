@@ -98,7 +98,7 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "taxon", "parent");
     },
     autocompleteTaxonFossilGroupSearch(value) {
-      this.$_autocompleteMixin_search(value, "taxon", "fossil_group");
+      this.$_autocompleteMixin_search(value, "fossil_group", "fossil_group");
     },
     autocompleteTypeTaxonSearch(value) {
       this.$_autocompleteMixin_search(value, "taxon", "type_taxon");
@@ -493,6 +493,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&or_search=user_added__iexact:${currentUser.user};is_private__iexact:0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
     case "taxon":
       return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&fields=id,taxon,hierarchy_string`;
+    case "fossil_group":
+      return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&is_fossil_group=true&fields=id,taxon,hierarchy_string`;
     case "project":
     case "parent_project":
       return `project/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
