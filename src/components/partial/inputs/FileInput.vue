@@ -672,11 +672,6 @@ export default {
         this.toastInfo({ text: "You have already added one existing file." });
       } else this.toastInfo({ text: "You have already uploaded one file." });
     },
-
-    clearFiles() {
-      this.resetData();
-      this.fileInputKey = 12;
-    },
   },
 };
 </script>
