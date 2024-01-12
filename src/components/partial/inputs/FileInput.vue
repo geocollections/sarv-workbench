@@ -18,6 +18,7 @@
         <v-file-input
           :id="`${id}`"
           class="d-none"
+          :key="`file-${fileInputKey}`"
           :multiple="acceptMultiple"
           :accept="acceptableFormat"
           @change="addFile"
@@ -78,8 +79,11 @@
         <v-file-input
           ref="photoUpload"
           class="d-none"
+          :key="`photo-${fileInputKey}`"
           :multiple="acceptMultiple"
-          accept="image/*;capture=camera"
+          accept="image/*"
+          name="image"
+          capture="environment"
           @change="addFile"
         />
       </div>
@@ -106,8 +110,11 @@
         <v-file-input
           ref="videoUpload"
           class="d-none"
+          :key="`video-${fileInputKey}`"
           :multiple="acceptMultiple"
-          accept="video/*;capture=camcorder"
+          accept="video/*"
+          name="video"
+          capture="environment"
           @change="addFile"
         />
       </div>
@@ -134,8 +141,11 @@
         <v-file-input
           ref="audioUpload"
           class="d-none"
+          :key="`audio-${fileInputKey}`"
           :multiple="acceptMultiple"
-          accept="audio/*;capture=microphone"
+          accept="audio/*"
+          name="audio"
+          capture
           @change="addFile"
         />
       </div>
@@ -383,19 +393,22 @@ export default {
       return !this.acceptMultiple && this.userHasInsertedFiles;
     },
   },
-  data: () => ({
-    useExisting: false,
-    isDragging: false,
-    files: null,
-    existingFiles: null,
-    autocomplete: {
-      attachment: [],
-      loaders: { attachment: false },
-    },
-    sourceList: [],
-    id: null,
-    singleFileMetadata: null,
-  }),
+  data() {
+    return {
+      useExisting: false,
+      isDragging: false,
+      files: null,
+      existingFiles: null,
+      autocomplete: {
+        attachment: [],
+        loaders: { attachment: false },
+      },
+      sourceList: [],
+      id: null,
+      singleFileMetadata: null,
+      fileInputKey: 0,
+    };
+  },
   mounted() {
     this.id = this._uid;
   },
@@ -582,6 +595,7 @@ export default {
       this.files = null;
       this.existingFiles = null;
       this.sourceList = [];
+      this.fileInputKey++;
       this.$emit("files-cleared");
     },
 
