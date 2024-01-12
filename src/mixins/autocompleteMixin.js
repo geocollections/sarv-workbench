@@ -66,6 +66,20 @@ const autocompleteMixin = {
     ...mapGetters("user", ["getCurrentUser"]),
   },
   methods: {
+    customLabelForDataset(option) {
+      const isTranslatedET = option.title_translated_language === 4;
+      const isTranslatedEN = option.title_translated_language === 1;
+
+      const title = isTranslatedET
+        ? option.title_translated || option.title || option.name
+        : option.title || option.name;
+      const title_en = isTranslatedEN
+        ? option.title_translated || option.name_en || option.title
+        : option.name_en || option.title;
+
+      if (this.$i18n.locale === "ee") return `${option.id} - (${title})`;
+      return `${option.id} - (${title_en})`;
+    },
     autocompleteAnalysisSearch(value) {
       this.$_autocompleteMixin_search(value, "analysis", "analysis");
     },
@@ -507,7 +521,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "site":
       return `site/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case "dataset":
-      return `dataset/?multi_search=value:${value};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+      return `dataset/?multi_search=value:${value};fields:id,name,name_en,title,title_alternative,title_translated;lookuptype:icontains&fields=id,name,name_en,title,title_alternative,title_translated,title_translated_language`;
     case "doi_agent":
       return `agent/?multi_search=value:${value};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,institution__institution_name_en,orcid`;
     case "library_agent_search":
