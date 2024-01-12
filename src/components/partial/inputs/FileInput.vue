@@ -503,7 +503,12 @@ export default {
     },
 
     readFileMetaData(file) {
-      if (!file.type.startsWith("image")) {
+      if (
+        !this.$helpers.isImageFile({
+          ...file,
+          attachment_format__value: file.type,
+        })
+      ) {
         return null;
       }
       return new Promise((resolve, reject) => {

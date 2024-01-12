@@ -61,12 +61,12 @@ const isImageFile = (file) => {
   if (mimeType) {
     return imageMimeTypes.includes(mimeType);
   } else {
-    let fileType = uuidFilename.split(".")[1];
+    let fileType = uuidFilename?.split(".")[1];
     return !!(
-      fileType.includes("jpe") ||
-      fileType.includes("jpg") ||
-      fileType.includes("jpeg") ||
-      fileType.includes("png")
+      fileType?.includes("jpe") ||
+      fileType?.includes("jpg") ||
+      fileType?.includes("jpeg") ||
+      fileType?.includes("png")
     );
   }
 };
