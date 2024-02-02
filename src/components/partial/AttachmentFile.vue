@@ -74,7 +74,7 @@
           text
           link
           class="ma-1 text-capitalize blue--text text--darken-2"
-          @click="$helpers.openFileInNewWindow(data)"
+          @click="$helpers.openFileInNewWindow(data, size)"
           >{{ $t(`common.${size}`) }}</v-btn
         >
       </div>
@@ -194,7 +194,7 @@ export default {
       if (data.is_private) {
         try {
           const uuid = data.uuid_filename?.split(".")?.[0];
-          let res = await fetchRawFile({ uuid });
+          let res = await fetchRawFile({ uuid, size });
 
           if (res.status !== 200) return;
           url = URL.createObjectURL(res.data);

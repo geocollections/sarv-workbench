@@ -204,9 +204,9 @@ export function postRequest(url, data, customUrl = "", config = {}) {
  *** ATTACHMENTS START ***
  *************************/
 
-export function fetchRawFile({ size, uuid, extension }, blob) {
+export function fetchRawFile({ size, uuid }) {
   let path = "files/";
-  if (size) path += `${size}/`;
+  if (size && ["small", "medium", "large"].includes(size)) path += `${size}/`;
   path += `${uuid}/`;
   return get(path, api.filesUrl, {
     responseType: "blob",
