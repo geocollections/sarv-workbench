@@ -28,7 +28,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
@@ -226,6 +226,12 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
@@ -233,19 +239,22 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog.vue";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 
 export default {
   name: "RockImageTable",
 
   components: {
+    RelatedDataDeleteDialog,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -282,42 +291,44 @@ export default {
     },
   },
 
-  data: () => ({
-    headers: [
-      { text: "rock.attachment", value: "attachment" },
-      { text: "rock.link", value: "link" },
-      { text: "rock.title", value: "title" },
-      { text: "rock.title_en", value: "title_en" },
-      { text: "rock.sort", value: "sort" },
-      { text: "common.is_private", value: "is_private" },
-      { text: "common.remarks", value: "remarks" },
-      {
-        text: "common.actions",
-        value: "action",
-        sortable: false,
-        align: "center",
+  data() {
+    return {
+      headers: [
+        { text: "rock.attachment", value: "attachment" },
+        { text: "rock.link", value: "link" },
+        { text: "rock.title", value: "title" },
+        { text: "rock.title_en", value: "title_en" },
+        { text: "rock.sort", value: "sort" },
+        { text: "common.is_private", value: "is_private" },
+        { text: "common.remarks", value: "remarks" },
+        {
+          text: "common.actions",
+          value: "action",
+          sortable: false,
+          align: "center",
+        },
+      ],
+      dialog: false,
+      item: {
+        attachment: null,
+        link: null,
+        title: "",
+        title_en: "",
+        sort: "",
+        is_private: false,
+        remarks: "",
       },
-    ],
-    dialog: false,
-    item: {
-      attachment: null,
-      link: null,
-      title: "",
-      title_en: "",
-      sort: "",
-      is_private: false,
-      remarks: "",
-    },
-    isNewItem: true,
-    autocomplete: {
-      attachment: [],
-      rock: [],
-      loaders: {
-        attachment: false,
-        rock: false,
+      isNewItem: true,
+      autocomplete: {
+        attachment: [],
+        rock: [],
+        loaders: {
+          attachment: false,
+          rock: false,
+        },
       },
-    },
-  }),
+    };
+  },
 
   computed: {
     translatedHeaders() {
@@ -338,9 +349,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         attachment: null,
         link: null,
@@ -352,29 +361,7 @@ export default {
       };
     },
 
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "rock_image",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "rock_image",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
@@ -406,26 +393,6 @@ export default {
       this.item.sort = item.sort;
       this.item.is_private = item.is_private;
       this.item.remarks = item.remarks;
-
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "rock_image",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
-    },
-
-    formatItem(item) {
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === "undefined") item[key] = null;
-        if (typeof item[key] === "object" && item[key] !== null) {
-          item[key] = item[key].id ? item[key].id : null;
-        }
-      });
-      return item;
     },
 
     customLabelForAttachment(option) {
