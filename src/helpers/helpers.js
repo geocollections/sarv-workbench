@@ -34,8 +34,9 @@ const getDoiUrl = (doi) => {
   return `https://doi.org/${doi}`;
 };
 
-const openFileInNewWindow = (file) => {
+const openFileInNewWindow = (file, size) => {
   if (!file) return;
+  if (!size) size = "large";
   const isPrivate = file.is_private || file.attachment__is_private;
   const uuidFilename = file.uuid_filename || file.attachment__uuid_filename;
 
@@ -45,8 +46,8 @@ const openFileInNewWindow = (file) => {
     uuid = uuidFilename.split(".")?.[0];
     url = config.app.filesUrl;
   }
-  if (isImageFile(file)) {
-    url += `/large/${uuid}`;
+  if (isImageFile(file) && ["small", "medium", "large"].includes(size)) {
+    url += `/${size}/${uuid}`;
   } else {
     url += "/" + uuid;
   }
