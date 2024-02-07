@@ -544,14 +544,14 @@ export default {
         // GPS DATA
         if (metadata.GPSLatitude) {
           const degrees =
-            metadata.GPSLatitude[0].numerator /
-            metadata.GPSLatitude[0].denominator;
+            metadata.GPSLatitude.value[0].numerator /
+            metadata.GPSLatitude.value[0].denominator;
           const minutes =
-            metadata.GPSLatitude[1].numerator /
-            metadata.GPSLatitude[1].denominator;
+            metadata.GPSLatitude.value[1].numerator /
+            metadata.GPSLatitude.value[1].denominator;
           const seconds =
-            metadata.GPSLatitude[2].numerator /
-            metadata.GPSLatitude[2].denominator;
+            metadata.GPSLatitude.value[2].numerator /
+            metadata.GPSLatitude.value[2].denominator;
           const latitude = this.convertExifGPSToDecimal(
             degrees,
             minutes,
@@ -562,14 +562,14 @@ export default {
         }
         if (metadata.GPSLongitude) {
           const degrees =
-            metadata.GPSLongitude[0].numerator /
-            metadata.GPSLongitude[0].denominator;
+            metadata.GPSLongitude.value[0].numerator /
+            metadata.GPSLongitude.value[0].denominator;
           const minutes =
-            metadata.GPSLongitude[1].numerator /
-            metadata.GPSLongitude[1].denominator;
+            metadata.GPSLongitude.value[1].numerator /
+            metadata.GPSLongitude.value[1].denominator;
           const seconds =
-            metadata.GPSLongitude[2].numerator /
-            metadata.GPSLongitude[2].denominator;
+            metadata.GPSLongitude.value[2].numerator /
+            metadata.GPSLongitude.value[2].denominator;
           const longitude = this.convertExifGPSToDecimal(
             degrees,
             minutes,
