@@ -92,9 +92,9 @@ axios.interceptors.response.use(
   }
 );
 
-async function get(child = "", customUrl, options) {
+async function get(child = "", options) {
   let url = api.url + child;
-  if (customUrl) url = customUrl + child;
+  if (options?.customUrl) url = options.customUrl + child;
   try {
     const res = await axios.get(url, options);
     if (options?.timestamp) res.timestamp = options.timestamp;
@@ -191,7 +191,7 @@ export function fetchLogout() {
 }
 
 export function fetchIsLoggedIn() {
-  return get(`v0/login_state`, api.accountsUrl);
+  return get(`v0/login_state`, { customUrl: api.accountsUrl });
 }
 
 /*******************
@@ -210,12 +210,10 @@ export function fetchRawFile({ size, uuid }) {
   let path = "files/";
   if (size && ["small", "medium", "large"].includes(size)) path += `${size}/`;
   path += `${uuid}/`;
-  return get(path, api.filesUrl, {
-    responseType: "blob",
-  });
+  return get(path, { customUrl: api.filesUrl, responseType: "blob" });
 }
 
-export function fetchAttachments(data, dynamicSearch) {
+export function fetchAttachments(data, dynamicSearch, timestamp) {
   let fields =
     "original_filename,filename,specimen_image_attachment,type,type__value,type__value_en,attachment_format,attachment_format__value,author,author__agent,author_free,date_created,date_created_free,device,device__name,device_txt,date_digitised,date_digitised_free,agent_digitised,agent_digitised__agent,device_digitised,device_digitised__name,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,description,description_en,size_mb,remarks,tags,stars,is_private,is_preferred,is_locked,specimen,specimen__specimen_id,locality,locality__locality,locality__locality_en,drillcore,drillcore__drillcore,drillcore__drillcore_en,drillcore_box,drillcore_box__number,reference,reference__reference,drillcore_image_id,image_id,imageset,imageset__imageset_number,specimen_image_id,image_number,image_type,image_type__value,image_type__value_en,image_width,image_height,image_category,image_category__value,image_category__value_en,image_object,image_place,image_people,image_latitude,image_longitude,image_altitude,image_scalebar,image_description,image_description_en,storage,user_added,date_added,user_changed,date_changed,database,database__acronym,uuid_filename,id,upload,uuid";
 
@@ -300,11 +298,13 @@ export function fetchAttachments(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -451,7 +451,7 @@ export function fetchReference(id) {
   return get(`reference/?id=${id}&format=json`);
 }
 
-export async function fetchReferences(data, dynamicSearch) {
+export async function fetchReferences(data, dynamicSearch, timestamp) {
   const fields =
     "reference,author,author_original,year,type,type__ris_type,type__value,type__value_en,language,language__value,language__value_en,title,title_original,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,book,book_original,book_translated,book_translated_language,book_translated_language__value,book_translated_language__value_en,book_editor,publisher,publisher_place,journal,journal__journal_name,journal_txt,journal_additional,volume,number,pages,figures,doi,url,issn,isbn,abstract,author_keywords,tags,remarks,remarks_private,is_oa,licence,licence__licence,licence__licence_en,egf,is_private,is_locked,location_txt,is_estonian_reference,is_estonian_author,parent_reference,parent_reference__reference,translated_reference,translated_reference__reference,user_added,date_added,user_changed,date_changed,id,uuid,attachment__filename,attachment__uuid_filename,attachment__is_private";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
@@ -460,7 +460,7 @@ export async function fetchReferences(data, dynamicSearch) {
     let start = (data.page - 1) * data.paginateBy;
     return get(
       `reference/?q=${data.solrSearch}&rows=${data.paginateBy}&start=${start}&format=json`,
-      api.solrUrl
+      { customUrl: api.solrUrl, timestamp }
     );
   }
 
@@ -728,7 +728,7 @@ export function fetchLatestLogs(data) {
  *** LOCALITY START ***
  **********************/
 
-export function fetchLocalities(data, dynamicSearch) {
+export function fetchLocalities(data, dynamicSearch, timestamp) {
   const fields =
     "locality,locality_en,number,code,type,type__value,type__value_en,parent,parent__locality,parent__locality_en,latitude,longitude,elevation,coord_det_precision,coord_det_precision__value,coord_det_precision__value_en,coord_det_method,coord_det_method__value,coord_det_method__value_en,coord_det_agent,coord_det_agent__agent,coord_system,epsg,coordx,coordy,extent,extent__value,extent__value_en,country,country__value,country__value_en,maakond,maakond__maakond,maakond__maakond_en,vald,vald__vald,vald__vald_en,asustusyksus,asustusyksus__asustusyksus,asustusyksus__asustusyksus_en,remarks_location,depth,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,eelis,maaamet_pa_id,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -784,11 +784,13 @@ export function fetchLocalities(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `locality/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `locality/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `locality/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `locality/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -1096,7 +1098,7 @@ export function fetchLibrary(id) {
   return get(`library/?id=${id}&format=json`);
 }
 
-export function fetchLibraries(data, dynamicSearch) {
+export function fetchLibraries(data, dynamicSearch, timestamp) {
   const fields =
     "title,title_en,title_short,title_short_en,abstract,abstract_en,author,author__agent,author_txt,year,publisher,doi,keywords,remarks,is_private,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -1134,11 +1136,13 @@ export function fetchLibraries(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `library/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `library/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `library/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `library/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -1253,7 +1257,7 @@ export function fetchMultiAddReferencesToLibrary(data) {
  *** DOI START ***
  *****************/
 
-export function fetchDois(data, dynamicSearch) {
+export function fetchDois(data, dynamicSearch, timestamp) {
   const fields =
     "identifier,creators,title,title_alternative,title_translated,title_translated_language,title_translated_language__value,title_translated_language__value_en,publisher,publication_year,subjects,reference,reference__reference,dataset,dataset__name,dataset__name_en,language,language__value,language__value_en,resource_type,resource_type__value,resource,version,sizes,formats,abstract,methods,date_txt,is_private,owner,owner__agent,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,egf,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,datacite_created,datacite_updated,id";
   let searchFields = "";
@@ -1292,11 +1296,13 @@ export function fetchDois(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `doi/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `doi/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -1306,7 +1312,7 @@ export function fetchDoi(id) {
 }
 
 export function fetchDoiUsingEGF(id) {
-  return get(`egf/${id}`, api.baseUrl);
+  return get(`egf/${id}`, { customUrl: api.baseUrl });
 }
 
 export function fetchDoiResourceType() {
@@ -1408,11 +1414,11 @@ export function fetchAddDoiAgent(data) {
 }
 
 export function fetchCheckMetadataInDataCite(id) {
-  return get(`metadata/${id}/`, api.dataciteUrl);
+  return get(`metadata/${id}/`, { customUrl: api.dataciteUrl });
 }
 
 export function fetchCheckDoiUrlInDataCite(id) {
-  return get(`doi/${id}/`, api.dataciteUrl);
+  return get(`doi/${id}/`, { customUrl: api.dataciteUrl });
 }
 
 export function fetchRegisterMetadataToDataCite(id) {
@@ -1473,7 +1479,7 @@ export function fetchProjectType() {
   return get(`project_type/?order_by=name&format=json`);
 }
 
-export function fetchProjects(data, dynamicSearch) {
+export function fetchProjects(data, dynamicSearch, timestamp) {
   const fields =
     "name,name_en,number,project_type,project_type__name,project_type__name_en,parent_project,parent_project__name,parent_project__name_en,date_start,date_end,date_free,description,remarks,owner,owner__agent,is_private,user_added,date_added,user_changed,date_changed,id,timestamp";
   let searchFields = "";
@@ -1494,11 +1500,13 @@ export function fetchProjects(data, dynamicSearch) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
     return get(
-      `project/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `project/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `project/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `project/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -1517,7 +1525,7 @@ export function fetchActiveProjects(projectIds) {
  *** SITE START ***
  ******************/
 
-export function fetchSites(data, dynamicSearch) {
+export function fetchSites(data, dynamicSearch, timestamp) {
   let fields =
     "project,project__name,project__name_en,locality,locality__locality,locality__locality,area,area__name,area__name_en,site_type,site_type__value,site_type__value,name,name_en,number,latitude,longitude,location_accuracy,elevation,elevation_accuracy,coord_det_precision,coord_det_precision__value,coord_det_precision__value_en,coord_det_method,coord_det_method__value,coord_det_method__value_en,coord_det_agent,coord_det_agent__agent,epsg,coordx,coordy,extent,depth,date_start,date_end,date_free,remarks_location,description,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -1569,10 +1577,6 @@ export function fetchSites(data, dynamicSearch) {
     searchFields += `&date_end__lte=${dateEnd}`;
   }
 
-  // if (data.date_start !== null && data.date_start.trim().length > 0) {
-  //   searchFields += `&date_start__gt=${data.date_start}`
-  // }
-
   if (data.coords_not_null === true) {
     searchFields += `&latitude__isnull=False&longitude__isnull=False`;
   }
@@ -1582,15 +1586,14 @@ export function fetchSites(data, dynamicSearch) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    // return data.coords_not_null === true ? get(`site/?${searchFields}&order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
     return get(
-      `site/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `site/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
-    // return data.coords_not_null === true ? get(`site/?order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
-
     return get(
-      `site/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `site/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -1705,7 +1708,7 @@ export function fetchInstruments() {
   return get(`lab_instrument/?format=json`);
 }
 
-export function fetchAnalyses(data, dynamicSearch) {
+export function fetchAnalyses(data, dynamicSearch, timestamp) {
   const fields =
     "material,sample,sample__number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__depth,specimen,specimen__specimen_id,dataset,dataset__name,dataset__name_en,reference,reference__reference,analysis_method,analysis_method__analysis_method,analysis_method__method_en,method_details,method_details_en,mass,date,date_end,date_free,lab,lab__lab,lab__lab_en,lab_txt,lab_sample_number,lab_analysis_number,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,agent,agent__agent,agent_txt,owner,owner__agent,is_private,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -1756,20 +1759,18 @@ export function fetchAnalyses(data, dynamicSearch) {
       data.datasetId__lookuptype || "icontains"
     }=${data.datasetId}`;
   }
-
-  // if (typeof agent !== "undefined" && agent !== null) {
-  //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
-  // }
   searchFields += buildDynamicSearch(dynamicSearch);
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
     return get(
-      `analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `analysis/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `analysis/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -1806,7 +1807,7 @@ export function fetchJournal(id) {
   return get(`journal/?id=${id}&format=json`);
 }
 
-export function fetchJournals(data, dynamicSearch) {
+export function fetchJournals(data, dynamicSearch, timestamp) {
   let fields =
     "journal_name,journal_short,journal_long,journal_abbr,journal_original,issn,publisher,publisher_place,http,former_journal,former_journal__journal_name,following_journal,following_journal__journal_name,oldname,newname,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -1840,11 +1841,13 @@ export function fetchJournals(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `journal/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `journal/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `journal/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `journal/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -1883,7 +1886,7 @@ export function fetchSpecimen(id) {
   return get(`specimen/?id=${id}&format=json`);
 }
 
-export function fetchSpecimens(data, dynamicSearch) {
+export function fetchSpecimens(data, dynamicSearch, timestamp) {
   const fields =
     "specimen_id,collection,coll,coll__number,specimen_nr,number_field,type,type__value,type__value_en,subtype_id,subtype_id__value,subtype_id__value_en,fossil,fossil__value,fossil__value_en,kind,kind,kind,classification,classification__class_field,part,number_pieces,locality,locality__locality,locality__locality_en,locality_free,locality_free_en,locality_is_private,depth,depth_interval,sample_number,sample,sample__number,parent,parent__specimen_id,remarks_collecting,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,remarks,remarks_internal,tags,presence,presence__value,presence__value_en,storage,storage__location,location,status,status__value,status__value_en,original_status,original_status__value,original_status__value_en,is_private,accession,accession__number,deaccession,deaccession__number,user_added,date_added,user_changed,date_changed,database,database__acronym,id,database__name,database__name_en,database__name_label";
   let searchFields = "";
@@ -2000,16 +2003,18 @@ export function fetchSpecimens(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
 
-export function fetchSpecimenImages(data, dynamicSearch) {
+export function fetchSpecimenImages(data, dynamicSearch, timestamp) {
   const fields =
     "id,specimen_id,size_mb,original_filename,uuid_filename,is_private,attachment_format__value,user_added,date_added,specimen__specimen_id,specimen__collection,specimen__coll,specimen__coll__number,specimen__specimen_nr,specimen__number_field,specimen__type,specimen__type__value,specimen__type__value_en,specimen__subtype_id,specimen__subtype_id__value,specimen__subtype_id__value_en,specimen__fossil,specimen__fossil__value,specimen__fossil__value_en,specimen__kind,specimen__kind,specimen__kind,specimen__classification,specimen__classification__class_field,specimen__part,specimen__number_pieces,specimen__locality,specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free,specimen__locality_free_en,specimen__locality_is_private,specimen__depth,specimen__depth_interval,specimen__sample_number,specimen__sample,specimen__sample__number,specimen__parent,specimen__parent__specimen_id,specimen__remarks_collecting,specimen__stratigraphy,specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__agent_collected,specimen__agent_collected__agent,specimen__agent_collected_free,specimen__date_collected,specimen__date_collected_free,specimen__remarks,specimen__remarks_internal,specimen__tags,specimen__presence,specimen__presence__value,specimen__presence__value_en,specimen__storage,specimen__storage__location,specimen__location,specimen__status,specimen__status__value,specimen__status__value_en,specimen__original_status,specimen__original_status__value,specimen__original_status__value_en,specimen__is_private,specimen__accession,specimen__accession__number,specimen__deaccession,specimen__deaccession__number,specimen__user_added,specimen__date_added,specimen__user_changed,specimen__date_changed,specimen__database,specimen__database__acronym,specimen__id";
   let searchFields = "";
@@ -2108,11 +2113,13 @@ export function fetchSpecimenImages(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `attachment/?${searchFields}&specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `attachment/?${searchFields}&specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `attachment/?specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `attachment/?specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -2289,7 +2296,7 @@ export function fetchMultiChangeSpecimen(data) {
  *** COLLECTION START ***
  ************************/
 
-export function fetchCollections(data, dynamicSearch) {
+export function fetchCollections(data, dynamicSearch, timestamp) {
   const fields =
     "id,number,collection_id,name,name_long,name_en,name_long_en,type,type__value,type__value_en,classification,classification__class_field,agent,agent__agent,locality,locality__locality,locality__locality_en,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,number_objects,number_types,reference,reference__reference,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym";
   let searchFields = "";
@@ -2351,11 +2358,13 @@ export function fetchCollections(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `collection/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `collection/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -2376,7 +2385,7 @@ export function fetchListCollectionType() {
  *** TAXON START ***
  *******************/
 
-export function fetchTaxa(data, dynamicSearch) {
+export function fetchTaxa(data, dynamicSearch, timestamp) {
   const fields =
     "taxon,author_year,taxon_epithet,taxon_full_name,taxon_original_name,reference,reference__reference,parent,parent__taxon,fossil_group,fossil_group__taxon,synonym_of,synonym_of_reference_id,hierarchy_string,rank,rank__rank,rank_original,rank_original__rank,type_taxon,type_taxon__taxon,type_taxon_txt,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,in_estonia,in_baltoscandia,is_fossil,is_private,is_valid,is_fossil_group,sort,taxon_id_pbdb,taxon_id_plutof,taxon_id_tol,taxon_id_eol,taxon_id_nrm,remarks,owner,is_authorized,user_authorized,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -2434,11 +2443,13 @@ export function fetchTaxa(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `taxon/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `taxon/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -2676,7 +2687,7 @@ export function fetchAgent(id) {
   return get(`agent/?id=${id}&fields=${fields}&format=json`);
 }
 
-export function fetchAgents(data, dynamicSearch) {
+export function fetchAgents(data, dynamicSearch, timestamp) {
   const fields =
     "agent,type,type__value,type__value_en,forename,middlename,surename,title,profession,profession_en,institution,institution__agent,institution_name,institution_name_en,address,address1,address2,country,country__value,country__value_en,country_txt,phone,email,http,old_name,new_name,date_born,date_deceased,orcid,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -2710,11 +2721,13 @@ export function fetchAgents(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `agent/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `agent/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `agent/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `agent/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -2737,7 +2750,7 @@ export function fetchListAgentType() {
  *** SELECTION SERIES START ***
  ******************************/
 
-export function fetchSelectionSeries(data, dynamicSearch) {
+export function fetchSelectionSeries(data, dynamicSearch, timestamp) {
   let fields =
     "name,tablename,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -2768,11 +2781,13 @@ export function fetchSelectionSeries(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `selection_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `selection_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `selection_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `selection_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -2903,7 +2918,7 @@ export function fetchDrillcore(id) {
   return get(`drillcore/?id=${id}&format=json`);
 }
 
-export function fetchDrillcores(data, dynamicSearch) {
+export function fetchDrillcores(data, dynamicSearch, timestamp) {
   const fields =
     "drillcore,drillcore_en,locality,locality__locality,locality__locality_en,year,agent,agent__agent,depository,depository__value,depository__value_en,location,storage,storage__location,boxes,box_numbers,number_meters,direction_lr,depth,igsn,remarks,database,database__acronym,uid,gid,is_private,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -2949,11 +2964,13 @@ export function fetchDrillcores(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `drillcore/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `drillcore/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `drillcore/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `drillcore/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -3014,7 +3031,7 @@ export function fetchDrillcoreBox(id) {
   return get(`drillcore_box/?id=${id}&format=json`);
 }
 
-export function fetchDrillcoreBoxes(data, dynamicSearch) {
+export function fetchDrillcoreBoxes(data, dynamicSearch, timestamp) {
   const fields =
     "drillcore,drillcore__drillcore,drillcore__drillcore_en,number,number_meters,diameter,depth_start,depth_end,depth_other,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,stratigraphy_free,location,storage,storage__location,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -3040,16 +3057,18 @@ export function fetchDrillcoreBoxes(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `drillcore_box/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `drillcore_box/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `drillcore_box/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `drillcore_box/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
 
-export function fetchDrillcoreBoxImages(data, dynamicSearch) {
+export function fetchDrillcoreBoxImages(data, dynamicSearch, timestamp) {
   let fields =
     "id,attachment__uuid_filename,attachment__attachment_format__value,attachment__is_private,drillcore_box__drillcore,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en,drillcore_box__number,drillcore_box__number_meters,drillcore_box__diameter,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base_free,drillcore_box__stratigraphy_top_free,drillcore_box__stratigraphy_free,drillcore_box__location,drillcore_box__storage,drillcore_box__storage__location,drillcore_box__remarks,drillcore_box__user_added,drillcore_box__date_added,drillcore_box__user_changed,drillcore_box__date_changed,drillcore_box__database,drillcore_box__database__acronym,drillcore_box__id";
   let searchFields = "";
@@ -3072,22 +3091,15 @@ export function fetchDrillcoreBoxImages(data, dynamicSearch) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
-  // if (data.user_added && data.user_added.trim().length > 0) {
-  //   searchFields += `&user_added__${data.user_added__lookuptype ||
-  //     "icontains"}=${data.user_added}`;
-  // }
-  // if (data.date_added && data.date_added.trim().length > 0) {
-  //   searchFields += `&date_added__${data.date_added__lookuptype ||
-  //     "icontains"}=${data.date_added}`;
-  // }
-
   if (searchFields.length > 0) {
     return get(
-      `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`
+      `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`,
+      { timestamp }
     );
   } else {
     return get(
-      `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`
+      `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&drillcore_box__isnull=false`,
+      { timestamp }
     );
   }
 }
@@ -3116,7 +3128,7 @@ export function fetchPreparation(id) {
   return get(`preparation/?id=${id}&format=json`);
 }
 
-export function fetchPreparations(data, dynamicSearch) {
+export function fetchPreparations(data, dynamicSearch, timestamp) {
   const fields =
     "preparation_number,sample,sample__number,analysis,sample_number,taxon,taxon__taxon,agent,agent__agent,agent_txt,date_prepared,date_prepared_txt,identification_agent,identification_agent__agent,identification_date,identification_remarks,location,storage,storage__location,owner,owner__agent,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3166,11 +3178,13 @@ export function fetchPreparations(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `preparation/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `preparation/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `preparation/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `preparation/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -3249,7 +3263,7 @@ export function fetchDataset(id) {
   return get(`dataset/?id=${id}&format=json`);
 }
 
-export function fetchDatasets(data, dynamicSearch) {
+export function fetchDatasets(data, dynamicSearch, timestamp) {
   const fields =
     "title,creators,publication_year,resource,name,name_en,description,description_en,dataset_html,date,date_txt,is_private,owner,owner__agent,owner_txt,copyright_agent,copyright_agent__agent,licence,licence__licence,licence__licence_en,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -3289,11 +3303,13 @@ export function fetchDatasets(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `dataset/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `dataset/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `dataset/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `dataset/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -3354,7 +3370,7 @@ export function fetchStratigraphy(id) {
   return get(`stratigraphy/?id=${id}&format=json`);
 }
 
-export function fetchStratigraphies(data, dynamicSearch) {
+export function fetchStratigraphies(data, dynamicSearch, timestamp) {
   const fields =
     "stratigraphy,stratigraphy_en,stratigraphy_original,author_free,year,etymon,etymon_en,original_locality,original_rank,index_main,index_main_html,index_additional,index_additional_html,index_old,color_code_cgmw,color_code_additional,hierarchy_string,parent,parent__stratigraphy,parent__stratigraphy_en,type,type__value,type__value_en,rank,rank__value,rank__value_en,scope,scope__value,scope__value_en,status,status__value,status__value_en,region,region_en,lithology,lithology_en,max_thickness,description,description_en,definition,definition_en,age_base,age_top,age_precision,age_reference,age_reference__reference,age_chronostratigraphy,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,sort_within_parent,approved_ics,approved_esk,maaamet_kood,is_private,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3426,11 +3442,13 @@ export function fetchStratigraphies(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `stratigraphy/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `stratigraphy/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `stratigraphy/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `stratigraphy/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -3521,7 +3539,7 @@ export function fetchArea(id) {
   return get(`area/?id=${id}&format=json`);
 }
 
-export function fetchAreas(data, dynamicSearch) {
+export function fetchAreas(data, dynamicSearch, timestamp) {
   const fields =
     "name,name_en,area_type,area_type__name,area_type__name_en,maardla,eelis,egf,area_ha,deposit_area_ha,maakond,maakond__maakond,maakond__maakond_en,description,description_en,remarks,text1,polygon,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3561,11 +3579,13 @@ export function fetchAreas(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `area/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `area/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `area/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `area/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -3609,7 +3629,7 @@ export function fetchLocation(id) {
   return get(`location/?id=${id}&format=json`);
 }
 
-export function fetchLocations(data, dynamicSearch) {
+export function fetchLocations(data, dynamicSearch, timestamp) {
   let fields =
     "location,parent_location,parent_location__location,location_location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,number_items_registered,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3641,14 +3661,6 @@ export function fetchLocations(data, dynamicSearch) {
       data.agent__lookuptype || "icontains"
     }`;
   }
-  // if (data.user_added && data.user_added.trim().length > 0) {
-  //   searchFields += `&user_added__${data.user_added__lookuptype ||
-  //     "icontains"}=${data.user_added}`;
-  // }
-  // if (data.date_added && data.date_added.trim().length > 0) {
-  //   searchFields += `&date_added__${data.date_added__lookuptype ||
-  //     "icontains"}=${data.date_added}`;
-  // }
   if (data.contents && data.contents.trim().length > 0) {
     searchFields += `&contents__${data.contents__lookuptype || "icontains"}=${
       data.contents
@@ -3661,16 +3673,18 @@ export function fetchLocations(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `location/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `location/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `location/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `location/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
 
-export function fetchLocationImages(data, dynamicSearch) {
+export function fetchLocationImages(data, dynamicSearch, timestamp) {
   let fields =
     "id,attachment__uuid_filename,attachment__attachment_format__value,attachment__is_private,storage__location,storage__parent_location,storage__parent_location__location,storage__location_location,storage__contents,storage__agent,storage__agent__agent,storage__date_collected_free,storage__stratigraphy_free,storage__number_items,storage__number_items_registered,storage__remarks,storage__database,storage__database__acronym,storage__user_added,storage__date_added,storage__user_changed,storage__date_changed,storage__id";
   let searchFields = "";
@@ -3703,14 +3717,6 @@ export function fetchLocationImages(data, dynamicSearch) {
       data.agent__lookuptype || "icontains"
     }`;
   }
-  // if (data.user_added && data.user_added.trim().length > 0) {
-  //   searchFields += `&user_added__${data.user_added__lookuptype ||
-  //     "icontains"}=${data.user_added}`;
-  // }
-  // if (data.date_added && data.date_added.trim().length > 0) {
-  //   searchFields += `&date_added__${data.date_added__lookuptype ||
-  //     "icontains"}=${data.date_added}`;
-  // }
   if (data.contents && data.contents.trim().length > 0) {
     searchFields += `&storage__contents__${
       data.contents__lookuptype || "icontains"
@@ -3723,11 +3729,13 @@ export function fetchLocationImages(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`
+      `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`,
+      { timestamp }
     );
   } else {
     return get(
-      `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`
+      `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`,
+      { timestamp }
     );
   }
 }
@@ -3777,7 +3785,7 @@ export function fetchRock(id) {
   return get(`rock/?id=${id}&format=json`);
 }
 
-export function fetchRocks(data, dynamicSearch) {
+export function fetchRocks(data, dynamicSearch, timestamp) {
   let fields =
     "name,name_en,name_ru,rock_type,rock_type__name,rock_type__name_en,rock_rank,rock_rank__name,rock_rank__name_en,parent,parent__name,parent__name_en,synonym_of,synonym_of__name,synonym_of__name_en,sort,description,description_en,description_ru,description_in_estonia,description_in_estonia_en,description_in_estonia_ru,description_usage,description_usage_en,description_usage_ru,description_author,in_estonia,is_resource,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,mindat_id,link_wikipedia,link_wikipedia_en,link_wikipedia_ru,ima_status,formula,formula_html,remarks,is_private,in_portal,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -3833,11 +3841,13 @@ export function fetchRocks(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `rock/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `rock/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `rock/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `rock/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -3964,7 +3974,7 @@ export function fetchVisit(id) {
   return get(`visit/?id=${id}&format=json`);
 }
 
-export function fetchVisits(data, dynamicSearch) {
+export function fetchVisits(data, dynamicSearch, timestamp) {
   let fields =
     "visitor,visitor__agent,visitor_free,visitor_institution,visitor_institution__agent,visitor_country,visitor_country__value,visitor_country__value_en,host,host__agent,date_arrived,date_left,purpose,collections_studied,items_studied,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4004,11 +4014,13 @@ export function fetchVisits(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `visit/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `visit/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `visit/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `visit/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4025,7 +4037,7 @@ export function fetchLoan(id) {
   return get(`loan/?id=${id}&format=json`);
 }
 
-export function fetchLoans(data, dynamicSearch) {
+export function fetchLoans(data, dynamicSearch, timestamp) {
   let fields =
     "loan_number,date_start,date_end,type,type__value,type__value_en,project,borrower,borrower__agent,borrower_institution,borrower_institution__agent,loaner,loaner__agent,date_signed,delivery_method,delivery_method__value,delivery_method__value_en,deliverer,deliverer__agent,delivery_remarks,returned,date_returned,special,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -4081,11 +4093,13 @@ export function fetchLoans(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `loan/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `loan/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `loan/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `loan/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4150,7 +4164,7 @@ export function fetchAccessionDetail(id) {
   return get(`accession/?id=${id}&format=json`);
 }
 
-export function fetchAccessions(data, dynamicSearch) {
+export function fetchAccessions(data, dynamicSearch, timestamp) {
   let fields =
     "number,date_signed,date_confirmed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -4173,11 +4187,13 @@ export function fetchAccessions(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `accession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `accession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `accession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `accession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4194,7 +4210,7 @@ export function fetchDeaccessionDetail(id) {
   return get(`deaccession/?id=${id}&format=json`);
 }
 
-export function fetchDeaccessions(data, dynamicSearch) {
+export function fetchDeaccessions(data, dynamicSearch, timestamp) {
   let fields =
     "number,date_signed,date_confirmed,agent_kandis__agent,agent_kandis,agent_kinnitas,agent_kinnitas__agent,number_items,description,remarks,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -4217,11 +4233,13 @@ export function fetchDeaccessions(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `deaccession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `deaccession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `deaccession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `deaccession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4238,7 +4256,7 @@ export function fetchWebNewsDetail(id) {
   return get(`web_news/?id=${id}&format=json`);
 }
 
-export function fetchWebNews(data, dynamicSearch) {
+export function fetchWebNews(data, dynamicSearch, timestamp) {
   const fields =
     "title_et,title_en,text_en,text_et,is_private,user_added,date_added,user_changed,date_changed,date_expires,timestamp,id";
   let searchFields = "";
@@ -4260,11 +4278,13 @@ export function fetchWebNews(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `web_news/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `web_news/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `web_news/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `web_news/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4281,7 +4301,7 @@ export function fetchWebPagesDetail(id) {
   return get(`web_pages/?id=${id}&format=json`);
 }
 
-export function fetchWebPages(data, dynamicSearch) {
+export function fetchWebPages(data, dynamicSearch, timestamp) {
   const fields =
     "title_et,menu_title_et,content_et,link_et,title_en,menu_title_en,content_en,link_en,public,menu,menu_bold,menu_color,menu_fold,sort,parent,site,is_private,user,date_inserted,date_expires,timestamp,id";
   let searchFields = "";
@@ -4303,11 +4323,13 @@ export function fetchWebPages(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `web_pages/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `web_pages/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `web_pages/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `web_pages/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4324,7 +4346,7 @@ export function fetchTaxonPagesDetail(id) {
   return get(`taxon_page/?id=${id}&format=json`);
 }
 
-export function fetchTaxonPages(data, dynamicSearch) {
+export function fetchTaxonPages(data, dynamicSearch, timestamp) {
   const fields =
     "taxon,taxon__taxon,language,on_frontpage,frontpage,frontpage_order,frontpage_title,title,content,author,author__agent,author_txt,date_txt,is_private,link_wikipedia,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4359,11 +4381,13 @@ export function fetchTaxonPages(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `taxon_page/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `taxon_page/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `taxon_page/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `taxon_page/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4384,7 +4408,7 @@ export function fetchSiteGroundwaterUsingSite(siteId) {
   return get(`site_groundwater/?site=${siteId}&format=json`);
 }
 
-export function fetchSiteGroundwaters(data, dynamicSearch) {
+export function fetchSiteGroundwaters(data, dynamicSearch, timestamp) {
   const fields =
     "site,aquifer_system,aquifer,well_depth,type_txt,filter_type,filter_top_z,filter_bottom_z,filter_midpoint_z,filter_top,filter_bottom,filter_midpoint,kataster_id,keskkonnaregister_id,url_veka,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4459,11 +4483,13 @@ export function fetchSiteGroundwaters(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `site_groundwater/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `site_groundwater/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `site_groundwater/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `site_groundwater/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4477,11 +4503,11 @@ export function fetchSiteGroundwaters(data, dynamicSearch) {
  ************************/
 
 export function fetchDatabaseGroups() {
-  return get(`database-groups/`, api.accountsUrl);
+  return get(`database-groups/`, { customUrl: api.accountsUrl });
 }
 
 export function fetchUserDatabaseGroups() {
-  return get(`user/database-groups/`, api.accountsUrl);
+  return get(`user/database-groups/`, { customUrl: api.accountsUrl });
 }
 export function changeDatabaseGroup(database) {
   return axios.patch(`${api.accountsUrl}/user/database-groups/`, {
@@ -4577,7 +4603,7 @@ export function fetchSampleSeriesDetail(id) {
   return get(`sample_series/?id=${id}&format=json`);
 }
 
-export function fetchSampleSeries(data, dynamicSearch) {
+export function fetchSampleSeries(data, dynamicSearch, timestamp) {
   const fields =
     "name,sampling_purpose,sample_count,sample_numbers,number_prefix,number_start,locality,locality__locality,locality__locality_en,locality_free,zero_level,depth_top,depth_base,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_base_free,stratigraphy_top_free,agent_collected,agent_collected__agent,date_collected,date_collected_free,location,remarks,owner,owner__agent,public,is_private,user_added,date_added,user_changed,date_changed,database,database__acronym,id";
   let searchFields = "";
@@ -4609,11 +4635,13 @@ export function fetchSampleSeries(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `sample_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `sample_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `sample_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `sample_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4646,7 +4674,7 @@ export function fetchSampleSeriesAttachments(id, searchParameters) {
  ***  ANALYSIS_PARAMETERS START  ***
  **********************************/
 
-export function fetchAnalysisParameters(data, dynamicSearch) {
+export function fetchAnalysisParameters(data, dynamicSearch, timestamp) {
   const fields =
     "parameter,parameter_name,parameter_name_en,parameter_html,synonyms,parent_parameter,parent_parameter__parameter,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4680,11 +4708,13 @@ export function fetchAnalysisParameters(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `analysis_parameter/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `analysis_parameter/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `analysis_parameter/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `analysis_parameter/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4701,7 +4731,7 @@ export function fetchAnalysisParameter(id) {
  ***  ANALYSIS_METHODS START  ***
  *******************************/
 
-export function fetchAnalysisMethods(data, dynamicSearch) {
+export function fetchAnalysisMethods(data, dynamicSearch, timestamp) {
   const fields =
     "analysis_method,method_en,parent_method,parent_method__analysis_method,parent_method__method_en,remarks,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4712,18 +4742,11 @@ export function fetchAnalysisMethods(data, dynamicSearch) {
   }
 
   if (data.analysis_method && data.analysis_method.trim().length > 0) {
-    // searchFields += `&analysis_method__${data.analysis_method__lookuptype ||
-    //   "icontains"}=${data.analysis_method}`;
     searchFields += `&multi_search=value:${
       data.analysis_method
     };fields:analysis_method,method_en;lookuptype:${
       data.analysis_method__lookuptype || "icontains"
     }`;
-    // searchFields +=
-    //     "&multi_search=value:" +
-    //     data.analysis_method +
-    //     ";fields:,uuid_filename;lookuptype:" +
-    //     `${data.filename__lookuptype || "icontains"}`;
   }
 
   if (
@@ -4747,11 +4770,13 @@ export function fetchAnalysisMethods(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `analysis_method/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `analysis_method/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `analysis_method/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `analysis_method/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4772,7 +4797,7 @@ export function fetchImageset(id) {
   return get(`imageset/?id=${id}&format=json`);
 }
 
-export function fetchImagesets(data, author, dynamicSearch) {
+export function fetchImagesets(data, author, dynamicSearch, timestamp) {
   const fields =
     "imageset_number,imageset_series,author,author__agent,author_free,date_start,date_end,date_free,device,device__name,object,place,keywords,description,date_digitised,date_digitised_free,device_digitised,device_digitised__name,agent_digitised,agent_digitised__agent,is_private,remarks,database,database__acronym,user_added,date_added,user_changed,date_changed,id";
   let searchFields = "";
@@ -4796,11 +4821,13 @@ export function fetchImagesets(data, author, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `imageset/?${searchFields}&author=${author}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `imageset/?${searchFields}&author=${author}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   } else {
     return get(
-      `imageset/?page=${data.page}&author=${author}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `imageset/?page=${data.page}&author=${author}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      { timestamp }
     );
   }
 }
@@ -4852,7 +4879,7 @@ export function fetchObjectPermissions(id, table) {
 }
 
 export function fetchUserDefaultPermissions() {
-  return get(`user/default-permissions/`, api.accountsUrl);
+  return get(`user/default-permissions/`, { customUrl: api.accountsUrl });
 }
 
 export function changeUserDefaultPermissions(newPerms) {

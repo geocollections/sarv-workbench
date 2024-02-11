@@ -70,15 +70,17 @@ export default {
   },
 
   methods: {
-    apiCall() {
+    apiCall(timestamp) {
       return this.locationViewType === "image"
         ? fetchLocationImages(
             this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
+            this.$_tableHeaderMixin_searchFields,
+            timestamp
           )
         : fetchLocations(
             this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
+            this.$_tableHeaderMixin_searchFields,
+            timestamp
           );
     },
     searchLocationImages(searchImages) {

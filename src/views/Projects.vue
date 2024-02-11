@@ -56,10 +56,11 @@ export default {
   },
 
   methods: {
-    apiCall() {
+    apiCall(timestamp) {
       return fetchProjects(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableHeaderMixin_searchFields,
+        timestamp
       );
     },
   },
