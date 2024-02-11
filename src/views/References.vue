@@ -98,10 +98,11 @@ export default {
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
 
-    apiCall() {
+    apiCall(timestamp) {
       return fetchReferences(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableHeaderMixin_searchFields,
+        timestamp
       );
     },
   },

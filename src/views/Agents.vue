@@ -58,10 +58,11 @@ export default {
   },
 
   methods: {
-    apiCall() {
+    apiCall(timestamp) {
       return fetchAgents(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableHeaderMixin_searchFields,
+        timestamp
       );
     },
   },

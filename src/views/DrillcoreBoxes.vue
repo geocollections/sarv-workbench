@@ -63,16 +63,18 @@ export default {
     ...mapState("search", ["drillcore_boxViewType"]),
   },
   methods: {
-    apiCall() {
+    apiCall(timestamp) {
       return this.drillcore_boxViewType === "image" ||
         this.drillcore_boxViewType === "list"
         ? fetchDrillcoreBoxImages(
             this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
+            this.$_tableHeaderMixin_searchFields,
+            timestamp
           )
         : fetchDrillcoreBoxes(
             this.searchParameters,
-            this.$_tableHeaderMixin_searchFields
+            this.$_tableHeaderMixin_searchFields,
+            timestamp
           );
     },
     //test

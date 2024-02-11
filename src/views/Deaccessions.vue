@@ -57,10 +57,11 @@ export default {
   },
 
   methods: {
-    apiCall() {
+    apiCall(timestamp) {
       return fetchDeaccessions(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableHeaderMixin_searchFields,
+        timestamp
       );
     },
   },
