@@ -96,7 +96,9 @@ async function get(child = "", customUrl, options) {
   let url = api.url + child;
   if (customUrl) url = customUrl + child;
   try {
-    return await axios.get(url, options);
+    const res = await axios.get(url, options);
+    if (options?.timestamp) res.timestamp = options.timestamp;
+    return res;
   } catch (error) {
     return error.response;
   }
@@ -909,7 +911,7 @@ export function fetchAnalysisMethod() {
   return get(`analysis_method/?order_by=analysis_method&format=json`);
 }
 
-export function fetchSamples(data, dynamicSearch) {
+export function fetchSamples(data, dynamicSearch, timestamp) {
   const fields =
     "number,number_additional,number_field,igsn,series,series__name,parent_sample,parent_sample__number,parent_specimen,parent_specimen__specimen_id,sample_purpose,sample_purpose__value,sample_purpose__value_en,sample_type,locality,locality__locality,locality__locality_en,site,site__name,site__name_en,locality_free,latitude1,longitude1,x1,y1,epsg,coordinate_accuracy,depth,depth_interval,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,stratigraphy_free,stratigraphy_bed,soil_horizon,agent_collected,agent_collected__agent,agent_collected_free,date_collected,date_collected_free,classification_rock,classification_rock__name,classification_rock__name_en,rock,rock_en,fossils,palaeontology,analysis,mass,location,location_additional,storage,storage__location,storage_additional,storage_additional__location,remarks,user_added,date_added,user_changed,date_changed,owner,owner__agent,is_private,database__acronym,id,number,database__name_label";
   let searchFields = "";
@@ -1007,11 +1009,15 @@ export function fetchSamples(data, dynamicSearch) {
 
   if (searchFields.length > 0) {
     return get(
-      `sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      null,
+      { timestamp }
     );
   } else {
     return get(
-      `sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
+      null,
+      { timestamp }
     );
   }
 }
