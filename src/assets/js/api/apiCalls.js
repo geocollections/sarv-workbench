@@ -15,7 +15,7 @@ const api = {
 };
 
 const attachmentFields =
-  "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number";
+  "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number,is_private";
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {

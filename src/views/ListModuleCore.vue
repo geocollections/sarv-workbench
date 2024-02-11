@@ -320,7 +320,8 @@ export default {
       if (response?.data?.count > 0) this.noResults = false;
 
       // Validate timestamps, in case debounce fails and previous requests take too long
-      if (response.timestamp && this.lastTimestamp !== response.timestamp) return;
+      if (response.timestamp && this.lastTimestamp !== response.timestamp)
+        return;
 
       this.response.count = response.data.count ?? 0;
       this.response.results = response.data.results ?? [];
