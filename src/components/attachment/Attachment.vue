@@ -58,7 +58,7 @@
               :record-audio="recordAudio"
               :acceptable-format="fileInputFormat"
               v-on:file-uploaded="addFiles"
-              v-on:metadata-loaded="updateFields"
+              v-on:metadata-loaded="onMetadataLoaded"
               v-on:files-cleared="clearUploadedFiles"
             />
           </div>
@@ -5186,10 +5186,7 @@ export default {
       this.files = [];
     },
 
-    updateFields(metadata) {
-      console.log("FILE METADATA: ");
-      console.log(metadata);
-
+    onMetadataLoaded(metadata) {
       if (
         metadata &&
         (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile)

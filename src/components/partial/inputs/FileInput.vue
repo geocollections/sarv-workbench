@@ -540,45 +540,14 @@ export default {
 
     updateSingleFileMetadata(metadata) {
       this.singleFileMetadata = {};
-      if (metadata) {
-        // GPS DATA
-        if (metadata.GPSLatitude) {
-          const degrees =
-            metadata.GPSLatitude[0].numerator /
-            metadata.GPSLatitude[0].denominator;
-          const minutes =
-            metadata.GPSLatitude[1].numerator /
-            metadata.GPSLatitude[1].denominator;
-          const seconds =
-            metadata.GPSLatitude[2].numerator /
-            metadata.GPSLatitude[2].denominator;
-          const latitude = this.convertExifGPSToDecimal(
-            degrees,
-            minutes,
-            seconds,
-            metadata.GPSLatitudeRef
-          );
-          this.singleFileMetadata.image_latitude = latitude.toFixed(6);
-        }
-        if (metadata.GPSLongitude) {
-          const degrees =
-            metadata.GPSLongitude[0].numerator /
-            metadata.GPSLongitude[0].denominator;
-          const minutes =
-            metadata.GPSLongitude[1].numerator /
-            metadata.GPSLongitude[1].denominator;
-          const seconds =
-            metadata.GPSLongitude[2].numerator /
-            metadata.GPSLongitude[2].denominator;
-          const longitude = this.convertExifGPSToDecimal(
-            degrees,
-            minutes,
-            seconds,
-            metadata.GPSLatitudeRef
-          );
 
-          this.singleFileMetadata.image_longitude = longitude.toFixed(6);
-        }
+      if (metadata.GPSLatitude) {
+        this.singleFileMetadata.image_latitude =
+          metadata.GPSLatitude.description.toFixed(6);
+      }
+      if (metadata.GPSLongitude) {
+        this.singleFileMetadata.image_longitude =
+          metadata.GPSLongitude.description.toFixed(6);
       }
     },
 
