@@ -540,45 +540,14 @@ export default {
 
     updateSingleFileMetadata(metadata) {
       this.singleFileMetadata = {};
-      if (metadata) {
-        // GPS DATA
-        if (metadata.GPSLatitude) {
-          const degrees =
-            metadata.GPSLatitude.value[0].numerator /
-            metadata.GPSLatitude.value[0].denominator;
-          const minutes =
-            metadata.GPSLatitude.value[1].numerator /
-            metadata.GPSLatitude.value[1].denominator;
-          const seconds =
-            metadata.GPSLatitude.value[2].numerator /
-            metadata.GPSLatitude.value[2].denominator;
-          const latitude = this.convertExifGPSToDecimal(
-            degrees,
-            minutes,
-            seconds,
-            metadata.GPSLatitudeRef
-          );
-          this.singleFileMetadata.image_latitude = latitude.toFixed(6);
-        }
-        if (metadata.GPSLongitude) {
-          const degrees =
-            metadata.GPSLongitude.value[0].numerator /
-            metadata.GPSLongitude.value[0].denominator;
-          const minutes =
-            metadata.GPSLongitude.value[1].numerator /
-            metadata.GPSLongitude.value[1].denominator;
-          const seconds =
-            metadata.GPSLongitude.value[2].numerator /
-            metadata.GPSLongitude.value[2].denominator;
-          const longitude = this.convertExifGPSToDecimal(
-            degrees,
-            minutes,
-            seconds,
-            metadata.GPSLatitudeRef
-          );
 
-          this.singleFileMetadata.image_longitude = longitude.toFixed(6);
-        }
+      if (metadata.GPSLatitude) {
+        this.singleFileMetadata.image_latitude =
+          metadata.GPSLatitude.description.toFixed(6);
+      }
+      if (metadata.GPSLongitude) {
+        this.singleFileMetadata.image_longitude =
+          metadata.GPSLongitude.description.toFixed(6);
       }
     },
 
