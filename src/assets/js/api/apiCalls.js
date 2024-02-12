@@ -180,10 +180,9 @@ export function fetchLoginOrcid(code) {
 }
 
 export function fetchLoginId() {
-  return get(
-    `?redirect_uri=${import.meta.env.VITE_API_URL}/accounts/idcard/`,
-    "https://idcard.geoloogia.info/"
-  );
+  return get(`?redirect_uri=${import.meta.env.VITE_API_URL}/accounts/idcard/`, {
+    customUrl: "https://idcard.geoloogia.info/",
+  });
 }
 
 export function fetchLogout() {
