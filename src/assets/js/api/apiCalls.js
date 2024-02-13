@@ -1011,13 +1011,11 @@ export function fetchSamples(data, dynamicSearch, timestamp) {
   if (searchFields.length > 0) {
     return get(
       `sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
-      null,
       { timestamp }
     );
   } else {
     return get(
       `sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`,
-      null,
       { timestamp }
     );
   }
@@ -1331,7 +1329,7 @@ export function fetchListLicences() {
 }
 
 export function fetchDoiCheck(doi) {
-  return get(doi, api.checkDoiUrl);
+  return get(doi, { customUrl: api.checkDoiUrl });
 }
 
 export function fetchDoiAttachment(id, searchParameters) {
