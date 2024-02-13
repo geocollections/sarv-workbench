@@ -543,11 +543,17 @@ export default {
 
       if (!metadata) return;
 
-      if (metadata.GPSLatitude) {
+      if (
+        metadata.GPSLatitude &&
+        !Number.isNaN(metadata.GPSLatitude.description)
+      ) {
         this.singleFileMetadata.image_latitude =
           metadata.GPSLatitude.description.toFixed(6);
       }
-      if (metadata.GPSLongitude) {
+      if (
+        metadata.GPSLongitude &&
+        !Number.isNaN(metadata.GPSLatitude.description)
+      ) {
         this.singleFileMetadata.image_longitude =
           metadata.GPSLongitude.description.toFixed(6);
       }
