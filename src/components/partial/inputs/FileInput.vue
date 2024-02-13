@@ -541,6 +541,8 @@ export default {
     updateSingleFileMetadata(metadata) {
       this.singleFileMetadata = {};
 
+      if (!metadata) return;
+
       if (metadata.GPSLatitude) {
         this.singleFileMetadata.image_latitude =
           metadata.GPSLatitude.description.toFixed(6);
