@@ -875,7 +875,7 @@ export default {
         (item) => item.id
       );
 
-      let url = `${this.table}/${this.$route.params.id}/setcontentpermissions`;
+      let url = `selection_series/${this.$route.params.id}/setcontentpermissions`;
       let formData = new FormData();
       formData.append("data", JSON.stringify({ groups_view, groups_change }));
 
