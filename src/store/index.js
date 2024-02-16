@@ -12,18 +12,12 @@ import tableHeaders from "./modules/tableHeaders";
 Vue.use(Vuex);
 
 function buildLocalStorageKey() {
-  const hostname = window?.location?.hostname;
-  const devVersion = "_v2.0.1";
-  const liveVersion = "_v2.0.1";
-  const localVersion = "_v2.0.1";
+  let key = "sarv-wb";
+  const version = "1";
+  const isDev = window?.location?.hostname?.startsWith("edit-dev");
+  if (isDev) key += "-dev";
 
-  if (hostname) {
-    if (hostname.startsWith("edit2.") || hostname.startsWith("edit3.")) {
-      return hostname + devVersion;
-    } else if (hostname.startsWith("edit.")) {
-      return hostname + liveVersion;
-    } else return hostname + localVersion;
-  } else return "edit.geocollections.info" + liveVersion;
+  return `${key}-${version}`;
 }
 
 const vuexLocal = new VuexPersistence({

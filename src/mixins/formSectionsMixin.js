@@ -1,5 +1,5 @@
 import { mapActions, mapState } from "vuex";
-import cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 
 const formSectionsMixin = {
   data: () => ({
@@ -29,8 +29,16 @@ const formSectionsMixin = {
   },
 
   created() {
-    if (this?.formSections?.[this.routeObject]) {
-      this.block = cloneDeep(this.formSections[this.routeObject]);
+    const blockFromStorage = this.formSections?.[this.routeObject];
+
+    if (blockFromStorage) {
+      if (
+        this.block &&
+        Object.keys(blockFromStorage).length === Object.keys(this.block).length
+      )
+        this.block = cloneDeep(blockFromStorage);
+      else
+        this.updateFormSections({ key: this.routeObject, value: this.block });
     } else if (this.block) {
       this.updateFormSections({ key: this.routeObject, value: this.block });
     }

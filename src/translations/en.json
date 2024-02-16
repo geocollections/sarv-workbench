@@ -2480,6 +2480,7 @@
     "confirm_storage_change": "Are you sure you would like to change the storage location for the following specimens?",
     "change_storage": "Change storage",
     "change_storage_yes": "Yes, Change storage",
+    "content_permission": "Content permissions",
     "relatedTables": {
       "specimen": "Specimens",
       "sample": "Samples",
@@ -3034,7 +3035,9 @@
     "view_perms_title": "View only:",
     "change_perms_title": "Edit only:",
     "update": "Update permissions",
-    "update_message": "Note that removing your own permissions will result in losing access to the record."
+    "update_content": "Add permissions to content",
+    "update_message": "Note that removing your own permissions will result in losing access to the record.",
+    "update_content_message": "Note that the given permissions will be added to content, they cannot be removed from here."
   },
   "messages": {
     "langChange": "Changed language!",
