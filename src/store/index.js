@@ -17,7 +17,7 @@ function buildLocalStorageKey() {
   const isDev = window?.location?.hostname?.startsWith("edit-dev");
   if (isDev) key += "-dev";
 
-  return `sarv-wb-${version}`;
+  return `${key}-${version}`;
 }
 
 const vuexLocal = new VuexPersistence({

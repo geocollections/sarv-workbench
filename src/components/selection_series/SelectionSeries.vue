@@ -430,7 +430,6 @@ import {
   fetchSelectedSpecimens,
   fetchSelectedTaxa,
   fetchSelectionSerie,
-  fetchUsers,
   postRequest,
 } from "@/assets/js/api/apiCalls";
 
