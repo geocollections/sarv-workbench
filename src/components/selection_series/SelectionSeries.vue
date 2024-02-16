@@ -141,7 +141,6 @@
                 v-model="new_specimen_storage"
                 :color="bodyActiveColor"
                 :items="autocomplete.storage"
-                :loading="autocomplete.loaders.storage"
                 item-text="location"
                 :label="$t('common.storage')"
                 is-link
@@ -326,7 +325,6 @@
                   v-model="object_permissions.change_group"
                   :color="bodyActiveColor"
                   :items="autocomplete.groups"
-                  :loading="autocomplete.loaders.groups"
                   item-text="acronym"
                   :label="$t('permissions.group')"
                   :multiple="true"
