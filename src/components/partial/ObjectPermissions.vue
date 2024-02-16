@@ -27,7 +27,7 @@
     <transition>
       <div v-show="block.permissions" class="pa-1">
         <v-row no-gutters>
-          <!-- VIEW AND EDIT -->
+          <!-- EDIT -->
           <v-col cols="12" md="6" class="pa-1">
             <v-card
               :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -160,8 +160,8 @@
 
         <v-row no-gutters>
           <v-col cols="12" class="pa-1">
-            <div class="v-messages theme--light">
-              <div class="v-messages__wrapper mb-1">
+            <div class="v-messages theme--light mb-1">
+              <div class="v-messages__wrapper">
                 <div class="v-messages__message">
                   {{ $t("permissions.update_message") }}
                 </div>
