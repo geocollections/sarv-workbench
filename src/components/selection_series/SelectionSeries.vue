@@ -1,7 +1,6 @@
 <template>
   <div class="selectionSeries">
     <!-- GENERAL INFO -->
-    asdasdasd
     <v-card
       class="mt-3"
       id="block-info"
