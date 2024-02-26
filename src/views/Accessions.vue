@@ -56,10 +56,11 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateSearchParameters"]),
-    apiCall() {
+    apiCall(timestamp) {
       return fetchAccessions(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableHeaderMixin_searchFields,
+        timestamp
       );
     },
   },

@@ -15,6 +15,11 @@ const getPublicFileUrl = (filename, size) => {
 const getFilePath = (filename, size) => {
   const uuid = filename.split(".")[0];
   let filePath = "/" + uuid;
+
+  // SVG-s do not have sizes
+  const useOriginal = filename.endsWith(".svg");
+  if (useOriginal) return filePath;
+
   if (size && ["small", "medium", "large"].includes(size)) {
     filePath = "/" + size + "/" + uuid;
   }
@@ -29,8 +34,9 @@ const getDoiUrl = (doi) => {
   return `https://doi.org/${doi}`;
 };
 
-const openFileInNewWindow = (file) => {
+const openFileInNewWindow = (file, size) => {
   if (!file) return;
+  if (!size) size = "large";
   const isPrivate = file.is_private || file.attachment__is_private;
   const uuidFilename = file.uuid_filename || file.attachment__uuid_filename;
 
@@ -40,8 +46,8 @@ const openFileInNewWindow = (file) => {
     uuid = uuidFilename.split(".")?.[0];
     url = config.app.filesUrl;
   }
-  if (isImageFile(file)) {
-    url += `/large/${uuid}`;
+  if (isImageFile(file) && ["small", "medium", "large"].includes(size)) {
+    url += `/${size}/${uuid}`;
   } else {
     url += "/" + uuid;
   }
@@ -56,12 +62,12 @@ const isImageFile = (file) => {
   if (mimeType) {
     return imageMimeTypes.includes(mimeType);
   } else {
-    let fileType = uuidFilename.split(".")[1];
+    let fileType = uuidFilename?.split(".")[1];
     return !!(
-      fileType.includes("jpe") ||
-      fileType.includes("jpg") ||
-      fileType.includes("jpeg") ||
-      fileType.includes("png")
+      fileType?.includes("jpe") ||
+      fileType?.includes("jpg") ||
+      fileType?.includes("jpeg") ||
+      fileType?.includes("png")
     );
   }
 };

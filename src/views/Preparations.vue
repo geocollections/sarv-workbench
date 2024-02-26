@@ -79,11 +79,11 @@ export default {
   },
 
   methods: {
-    apiCall() {
-      console.log(this.searchParameters);
+    apiCall(timestamp) {
       return fetchPreparations(
         this.searchParameters,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableHeaderMixin_searchFields,
+        timestamp
       );
     },
   },

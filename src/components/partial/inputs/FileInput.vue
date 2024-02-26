@@ -18,6 +18,7 @@
         <v-file-input
           :id="`${id}`"
           class="d-none"
+          :key="`file-${fileInputKey}`"
           :multiple="acceptMultiple"
           :accept="acceptableFormat"
           @change="addFile"
@@ -78,8 +79,11 @@
         <v-file-input
           ref="photoUpload"
           class="d-none"
+          :key="`photo-${fileInputKey}`"
           :multiple="acceptMultiple"
-          accept="image/*;capture=camera"
+          accept="image/*"
+          name="image"
+          capture="environment"
           @change="addFile"
         />
       </div>
@@ -106,8 +110,11 @@
         <v-file-input
           ref="videoUpload"
           class="d-none"
+          :key="`video-${fileInputKey}`"
           :multiple="acceptMultiple"
-          accept="video/*;capture=camcorder"
+          accept="video/*"
+          name="video"
+          capture="environment"
           @change="addFile"
         />
       </div>
@@ -134,8 +141,11 @@
         <v-file-input
           ref="audioUpload"
           class="d-none"
+          :key="`audio-${fileInputKey}`"
           :multiple="acceptMultiple"
-          accept="audio/*;capture=microphone"
+          accept="audio/*"
+          name="audio"
+          capture
           @change="addFile"
         />
       </div>
@@ -383,19 +393,22 @@ export default {
       return !this.acceptMultiple && this.userHasInsertedFiles;
     },
   },
-  data: () => ({
-    useExisting: false,
-    isDragging: false,
-    files: null,
-    existingFiles: null,
-    autocomplete: {
-      attachment: [],
-      loaders: { attachment: false },
-    },
-    sourceList: [],
-    id: null,
-    singleFileMetadata: null,
-  }),
+  data() {
+    return {
+      useExisting: false,
+      isDragging: false,
+      files: null,
+      existingFiles: null,
+      autocomplete: {
+        attachment: [],
+        loaders: { attachment: false },
+      },
+      sourceList: [],
+      id: null,
+      singleFileMetadata: null,
+      fileInputKey: 0,
+    };
+  },
   mounted() {
     this.id = this._uid;
   },
@@ -503,7 +516,12 @@ export default {
     },
 
     readFileMetaData(file) {
-      if (!file.type.startsWith("image")) {
+      if (
+        !this.$helpers.isImageFile({
+          ...file,
+          attachment_format__value: file.type,
+        })
+      ) {
         return null;
       }
       return new Promise((resolve, reject) => {
@@ -522,45 +540,22 @@ export default {
 
     updateSingleFileMetadata(metadata) {
       this.singleFileMetadata = {};
-      if (metadata) {
-        // GPS DATA
-        if (metadata.GPSLatitude) {
-          const degrees =
-            metadata.GPSLatitude[0].numerator /
-            metadata.GPSLatitude[0].denominator;
-          const minutes =
-            metadata.GPSLatitude[1].numerator /
-            metadata.GPSLatitude[1].denominator;
-          const seconds =
-            metadata.GPSLatitude[2].numerator /
-            metadata.GPSLatitude[2].denominator;
-          const latitude = this.convertExifGPSToDecimal(
-            degrees,
-            minutes,
-            seconds,
-            metadata.GPSLatitudeRef
-          );
-          this.singleFileMetadata.image_latitude = latitude.toFixed(6);
-        }
-        if (metadata.GPSLongitude) {
-          const degrees =
-            metadata.GPSLongitude[0].numerator /
-            metadata.GPSLongitude[0].denominator;
-          const minutes =
-            metadata.GPSLongitude[1].numerator /
-            metadata.GPSLongitude[1].denominator;
-          const seconds =
-            metadata.GPSLongitude[2].numerator /
-            metadata.GPSLongitude[2].denominator;
-          const longitude = this.convertExifGPSToDecimal(
-            degrees,
-            minutes,
-            seconds,
-            metadata.GPSLatitudeRef
-          );
 
-          this.singleFileMetadata.image_longitude = longitude.toFixed(6);
-        }
+      if (!metadata) return;
+
+      if (
+        metadata.GPSLatitude &&
+        !Number.isNaN(metadata.GPSLatitude.description)
+      ) {
+        this.singleFileMetadata.image_latitude =
+          metadata.GPSLatitude.description.toFixed(6);
+      }
+      if (
+        metadata.GPSLongitude &&
+        !Number.isNaN(metadata.GPSLatitude.description)
+      ) {
+        this.singleFileMetadata.image_longitude =
+          metadata.GPSLongitude.description.toFixed(6);
       }
     },
 
@@ -577,6 +572,7 @@ export default {
       this.files = null;
       this.existingFiles = null;
       this.sourceList = [];
+      this.fileInputKey++;
       this.$emit("files-cleared");
     },
 

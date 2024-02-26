@@ -301,7 +301,7 @@
                 :color="bodyActiveColor"
                 :items="autocomplete.dataset"
                 :loading="autocomplete.loaders.dataset"
-                :item-text="nameLabel"
+                :item-text="customLabelForDataset"
                 :label="$t('analysis.first_dataset')"
                 is-link
                 route-object="dataset"

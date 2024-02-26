@@ -62,11 +62,12 @@ export default {
     ...mapActions("search", ["setActiveSearchParameters"]),
     ...mapActions("search", ["fetchActiveSarvIssues"]),
 
-    apiCall() {
+    apiCall(timestamp) {
       return fetchSarvIssues(
         this.searchParameters,
         this.getUserId,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableHeaderMixin_searchFields,
+        timestamp
       );
     },
   },

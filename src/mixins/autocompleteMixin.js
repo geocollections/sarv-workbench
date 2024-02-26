@@ -66,6 +66,20 @@ const autocompleteMixin = {
     ...mapGetters("user", ["getCurrentUser"]),
   },
   methods: {
+    customLabelForDataset(option) {
+      const isTranslatedET = option.title_translated_language === 4;
+      const isTranslatedEN = option.title_translated_language === 1;
+
+      const title = isTranslatedET
+        ? option.title_translated || option.title || option.name
+        : option.title || option.name;
+      const title_en = isTranslatedEN
+        ? option.title_translated || option.name_en || option.title
+        : option.name_en || option.title;
+
+      if (this.$i18n.locale === "ee") return `${option.id} - (${title})`;
+      return `${option.id} - (${title_en})`;
+    },
     autocompleteAnalysisSearch(value) {
       this.$_autocompleteMixin_search(value, "analysis", "analysis");
     },
@@ -98,7 +112,7 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "taxon", "parent");
     },
     autocompleteTaxonFossilGroupSearch(value) {
-      this.$_autocompleteMixin_search(value, "taxon", "fossil_group");
+      this.$_autocompleteMixin_search(value, "fossil_group", "fossil_group");
     },
     autocompleteTypeTaxonSearch(value) {
       this.$_autocompleteMixin_search(value, "taxon", "type_taxon");
@@ -493,6 +507,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&or_search=user_added__iexact:${currentUser.user};is_private__iexact:0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
     case "taxon":
       return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&fields=id,taxon,hierarchy_string`;
+    case "fossil_group":
+      return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&is_fossil_group=true&fields=id,taxon,hierarchy_string`;
     case "project":
     case "parent_project":
       return `project/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
@@ -505,7 +521,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "site":
       return `site/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case "dataset":
-      return `dataset/?multi_search=value:${value};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+      return `dataset/?multi_search=value:${value};fields:id,name,name_en,title,title_alternative,title_translated;lookuptype:icontains&fields=id,name,name_en,title,title_alternative,title_translated,title_translated_language`;
     case "doi_agent":
       return `agent/?multi_search=value:${value};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,institution__institution_name_en,orcid`;
     case "library_agent_search":

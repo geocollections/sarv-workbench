@@ -37,7 +37,7 @@
           class="image-link my-1"
           style="max-width: 150px; max-height: 150px; display: block"
         >
-          <file-preview :attachment="item" />
+          <file-preview :attachment="item" max="150" />
         </router-link>
       </template>
 

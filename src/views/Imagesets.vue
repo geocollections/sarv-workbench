@@ -61,11 +61,12 @@ export default {
   },
 
   methods: {
-    apiCall() {
+    apiCall(timestamp) {
       return fetchImagesets(
         this.searchParameters,
         this.getCurrentUser.id,
-        this.$_tableHeaderMixin_searchFields
+        this.$_tableHeaderMixin_searchFields,
+        timestamp
       );
     },
   },

@@ -74,7 +74,7 @@
           text
           link
           class="ma-1 text-capitalize blue--text text--darken-2"
-          @click="$helpers.openFileInNewWindow(data)"
+          @click="$helpers.openFileInNewWindow(data, size)"
           >{{ $t(`common.${size}`) }}</v-btn
         >
       </div>
@@ -185,13 +185,16 @@ export default {
   },
   methods: {
     async downloadFile(data, size) {
-      const filename = this.downloadFileName(data.uuid_filename, size);
+      const filename = this.downloadFileName(
+        data.original_filename || data.uuid_filename,
+        size
+      );
       let url = this.$helpers.getPublicFileUrl(data.uuid_filename, size);
 
       if (data.is_private) {
         try {
           const uuid = data.uuid_filename?.split(".")?.[0];
-          let res = await fetchRawFile({ uuid });
+          let res = await fetchRawFile({ uuid, size });
 
           if (res.status !== 200) return;
           url = URL.createObjectURL(res.data);

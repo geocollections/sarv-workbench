@@ -141,7 +141,6 @@
                 v-model="new_specimen_storage"
                 :color="bodyActiveColor"
                 :items="autocomplete.storage"
-                :loading="autocomplete.loaders.storage"
                 item-text="location"
                 :label="$t('common.storage')"
                 is-link
@@ -226,7 +225,7 @@
       </transition>
     </v-card>
 
-    <!-- EMPTY SELECTION -->
+    <!-- EMPTY SELECTION BUTTON -->
     <div
       v-if="$route.meta.isEdit && isRelatedDataFilled"
       class="d-flex flex-row flex-nowrap justify-end mt-2"
@@ -279,6 +278,133 @@
         </v-card>
       </v-dialog>
     </div>
+
+    <!-- SELECTION CONTENT PERMISSIONS -->
+    <v-card
+      v-if="$route.meta.isEdit"
+      class="mt-2"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <span>{{ $t("selectionSeries.content_permission") }}</span>
+        <v-icon right>fas fa-cogs</v-icon>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.contentPermission = !block.contentPermission"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.contentPermission ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.contentPermission" class="pa-1">
+          <v-row no-gutters>
+            <!-- EDIT -->
+            <v-col cols="12" md="6" class="pa-1">
+              <v-card
+                flat
+                :color="bodyColor.split('n-')[0] + 'n-5'"
+                hover
+                class="pa-1"
+              >
+                <div class="pa-1 font-weight-bold">
+                  <span>{{ $t("permissions.change_perms_title") }}</span>
+                  <span
+                    ><v-icon small right :color="bodyActiveColor"
+                      >far fa-edit</v-icon
+                    ></span
+                  >
+                </div>
+
+                <autocomplete-wrapper
+                  v-model="object_permissions.change_group"
+                  :color="bodyActiveColor"
+                  :items="autocomplete.groups"
+                  item-text="acronym"
+                  :label="$t('permissions.group')"
+                  :multiple="true"
+                  v-on:chip:close="
+                    object_permissions.change_group.splice(
+                      object_permissions.change_group.findIndex(
+                        (item) => item.id === $event.id
+                      ),
+                      1
+                    )
+                  "
+                  :menu-props="{ maxHeight: 208 }"
+                />
+              </v-card>
+            </v-col>
+
+            <!-- VIEW -->
+            <v-col cols="12" md="6" class="pa-1">
+              <v-card
+                :color="bodyColor.split('n-')[0] + 'n-5'"
+                flat
+                hover
+                class="pa-1"
+              >
+                <div class="pa-1 font-weight-bold">
+                  <span>{{ $t("permissions.view_perms_title") }}</span>
+                  <span
+                    ><v-icon small right :color="bodyActiveColor"
+                      >fas fa-eye</v-icon
+                    ></span
+                  >
+                </div>
+
+                <autocomplete-wrapper
+                  v-model="object_permissions.view_group"
+                  :color="bodyActiveColor"
+                  :items="autocomplete.groups"
+                  :loading="autocomplete.loaders.groups"
+                  item-text="acronym"
+                  :label="$t('permissions.group')"
+                  :multiple="true"
+                  v-on:chip:close="
+                    object_permissions.view_group.splice(
+                      object_permissions.view_group.findIndex(
+                        (item) => item.id === $event.id
+                      ),
+                      1
+                    )
+                  "
+                  :menu-props="{ maxHeight: 208 }"
+                />
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <div class="v-messages theme--light mb-1">
+                <div class="v-messages__wrapper">
+                  <div class="v-messages__message">
+                    {{ $t("permissions.update_content_message") }}
+                  </div>
+                </div>
+              </div>
+
+              <v-btn
+                :color="bodyActiveColor"
+                dark
+                :title="$t('permissions.update')"
+                @click="updateContentPermissions"
+              >
+                {{ $t("permissions.update_content") }}
+                <v-icon small right>fas fa-users-cog</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <v-row no-gutters class="mt-2">
       <v-col>
         <object-permissions-create
@@ -294,6 +420,7 @@
 import formManipulation from "../../mixins/formManipulation";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
+  fetchDatabaseGroups,
   fetchMultiRemoveRecordFromSelection,
   fetchSelectedAnalyses,
   fetchSelectedAttachments,
@@ -303,7 +430,8 @@ import {
   fetchSelectedSpecimens,
   fetchSelectedTaxa,
   fetchSelectionSerie,
-} from "../../assets/js/api/apiCalls";
+  postRequest,
+} from "@/assets/js/api/apiCalls";
 
 import InputWrapper from "../partial/inputs/InputWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -551,10 +679,15 @@ export default {
             storage: false,
           },
           storage: [],
+          groups: [],
         },
         clearSelectionModal: false,
         changeStorageDialog: false,
-        block: { info: true, storage: true },
+        block: {
+          info: true,
+          storage: true,
+          contentPermission: false,
+        },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
           { text: "main.pagination", value: 25 },
@@ -564,6 +697,10 @@ export default {
           { text: "main.pagination", value: 500 },
           { text: "main.pagination", value: 1000 },
         ],
+        object_permissions: {
+          view_group: [],
+          change_group: [],
+        },
       };
     },
 
@@ -602,6 +739,7 @@ export default {
         });
 
         this.relatedTabs.forEach((tab) => this.loadRelatedData(tab.name));
+        this.getDatabaseGroups();
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -717,6 +855,42 @@ export default {
           this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
+      }
+    },
+
+    async getDatabaseGroups() {
+      try {
+        const res = await fetchDatabaseGroups();
+        this.autocomplete.groups = res?.data?.results ?? [];
+      } catch (e) {
+        console.error("Failed to fetch database groups: ", e);
+      }
+    },
+
+    async updateContentPermissions() {
+      const groups_change = this.object_permissions.change_group.map(
+        (item) => item.id
+      );
+      const groups_view = this.object_permissions.view_group.map(
+        (item) => item.id
+      );
+
+      let url = `selection_series/${this.$route.params.id}/setcontentpermissions`;
+      let formData = new FormData();
+      formData.append("data", JSON.stringify({ groups_view, groups_change }));
+
+      try {
+        const res = await postRequest(url, formData);
+
+        if (res.status !== 200) {
+          this.toastError({ text: "Failed to add content permissions" });
+          return;
+        }
+
+        this.toastSuccess({ text: "Content permissions added!" });
+      } catch (e) {
+        console.error("Failed to add content permissions: ", e);
+        this.toastError({ text: "Failed to add content permissions" });
       }
     },
   },

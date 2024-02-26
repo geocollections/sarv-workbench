@@ -2481,6 +2481,7 @@
     "confirm_storage_change": "Kas olete kindel, et soovite järgnevate eksemplaride hoiukohta muuta?",
     "change_storage": "Muuda hoiukohta",
     "change_storage_yes": "Jah, muuda hoiukohta",
+    "content_permission": "Juurdepääsuõigused valiku sisule",
     "relatedTables": {
       "specimen": "Eksemplarid",
       "sample": "Proovid",
@@ -3034,9 +3035,11 @@
     "group": "Grupp",
     "user": "Kasutaja",
     "view_perms_title": "Vaatamise õigus:",
-    "change_perms_title": "Vaatamise ja muutmise õigus:",
+    "change_perms_title": "Muutmise õigus:",
     "update": "Uuenda õiguseid",
-    "update_message": "NB! Enda juurdepääsuõiguste eemaldamisel kaotate võimaluse kirje nägemiseks / muutmiseks."
+    "update_content": "Lisa sisule õigused",
+    "update_message": "NB! Enda juurdepääsuõiguste eemaldamisel kaotate võimaluse kirje nägemiseks / muutmiseks.",
+    "update_content_message": "NB! Antud õigused lisatakse kirjetele juurde, eemaldada siit ei saa."
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

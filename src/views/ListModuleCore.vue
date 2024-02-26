@@ -6,6 +6,11 @@
       :body-active-color="bodyActiveColor"
     />
 
+    <v-btn class="mb-2" @click="search" color="green" dark>
+      <v-icon left>fas fa-search</v-icon>
+      {{ $t("buttons.search") }}
+    </v-btn>
+
     <!-- DATA TABLE -->
     <v-row no-gutters align="center" justify="start" class="d-print-none">
       <span id="table-title" class="mr-2" style="font-size: 1.25rem">
@@ -209,6 +214,7 @@ export default {
         count: 0,
         results: [],
       },
+      timestamps: [],
     };
   },
 
@@ -244,6 +250,10 @@ export default {
           text: this.$t(item.text, { num: item.value }),
         };
       });
+    },
+
+    lastTimestamp() {
+      return this.timestamps[this.timestamps.length - 1];
     },
   },
   watch: {
@@ -281,47 +291,45 @@ export default {
     },
   },
 
+  mounted() {
+    window.addEventListener("keyup", this.handleKeyup);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("keyup", this.handleKeyup);
+  },
+
   methods: {
     ...mapActions("search", ["updateViewType"]),
+
+    handleKeyup(e) {
+      if (e.key === "Enter" || e.keyCode === 13) this.search();
+    },
 
     search: debounce(async function () {
       this.isLoading = true;
 
-      const response = await this.apiCall();
+      this.timestamps.push(Date.now());
+      const response = await this.apiCall(this.lastTimestamp);
 
       this.isLoading = false;
 
-      if (response?.status === 200) {
-        if (response?.data?.count === 0) this.noResults = true;
-        if (response?.data?.count > 0) this.noResults = false;
-        this.response.count = response.data.count ?? 0;
-        this.response.results = response.data.results ?? [];
-      }
+      if (response?.status !== 200) return;
+
+      if (response?.data?.count === 0) this.noResults = true;
+      if (response?.data?.count > 0) this.noResults = false;
+
+      // Validate timestamps, in case debounce fails and previous requests take too long
+      if (response.timestamp && this.lastTimestamp !== response.timestamp)
+        return;
+
+      this.response.count = response.data.count ?? 0;
+      this.response.results = response.data.results ?? [];
     }, 500),
 
     changeObjectsPrivacyState(state, id) {
       let formData = new FormData();
       formData.append("data", JSON.stringify({ is_private: state }));
-
-      // const response = await fetchChangeRecordState(this.module, id, formData);
-      //
-      // if (response?.data) {
-      //   if (response?.data?.message)
-      //     this.toastSuccess({
-      //       text: `${response?.data?.message}${
-      //         this.$i18n.locale === "ee" ? "_et" : ""
-      //       }`
-      //     });
-      //   else if (response?.data?.error)
-      //     this.toastSuccess({
-      //       text: `${response?.data?.error}${
-      //         this.$i18n.locale === "ee" ? "_et" : ""
-      //       }`
-      //     });
-      // } else
-      //   this.toastError({
-      //     text: response?.data?.error ?? this.$t("messages.uploadError")
-      //   });
 
       fetchChangeRecordState(this.module, id, formData).then(
         (response) => {
