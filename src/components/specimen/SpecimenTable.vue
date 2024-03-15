@@ -105,7 +105,7 @@
             en: item.stratigraphy__stratigraphy_en,
           }"
         />
-        <span v-if="item.stratigraphy && item.lithostratigraphy"> | </span>
+        <span v-if="item.stratigraphy && item.lithostratigraphy_id"> | </span>
         <span
           v-translate="{
             et: item.lithostratigraphy__stratigraphy,
