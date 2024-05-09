@@ -2807,7 +2807,8 @@
     "specimen_extra6": "Eritingimused ja kommentaarid",
     "name_and_signature": "nimi ja allkiri",
     "signature": "allkiri",
-    "date": "kuupäev"
+    "date": "Kuupäev",
+    "loaner": "Laenu andja"
   },
   "web_news": {
     "date_added": "Lisatud",

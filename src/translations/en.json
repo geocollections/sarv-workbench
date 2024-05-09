@@ -2806,7 +2806,8 @@
     "specimen_extra6": "Special conditions and comments",
     "name_and_signature": "name and signature",
     "signature": "signature",
-    "date": "date"
+    "date": "Date",
+    "loaner": "Loaner"
   },
   "web_news": {
     "date_added": "Date added",

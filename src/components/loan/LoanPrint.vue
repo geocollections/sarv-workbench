@@ -2,7 +2,7 @@
   <v-main class="loan-print">
     <lang-buttons style="z-index: 10" :is-dark="false" class="d-print-none" />
 
-    <v-container fluid>
+    <v-container fluid class="white">
       <v-skeleton-loader
         v-if="isLoading"
         type="list-item@2, article, table-heading, table-thead, table-tbody, article, table-tfoot"
@@ -10,7 +10,7 @@
         height="100%"
         class="pa-2"
       />
-      <v-card v-else-if="loan" class="pa-2">
+      <v-card v-else-if="loan" class="pa-2 elevation-0">
         <v-row no-gutters v-if="loan.returned">
           <v-col cols="12" class="red--text font-weight-bold">
             {{ $t("loan_print.has_returned") }}
@@ -133,22 +133,22 @@
               <span v-if="loan.project">
                 (<b>{{ loan.project }}</b
                 >)</span
-              >
-
-              {{ $t("loan_print.specimen_info2") }}
-              <span
-                v-translate="{
-                  et: loan.loaner__institution__institution_name,
-                  en: loan.loaner__institution__institution_name_en,
-                }"
-              ></span>
-              {{ $t("loan_print.specimen_info3") }}
-
-              <span class="font-weight-bold">{{ loan.date_end }}</span
               >.
+
+              <!-- {{ $t("loan_print.specimen_info2") }} -->
+              <!-- <span -->
+              <!--   v-translate="{ -->
+              <!--     et: loan.loaner__institution__institution_name, -->
+              <!--     en: loan.loaner__institution__institution_name_en, -->
+              <!--   }" -->
+              <!-- ></span> -->
+              <!-- {{ $t("loan_print.specimen_info3") }} -->
+              <!---->
+              <!-- <span class="font-weight-bold">{{ loan.date_end }}</span -->
+              <!-- >. -->
             </div>
 
-            <div class="mt-2">
+            <div v-if="loan.delivery_method__value" class="mt-2">
               {{ $t("loan_print.specimen_info4") }}
               <span
                 v-translate="{
@@ -394,24 +394,24 @@
         </v-row>
 
         <v-row no-gutters class="mt-12 pt-12" v-if="loanSpecimens.length > 0">
-          <v-col cols="4">
-            <div class="text-center" style="color: transparent">.</div>
-            <div style="border-bottom: 1px solid black"></div>
-            <div class="text-center">
-              {{ loan.borrower__forename }} {{ loan.borrower__surename }}
-            </div>
-          </v-col>
+          <!-- <v-col cols="4"> -->
+          <!--   <div class="text-center" style="color: transparent">.</div> -->
+          <!--   <div style="border-bottom: 1px solid black"></div> -->
+          <!--   <div class="text-center"> -->
+          <!--     {{ loan.borrower__forename }} {{ loan.borrower__surename }} -->
+          <!--   </div> -->
+          <!-- </v-col> -->
           <v-col cols="4" class="px-2">
-            <div class="text-center" style="color: transparent">.</div>
-            <div style="border-bottom: 1px solid black"></div>
-            <div class="text-center">
+            <!-- <div class="text-center" style="color: transparent">.</div> -->
+            <!-- <div style="border-bottom: 1px solid black"></div> -->
+            <div>{{ $t("loan_print.loaner") }}</div>
+            <div class="font-weight-bold">
               {{ loanerSignature }}
             </div>
           </v-col>
           <v-col cols="4">
-            <div class="text-center">{{ loan.date_start }}</div>
-            <div style="border-bottom: 1px solid black"></div>
-            <div class="text-center">{{ $t("loan_print.date") }}</div>
+            <div>{{ $t("loan_print.date") }}</div>
+            <div class="font-weight-bold">{{ loan.date_start }}</div>
           </v-col>
         </v-row>
 
@@ -421,34 +421,34 @@
           style="border: 1px solid black; page-break-inside: avoid"
         >
           <v-col cols="12" class="pa-1" v-if="loanSpecimens.length > 0">
-            <div class="font-weight-bold mt-4 mb-3">
-              {{ $t("loan_print.specimen_extra0") }}
-              <span
-                v-translate="{
-                  et: loan.loaner__institution__institution_name,
-                  en: loan.loaner__institution__institution_name_en,
-                }"
-              />
-              {{ $t("loan_print.specimen_extra0a") }}
-            </div>
-
-            <div class="my-3">
-              {{ $t("loan_print.specimen_extra1") }}
-              <span class="font-weight-bold">{{ loanSpecimens.length }}</span>
-              {{ $t("loan_print.specimen_extra2") }}
-              <span>{{ loan.date_end }}</span>
-              {{ $t("loan_print.specimen_extra3") }}
-              <span
-                v-translate="{
-                  et: loan.loaner__institution__institution_name,
-                  en: loan.loaner__institution__institution_name_en,
-                }"
-              />
-            </div>
-
-            <div class="my-3">
-              {{ $t("loan_print.specimen_extra4") }}
-            </div>
+            <!-- <div class="font-weight-bold mt-4 mb-3"> -->
+            <!--   {{ $t("loan_print.specimen_extra0") }} -->
+            <!--   <span -->
+            <!--     v-translate="{ -->
+            <!--       et: loan.loaner__institution__institution_name, -->
+            <!--       en: loan.loaner__institution__institution_name_en, -->
+            <!--     }" -->
+            <!--   /> -->
+            <!--   {{ $t("loan_print.specimen_extra0a") }} -->
+            <!-- </div> -->
+            <!---->
+            <!-- <div class="my-3"> -->
+            <!--   {{ $t("loan_print.specimen_extra1") }} -->
+            <!--   <span class="font-weight-bold">{{ loanSpecimens.length }}</span> -->
+            <!--   {{ $t("loan_print.specimen_extra2") }} -->
+            <!--   <span>{{ loan.date_end }}</span> -->
+            <!--   {{ $t("loan_print.specimen_extra3") }} -->
+            <!--   <span -->
+            <!--     v-translate="{ -->
+            <!--       et: loan.loaner__institution__institution_name, -->
+            <!--       en: loan.loaner__institution__institution_name_en, -->
+            <!--     }" -->
+            <!--   /> -->
+            <!-- </div> -->
+            <!---->
+            <!-- <div class="my-3"> -->
+            <!--   {{ $t("loan_print.specimen_extra4") }} -->
+            <!-- </div> -->
 
             <div class="my-3">
               {{ $t("loan_print.specimen_extra5") }}
@@ -515,29 +515,29 @@
           </v-col>
         </v-row>
 
-        <v-row no-gutters class="mt-12 pt-12 mb-4">
-          <v-col cols="4"></v-col>
-          <v-col cols="4" class="pr-2">
-            <div style="border-bottom: 1px solid black"></div>
-            <div v-if="loanSpecimens.length > 0">
-              <div class="text-center">
-                {{ $t("loan_print.name_and_signature") }}
-              </div>
-            </div>
-            <div v-else-if="loanSamples.length > 0">
-              <div class="text-center" v-if="loanerSignature">
-                {{ loanerSignature }}
-              </div>
-              <div class="text-center" v-else>
-                {{ $t("loan_print.signature") }}
-              </div>
-            </div>
-          </v-col>
-          <v-col cols="4">
-            <div style="border-bottom: 1px solid black"></div>
-            <div class="text-center">{{ $t("loan_print.date") }}</div>
-          </v-col>
-        </v-row>
+        <!-- <v-row no-gutters class="mt-12 pt-12 mb-4"> -->
+        <!--   <v-col cols="4"></v-col> -->
+        <!--   <v-col cols="4" class="pr-2"> -->
+        <!--     <div style="border-bottom: 1px solid black"></div> -->
+        <!--     <div v-if="loanSpecimens.length > 0"> -->
+        <!--       <div class="text-center"> -->
+        <!--         {{ $t("loan_print.name_and_signature") }} -->
+        <!--       </div> -->
+        <!--     </div> -->
+        <!--     <div v-else-if="loanSamples.length > 0"> -->
+        <!--       <div class="text-center" v-if="loanerSignature"> -->
+        <!--         {{ loanerSignature }} -->
+        <!--       </div> -->
+        <!--       <div class="text-center" v-else> -->
+        <!--         {{ $t("loan_print.signature") }} -->
+        <!--       </div> -->
+        <!--     </div> -->
+        <!--   </v-col> -->
+        <!--   <v-col cols="4"> -->
+        <!--     <div style="border-bottom: 1px solid black"></div> -->
+        <!--     <div class="text-center">{{ $t("loan_print.date") }}</div> -->
+        <!--   </v-col> -->
+        <!-- </v-row> -->
       </v-card>
     </v-container>
   </v-main>
