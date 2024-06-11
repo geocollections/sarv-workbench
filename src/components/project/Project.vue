@@ -197,7 +197,7 @@
         <div v-show="block.description" class="pa-1">
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <textarea-wrapper
+              <editor
                 v-model="project.description"
                 :color="bodyActiveColor"
                 :label="$t('common.description')"
@@ -519,6 +519,7 @@ import MapComponent from "../partial/MapComponent";
 import { mapActions, mapState } from "vuex";
 import ExportButtons from "../partial/export/ExportButtons";
 import SiteTable from "../site/SiteTable";
+import Editor from "../partial/inputs/Editor";
 import debounce from "lodash/debounce";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -540,6 +541,7 @@ export default {
     MapComponent,
     ExportButtons,
     SiteTable,
+    Editor,
     ObjectPermissionsCreate,
   },
   props: {
