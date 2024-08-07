@@ -405,7 +405,7 @@ const autocompleteMixin = {
      * @param groupByField {String} - Field used to group results
      * @param clearAutocomplete {Boolean} - If set to false then autocomplete won't get cleared when multiselect field is cleared (needed in reference keywords search)
      */
-    $_autocompleteMixin_search: debounce(function (
+    $_autocompleteMixin_search: debounce(function(
       value,
       type,
       options,
@@ -433,7 +433,7 @@ const autocompleteMixin = {
         }
       }
     },
-    500),
+      500),
   },
 };
 
@@ -506,7 +506,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "attachment3":
       return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&or_search=user_added__iexact:${currentUser.user};is_private__iexact:0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
     case "taxon":
-      return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&fields=id,taxon,hierarchy_string`;
+      return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&fields=id,taxon,hierarchy_string,is_valid`;
     case "fossil_group":
       return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&is_fossil_group=true&fields=id,taxon,hierarchy_string`;
     case "project":
@@ -558,57 +558,44 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "attachment_link__dataset":
     case "attachment_link__project":
     case "attachment_link__site":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case "attachment_link__specimen":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,specimen_id,coll__number;lookuptype:icontains&fields=id,specimen_id,coll__number`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,specimen_id,coll__number;lookuptype:icontains&fields=id,specimen_id,coll__number`;
     case "attachment_link__sample":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,number;lookuptype:icontains&fields=id,number`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,number;lookuptype:icontains&fields=id,number`;
     case "attachment_link__sample_series":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,name;lookuptype:icontains&fields=id,name`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,name;lookuptype:icontains&fields=id,name`;
     case "attachment_link__analysis":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,sample__number;lookuptype:icontains&fields=id,sample__number`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,sample__number;lookuptype:icontains&fields=id,sample__number`;
     case "attachment_link__doi":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,identifier;lookuptype:icontains&fields=id,identifier`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,identifier;lookuptype:icontains&fields=id,identifier`;
     case "attachment_link__locality":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en`;
     case "attachment_link__drillcore":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,drillcore,drillcore_en;lookuptype:icontains&fields=id,drillcore,drillcore_en`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,drillcore,drillcore_en;lookuptype:icontains&fields=id,drillcore,drillcore_en`;
     case "attachment_link__drillcore_box":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,drillcore__drillcore,drillcore__drillcore_en,number;lookuptype:icontains&fields=id,drillcore__drillcore,drillcore__drillcore_en,number`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,drillcore__drillcore,drillcore__drillcore_en,number;lookuptype:icontains&fields=id,drillcore__drillcore,drillcore__drillcore_en,number`;
     case "attachment_link__preparation":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,preparation_number;lookuptype:icontains&fields=id,preparation_number`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,preparation_number;lookuptype:icontains&fields=id,preparation_number`;
     case "attachment_link__reference":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,reference;lookuptype:icontains&fields=id,reference`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,reference;lookuptype:icontains&fields=id,reference`;
     case "attachment_link__locality_description":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,description;lookuptype:icontains&fields=id,description`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,description;lookuptype:icontains&fields=id,description`;
     case "attachment_link__taxon":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,taxon;lookuptype:icontains&fields=id,taxon,author_year`;
+      return `${type.split("__")[1]
+        }/?multi_search=value:${value};fields:id,taxon;lookuptype:icontains&fields=id,taxon,author_year`;
     case "attachment_link__storage":
       return `location/?multi_search=value:${value};fields:id,location,contents;lookuptype:icontains&fields=id,location,contents`;
     default:
