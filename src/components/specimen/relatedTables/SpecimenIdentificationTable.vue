@@ -58,6 +58,10 @@
           {{ item.taxon.taxon }}
         </router-link>
       </template>
+      <template v-slot:item.is_valid="{ item }">
+        <v-icon v-if="item.taxon__is_valid" small>fas fa-plus</v-icon>
+        <v-icon v-else small>fas fa-minus</v-icon>
+      </template>
 
       <template v-slot:item.agent="{ item }">
         <router-link
@@ -148,19 +152,35 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
+                  <autocomplete-wrapper-new
                     v-model="item.taxon"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.taxon"
-                    :loading="autocomplete.loaders.taxon"
-                    item-text="taxon"
+                    :route="taxonRoute"
                     :label="$t('specimen_identification.taxon')"
-                    use-state
-                    is-link
-                    route-object="taxon"
-                    is-searchable
+                    item-text="taxon"
+                    :rules="[taxonIsValidRule]"
+                    :suggestions="autocomplete.taxon"
                     v-on:search:items="autocompleteTaxonSearch"
-                  />
+                  >
+                    <template #item="{ item }">
+                      <v-list-item-content>
+                        <v-list-item-title>{{ item.taxon }}</v-list-item-title>
+                      </v-list-item-content>
+                      <v-tooltip right color="red" open-delay="500">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-list-item-icon
+                            v-if="!item.is_valid"
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            <v-icon right color="red"
+                              >fas fa-exclamation</v-icon
+                            >
+                          </v-list-item-icon>
+                        </template>
+                        {{ $t("taxon.is_invalid") }}
+                      </v-tooltip>
+                    </template>
+                  </autocomplete-wrapper-new>
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
@@ -277,6 +297,7 @@
 <script>
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import AutocompleteWrapperNew from "../../partial/inputs/AutocompleteWrapperNew";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import DateWrapper from "../../partial/inputs/DateWrapper";
@@ -292,6 +313,7 @@ export default {
     DateWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
+    AutocompleteWrapperNew,
     InputWrapper,
   },
 
@@ -335,6 +357,7 @@ export default {
   data: () => ({
     headers: [
       { text: "specimen_identification.taxon", value: "taxon" },
+      { text: "taxon.is_valid", value: "is_valid" },
       { text: "common.name", value: "name" },
       { text: "specimen_identification.agent", value: "agent" },
       { text: "common.reference", value: "reference" },
@@ -381,6 +404,10 @@ export default {
     isItemValid() {
       return typeof this.item.taxon === "object" && this.item.taxon !== null;
     },
+    taxonRoute() {
+      if (this.item.taxon) return `/taxon/${this.item.taxon.id}`;
+      return null;
+    },
   },
 
   watch: {
@@ -390,6 +417,12 @@ export default {
   },
 
   methods: {
+    taxonIsValidRule(item) {
+      if (item === null) return true;
+      if (!item.is_valid)
+        return this.$t("specimen_identification.taxon_is_invalid");
+      return true;
+    },
     resetItem() {
       this.item = {
         taxon: null,
@@ -409,11 +442,12 @@ export default {
         this.item.taxon = {
           id: item.taxon,
           taxon: item.taxon__taxon,
+          is_valid: item.taxon__is_valid,
         };
-        this.autocomplete.taxon.push(this.item.taxon);
+        this.autocomplete.taxon = [this.item.taxon];
       } else if (item.taxon !== null) {
         this.item.taxon = item.taxon;
-        this.autocomplete.taxon.push(this.item.taxon);
+        this.autocomplete.taxon = [this.item.taxon];
       }
 
       if (typeof item.agent !== "object" && item.agent !== null) {

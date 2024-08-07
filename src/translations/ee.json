@@ -1147,7 +1147,8 @@
     "taxon": "Takson registrist",
     "agent": "Det.",
     "reference": "Kirjandus",
-    "current": "Kehtiv"
+    "current": "Kehtiv",
+    "taxon_is_invalid": "Märkus: hetkel valitud takson ei ole valiidne"
   },
   "specimen_identification_geology": {
     "rock": "Mineraal/kivim",
@@ -1614,6 +1615,7 @@
     "locality_free": "Leiukoht txt",
     "attachment": "Pilt",
     "attachment_filename": "Failinimi",
+    "is_invalid": "Takson ei ole valiidne",
     "relatedTables": {
       "taxon_subclass": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",
