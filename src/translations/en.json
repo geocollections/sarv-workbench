@@ -1147,7 +1147,8 @@
     "taxon": "Taxon",
     "agent": "Agent",
     "reference": "Reference",
-    "current": "Current"
+    "current": "Current",
+    "taxon_is_invalid": "Note: currently selected taxon is invalid"
   },
   "specimen_identification_geology": {
     "rock": "Mineral/rock",
@@ -1615,6 +1616,7 @@
     "locality_free": "Locality txt",
     "attachment": "Image",
     "attachment_filename": "Filename",
+    "is_invalid": "Invalid taxon",
     "relatedTables": {
       "taxon_subclass": "Subtaxa",
       "taxon_synonym": "Synonymy",
