@@ -2668,7 +2668,7 @@ router.beforeEach(async (to, from, next) => {
           displayMode: "replace",
         });
       }
-      next("/");
+      next({ path: "/", query: { from: to.fullPath } });
     }
   }
   next();
