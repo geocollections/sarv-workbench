@@ -223,7 +223,7 @@
                   en: ' by ',
                 }"
               ></span>
-              <span>{{ loan.borrower__surename }}</span>
+              <span>{{ loan.deliverer__agent }}</span>
               <span
                 v-translate="{
                   et: ' poolt',
