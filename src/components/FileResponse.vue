@@ -125,7 +125,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #app {
   background-color: rgb(14, 14, 14);
   overflow-x: auto !important;
