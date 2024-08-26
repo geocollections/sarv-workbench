@@ -66,6 +66,9 @@
           }"
         />
       </template>
+      <template v-slot:item.storage="{ item }">
+        {{ item.storage__location }}
+      </template>
 
       <template v-slot:item.agent="{ item }">
         <router-link
@@ -132,6 +135,19 @@
                     :color="bodyActiveColor"
                     :label="$t('analysis.mass')"
                     type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.storage"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.storage"
+                    :loading="autocomplete.loaders.storage"
+                    item-text="location"
+                    :label="$t('analysis.storage')"
+                    is-searchable
+                    v-on:search:items="autocompleteStorageSearch"
                   />
                 </v-col>
 
@@ -219,7 +235,10 @@
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import { fetchAnalysisMethod } from "../../../assets/js/api/apiCalls";
+import {
+  fetchAnalysisMethod,
+  fetchLocation,
+} from "../../../assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import DateWrapper from "../../partial/inputs/DateWrapper";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
@@ -277,6 +296,7 @@ export default {
       { text: "common.date_end", value: "date_end" },
       { text: "analysis.date_free", value: "date_free" },
       { text: "analysis.agent", value: "agent" },
+      { text: "analysis.storage", value: "storage" },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -294,15 +314,18 @@ export default {
       date_end: null,
       date_free: "",
       agent: null,
+      storage: null,
       remarks: "",
     },
     isNewItem: true,
     autocomplete: {
       analysis_method: [],
       agent: [],
+      storage: [],
       loaders: {
         analysis_method: false,
         agent: false,
+        storage: false,
       },
     },
   }),
@@ -327,6 +350,7 @@ export default {
         date_free: "",
         agent: null,
         remarks: "",
+        storage: null,
       };
     },
 
@@ -344,6 +368,17 @@ export default {
         this.autocomplete.agent.push(this.item.agent);
       }
 
+      if (typeof item.storage !== "object" && item.storage !== null) {
+        this.item.storage = {
+          id: item.storage,
+          location: item.storage__location,
+        };
+        this.autocomplete.storage.push(this.item.storage);
+      } else if (item.storage !== null) {
+        this.item.storage = item.storage;
+        this.autocomplete.storage.push(this.item.storage);
+      }
+
       if (
         typeof item.analysis_method !== "object" &&
         item.analysis_method !== null
@@ -353,7 +388,11 @@ export default {
           analysis_method: item.analysis_method__analysis_method,
           method_en: item.analysis_method__method_en,
         };
-      } else this.item.analysis_method = item.analysis_method;
+        this.autocomplete.analysis_method.push(this.item.analysis_method);
+      } else if (item.analysis_method !== null) {
+        this.item.analysis_method = item.analysis_method;
+        this.autocomplete.analysis_method.push(this.item.analysis_method);
+      }
 
       this.item.method_details = item.method_details;
       this.item.mass = item.mass;
@@ -375,6 +414,17 @@ export default {
           }
         });
         this.autocomplete.loaders.analysis_method = false;
+      }
+
+      if (this.autocomplete.storage.length <= 1) {
+        this.autocomplete.loaders.storage = true;
+        fetchLocation().then((response) => {
+          if (response.status === 200) {
+            this.autocomplete.storage =
+              response.data.count > 0 ? response.data.results : [];
+          }
+        });
+        this.autocomplete.loaders.storage = false;
       }
     },
   },
