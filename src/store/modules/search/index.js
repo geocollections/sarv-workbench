@@ -256,6 +256,7 @@ const state = {
     selection: null,
     sample: null,
     datasetId: null,
+    sample__depth: null,
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],
