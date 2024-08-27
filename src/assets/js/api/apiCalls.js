@@ -1751,6 +1751,15 @@ export function fetchAnalyses(data, dynamicSearch, timestamp) {
     }`;
   }
 
+  if (data.sample__depth !== null && data.sample__depth.trim().length > 0) {
+    //searchFields += '&depth__exact='+data.depth
+    searchFields += `&multi_search=value:${
+      data.sample__depth
+    };fields:sample__depth,sample__depth_interval;lookuptype:${
+      data.sample__depth__lookuptype || "icontains"
+    }`;
+  }
+
   if (data.datasetId && data.datasetId.trim().length > 0) {
     searchFields += `&dataset__id__${
       data.datasetId__lookuptype || "icontains"
