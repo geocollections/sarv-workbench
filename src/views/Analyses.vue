@@ -80,6 +80,7 @@ export default {
       { id: "datasetId", title: "analysis.datasetId", type: "number" },
       { id: "selectionId", title: "specimen.selectionId", type: "number" },
       { id: "selection", title: "specimen.selection", type: "text" },
+      { id: "sample__depth", title: "sample.depth", type: "number" },
     ]);
   },
 
