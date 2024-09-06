@@ -54,14 +54,6 @@ const mutations = {
         show: true,
       });
     }
-    if (payload.table === "sarv_issue") {
-      allHeaders.push({
-        value: "replied",
-        text: `${payload.table}.replied`,
-        sortable: false,
-        show: true,
-      });
-    }
 
     allHeaders
       .sort(

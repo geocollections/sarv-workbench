@@ -1440,8 +1440,6 @@ export default {
         uploadableObject.related_data = null;
       }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 
@@ -1550,7 +1548,6 @@ export default {
           }
         },
         () => {
-          // console.log(errResponse)
           this.setLoadingState(false);
           this.toastError({ text: this.$t("reference.doiCheckUnsuccessful") });
         }

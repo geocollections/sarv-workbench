@@ -834,11 +834,6 @@ export default {
   },
 
   props: {
-    isBodyActiveColorDark: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -906,9 +901,6 @@ export default {
   computed: {
     ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["specimenSearchParameters"]),
-    ...mapState("search", {
-      activeRelatedDataTab: (state) => state.activeRelatedDataTab.specimen,
-    }),
 
     isFossil() {
       let fossilId = this.specimen?.fossil?.id;
@@ -928,7 +920,6 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
-    ...mapActions("detail", ["saveFields"]),
 
     setTab(type) {
       if (type) {
@@ -1149,33 +1140,6 @@ export default {
             id: this.getDatabaseId,
           };
         }
-
-        // Set default tab
-        // if (this.specimen?.fossil) {
-        //   if (
-        //     this.specimen?.fossil?.id === 1 ||
-        //     this.specimen?.fossil?.id === 7
-        //   ) {
-        //     if (
-        //       this.activeRelatedDataTab &&
-        //       this.activeRelatedDataTab !== "specimen_identification_geology"
-        //     )
-        //       this.setTab(this.activeRelatedDataTab);
-        //     else this.setTab("specimen_identification");
-        //   } else {
-        //     if (this.activeRelatedDataTab)
-        //       this.setTab(this.activeRelatedDataTab);
-        //     else this.setTab("specimen_identification_geology");
-        //   }
-        // } else {
-        //   if (
-        //     this.activeRelatedDataTab &&
-        //     this.activeRelatedDataTab !== "specimen_identification" &&
-        //     this.activeRelatedDataTab !== "specimen_identification_geology"
-        //   )
-        //     this.setTab(this.activeRelatedDataTab);
-        //   else this.setTab("specimen_reference");
-        // }
       }
     },
 
@@ -1344,8 +1308,6 @@ export default {
         uploadableObject.initial_permissions = this.currentPermissions;
       }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 

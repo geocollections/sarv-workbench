@@ -206,7 +206,6 @@ export default {
         this.importResponse = message;
 
         await this.uploadImportedFileAsNewAttachment();
-        await this.getNewlyAddedRecords();
       } else if (fileUploadResponse?.data?.error) {
         // Todo: Handle different errors
         // invalid_column_names
@@ -243,13 +242,11 @@ export default {
       try {
         return await postRequest("", formData, this.importUrl);
       } catch (err) {
-        console.log(err);
         return false;
       }
     },
 
     async uploadImportedFileAsNewAttachment() {
-      console.log(this.getCurrentUser.id);
       let data = {
         description: `See fail loodi kasutades faili importi. Failinimi: ${
           this?.file?.[0]?.name
@@ -290,15 +287,6 @@ export default {
     },
     handlePermissionsChange(perms) {
       this.initialPermissions = perms;
-    },
-
-    async getNewlyAddedRecords() {
-      // Todo: Get newly added records
-      if (this.showSamplesCard) {
-        console.log("Todo: fetch new samples");
-      } else if (this.showAnalysesCard) {
-        console.log("Todo: fetch new analyses");
-      }
     },
 
     getSizeAsMB(size) {

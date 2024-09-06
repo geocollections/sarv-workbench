@@ -7,7 +7,6 @@ const requestsMixin = {
 
   methods: {
     addRelatedItem(payload, connectionField = null) {
-      console.log(payload);
       let table = payload.table;
       if (table === "taxon_subclass") table = "taxon";
 
@@ -29,7 +28,6 @@ const requestsMixin = {
 
         this.$_requestsMixin_httpRequestWrapper(url, formData).then(
           (response) => {
-            console.log(response);
             if (response) {
               this.loadRelatedData(table);
             }
@@ -54,7 +52,6 @@ const requestsMixin = {
     },
 
     editRelatedItem(payload) {
-      console.log(payload);
       let table = payload.table;
       if (table === "taxon_subclass") table = "taxon";
 
@@ -69,25 +66,19 @@ const requestsMixin = {
           uploadableObject.taxon = payload.rawItem.taxon;
         }
 
-        console.log(JSON.stringify(uploadableObject));
         formData.append("data", JSON.stringify(uploadableObject));
 
         this.$_requestsMixin_httpRequestWrapper(url, formData).then(
           (response) => {
-            console.log(response);
             if (response) {
               this.loadRelatedData(table);
             }
           }
         );
-      } else {
-        // Todo
-        console.log("Todo");
       }
     },
 
     async deleteRelatedItem(payload) {
-      console.log(payload);
       if (this.$route.meta.isEdit) {
         const deleteResponse = await fetchDeleteRecord(
           payload.table,
@@ -107,9 +98,6 @@ const requestsMixin = {
           if (deleteResponse.status === 200)
             this.loadRelatedData(payload.table);
         }
-      } else {
-        // Todo
-        console.log("Todo");
       }
     },
 
@@ -130,7 +118,6 @@ const requestsMixin = {
           } else resolve(false);
         },
         (errResponse) => {
-          console.log("ERROR: " + JSON.stringify(errResponse));
           this.toastError({ text: this.$t("messages.uploadError") });
           resolve(false);
         }

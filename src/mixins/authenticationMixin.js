@@ -84,17 +84,15 @@ const authenticationMixin = {
     logOut() {
       fetchLogout().then((response) => {
         if (response.status === 204) {
-          this.$router.push({
-            name: "login",
-            params: { dontShowSessionExpired: true },
-          });
-          this.$cookies.remove("csrftokenLocalhost", null, "localhost");
-          this.$cookies.remove("csrftoken", null, "geocollections.info");
           this.removeAuthUser();
           this.$_authenticationMixin_toastSuccessMessage(
             response,
             this.$i18n.locale
           );
+          this.$router.push({
+            name: "login",
+            params: { dontShowSessionExpired: true },
+          });
         } else
           this.$_authenticationMixin_getErrorMessage(
             response,
@@ -122,17 +120,6 @@ const authenticationMixin = {
         if (response.data.user != null) {
           let date = new Date();
           response.data.expires = date.setDate(date.getDate() + 7);
-
-          // Cookie for localhost
-          // this.$cookies.set(
-          //   "csrftokenLocalhost",
-          //   "test token",
-          //   "1d",
-          //   null,
-          //   "localhost",
-          //   true,
-          //   "Lax"
-          // );
           this.setAuthUser(response.data);
 
           if (this.$route.query.from) {

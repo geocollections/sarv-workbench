@@ -175,7 +175,6 @@ import {
   postRequest,
 } from "../../assets/js/api/apiCalls";
 import toastMixin from "../../mixins/toastMixin";
-import { isEqual } from "lodash";
 import { mapGetters } from "vuex";
 
 export default {
@@ -343,7 +342,6 @@ export default {
           }
         },
         (errResponse) => {
-          console.log("ERROR: " + JSON.stringify(errResponse));
           this.toastError({ text: this.$t("messages.uploadError") });
         }
       );

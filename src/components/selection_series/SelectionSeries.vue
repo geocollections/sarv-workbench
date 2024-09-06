@@ -458,11 +458,6 @@ export default {
   },
 
   props: {
-    isBodyActiveColorDark: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -612,8 +607,6 @@ export default {
             };
           }
         );
-        console.log(updatedSpecimenObjects);
-
         let formData = new FormData();
         formData.append(
           "data",
@@ -746,9 +739,6 @@ export default {
     },
 
     formatDataForUpload(objectToUpload) {
-      console.log("This object is sent in string format:");
-      console.log(objectToUpload);
-
       if (!this.$route.meta.isEdit) {
         objectToUpload.initial_permissions = this.initialPermissions;
       }

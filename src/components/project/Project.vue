@@ -849,8 +849,6 @@ export default {
         uploadableObject.initial_permissions = this.initialPermissions;
       }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 
@@ -946,7 +944,6 @@ export default {
       let uploadableObject = cloneDeep(objectToUpload);
       uploadableObject.project = this.project.id;
 
-      // console.log(JSON.stringify(uploadableObject));
       return JSON.stringify(uploadableObject);
     },
 

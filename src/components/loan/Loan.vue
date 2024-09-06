@@ -484,11 +484,6 @@ export default {
   },
 
   props: {
-    isBodyActiveColorDark: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -759,8 +754,6 @@ export default {
         uploadableObject.initial_permissions = this.currentPermissions;
       }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 
@@ -860,8 +853,6 @@ export default {
             database: this.getDatabaseId,
           };
         });
-
-        console.log(listOfObjects);
 
         let formData = new FormData();
         formData.append(

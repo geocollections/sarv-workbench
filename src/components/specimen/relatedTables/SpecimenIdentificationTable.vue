@@ -323,10 +323,6 @@ export default {
     response: {
       type: Object,
     },
-    filter: {
-      type: String,
-      required: false,
-    },
     searchParameters: {
       type: Object,
       required: true,

@@ -4,6 +4,7 @@ module.exports = {
     node: true,
     es2022: true,
   },
+  ignorePatterns: ["*.html"],
   extends: [
     "plugin:vue/essential",
     "eslint:recommended",
@@ -20,5 +21,6 @@ module.exports = {
     "vue/no-v-text-v-html-on-component": "off",
     "vue/no-reserved-component-names": "off",
     "no-unused-vars": "off",
+    "vue/no-unused-properties": "error"
   },
 };

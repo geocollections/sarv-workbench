@@ -6,8 +6,6 @@
 
     <v-main>
       <v-container fluid class="px-0 w-100">
-        <GlobalAlertNotification class="d-print-none" />
-
         <breadcrumbs
           class="d-print-none px-2"
           v-if="recentUrlsState"
@@ -25,11 +23,9 @@
 import AppHeader from "../components/partial/app_header/AppHeader";
 import { mapActions, mapGetters, mapState } from "vuex";
 import Breadcrumbs from "../components/partial/Breadcrumbs";
-import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
 
 export default {
   components: {
-    GlobalAlertNotification,
     Breadcrumbs,
     AppHeader,
   },
@@ -52,14 +48,12 @@ export default {
     next();
   },
   created() {
-    this.fetchActiveSarvIssues();
     this.fetchLastLoggedInDate();
     // Filling all dynamic fields
     this.getListOfAllTables().forEach((table) => this.getDynamicFields(table));
   },
   methods: {
     ...mapActions("settings", ["updateRecentUrls"]),
-    ...mapActions("search", ["fetchActiveSarvIssues"]),
     ...mapActions("user", ["fetchLastLoggedInDate"]),
     ...mapActions("tableHeaders", ["getDynamicFields"]),
   },

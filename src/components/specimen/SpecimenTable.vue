@@ -290,7 +290,6 @@ export default {
                 ? this.names.push(secondItem)
                 : this.names.push(taxonItem);
             });
-            // console.log(this.names);
           } else if (taxonList.length > 0) this.names = taxonList;
           else if (rockList.length > 0) this.names = rockList;
         }

@@ -116,11 +116,9 @@
 <script>
 import activeListMixin from "../../mixins/activeListMixin";
 import tableHeaderMixin from "@/mixins/tableHeaderMixin";
-import FilePreview from "@/components/FilePreview.vue";
 
 export default {
   name: "ReferenceTable",
-  components: { FilePreview },
   mixins: [activeListMixin, tableHeaderMixin],
   props: {
     response: {

@@ -180,7 +180,6 @@ export default {
     },
     clearItemBackground: Boolean,
     openFile: Boolean,
-    showAttachmentLink: Boolean,
   },
   data() {
     return {

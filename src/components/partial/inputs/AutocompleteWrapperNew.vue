@@ -63,10 +63,6 @@ export default {
       type: String,
       default: "name",
     },
-    itemValue: {
-      type: String,
-      default: "id",
-    },
     rules: {
       type: Array,
       default: () => [],

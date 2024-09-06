@@ -362,11 +362,6 @@ export default {
     ObjectPermissionsCreate,
   },
   props: {
-    isBodyActiveColorDark: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -631,8 +626,6 @@ export default {
         } else uploadableObject.related_data.agent = null;
       }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 

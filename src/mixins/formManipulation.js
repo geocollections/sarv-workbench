@@ -135,9 +135,8 @@ const formManipulation = {
     isObjectLocked(object) {
       if (this.$route.meta.isEdit && object === "attachment") {
         return !!this.isAttachmentLocked;
-      } else if (this.$route.meta.isEdit && object === "sarv_issue") {
-        return this.isNotEmpty(this.initialResponse);
-      } else return false;
+      }
+      return false;
     },
 
     add(
@@ -190,17 +189,6 @@ const formManipulation = {
 
           this.saveData(object, formData, url).then(
             (savedObjectId) => {
-              console.log(savedObjectId);
-              console.log("^^^^^^ Saved object ID ^^^^^^ ");
-
-              if (
-                this.$route.meta.isEdit &&
-                addAnother &&
-                object === "sarv_issue"
-              ) {
-                this.setInitialResponse(this[object]);
-              }
-
               if (saveAsNew) {
                 if (this.isNotEmpty(savedObjectId)) {
                   this.$router.push({
@@ -268,8 +256,6 @@ const formManipulation = {
         } else {
           if (object === "attachment" && this.isAttachmentLocked)
             this.toastError({ text: this.$t("messages.lockedForm") });
-          if (object === "sarv_issue" && this.isNotEmpty(this.initialResponse))
-            this.toastError({ text: this.$t("sarv_issue.message_answered") });
           else this.toastError({ text: this.$t("messages.checkForm") });
           resolve(false);
         }
@@ -298,7 +284,6 @@ const formManipulation = {
         },
       }).then(
         (response) => {
-          console.log(response);
           this.setLoadingState(false);
           if (response.status === 200) {
             if (response.data) {
@@ -341,7 +326,6 @@ const formManipulation = {
         },
         (errResponse) => {
           this.setLoadingState(false);
-          console.log("ERROR: " + JSON.stringify(errResponse));
           this.toastError({ text: this.$t("messages.uploadError") });
           resolve(undefined);
         }
@@ -419,8 +403,7 @@ const formManipulation = {
           }
         );
       } catch (e) {
-        console.log("Attachment cannot be added");
-        console.log(e);
+        console.error("formManipulation.js | ", e);
       }
     },
 
@@ -430,9 +413,6 @@ const formManipulation = {
       singleFileMetadata,
       totalAttachmentCount
     ) {
-      console.log(files);
-      console.log(totalAttachmentCount);
-      console.log(singleFileMetadata);
       let attachment_link = `attachment_link__${
         relatedObject === "location" ? "storage" : relatedObject
       }`;
@@ -490,7 +470,6 @@ const formManipulation = {
       try {
         this.saveData("attachment", formData, "add/attachment/").then(
           (savedObjectId) => {
-            console.log(savedObjectId);
             if (savedObjectId) {
               if (relatedObject === "reference")
                 this.loadAutocompleteFields(false, true);
@@ -502,8 +481,7 @@ const formManipulation = {
           }
         );
       } catch (e) {
-        console.log("Attachment cannot be added");
-        console.log(e);
+        console.error("formManipulation.js | ", e);
       }
     },
 
@@ -561,7 +539,6 @@ const formManipulation = {
           currentData.remarks = "(This record was added from specimen form)";
         }
       } else if (object === "specimen") {
-        console.log(originalObjectId);
         delete currentData.number;
         delete currentData.number_additional;
         delete currentData.series;
@@ -597,7 +574,6 @@ const formManipulation = {
     },
 
     reset(object, isEdit) {
-      console.log("reset");
       if (isEdit) this.$router.push({ path: "/" + object });
       else {
         this[object] = {};
@@ -733,7 +709,6 @@ const formManipulation = {
 
       if (choice === "COPY_TO_LOCALITY") {
         this.add(true, object, true, false, "locality").then((localityId) => {
-          console.log(localityId);
           if (this.isNotEmpty(localityId)) {
             this[object].locality.id = localityId;
             this.add(true, object, true).then(() => {
@@ -882,8 +857,6 @@ const formManipulation = {
           this.toastSuccess({ text: this.$t("attachment.imageRotated") });
         } else
           this.toastError({ text: this.$t("attachment.imageRotationFailed") });
-
-        console.log(response);
       }
     },
   },

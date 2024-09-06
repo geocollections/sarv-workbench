@@ -1,7 +1,6 @@
 import {
   fetchAccessions,
   fetchActiveLibraryList,
-  fetchActiveSarvIssues,
   fetchActiveSelectionSeriesList,
   fetchAgents,
   fetchAnalyses,
@@ -24,7 +23,6 @@ import {
   fetchRocks,
   fetchSamples,
   fetchSampleSeries,
-  fetchSarvIssues,
   fetchSelectionSeries,
   fetchSites,
   fetchSpecimens,
@@ -284,21 +282,6 @@ const actions = {
   FETCH_SAMPLE_SERIES({ commit, state }) {
     return fetchSampleSeries(state.activeSearchParams.search).then((resp) => {
       commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  FETCH_SARV_ISSUES({ commit, state, rootGetters }) {
-    return fetchSarvIssues(
-      state.activeSearchParams.search,
-      rootGetters["user/getUserId"]
-    ).then((resp) => {
-      commit("SET_SIDEBAR_LIST", resp);
-    });
-  },
-
-  fetchActiveSarvIssues({ commit, rootGetters }) {
-    return fetchActiveSarvIssues(rootGetters["user/getUserId"]).then((resp) => {
-      commit("SET_ACTIVE_SARV_ISSUES", resp);
     });
   },
 
