@@ -838,7 +838,7 @@ export default {
       this.$emit("change:headers", structuredClone(this.headers));
     },
     handleHeadersReset() {
-      this.headers = defaultHeaders();
+      this.headers = this.defaultHeaders();
     },
     handleValueClick(value) {
       this.$refs.filterMenu.openAndFocusInput(value.filterIndex);

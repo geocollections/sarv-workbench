@@ -175,7 +175,6 @@ import {
   postRequest,
 } from "../../assets/js/api/apiCalls";
 import toastMixin from "../../mixins/toastMixin";
-import { isEqual } from "lodash";
 import { mapGetters } from "vuex";
 
 export default {

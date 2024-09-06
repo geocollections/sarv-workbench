@@ -150,7 +150,7 @@ import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialo
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper.vue";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 export default {
   name: "DatasetAnalysisTable",
   components: {

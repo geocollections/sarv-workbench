@@ -112,7 +112,7 @@ import ObjectDoesNotExist from "../components/partial/errors/ObjectDoesNotExist"
 import { mapActions, mapState } from "vuex";
 import ObjectPermissions from "../components/partial/ObjectPermissions";
 import SpinnerWrapper from "../components/partial/SpinnerWrapper";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import ConfirmationDialog from "../components/partial/ConfirmationDialog";
 
 export default {

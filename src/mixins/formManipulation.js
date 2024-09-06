@@ -402,7 +402,9 @@ const formManipulation = {
             }
           }
         );
-      } catch (e) {}
+      } catch (e) {
+        console.error("formManipulation.js | ", e);
+      }
     },
 
     async addFileAsRelatedDataNew(
@@ -479,6 +481,7 @@ const formManipulation = {
           }
         );
       } catch (e) {
+        console.error("formManipulation.js | ", e);
       }
     },
 
@@ -854,7 +857,6 @@ const formManipulation = {
           this.toastSuccess({ text: this.$t("attachment.imageRotated") });
         } else
           this.toastError({ text: this.$t("attachment.imageRotationFailed") });
-
       }
     },
   },

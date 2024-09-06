@@ -653,7 +653,6 @@ export default {
         this.filledRelatedDataObjects &&
         this.filledRelatedDataObjects.length > 0
       ) {
-
         this.filledRelatedDataObjects.forEach(async (table) => {
           let updatedObjects = this.relatedData[table].results.map((item) => {
             return {

@@ -9,7 +9,7 @@ import {
   fetchRemoveRecordFromSelection,
   fetchRemoveReferenceFromLibrary,
 } from "../assets/js/api/apiCalls";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 
 const activeListMixin = {
   data: () => ({

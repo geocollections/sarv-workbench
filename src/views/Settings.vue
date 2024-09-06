@@ -332,7 +332,9 @@ export default {
     },
     async disconnectSocialAccountConfirm() {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/accounts/dj-rest-auth/socialaccounts/${this.disconnectItem.id}/disconnect/`
+        `${import.meta.env.VITE_API_URL}/accounts/dj-rest-auth/socialaccounts/${
+          this.disconnectItem.id
+        }/disconnect/`
       );
     },
     closeDelete() {

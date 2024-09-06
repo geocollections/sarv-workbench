@@ -155,7 +155,7 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import DateWrapper from "../../partial/inputs/DateWrapper";
 import { fetchListHistoryType } from "../../../assets/js/api/apiCalls";
 

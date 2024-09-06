@@ -115,7 +115,7 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 
 export default {
   name: "TaxonSubclassTable",
