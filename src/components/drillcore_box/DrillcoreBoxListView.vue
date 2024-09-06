@@ -41,11 +41,6 @@ export default {
     data: {
       type: Array,
     },
-    bodyActiveColor: {
-      type: String,
-      required: false,
-      default: "deep-orange",
-    },
     title: {
       type: Object,
     },

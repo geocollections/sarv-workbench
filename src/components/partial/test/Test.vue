@@ -160,7 +160,6 @@ export default {
           );
           this.requestResponse = response;
         } catch (err) {
-          console.log(err);
           this.requestResponse = "ERROR: Something went wrong";
         }
       }

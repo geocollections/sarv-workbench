@@ -641,7 +641,7 @@ import DatasetReferenceTable from "./relatedTables/DatasetReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import DatasetAnalysisTable from "./relatedTables/DatasetAnalysisTable";
 import Pagination from "@/components/partial/Pagination";
-import  orderBy  from "lodash/orderBy";
+import orderBy from "lodash/orderBy";
 import DatasetGeolocationTable from "@/components/dataset/relatedTables/DatasetGeolocationTable";
 import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 import {
@@ -666,11 +666,6 @@ export default {
   },
 
   props: {
-    isBodyActiveColorDark: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -734,9 +729,6 @@ export default {
   computed: {
     ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["datasetSearchParameters"]),
-    ...mapState("search", {
-      activeRelatedDataTab: (state) => state.activeRelatedDataTab.dataset,
-    }),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map((item) => {
@@ -1054,8 +1046,6 @@ export default {
         uploadableObject.initial_permissions = this.currentPermissions;
       }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 
@@ -1213,8 +1203,6 @@ export default {
             dataset: this.$route.params.id,
           };
         });
-
-        console.log(listOfObjects);
 
         let formData = new FormData();
         formData.append(

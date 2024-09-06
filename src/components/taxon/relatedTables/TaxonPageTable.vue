@@ -170,7 +170,7 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
@@ -370,7 +370,6 @@ export default {
 
     formatItem(item) {
       Object.keys(item).forEach((key) => {
-        console.log(key, item[key]);
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;

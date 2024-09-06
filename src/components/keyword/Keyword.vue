@@ -260,11 +260,6 @@ export default {
     CheckboxWrapper,
   },
   props: {
-    isBodyActiveColorDark: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -286,17 +281,6 @@ export default {
     ...mapState("search", ["keywordSearchParameters"]),
 
     computedRelatedTabs() {
-      // return this.relatedTabs.filter(tabs => {
-      //   if (this.keyword.is_primary) {
-      //     return (
-      //       tabs.name !== "keyword_relation" &&
-      //       this.relatedData.keyword_relation_reverse.count > 0
-      //     );
-      //   } else {
-      //     return tabs.name !== "keyword_relation_reverse";
-      //   }
-      // });
-
       return this.relatedTabs.filter(
         (tabs) => tabs.name !== "keyword_relation_reverse"
       );
@@ -511,8 +495,6 @@ export default {
       //   });
       // }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 

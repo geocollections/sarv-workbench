@@ -234,10 +234,6 @@ export default {
     drawerState: {
       required: true,
     },
-    currentUser: {
-      type: Object,
-      required: true,
-    },
     userShortcuts: {
       type: Array,
       required: false,
@@ -523,7 +519,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("user", ["isUserSuperuser"]),
     allowedRouteLinks() {
       return this.routeLinks.filter((link) =>
         this.isUserAllowedTo("add", link.name)

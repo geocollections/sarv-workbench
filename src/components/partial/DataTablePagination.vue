@@ -89,14 +89,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    itemsPerPageText: {
-      type: String,
-      default: "Items per page",
-    },
-    pageSelectText: {
-      type: String,
-      default: `Page 0 / 0`,
-    },
     goToText: {
       type: String,
       default: "Go to page",
@@ -104,10 +96,6 @@ export default {
     goToButtonText: {
       type: String,
       default: "Go",
-    },
-    selectPageId: {
-      type: String,
-      default: "page-select-btn",
     },
   },
   data() {

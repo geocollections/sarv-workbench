@@ -55,7 +55,6 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", ["updateSearchParameters"]),
     apiCall(timestamp) {
       return fetchAccessions(
         this.searchParameters,

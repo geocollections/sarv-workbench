@@ -332,7 +332,6 @@ export default {
           }
         },
         (errResponse) => {
-          console.log("ERROR: " + JSON.stringify(errResponse));
           this.toastError({ text: this.$t("messages.uploadError") });
         }
       );

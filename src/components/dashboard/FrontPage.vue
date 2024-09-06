@@ -35,17 +35,6 @@
       </v-col>
     </v-row>
     <div v-if="!isPermissionsEmpty">
-      <!-- MESSAGES -->
-      <v-row v-if="activeSarvIssues !== null && activeSarvIssues.count > 0">
-        <v-col>
-          <messages
-            :sarv-issues="activeSarvIssues"
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-          />
-        </v-col>
-      </v-row>
-
       <!-- MAP -->
       <v-row
         class="mt-0"
@@ -218,11 +207,9 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import SitesMap from "./SitesMap";
 import ImageViewWrapper from "../partial/image_view/ImageViewWrapper";
 import { fetchRecentFiles } from "../../assets/js/api/apiCalls";
-import Messages from "./Messages";
 
 export default {
   components: {
-    Messages,
     ImageViewWrapper,
     RecentActivity,
     SitesMap,
@@ -238,7 +225,6 @@ export default {
 
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
-    ...mapState("search", ["activeSarvIssues"]),
     ...mapGetters("user", [
       "getCurrentUser",
       "getPermissions",
@@ -266,14 +252,7 @@ export default {
     },
   },
 
-  created() {
-    if (this.isPermissionsEmpty) return;
-    this.fetchActiveSarvIssues();
-  },
-
   methods: {
-    ...mapActions("search", ["fetchActiveSarvIssues"]),
-
     getRecentFiles(paginateBy) {
       fetchRecentFiles(this.getCurrentUser.id, paginateBy).then((response) => {
         if (response.status === 200) {

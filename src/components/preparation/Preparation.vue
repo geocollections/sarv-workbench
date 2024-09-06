@@ -410,11 +410,6 @@ export default {
     FileInput,
   },
   props: {
-    isBodyActiveColorDark: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -690,8 +685,6 @@ export default {
         delete uploadableObject.related_data;
       if (saveAsNew) delete uploadableObject.related_data;
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 

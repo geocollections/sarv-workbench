@@ -649,14 +649,10 @@ export default {
     },
 
     changeRelatedDataLocation() {
-      console.log(this.filledRelatedDataObjects);
-
       if (
         this.filledRelatedDataObjects &&
         this.filledRelatedDataObjects.length > 0
       ) {
-        console.log("change");
-
         this.filledRelatedDataObjects.forEach(async (table) => {
           let updatedObjects = this.relatedData[table].results.map((item) => {
             return {
@@ -924,8 +920,6 @@ export default {
         uploadableObject.initial_permissions = this.currentPermissions;
       }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 

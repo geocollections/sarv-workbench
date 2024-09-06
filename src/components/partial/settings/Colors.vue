@@ -485,7 +485,6 @@ export default {
 
   methods: {
     ...mapActions("settings", [
-      "updateSettings",
       "updateBodyColor",
       "updateBodyDark",
       "updateBodyActiveColor",

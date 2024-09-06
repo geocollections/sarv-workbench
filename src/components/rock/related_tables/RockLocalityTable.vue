@@ -191,7 +191,7 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
 

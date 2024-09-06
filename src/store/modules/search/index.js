@@ -464,16 +464,6 @@ const state = {
     sortDesc: [true],
   },
   taxon_pageViewType: "table",
-  sarv_issueSearchParameters: {
-    title: null,
-    description: null,
-    from_user: null,
-    page: 1,
-    paginateBy: 50,
-    sortBy: ["response"],
-    sortDesc: [true],
-  },
-  sarv_issueViewType: "table",
   analysis_parameterSearchParameters: {
     id: null,
     parameter_name: null,
@@ -505,7 +495,6 @@ const state = {
     sortDesc: [true],
   },
   imagesetViewType: "table",
-  activeSarvIssues: null,
   lookUpTypes: [
     //exact, iexact, in, range, contains, icontains, startswith, istartswith, endswith, iendswith, gt, lt, gte, lte, isnull, hierarchy
     { text: "main.iexact", value: "iexact", symbol: "=" },

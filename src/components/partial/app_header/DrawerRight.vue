@@ -653,7 +653,6 @@ export default {
       "activeSearchParams",
       "sidebarList",
       "activeLibrary",
-      "activeSite",
       "activeSelectionSeries",
     ]),
 
@@ -726,7 +725,6 @@ export default {
     ...mapActions("search", [
       "activeSearchParamsNextPage",
       "activeSearchParamsPreviousPage",
-      "setSidebarUserAction",
       "getActiveSelectionSeriesList",
       "getActiveLibraryList",
       "resetActiveSelectionSeriesList",

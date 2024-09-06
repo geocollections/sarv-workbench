@@ -147,7 +147,7 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";

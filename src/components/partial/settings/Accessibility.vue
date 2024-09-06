@@ -25,11 +25,6 @@ import { mapActions, mapState } from "vuex";
 export default {
   name: "Accessibility",
   props: {
-    bodyDark: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
     bodyActiveColor: {
       type: String,
       required: false,

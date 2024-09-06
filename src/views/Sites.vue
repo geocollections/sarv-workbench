@@ -41,17 +41,6 @@ export default {
 
   mixins: [searchParametersMixin, tableHeaderMixin],
 
-  props: {
-    project: {
-      type: String,
-      default: null,
-    },
-
-    page: {
-      type: Number,
-      default: 1,
-    },
-  },
   data() {
     return {
       block: { search: true },

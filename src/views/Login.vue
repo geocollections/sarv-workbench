@@ -20,7 +20,6 @@
           <!--     workbench -->
           <!--   </span> -->
           <!-- </div> -->
-          <GlobalAlertNotification />
 
           <!-- <DevNotification /> -->
 
@@ -132,13 +131,11 @@ import authenticationMixin from "../mixins/authenticationMixin";
 import LangButtons from "../components/partial/LangButtons";
 import { mapState } from "vuex";
 import SiteIcons from "@/components/partial/SiteIcons";
-import GlobalAlertNotification from "@/components/partial/GlobalAlertNotification";
 import config from "@/config";
 import backgroundImg from "../assets/img/login_background.jpg";
 export default {
   name: "Login",
   components: {
-    GlobalAlertNotification,
     SiteIcons,
     LangButtons,
   },
@@ -171,7 +168,6 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["bodyColor"]),
     mainCss() {
       return {
         backgroundImage: `linear-gradient(

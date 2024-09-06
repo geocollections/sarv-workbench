@@ -86,9 +86,6 @@ export default {
       default: "deep-orange",
     },
   },
-  created() {
-    console.log(this.$dayjs);
-  },
   methods: {
     getSarvDoiUrl(doiIdentifier) {
       if (doiIdentifier)

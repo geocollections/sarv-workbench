@@ -80,12 +80,7 @@ export default {
   },
 
   computed: {
-    ...mapState("settings", [
-      "bodyColor",
-      "bodyDark",
-      "bodyActiveColor",
-      "bodyActiveColorDark",
-    ]),
+    ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
 
     ...mapState("admin", ["activeUsers"]),
   },

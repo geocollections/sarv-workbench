@@ -167,7 +167,7 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
-import  cloneDeep  from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep";
 import { fetchListRockPropertyType } from "../../../assets/js/api/apiCalls";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 

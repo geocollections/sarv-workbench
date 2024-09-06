@@ -25,13 +25,11 @@ axios.interceptors.request.use(function (config) {
     !config.url.includes("/idcard") &&
     !config.url.includes("/egf/")
   ) {
-    let csrftoken = Vue.$cookies.get("csrftoken");
     config.withCredentials = true;
-    config.headers["X-CSRFTOKEN"] = csrftoken;
     if (store.state?.user?.authUser?.token) {
       config.headers[
         "Authorization"
-      ] = `Token ${store?.state?.user?.authUser?.token}`;
+      ] = `Token ${store.state.user.authUser.token}`;
     }
   }
 
@@ -41,6 +39,8 @@ axios.interceptors.request.use(function (config) {
 // Add a response interceptor
 axios.interceptors.response.use(
   function (response) {
+    console.log("response status: ", response.status);
+
     if (response.status === 200 && response.config.url.includes("rwapi")) {
       // Showing Missing permissions message
       if (response.data.error_permissions) {
@@ -57,25 +57,14 @@ axios.interceptors.response.use(
         );
       }
 
-      // Destroying session and redirecting to login view
-      if (response.data.error_not_logged_in) {
-        Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
-        Vue.$cookies.remove("csrftoken", null, "geocollections.info");
-        Vue.prototype.toast.error("Please log back in", "Session expired", {
-          position: "topCenter",
-          timeout: 5000,
-          closeOnEscape: true,
-          pauseOnHover: false,
-          displayMode: "replace",
-        });
-        router.push({ path: "/" });
-      }
+      // Handling legacy error message
+      if (response.data.error_not_logged_in) teardown();
 
       // Showing link error message
       if (response.data.link_error) {
         Vue.prototype.toast.error(response.data.link_error, "Error", {
           position: "topCenter",
-          timeout: 99999999999,
+          timeout: 5000,
           pauseOnHover: false,
           displayMode: "replace",
         });
@@ -85,12 +74,27 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (error.status === 401) {
-      await store.dispatch("user/setAuthUser", null);
-    }
+    if (error.status === 401) teardown();
+
     return Promise.reject(error);
   }
 );
+
+function teardown() {
+  if (store?.state?.user?.authUser) {
+    Vue.prototype.toast.error("Palun logige uuesti sisse", "Sessioon aegus", {
+      position: "topCenter",
+      timeout: 5000,
+      closeOnEscape: true,
+      pauseOnHover: false,
+      displayMode: "replace",
+    });
+
+    store.dispatch("user/removeAuthUser");
+  }
+
+  if (window.location.pathname !== "/") router.push({ path: "/" });
+}
 
 async function get(child = "", options) {
   let url = api.url + child;
@@ -4522,63 +4526,6 @@ export function changeDatabaseGroup(database) {
 }
 /************************
  *** DATABASE GROUP END***
- ************************/
-
-/************************
- *** SARV_ISSUE START ***
- ************************/
-
-export function fetchSarvIssue(id, currentUserId) {
-  return get(
-    `sarv_issue/?or_search=to_user:${currentUserId};from_user:${currentUserId}&id=${id}&format=json`
-  );
-}
-
-export function fetchActiveSarvIssues(currentUserId) {
-  return get(
-    `sarv_issue/?to_user=${currentUserId}&or_search=response__isnull:true;response:%20&order_by=-id&format=json`
-  );
-}
-
-export function fetchSarvIssues(data, currentUserId, dynamicSearch) {
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.title !== null && data.title.trim().length > 0) {
-    searchFields += `title__${data.title__lookuptype || "icontains"}=${
-      data.title
-    }`;
-  }
-
-  if (data.description !== null && data.description.trim().length > 0) {
-    searchFields += `&description__${
-      data.description__lookuptype || "icontains"
-    }=${data.description}`;
-  }
-
-  if (data.from_user !== null && data.from_user.trim().length > 0) {
-    searchFields += `&from_user__username__${
-      data.from_user__lookuptype || "icontains"
-    }=${data.from_user}`;
-  }
-
-  searchFields += buildDynamicSearch(dynamicSearch);
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return get(
-      `sarv_issue/?${searchFields}&multi_search=value:${currentUserId};fields:to_user,from_user&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
-    );
-  } else {
-    return get(
-      `sarv_issue/?multi_search=value:${currentUserId};fields:to_user,from_user&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
-    );
-  }
-}
-
-/************************
- ***  SARV_ISSUE END  ***
  ************************/
 
 /************************

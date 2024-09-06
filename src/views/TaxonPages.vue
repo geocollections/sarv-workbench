@@ -61,7 +61,6 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", ["setActiveSearchParameters"]),
     apiCall(timestamp) {
       return fetchTaxonPages(
         this.searchParameters,

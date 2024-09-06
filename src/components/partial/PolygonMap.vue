@@ -297,9 +297,6 @@ export default {
           }
         });
 
-        // console.log(coordinates);
-        // console.log(newCoordinates);
-
         if (returnInStringFormat) return JSON.stringify(newCoordinates);
         else return newCoordinates;
       } else {

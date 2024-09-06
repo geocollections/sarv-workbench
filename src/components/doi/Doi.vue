@@ -910,7 +910,7 @@ import requestsMixin from "../../mixins/requestsMixin";
 import toastMixin from "../../mixins/toastMixin";
 import DiffMatchPatch from "diff-match-patch";
 import Pagination from "@/components/partial/Pagination";
-import  orderBy  from "lodash/orderBy";
+import orderBy from "lodash/orderBy";
 import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
 
 export default {
