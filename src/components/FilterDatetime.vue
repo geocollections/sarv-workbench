@@ -54,12 +54,6 @@ const TIME_FORMAT = "HH:mm:ss";
 
 export default {
   name: "FilterDatetime",
-  props: {
-    value: {
-      type: String,
-      required: true,
-    },
-  },
   data() {
     return {
       date: null,

@@ -318,7 +318,6 @@ export default {
       "bodyDark",
       "bodyActiveColor",
       "bodyActiveColorDark",
-      "showRecentUrls",
     ]),
     ...mapGetters("user", ["getPermissions"]),
   },

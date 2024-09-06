@@ -410,11 +410,6 @@ export default {
     FileInput,
   },
   props: {
-    isBodyActiveColorDark: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     bodyColor: {
       type: String,
       required: false,

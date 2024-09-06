@@ -75,7 +75,6 @@ export default {
     isLink: Boolean,
     routeObject: String,
     isSearchable: Boolean,
-    method: Function,
     useState: Boolean,
     useCustomState: Boolean,
     noCache: Boolean,

@@ -418,11 +418,6 @@ export default {
   },
 
   props: {
-    isBodyActiveColorDark: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -480,9 +475,6 @@ export default {
   computed: {
     ...mapGetters("user", ["getDatabaseId"]),
     ...mapState("search", ["drillcoreSearchParameters"]),
-    ...mapState("search", {
-      activeRelatedDataTab: (state) => state.activeRelatedDataTab.drillcore,
-    }),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map((item) => {

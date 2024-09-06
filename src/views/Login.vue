@@ -168,7 +168,6 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["bodyColor"]),
     mainCss() {
       return {
         backgroundImage: `linear-gradient(

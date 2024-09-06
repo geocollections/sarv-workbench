@@ -143,7 +143,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
+    ...mapState("settings", ["bodyActiveColor"]),
   },
 };
 </script>

@@ -83,10 +83,6 @@ export default {
       type: String,
       required: true,
     },
-    itemValue: {
-      type: String,
-      required: true,
-    },
     multiple: {
       type: Boolean,
       default: false,

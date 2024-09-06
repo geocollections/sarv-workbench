@@ -770,7 +770,6 @@ export default {
 
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
-    ...mapActions("detail", ["saveFields", "resetFields"]),
 
     setTab(type) {
       if (type) {
