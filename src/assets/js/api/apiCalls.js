@@ -39,8 +39,6 @@ axios.interceptors.request.use(function (config) {
 // Add a response interceptor
 axios.interceptors.response.use(
   function (response) {
-    console.log("response status: ", response.status);
-
     if (response.status === 200 && response.config.url.includes("rwapi")) {
       // Showing Missing permissions message
       if (response.data.error_permissions) {
