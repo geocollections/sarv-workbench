@@ -158,22 +158,6 @@
               <v-list-item-title>eMaapõu</v-list-item-title>
             </v-list-item>
 
-            <v-list-item :to="{ path: '/sarv_issue' }">
-              <v-list-item-icon>
-                <v-badge
-                  :content="getActiveSarvIssuesCount()"
-                  :value="getActiveSarvIssuesCount()"
-                  color="red"
-                  overlap
-                >
-                  <v-icon>far fa-envelope</v-icon>
-                </v-badge>
-              </v-list-item-icon>
-              <v-list-item-title>{{
-                $t("sarv_issue.my_messages")
-              }}</v-list-item-title>
-            </v-list-item>
-
             <v-list-item :to="{ path: '/admin' }" v-if="isUserSuperuser">
               <v-list-item-icon
                 ><v-icon>fa fa-user-shield</v-icon></v-list-item-icon
@@ -279,7 +263,6 @@ export default {
     ...mapGetters("user", ["getDatabaseId"]),
   },
   async created() {
-    this.fetchActiveSarvIssues();
     this.databaseGroups = (await fetchUserDatabaseGroups()).data;
   },
   methods: {
@@ -288,9 +271,6 @@ export default {
       "updateDrawerRightState",
       "updateLang",
     ]),
-    ...mapGetters("search", ["getActiveSarvIssuesCount"]),
-
-    ...mapActions("search", ["fetchActiveSarvIssues"]),
     ...mapActions("user", ["setActiveDatabase"]),
 
     changeLang(newLang) {

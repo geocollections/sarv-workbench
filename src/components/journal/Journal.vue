@@ -221,8 +221,6 @@ export default {
     },
 
     formatDataForUpload(objectToUpload) {
-      console.log("This object is sent in string format:");
-      console.log(objectToUpload);
       return JSON.stringify(objectToUpload);
     },
   },

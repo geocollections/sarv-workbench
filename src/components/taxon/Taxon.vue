@@ -1061,7 +1061,6 @@ export default {
             });
         } else uploadableObject.related_data.attachment = null;
       }
-      // console.log(uploadableObject.related_data);
 
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
@@ -1070,8 +1069,6 @@ export default {
         uploadableObject.taxon += " (copy)";
       }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 

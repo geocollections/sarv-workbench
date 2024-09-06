@@ -631,8 +631,6 @@ export default {
         } else uploadableObject.related_data.agent = null;
       }
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 

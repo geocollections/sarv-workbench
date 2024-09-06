@@ -370,7 +370,6 @@ export default {
 
     formatItem(item) {
       Object.keys(item).forEach((key) => {
-        console.log(key, item[key]);
         if (typeof item[key] === "undefined") item[key] = null;
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;

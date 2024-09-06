@@ -4267,8 +4267,6 @@ export default {
           if (attachmentHistory) {
             this.attachment = attachmentHistory;
             this.removeUnnecessaryFields(this.attachment, this.copyFields);
-            console.log("nanana");
-            console.log(this.attachment);
             if (this.isNotEmpty(this.attachment.specimen)) {
               this.autocomplete.specimen.push(this.attachment.specimen);
             }
@@ -4666,7 +4664,6 @@ export default {
           this.attachment.database = {
             id: this.getDatabaseId,
           };
-          console.log(this.attachment);
         }
       }
     },
@@ -5086,8 +5083,6 @@ export default {
       if (saveAsNew) {
         uploadableObject.initial_permissions = this.currentPermissions;
       }
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
 

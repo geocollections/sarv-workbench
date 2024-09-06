@@ -4,7 +4,6 @@ import Login from "./views/Login.vue";
 import Dashboard from "./views/Dashboard.vue";
 import OrcidCallback from "./views/OrcidCallback.vue";
 import OrcidConnect from "./views/OrcidConnect.vue";
-import { fetchIsLoggedIn, fetchLogout } from "./assets/js/api/apiCalls";
 import store from "./store";
 import FileResponse from "@/components/FileResponse.vue";
 Vue.use(Router);
@@ -46,15 +45,6 @@ const router = new Router({
       meta: {
         isLogin: true,
         requiresAuth: false,
-      },
-      beforeEnter: async (to, from, next) => {
-        const loginStateResponse = await fetchIsLoggedIn().then(
-          (response) => response,
-          (errResponse) => errResponse
-        );
-        const isLoggedIn = handleResponse(loginStateResponse);
-        if (isLoggedIn) next("/dashboard");
-        next();
       },
     },
     {
@@ -775,15 +765,6 @@ const router = new Router({
             },
           ],
         },
-        // {
-        //   path: "/site/import",
-        //   name: "Site import",
-        //   component: () => import("./views/Import.vue"),
-        //   meta: {
-        //     requiresAuth: true,
-        //     object: "site"
-        //   }
-        // },
         {
           path: "/library",
           component: () => import("./views/Libraries.vue"),
@@ -2376,69 +2357,6 @@ const router = new Router({
           ],
         },
         {
-          path: "/sarv_issue",
-          component: () => import("./views/SarvIssues.vue"),
-          meta: {
-            requiresAuth: true,
-          },
-          children: [
-            {
-              path: "",
-              component: () =>
-                import("./components/sarv_issue/SarvIssueTable.vue"),
-              meta: {
-                requiresAuth: true,
-                object: "sarv_issue",
-                isTableView: true,
-              },
-            },
-          ],
-        },
-        {
-          path: "/sarv_issue/:id(\\d+)",
-          props: true,
-          component: () => import("./views/EditForm.vue"),
-          meta: {
-            requiresAuth: true,
-          },
-          children: [
-            {
-              path: "",
-              component: () => import("./components/sarv_issue/SarvIssue.vue"),
-              meta: {
-                isEdit: true,
-                table: "sarv_issue",
-                heading: "editSarvIssue.heading",
-                requiresAuth: true,
-                object: "sarv_issue",
-              },
-            },
-          ],
-        },
-        {
-          path: "/sarv_issue/add",
-          component: () => import("./views/AddForm.vue"),
-          meta: {
-            requiresAuth: true,
-          },
-          children: [
-            {
-              path: "",
-              name: "Sarv issue add",
-              component: () => import("./components/sarv_issue/SarvIssue.vue"),
-              meta: {
-                isEdit: false,
-                addNew: "header.sarv_issue",
-                subForms: [
-                  { path: "/sarv_issue/add", name: "header.sarv_issue" },
-                ],
-                requiresAuth: true,
-                object: "sarv_issue",
-              },
-            },
-          ],
-        },
-        {
           path: "/analysis_parameter",
           component: () => import("./views/AnalysisParameters.vue"),
           meta: {
@@ -2640,126 +2558,18 @@ router.beforeEach(async (to, from, next) => {
     x: document.documentElement.scrollLeft,
     y: document.documentElement.scrollTop,
   };
+  const isLoggedIn = !!store?.state?.user?.authUser;
 
-  const loginStateResponse = await fetchIsLoggedIn().then(
-    (response) => response,
-    (errResponse) => errResponse
-  );
-  const isLoggedIn = handleResponse(loginStateResponse);
-  if (!isLoggedIn) {
-    if (to.meta.requiresAuth) {
-      if (to.params.dontShowSessionExpired === false) {
-        Vue.prototype.toast.error("Please log back in", "Session expired", {
-          position: "topCenter",
-          timeout: 5000,
-          closeOnEscape: true,
-          pauseOnHover: false,
-          displayMode: "replace",
-        });
-      }
-      removeBrowserDataAndLogout();
-      if (store.state?.user?.authUser) {
-        store.dispatch("user/removeAuthUser");
-        Vue.prototype.toast.error("Please log back in", "Session expired", {
-          position: "topCenter",
-          timeout: 5000,
-          closeOnEscape: true,
-          pauseOnHover: false,
-          displayMode: "replace",
-        });
-      }
-      next({ path: "/", query: { from: to.fullPath } });
-    }
+  // If logged in user tries to access login view again then redirect to dashboard
+  if (isLoggedIn && to.name === "login") next({ path: "/dashboard" });
+
+  // If user is not logged in but route requires auth then redirect to login view
+  if (!isLoggedIn && to.meta.requiresAuth) {
+    next({ path: "/" });
   }
+
   next();
-  // NOTE: old login checking logic. the one above should function the same but need to check if everything is ported over
-  // const loginPath = window.location.pathname;
-  //
-  // const loginStateResponse = await fetchIsLoggedIn().then(
-  //   (response) => response,
-  //   (errResponse) => errResponse
-  // );
-  // const isLoggedIn = handleResponse(loginStateResponse);
-  //
-  // if (isLoggedIn) {
-  //   const loggedInUser = getLoggedInUser(loginStateResponse);
-  //
-  //   if (checkCookiesAndStorage(loggedInUser)) {
-  //     if (to.meta.requiresAuth) next();
-  //     else {
-  //       if (to.name === "login") next({ path: "/dashboard" });
-  //       else next();
-  //     }
-  //   } else {
-  //     removeBrowserDataAndLogout();
-  //     next({ path: "/" });
-  //   }
-  // } else {
-  //   if (from.fullPath !== "/") {
-  //     if (to.params.dontShowSessionExpired === false) {
-  //       Vue.prototype.toast.error("Please log back in", "Session expired", {
-  //         position: "topCenter",
-  //         timeout: 5000,
-  //         closeOnEscape: true,
-  //         pauseOnHover: false,
-  //         displayMode: "replace",
-  //       });
-  //     }
-  //   }
-  //
-  //   if (to.meta.requiresAuth) next({ path: "/", query: { from: loginPath } });
-  //   else next();
-  // }
 });
-
-function checkCookiesAndStorage(user) {
-  if (user.length > 0) {
-    // Getting user data from cookies and storage
-    let csrftoken = Vue.$cookies.get("csrftoken");
-    let csrftokenLocalhost = Vue.$cookies.get("csrftokenLocalhost");
-    let authUser = store?.state?.user?.authUser;
-
-    if ((csrftoken || csrftokenLocalhost) && authUser) {
-      if (authUser.user) return authUser.user === user;
-      else return false; // User field does not exist in authUser
-    }
-    return false; // Some user data is missing or it has been tampered
-  } else return false; // User is empty
-}
-
-function removeBrowserDataAndLogout() {
-  // Deleting cookies and local storage
-  Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
-  Vue.$cookies.remove("csrftoken", null, "geocollections.info");
-
-  // Sending logout request to API
-  // fetchLogout().then(
-  //   () => {
-  //     Vue.prototype.toast.error("Please log back in", "Session expired", {
-  //       position: "topCenter",
-  //       timeout: 5000,
-  //       closeOnEscape: true,
-  //       pauseOnHover: false,
-  //       displayMode: "replace",
-  //     });
-  //   },
-  //   (errResponse) => {
-  //     console.log("removeBrowserDataAndLogout");
-  //     router.push("/");
-  //   }
-  // );
-}
-
-function handleResponse(response) {
-  if (response.status === 200) {
-    return !!response?.data?.results?.success;
-  } else return false;
-}
-
-function getLoggedInUser(response) {
-  if (handleResponse(response)) return response.data.results.user;
-  else return "";
-}
 
 function isSameRoute(routeTo, routeFrom) {
   let toPath = routeTo.path.split("/")[1];

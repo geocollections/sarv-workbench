@@ -234,8 +234,6 @@ export default {
         }
       });
 
-      console.log("This object is sent in string format:");
-      console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
   },

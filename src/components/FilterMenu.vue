@@ -162,7 +162,6 @@ export default {
     openAndFocusInput(index) {
       this.$refs.menuButton.$el.click();
       this.$nextTick(() => {
-        console.log(this.$refs.filterBuilder.$refs[`value${index}`]);
         setTimeout(
           () => this.$refs.filterBuilder.$refs[`value${index}`][0].focus(),
           100
