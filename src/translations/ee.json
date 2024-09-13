@@ -2810,7 +2810,8 @@
     "name_and_signature": "nimi ja allkiri",
     "signature": "allkiri",
     "date": "Kuupäev",
-    "loaner": "Laenu andja"
+    "loaner": "Laenu andja",
+    "digital_loan": "Digilaen"
   },
   "web_news": {
     "date_added": "Lisatud",

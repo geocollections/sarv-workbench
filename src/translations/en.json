@@ -2809,7 +2809,8 @@
     "name_and_signature": "name and signature",
     "signature": "signature",
     "date": "Date",
-    "loaner": "Loaner"
+    "loaner": "Loaner",
+    "digital_loan": "Digital loan"
   },
   "web_news": {
     "date_added": "Date added",
