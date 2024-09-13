@@ -10,7 +10,12 @@
         class="pa-2 d-print-none"
       />
       <template v-else-if="loan">
-        <v-row no-gutters v-if="loan.returned">
+        <v-row no-gutters v-if="loan.type === 7">
+          <v-col cols="12" class="red--text font-weight-bold">
+            {{ $t("loan_print.digital_loan") }}
+          </v-col>
+        </v-row>
+        <v-row no-gutters v-else-if="loan.returned">
           <v-col cols="12" class="red--text font-weight-bold">
             {{ $t("loan_print.has_returned") }}
           </v-col>
