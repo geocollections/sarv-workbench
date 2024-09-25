@@ -2765,6 +2765,7 @@
     "confirm_list_fill": "Are you sure you would like to add all specimens and/or samples from selection to loan list?",
     "fill_list_yes": "Yes, fill list",
     "relatedTables": {
+      "attachment_link": "Files",
       "loan_specimen": "Loan specimens",
       "loan_sample": "Loan samples"
     }

@@ -4120,6 +4120,16 @@ export function fetchListLoanDeliveryMethod() {
   return get(`list_loan_delivery_method/?format=json`);
 }
 
+export function fetchLoanAttachment(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `attachment/?attachment_link__loan__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+  );
+}
+
 export function fetchLoanSpecimens(id, searchParameters) {
   if (!searchParameters) {
     searchParameters = {
