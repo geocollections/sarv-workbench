@@ -2766,6 +2766,7 @@
     "confirm_list_fill": "Kas sa oled kindel, et soovid valikus olevad eksemplarid ja/või proovid lisada laenu nimekirja?",
     "fill_list_yes": "Jah, lisa nimekirja",
     "relatedTables": {
+      "attachment_link": "Failid",
       "loan_specimen": "Eksemplaride nimekiri",
       "loan_sample": "Proovide nimekiri"
     }

@@ -296,6 +296,18 @@
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
+          <div v-show="activeTab === 'attachment_link'">
+            <file-input
+              show-existing
+              :files-from-object="relatedData.attachment_link.results"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :record-options="$route.meta.isEdit"
+              :is-draggable="$route.meta.isEdit"
+              show-attachment-link
+            />
+          </div>
           <loan-specimen-table
             v-show="activeTab === 'loan_specimen'"
             :response="relatedData.loan_specimen"
@@ -447,6 +459,7 @@ import {
   fetchListLoanDeliveryMethod,
   fetchListLoanType,
   fetchLoan,
+  fetchLoanAttachment,
   fetchLoanSamples,
   fetchLoanSpecimens,
   fetchSelectedSpecimens,
@@ -467,11 +480,13 @@ import {
 } from "@/assets/js/api/apiCalls";
 import Pagination from "@/components/partial/Pagination";
 import ObjectPermissionsCreate from "../partial/ObjectPermissionsCreate.vue";
+import FileInput from "../partial/inputs/FileInput";
 
 export default {
   name: "Loan",
 
   components: {
+    FileInput,
     Pagination,
     LoanSpecimenTable,
     LoanSampleTable,
@@ -565,10 +580,11 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
+          { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "loan_specimen", iconClass: "fas fa-fish" },
           { name: "loan_sample", iconClass: "fas fa-vial" },
         ],
-        activeTab: "loan_specimen",
+        activeTab: "attachment_link",
         relatedData: this.setDefaultRelatedData(),
         initialPermissions: {
           groups_view: [],
@@ -697,7 +713,14 @@ export default {
       return {
         loan_specimen: { count: 0, results: [] },
         loan_sample: { count: 0, results: [] },
+        attachment_link: { count: 0, results: [] },
         searchParameters: {
+          attachment_link: {
+            page: 1,
+            paginateBy: 100,
+            sortBy: ["id"],
+            sortDesc: [true],
+          },
           loan_specimen: {
             page: 1,
             paginateBy: 10,
@@ -748,7 +771,34 @@ export default {
       });
 
       if (!this.$route.meta.isEdit) {
+        this.relatedTabs.forEach((tab) => {
+          if (this.relatedData[tab.name].count > 0)
+            if (tab.name === "attachment_link") {
+              uploadableObject.related_data.attachment =
+                this.relatedData.attachment_link.results.map((item) => {
+                  return { id: item.id };
+                });
+            } else {
+              uploadableObject.related_data[tab.name] =
+                this.relatedData[tab.name].results;
+
+              uploadableObject.related_data[tab.name].forEach((item) => {
+                Object.keys(item).forEach((key) => {
+                  if (typeof item[key] === "object" && item[key] !== null) {
+                    item[key] = item[key].id ? item[key].id : null;
+                  }
+                });
+              });
+            }
+        });
         uploadableObject.initial_permissions = this.initialPermissions;
+      } else {
+        if (this.relatedData.attachment_link.results.length > 0) {
+          uploadableObject.related_data.attachment =
+            this.relatedData.attachment_link.results.map((item) => {
+              return { id: item.id };
+            });
+        } else uploadableObject.related_data.attachment = null;
       }
       if (saveAsNew) {
         uploadableObject.initial_permissions = this.currentPermissions;
@@ -806,7 +856,12 @@ export default {
     loadRelatedData(object) {
       let query;
 
-      if (object === "loan_specimen") {
+      if (object === "attachment_link") {
+        query = fetchLoanAttachment(
+          this.$route.params.id,
+          this.relatedData.searchParameters.attachment_link
+        );
+      } else if (object === "loan_specimen") {
         query = fetchLoanSpecimens(
           this.$route.params.id,
           this.relatedData.searchParameters.loan_specimen
@@ -886,6 +941,15 @@ export default {
     customSelectionSeriesLabel(option) {
       if (option.name) return `${option.id} - ${option.name}`;
       else return `${option.id}`;
+    },
+
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "loan", singleFileMetadata);
+    },
+
+    addExistingFiles(files) {
+      // this.relatedData.attachment_link.count = files.length;
+      this.relatedData.attachment_link.results = files;
     },
   },
 };
