@@ -107,6 +107,22 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
+                    v-model="item.pages"
+                    :color="bodyActiveColor"
+                    :label="$t('sample_reference.pages')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.figures"
+                    :color="bodyActiveColor"
+                    :label="$t('sample_reference.figures')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
                     :label="$t('common.remarks')"
@@ -189,6 +205,8 @@ export default {
   data: () => ({
     headers: [
       { text: "common.reference", value: "reference" },
+      { text: "sample_reference.pages", value: "pages" },
+      { text: "sample_reference.figures", value: "figures" },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -200,6 +218,8 @@ export default {
     dialog: false,
     item: {
       reference: null,
+      pages: "",
+      figures: "",
       remarks: "",
     },
     isNewItem: true,
@@ -235,6 +255,8 @@ export default {
       this.item = {
         reference: null,
         remarks: "",
+        figures: "",
+        pages: "",
       };
     },
 
@@ -276,6 +298,8 @@ export default {
       }
 
       this.item.remarks = item.remarks;
+      this.item.pages = item.pages;
+      this.item.figures = item.figures;
 
       this.dialog = true;
     },

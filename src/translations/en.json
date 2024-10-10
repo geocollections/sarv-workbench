@@ -1155,6 +1155,10 @@
     "pages": "Pages",
     "figures": "Figures"
   },
+  "sample_reference": {
+    "pages": "Pages",
+    "figures": "Figures"
+  },
   "specimen_description": {
     "length": "Length",
     "width": "Width",

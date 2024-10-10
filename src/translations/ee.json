@@ -1155,6 +1155,10 @@
     "pages": "Leheküljed",
     "figures": "Joonised"
   },
+  "specimen_reference": {
+    "pages": "Leheküljed",
+    "figures": "Joonised"
+  },
   "specimen_description": {
     "length": "Pikkus",
     "width": "Laius",
