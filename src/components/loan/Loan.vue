@@ -793,12 +793,15 @@ export default {
         });
         uploadableObject.initial_permissions = this.initialPermissions;
       } else {
+        uploadableObject.related_data = {};
         if (this.relatedData.attachment_link.results.length > 0) {
           uploadableObject.related_data.attachment =
             this.relatedData.attachment_link.results.map((item) => {
               return { id: item.id };
             });
-        } else uploadableObject.related_data.attachment = null;
+        } else {
+          uploadableObject.related_data.attachment = null;
+        }
       }
       if (saveAsNew) {
         uploadableObject.initial_permissions = this.currentPermissions;
