@@ -43,6 +43,9 @@ export default {
 </script>
 
 <style>
+.cke_notifications_area {
+  display: none;
+}
 .cke_maximized {
   z-index: 100000 !important;
 }
