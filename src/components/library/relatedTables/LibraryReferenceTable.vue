@@ -38,7 +38,7 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.reference="{ item }">
+      <template v-slot:item.reference__reference="{ item }">
         <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
@@ -202,7 +202,7 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "common.reference", value: "reference" },
+      { text: "common.reference", value: "reference__reference" },
       { text: "reference.keywords", value: "keywords" },
       { text: "common.remarks", value: "remarks" },
       { text: "reference.sort", value: "sort" },
