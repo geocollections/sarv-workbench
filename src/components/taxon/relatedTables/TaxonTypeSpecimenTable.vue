@@ -260,18 +260,25 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
+                  <autocomplete-wrapper-new
                     v-model="item.specimen"
                     :color="bodyActiveColor"
-                    :items="autocomplete.specimen"
+                    :suggestions="autocomplete.specimen"
                     :loading="autocomplete.loaders.specimen"
-                    item-text="specimen_id"
                     :label="$t('taxon.specimen_sarv')"
-                    is-link
+                    item-text="specimen_id"
                     route-object="specimen"
-                    is-searchable
-                    v-on:search:items="autocompleteSpecimenSearch"
-                  />
+                    v-on:search:items="autocompleteTypeSpecimenSearch"
+                  >
+                    <template #item="{ item }">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{ item.specimen_id }}
+                        </v-list-item-title>
+                      </v-list-item-content>
+                      <v-chip>{{ item.database__acronym }}</v-chip>
+                    </template>
+                  </autocomplete-wrapper-new>
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
@@ -366,6 +373,7 @@
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import AutocompleteWrapperNew from "../../partial/inputs/AutocompleteWrapperNew";
 import { fetchTaxonTypeType } from "@/assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
@@ -377,6 +385,7 @@ export default {
   components: {
     RelatedDataDeleteDialog,
     AutocompleteWrapper,
+    AutocompleteWrapperNew,
     InputWrapper,
   },
 
