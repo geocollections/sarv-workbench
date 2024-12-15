@@ -222,6 +222,9 @@ const autocompleteMixin = {
     autocompleteSpecimenSearch(value) {
       this.$_autocompleteMixin_search(value, "specimen", "specimen");
     },
+    autocompleteTypeSpecimenSearch(value) {
+      this.$_autocompleteMixin_search(value, "specimen_all", "specimen");
+    },
     autocompleteSiteSearch(value) {
       this.$_autocompleteMixin_search(value, "site", "site");
     },
@@ -493,6 +496,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `sample_series/?multi_search=value:${value};fields:name;lookuptype:icontains&fields=id,name`;
     case "specimen":
       return `specimen/?multi_search=value:${value};fields:specimen_id,coll__number;lookuptype:icontains&fields=id,specimen_id,coll__number`;
+    case "specimen_all":
+      return `specimen/?all=true&multi_search=value:${value};fields:specimen_id,coll__number;lookuptype:icontains&fields=id,specimen_id,coll__number,database__acronym`;
     case "reference":
       return `reference/?multi_search=value:${value};fields:reference,id;lookuptype:icontains&fields=id,reference,pages,figures,remarks`;
     case "synonym":
