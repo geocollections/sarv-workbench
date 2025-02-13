@@ -267,6 +267,7 @@
                     :loading="autocomplete.loaders.specimen"
                     :label="$t('taxon.specimen_sarv')"
                     item-text="specimen_id"
+                    item-value="id"
                     route-object="specimen"
                     v-on:search:items="autocompleteTypeSpecimenSearch"
                   >
