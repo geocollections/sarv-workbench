@@ -16,6 +16,7 @@
       :search-input.sync="search"
       :label="label"
       :item-text="itemText"
+      :item-value="itemValue"
       :items="suggestions"
       :value="value"
       :rules="rules"
@@ -62,6 +63,10 @@ export default {
     itemText: {
       type: String,
       default: "name",
+    },
+    itemValue: {
+      type: String,
+      default: "value",
     },
     rules: {
       type: Array,

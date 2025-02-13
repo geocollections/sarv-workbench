@@ -157,6 +157,7 @@
                     :route="taxonRoute"
                     :label="$t('specimen_identification.taxon')"
                     item-text="taxon"
+                    item-value="id"
                     :rules="[taxonIsValidRule]"
                     :suggestions="autocomplete.taxon"
                     v-on:search:items="autocompleteTaxonSearch"
