@@ -289,7 +289,7 @@ export function fetchAttachments(data, dynamicSearch, timestamp) {
     searchFields +=
       "&multi_search=value:" +
       data.keyword +
-      ";fields:attachmentkeyword__keyword__keyword,description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:" +
+      ";fields:attachment_keyword__keyword__keyword,description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:" +
       `${data.keyword__lookuptype || "icontains"}&distinct=true`;
   }
 
