@@ -1311,7 +1311,7 @@ export function fetchDoi(id) {
 }
 
 export function fetchDoiUsingEGF(id) {
-  return get(`egf/${id}`, { customUrl: api.baseUrl });
+  return get(`egf/egf-api/${id}`, { customUrl: api.baseUrl });
 }
 
 export function fetchDoiResourceType() {
