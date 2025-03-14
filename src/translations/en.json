@@ -64,7 +64,9 @@
     "institution": "Institution",
     "pageSelect": "{current} / {count}",
     "headers": "Headers",
-    "filter": "Filter"
+    "filter": "Filter",
+    "title": "Title",
+    "title_en": "Title (EN)"
   },
   "main": {
     "pagination": "Show {num} results per page",

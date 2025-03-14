@@ -264,19 +264,14 @@ export default {
           links: [
             { title: "myFiles", path: "/attachment", icon: "far fa-folder" },
             {
-              title: "photoArchive",
-              path: "/attachment/add/photo_archive",
-              icon: "far fa-image",
+              title: "otherFiles",
+              path: "/attachment/add/other_file",
+              icon: "far fa-file",
             },
             {
               title: "specimenImage",
               path: "/attachment/add/specimen_image",
               icon: "fas fa-image",
-            },
-            {
-              title: "otherFiles",
-              path: "/attachment/add/other_file",
-              icon: "far fa-file",
             },
             {
               title: "digitisedReference",

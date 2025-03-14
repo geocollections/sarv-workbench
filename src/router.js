@@ -167,16 +167,12 @@ const router = new Router({
                 addNew: "header.addAttachment",
                 subForms: [
                   {
-                    path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive",
+                    path: "/attachment/add/other_file",
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/specimen_image",
                     name: "header.specimenImage",
-                  },
-                  {
-                    path: "/attachment/add/other_file",
-                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
@@ -196,16 +192,12 @@ const router = new Router({
                 addNew: "header.addAttachment",
                 subForms: [
                   {
-                    path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive",
+                    path: "/attachment/add/other_file",
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/specimen_image",
                     name: "header.specimenImage",
-                  },
-                  {
-                    path: "/attachment/add/other_file",
-                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
@@ -225,16 +217,12 @@ const router = new Router({
                 addNew: "header.addAttachment",
                 subForms: [
                   {
-                    path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive",
+                    path: "/attachment/add/other_file",
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/specimen_image",
                     name: "header.specimenImage",
-                  },
-                  {
-                    path: "/attachment/add/other_file",
-                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
@@ -254,16 +242,12 @@ const router = new Router({
                 addNew: "header.addAttachment",
                 subForms: [
                   {
-                    path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive",
+                    path: "/attachment/add/other_file",
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/specimen_image",
                     name: "header.specimenImage",
-                  },
-                  {
-                    path: "/attachment/add/other_file",
-                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
@@ -283,16 +267,12 @@ const router = new Router({
                 addNew: "header.addAttachment",
                 subForms: [
                   {
-                    path: "/attachment/add/photo_archive",
-                    name: "header.photoArchive",
+                    path: "/attachment/add/other_file",
+                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/specimen_image",
                     name: "header.specimenImage",
-                  },
-                  {
-                    path: "/attachment/add/other_file",
-                    name: "header.otherFiles",
                   },
                   {
                     path: "/attachment/add/digitised_reference",
