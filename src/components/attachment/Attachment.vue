@@ -2067,6 +2067,28 @@
 
           <transition>
             <div v-show="block.requiredFields" class="pa-1">
+              <!-- TITLE and TITLE_EN -->
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="attachment.title"
+                    :color="bodyActiveColor"
+                    :label="$t('common.title')"
+                    use-state
+                    :error="!isNotEmpty(attachment.title)"
+                    :success="isNotEmpty(attachment.title)"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="attachment.title_en"
+                    :color="bodyActiveColor"
+                    :label="$t('common.title_en')"
+                  />
+                </v-col>
+              </v-row>
+
               <!-- AUTHOR and AUTHOR FREE -->
               <v-row no-gutters>
                 <v-col cols="12" md="6" class="pa-1">
@@ -2115,23 +2137,44 @@
                 </v-col>
               </v-row>
 
-              <!-- DESCRIPTION and DESCRIPTION_EN -->
               <v-row no-gutters>
                 <v-col cols="12" md="6" class="pa-1">
-                  <textarea-wrapper
-                    v-model="attachment.description"
+                  <date-wrapper
+                    v-model="attachment.date_created"
                     :color="bodyActiveColor"
-                    :label="$t('common.description')"
-                    use-state
+                    :label="$t('attachment.dateCreated')"
+                    v-on:date:clear="attachment.date_created = null"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_created', $event)
+                    "
+                    :error="
+                      !(
+                        isNotEmpty(attachment.date_created) ||
+                        isNotEmpty(attachment.date_created_free)
+                      )
+                    "
+                    :success="
+                      isNotEmpty(attachment.date_created) ||
+                      isNotEmpty(attachment.date_created_free)
+                    "
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <textarea-wrapper
-                    v-model="attachment.description_en"
+                  <input-wrapper
+                    v-model="attachment.date_created_free"
                     :color="bodyActiveColor"
-                    :label="$t('common.description_en')"
-                    use-state
+                    :label="$t('attachment.dateCreatedFree')"
+                    :error="
+                      !(
+                        isNotEmpty(attachment.date_created) ||
+                        isNotEmpty(attachment.date_created_free)
+                      )
+                    "
+                    :success="
+                      isNotEmpty(attachment.date_created) ||
+                      isNotEmpty(attachment.date_created_free)
+                    "
                   />
                 </v-col>
               </v-row>
@@ -2168,36 +2211,102 @@
 
           <transition>
             <div v-show="block.info" class="pa-1">
-              <!-- DATE_CREATED, DATE_CREATED_FREE and TYPE -->
+              <!-- DESCRIPTION and DESCRIPTION_EN -->
+              <v-row no-gutters>
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
+                    v-model="attachment.description"
+                    :color="bodyActiveColor"
+                    :label="$t('common.description')"
+                  />
+                </v-col>
+              </v-row>
+
+              <v-row no-gutters>
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
+                    v-model="attachment.description_en"
+                    :color="bodyActiveColor"
+                    :label="$t('common.description_en')"
+                  />
+                </v-col>
+              </v-row>
               <v-row no-gutters>
                 <v-col cols="12" md="4" class="pa-1">
-                  <date-wrapper
-                    v-model="attachment.date_created"
+                  <autocomplete-wrapper
+                    v-model="attachment.locality"
                     :color="bodyActiveColor"
-                    :label="$t('attachment.dateCreated')"
-                    v-on:date:clear="attachment.date_created = null"
-                    v-on:date:update="
-                      updateUserInputtedDate('date_created', $event)
-                    "
+                    :items="autocomplete.locality"
+                    :loading="autocomplete.loaders.locality"
+                    :item-text="localityLabel"
+                    :label="$t('attachment.locality__locality')"
+                    is-link
+                    route-object="locality"
+                    is-searchable
+                    v-on:search:items="autocompleteLocalitySearch"
+                    @change="updateLocationUsingLocality"
                   />
                 </v-col>
 
                 <v-col cols="12" md="4" class="pa-1">
                   <input-wrapper
-                    v-model="attachment.date_created_free"
+                    v-model="attachment.image_place"
                     :color="bodyActiveColor"
-                    :label="$t('attachment.dateCreatedFree')"
+                    :label="$t('attachment.imagePlace')"
                   />
                 </v-col>
-
                 <v-col cols="12" md="4" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="attachment.type"
+                  <input-wrapper
+                    v-model="attachment.image_people"
                     :color="bodyActiveColor"
-                    :items="autocomplete.type"
-                    :loading="autocomplete.loaders.type"
-                    :item-text="commonLabel"
-                    :label="$t('common.type')"
+                    :label="$t('attachment.imagePeople')"
+                  />
+                </v-col>
+              </v-row>
+
+              <!-- KEYWORDS -->
+              <div class="d-flex justify-start flex-wrap pa-1">
+                <div class="mr-3 flex-grow-1">
+                  <autocomplete-wrapper
+                    v-model="relatedData.keyword"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.keyword"
+                    :loading="autocomplete.loaders.keyword"
+                    item-text="keyword"
+                    :label="$t('attachment.keywords')"
+                    is-link
+                    route-object="keyword"
+                    is-searchable
+                    v-on:search:items="autocompleteKeywordSearch"
+                    :multiple="true"
+                    v-on:chip:close="
+                      relatedData.keyword.splice(
+                        relatedData.keyword.indexOf($event),
+                        1
+                      )
+                    "
+                  />
+                </div>
+
+                <div class="mr-2 my-1 align-self-end">
+                  <v-btn
+                    icon
+                    :title="$t('add.new')"
+                    @click="windowOpenNewTab('/keyword/add')"
+                    target="newKeywordWindow"
+                    color="green"
+                  >
+                    <v-icon>fas fa-plus</v-icon>
+                  </v-btn>
+                </div>
+              </div>
+
+              <v-row no-gutters>
+                <v-col cols="12" class="pa-1">
+                  <input-wrapper
+                    v-model="attachment.tags"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.tags')"
                   />
                 </v-col>
               </v-row>
@@ -2364,43 +2473,56 @@
 
           <transition>
             <div v-show="block.description" class="pa-1">
-              <!-- KEYWORDS -->
-              <div class="d-flex justify-start flex-wrap pa-1">
-                <div class="mr-3 flex-grow-1">
-                  <autocomplete-wrapper
-                    v-model="relatedData.keyword"
+              <!-- STARS -->
+              <v-row no-gutters>
+                <v-col cols="12" md="4" class="pa-1">
+                  <select-wrapper
+                    v-model="attachment.stars"
                     :color="bodyActiveColor"
-                    :items="autocomplete.keyword"
-                    :loading="autocomplete.loaders.keyword"
-                    item-text="keyword"
-                    :label="$t('attachment.keywords')"
-                    is-link
-                    route-object="keyword"
-                    is-searchable
-                    v-on:search:items="autocompleteKeywordSearch"
-                    :multiple="true"
-                    v-on:chip:close="
-                      relatedData.keyword.splice(
-                        relatedData.keyword.indexOf($event),
-                        1
-                      )
-                    "
+                    :label="$t('attachment.stars')"
+                    :items="ratings"
+                    item-text="value"
+                    translation-prefix="main.rating"
+                    :clearable="false"
                   />
-                </div>
+                </v-col>
+                <v-col cols="12" md="4" class="pa-1">
+                  <div class="d-flex">
+                    <div class="flex-grow-1 mr-3">
+                      <autocomplete-wrapper
+                        v-model="attachment.imageset"
+                        :color="bodyActiveColor"
+                        :items="autocomplete.imageset"
+                        :loading="autocomplete.loaders.imageset"
+                        item-text="imageset_number"
+                        :label="$t('attachment.imageset')"
+                        is-link
+                        route-object="imageset"
+                        is-searchable
+                        v-on:search:items="autocompleteImagesetSearch"
+                      />
+                    </div>
 
-                <div class="mr-2 my-1 align-self-end">
-                  <v-btn
-                    icon
-                    :title="$t('add.new')"
-                    @click="windowOpenNewTab('/keyword/add')"
-                    target="newKeywordWindow"
-                    color="green"
-                  >
-                    <v-icon>fas fa-plus</v-icon>
-                  </v-btn>
-                </div>
-              </div>
-
+                    <div class="align-self-end">
+                      <v-btn
+                        icon
+                        :to="{ path: '/imageset/add' }"
+                        :title="$t('header.addImageset')"
+                        color="green"
+                      >
+                        <v-icon>fas fa-plus</v-icon>
+                      </v-btn>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col cols="12" md="4" class="pa-1">
+                  <input-wrapper
+                    v-model="attachment.image_number"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageNumber')"
+                  />
+                </v-col>
+              </v-row>
               <!-- LICENCE and COPYRIGHT -->
               <v-row no-gutters>
                 <v-col cols="12" md="6" class="pa-1">
@@ -2430,9 +2552,20 @@
                 </v-col>
               </v-row>
 
-              <!-- IMAGE_TYPE and DEVICE -->
+              <!-- TYPE, IMAGE_TYPE and DEVICE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" md="4" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="attachment.type"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.type"
+                    :loading="autocomplete.loaders.type"
+                    :item-text="commonLabel"
+                    :label="$t('common.type')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="4" class="pa-1">
                   <autocomplete-wrapper
                     v-model="attachment.image_type"
                     :color="bodyActiveColor"
@@ -2443,7 +2576,7 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" md="4" class="pa-1">
                   <input-wrapper
                     v-model="attachment.device_txt"
                     :color="bodyActiveColor"
@@ -3848,80 +3981,6 @@
       </div>
     </template>
 
-    <template v-slot:change-type>
-      <v-card
-        class="mt-2"
-        id="block-changeType"
-        :color="bodyColor.split('n-')[0] + 'n-5'"
-        elevation="4"
-      >
-        <v-card-title class="pt-2 pb-1">
-          <div
-            class="card-title--clickable"
-            @click="block.changeType = !block.changeType"
-          >
-            <span>{{ $t("attachment.changeType") }}</span>
-            <v-icon right>fas fa-exchange-alt</v-icon>
-          </div>
-          <v-spacer></v-spacer>
-          <v-btn
-            icon
-            @click="block.changeType = !block.changeType"
-            :color="bodyActiveColor"
-          >
-            <v-icon>{{
-              block.changeType ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <transition>
-          <div v-show="block.changeType" class="pa-1">
-            <!-- CHANGE TYPE -->
-            <v-row no-gutters>
-              <v-col cols="12" md="6" class="pa-1">
-                <select-wrapper
-                  v-model="attachment.specimen_image_attachment"
-                  :color="bodyActiveColor"
-                  :label="$t('attachment.changeType')"
-                  :items="computedChangeType"
-                  item-text="name"
-                  item-value="value"
-                  translation-prefix="attachment."
-                  :clearable="false"
-                />
-              </v-col>
-
-              <v-col cols="12" md="6" class="pa-1 align-self-center">
-                <span
-                  class="subtitle-1"
-                  v-if="
-                    currentAttachmentType !==
-                    getAttachmentTypeAsString(
-                      attachment.specimen_image_attachment
-                    )
-                  "
-                >
-                  <b>{{ $t("attachment." + currentAttachmentType) }} </b>
-                  <i class="fas fa-long-arrow-alt-right"></i>
-                  <b>
-                    {{
-                      $t(
-                        "attachment." +
-                          getAttachmentTypeAsString(
-                            attachment.specimen_image_attachment
-                          )
-                      )
-                    }}</b
-                  >
-                </span>
-              </v-col>
-            </v-row>
-          </div>
-        </transition>
-      </v-card>
-    </template>
-
     <template v-slot:checkbox>
       <div class="d-flex flex-wrap mt-2">
         <div class="pr-2">
@@ -4493,6 +4552,8 @@ export default {
           "specimen_image_attachment",
           "stars",
           "storage",
+          "title",
+          "title_en",
           "type",
           "database",
         ],
@@ -4561,7 +4622,7 @@ export default {
         requiredFields: {
           photo_archive: ["imageset"],
           specimen_image: [this.$route.meta.isEdit ? "specimen" : "author"],
-          other_file: ["description", "description_en"],
+          other_file: [],
           digitised_reference: ["reference"],
         },
         optionalFields: {

@@ -65,7 +65,9 @@
     "institution": "Asutus",
     "pageSelect": "{current} / {count}",
     "headers": "Päised",
-    "filter": "Filter"
+    "filter": "Filter",
+    "title": "Pealkiri",
+    "title_en": "Pealkiri (EN)"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -885,7 +887,7 @@
     "site__name_en": "Vaatluspunkt EN",
     "size_mb": "Suurus (MB)",
     "specimen_image_attachment": "Faili liik",
-    "tags": "Märksõnad",
+    "tags": "Märksõnad (tekstiline)",
     "type": "Tüüp",
     "uuid": "Uuid",
     "uuid_filename": "Uuid failinimi",
