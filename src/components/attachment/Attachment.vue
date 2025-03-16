@@ -1,6 +1,5 @@
 <template>
   <attachment-wrapper
-    :is-photo-archive="isPhotoArchive"
     :is-specimen-image="isSpecimenImage"
     :is-other-file="isOtherFile"
     :is-digitised-reference="isDigitisedReference"
@@ -109,1597 +108,6 @@
           </div>
         </transition>
       </v-card>
-    </template>
-
-    <template v-slot:photo-archive>
-      <div class="photo-archive">
-        <!-- REQUIRED INFO -->
-        <v-card
-          class="mt-2"
-          id="block-requiredFields"
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-          elevation="4"
-        >
-          <v-card-title class="pt-2 pb-1">
-            <div
-              class="card-title--clickable"
-              @click="block.requiredFields = !block.requiredFields"
-            >
-              <span>{{ $t("common.requiredFields") }}</span>
-              <v-icon right>fas fa-project-diagram</v-icon>
-            </div>
-            <v-spacer></v-spacer>
-            <v-btn
-              icon
-              @click="block.requiredFields = !block.requiredFields"
-              :color="bodyActiveColor"
-            >
-              <v-icon>{{
-                block.requiredFields ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
-            </v-btn>
-          </v-card-title>
-
-          <transition>
-            <div v-show="block.requiredFields" class="pa-1">
-              <!-- AUTHOR, AUTHOR FREE and IMAGESET -->
-              <v-row no-gutters>
-                <v-col cols="12" md="4" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="attachment.author"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.agent"
-                    :loading="autocomplete.loaders.agent"
-                    item-text="agent"
-                    :label="$t('attachment.author__agent')"
-                    use-custom-state
-                    :error="
-                      !(
-                        isNotEmpty(attachment.author) ||
-                        isNotEmpty(attachment.author_free)
-                      )
-                    "
-                    :success="
-                      isNotEmpty(attachment.author) ||
-                      isNotEmpty(attachment.author_free)
-                    "
-                    is-link
-                    route-object="agent"
-                    is-searchable
-                    v-on:search:items="autocompleteAgentSearch"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="4" class="pa-1">
-                  <input-wrapper
-                    v-model="attachment.author_free"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.author_free')"
-                    use-custom-state
-                    :error="
-                      !(
-                        isNotEmpty(attachment.author_free) ||
-                        isNotEmpty(attachment.author)
-                      )
-                    "
-                    :success="
-                      isNotEmpty(attachment.author_free) ||
-                      isNotEmpty(attachment.author)
-                    "
-                  />
-                </v-col>
-
-                <v-col cols="12" md="4" class="pa-1">
-                  <div class="d-flex">
-                    <div class="flex-grow-1 mr-3">
-                      <autocomplete-wrapper
-                        v-model="attachment.imageset"
-                        :color="bodyActiveColor"
-                        :items="autocomplete.imageset"
-                        :loading="autocomplete.loaders.imageset"
-                        item-text="imageset_number"
-                        :label="$t('attachment.imageset')"
-                        use-state
-                        is-link
-                        route-object="imageset"
-                        is-searchable
-                        v-on:search:items="autocompleteImagesetSearch"
-                      />
-                    </div>
-
-                    <div class="align-self-end">
-                      <v-btn
-                        icon
-                        :to="{ path: '/imageset/add' }"
-                        :title="$t('header.addImageset')"
-                        color="green"
-                      >
-                        <v-icon>fas fa-plus</v-icon>
-                      </v-btn>
-                    </div>
-                  </div>
-                </v-col>
-              </v-row>
-            </div>
-          </transition>
-        </v-card>
-
-        <!-- GENERAL INFO -->
-        <v-card
-          class="mt-2"
-          id="block-info"
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-          elevation="4"
-        >
-          <v-card-title class="pt-2 pb-1">
-            <div
-              class="card-title--clickable"
-              @click="block.info = !block.info"
-            >
-              <span>{{ $t("attachment.info") }}</span>
-              <v-icon right>fas fa-project-diagram</v-icon>
-            </div>
-            <v-spacer></v-spacer>
-            <v-btn
-              icon
-              @click="block.info = !block.info"
-              :color="bodyActiveColor"
-            >
-              <v-icon>{{
-                block.info ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
-            </v-btn>
-          </v-card-title>
-
-          <transition>
-            <div v-show="block.info" class="pa-1">
-              <!-- DATE_CREATED and DATE_CREATED_FREE -->
-              <v-row no-gutters>
-                <v-col cols="12" md="6" class="pa-1">
-                  <date-wrapper
-                    v-model="attachment.date_created"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.dateCreated')"
-                    v-on:date:clear="attachment.date_created = null"
-                    v-on:date:update="
-                      updateUserInputtedDate('date_created', $event)
-                    "
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="attachment.date_created_free"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.dateCreatedFree')"
-                  />
-                </v-col>
-              </v-row>
-
-              <!-- IMAGE PLACE and LOCALITY -->
-              <v-row no-gutters>
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="attachment.image_place"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.imagePlace')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="attachment.locality"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.locality"
-                    :loading="autocomplete.loaders.locality"
-                    :item-text="localityLabel"
-                    :label="$t('attachment.locality__locality')"
-                    is-link
-                    route-object="locality"
-                    is-searchable
-                    v-on:search:items="autocompleteLocalitySearch"
-                    @change="updateLocationUsingLocality"
-                  />
-                </v-col>
-              </v-row>
-            </div>
-          </transition>
-        </v-card>
-
-        <!-- MAP -->
-        <v-card
-          class="mt-2"
-          id="block-map"
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-          elevation="4"
-        >
-          <v-card-title class="pt-2 pb-1">
-            <div class="card-title--clickable" @click="block.map = !block.map">
-              <span>{{ $t("attachment.map") }}</span>
-              <v-icon right>fas fa-globe-americas</v-icon>
-            </div>
-            <v-spacer></v-spacer>
-            <v-btn
-              icon
-              @click="block.map = !block.map"
-              :color="bodyActiveColor"
-            >
-              <v-icon>{{
-                block.map ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
-            </v-btn>
-          </v-card-title>
-
-          <transition>
-            <div v-show="block.map" class="pa-1">
-              <!-- IMAGE LATITUDE and IMAGE LONGITUDE -->
-              <v-row no-gutters>
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="attachment.image_latitude"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.imageLatitude')"
-                    type="number"
-                    step="0.000001"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="attachment.image_longitude"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.imageLongitude')"
-                    type="number"
-                    step="0.000001"
-                  />
-                </v-col>
-              </v-row>
-
-              <!-- MAP SWITCH -->
-              <v-card
-                class="d-flex flex-row justify-start mb-1 mx-3"
-                flat
-                tile
-                :color="bodyColor.split('n-')[0] + 'n-5'"
-              >
-                <v-card
-                  flat
-                  tile
-                  class="align-self-center mr-2"
-                  :color="bodyColor.split('n-')[0] + 'n-5'"
-                >
-                  <v-switch
-                    v-model="myShowMap"
-                    hide-details
-                    id="map-switch"
-                    class="vuetify-switch my-1"
-                  ></v-switch>
-                </v-card>
-
-                <v-card
-                  flat
-                  tile
-                  class="align-self-center flex-grow-1"
-                  :color="bodyColor.split('n-')[0] + 'n-5'"
-                >
-                  <label class="m-0" :for="`map-switch`">
-                    <i class="far fa-map"></i>
-                    {{
-                      myShowMap ? $t("site.mapEnabled") : $t("site.mapDisabled")
-                    }}
-                  </label>
-                </v-card>
-
-                <v-btn
-                  class="align-self-center ml-2"
-                  v-if="attachment.image_latitude || attachment.image_longitude"
-                  small
-                  @click="resetLocation"
-                  color="error"
-                  >Reset location
-                  <v-icon right small>fas fa-map-marker-alt</v-icon>
-                </v-btn>
-              </v-card>
-
-              <!-- MAP -->
-              <v-row no-gutters v-show="myShowMap" class="mt-1">
-                <v-col cols="12" class="pa-1">
-                  <map-component
-                    :show-map="myShowMap && block.map"
-                    mode="single"
-                    module="attachment"
-                    v-bind:locations="[]"
-                    v-bind:location="{
-                      lat: attachment.image_latitude
-                        ? attachment.image_latitude.toString()
-                        : null,
-                      lng: attachment.image_longitude
-                        ? attachment.image_longitude.toString()
-                        : null,
-                    }"
-                    v-on:update-coordinates="updateLocation"
-                  ></map-component>
-                </v-col>
-              </v-row>
-            </div>
-          </transition>
-        </v-card>
-
-        <!-- IMAGE INFO -->
-        <v-card
-          class="mt-2"
-          id="block-description"
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-          elevation="4"
-        >
-          <v-card-title class="pt-2 pb-1">
-            <div
-              class="card-title--clickable"
-              @click="block.description = !block.description"
-            >
-              <span>{{ $t("common.description") }}</span>
-              <v-icon right>fas fa-image</v-icon>
-            </div>
-            <v-spacer></v-spacer>
-            <v-btn
-              icon
-              @click="block.description = !block.description"
-              :color="bodyActiveColor"
-            >
-              <v-icon>{{
-                block.description ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
-            </v-btn>
-          </v-card-title>
-
-          <transition>
-            <div v-show="block.description" class="pa-1">
-              <!-- OBJECT and PEOPLE -->
-              <v-row no-gutters>
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="attachment.image_object"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.imageObject')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="attachment.image_people"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.imagePeople')"
-                  />
-                </v-col>
-              </v-row>
-
-              <!-- DESCRIPTION -->
-              <v-row no-gutters>
-                <v-col cols="12" md="6" class="pa-1">
-                  <textarea-wrapper
-                    v-model="attachment.image_description"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.imageDescription')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <textarea-wrapper
-                    v-model="attachment.image_description_en"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.imageDescriptionEn')"
-                  />
-                </v-col>
-              </v-row>
-
-              <!-- KEYWORDS -->
-              <div class="d-flex justify-start flex-wrap pa-1">
-                <div class="mr-3 flex-grow-1">
-                  <autocomplete-wrapper
-                    v-model="relatedData.keyword"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.keyword"
-                    :loading="autocomplete.loaders.keyword"
-                    item-text="keyword"
-                    :label="$t('attachment.keywords')"
-                    is-link
-                    route-object="keyword"
-                    is-searchable
-                    v-on:search:items="autocompleteKeywordSearch"
-                    :multiple="true"
-                    v-on:chip:close="
-                      relatedData.keyword.splice(
-                        relatedData.keyword.indexOf($event),
-                        1
-                      )
-                    "
-                  />
-                </div>
-
-                <div class="mr-2 my-1 align-self-end">
-                  <v-btn
-                    icon
-                    color="green"
-                    :title="$t('add.new')"
-                    @click="windowOpenNewTab('/keyword/add')"
-                    target="newKeywordWindow"
-                  >
-                    <v-icon>fas fa-plus</v-icon>
-                  </v-btn>
-                </div>
-              </div>
-
-              <!-- LICENCE and COPYRIGHT -->
-              <v-row no-gutters>
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="attachment.licence"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.licence"
-                    :loading="autocomplete.loaders.licence"
-                    :item-text="licenceLabel"
-                    :label="$t('common.licence')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="attachment.copyright_agent"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.copyright_agent"
-                    :loading="autocomplete.loaders.copyright_agent"
-                    item-text="agent"
-                    :label="$t('attachment.copyrightAgent')"
-                    is-link
-                    route-object="agent"
-                    is-searchable
-                    v-on:search:items="autocompleteCopyrightAgentSearch"
-                  />
-                </v-col>
-              </v-row>
-
-              <!-- IMAGE_TYPE and DEVICE -->
-              <v-row no-gutters>
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="attachment.image_type"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.image_type"
-                    :loading="autocomplete.loaders.image_type"
-                    :item-text="commonLabel"
-                    :label="$t('attachment.imageType')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="attachment.device_txt"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.deviceTxt')"
-                  />
-                </v-col>
-              </v-row>
-
-              <!-- AGENT, DATE DIGITISED and STARS -->
-              <v-row no-gutters>
-                <v-col cols="12" md="4" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="attachment.agent_digitised"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.agent_digitised"
-                    :loading="autocomplete.loaders.agent_digitised"
-                    item-text="agent"
-                    :label="$t('attachment.agentDigitised')"
-                    is-link
-                    route-object="agent"
-                    is-searchable
-                    v-on:search:items="autocompleteAgentDigitisedSearch"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="4" class="pa-1">
-                  <date-wrapper
-                    v-model="attachment.date_digitised"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.dateDigitised')"
-                    v-on:date:clear="attachment.date_digitised = null"
-                    v-on:date:update="
-                      updateUserInputtedDate('date_digitised', $event)
-                    "
-                  />
-                </v-col>
-
-                <v-col cols="12" md="4" class="pa-1">
-                  <select-wrapper
-                    v-model="attachment.stars"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.stars')"
-                    :items="ratings"
-                    item-text="value"
-                    translation-prefix="main.rating"
-                    :clearable="false"
-                  />
-                </v-col>
-              </v-row>
-            </div>
-          </transition>
-        </v-card>
-
-        <!-- RELATED DATA -->
-        <v-card
-          class="mt-2"
-          id="block-relatedData"
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-          elevation="4"
-        >
-          <v-card-title class="pt-2 pb-1">
-            <div
-              class="card-title--clickable"
-              @click="block.relatedData = !block.relatedData"
-            >
-              <span>{{ $t("attachment.relatedData") }}</span>
-              <v-icon right>fas fa-table</v-icon>
-            </div>
-            <v-spacer></v-spacer>
-            <v-btn
-              icon
-              @click="block.relatedData = !block.relatedData"
-              :color="bodyActiveColor"
-            >
-              <v-icon>{{
-                block.relatedData ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
-            </v-btn>
-          </v-card-title>
-
-          <transition>
-            <div v-show="block.relatedData" class="pa-1">
-              <v-row no-gutters>
-                <v-col cols="12" md="6" class="pa-1">
-                  <select-wrapper
-                    v-model="selectedRelatedTable"
-                    :color="bodyActiveColor"
-                    :label="$t('attachment.relatedData')"
-                    :items="relatedTabs"
-                    item-text="name_short"
-                    translation-prefix="attachment.relatedTables.attachment_link__"
-                  />
-                </v-col>
-
-                <v-col
-                  cols="12"
-                  md="6"
-                  class="pa-1"
-                  v-if="selectedRelatedTable"
-                >
-                  <autocomplete-wrapper
-                    v-model="
-                      relatedData['attachment_link__' + selectedRelatedTable]
-                    "
-                    :color="bodyActiveColor"
-                    :items="
-                      autocomplete['attachment_link__' + selectedRelatedTable]
-                    "
-                    :loading="
-                      autocomplete.loaders[
-                        'attachment_link__' + selectedRelatedTable
-                      ]
-                    "
-                    :item-text="customLabelForRelatedData"
-                    :label="
-                      $t(
-                        'attachment.relatedTables.attachment_link__' +
-                          selectedRelatedTable
-                      )
-                    "
-                    is-link
-                    is-searchable
-                    :route-object="selectedRelatedTable"
-                    v-on:search:items="
-                      autocompleteRelatedDataSearch(
-                        $event,
-                        selectedRelatedTable
-                      )
-                    "
-                    attachment-related-data
-                    :multiple="true"
-                    v-on:chip:close="
-                      relatedData[
-                        'attachment_link__' + selectedRelatedTable
-                      ].splice(
-                        relatedData[
-                          'attachment_link__' + selectedRelatedTable
-                        ].indexOf($event),
-                        1
-                      )
-                    "
-                  />
-                </v-col>
-              </v-row>
-
-              <!-- SHOWING RELATED_DATA -->
-              <v-row no-gutters>
-                <!-- COLLECTION -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__collection &&
-                    relatedData.attachment_link__collection.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attachment_link__collection")
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("common.name") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__collection"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'collection',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.name
-                                : entity.name_en
-                            }}
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__collection.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- SPECIMEN -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__specimen &&
-                    relatedData.attachment_link__specimen.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attachment_link__specimen")
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("specimen.specimenNumber") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__specimen"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'specimen',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>
-                            <span v-if="entity.coll__number !== null"
-                              >{{ entity.coll__number.split(" ")[0] }}
-                              {{ entity.specimen_id }}</span
-                            >
-                            <span v-else>{{ entity.specimen_id }}</span>
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__specimen.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- SAMPLE -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__sample &&
-                    relatedData.attachment_link__sample.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{ $t("attachment.relatedTables.attachment_link__sample") }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("sample.number") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__sample"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'sample',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>{{ entity.number }}</td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__sample.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- SAMPLE_SERIES -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__sample_series &&
-                    relatedData.attachment_link__sample_series.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t(
-                        "attachment.relatedTables.attachment_link__sample_series"
-                      )
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("common.name") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__sample_series"
-                          :key="index"
-                        >
-                          <td>{{ entity.id }}</td>
-
-                          <td>{{ entity.name }}</td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__sample_series.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- ANALYSIS -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__analysis &&
-                    relatedData.attachment_link__analysis.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attachment_link__analysis")
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("analysis.sample") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__analysis"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'analysis',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>
-                            <span
-                              v-if="
-                                entity.sample__number !== null &&
-                                entity.sample__number
-                              "
-                              >{{ entity.sample__number }}</span
-                            >
-                            <span v-else>{{ entity.sample__id }}</span>
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__analysis.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- DATASET -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__dataset &&
-                    relatedData.attachment_link__dataset.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attachment_link__dataset")
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("common.name") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__dataset"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'dataset',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.name
-                                : entity.name_en
-                            }}
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__dataset.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- DOI -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__doi &&
-                    relatedData.attachment_link__doi.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{ $t("attachment.relatedTables.attachment_link__doi") }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("doi.identifier") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__doi"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'doi',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>{{ entity.identifier }}</td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__doi.splice(index, 1)
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- LOCALITY -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__locality &&
-                    relatedData.attachment_link__locality.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attachment_link__locality")
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("locality.locality") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__locality"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'locality',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.locality
-                                : entity.locality_en
-                            }}
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__locality.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- DRILLCORE -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__drillcore &&
-                    relatedData.attachment_link__drillcore.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attachment_link__drillcore")
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("drillcore.drillcore") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__drillcore"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'drillcore',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.drillcore
-                                : entity.drillcore_en
-                            }}
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__drillcore.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- DRILLCORE_BOX -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__drillcore_box &&
-                    relatedData.attachment_link__drillcore_box.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t(
-                        "attachment.relatedTables.attachment_link__drillcore_box"
-                      )
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("drillcore_box.drillcore") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__drillcore_box"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'corebox',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.drillcore__drillcore
-                                : entity.drillcore__drillcore_en
-                            }}
-                            - {{ entity.number }}
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__drillcore_box.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- PREPARATION -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__preparation !== null &&
-                    relatedData.attachment_link__preparation.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t(
-                        "attachment.relatedTables.attachment_link__preparation"
-                      )
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("preparation.number") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__preparation"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'preparation',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>{{ entity.preparation_number }}</td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__preparation.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- REFERENCE -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__reference !== null &&
-                    relatedData.attachment_link__reference.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{ $t("common.reference") }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("common.reference") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__reference"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
-                                openGeoInNewWindow({
-                                  object: 'reference',
-                                  id: entity.id,
-                                })
-                              "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
-
-                          <td>{{ entity.reference }}</td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__reference.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- STORAGE -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__storage !== null &&
-                    relatedData.attachment_link__storage.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attachment_link__storage")
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("storage.storage") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__storage"
-                          :key="index"
-                        >
-                          <td>{{ entity.id }}</td>
-
-                          <td>
-                            <span v-if="entity.contents !== null"
-                              >{{ entity.location }} -
-                              {{ entity.contents }}</span
-                            >
-                            <span v-else>{{ entity.location }}</span>
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__storage.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- PROJECT -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__project !== null &&
-                    relatedData.attachment_link__project.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{
-                      $t("attachment.relatedTables.attachment_link__project")
-                    }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("common.name") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__project"
-                          :key="index"
-                        >
-                          <td>
-                            <router-link
-                              :to="{ path: '/project/' + entity.id }"
-                              >{{ entity.id }}</router-link
-                            >
-                          </td>
-
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.name
-                                : entity.name_en
-                            }}
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__project.splice(
-                                index,
-                                1
-                              )
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- SITE -->
-                <div
-                  class="col-sm-6 pa-1"
-                  v-if="
-                    relatedData.attachment_link__site !== null &&
-                    relatedData.attachment_link__site.length > 0
-                  "
-                >
-                  <p class="h4">
-                    {{ $t("attachment.relatedTables.attachment_link__site") }}
-                  </p>
-
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("common.name") }}</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr
-                          v-for="(
-                            entity, index
-                          ) in relatedData.attachment_link__site"
-                          :key="index"
-                        >
-                          <td>
-                            <router-link :to="{ path: '/site/' + entity.id }">{{
-                              entity.id
-                            }}</router-link>
-                          </td>
-
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.name
-                                : entity.name_en
-                            }}
-                          </td>
-
-                          <td
-                            class="text-center delete-relation"
-                            @click="
-                              relatedData.attachment_link__site.splice(index, 1)
-                            "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </v-row>
-            </div>
-          </transition>
-        </v-card>
-      </div>
     </template>
 
     <template v-slot:specimen-image>
@@ -2073,7 +481,7 @@
                   <input-wrapper
                     v-model="attachment.title"
                     :color="bodyActiveColor"
-                    :label="$t('common.title')"
+                    :label="$t('attachment.title')"
                     use-state
                     :error="!isNotEmpty(attachment.title)"
                     :success="isNotEmpty(attachment.title)"
@@ -2084,7 +492,7 @@
                   <input-wrapper
                     v-model="attachment.title_en"
                     :color="bodyActiveColor"
-                    :label="$t('common.title_en')"
+                    :label="$t('attachment.title_en')"
                   />
                 </v-col>
               </v-row>
@@ -2257,9 +665,9 @@
                 </v-col>
                 <v-col cols="12" md="4" class="pa-1">
                   <input-wrapper
-                    v-model="attachment.image_people"
+                    v-model="attachment.tags"
                     :color="bodyActiveColor"
-                    :label="$t('attachment.imagePeople')"
+                    :label="$t('attachment.tags')"
                   />
                 </v-col>
               </v-row>
@@ -2304,9 +712,9 @@
               <v-row no-gutters>
                 <v-col cols="12" class="pa-1">
                   <input-wrapper
-                    v-model="attachment.tags"
+                    v-model="attachment.image_people"
                     :color="bodyActiveColor"
-                    :label="$t('attachment.tags')"
+                    :label="$t('attachment.imagePeople')"
                   />
                 </v-col>
               </v-row>
@@ -4157,12 +2565,6 @@ export default {
       },
     },
 
-    isPhotoArchive() {
-      return this.$route.meta.isEdit
-        ? this.attachment.specimen_image_attachment === 2
-        : this.$route.meta.child === "photo_archive";
-    },
-
     isSpecimenImage() {
       return this.$route.meta.isEdit
         ? this.attachment.specimen_image_attachment === 1
@@ -4171,7 +2573,8 @@ export default {
 
     isOtherFile() {
       return this.$route.meta.isEdit
-        ? this.attachment.specimen_image_attachment === 3
+        ? this.attachment.specimen_image_attachment === 3 ||
+            this.attachment.specimen_image_attachment === 2
         : this.$route.meta.child === "other_file";
     },
 
@@ -4182,56 +2585,49 @@ export default {
     },
 
     recordOptions() {
-      if (this.isPhotoArchive) return true;
-      else if (this.isSpecimenImage) return true;
+      if (this.isSpecimenImage) return true;
       else if (this.isOtherFile) return true;
       else if (this.isDigitisedReference) return false;
       else return true;
     },
 
     recordImage() {
-      if (this.isPhotoArchive) return true;
-      else if (this.isSpecimenImage) return true;
+      if (this.isSpecimenImage) return true;
       else if (this.isOtherFile) return true;
       else if (this.isDigitisedReference) return false;
       else return true;
     },
 
     recordVideo() {
-      if (this.isPhotoArchive) return false;
-      else if (this.isSpecimenImage) return true;
+      if (this.isSpecimenImage) return true;
       else if (this.isOtherFile) return true;
       else if (this.isDigitisedReference) return false;
       else return true;
     },
 
     recordAudio() {
-      if (this.isPhotoArchive) return false;
-      else if (this.isSpecimenImage) return true;
+      if (this.isSpecimenImage) return true;
       else if (this.isOtherFile) return true;
       else if (this.isDigitisedReference) return false;
       else return true;
     },
 
     fileInputFormat() {
-      if (this.isPhotoArchive) return "image/*";
-      else if (this.isSpecimenImage) return "*/*";
+      if (this.isSpecimenImage) return "*/*";
       else if (this.isOtherFile) return "*/*";
       else if (this.isDigitisedReference) return "application/pdf";
       else return "image/*";
     },
 
     acceptMultiple() {
-      if (this.isPhotoArchive) return true;
-      else if (this.isSpecimenImage) return true;
+      if (this.isSpecimenImage) return true;
       else if (this.isOtherFile) return true;
       else if (this.isDigitisedReference) return true;
       else return true;
     },
 
     currentAttachmentType() {
-      if (this.isAttachmentPhotoArchive) return "photoArchive";
-      else if (this.isAttachmentSpecimenImage) return "specimenImage";
+      if (this.isAttachmentSpecimenImage) return "specimenImage";
       else if (this.isAttachmentOtherFile) return "otherFiles";
       else if (this.isAttachmentDigitisedReference) return "digitisedReference";
       else return "otherFiles";
@@ -4305,10 +2701,7 @@ export default {
 
           let attachmentHistory;
           let keywords;
-          if (this.isPhotoArchive) {
-            attachmentHistory = cloneDeep(this.photoArchive);
-            keywords = cloneDeep(this.photoArchiveKeywords);
-          } else if (this.isSpecimenImage) {
+          if (this.isSpecimenImage) {
             attachmentHistory = cloneDeep(this.specimenImage);
             keywords = cloneDeep(this.specimenImageKeywords);
           } else if (this.isOtherFile) {
@@ -4349,17 +2742,6 @@ export default {
             this.autocomplete.keyword = this.relatedData.keyword;
           }
 
-          if (this.isPhotoArchive) {
-            if (this.$route.params.imageset) {
-              this.$set(
-                this.attachment,
-                "imageset",
-                this.$route.params.imageset
-              );
-              this.autocomplete.imageset.push(this.attachment.imageset);
-            }
-          }
-
           if (!this.isDigitisedReference) {
             this.$set(this.attachment, "author", {
               id: this.getCurrentUser.id,
@@ -4377,11 +2759,11 @@ export default {
       handler: function (newVal) {
         if (this.isNotEmpty(newVal)) {
           this.isAttachmentLocked = newVal.is_locked;
-          this.isAttachmentPhotoArchive =
-            newVal.specimen_image_attachment === 2;
           this.isAttachmentSpecimenImage =
             newVal.specimen_image_attachment === 1;
-          this.isAttachmentOtherFile = newVal.specimen_image_attachment === 3;
+          this.isAttachmentOtherFile =
+            newVal.specimen_image_attachment === 3 ||
+            newVal.specimen_image_attachment === 2;
           this.isAttachmentDigitisedReference =
             newVal.specimen_image_attachment === 4;
         }
@@ -4541,6 +2923,7 @@ export default {
           "image_place",
           "image_scalebar",
           "image_type",
+          "image_number",
           "imageset",
           "is_locked",
           "is_private",
@@ -4556,6 +2939,7 @@ export default {
           "title_en",
           "type",
           "database",
+          "tags",
         ],
         autocomplete: {
           loaders: {
@@ -4646,7 +3030,6 @@ export default {
         files: [],
         selectedRelatedTable: null,
         isAttachmentLocked: false,
-        isAttachmentPhotoArchive: false,
         isAttachmentSpecimenImage: false,
         isAttachmentOtherFile: false,
         isAttachmentDigitisedReference: false,
@@ -5042,13 +3425,7 @@ export default {
       let uploadableObject = cloneDeep(objectToUpload);
 
       if (!this.$route.meta.isEdit) {
-        if (this.isPhotoArchive) {
-          this.saveFields({ key: "photoArchive", value: objectToUpload });
-          this.saveFields({
-            key: "photoArchiveKeywords",
-            value: objectToUpload,
-          });
-        } else if (this.isSpecimenImage) {
+        if (this.isSpecimenImage) {
           this.saveFields({ key: "specimenImage", value: objectToUpload });
           this.saveFields({
             key: "specimenImageKeywords",
@@ -5112,7 +3489,7 @@ export default {
         else uploadableObject.related_data.keyword = null;
       }
 
-      if (this.isPhotoArchive || this.isOtherFile) {
+      if (this.isOtherFile) {
         this.relatedTabs.forEach((tab) => {
           if (
             this.relatedData[tab.name] &&
@@ -5238,10 +3615,7 @@ export default {
     },
 
     onMetadataLoaded(metadata) {
-      if (
-        metadata &&
-        (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile)
-      ) {
+      if (metadata && (this.isSpecimenImage || this.isOtherFile)) {
         // DATE
         if (metadata.DateTimeOriginal) {
           this.attachment.date_created = this.formatMetadataDate(
@@ -5285,7 +3659,7 @@ export default {
         }
 
         // GPS DATA
-        if (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile) {
+        if (this.isSpecimenImage || this.isOtherFile) {
           if (metadata.GPSLatitude) {
             this.attachment.image_latitude =
               metadata.GPSLatitude.description.toFixed(6);
@@ -5359,10 +3733,7 @@ export default {
     },
 
     clearSavedFields() {
-      if (this.isPhotoArchive) {
-        this.resetFields("photoArchive");
-        this.resetFields("photoArchiveKeywords");
-      } else if (this.isSpecimenImage) {
+      if (this.isSpecimenImage) {
         this.resetFields("specimenImage");
         this.resetFields("specimenImageKeywords");
       } else if (this.isOtherFile) {
@@ -5467,9 +3838,7 @@ export default {
         },
         stars: 0,
       };
-      if (this.isPhotoArchive) defaultFields.specimen_image_attachment = 2;
-      else if (this.isSpecimenImage)
-        defaultFields.specimen_image_attachment = 1;
+      if (this.isSpecimenImage) defaultFields.specimen_image_attachment = 1;
       else if (this.isOtherFile) defaultFields.specimen_image_attachment = 3;
       else if (this.isDigitisedReference) {
         defaultFields.specimen_image_attachment = 4;
