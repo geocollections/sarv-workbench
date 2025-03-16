@@ -62,12 +62,16 @@
       <span v-else>{{ item.author_free }}</span>
     </template>
 
+    <template v-slot:item.title="{ item }">
+      <span v-if="item.title">{{ item.title }}</span>
+    </template>
+
     <template v-slot:item.date_created="{ item }">
       <span v-if="item.date_created">{{ item.date_created }}</span>
       <span v-else>{{ item.date_created_free }}</span>
     </template>
 
-    <template v-slot:item.specimen="{ item }">
+    <template v-slot:item.specimen__id="{ item }">
       <router-link
         :to="{ path: '/specimen/' + item.specimen }"
         :title="$t('editSpecimen.editMessage')"
@@ -75,6 +79,16 @@
         :class="`${bodyActiveColor}--text`"
       >
         {{ item.specimen }}
+      </router-link>
+    </template>
+
+    <template v-slot:item.imageset__id="{ item }">
+      <router-link
+        :to="{ path: '/imageset/' + item.imageset }"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
+      >
+        {{ item.imageset }}
       </router-link>
     </template>
 

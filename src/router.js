@@ -159,7 +159,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              redirect: "photo_archive",
+              redirect: "other_file",
               name: "Attachment add",
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {

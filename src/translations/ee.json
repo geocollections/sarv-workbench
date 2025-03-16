@@ -936,7 +936,9 @@
     "imageRotated": "Pilt edukalt pööratud!",
     "imageRotationFailed": "Pildi pööramine ebaõnnestus!",
     "imageWidthMm": "Pildi laius (mm)",
-    "imageHeightMm": "Pildi kõrgus (mm)"
+    "imageHeightMm": "Pildi kõrgus (mm)",
+    "title": "Pealkiri",
+    "title_en": "Pealkiri (EN)"
   },
   "imageset": {
     "author__agent": "Autor",
