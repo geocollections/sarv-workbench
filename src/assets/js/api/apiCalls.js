@@ -1831,7 +1831,7 @@ export function fetchSpecimens(data, dynamicSearch, timestamp) {
   }
 
   if (data.specimenNr && data.specimenNr.trim().length > 0) {
-    searchFields += `multi_search=value:${data.specimenNr
+    searchFields += `&multi_search=value:${data.specimenNr
       };fields:specimen_id,specimen_nr;lookuptype:${data.specimenNr__lookuptype || "icontains"
       }`;
   }
