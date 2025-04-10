@@ -1897,7 +1897,7 @@ export function fetchSpecimens(data, dynamicSearch, timestamp) {
 
   if (data.reference && data.reference.trim().length > 0) {
     searchFields += `&multi_search=value:${data.reference
-      };fields:specimenreference__reference__reference,specimenreference__reference__id;lookuptype:${data.reference__lookuptype || "icontains"
+      };fields:specimen_reference__reference__reference,specimen_reference__reference__id;lookuptype:${data.reference__lookuptype || "icontains"
       }`;
   }
 
