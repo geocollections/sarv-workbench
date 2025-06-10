@@ -1367,6 +1367,12 @@ export default {
             sortBy: ["id"],
             sortDesc: [true],
           },
+          library: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["id"],
+            sortDesc: [true],
+          },
         },
       };
     },
