@@ -28,7 +28,7 @@
           <v-icon small>far fa-edit</v-icon>
         </v-btn>
         <v-btn
-          v-if="!$route.meta.isEdit"
+          v-if="$route.meta.isEdit"
           icon
           @click="deleteItem(item)"
           color="red"
