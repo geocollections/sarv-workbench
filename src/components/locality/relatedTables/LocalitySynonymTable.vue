@@ -148,13 +148,21 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
+
+    <RelatedDataDeleteDialog
+      :dialog="deleteDialog"
+      @cancel="cancelDeletion"
+      @delete="runDeletion"
+    />
   </div>
 </template>
 
 <script>
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import InputWrapper from "../../partial/inputs/InputWrapper";
+import relatedDataMixin from "@/mixins/relatedDataMixin";
 import cloneDeep from "lodash/cloneDeep";
 
 export default {
@@ -162,10 +170,11 @@ export default {
 
   components: {
     AutocompleteWrapper,
+    RelatedDataDeleteDialog,
     InputWrapper,
   },
 
-  mixins: [autocompleteMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -247,9 +256,7 @@ export default {
   },
 
   methods: {
-    cancel() {
-      this.dialog = false;
-      this.isNewItem = true;
+    resetItem() {
       this.item = {
         synonym: "",
         reference: null,
@@ -257,30 +264,7 @@ export default {
         remarks: "",
       };
     },
-
-    addItem() {
-      let clonedItem = cloneDeep(this.item);
-      let formattedItem = this.formatItem(clonedItem);
-
-      if (this.isNewItem) {
-        this.$emit("related:add", {
-          table: "locality_synonym",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      } else {
-        this.$emit("related:edit", {
-          table: "locality_synonym",
-          item: formattedItem,
-          rawItem: this.item,
-        });
-      }
-      this.cancel();
-    },
-
-    editItem(item) {
-      this.isNewItem = false;
-
+    setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
@@ -300,14 +284,6 @@ export default {
       this.item.remarks = item.remarks;
 
       this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.$emit("related:delete", {
-        table: "locality_synonym",
-        item: item,
-        onDeleteIndex: this.response.results.indexOf(item),
-      });
     },
 
     formatItem(item) {
