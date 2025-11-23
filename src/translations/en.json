@@ -2829,7 +2829,8 @@
     "title_et": "Title",
     "title_en": "Title EN",
     "text_et": "Text",
-    "text_en": "Text EN"
+    "text_en": "Text EN",
+    "date_published": "Date published"
   },
   "web_pages": {
     "date_expires": "Date expires",

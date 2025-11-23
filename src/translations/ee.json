@@ -2830,7 +2830,8 @@
     "title_et": "Pealkiri",
     "title_en": "Pealkiri EN",
     "text_et": "Sisu",
-    "text_en": "Sisu EN"
+    "text_en": "Sisu EN",
+    "date_published": "Avaldamise kuupäev"
   },
   "web_pages": {
     "date_expires": "Aegub",
