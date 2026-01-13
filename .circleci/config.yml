@@ -17,14 +17,14 @@ jobs:
     steps:
       - run:
           name: Run edit2 script
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_NEW} "cd /var/www/edit2/script && . run_docker_image.sh"
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/edit2/script && . run_docker_image.sh"
 
   deploy_edit2-dev:
     executor: docker-publisher
     steps:
       - run:
           name: Run edit2 script
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_NEW} "cd /var/www/edit2-dev/script && . run_docker_image.sh"
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/edit2-dev/script && . run_docker_image.sh"
 
 workflows:
   build:
@@ -34,10 +34,8 @@ workflows:
             branches:
               only: 
                 - main
-                - new-cloud-machine
       - deploy_edit2-dev:
           filters:
             branches:
               only: 
                 - development
-                - new-cloud-machine
