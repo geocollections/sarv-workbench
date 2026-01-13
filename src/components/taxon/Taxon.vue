@@ -591,6 +591,19 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <taxon-character-table
+            v-show="activeTab === 'taxon_character_key'"
+            :response="relatedData.taxon_character_key"
+            :search-parameters="
+              relatedData.searchParameters.taxon_character_key
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- PAGINATION -->
           <pagination
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -645,6 +658,7 @@ import {
   fetchTaxonTypeSpecimen,
   fetchTaxonAttachments,
   fetchTaxonByTaxonTypeId,
+  fetchTaxonCharacters,
 } from "../../assets/js/api/apiCalls";
 
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -661,6 +675,7 @@ import TaxonCommonNameTable from "./relatedTables/TaxonCommonNameTable";
 import TaxonDescriptionTable from "./relatedTables/TaxonDescriptionTable";
 import TaxonPageTable from "./relatedTables/TaxonPageTable";
 import TaxonImageTable from "./relatedTables/TaxonImageTable";
+import TaxonCharacterTable from "./relatedTables/TaxonCharacterTable";
 import Editor from "../partial/inputs/Editor";
 import Pagination from "@/components/partial/Pagination";
 
@@ -679,6 +694,7 @@ export default {
     TaxonTypeSpecimenTable,
     TaxonSynonymTable,
     TaxonSubclassTable,
+    TaxonCharacterTable,
     FileInput,
     CheckboxWrapper,
     AutocompleteWrapper,
@@ -792,6 +808,7 @@ export default {
           { name: "taxon_common_name", iconClass: "fas fa-signature" },
           { name: "taxon_description", iconClass: "far fa-comment-dots" },
           { name: "taxon_image", iconClass: "far fa-image" },
+          { name: "taxon_character_key", iconClass: "far fa-image" },
           { name: "taxon_page", iconClass: "fas fa-pager" },
           { name: "attachment", iconClass: "far fa-file" },
         ],
@@ -946,6 +963,7 @@ export default {
         taxon_page: { count: 0, results: [] },
         attachment: { count: 0, results: [] },
         taxon_image: { count: 0, results: [] },
+        taxon_character_key: { count: 0, results: [] },
         searchParameters: {
           taxon_subclass: {
             page: 1,
@@ -1002,6 +1020,12 @@ export default {
             sortDesc: [true],
           },
           taxon_image: {
+            page: 1,
+            paginateBy: 100,
+            sortBy: ["id"],
+            sortDesc: [true],
+          },
+          taxon_character_key: {
             page: 1,
             paginateBy: 100,
             sortBy: ["id"],
@@ -1185,6 +1209,11 @@ export default {
         query = fetchTaxonImage(
           this.$route.params.id,
           this.relatedData.searchParameters.taxon_image
+        );
+      } else if (object === "taxon_character_key") {
+        query = fetchTaxonCharacters(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_character_key
         );
       }
 

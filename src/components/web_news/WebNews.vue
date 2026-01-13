@@ -69,6 +69,19 @@
               />
             </v-col>
           </v-row>
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <date-wrapper
+                v-model="web_news.date_published"
+                :color="bodyActiveColor"
+                :label="$t('web_news.date_published')"
+                v-on:date:clear="web_news.date_published = null"
+                v-on:date:update="
+                  updateUserInputtedDate('date_published', $event)
+                "
+              />
+            </v-col>
+          </v-row>
 
           <!-- IS_PRIVATE -->
           <v-row no-gutters>
@@ -94,6 +107,7 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import { fetchWebNewsDetail } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import DateWrapper from "../partial/inputs/DateWrapper";
 import Editor from "../partial/inputs/Editor";
 import { mapState } from "vuex";
 
@@ -104,6 +118,7 @@ export default {
     Editor,
     CheckboxWrapper,
     InputWrapper,
+    DateWrapper,
   },
 
   props: {
@@ -162,6 +177,7 @@ export default {
           "title_en",
           "text_en",
           "text_et",
+          "date_published",
           "is_private",
         ],
         web_news: {},
