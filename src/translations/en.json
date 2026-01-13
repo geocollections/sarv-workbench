@@ -280,6 +280,7 @@
     "loan_specimen": "Loan specimen",
     "loan_sample": "Loan sample",
     "taxon_common_name": "Common name",
+    "taxon_character": "Character",
     "taxon_description": "Description",
     "taxon_occurence": "Occurence",
     "taxon_opinion": "Opinion",
@@ -1619,6 +1620,9 @@
     "attachment": "Image",
     "attachment_filename": "Filename",
     "is_invalid": "Invalid taxon",
+    "sample_taxon": "Sample taxon",
+    "character": "Character",
+    "character_state": "Character state",
     "relatedTables": {
       "taxon_subclass": "Subtaxa",
       "taxon_synonym": "Synonymy",
@@ -1629,7 +1633,8 @@
       "taxon_description": "Descriptions",
       "taxon_page": "Webpages",
       "attachment": "Files",
-      "taxon_image": "Images"
+      "taxon_image": "Images",
+      "taxon_character_key": "Character"
     }
   },
   "dataset": {

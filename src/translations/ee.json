@@ -281,6 +281,7 @@
     "loan_specimen": "Laenatud eksemplar",
     "loan_sample": "Laenatud proov",
     "taxon_common_name": "Tavanimi",
+    "taxon_character": "Tunnus",
     "taxon_description": "Kirjeldus",
     "taxon_occurence": "Levik/Viide",
     "taxon_opinion": "Arvamus",
@@ -1618,6 +1619,9 @@
     "attachment": "Pilt",
     "attachment_filename": "Failinimi",
     "is_invalid": "Takson ei ole valiidne",
+    "sample_taxon": "Näidis takson",
+    "character": "Tunnus",
+    "character_state": "Tunnuse olek",
     "relatedTables": {
       "taxon_subclass": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",
@@ -1628,7 +1632,8 @@
       "taxon_description": "Kirjeldused",
       "taxon_page": "Veebilehed",
       "attachment": "Failid",
-      "taxon_image": "Pildid"
+      "taxon_image": "Pildid",
+      "taxon_character_key": "Tunnused"
     }
   },
   "dataset": {
