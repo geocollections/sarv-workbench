@@ -17,6 +17,17 @@
       :class="bodyColor.split('n-')[0] + 'n-5'"
       :disable-sort="!$route.meta.isEdit"
     >
+      <template v-slot:item.reference="{ item }">
+        <router-link
+          :to="{ path: '/reference/' + item.reference }"
+          :title="$t('editReference.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.reference__reference }}
+        </router-link>
+      </template>
+
       <template v-slot:item.action="{ item }">
         <v-btn
           icon
@@ -62,6 +73,21 @@
                     :label="$t('taxon.synonym')"
                     use-state
                     name="taxon_synonym"
+                  />
+                </v-col>
+
+                <v-col cols="12" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.reference"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.reference"
+                    :loading="autocomplete.loaders.reference"
+                    item-text="reference"
+                    :label="$t('taxon.reference')"
+                    is-link
+                    route-object="reference"
+                    is-searchable
+                    v-on:search:items="autocompleteReferenceSearch"
                   />
                 </v-col>
 
@@ -141,9 +167,11 @@
 
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "@/components/partial/inputs/TextareaWrapper";
 import RelatedDataDeleteDialog from "@/components/partial/RelatedDataDeleteDialog";
 import relatedDataMixin from "@/mixins/relatedDataMixin";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
 export default {
   name: "TaxonSynonymTable",
@@ -152,9 +180,10 @@ export default {
     RelatedDataDeleteDialog,
     TextareaWrapper,
     InputWrapper,
+    AutocompleteWrapper,
   },
 
-  mixins: [relatedDataMixin],
+  mixins: [autocompleteMixin, relatedDataMixin],
 
   props: {
     response: {
@@ -190,6 +219,7 @@ export default {
     headers: [
       { text: "common.year", value: "year" },
       { text: "taxon.synonym", value: "taxon_synonym" },
+      { text: "common.reference", value: "reference" },
       { text: "taxon.author", value: "author" },
       { text: "taxon.pages", value: "pages" },
       { text: "taxon.figures", value: "figures" },
@@ -204,11 +234,18 @@ export default {
     dialog: false,
     item: {
       taxon_synonym: "",
+      reference: null,
       author: "",
       year: "",
       pages: "",
       figures: "",
       remarks: "",
+    },
+    autocomplete: {
+      reference: [],
+      loaders: {
+        reference: false,
+      },
     },
     isNewItem: true,
   }),
@@ -230,11 +267,23 @@ export default {
         pages: "",
         figures: "",
         remarks: "",
+        reference: null,
       };
     },
 
     setItemFields(item) {
       if (this.$route.meta.isEdit) this.item.id = item.id;
+
+      if (typeof item.reference !== "object" && item.reference !== null) {
+        this.item.reference = {
+          id: item.reference,
+          reference: item.reference__reference,
+        };
+        this.autocomplete.reference.push(this.item.reference);
+      } else if (item.reference !== null) {
+        this.item.reference = item.reference;
+        this.autocomplete.reference.push(this.item.reference);
+      }
 
       this.item.taxon_synonym = item.taxon_synonym;
       this.item.author = item.author;
