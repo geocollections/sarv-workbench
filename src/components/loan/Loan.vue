@@ -303,6 +303,7 @@
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
+              acceptable-format="*/*"
               :record-options="$route.meta.isEdit"
               :is-draggable="$route.meta.isEdit"
               show-attachment-link
