@@ -2836,7 +2836,8 @@
     "title_en": "Pealkiri EN",
     "text_et": "Sisu",
     "text_en": "Sisu EN",
-    "date_published": "Avaldamise kuupäev"
+    "date_published": "Avaldamise kuupäev",
+    "site": "Lehekülg"
   },
   "web_pages": {
     "date_expires": "Aegub",

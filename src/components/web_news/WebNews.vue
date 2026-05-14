@@ -81,6 +81,13 @@
                 "
               />
             </v-col>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="web_news.site"
+                :color="bodyActiveColor"
+                :label="$t('web_news.site')"
+              />
+            </v-col>
           </v-row>
 
           <!-- IS_PRIVATE -->
@@ -178,6 +185,7 @@ export default {
           "text_en",
           "text_et",
           "date_published",
+          "site",
           "is_private",
         ],
         web_news: {},
