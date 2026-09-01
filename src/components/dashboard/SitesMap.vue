@@ -58,12 +58,12 @@ export default {
       }),
       baseMaps: [
         {
-          name: "CartoDB",
+          name: "ArcGIS",
           leafletObject: L.tileLayer(
-            "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+            "https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
             {
               attribution:
-                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                'Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, and the GIS user community',
             }
           ),
           minZoom: 1,
@@ -230,6 +230,12 @@ export default {
 
     initMap(recentData) {
       L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
+      if (this.defaultLayer === "CartoDB") {
+        // NOTE: CartoDB is no longer in use and have to update user local storage to new default map layer,
+        // otherwise the throws an error and breaks.
+        // Can be removed after some time has gone by. Added on 01.09.2026
+        this.updateDefaultLayer("ArcGIS");
+      }
 
       this.map = L.map("map", {
         layers: [this.baseMaps[0].leafletObject],
@@ -251,7 +257,7 @@ export default {
 
       // Default layer
       if (this.defaultLayer) {
-        this.map.removeLayer(baseMaps["CartoDB"]);
+        this.map.removeLayer(baseMaps["ArcGIS"]);
         this.map.addLayer(baseMaps[this.defaultLayer]);
         if (this.defaultLayer === "Maaameti fotokaart") {
           this.map.addLayer(this.overlayMaps[0].leafletObject);
