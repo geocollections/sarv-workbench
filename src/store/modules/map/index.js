@@ -1,6 +1,6 @@
 const state = {
   showMap: true,
-  defaultLayer: "CartoDB",
+  defaultLayer: "ArcGIS",
 };
 
 const getters = {};
