@@ -318,7 +318,7 @@
             <v-row no-gutters>
               <v-col cols="12" md="4" class="pa-1">
                 <autocomplete-wrapper
-                  v-model="sample.classification_rock"
+                  v-model="sample.rock_id"
                   :color="bodyActiveColor"
                   :items="autocomplete.rock"
                   :loading="autocomplete.loaders.rock"
@@ -737,7 +737,7 @@
             <v-row no-gutters>
               <v-col cols="12" md="4" class="pa-1">
                 <autocomplete-wrapper
-                  v-model="sample.classification_rock"
+                  v-model="sample.rock_id"
                   :color="bodyActiveColor"
                   :items="autocomplete.rock"
                   :loading="autocomplete.loaders.rock"
@@ -1256,7 +1256,7 @@ export default {
           "agent_collected_free",
           "date_collected",
           "date_collected_free",
-          "classification_rock",
+          "rock_id",
           "rock",
           "rock_en",
           "fossils",
@@ -1280,7 +1280,7 @@ export default {
           "sample_purpose",
           "series",
           "locality",
-          "classification_rock",
+          "rock_id",
           "rock",
           "site",
           "project",
@@ -1610,13 +1610,13 @@ export default {
         };
         this.autocomplete.agent.push(this.sample.agent_collected);
       }
-      if (this.isNotEmpty(obj.classification_rock__id)) {
-        this.sample.classification_rock = {
-          name: obj.classification_rock__name,
-          name_en: obj.classification_rock__name_en,
-          id: obj.classification_rock__id,
+      if (this.isNotEmpty(obj.rock_id__id)) {
+        this.sample.rock_id = {
+          name: obj.rock_id__name,
+          name_en: obj.rock_id__name_en,
+          id: obj.rock_id__id,
         };
-        this.autocomplete.rock.push(this.sample.classification_rock);
+        this.autocomplete.rock.push(this.sample.rock_id);
       }
       if (this.isNotEmpty(obj.owner__id)) {
         this.sample.owner = { agent: obj.owner__agent, id: obj.owner__id };
