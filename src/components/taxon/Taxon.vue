@@ -314,7 +314,7 @@
 
       <transition>
         <div v-show="block.details" class="pa-1">
-          <!-- TAXON_ID_PBDB, TAXON_ID_PLUTOF, TAXON_ID_TOL, TAXON_ID_EOL and TAXON_ID_NRM -->
+          <!-- TAXON_ID_PBDB, TAXON_ID_PLUTOF, TAXON_ID_TOL, TAXON_ID_EOL and TAXON_ID_COL -->
           <v-row no-gutters>
             <v-col class="pa-1" cols="12" md="">
               <input-wrapper
@@ -354,10 +354,9 @@
 
             <v-col class="pa-1" cols="12" md="">
               <input-wrapper
-                v-model="taxon.taxon_id_nrm"
+                v-model="taxon.taxon_id_col"
                 :color="bodyActiveColor"
-                :label="$t('taxon.taxon_id_nrm')"
-                type="number"
+                :label="$t('taxon.taxon_id_col')"
               />
             </v-col>
           </v-row>
@@ -841,7 +840,7 @@ export default {
           "taxon_id_plutof",
           "taxon_id_tol",
           "taxon_id_eol",
-          "taxon_id_nrm",
+          "taxon_id_col",
           "remarks",
           "owner",
           "is_authorized",

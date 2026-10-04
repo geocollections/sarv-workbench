@@ -1591,7 +1591,7 @@
     "taxon_id_plutof": "PlutoF ID",
     "taxon_id_tol": "ToL ID",
     "taxon_id_eol": "EoL ID",
-    "taxon_id_nrm": "NRM ID",
+    "taxon_id_col": "CoL ID",
     "is_authorized": "Autoriseeritud?",
     "user_authorized": "Autoriseerija",
     "sort": "Sorteeri",
