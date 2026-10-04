@@ -30,6 +30,29 @@ const vuexLocal = new VuexPersistence({
   }),
 });
 
+// Every tab writes its whole in-memory state to localStorage on each mutation,
+// so a tab holding a stale token would overwrite a newer login from another tab.
+// Pick up auth changes made in other tabs so all tabs share the same token.
+function syncAuthUserAcrossTabs(store) {
+  window.addEventListener("storage", (event) => {
+    if (
+      event.key !== vuexLocal.key ||
+      event.storageArea !== window.localStorage
+    )
+      return;
+
+    let authUser = null;
+    try {
+      authUser = JSON.parse(event.newValue)?.user?.authUser ?? null;
+    } catch {
+      return;
+    }
+
+    if (JSON.stringify(authUser) !== JSON.stringify(store.state.user.authUser))
+      store.commit("user/SET_AUTH_USER", authUser);
+  });
+}
+
 export default new Vuex.Store({
   modules: {
     detail,
@@ -40,6 +63,6 @@ export default new Vuex.Store({
     admin,
     tableHeaders,
   },
-  plugins: [vuexLocal.plugin],
+  plugins: [vuexLocal.plugin, syncAuthUserAcrossTabs],
   strict: import.meta.env.NODE_ENV !== "production",
 });
